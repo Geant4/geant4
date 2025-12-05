@@ -22,16 +22,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// G4BorisDriver
+// G4BorisDriver implementation
 //
-// Class description:
-//
-//   G4BorisDriver is a driver class using the second order Boris 
-// method to integrate the equation of motion.
-// 
-//
-// Author: Divyansh Tiwari, Google Summer of Code 2022
-// Supervision: John Apostolakis,Renee Fatemi, Soon Yung Jun 
+// Author: Divyansh Tiwari (CERN, Google Summer of Code 2022), 05.11.2022
+// Supervision: John Apostolakis (CERN), Renee Fatemi, Soon Yung Jun (FNAL)
 // --------------------------------------------------------------------
 #include <cassert>
 

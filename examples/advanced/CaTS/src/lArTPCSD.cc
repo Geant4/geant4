@@ -23,16 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// ********************************************************************
+// CaTS (Calorimetry and Tracking Simulation)
 //
-//  CaTS (Calorimetry and Tracking Simulation)
+// Authors: Hans Wenzel and Soon Yung Jun
+//           (Fermi National Accelerator Laboratory)
 //
-//  Authors : Hans Wenzel
-//            Soon Yung Jun
-//            (Fermi National Accelerator Laboratory)
-//
-// History
-//   October 18th, 2021 : first implementation
+// History: October 18th, 2021 : first implementation
 //
 // ********************************************************************
 //
@@ -71,6 +67,7 @@
 #include "lArTPCSD.hh"
 #include "ConfigurationManager.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 lArTPCSD::lArTPCSD(G4String name)
   : G4VSensitiveDetector(name)
 {
@@ -86,6 +83,7 @@ lArTPCSD::lArTPCSD(G4String name)
   first = true;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void lArTPCSD::Initialize(G4HCofThisEvent* hce)
 {
   flArTPCHitsCollection =
@@ -102,6 +100,7 @@ void lArTPCSD::Initialize(G4HCofThisEvent* hce)
   hce->AddHitsCollection(fHCID, flArTPCHitsCollection);
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4bool lArTPCSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 {
   G4double edep = aStep->GetTotalEnergyDeposit();
@@ -272,7 +271,7 @@ G4bool lArTPCSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
       for(G4int i = 0; i < hctable->entries(); ++i)
       {
         std::string sdn   = hctable->GetSDname(i);
-        std::size_t found = sdn.find("Photondetector");
+        std::size_t found = sdn.find("PhotonDetector");
         if(found != std::string::npos)
         {
           PhotonSD* aSD =
@@ -288,6 +287,7 @@ G4bool lArTPCSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
   return true;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void lArTPCSD::EndOfEvent(G4HCofThisEvent*)
 {
   tSphotons    = 0;
@@ -299,26 +299,22 @@ void lArTPCSD::EndOfEvent(G4HCofThisEvent*)
   }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4double lArTPCSD::NumElectrons(G4double edep, G4double ds)
 {
+  G4double dEdx = std::max((ds <= 0.0) ? 0.0 : edep / ds, 1.0);
+
   // Nucl.Instrum.Meth.A523:275-286,2004
-  G4double fGeVToElectrons = 4.237e+07;
-  G4double fModBoxA        = 0.930;
-  G4double fModBoxB        = 0.212;
-  G4double EFieldStep      = 0.5;
-  G4double recomb          = 0.0;
-  G4double dEdx            = (ds <= 0.0) ? 0.0 : edep / ds;
-  if(dEdx < 1.)
-    dEdx = 1.;
+  const G4double fGeVToElectrons = 4.237e+04;
+  G4double recomb = 0.0;
   if(ds > 0)
   {
-    G4double Xi = fModBoxB * dEdx / EFieldStep;
+    G4double fModBoxA = 0.930;
+    G4double fModBoxB = 0.212;
+
+    G4double Xi = 2.0 * fModBoxB * dEdx;
     recomb      = std::log(fModBoxA + Xi) / Xi;
   }
-  else
-  {
-    recomb = 0.0;
-  }
-  G4double fNumIonElectrons = fGeVToElectrons * 1.e-3 * edep * recomb;
-  return fNumIonElectrons;
+
+  return fGeVToElectrons * edep * recomb;
 }

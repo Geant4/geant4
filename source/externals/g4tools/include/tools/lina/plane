@@ -68,10 +68,10 @@ public:
     T d = m_normal.dot(dir);
     if(d==T()) return false;
     T t = (m_distance - m_normal.dot(pos))/d;
+    //a_intersection = pos + t * dir;
     a_intersection = dir;
     a_intersection.multiply(t);
     a_intersection.add(pos);
-    //a_intersection = pos + t * dir;
     return true;
   }
 

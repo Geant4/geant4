@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file TimeStepAction.hh
+/// \file TimeStepAction.cc
 /// \brief Implementation of the TimeStepAction class
 
 #include "TimeStepAction.hh"
@@ -51,10 +50,6 @@ TimeStepAction::TimeStepAction() : G4UserTimeStepAction()
   AddTimeStep(1000 * picosecond, 10 * picosecond);
   AddTimeStep(10000 * picosecond, 100 * picosecond);
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-TimeStepAction::~TimeStepAction() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

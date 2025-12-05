@@ -23,12 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file eventgenerator/exgps/exgps.cc
+/// \file exgps.cc
 /// \brief Main program of the eventgenerator/exgps example
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "ActionInitialization.hh"
 #include "GeometryConstruction.hh"

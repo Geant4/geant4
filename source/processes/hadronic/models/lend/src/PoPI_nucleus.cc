@@ -106,7 +106,7 @@ double Nucleus::energy( std::string const &a_unit ) const {
         std::cerr << std::endl << "Particle " << ID( ) << " missing energy node, please report to PoPs maintainer. Using 0.0 and continuing." << std::endl;
         return( 0.0 );
     }
-    PQ_double *pq = dynamic_cast<PQ_double *>( m_energy[0] );
+    PQ_double *pq = static_cast<PQ_double *>( m_energy[0] );
     if( pq->unit( ) == "eV" ) return( pq->value( ) * 1e-6 );        // Kludge until units are functional.
     return( pq->value( a_unit ) );
 }

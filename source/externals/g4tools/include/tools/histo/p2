@@ -64,7 +64,6 @@ public:
     TV sv2w = m_bin_Sv2w[offset];  //ROOT err2
     TV mean = (svw / sw);        //ROOT contsum
     TV rms = ::sqrt(::fabs((sv2w/sw) - mean * mean)); //ROOT eprim
-    // rms = get_bin_rms_value.
     return rms/::sqrt(sw); //ROOT kERRORMEAN mode returned value
   }
 

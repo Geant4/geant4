@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file B2/B2b/src/DetectorMessenger.cc
+/// \file DetectorMessenger.cc
 /// \brief Implementation of the B2b::DetectorMessenger class
 
 #include "DetectorMessenger.hh"

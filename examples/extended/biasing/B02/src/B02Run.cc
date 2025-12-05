@@ -23,14 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file biasing/B02/src/B02Run.cc
+/// \file B02Run.cc
 /// \brief Implementation of the B02Run class
-//
-//
-//
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//
 //  (Description)
 //    B02Run Class is for accumulating scored quantities which is
 //  scored using G4MutiFunctionalDetector and G4VPrimitiveScorer.

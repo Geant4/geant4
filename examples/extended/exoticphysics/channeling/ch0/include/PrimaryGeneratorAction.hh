@@ -22,8 +22,9 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// --------------------------------------------------------------
 //
+/// \file PrimaryGeneratorAction.hh
+/// \brief Definition of the PrimaryGeneratorAction class
 
 #ifndef PrimaryGeneratorAction_h
 #define PrimaryGeneratorAction_h 1

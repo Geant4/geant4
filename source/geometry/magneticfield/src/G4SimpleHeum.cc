@@ -25,7 +25,7 @@
 //
 // G4SimpleHeum implementation
 //
-// Created: W.Wander <wwc@mit.edu>, 12/09/1997 
+// Author: W.Wander (MIT), 12.09.1997
 // -------------------------------------------------------------------
 
 #include "G4SimpleHeum.hh"

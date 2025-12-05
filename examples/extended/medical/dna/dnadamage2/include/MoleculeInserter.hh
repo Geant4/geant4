@@ -23,6 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file MoleculeInserter.hh
+/// \brief Definition of the MoleculeInserter class
+///
+/// Definition of the DNA chemical species inserter for IRT
+
 // This class was made using G4MoleculeGun as a base
 // G4MoleculeGun Author: Mathieu Karamitros
 //
@@ -46,8 +51,6 @@
 // J. Comput. Phys. 274 (2014) 841-882
 // Prog. Nucl. Sci. Tec. 2 (2011) 503-508
 //
-/// \file MoleculeInserter.hh
-/// \brief Definition of the DNA chemical species inserter for IRT
 
 #ifndef DNADAMAGE2_moleculeinserter_h
 #define DNADAMAGE2_moleculeinserter_h 1

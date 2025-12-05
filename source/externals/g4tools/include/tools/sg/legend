@@ -14,7 +14,6 @@
 #include "enums"
 
 #include "../colorf"
-//#include "../paw2stix"
 #include "text_valop"
 
 namespace tools {
@@ -27,18 +26,15 @@ public:
 
   sf_vec<colorf,float> color; //color of the "rep"
   // text atbs :
-  //sf<float> transparency;
   sf_string font;
   sf_enum<sg::font_modeling> font_modeling;
   sf_string encoding;
-  //sf<float> line_width;          // for text_hershey.
 
   sf<bool> back_visible;
   sf<float> wmargin_factor;
   sf<float> hmargin_factor;
   sf_enum<hjust> lhjust;
   sf_enum<hjust> rhjust;
-  //sf<bool> confine;
 
   sf_enum<sg::marker_style> marker_style;
   sf<float> marker_size;
@@ -129,25 +125,17 @@ public:
   legend(const base_freetype& a_ttf)
   :parent()
   ,strings()
-
   ,color(colorf_black())
-  //,transparency(0)
   ,font(font_hershey())
   ,font_modeling(font_filled)
   ,encoding(encoding_PAW())
-  //,line_width(1)
-
   ,back_visible(true)
   ,wmargin_factor(0.9f)
   ,hmargin_factor(0.9f)
   ,lhjust(left)
   ,rhjust(right)
-
   ,marker_style(marker_dot)
   ,marker_size(10)
-
-  //,confine(false)
-
   ,m_ttf(a_ttf)
   {
     add_fields();
@@ -157,25 +145,17 @@ public:
   legend(const legend& a_from)
   :parent(a_from)
   ,strings(a_from.strings)
-
   ,color(a_from.color)
-  //,transparency(a_from.transparency)
   ,font(a_from.font)
   ,font_modeling(a_from.font_modeling)
   ,encoding(a_from.encoding)
-  //,line_width(a_from.line_width)
-
   ,back_visible(a_from.back_visible)
   ,wmargin_factor(a_from.wmargin_factor)
   ,hmargin_factor(a_from.hmargin_factor)
   ,lhjust(a_from.lhjust)
   ,rhjust(a_from.rhjust)
-
   ,marker_style(a_from.marker_style)
   ,marker_size(a_from.marker_size)
-
-  //,confine(a_from.confine)
-
   ,m_ttf(a_from.m_ttf)
   {
     add_fields();
@@ -185,11 +165,9 @@ public:
     strings = a_from.strings;
 
     color = a_from.color;
-    //transparency = a_from.transparency;
     font = a_from.font;
     font_modeling = a_from.font_modeling;
     encoding = a_from.encoding;
-    //line_width = a_from.line_width;
 
     back_visible = a_from.back_visible;
     wmargin_factor = a_from.wmargin_factor;
@@ -199,8 +177,6 @@ public:
 
     marker_style = a_from.marker_style;
     marker_size = a_from.marker_size;
-
-    //confine = a_from.confine;
 
     return *this;
   }
@@ -215,9 +191,6 @@ public:
     m_sep.clear();
 
     if(width.value()<=0) return;
-    //if(confine) {
-    //  if(height.value()<=0) return;
-    //}
 
    {bool empty = true;
     std::vector<std::string>::const_iterator it;
@@ -229,24 +202,6 @@ public:
     //sf<float> zfront ?
     float zz = back_visible.value()?0.01f:0;
 
-  //bool rep_line = false;
-
-    /*
-    float fw = 0;
-    float fh = 0;
-    float lw = 0;
-    float rw = 0;
-    if(rep_line) {
-      fw = width * wmargin_factor;
-      fh = height * hmargin_factor;
-
-      lw = fw*0.5f*0.95f;
-      rw = fw*0.5f;
-    }*/
-    ////////////////////////////////////////////////////////////
-    /// rep at left ////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////
-
    {separator* _sep = new separator;
     m_sep.add(_sep);
 
@@ -254,23 +209,7 @@ public:
     mat->color = color;
     _sep->add(mat);
 
-/*  if(rep_line) {
-      matrix* ltsf = new matrix;
-      float xx = -fw*0.5F; //left justified.
-      ltsf->set_translate(xx,0,zz);
-      _sep->add(ltsf);
-
-      draw_style* ds = new draw_style;
-      ds->style = draw_lines;
-      _sep->add(ds);
-
-      vertices* vtxs = new vertices;
-      vtxs->mode = gl::line_strip();
-      vtxs->add( 0,0,zz);
-      vtxs->add(lw,0,zz);
-      _sep->add(vtxs);
-
-    } else*/ { // rep marker :
+ { // rep marker :
       if(marker_style.value()==marker_dot) {
         draw_style* ds = new draw_style;
         ds->style = draw_points;
@@ -336,40 +275,7 @@ public:
       }
     }
     rtext->hjust = rhjust;}
-
-    ////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////
-
-/*  if(rep_line) {
-
-      // adjust width :
-      float th = fh;
-     {float mn_x,mn_y,mn_z;
-      float mx_x,mx_y,mx_z;
-      rtext->get_bounds(th,mn_x,mn_y,mn_z,mx_x,mx_y,mx_z);
-      float bxw = mx_x-mn_x;
-      if(!bxw) {
-        m_sep.clear();
-        parent::update_sg();
-        return;
-      }
-      // adjust box width :
-      // fh -> bxw then to have rw :
-      float max_width = rw;
-      if(bxw>max_width) th = max_width*fh/bxw;}
-
-      rtext->height = th;
-
-     {float mn_x,mn_y,mn_z;
-      float mx_x,mx_y,mx_z;
-      rtext->get_bounds(th,mn_x,mn_y,mn_z,mx_x,mx_y,mx_z);
-      rtext->hjust = right;
-      float xx = fw*0.5f;
-      float yy = -(mn_y+mx_y)*0.5F;
-      rtsf->set_translate(xx,yy,zz);}
-
-    } else*/ { //rep mark :
+{ //rep mark :
 
       // adjust width :
       float th = height;

@@ -34,7 +34,7 @@
 //
 // [ref. Numerical Recipes in C, 2nd Edition]
 //
-// Authors: J.Apostolakis, V.Grichine - 30.01.1997
+// Authors: J.Apostolakis, V.Grichine (CERN), 30.01.1997
 // -------------------------------------------------------------------
 
 #include "G4CashKarpRKF45.hh"
@@ -59,7 +59,6 @@ G4CashKarpRKF45::G4CashKarpRKF45(G4EquationOfMotion *EqRhs,
   ak4 = new G4double[numberOfVariables] ;
   ak5 = new G4double[numberOfVariables] ;
   ak6 = new G4double[numberOfVariables] ;
-  // ak7 = 0;
 
   // Must ensure space extra 'state' variables exists - i.e. yIn[7]
   const G4int numStateMax  = std::max(GetNumberOfStateVariables(), 8);  
@@ -93,7 +92,7 @@ G4CashKarpRKF45::~G4CashKarpRKF45()
   delete [] ak4;
   delete [] ak5;
   delete [] ak6;
-  // delete [] ak7;
+
   delete [] yTemp;
   delete [] yIn;
 
@@ -215,23 +214,6 @@ G4CashKarpRKF45::Stepper(const G4double yInput[],
 
   return;
 } 
-
-///////////////////////////////////////////////////////////////////////////////
-//
-void
-G4CashKarpRKF45::StepWithEst( const G4double*,
-                              const G4double*,
-                                    G4double,
-                                    G4double*,
-                                    G4double&,
-                                    G4double&,
-                              const G4double*,
-                                    G4double*  )    
-{
-  G4Exception("G4CashKarpRKF45::StepWithEst()", "GeomField0001",
-              FatalException, "Method no longer used.");
-  return ;
-}
 
 /////////////////////////////////////////////////////////////////
 //

@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file radiobiology/src/DoseAccumulable.cc
+/// \file DoseAccumulable.cc
 /// \brief Implementation of the RadioBio::DoseAccumulable class
 
 #include "DoseAccumulable.hh"

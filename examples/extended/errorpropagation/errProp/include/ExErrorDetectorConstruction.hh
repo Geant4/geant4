@@ -23,10 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file errProp/include/ExErrorDetectorConstruction.hh
+/// \file ExErrorDetectorConstruction.hh
 /// \brief Definition of the ExErrorDetectorConstruction class
-//
 
 #ifndef ExErrorDetectorConstruction_hh
 #define ExErrorDetectorConstruction_hh 1

@@ -25,11 +25,6 @@
 //
 /// \file Activation.cc
 /// \brief Main program of the radioactivedecay/Activation example
-//
-//
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "ActionInitialization.hh"
 #include "DetectorConstruction.hh"

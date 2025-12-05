@@ -23,10 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file RE05/src/RE05SteppingAction.cc
+/// \file RE05SteppingAction.cc
 /// \brief Implementation of the RE05SteppingAction class
-//
 
 #include "RE05SteppingAction.hh"
 

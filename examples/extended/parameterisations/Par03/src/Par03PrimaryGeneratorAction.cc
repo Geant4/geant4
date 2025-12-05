@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file Par03PrimaryGeneratorAction.cc
+/// \brief Implementation of the Par03PrimaryGeneratorAction class
+
 #include "Par03PrimaryGeneratorAction.hh"
 
 #include "G4ParticleGun.hh"

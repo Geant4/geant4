@@ -4,8 +4,6 @@
 #ifndef toolx_Qt_glarea
 #define toolx_Qt_glarea
 
-#include "../sg/GL_viewer"
-
 #include <QtCore/qglobal.h> //For QT_VERSION.
 
 #if QT_VERSION < 0x060000
@@ -16,10 +14,19 @@
 
 #include <QtGui/qevent.h>
 
+#include "gl_functions"
+
+#include "../sg/GL_action"
+#include "../sg/GL_viewer"
+
+namespace toolx {
+namespace sg {
+  using GL_action = GL_action_T<toolx::Qt::gl_functions>;
+  using GL_manager = GL_manager_T<toolx::Qt::gl_functions>;
+  using GL_viewer = GL_viewer_T<GL_manager,GL_action>;
+}}
+
 #include <tools/sg/device_interactor>
-#ifdef TOOLS_MEM
-#include <tools/mem>
-#endif
 
 namespace toolx {
 namespace Qt {
@@ -113,14 +120,8 @@ public:
 
 public:
   glarea(QWidget* a_parent,toolx::sg::GL_viewer& a_viewer):parent(a_parent),m_viewer(a_viewer),m_interactor(0){
-#ifdef TOOLS_MEM
-    tools::mem::increment(s_class().c_str());
-#endif
   }
   virtual ~glarea(){
-#ifdef TOOLS_MEM
-    tools::mem::decrement(s_class().c_str());
-#endif
   }
 public:
   void set_device_interactor(tools::sg::device_interactor* a_interactor) {m_interactor = a_interactor;} //we do not have ownership.
@@ -132,6 +133,5 @@ protected:
 };
 
 }}
-
 
 #endif

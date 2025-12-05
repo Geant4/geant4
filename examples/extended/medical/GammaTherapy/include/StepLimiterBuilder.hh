@@ -23,12 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file medical/GammaTherapy/include/StepLimiterBuilder.hh
+/// \file StepLimiterBuilder.hh
 /// \brief Definition of the StepLimiterBuilder class
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef StepLimiterBuilder_h
 #define StepLimiterBuilder_h 1

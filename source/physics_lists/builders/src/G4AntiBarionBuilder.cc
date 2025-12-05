@@ -36,62 +36,9 @@
 //----------------------------------------------------------------------------
 //
 #include "G4AntiBarionBuilder.hh"
-#include "G4ParticleDefinition.hh"
-#include "G4ParticleTable.hh"
-#include "G4ProcessManager.hh"
-#include "G4HadronInelasticProcess.hh"
-#include "G4VAntiBarionBuilder.hh"
-
-
-G4AntiBarionBuilder::G4AntiBarionBuilder()
-{  
-  theAntiProtonInelastic=new   G4HadronInelasticProcess( "anti_protonInelastic",   G4AntiProton::Definition() );
-  theAntiNeutronInelastic=new  G4HadronInelasticProcess( "anti_neutronInelastic",  G4AntiNeutron::Definition() );
-  theAntiDeuteronInelastic=new G4HadronInelasticProcess( "anti_deuteronInelastic", G4AntiDeuteron::Definition() );
-  theAntiTritonInelastic=new   G4HadronInelasticProcess( "anti_tritonInelastic",   G4AntiTriton::Definition() );
-  theAntiHe3Inelastic=new      G4HadronInelasticProcess( "anti_He3Inelastic",      G4AntiHe3::Definition() );
-  theAntiAlphaInelastic=new    G4HadronInelasticProcess( "anti_alpha_Inelastic",   G4AntiAlpha::Definition() );
-}
+#include "G4HadronicBuilder.hh"
 
 void G4AntiBarionBuilder::Build()
 {
-  std::vector<G4VAntiBarionBuilder *>::iterator i;
-  for(i=theModelCollections.begin(); i!=theModelCollections.end(); i++)
-  {
-    (*i)->Build(theAntiProtonInelastic);
-    (*i)->Build(theAntiNeutronInelastic);
-    (*i)->Build(theAntiDeuteronInelastic);
-    (*i)->Build(theAntiTritonInelastic);
-    (*i)->Build(theAntiHe3Inelastic);
-    (*i)->Build(theAntiAlphaInelastic);
-  }
-  G4ProcessManager * theProcMan;
-  theProcMan = G4AntiProton::AntiProton()->GetProcessManager();
-  theProcMan->AddDiscreteProcess(theAntiProtonInelastic);
-  
-  theProcMan = G4AntiNeutron::AntiNeutron()->GetProcessManager();
-  theProcMan->AddDiscreteProcess(theAntiNeutronInelastic);
-  
-  theProcMan = G4AntiDeuteron::AntiDeuteron()->GetProcessManager();
-  theProcMan->AddDiscreteProcess(theAntiDeuteronInelastic);
-
-  theProcMan = G4AntiTriton::AntiTriton()->GetProcessManager();
-  theProcMan->AddDiscreteProcess(theAntiTritonInelastic);
-  
-  theProcMan = G4AntiHe3::AntiHe3()->GetProcessManager();
-  theProcMan->AddDiscreteProcess(theAntiHe3Inelastic);
-  
-  theProcMan = G4AntiAlpha::AntiAlpha()->GetProcessManager();
-  theProcMan->AddDiscreteProcess(theAntiAlphaInelastic);
+  G4HadronicBuilder::BuildAntiLightIonsFTFP();
 }
-
-void G4AntiBarionBuilder::RegisterMe(G4PhysicsBuilderInterface* aB ) {
-  auto bld = dynamic_cast<G4VAntiBarionBuilder*>(aB);
-  if ( bld != nullptr ) {
-      theModelCollections.push_back(bld);
-  } else {
-      G4PhysicsBuilderInterface::RegisterMe(aB);
-  }
-
-}
-

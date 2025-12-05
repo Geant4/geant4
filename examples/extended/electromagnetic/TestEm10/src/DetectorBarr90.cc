@@ -23,12 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm10/src/DetectorBarr90.cc
+/// \file DetectorBarr90.cc
 /// \brief Implementation of the DetectorBarr90 class
-//
-//
-//
-//
 
 #include "DetectorBarr90.hh"
 

@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file Par03SensitiveDetector.hh
+/// \brief Definition of the Par03SensitiveDetector class
+
 #ifndef PAR03SENSITIVEDETECTOR_HH
 #define PAR03SENSITIVEDETECTOR_HH
 

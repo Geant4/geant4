@@ -27,10 +27,10 @@
 //
 // G4QSS2 simulator
 
-// Authors: Lucio Santi, Rodrigo Castro (Univ. Buenos Aires) - 2018-2021
+// Authors: Lucio Santi, Rodrigo Castro (Univ. Buenos Aires), 2018-2021
 // --------------------------------------------------------------------
-#ifndef _G4QSS2_H_
-#define _G4QSS2_H_ 1
+#ifndef G4QSS2_HH
+#define G4QSS2_HH
 
 #include "G4Types.hh"
 #include "G4qss_misc.hh"
@@ -45,11 +45,15 @@
 #include "G4Log.hh"
 #endif
 
+/**
+ * @brief G4QSS2 defines the QSS2 simulator engine used in QSS field stepper.
+ */
+
 class G4QSS2
 {
   public:
 
-    G4QSS2(QSS_simulator sim) : simulator(sim) {}
+    inline G4QSS2(QSS_simulator sim) : simulator(sim) {}
 
     inline QSS_simulator getSimulator() const { return this->simulator; }
 

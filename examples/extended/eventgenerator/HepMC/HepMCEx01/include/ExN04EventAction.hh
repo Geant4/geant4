@@ -23,10 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file eventgenerator/HepMC/HepMCEx01/include/ExN04EventAction.hh
+/// \file ExN04EventAction.hh
 /// \brief Definition of the ExN04EventAction class
-//
-//
 
 #ifndef ExN04EventAction_h
 #define ExN04EventAction_h 1

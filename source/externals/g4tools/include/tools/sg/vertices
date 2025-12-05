@@ -41,8 +41,6 @@ private:
   }
 protected: //gstos
   virtual unsigned int create_gsto(std::ostream&,sg::render_manager& a_mgr) {
-    //unsigned int npt = xyzs.values().size()/3;
-    //::printf("debug : vertices : %lu : create_gsto : %u\n",this,npt);
     return a_mgr.create_gsto_from_data(xyzs.values());
   }
 
@@ -56,9 +54,6 @@ public:
     if(state.m_use_gsto) {
       unsigned int _id = get_gsto_id(a_action.out(),a_action.render_manager());
       if(_id) {
-#ifdef __APPLE__
-        bool restore_blend = check_set_blend(a_action);
-#endif
         a_action.begin_gsto(_id);
         size_t npt = xyzs.values().size()/3;
         bufpos pos = 0;
@@ -71,9 +66,6 @@ public:
           a_action.draw_gsto_v(mode.value(),npt,pos);
         }
         a_action.end_gsto();
-#ifdef __APPLE__
-        if(restore_blend) a_action.set_blend(true);
-#endif
         return;
       } else { //!_id
         // use immediate rendering.
@@ -83,9 +75,6 @@ public:
       clean_gstos(&a_action.render_manager());
     }
 
-#ifdef __APPLE__
-    bool restore_blend = check_set_blend(a_action);
-#endif
 
     // immediate rendering :
     if(gl::is_line(mode.value())) {
@@ -97,9 +86,6 @@ public:
       a_action.draw_vertex_array(mode.value(),xyzs.values());
     }
 
-#ifdef __APPLE__
-    if(restore_blend) a_action.set_blend(true);
-#endif
   }
   virtual void pick(pick_action& a_action) {
     if(touched()) {clean_gstos();reset_touched();}
@@ -119,15 +105,9 @@ public:
   vertices()
   :parent()
   ,mode(gl::line_strip()){
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
     add_fields();
   }
   virtual ~vertices(){
-#ifdef TOOLS_MEM
-    mem::decrement(s_class().c_str());
-#endif
   }
 public:
   vertices(const vertices& a_from)
@@ -136,9 +116,6 @@ public:
   ,mode(a_from.mode)
   ,xyzs(a_from.xyzs)
   {
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
     add_fields();
   }
   vertices& operator=(const vertices& a_from){
@@ -251,21 +228,6 @@ protected:
     if(!action.node()) return false;
     return true;
   }
-#ifdef __APPLE__
-protected:
-  // macOS/Mojave : on this version, points are blended even if alpha is one !
-  bool check_set_blend(render_action& a_action) {
-    bool restore_blend = false;
-    const state& state = a_action.state();
-    if(state.m_GL_BLEND) {
-      if(state.m_color.a()==1) {
-        a_action.set_blend(false);
-        restore_blend = true;
-      }
-    }
-    return restore_blend;
-  }
-#endif //__APPLE__
 };
 
 }}

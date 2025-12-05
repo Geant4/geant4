@@ -102,7 +102,9 @@ void G4OpticalParameters::Initialise()
   verboseLevel = 1;
 
   cerenkovStackPhotons          = true;
+  cerenkovOffloadPhotons        = false;
   cerenkovTrackSecondariesFirst = true;
+  cerenkovGeneral               = false;
   cerenkovVerboseLevel          = 1;
   cerenkovMaxPhotons            = 100;
   cerenkovMaxBetaChange         = 10.;
@@ -110,6 +112,7 @@ void G4OpticalParameters::Initialise()
   scintByParticleType        = false;
   scintTrackInfo             = false;
   scintStackPhotons          = true;
+  scintOffloadPhotons        = false;
   scintFiniteRiseTime        = false;
   scintTrackSecondariesFirst = true;
   scintVerboseLevel          = 1;
@@ -137,6 +140,8 @@ void G4OpticalParameters::Initialise()
   processActivation["OpWLS2"]        = true;
   processActivation["Cerenkov"]      = true;
   processActivation["Scintillation"] = true;
+  processActivation["QuasiCerenkov"]      = true;
+  processActivation["QuasiScintillation"] = true;
 }
 
 void G4OpticalParameters::SetVerboseLevel(G4int val)
@@ -207,6 +212,20 @@ G4bool G4OpticalParameters::GetCerenkovStackPhotons() const
   return cerenkovStackPhotons;
 }
 
+void G4OpticalParameters::SetCerenkovOffloadPhotons(G4bool val)
+{
+  if(IsLocked())
+  {
+    return;
+  }
+  cerenkovOffloadPhotons = val;
+}
+
+G4bool G4OpticalParameters::GetCerenkovOffloadPhotons() const
+{
+  return cerenkovOffloadPhotons;
+}
+
 void G4OpticalParameters::SetCerenkovVerboseLevel(G4int val)
 {
   if(IsLocked())
@@ -261,6 +280,20 @@ void G4OpticalParameters::SetCerenkovTrackSecondariesFirst(G4bool val)
 G4bool G4OpticalParameters::GetCerenkovTrackSecondariesFirst() const
 {
   return cerenkovTrackSecondariesFirst;
+}
+
+void G4OpticalParameters::EnableCerenkovGeneral(G4bool val)
+{
+  if(IsLocked())
+  {
+    return;
+  }
+  cerenkovGeneral = val;
+}
+
+G4bool G4OpticalParameters::CerenkovGeneral() const
+{
+  return cerenkovGeneral;
 }
 
 void G4OpticalParameters::SetScintByParticleType(G4bool val)
@@ -328,6 +361,20 @@ void G4OpticalParameters::SetScintStackPhotons(G4bool val)
 G4bool G4OpticalParameters::GetScintStackPhotons() const
 {
   return scintStackPhotons;
+}
+
+void G4OpticalParameters::SetScintOffloadPhotons(G4bool val)
+{
+  if(IsLocked())
+  {
+    return;
+  }
+  scintOffloadPhotons = val;
+}
+
+G4bool G4OpticalParameters::GetScintOffloadPhotons() const
+{
+  return scintOffloadPhotons;
 }
 
 void G4OpticalParameters::SetScintVerboseLevel(G4int val)

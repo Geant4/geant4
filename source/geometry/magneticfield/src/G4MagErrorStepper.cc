@@ -25,7 +25,7 @@
 //
 // G4MagErrorStepper implementation
 //
-// Author: W.Wander <wwc@mit.edu>, 09.12.1997
+// Author: W.Wander (MIT), 09.12.1997
 // --------------------------------------------------------------------
 
 #include "G4MagErrorStepper.hh"

@@ -23,11 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
-
+// 13.08.2025 V.Ivanchenko rewrite
 
 #ifndef G4VStatMFEnsemble_h
 #define G4VStatMFEnsemble_h 1
@@ -38,50 +36,36 @@
 class G4VStatMFEnsemble {
 
 public:
-    // Default Constructor
-    G4VStatMFEnsemble() :
-	__FreeInternalE0(0.0),
-	__MeanTemperature(0.0),
-	__MeanEntropy(0.0),
-	__MeanMultiplicity(0.0)
-	{};
 
+  G4VStatMFEnsemble() = default;
+  virtual ~G4VStatMFEnsemble() = default;
 
-    // Destructor
-    virtual ~G4VStatMFEnsemble() {};
+  virtual void Initialise(const G4Fragment& aFragment) = 0;
 
-
-private:
-
-    // Copy constructor
-    G4VStatMFEnsemble(const G4VStatMFEnsemble & right);
-
-    // operators
-    G4VStatMFEnsemble & operator=(const G4VStatMFEnsemble & right);
-    G4bool operator==(const G4VStatMFEnsemble & right) const;
-    G4bool operator!=(const G4VStatMFEnsemble & right) const;
-	
-public:
-
-    virtual G4StatMFChannel * ChooseAandZ(const G4Fragment & aFragment) = 0;
+  virtual G4StatMFChannel* ChooseAandZ(const G4Fragment& aFragment) = 0;
 		
-    G4double GetMeanMultiplicity(void) const {return __MeanMultiplicity;}
+  G4double GetMeanMultiplicity() const { return pMeanMultiplicity; }
 	
-    G4double GetMeanTemperature(void) const {return __MeanTemperature;}
+  G4double GetMeanTemperature() const { return pMeanTemperature; }
+
+  G4VStatMFEnsemble(const G4VStatMFEnsemble & right) = delete;
+  G4VStatMFEnsemble & operator=(const G4VStatMFEnsemble & right) = delete;
+  G4bool operator==(const G4VStatMFEnsemble & right) const = delete;
+  G4bool operator!=(const G4VStatMFEnsemble & right) const = delete;
 
 protected:
 
-    // Free internal energy at temperature T = 0
-    G4double __FreeInternalE0;
+  // Free internal energy at temperature T = 0
+  G4double pFreeInternalE0{0.0};
+
+  // Mean temperature 
+  G4double pMeanTemperature{0.0};
 	
-    // Mean temperature 
-    G4double __MeanTemperature;
+  // Mean Entropy 
+  G4double pMeanEntropy{0.0};
 	
-    // Mean Entropy 
-    G4double __MeanEntropy;
-	
-    // Mean Multiplicity
-    G4double __MeanMultiplicity;
+  // Mean Multiplicity
+  G4double pMeanMultiplicity{0.0};
 };
 
 #endif

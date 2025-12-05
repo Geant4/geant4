@@ -35,6 +35,7 @@
 // Creation date: 23.08.2017
 //
 // Modifications:
+// 26.10.2025 M. Novak: added the related technical note as the proper reference.
 //
 // Class description:
 //   An object of this calss is used in the G4GoudsmitSaundersonTable when Mott-correction
@@ -60,12 +61,13 @@
 //  Unlike the default GS, the Mott-corrected angular distributions are particle type
 //  (different for e- and e+ <= the DCS_{Mott} and the screening correction) and target
 //  (Z and material) dependent.
+//  [1] I.Kawrakow, E.Mainegra-Hing, D.W.O.Rogers, F.Tessier,B.R.B.Walters, NRCC
+//      Report PIRS-701 (2013)
+//  [2] N.F. Mott, Proc. Roy. Soc. (London) A 124 (1929) 425.
+//  [3] F.Salvat, A.Jablonski, C.J. Powell, CPC 165(2005) 157-190
 //
 // References:
-//   [2] I.Kawrakow, E.Mainegra-Hing, D.W.O.Rogers, F.Tessier,B.R.B.Walters, NRCC
-//       Report PIRS-701 (2013)
-//   [2]  N.F. Mott, Proc. Roy. Soc. (London) A 124 (1929) 425.
-//   [3] F.Salvat, A.Jablonski, C.J. Powell, CPC 165(2005) 157-190
+//   M. Novak: https://arxiv.org/abs/2410.13361
 //
 // -----------------------------------------------------------------------------
 

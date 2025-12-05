@@ -32,7 +32,7 @@
 //
 //  Third order solver.
 //
-// Author: W.Wander <wwc@mit.edu>, 03/11/1998
+// Author: W.Wander (MIT), 03.11.1998
 // -------------------------------------------------------------------
 
 #include "G4HelixHeum.hh"
@@ -43,8 +43,6 @@ G4HelixHeum::G4HelixHeum(G4Mag_EqRhs* EqRhs)
 {
 }
 
-G4HelixHeum::~G4HelixHeum() = default;
-  
 void
 G4HelixHeum::DumbStepper( const G4double  yIn[],
                           G4ThreeVector   Bfld,

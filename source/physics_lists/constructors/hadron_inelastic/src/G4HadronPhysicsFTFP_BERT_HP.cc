@@ -70,34 +70,32 @@ G4HadronPhysicsFTFP_BERT_HP::G4HadronPhysicsFTFP_BERT_HP(const G4String& name, G
   minBERT_neutron = 19.9*CLHEP::MeV;
 }
 
-G4HadronPhysicsFTFP_BERT_HP::~G4HadronPhysicsFTFP_BERT_HP()
-{}
-
 void G4HadronPhysicsFTFP_BERT_HP::Neutron()
 {
   G4HadronicParameters* param = G4HadronicParameters::Instance();
   G4bool useFactorXS = param->ApplyFactorXS();
 
-  auto neu = new G4NeutronBuilder( true ); // Fission on
-  AddBuilder(neu);
-  auto ftfpneu = new G4FTFPNeutronBuilder(QuasiElastic);
-  AddBuilder(ftfpneu);
-  ftfpneu->SetMinEnergy(minFTFP_neutron);
-  neu->RegisterMe(ftfpneu);
-  auto bertneu = new G4BertiniNeutronBuilder;
-  AddBuilder(bertneu);
-  bertneu->SetMaxEnergy(maxBERT_neutron);
-  bertneu->SetMinEnergy(minBERT_neutron);
-  neu->RegisterMe(bertneu);
-  auto hpneu = new G4NeutronPHPBuilder;
-  AddBuilder(hpneu);
-  neu->RegisterMe(hpneu);
-  neu->Build();
+  G4NeutronBuilder neu( true ); // Fission on
+ 
+  G4FTFPNeutronBuilder ftfpneu(QuasiElastic);
+  ftfpneu.SetMinEnergy(minFTFP_neutron);
+  neu.RegisterMe(&ftfpneu);
+  
+  G4BertiniNeutronBuilder bertneu;
+  bertneu.SetMaxEnergy(maxBERT_neutron);
+  bertneu.SetMinEnergy(minBERT_neutron);
+  neu.RegisterMe(&bertneu);
+  
+  G4NeutronPHPBuilder hpneu;
+  neu.RegisterMe(&hpneu);
+
+  // build all models 
+  neu.Build();
 
   const G4ParticleDefinition* neutron = G4Neutron::Neutron();
   G4HadronicProcess* inel = G4PhysListUtil::FindInelasticProcess(neutron);
-  if(nullptr != inel) { 
-    if( useFactorXS ) inel->MultiplyCrossSectionBy( param->XSFactorNucleonInelastic() );
+  if ( nullptr != inel && useFactorXS ) {
+    inel->MultiplyCrossSectionBy( param->XSFactorNucleonInelastic() );
   }
 
   G4HadronicProcess* capture = G4PhysListUtil::FindCaptureProcess(neutron);

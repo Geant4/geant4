@@ -4,7 +4,7 @@
 #ifndef tools_snums
 #define tools_snums
 
-#include "words"
+#include "tokenize"
 #include "sto"
 #include "forit"
 

@@ -23,12 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file medical/fanoCavity/include/PhysListEmStandard_WVI.hh
+/// \file PhysListEmStandard_WVI.hh
 /// \brief Definition of the PhysListEmStandard_WVI class
-//
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef PhysListEmStandard_WVI_h
 #define PhysListEmStandard_WVI_h 1

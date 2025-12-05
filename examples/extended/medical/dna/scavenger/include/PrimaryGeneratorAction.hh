@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file scavenger/include/PrimaryGeneratorAction.hh
+/// \file PrimaryGeneratorAction.hh
 /// \brief Definition of the scavenger::PrimaryGeneratorAction class
 
 #ifndef SCAVENGER_PrimaryGeneratorAction_h

@@ -23,10 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file field/field04/src/F04GlobalField.cc
+/// \file F04GlobalField.cc
 /// \brief Implementation of the F04GlobalField class
-//
 
 #include "F04GlobalField.hh"
 

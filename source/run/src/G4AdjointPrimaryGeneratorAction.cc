@@ -47,8 +47,7 @@
 //
 G4AdjointPrimaryGeneratorAction::G4AdjointPrimaryGeneratorAction()
 {
-  theAdjointPrimaryGenerator = new G4AdjointPrimaryGenerator();
-
+  
   PrimariesConsideredInAdjointSim[G4String("e-")] = false;
   PrimariesConsideredInAdjointSim[G4String("gamma")] = false;
   PrimariesConsideredInAdjointSim[G4String("proton")] = false;
@@ -62,7 +61,6 @@ G4AdjointPrimaryGeneratorAction::G4AdjointPrimaryGeneratorAction()
 //
 G4AdjointPrimaryGeneratorAction::~G4AdjointPrimaryGeneratorAction()
 {
-  delete theAdjointPrimaryGenerator;
 }
 
 // --------------------------------------------------------------------
@@ -88,8 +86,8 @@ void G4AdjointPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     E2 = EmaxIon * A;
   }
   // Generate first the forwrad primaries
-  theAdjointPrimaryGenerator->GenerateFwdPrimaryVertex(
-    anEvent, ListOfPrimaryFwdParticles[index_particle], E1, E2);
+    G4AdjointPrimaryGenerator::GetInstance()->GenerateFwdPrimaryVertex(anEvent, ListOfPrimaryFwdParticles[index_particle], E1, E2);
+
   G4PrimaryVertex* fwdPrimVertex = anEvent->GetPrimaryVertex();
 
   p = fwdPrimVertex->GetPrimary()->GetMomentum();
@@ -231,7 +229,7 @@ void G4AdjointPrimaryGeneratorAction::SetSphericalAdjointPrimarySource(G4double 
   radius_spherical_source = radius;
   center_spherical_source = center_pos;
   type_of_adjoint_source = "Spherical";
-  theAdjointPrimaryGenerator->SetSphericalAdjointPrimarySource(radius, center_pos);
+   G4AdjointPrimaryGenerator::GetInstance()->SetSphericalAdjointPrimarySource(radius, center_pos);
 }
 
 // --------------------------------------------------------------------
@@ -240,7 +238,7 @@ void G4AdjointPrimaryGeneratorAction::SetAdjointPrimarySourceOnAnExtSurfaceOfAVo
   const G4String& volume_name)
 {
   type_of_adjoint_source = "ExternalSurfaceOfAVolume";
-  theAdjointPrimaryGenerator->SetAdjointPrimarySourceOnAnExtSurfaceOfAVolume(volume_name);
+   G4AdjointPrimaryGenerator::GetInstance()->SetAdjointPrimarySourceOnAnExtSurfaceOfAVolume(volume_name);
 }
 
 // --------------------------------------------------------------------

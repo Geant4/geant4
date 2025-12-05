@@ -39,8 +39,8 @@
 //       587/8064      0            4440339/15491840 24353/124800    387/44800   2152/5985     7267/94080     0
 //       2479/34992    0            123/416          612941/3411720  43/1440     2272/6561     79937/1113912  3293/556956
 //
-// Created: Somnath Banerjee, Google Summer of Code 2015, 26 May 2015
-// Supervision: John Apostolakis, CERN
+// Author: Somnath Banerjee (CERN, Google Summer of Code 2015), 26.05.2015
+// Supervision: John Apostolakis (CERN)
 // --------------------------------------------------------------------
 
 // Plan is that this source file / class will be merged with the updated

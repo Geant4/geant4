@@ -134,10 +134,12 @@ G4FissionFragmentGenerator::G4GenerateFission(G4long NumberOfFissions,
       // InitializeFissionProductYieldClass();
     }
 
-    for (G4long i = 0; i < NumberOfFissions; i++) {
-      FissionEvents.push_back(YieldData_->G4GetFission());
-      // FIXME Use particle momentum in balance equation
-      // FissionEvents.push_back(YieldData_->G4GetFission(Projectile.Get4Momentum()));
+    if (nullptr != YieldData_) {
+      for (G4long i = 0; i < NumberOfFissions; i++) {
+	FissionEvents.push_back(YieldData_->G4GetFission());
+	// FIXME Use particle momentum in balance equation
+	// FissionEvents.push_back(YieldData_->G4GetFission(Projectile.Get4Momentum()));
+      }
     }
   }
   else {

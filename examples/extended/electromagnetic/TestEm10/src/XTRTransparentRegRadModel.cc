@@ -23,11 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file electromagnetic/TestEm10/src/XTRTransparentRegRadModel.cc
+/// \file XTRTransparentRegRadModel.cc
 /// \brief Implementation of the XTRTransparentRegRadModel class
-//
-//
 
 #include "XTRTransparentRegRadModel.hh"
 

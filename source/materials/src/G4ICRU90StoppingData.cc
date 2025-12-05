@@ -78,9 +78,6 @@ void G4ICRU90StoppingData::Initialise()
   }
   // this method may be called several times during initialisation
   auto nmat = (G4int)G4Material::GetNumberOfMaterials();
-  if (nmat == (G4int)nvectors) {
-    return;
-  }
 
   static const G4String nameNIST_ICRU90[3] = {"G4_AIR", "G4_WATER", "G4_GRAPHITE"};
 

@@ -23,13 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file OpNovice/src/OpNovicePrimaryGeneratorAction.cc
+/// \file OpNovicePrimaryGeneratorAction.cc
 /// \brief Implementation of the OpNovicePrimaryGeneratorAction class
-//
-//
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "OpNovicePrimaryGeneratorAction.hh"
 

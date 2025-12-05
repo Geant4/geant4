@@ -24,12 +24,7 @@
 // ********************************************************************
 //
 /// \file Sphere.cc
-/// \brief Main program of the hadronic/ParticleFluence/Sphere example
-//
-//
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// \brief Main program of the ParticleFluence/Sphere example
 
 #include "ActionInitialization.hh"
 #include "DetectorConstruction.hh"

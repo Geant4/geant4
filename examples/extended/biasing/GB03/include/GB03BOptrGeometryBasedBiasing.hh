@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 /// \file GB03BOptrGeometryBasedBiasing.hh
 /// \brief Definition of the GB03BOptrGeometryBasedBiasing class
 
@@ -87,7 +86,5 @@ class GB03BOptrGeometryBasedBiasing : public G4VBiasingOperator
     G4GenericMessenger* fSplittingFactorMessenger;
     G4GenericMessenger* fApplyProbabilityMessenger;
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif

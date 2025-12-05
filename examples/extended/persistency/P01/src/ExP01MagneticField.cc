@@ -23,11 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file persistency/P01/src/ExP01MagneticField.cc
+/// \file ExP01MagneticField.cc
 /// \brief Implementation of the ExP01MagneticField class
-//
-//
-//
+
 //   User Field class implementation.
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

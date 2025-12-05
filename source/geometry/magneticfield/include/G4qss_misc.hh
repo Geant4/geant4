@@ -23,7 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// Authors: Lucio Santi, Rodrigo Castro (Univ. Buenos Aires) - 2018-2021 
+// Qss_misc
+//
+// Auxiliary namespace for QSS data.
+//
+// Authors: Lucio Santi, Rodrigo Castro (Univ. Buenos Aires), 2018-2021 
 // --------------------------------------------------------------------
 #ifndef _QSS_MISC_H_
 #define _QSS_MISC_H_ 1
@@ -33,7 +37,12 @@
 using QSS_simulator = struct QSS_simulator_*;
 using QSSSubstep = struct QSSSubstep_*;
 
-namespace Qss_misc { 
+/**
+ * @brief Qss_misc defines an auxiliary namespace for QSS drivers data.
+ */
+
+namespace Qss_misc
+{ 
   // Convention of Geant4 notation of indices
   constexpr unsigned int PXidx= 0;
   constexpr unsigned int PYidx= 1;

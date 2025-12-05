@@ -23,10 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file RE06/include/RE06SteppingVerbose.hh
+/// \file RE06SteppingVerbose.hh
 /// \brief Definition of the RE06SteppingVerbose class
-//
-//
 
 class RE06SteppingVerbose;
 

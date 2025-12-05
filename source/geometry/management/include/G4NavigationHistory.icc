@@ -23,8 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// class G4NavigationHistory Inline implementation
+// G4NavigationHistory Inline implementation
 //
+// Author: Paul Kent (CERN), 25.07.1996 - Initial version.
 // ----------------------------------------------------------------------
 
 extern G4GEOM_DLL G4Allocator<G4NavigationHistory>*& aNavigHistoryAllocator();

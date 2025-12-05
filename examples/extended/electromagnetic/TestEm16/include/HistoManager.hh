@@ -23,12 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm16/include/HistoManager.hh
-/// \brief Implementation of the HistoManager class
-//
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// \file HistoManager.hh
+/// \brief Definition of the HistoManager class
 
 #ifndef HistoManager_h
 #define HistoManager_h 1

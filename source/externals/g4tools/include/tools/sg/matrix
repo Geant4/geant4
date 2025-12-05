@@ -60,22 +60,13 @@ public:
   }
 public:
   matrix():parent(),mtx(mat4f()) {
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
     add_fields();
     mtx.set_identity();
   }
   virtual ~matrix(){
-#ifdef TOOLS_MEM
-    mem::decrement(s_class().c_str());
-#endif
   }
 public:
   matrix(const matrix& a_from):parent(a_from),mtx(a_from.mtx) {
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
     add_fields();
   }
   matrix& operator=(const matrix& a_from){

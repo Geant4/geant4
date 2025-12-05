@@ -25,8 +25,8 @@
 //
 // G4FieldTrack implementation
 //
-// Author: John Apostolakis, CERN - First version, 14.10.1996
-// -------------------------------------------------------------------
+// Author: John Apostolakis (CERN), 14.10.1996 - First version
+// --------------------------------------------------------------------
 
 #include "G4FieldTrack.hh"
 
@@ -93,10 +93,7 @@ G4FieldTrack::G4FieldTrack( const G4ThreeVector& pPosition,
    fRestMass_c2(restMass_c2),
    fLabTimeOfFlight(LaboratoryTimeOfFlight), 
    fProperTimeOfFlight(0.),
-   // fMomentumDir(pMomentumDirection),
    fChargeState(  charge, magnetic_dipole_moment, pdgSpin ) 
-   // fChargeState(  charge, magnetic_dipole_moment ) , 
-   // fPDGSpin( pdgSpin )
 {
   UpdateFourMomentum( kineticEnergy, pMomentumDirection ); 
     // Sets momentum direction as well.
@@ -140,8 +137,6 @@ G4FieldTrack::G4FieldTrack( char )                  //  Nothing is set !!
   G4ThreeVector Zero(0.0, 0.0, 0.0);
   SetCurvePnt( Zero, Zero, 0.0 );
   SetPolarization( Zero ); 
-  // fInitialMomentumMag = 0.00; // Invalid
-  // fLastMomentumMag = 0.0; 
 }
 
 void G4FieldTrack::

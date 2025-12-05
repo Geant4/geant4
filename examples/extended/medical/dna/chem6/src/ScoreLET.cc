@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file ScoreLET.cc
+/// \brief Implementation of the ScoreLET class
+
 // This example is provided by the Geant4-DNA collaboration
 // chem6 example is derived from chem4 and chem5 examples
 //
@@ -36,57 +39,33 @@
 // The Geant4-DNA web site is available at http://geant4-dna.org
 //
 // Authors: W. G. Shin and S. Incerti (CENBG, France)
-//
-// $Id$
-//
-/// \file ScoreLET.cc
-/// \brief Implementation of the ScoreLET class
 
 #include "ScoreLET.hh"
 
 #include "G4RunManager.hh"
 #include "G4SystemOfUnits.hh"
 
-ScoreLET::ScoreLET(G4String name) : G4VPrimitiveScorer(name), G4UImessenger(), fEvtMap(0)
-{
-  fLET = 0;
-  fEdep = 0;
-  fStepL = 0;
-  fNEvent = 0;
-  fTrackID = 1;
-
-  fpLETDir = new G4UIdirectory("/scorer/LET/");
+ScoreLET::ScoreLET(G4String name) : G4VPrimitiveScorer(name), G4UImessenger() {
+  fpLETDir = std::make_unique<G4UIdirectory>("/scorer/LET/");
   fpLETDir->SetGuidance("LET scorer commands");
-
-  fpCutoff = new G4UIcmdWithADoubleAndUnit("/scorer/LET/cutoff", this);
-
-  fCutoff = DBL_MAX;
+  fpCutoff = std::make_unique<G4UIcmdWithADoubleAndUnit>("/scorer/LET/cutoff", this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-ScoreLET::~ScoreLET()
-{
-  delete fpLETDir;
-  delete fpCutoff;
+void ScoreLET::SetNewValue(G4UIcommand *command, const G4String newValue) {
+  if (command == fpCutoff.get()) {
+    fCutoff = G4UIcmdWithADoubleAndUnit::GetNewDoubleValue(newValue);
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-void ScoreLET::SetNewValue(G4UIcommand* command, G4String newValue)
-{
-  if (command == fpCutoff) fCutoff = atof(newValue);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
-
-G4bool ScoreLET::ProcessHits(G4Step* aStep, G4TouchableHistory* /*TH*/)
-{
+G4bool ScoreLET::ProcessHits(G4Step *aStep, G4TouchableHistory * /*TH*/) {
   // In order to follow the primary track
   // regardless charge increasing or decreasing
   if (aStep->GetTrack()->GetTrackID() != 1
-      && aStep->GetTrack()->GetParticleDefinition()->GetPDGEncoding() != 11)
-  {
+      && aStep->GetTrack()->GetParticleDefinition()->GetPDGEncoding() != 11) {
     G4int subType = aStep->GetTrack()->GetCreatorProcess()->GetProcessSubType();
     if (subType == 56 || subType == 57) {
       fTrackID = aStep->GetTrack()->GetTrackID();
@@ -94,28 +73,25 @@ G4bool ScoreLET::ProcessHits(G4Step* aStep, G4TouchableHistory* /*TH*/)
   }
 
   // Ignore the step if it is not primary.
-  if (aStep->GetTrack()->GetTrackID() != fTrackID)
-    return false;
-  else {
-    fStepL += aStep->GetStepLength() / um;
-    fEdep += aStep->GetTotalEnergyDeposit() / keV;
+  if (aStep->GetTrack()->GetTrackID() != fTrackID) { return false; }
+  fStepL += aStep->GetStepLength() / um;
+  fEdep += aStep->GetTotalEnergyDeposit() / keV;
 
-    G4int subType = aStep->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessSubType();
+  G4int subType = aStep->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessSubType();
 
-    // Don't add the kinetic energy of primary particle
-    if (subType == 56 || subType == 57) return false;
+  // Don't add the kinetic energy of primary particle
+  if (subType == 56 || subType == 57) { return false; }
 
-    const std::vector<const G4Track*>* secondary = aStep->GetSecondaryInCurrentStep();
+  const std::vector<const G4Track *> *secondary = aStep->GetSecondaryInCurrentStep();
 
-    size_t nbtrk = (*secondary).size();
+  size_t nbtrk = secondary->size();
 
-    if (nbtrk) {
-      for (size_t lp = 0; lp < nbtrk; lp++) {
-        // Store the kinetic energy of secondaries
-        // which less than cutoff energy.
-        if ((*secondary)[lp]->GetKineticEnergy() / eV < fCutoff) {
-          fEdep += (*secondary)[lp]->GetKineticEnergy() / keV;
-        }
+  if (nbtrk) {
+    for (size_t lp = 0; lp < nbtrk; lp++) {
+      // Store the kinetic energy of secondaries
+      // which less than cutoff energy.
+      if ((*secondary)[lp]->GetKineticEnergy() / eV < fCutoff) {
+        fEdep += (*secondary)[lp]->GetKineticEnergy() / keV;
       }
     }
   }
@@ -124,8 +100,7 @@ G4bool ScoreLET::ProcessHits(G4Step* aStep, G4TouchableHistory* /*TH*/)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-void ScoreLET::Initialize(G4HCofThisEvent* HCE)
-{
+void ScoreLET::Initialize(G4HCofThisEvent *HCE) {
   fEvtMap = new G4THitsMap<G4double>(GetMultiFunctionalDetector()->GetName(), GetName());
 
   fEvtMap->clear();
@@ -134,13 +109,12 @@ void ScoreLET::Initialize(G4HCofThisEvent* HCE)
   if (HCID < 0) {
     HCID = GetCollectionID(0);
   }
-  HCE->AddHitsCollection(HCID, (G4VHitsCollection*)fEvtMap);
+  HCE->AddHitsCollection(HCID, fEvtMap);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-void ScoreLET::EndOfEvent(G4HCofThisEvent*)
-{
+void ScoreLET::EndOfEvent(G4HCofThisEvent *) {
   fLET = fEdep / fStepL;
   if (!G4RunManager::GetRunManager()->GetCurrentEvent()->IsAborted()) {
     fEvtMap->add(fNEvent, fLET);
@@ -150,13 +124,6 @@ void ScoreLET::EndOfEvent(G4HCofThisEvent*)
   fLET = 0;
   fEdep = 0;
   fStepL = 0;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
-
-G4int ScoreLET::GetIndex(G4Step* /*aStep*/)
-{
-  return 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....

@@ -36,7 +36,6 @@
 #include "globals.hh"
 
 #include "G4INCLDeltaProductionChannel.hh"
-#include "G4INCLKinematicsUtils.hh"
 #include "G4INCLBinaryCollisionAvatar.hh"
 #include "G4INCLRandom.hh"
 #include "G4INCLGlobals.hh"
@@ -46,17 +45,19 @@ namespace G4INCL {
 
   const G4int DeltaProductionChannel::maxTries = 100000;
 
-  DeltaProductionChannel::DeltaProductionChannel(Particle *p1,
-						 Particle *p2)
-    : particle1(p1), particle2(p2)
-  {}
+  DeltaProductionChannel::DeltaProductionChannel(Particle *p1, Particle *p2,
+                                                 Nucleus *n)
+    : particle1(p1), particle2(p2), thenucleus(n) {}
 
   DeltaProductionChannel::~DeltaProductionChannel() {}
 
   G4double DeltaProductionChannel::sampleDeltaMass(G4double ecm) {
     const G4double maxDeltaMass = ecm - ParticleTable::effectiveNucleonMass - 1.0;
-    const G4double maxDeltaMassRndm = std::atan((maxDeltaMass-ParticleTable::effectiveDeltaMass)*2./ParticleTable::effectiveDeltaWidth);
-    const G4double deltaMassRndmRange = maxDeltaMassRndm - ParticleTable::minDeltaMassRndm;
+    const G4double maxDeltaMassRndm =
+                      std::atan((maxDeltaMass - ParticleTable::effectiveDeltaMass) * 2. /
+                      ParticleTable::effectiveDeltaWidth);
+    const G4double deltaMassRndmRange =
+                      maxDeltaMassRndm - ParticleTable::minDeltaMassRndm;
 // assert(deltaMassRndmRange>0.);
 
     G4double y=ecm*ecm;
@@ -105,6 +106,13 @@ namespace G4INCL {
     //    ParticleType p1TypeOld = particle1->getType();
     //    ParticleType p2TypeOld = particle2->getType();
     G4double ecm = KinematicsUtils::totalEnergyInCM(particle1, particle2);
+ 
+  // For SRC
+  ParticleType p1TypeOld = particle1->getType();
+  ParticleType p2TypeOld = particle2->getType();
+
+  // INCL_INFO( particle1->print() << '\n');
+  // INCL_INFO( particle2->print() << '\n');
 
     const G4int isospin = ParticleTable::getIsospin(particle1->getType()) +
       ParticleTable::getIsospin(particle2->getType());
@@ -232,11 +240,22 @@ namespace G4INCL {
     } else if(is2 == ParticleTable::getIsospin(Neutron)) {
       particle2->setType(Neutron);
     }
+ 
+  if (particle1->isDelta())
+    particle1->setMass(xmdel);
+  if (particle2->isDelta())
+    particle2->setMass(xmdel);
 
-    if(particle1->isDelta()) particle1->setMass(xmdel);
-    if(particle2->isDelta()) particle2->setMass(xmdel);
-
+  if (thenucleus) {
+    // std::cout<< "entrando" <<std::endl;
+    // std::cout<< particle1->print() <<std::endl;
+    // std::cout<< particle2->print() <<std::endl;
+    srcChannel = new SrcChannel(particle1, particle2, thenucleus);
+    srcChannel->fillFinalState(fs, p1TypeOld, p2TypeOld);
+    delete srcChannel;
+  } else {
     fs->addModifiedParticle(particle1);
     fs->addModifiedParticle(particle2);
   }
-}
+ } 
+} // namespace G4INCL

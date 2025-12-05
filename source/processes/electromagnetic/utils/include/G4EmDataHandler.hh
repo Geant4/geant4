@@ -71,14 +71,8 @@ public:
 
   ~G4EmDataHandler();
 
-  // add table
-  std::size_t SetTable(G4PhysicsTable*);
-
   // update existing table
   void UpdateTable(G4PhysicsTable*, std::size_t idx);
-
-  // save table pointer 
-  void SaveTable(G4PhysicsTable*, std::size_t idx);
 
   // assuming that the table is already defined
   G4PhysicsTable* MakeTable(std::size_t idx);

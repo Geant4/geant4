@@ -4,7 +4,6 @@
 #ifndef toolx_sg_text_freetype
 #define toolx_sg_text_freetype
 
-//#define TOOLX_DONE_FACE
 
 #include <tools/sg/base_freetype>
 #include <tools/sg/render_action>
@@ -12,7 +11,7 @@
 #include <tools/sg/bbox_action>
 #include <tools/sg/enums>
 #include <tools/lina/vec3d>
-#include <tools/fmanip>
+#include <tools/file>
 #include <tools/nostream>
 #include <tools/lina/box_3f>
 
@@ -20,7 +19,6 @@
 #include <tools/sg/group>
 #include <tools/sg/blend>
 #include <tools/sg/tex_quadrilateral>
-#include <tools/platform> //for APPLE TargetConditionals.h
 
 #include <tools/glutess/glutess>
 
@@ -32,8 +30,6 @@
 #include FT_GLYPH_H
 #include FT_OUTLINE_H
 #endif
-
-//#define TOOLX_SG_TEXT_FREETYPE_DEBUG
 
 namespace toolx {
 namespace sg {
@@ -66,7 +62,7 @@ protected: //gstos
         continue; //do we have the case num = 1 ?
       }
 
-      const float* data = tools::vec_data<float>(m_xys)+pos;
+      const float* data = m_xys.data()+pos;
 
       // data is a line_strip(), convert it to lines.
 
@@ -75,7 +71,7 @@ protected: //gstos
       size_t ngsto = nsegs*2*3; //3 = have a z (Windows GL).
       size_t sz = gsto_data.size();
       gsto_data.resize(sz+ngsto);
-      float* pxyz = tools::vec_data<float>(gsto_data)+sz;
+      float* pxyz = gsto_data.data()+sz;
 
       tools::gl::line_strip_to_lines_2to3(num,data,pxyz);
     }}
@@ -95,7 +91,7 @@ protected: //gstos
         continue;
       }
 
-      const float* data = tools::vec_data<float>(m_xys)+pos;
+      const float* data = m_xys.data()+pos;
 
       if((*it).first==tools::gl::triangles()) {
 
@@ -104,7 +100,7 @@ protected: //gstos
         size_t ngsto = ntri*3*3;
         size_t sz = gsto_data.size();
         gsto_data.resize(sz+ngsto);
-        float* pxyz = tools::vec_data<float>(gsto_data)+sz;
+        float* pxyz = gsto_data.data()+sz;
 
         tools::gl::cvt_2to3(num,data,pxyz);
 
@@ -115,7 +111,7 @@ protected: //gstos
         size_t ngsto = ntri*3*3;
         size_t sz = gsto_data.size();
         gsto_data.resize(sz+ngsto);
-        float* pxyz = tools::vec_data<float>(gsto_data)+sz;
+        float* pxyz = gsto_data.data()+sz;
 
         tools::gl::triangle_fan_to_triangles_2to3(num,data,pxyz);
 
@@ -126,7 +122,7 @@ protected: //gstos
         size_t ngsto = ntri*3*3;
         size_t sz = gsto_data.size();
         gsto_data.resize(sz+ngsto);
-        float* pxyz = tools::vec_data<float>(gsto_data)+sz;
+        float* pxyz = gsto_data.data()+sz;
 
         tools::gl::triangle_strip_to_triangles_2to3(num,data,pxyz);
 
@@ -141,9 +137,6 @@ protected: //gstos
     m_gsto_sz = gsto_data.size();
 
     if(gsto_data.empty()) {
-      //a_out << "toolx::sg::text_freetype::create_gsto :"
-      //      << " empty buffer."
-      //      << std::endl;
       return 0;
     }
 
@@ -206,11 +199,8 @@ public:
       size_t pos = item.first;
       size_t num = item.second;
       if(!num) continue;
-      //a_out << "toolx::sg::text_freetype::render :"
-      //      << " num points " << num
-      //      << std::endl;
 
-      const float* data = tools::vec_data<float>(m_xys)+pos;
+      const float* data = m_xys.data()+pos;
 
       a_action.draw_vertex_array_xy(tools::gl::line_strip(),num*2,data);
     }}
@@ -225,11 +215,8 @@ public:
       size_t pos = item.second.first;
       size_t num = item.second.second;
       if(!num) continue;
-      //a_out << "toolx::sg::text_freetype::render :"
-      //      << " num points " << num
-      //      << std::endl;
 
-      const float* data = tools::vec_data<float>(m_xys)+pos;
+      const float* data = m_xys.data()+pos;
 
       a_action.draw_vertex_array_xy((*it).first,num*2,data);
     }}
@@ -241,18 +228,7 @@ public:
     ///////////////////////////////////////////////////////////
     /// bitmap ////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////
-#if defined(ANDROID) /*|| TARGET_OS_IPHONE*/
-    // we do not have transparent texture here (see also gl/tex_img() that does img/4-bytes => img/3-bytes) :
-   {tools::sg::state& _state = a_action.state();
-    tools::colorf old_color = _state.m_color;
-    _state.m_color = tools::colorf_white();
-    a_action.color4f(_state.m_color);
     m_bitmaps.render(a_action);
-    _state.m_color = old_color;
-    a_action.color4f(_state.m_color);}
-#else
-    m_bitmaps.render(a_action);
-#endif
   }
 
   virtual void pick(tools::sg::pick_action& a_action) {
@@ -262,34 +238,6 @@ public:
       reset_touched();
     }}
 
-/*
-    //OPTIMIZATION : pick on the bounding box ?
-    if(m_face) {
-      tools::box3f box;
-      get_bounds(m_face,height,strings.values(),box);
-
-      vec3f mn = box.mn();
-      vec3f mx = box.mx();
-
-      mn = mtx*mn;
-      mx = mtx*mx;
-
-      if(a_action.is_inside(b[0],b[1])) {
-        //we have a pick.
-        a_action.set_done(true);
-        a_action.set_node(this);
-        return;
-      }
-
-      if(a_action.intersect(p1[0],p1[1],p2[0],p2[1],p3[0],p3[1])) {
-        a_action.set_done(true);
-        a_action.set_node(this);
-        return;
-      }
-    }
-    return;
-*/
-
     ///////////////////////////////////////////////////////////
     /// lines /////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////
@@ -298,7 +246,7 @@ public:
       const line_t& item = *it;
       size_t pos = item.first;
       size_t num = item.second;
-      const float* data = tools::vec_data<float>(m_xys)+pos;
+      const float* data = m_xys.data()+pos;
       if(a_action.add__line_strip_xy(*this,2*num,data,true)) return;
     }}
 
@@ -310,7 +258,7 @@ public:
       const std::pair<GLUenum,triangle_t>& item = *it;
       size_t pos = item.second.first;
       size_t num = item.second.second;
-      const float* data = tools::vec_data<float>(m_xys)+pos;
+      const float* data = m_xys.data()+pos;
       if(a_action.add__primitive_xy(*this,item.first,2*num,data,true)) return;
     }}
 
@@ -330,7 +278,7 @@ public:
    {tools_vforcit(line_t,m_lines,it) {
       const line_t& item = *it;
       size_t num = item.second;
-      const float* data = tools::vec_data<float>(m_xys)+item.first;
+      const float* data = m_xys.data()+item.first;
 
       float px,py,pz;
       float* pos = (float*)data;
@@ -349,7 +297,7 @@ public:
    {tools_vforcit(gl_triangle_t,m_triangles,it) {
       const std::pair<GLUenum,triangle_t>& item = *it;
       size_t num = item.second.second;
-      const float* data = tools::vec_data<float>(m_xys)+item.second.first;
+      const float* data = m_xys.data()+item.second.first;
 
       float px,py,pz;
       float* pos = (float*)data;
@@ -425,10 +373,6 @@ public: //tools::sg::base_text :
     if(!m_face) return 0;
     float value;
     if(!ascent(out,self().m_face,a_height,value)) return 0;
-#ifdef TOOLX_DONE_FACE
-    ::FT_Done_Face(m_face);
-    self().m_face = 0;
-#endif
     return value;
   }
 
@@ -438,10 +382,6 @@ public: //tools::sg::base_text :
     if(!m_face) return 0;
     float value;
     if(!descent(out,self().m_face,a_height,value)) return 0;
-#ifdef TOOLX_DONE_FACE
-    ::FT_Done_Face(m_face);
-    self().m_face = 0;
-#endif
     return value;
   }
 
@@ -451,10 +391,6 @@ public: //tools::sg::base_text :
     if(!m_face) return 0;
     float value;
     if(!y_advance(out,self().m_face,a_height,value)) return 0;
-#ifdef TOOLX_DONE_FACE
-    ::FT_Done_Face(m_face);
-    self().m_face = 0;
-#endif
     return value;
   }
 
@@ -469,10 +405,6 @@ public: //tools::sg::base_text :
     } else if(unitext.values().size()) {
       if(!get_bounds(out,self().m_face,a_height,unitext.values(),a_mn_x,a_mn_y,a_mn_z,a_mx_x,a_mx_y,a_mx_z)) return;
     }
-#ifdef TOOLX_DONE_FACE
-    ::FT_Done_Face(m_face);
-    self().m_face = 0;
-#endif
   }
 
   virtual bool truncate(const std::string& a_string,float a_height,float a_cut_width,std::string& a_out) const {
@@ -481,20 +413,14 @@ public: //tools::sg::base_text :
     if(!m_face) self().load_face(out);
     if(!m_face) return false;
     if(!truncate(out,self().m_face,a_height,a_string,a_cut_width,a_out)) return false;
-#ifdef TOOLX_DONE_FACE
-    ::FT_Done_Face(m_face);
-    self().m_face = 0;
-#endif
     return true;
   }
 
   void dump_unitext(std::ostream& a_out) {
-    //unitext.values().size()
     a_out << "unitext size : " << unitext.values().size() << std::endl;
     tools_vforcit(uniline,unitext.values(),vit) {
       const uniline& line = *vit;
       a_out << "beg line :" << std::endl;
-      //a_out << line << std::endl;
       tools_vforcit(unichar,line,it) {
         a_out << ((unsigned int)*it) << std::endl;
       }
@@ -506,9 +432,6 @@ protected:
   bool initialize() { //called from constructors.
     FT_Error error = ::FT_Init_FreeType(&m_library);
     if(error) {
-      //m_out << "toolx::sg::text_freetype :"
-      //      << " error : " << serror(error) << "."
-      //      << std::endl;
       m_library = 0;
       return false;
     }
@@ -562,8 +485,6 @@ protected:
     float screen_height = ymx-ymn;
     if(a_state.m_wh) screen_height *= a_state.m_wh; else screen_height = 100;
 
-    //::printf("debug : char_height_touched %g\n",screen_height);
-
     if(screen_height==m_char_height) return false;
     m_char_height = screen_height;
     return true;
@@ -575,10 +496,6 @@ protected:
     clean_gstos(); //must reset for all render_manager.
 
     if(!m_face) return;
-
-    //a_out << "toolx::sg::text_freetype::update_sg :"
-    //      << " font file opened."
-    //      << std::endl;
 
     m_encoding_offset = 0;
     if(!encoding_offset(m_face,m_encoding_offset)) {
@@ -607,7 +524,6 @@ protected:
       if(!bitmap_2_gl(a_out)) {m_bitmaps.clear();m_tqs.clear();return;}
     } else {
       update_what _what = lines;
-      //if(modeling==tools::sg::font_filled) _what = faces_and_lines;
       if(modeling==tools::sg::font_filled) _what = faces;
       if((_what==faces)||(_what==faces_and_lines)) outline_triangles_2_gl(a_out);
       if((_what==lines)||(_what==faces_and_lines)) outline_lines_2_gl(a_out);
@@ -624,7 +540,7 @@ protected:
         line_t& item = *it;
         size_t pos = item.first;
         size_t npt = item.second;
-        float* data = tools::vec_data<float>(m_xys)+pos+1;
+        float* data = m_xys.data()+pos+1;
         for(size_t i=0;i<npt;i++,data+=2) *data -= 0.5F * szy;
       }}
 
@@ -632,7 +548,7 @@ protected:
         std::pair<GLUenum,triangle_t>& item = *it;
         size_t pos = item.second.first;
         size_t npt = item.second.second;
-        float* data = tools::vec_data<float>(m_xys)+pos+1;
+        float* data = m_xys.data()+pos+1;
         for(size_t i=0;i<npt;i++,data+=2) *data -= 0.5F * szy;
       }}
 
@@ -651,7 +567,7 @@ protected:
         line_t& item = *it;
         size_t pos = item.first;
         size_t npt = item.second;
-        float* data = tools::vec_data<float>(m_xys)+pos+1;
+        float* data = m_xys.data()+pos+1;
         for(size_t i=0;i<npt;i++,data+=2) *data -= szy;
       }}
 
@@ -659,7 +575,7 @@ protected:
         std::pair<GLUenum,triangle_t>& item = *it;
         size_t pos = item.second.first;
         size_t npt = item.second.second;
-        float* data = tools::vec_data<float>(m_xys)+pos+1;
+        float* data = m_xys.data()+pos+1;
         for(size_t i=0;i<npt;i++,data+=2) *data -= szy;
       }}
 
@@ -671,11 +587,6 @@ protected:
     }
 
     m_tqs.clear();
-
-#ifdef TOOLX_DONE_FACE
-    ::FT_Done_Face(m_face);
-    m_face = 0;
-#endif
   }
 
   void outline_lines_2_gl(std::ostream& a_out) {
@@ -692,7 +603,7 @@ protected:
         m_trans_x = 0;
         m_trans_y = yline;
         size_t ibeg = m_lines.size(); //for hjust.
-        tools_sforcit(line,it) {
+        for(auto it = line.cbegin(); it != line.cend(); ++it) {
           if(!char_outline_2_gl(a_out,*it + m_encoding_offset)) return;
         }
         yline += -float(face_height)*m_scale;   //height >0
@@ -704,7 +615,7 @@ protected:
             line_t& item = m_lines[index];
             size_t pos = item.first;
             size_t npt = item.second;
-            float* data = tools::vec_data<float>(m_xys)+pos;
+            float* data = m_xys.data()+pos;
             for(size_t i=0;i<npt;i++,data+=2) *data -= 0.5F * sx;
           }
         } else if(hjust==tools::sg::right) {
@@ -713,7 +624,7 @@ protected:
             line_t& item = m_lines[index];
             size_t pos = item.first;
             size_t npt = item.second;
-            float* data = tools::vec_data<float>(m_xys)+pos;
+            float* data = m_xys.data()+pos;
             for(size_t i=0;i<npt;i++,data+=2) *data -= sx;
           }
         }}
@@ -723,7 +634,6 @@ protected:
       float yline = 0;
       tools_vforcit(uniline,unitext.values(),vit) {
         const uniline& line = *vit;
-        //a_out << line << std::endl;
         m_trans_x = 0;
         m_trans_y = yline;
         size_t ibeg = m_lines.size(); //for hjust.
@@ -739,7 +649,7 @@ protected:
             line_t& item = m_lines[index];
             size_t pos = item.first;
             size_t npt = item.second;
-            float* data = tools::vec_data<float>(m_xys)+pos;
+            float* data = m_xys.data()+pos;
             for(size_t i=0;i<npt;i++,data+=2) *data -= 0.5F*sx;
           }
         } else if(hjust==tools::sg::center) {
@@ -748,7 +658,7 @@ protected:
             line_t& item = m_lines[index];
             size_t pos = item.first;
             size_t npt = item.second;
-            float* data = tools::vec_data<float>(m_xys)+pos;
+            float* data = m_xys.data()+pos;
             for(size_t i=0;i<npt;i++,data+=2) *data -= sx;
           }
         }}
@@ -851,18 +761,14 @@ protected:
 
     ::gluTessProperty(m_tobj,(GLUenum)GLU_TESS_WINDING_RULE,GLU_TESS_WINDING_ODD);
 
-    //::gluTessProperty(m_tobj, GLU_TESS_TOLERANCE, 0);
-    //::gluTessNormal(m_tobj, 0.0f, 0.0f, -1.0f);
-
     if(strings.values().size()) {
       float yline = 0;
       tools_vforcit(std::string,strings.values(),vit) {
         const std::string& line = *vit;
-        //a_out << line << std::endl;
         m_trans_x = 0;
         m_trans_y = yline;
         size_t ibeg = m_triangles.size(); //for hjust.
-        tools_sforcit(line,it) {
+        for(auto it = line.cbegin(); it != line.cend(); ++it) {
           if(!char_triangles_2_gl(a_out,*it + m_encoding_offset)) {
             ::gluDeleteTess(m_tobj);
             m_tobj = 0;
@@ -878,7 +784,7 @@ protected:
             std::pair<GLUenum,triangle_t>& item = m_triangles[index];
             size_t pos = item.second.first;
             size_t npt = item.second.second;
-            float* data = tools::vec_data<float>(m_xys)+pos;
+            float* data = m_xys.data()+pos;
             for(size_t i=0;i<npt;i++,data+=2) *data -= sx*0.5f;
           }
         } else if(hjust==tools::sg::right) {
@@ -887,7 +793,7 @@ protected:
             std::pair<GLUenum,triangle_t>& item = m_triangles[index];
             size_t pos = item.second.first;
             size_t npt = item.second.second;
-            float* data = tools::vec_data<float>(m_xys)+pos;
+            float* data = m_xys.data()+pos;
             for(size_t i=0;i<npt;i++,data+=2) *data -= sx;
           }
         }}
@@ -896,7 +802,6 @@ protected:
       float yline = 0;
       tools_vforcit(uniline,unitext.values(),vit) {
         const uniline& line = *vit;
-        //a_out << line << std::endl;
         m_trans_x = 0;
         m_trans_y = yline;
         size_t ibeg = m_triangles.size(); //for hjust.
@@ -916,7 +821,7 @@ protected:
             std::pair<GLUenum,triangle_t>& item = m_triangles[index];
             size_t pos = item.second.first;
             size_t npt = item.second.second;
-            float* data = tools::vec_data<float>(m_xys)+pos;
+            float* data = m_xys.data()+pos;
             for(size_t i=0;i<npt;i++,data+=2) *data -= sx*0.5f;
           }
         } else if(hjust==tools::sg::right) {
@@ -925,7 +830,7 @@ protected:
             std::pair<GLUenum,triangle_t>& item = m_triangles[index];
             size_t pos = item.second.first;
             size_t npt = item.second.second;
-            float* data = tools::vec_data<float>(m_xys)+pos;
+            float* data = m_xys.data()+pos;
             for(size_t i=0;i<npt;i++,data+=2) *data -= sx;
           }
         }}
@@ -937,12 +842,6 @@ protected:
   }
 
   bool char_triangles_2_gl(std::ostream& a_out,unsigned int a_unichar) {
-    //if(m_verbose) {
-    //  a_out << "toolx::sg::text_freetype::char_triangles_2_gl :"
-    //        << " do " << a_unichar << "."
-    //        << std::endl;
-    //}
-
     FT_ULong charcode = a_unichar; //charcode is UTF-32.
     FT_UInt glyph_index = ::FT_Get_Char_Index(m_face,charcode);
     //NOTE : if not found -> glyph_index = 0 which is the "missing glyph".
@@ -1024,8 +923,6 @@ protected:
   /// bitmap /////////////////////////////////////////////
   ////////////////////////////////////////////////////////
   bool bitmap_2_gl(std::ostream& a_out) {
-  //if(!set_char_size(a_out,m_face,height.value(),m_scale)) return;
-    //::printf("debug : xxxxx %g\n",m_char_height);
     FT_F26Dot6 wchar = (FT_F26Dot6)(m_char_height*64);
     FT_F26Dot6 hchar = (FT_F26Dot6)(m_char_height*64);
     FT_UInt hres = 72;
@@ -1042,16 +939,14 @@ protected:
     m_scale = height.value()/float(hchar);
 
     FT_Pos face_height = m_face->size->metrics.height; //FT_Pos (long)
-    //::printf("debug : face_height %lu\n",face_height);
     if(strings.values().size()) {
       float yline = 0;
       tools_vforcit(std::string,strings.values(),vit) {
         const std::string& line = *vit;
-        //a_out << line << std::endl;
         m_trans_x = 0;
         m_trans_y = yline;
         size_t ibeg = m_tqs.size(); //for hjust.
-        tools_sforcit(line,it) {
+        for(auto it = line.cbegin(); it != line.cend(); ++it) {
           if(!char_2_bitmap(a_out,*it + m_encoding_offset)) return false;
         }
         yline += -float(face_height)*m_scale; //height>0
@@ -1075,7 +970,6 @@ protected:
       float yline = 0;
       tools_vforcit(uniline,unitext.values(),vit) {
         const uniline& line = *vit;
-        //a_out << line << std::endl;
         m_trans_x = 0;
         m_trans_y = yline;
         size_t ibeg = m_tqs.size(); //for hjust.
@@ -1104,12 +998,6 @@ protected:
   }
 
   bool char_2_bitmap(std::ostream& a_out,unsigned int a_unichar) {
-    //if(m_verbose) {
-    //  a_out << "toolx::sg::text_freetype::char_2_bitmap :"
-    //        << " do " << a_unichar << "."
-    //        << std::endl;
-    //}
-
     FT_ULong charcode = a_unichar; //charcode is UTF-32.
     FT_UInt glyph_index = ::FT_Get_Char_Index(m_face,charcode);
     //NOTE : if not found -> glyph_index = 0 which is the "missing glyph".
@@ -1160,21 +1048,7 @@ protected:
       return false;
     }}
 
-    //typedef struct  FT_Bitmap_ {
-    //    int             rows;
-    //    int             width;
-    //    int             pitch;
-    //    unsigned char*  buffer;
-    //    short           num_grays;
-    //    char            pixel_mode;
-    //    char            palette_mode;
-    //   void*            palette;
-    //} FT_Bitmap;
-
     FT_BitmapGlyph bitmap = (FT_BitmapGlyph)glyph;
-
-    //::printf("debug : unichar %u : r %d  w %d pitch %d : grays %d\n",
-    //    a_unichar,bitmap->bitmap.rows,bitmap->bitmap.width,bitmap->bitmap.pitch,bitmap->bitmap.num_grays);
 
     if( (bitmap->bitmap.pixel_mode!=ft_pixel_mode_mono) &&
         (bitmap->bitmap.pixel_mode!=ft_pixel_mode_grays) ){
@@ -1209,7 +1083,6 @@ protected:
     if(bitmap->bitmap.pixel_mode==ft_pixel_mode_mono) {
       a_out << "toolx::sg::text_freetype::char_2_bitmap : mode_mono : not yet handled." << std::endl;
 
-      //img_grays = 1;
       img_h = bitmap->bitmap.rows;
       //WARNING : bitmap->bitmap.pitch != int((bitmap->bitmap.width+7)/8) !!!
       // OpenGL wants the below for cols.
@@ -1236,7 +1109,6 @@ protected:
       img_w = bitmap->bitmap.width;
       img_h = bitmap->bitmap.rows;
       img_sz = img_w * img_h * img_bpp;
-      //img_grays = bitmap->bitmap.num_grays;
     }
 
     if(img_sz<=0) {
@@ -1274,19 +1146,13 @@ protected:
 
       FT_BBox _bbox;
       FT_Glyph_Get_CBox(glyph,ft_glyph_bbox_pixels,&_bbox);
-      //float _width  = float(_bbox.xMax)-float(_bbox.xMin);
-      //float _height = float(_bbox.yMax)-float(_bbox.yMin);
-      //aAdvance = int(face->glyph->advance.x/64);
 
       std::vector<tools::vec3f> vcs;
-      //::printf("debug : box : %d %d %d %d\n",_bbox.xMin,_bbox.xMax,_bbox.yMin,_bbox.yMax);
       float scale = height.value()/m_char_height;
       float x_min = float(_bbox.xMin)*scale+m_trans_x;
       float x_max = float(_bbox.xMax)*scale+m_trans_x;
       float y_min = float(_bbox.yMin)*scale+m_trans_y;
       float y_max = float(_bbox.yMax)*scale+m_trans_y;
-      //::printf("debug : scale %g, trans %g %g\n",m_scale,m_trans_x,m_trans_y);
-      //::printf("debug : corners %g %g %g %g\n",x_min,x_max,y_min,y_max);
 
       vcs.push_back(tools::vec3f(x_min,y_min,0));
       vcs.push_back(tools::vec3f(x_max,y_min,0));
@@ -1303,33 +1169,6 @@ protected:
 
       m_bitmaps.add(_node);
       m_tqs.push_back(_node);
-
-      /*
-      if(bitmap->bitmap.pixel_mode==ft_pixel_mode_mono) {
-        if((aChar=='T')||(aChar=='a')||(aChar=='o')||(aChar=='L')) {
-          printf("bitmap for '%c' : w = %d h = %d cols %d : ptsize = %d\n",
-            aChar,a_raster.width,a_raster.rows,a_raster.cols,getPointSize());
-          for( int row = (a_raster.rows-1); row >=0; --row ) {
-            unsigned char* bline = (unsigned char*)a_raster.buffer + row * a_raster.cols;
-            int icol = 0;
-            int ibit = 0;
-            unsigned char byte = (unsigned char)bline[icol];
-            icol++;
-            for( int i= 0; i < a_raster.width; ++i ) {
-              unsigned char v =  (byte & (1<<(7-ibit)));
-              printf("%c",(v?'x':' '));
-              ibit++;
-              if(ibit==8) {
-                ibit = 0;
-                byte = (unsigned char)bline[icol];
-                icol++;
-              }
-            }
-            printf("\n");
-          }
-        }
-      }*/
-
     }
 
     m_trans_x += float(m_face->glyph->advance.x)*m_scale;
@@ -1346,26 +1185,11 @@ protected:
     text_freetype& self = *((text_freetype*)a_this);
     self.m_mode = a_which;
     self.m_pos = self.m_xys.size();
-#ifdef TOOLX_SG_TEXT_FREETYPE_DEBUG
-    self.m_out << "toolx::sg::text_freetype::begin_cbk :"
-          << " which " << a_which
-          << " GL_TRIANGLE_STRIP " << GL_TRIANGLE_STRIP
-          << " GL_TRIANGLE_FAN " << GL_TRIANGLE_FAN
-          << " GL_TRIANGLES " << GL_TRIANGLES
-          << std::endl;
-#endif
   }
 
   static void GLUAPIENTRY vertex_cbk(void* a_vertex,void* a_this) {
     text_freetype& self = *((text_freetype*)a_this);
     double* vertex = (double*)a_vertex;
-#ifdef TOOLX_SG_TEXT_FREETYPE_DEBUG
-    std::cout << "toolx::sg::text_freetype::vertex_cbk :"
-          << " x " << vertex[0]
-          << " y " << vertex[1]
-          << " z " << vertex[2]
-          << std::endl;
-#endif
     self.add_xy(float(vertex[0]),float(vertex[1]));
   }
 
@@ -1390,10 +1214,6 @@ protected:
   }
 
   static void GLUAPIENTRY error_cbk(GLUenum,void*) {
-    //const GLubyte* estring = gluErrorString(aErrorCode);
-    //::fprintf(stderr, "Tessellation Error: %s\n", estring);
-    //SbTessContour* This = (SbTessContour*)aThis;
-    //This->setError(true);
   }
 
   ////////////////////////////////////////////////////////
@@ -1409,11 +1229,6 @@ protected:
     //        Exa : if char_width is 100*64 get some x of
     //        the same magnitude (in [0,6400]).
     text_freetype& self = *((text_freetype*)a_this);
-
-    //self.m_out << "toolx::sg::text_freetype::outline_move_to :"
-    //           << " x " << a_to->x
-    //           << " y " << a_to->y
-    //           << std::endl;
 
     float gx,gy;
     self.set_g(gx,gy,float(a_to->x),float(a_to->y));
@@ -1442,12 +1257,6 @@ protected:
   }
   static int outline_line_to(const FT_Vector* a_to,void* a_this){
     text_freetype& self = *((text_freetype*)a_this);
-
-    //self.m_out << "toolx::sg::text_freetype::outline_line_to :"
-    //           << " x " << a_to->x
-    //           << " y " << a_to->y
-    //           << std::endl;
-
     float gx,gy;
     self.set_g(gx,gy,float(a_to->x),float(a_to->y));
 
@@ -1486,11 +1295,6 @@ protected:
 
     // logic taken from OGLFT.
 
-    //OPTIMIZE :
-    //b = from - 2 * ctrl + to;
-    //c = -2 * from + 2 * ctrl;
-    //df = c * self.m_delta + b * self.m_delta2;
-    //df2 = 2 * b * self.m_delta2;
     float bx = fromx - 2 * ctrlx + tox;
     float by = fromy - 2 * ctrly + toy;
 
@@ -1529,7 +1333,6 @@ protected:
       dfy += df2y;
     }
 
-    //g = to;
     self.set_g(gx,gy,tox,toy);
 
     if(self.m_tobj) {
@@ -1554,15 +1357,6 @@ protected:
 
     // it must be fast. We avoid vec3f manipulations.
 
-    //self.m_out << "toolx::sg::text_freetype::outline_cubic_to :"
-    //      << " ctrl1 x " << a_ctrl1->x
-    //      << " ctrl1 y " << a_ctrl1->y
-    //      << " ctrl2 x " << a_ctrl2->x
-    //      << " ctrl2 y " << a_ctrl2->y
-    //      << " x " << a_to->x
-    //      << " y " << a_to->y
-    //      << std::endl;
-
     float ctrl1x = float(a_ctrl1->x);
     float ctrl1y = float(a_ctrl1->y);
 
@@ -1576,14 +1370,6 @@ protected:
     float toy = float(a_to->y);
 
     // logic taken from OGLFT.
-
-    //OPTIMIZE :
-    //a = -from + 3 * ctrl1 - 3 * ctrl2 + to;
-    //b = 3 * from - 6 * ctrl1 + 3 * ctrl2;
-    //c = -3 * from + 3 * ctrl1;
-    //df = c * self.m_delta + b * self.m_delta2 + a * self.m_delta3;
-    //df2 = 2 * b * self.m_delta2 + 6 * a * self.m_delta3;
-    //df3 = 6 * a * self.m_delta3;
 
     float ax = -fromx + 3 * ctrl1x - 3 * ctrl2x + tox;
     float ay = -fromy + 3 * ctrl1y - 3 * ctrl2y + toy;
@@ -1768,7 +1554,7 @@ protected:
 
     if(parent::find_font_with_finders(font.value(),file)) {
     } else {
-      tools::find_with_env(a_out,s_TOOLS_FONT_PATH(),font.value(),file,false);
+      tools::file::find_with_env(a_out,s_TOOLS_FONT_PATH(),font.value(),file,false);
     }
     
     if(file.empty()) {
@@ -1806,8 +1592,6 @@ protected:
 protected:
   static int load_flags() {
     return FT_LOAD_DEFAULT | FT_LOAD_NO_HINTING;
-    //return FT_LOAD_DEFAULT;
-    //return FT_LOAD_NO_HINTING | FT_LOAD_NO_BITMAP;
   }
 
   static bool set_char_size(std::ostream& a_out,FT_Face& a_face,float a_height,float& a_scale) {
@@ -1874,16 +1658,11 @@ protected:
     unsigned short offset;
     if(!encoding_offset(a_face,offset)) return false;
 
-    tools_sforcit(a_string,it) {
+    for(auto it = a_string.cbegin(); it != a_string.cend(); ++it) {
       FT_ULong charcode = *it + offset; //charcode is UTF-32.
       FT_UInt glyph_index = ::FT_Get_Char_Index(a_face,charcode);
       //NOTE : if not found -> glyph_index = 0 which is the "missing glyph".
       if((FT_Long)glyph_index>=a_face->num_glyphs) {
-#ifdef TOOLX_SG_TEXT_FREETYPE_DEBUG
-        m_out << "toolx::sg::text_freetype::truncate :"
-              << " FT_Get_Char_Index : failed for char : " << *it
-              << std::endl;
-#endif
         a_sout.clear();
         ::FT_Done_Face(a_face);
         a_face = 0;
@@ -1892,12 +1671,6 @@ protected:
 
      {FT_Error error = ::FT_Load_Glyph(a_face,glyph_index,load_flags());
       if(error) {
-#ifdef TOOLX_SG_TEXT_FREETYPE_DEBUG
-        m_out << "toolx::sg::text_freetype::truncate :"
-              << " for character " << *it
-              << ",FT_Load_Glyph : error : " << serror(error)
-              << std::endl;
-#endif
         a_sout.clear();
         ::FT_Done_Face(a_face);
         a_face = 0;
@@ -1934,7 +1707,7 @@ protected:
       const std::string& line = *vit;
 
       float width = 0;
-      tools_sforcit(line,it) {
+      for(auto it = line.cbegin(); it != line.cend(); ++it) {
         FT_ULong charcode = *it + offset; //charcode is UTF-32.
         FT_UInt glyph_index = ::FT_Get_Char_Index(a_face,charcode);
         //NOTE : if not found -> glyph_index = 0 which is the "missing glyph".
@@ -1951,12 +1724,11 @@ protected:
           return false;
         }}
 
-        //float cwidth = float(a_face->glyph->metrics.width)*scale;
         float advance = float(a_face->glyph->advance.x)*scale;
         width += advance;
       }
 
-      xmx = tools::mx<float>(xmx,width);
+      xmx = tools::max_of<float>(xmx,width);
     }
 
     FT_Pos ascent = a_face->size->metrics.ascender; //FT_Pos (long)
@@ -2011,12 +1783,11 @@ protected:
           return false;
         }}
 
-        //float cwidth = float(a_face->glyph->metrics.width)*scale;
         float advance = float(a_face->glyph->advance.x)*scale;
         width += advance;
       }
 
-      xmx = tools::mx<float>(xmx,width);
+      xmx = tools::max_of<float>(xmx,width);
     }
 
     FT_Pos ascent = a_face->size->metrics.ascender; //FT_Pos (long)
@@ -2057,10 +1828,6 @@ protected:
 
     a_offset = 0;
 
-    //std::cout << "toolx::sg::text_freetype::encoding_offset :"
-    //          << " num charmap " << a_face->num_charmaps  << "."
-    //          << std::endl;
-
     // cooking to handle symbol.ttf and wingding.ttf :
     FT_Int n = a_face->num_charmaps;
     FT_Int i;
@@ -2069,15 +1836,8 @@ protected:
       unsigned short platform = charmap->platform_id;
       unsigned short encoding = charmap->encoding_id;
 
-      //std::cout << "toolx::sg::text_freetype::encoding_offset :"
-      //          << " for charmap " << i
-      //          << ", platform " << platform
-      //          << ", encoding " << encoding << "."
-      //          << std::endl;
-
       if ( (platform == 3 && encoding == 1 )  ||
            (platform == 3 && encoding == 0 )  ||
-           //(platform == 1 && encoding == 0 )  ||
            (platform == 0 && encoding == 0 ) ) {
           FT_Error error = FT_Set_Charmap(a_face,charmap);
           if(error) {
@@ -2088,19 +1848,12 @@ protected:
           }
           // For symbol.ttf and wingding.ttf
           if (platform == 3 && encoding == 0 ) a_offset = 0xF000;
-          //if (platform == 1 && encoding == 0 ) a_offset = 0xF000;
           return true;
 
       } else {
-        //SoDebugError::post("SbTextTTF2Face::loadFont",
-        //  "for \"%s\", platform %d and encoding %d not taken into account",
-        //  filename,platform,encoding);
       }
     }
 
-    //a_out << "toolx::sg::text_freetype::update_sg :"
-    //      << " This font doesn't contain any Unicode mapping table."
-    //      << std::endl;
     ::FT_Done_Face(a_face);
     a_face = 0;
     a_offset = 0;

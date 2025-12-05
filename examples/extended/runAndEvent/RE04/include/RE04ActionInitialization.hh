@@ -23,10 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file include/RE04ActionInitialization.hh
+/// \file RE04ActionInitialization.hh
 /// \brief Definition of the RE04ActionInitialization class
-//
 
 #ifndef RE04ActionInitialization_H
 #define RE04ActionInitialization_H 1

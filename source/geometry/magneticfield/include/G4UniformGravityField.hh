@@ -29,8 +29,8 @@
 //
 // Class for creation of Uniform Gravitation Field.
 
-// Created: P.Gumplinger, 14.06.2011 - Adapted from G4UniformElectricField
-//          Thanks to P.Fierlinger (PSI), A.Capra and A.Fontana (INFN Pavia)
+// Author: Peter Gumplinger (TRIUMF), 14.06.2011
+//         Thanks to P.Fierlinger (PSI), A.Capra and A.Fontana (INFN Pavia)
 // -------------------------------------------------------------------
 #ifndef G4UNIFORMGRAVITYFIELD_HH
 #define G4UNIFORMGRAVITYFIELD_HH
@@ -41,28 +41,59 @@
 #include "G4ThreeVector.hh"
 #include "G4Field.hh"
 
+/**
+ * @brief G4UniformGravityField is a class for defining a uniform
+ * gravitation field.
+ */
+
 class G4UniformGravityField : public G4Field
 {
   public:
 
+    /**
+     * Constructor for G4UniformGravityField, a field with value equal
+     * to 'FieldVector'.
+     *  @param[in] FieldVector The field vector value.
+     */
     G4UniformGravityField(const G4ThreeVector& FieldVector );
-      // A field with value equal to FieldVector.
 
+    /**
+     * Alternative constructor for G4UniformGravityField.
+     *  @param[in] gy The gravitation field value (default is the Standard
+     *             Gravitational field on earth's surface.
+     */
     G4UniformGravityField(const G4double gy = -9.81*CLHEP::m/CLHEP::s/CLHEP::s);
-      // Standard Gravitational field on earth's surface
 
-   ~G4UniformGravityField() override;
+    /**
+     * Default Destructor.
+     */
+    ~G4UniformGravityField() override = default;
 
+    /**
+     * Copy constructor and assignment operator.
+     */
     G4UniformGravityField(const G4UniformGravityField& p);
     G4UniformGravityField& operator=(const G4UniformGravityField& p);
-      // Copy constructor and assignment operator
 
+    /**
+     * The field can change track energy, so returning true.
+     */
     inline G4bool DoesFieldChangeEnergy() const override { return true; }
-      // Since a gravitational field can change track energy
 
+    /**
+     * Returns the field value 'field' on given time 'Point'.
+     */
     void GetFieldValue(const G4double Point[4], G4double* field) const override;
     
+    /**
+     * Returns a pointer to a new allocated clone of this object.
+     */
     G4Field* Clone() const override;
+
+    /**
+     * Returns the field type ID, 'kGravity'.
+     */
+    inline G4FieldType GetFieldType() const override { return kGravity; }
 
   private:
 

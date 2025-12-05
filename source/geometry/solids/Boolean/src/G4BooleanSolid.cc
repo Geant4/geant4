@@ -43,6 +43,7 @@
 namespace
 {
   G4RecursiveMutex polyhedronMutex = G4MUTEX_INITIALIZER;
+  G4Mutex boolMutex = G4MUTEX_INITIALIZER;
 }
 
 G4VBooleanProcessor* G4BooleanSolid::fExternalBoolProcessor = nullptr;
@@ -164,10 +165,14 @@ G4BooleanSolid& G4BooleanSolid::operator = (const G4BooleanSolid& rhs)
 const G4VSolid* G4BooleanSolid::GetConstituentSolid(G4int no) const
 {
   const G4VSolid* subSolid = nullptr;
-  if( no == 0 )  
+  if( no == 0 )
+  {  
     subSolid = fPtrSolidA;
-  else if( no == 1 ) 
+  }
+  else if( no == 1 )
+  { 
     subSolid = fPtrSolidB;
+  }
   else
   {
     DumpInfo();
@@ -186,10 +191,14 @@ const G4VSolid* G4BooleanSolid::GetConstituentSolid(G4int no) const
 G4VSolid* G4BooleanSolid::GetConstituentSolid(G4int no)
 {
   G4VSolid* subSolid = nullptr;
-  if( no == 0 )  
+  if( no == 0 )
+  {  
     subSolid = fPtrSolidA;
-  else if( no == 1 ) 
+  }
+  else if( no == 1 )
+  { 
     subSolid = fPtrSolidB;
+  }
   else
   {
     DumpInfo();
@@ -465,11 +474,11 @@ G4ThreeVector G4BooleanSolid::GetPointOnSurface() const
      {
        prim  = fPrimitives[i];
        area += prim.first->GetSurfaceArea();
-       if (rand < area) break;
+       if (rand < area) { break; }
      }
      p = prim.first->GetPointOnSurface();
      p = prim.second * G4Point3D(p);
-     if (Inside(p) == kSurface) return p;
+     if (Inside(p) == kSurface) { return p; }
   }
   std::ostringstream message;
   message << "Solid - " << GetName() << "\n"
@@ -582,9 +591,26 @@ G4double G4BooleanSolid::GetCubicVolume()
 {
   if(fCubicVolume < 0.)
   {
+    G4AutoLock l(&boolMutex);
     fCubicVolume = EstimateCubicVolume(fCubVolStatistics, fCubVolEpsilon);
+    l.unlock();
   }
   return fCubicVolume;
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Estimate Surface Area and cache it for reuse.
+
+G4double G4BooleanSolid::GetSurfaceArea()
+{
+  if(fSurfaceArea < 0.)
+  {
+    G4AutoLock l(&boolMutex);
+    fSurfaceArea = EstimateSurfaceArea(fAreaStatistics, fAreaAccuracy);
+    l.unlock();
+  }
+  return fSurfaceArea;
 }
 
 //////////////////////////////////////////////////////////////////////////

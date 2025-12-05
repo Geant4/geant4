@@ -35,29 +35,41 @@
 // to a subclass of G4VTrajectoryPoint, which must take responsibility
 // for deleting them.
 
-// First version: Nov 19, 2002 - Jacek Generowicz
+// Author: Jacek Generowicz (CERN), 19.11.2002
 // ------------------------------------------------------------------------
 #ifndef G4IDENTITYTRAJECTORYFILTER_HH
-#define G4IDENTITYTRAJECTORYFILTER_HH 1
+#define G4IDENTITYTRAJECTORYFILTER_HH
 
 #include "G4VCurvedTrajectoryFilter.hh"
 #include "G4ThreeVector.hh"
 
+/**
+ * @brief G4IdentityTrajectoryFilter implements a trajectory point filter
+ * which accepts all points submitted to it.
+ */
+
 class G4IdentityTrajectoryFilter : public G4VCurvedTrajectoryFilter
 {
-
   public:
 
+    /**
+     * Default Constructor & Destructor.
+     */
     G4IdentityTrajectoryFilter() = default;
     ~G4IdentityTrajectoryFilter() override = default;
 
+    /**
+     * Copy constructor and assignement operator not allowed.
+     */
     G4IdentityTrajectoryFilter(const G4IdentityTrajectoryFilter&) =  delete;
     G4IdentityTrajectoryFilter& operator=(const G4IdentityTrajectoryFilter&) = delete;
-      // Do not want these objects to be copied or assigned
 
+    /**
+     * Submits intermediate points for the filter to consider keeping or
+     * rejecting.
+     *  @param[in] newPoint The new point to submit.
+     */
     void TakeIntermediatePoint( G4ThreeVector newPoint ) override;
-      // Submit intermediate points for the filter
-      // to consider keeping or rejecting
 };
 
 #endif

@@ -23,10 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file RE06/include/RE06PrimaryGeneratorAction.hh
+/// \file RE06PrimaryGeneratorAction.hh
 /// \brief Definition of the RE06PrimaryGeneratorAction class
-//
-//
 
 #ifndef RE06PrimaryGeneratorAction_h
 #define RE06PrimaryGeneratorAction_h 1

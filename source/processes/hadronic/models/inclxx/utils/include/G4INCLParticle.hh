@@ -96,6 +96,7 @@ namespace G4INCL {
       thePosition(rhs.thePosition),
       nCollisions(rhs.nCollisions),
       nDecays(rhs.nDecays),
+      nSrcPair(rhs.nSrcPair),
       thePotentialEnergy(rhs.thePotentialEnergy),
       rpCorrelated(rhs.rpCorrelated),
       uncorrelatedMomentum(rhs.uncorrelatedMomentum),
@@ -108,6 +109,7 @@ namespace G4INCL {
       theHelicity(rhs.theHelicity),
       emissionTime(rhs.emissionTime),
       outOfWell(rhs.outOfWell),
+      theSrcPartner(rhs.theSrcPartner),
       theMass(rhs.theMass)
       {
         if(rhs.thePropagationEnergy == &(rhs.theFrozenEnergy))
@@ -147,6 +149,7 @@ namespace G4INCL {
       std::swap(thePosition, rhs.thePosition);
       std::swap(nCollisions, rhs.nCollisions);
       std::swap(nDecays, rhs.nDecays);
+      std::swap(nSrcPair, rhs.nSrcPair),
       std::swap(thePotentialEnergy, rhs.thePotentialEnergy);
       // ID intentionally not swapped
 
@@ -158,6 +161,7 @@ namespace G4INCL {
       std::swap(theHelicity, rhs.theHelicity);
       std::swap(emissionTime, rhs.emissionTime);
       std::swap(outOfWell, rhs.outOfWell);
+      std::swap(theSrcPartner, rhs.theSrcPartner);
 
       std::swap(theMass, rhs.theMass);
       std::swap(rpCorrelated, rhs.rpCorrelated);
@@ -344,6 +348,11 @@ namespace G4INCL {
           theZ = 0;
           theS = 0;
           break;       
+        case antiComposite:
+          theA = 0;
+          theZ = 0;
+          theS = 0;
+          break;       
         case UnknownParticle:
           theA = 0;
           theZ = 0;
@@ -352,7 +361,7 @@ namespace G4INCL {
           break;
       }
 
-      if( !isResonance() && t!=Composite )
+      if( !isResonance() && t!=Composite && t!=antiComposite )
         setINCLMass();
     }
 
@@ -480,6 +489,9 @@ namespace G4INCL {
     
     /** \brief Returns the strangeness number. */
     G4int getS() const { return theS; }
+ 
+    /** \brief Returns the strangeness number. */
+    G4int getSrcPair() const { return nSrcPair; }
 
     G4double getBeta() const {
       const G4double P = theMomentum.mag();
@@ -578,6 +590,9 @@ namespace G4INCL {
         case Composite:
           return ParticleTable::getINCLMass(theA,theZ,theS);
           break;
+        case antiComposite:
+          return ParticleTable::getINCLMass(-theA,-theZ,theS);
+          break;
 
         default:
           INCL_ERROR("Particle::getINCLMass: Unknown particle type." << '\n');
@@ -630,6 +645,9 @@ namespace G4INCL {
 
         case Composite:
           return ParticleTable::getTableMass(theA,theZ,theS);
+          break;
+        case antiComposite:
+          return ParticleTable::getTableMass(-theA,-theZ,theS);
           break;
 
         default:
@@ -684,6 +702,9 @@ namespace G4INCL {
         case Composite:
           return ParticleTable::getRealMass(theA,theZ,theS);
           break;
+        case antiComposite:
+          return ParticleTable::getRealMass(-theA,-theZ,theS);
+          break;
 
         default:
           INCL_ERROR("Particle::getRealMass: Unknown particle type." << '\n');
@@ -734,33 +755,6 @@ namespace G4INCL {
       const G4double massINCLParticle = getINCLMass();
 
       // The rhs corresponds to the INCL Q-value
-      return theQValue - (massINCLParent-massINCLDaughter-massINCLParticle);
-    }
-
-    G4double getEmissionPbarQvalueCorrection(const G4int AParent, const G4int ZParent, const G4bool Victim) const {
-      G4int SParent = 0;
-      G4int SDaughter = 0;
-      G4int ADaughter = AParent - 1;
-      G4int ZDaughter; 
-      G4bool isProton = Victim;
-      if(isProton){     //proton is annihilated
-        ZDaughter = ZParent - 1;
-      }
-      else {       //neutron is annihilated
-        ZDaughter = ZParent;
-      }
-      
-      G4double theQValue; //same procedure as for normal case
-      
-      const G4double massTableParent = ParticleTable::getTableMass(AParent,ZParent,SParent);
-      const G4double massTableDaughter = ParticleTable::getTableMass(ADaughter,ZDaughter,SDaughter);
-      const G4double massTableParticle = getTableMass();
-      theQValue = massTableParent - massTableDaughter - massTableParticle;
-      
-      const G4double massINCLParent = ParticleTable::getINCLMass(AParent,ZParent,SParent);
-      const G4double massINCLDaughter = ParticleTable::getINCLMass(ADaughter,ZDaughter,SDaughter);
-      const G4double massINCLParticle = getINCLMass();
-
       return theQValue - (massINCLParent-massINCLDaughter-massINCLParticle);
     }
 
@@ -987,6 +981,9 @@ namespace G4INCL {
 
     /** \brief Increment the number of decays undergone by the particle. **/
     void incrementNumberOfDecays() { nDecays++; }
+ 
+    /** \brief Set the number of srcpairs. **/
+    void setNumberOfSrcPair(int n) { nSrcPair = n; }
 
     /** \brief Mark the particle as out of its potential well
      *
@@ -1000,6 +997,13 @@ namespace G4INCL {
 
     /// \brief Check if the particle is out of its potential well
     G4bool isOutOfWell() const { return outOfWell; }
+ 
+    /// \brief Set and reset src partner 
+    void setSrcPartner() { theSrcPartner = true; }  
+    void resetSrcPartner() { theSrcPartner = false; nSrcPair=0; }
+
+    /// \brief Check if the particle is a src partner    
+    G4bool isSrcPartner() const { return theSrcPartner; }
 
     void setEmissionTime(G4double t) { emissionTime = t; }
     G4double getEmissionTime() { return emissionTime; };
@@ -1021,7 +1025,7 @@ namespace G4INCL {
     G4double adjustEnergyFromMomentum();
 
     G4bool isCluster() const {
-      return (theType == Composite);
+      return ((theType == Composite || theType == antiComposite));
     }
 
     /// \brief Set the frozen particle momentum
@@ -1094,6 +1098,8 @@ namespace G4INCL {
       std::stringstream ss;
       ss << "Particle (ID = " << ID << ") type = ";
       ss << ParticleTable::getName(theType);
+      ss << ", SRC pair = " << nSrcPair;
+      ss << ", Potential energy = " << thePotentialEnergy;
       ss << '\n'
         << "   energy = " << theEnergy << '\n'
         << "   momentum = "
@@ -1109,6 +1115,7 @@ namespace G4INCL {
       std::stringstream ss;
       ss << "(particle " << ID << " ";
       ss << ParticleTable::getName(theType);
+      ss << nSrcPair << " ";
       ss << '\n'
         << thePosition.dump()
         << '\n'
@@ -1236,6 +1243,7 @@ namespace G4INCL {
     G4INCL::ThreeVector thePosition;
     G4int nCollisions;
     G4int nDecays;
+    G4int nSrcPair;
     G4double thePotentialEnergy;
     long ID;
 
@@ -1255,6 +1263,7 @@ namespace G4INCL {
     G4double theHelicity;
     G4double emissionTime;
     G4bool outOfWell;
+    G4bool theSrcPartner;
     
     /// \brief Time ordered vector of all biased vertices on the particle path
     std::vector<G4int> theBiasCollisionVector;

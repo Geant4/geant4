@@ -25,11 +25,6 @@
 //
 /// \file RunAction.cc
 /// \brief Implementation of the RunAction class
-//
-//
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "RunAction.hh"
 

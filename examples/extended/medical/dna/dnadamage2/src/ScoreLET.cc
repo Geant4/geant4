@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file ScoreLET.cc
+/// \brief Implementation of the ScoreLET class
+
 // This example is provided by the Geant4-DNA collaboration
 // chem6 example is derived from chem4 and chem5 examples
 //
@@ -36,11 +39,6 @@
 // The Geant4-DNA web site is available at http://geant4-dna.org
 //
 // Authors: W. G. Shin and S. Incerti (CENBG, France)
-//
-// $Id$
-//
-/// \file ScoreLET.cc
-/// \brief Implementation of the ScoreLET class
 
 #include "ScoreLET.hh"
 

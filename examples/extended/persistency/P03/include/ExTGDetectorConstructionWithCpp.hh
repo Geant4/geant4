@@ -23,9 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file persistency/P03/include/ExTGDetectorConstructionWithCpp.hh
+/// \file ExTGDetectorConstructionWithCpp.hh
 /// \brief Definition of the ExTGDetectorConstructionWithCpp class
-//
 
 #ifndef ExTGDetectorConstructionWithCpp_HH
 #define ExTGDetectorConstructionWithCpp_HH

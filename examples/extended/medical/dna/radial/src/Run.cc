@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file Run.cc
+/// \brief Implementation of the Run class
+
 // This example is provided by the Geant4-DNA collaboration
 // Any report or published results obtained using the Geant4-DNA software
 // shall cite the following Geant4-DNA collaboration publications:
@@ -34,8 +37,6 @@
 //
 // The Geant4-DNA web site is available at http://geant4-dna.org
 //
-/// \file Run.cc
-/// \brief Implementation of the Run class
 
 #include "Run.hh"
 
@@ -47,7 +48,7 @@
 Run::Run(DetectorConstruction* det)
 :fMyDetectorConstruction(det)
 {
-  G4int nbCyl = fMyDetectorConstruction->GetNumberCylinders();
+  G4int nbCyl = fMyDetectorConstruction->GetCylinderNumber();
   fCylDoseDeposit = new G4double[nbCyl];
   for (G4int i=0; i<nbCyl; ++i) fCylDoseDeposit[i] = 0;
 }
@@ -66,7 +67,7 @@ void Run::Merge(const G4Run* run)
   const Run* localRun = static_cast<const Run*>(run);
 
   // Accumulate dose deposits per cylinder
-  G4int nbCyl = fMyDetectorConstruction->GetNumberCylinders();
+  G4int nbCyl = fMyDetectorConstruction->GetCylinderNumber();
   for (G4int i=0; i<nbCyl; ++i)
     fCylDoseDeposit[i] += localRun->fCylDoseDeposit[i];
 
@@ -79,7 +80,7 @@ void Run::EndOfRun()
 {
   G4double dose=0;
 
-  for (G4int i = 0; i < fMyDetectorConstruction->GetNumberCylinders(); i++)
+  for (G4int i = 0; i < fMyDetectorConstruction->GetCylinderNumber(); i++)
     if (fCylDoseDeposit[i] > 0.) dose=dose+fCylDoseDeposit[i];
 
   G4cout << G4endl;

@@ -1,0 +1,24 @@
+\page Exampleperspective Example perspective
+
+examples/extended/visualization/perspective
+
+This example is another example of using the Geant Visualization
+System as a "stand-alone" graphics library and viewer.  See
+[Example standalone](../../html_standalone/html/Examplestandalone.html)
+for a simpler introductory explanation.
+
+The particular feature of this example is the addition of "perspective
+lines".  The direction of these lines is controlled by
+
+```
+/perspectiveDemo/optionString x
+```
+
+See vis.mac.
+
+Notes:
+- /perspectiveDemo/scene is not used at present.
+- visXm.mac is specially for use with G4UIXm and OGL*Xm.
+
+John Allison
+11th June 2012

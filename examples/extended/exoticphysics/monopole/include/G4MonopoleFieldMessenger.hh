@@ -23,12 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file exoticphysics/monopole/include/G4MonopoleFieldMessenger.hh
+/// \file G4MonopoleFieldMessenger.hh
 /// \brief Definition of the G4MonopoleFieldMessenger class
-//
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 // =======================================================================
 // Created:  15 Jun 2010, B. Bozsogi

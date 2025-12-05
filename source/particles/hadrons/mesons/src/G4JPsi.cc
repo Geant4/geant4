@@ -30,6 +30,7 @@
 // **********************************************************************
 //  New impelemenataion as an utility class  M.Asai, 26 July 2004
 // ----------------------------------------------------------------------
+//  Update mass and width (PDG2025)          S.Okada, 4 Nov. 2025
 
 #include "G4JPsi.hh"
 
@@ -59,7 +60,7 @@ G4JPsi* G4JPsi::Definition()
 
     // clang-format off
    anInstance = new G4ParticleDefinition(
-                 name,    3.096916*GeV,    0.0929*MeV,          0.,
+                 name,    3.096900*GeV,    0.0926*MeV,          0.,
                     2,              -1,            -1,
                     0,               0,            -1,
               "meson",               0,             0,         443,

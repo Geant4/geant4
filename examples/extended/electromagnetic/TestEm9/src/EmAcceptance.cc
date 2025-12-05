@@ -23,14 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm9/src/EmAcceptance.cc
-/// \brief Implementation of the Emeptance class
-//
-//
-//
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// \file EmAcceptance.cc
+/// \brief Implementation of the EmAcceptance class
 
 #include "EmAcceptance.hh"
 

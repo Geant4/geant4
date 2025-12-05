@@ -29,7 +29,7 @@
 //
 // Wrapper class for G4Ellipsoid to make use of VecGeom Ellipsoid.
 
-// 13.09.19 Gabriele Cosmo, CERN
+// Author: Gabriele Cosmo (CERN), 13.09.2019
 // --------------------------------------------------------------------
 #ifndef G4UELLIPSOID_HH
 #define G4UELLIPSOID_HH
@@ -42,6 +42,11 @@
 
 #include "G4Polyhedron.hh"
 
+/**
+ * @brief G4UEllipsoid is a wrapper class for G4Ellipsoid to make use
+ * of VecGeom Ellipsoid.
+ */
+
 class G4UEllipsoid : public G4UAdapter<vecgeom::UnplacedEllipsoid>
 {
   using Shape_t = vecgeom::UnplacedEllipsoid;
@@ -49,36 +54,86 @@ class G4UEllipsoid : public G4UAdapter<vecgeom::UnplacedEllipsoid>
 
   public:
 
-    G4UEllipsoid(const G4String& name, G4double pxSemiAxis,
-                                       G4double pySemiAxis,
-                                       G4double pzSemiAxis,
-                                       G4double pzBottomCut = 0.0,
-                                       G4double pzTopCut = 0.0);
-   ~G4UEllipsoid() override;
+    /**
+     * Constructs an ellipsoid, given its input parameters.
+     *  @param[in] name The solid name.
+     *  @param[in] pxSemiAxis Semiaxis in X.
+     *  @param[in] pySemiAxis Semiaxis in Y.
+     *  @param[in] pzSemiAxis Semiaxis in Z.
+     *  @param[in] pzBottomCut Optional lower cut plane level in Z.
+     *  @param[in] pzTopCut Optional upper cut plane level in Z.
+     */
+    G4UEllipsoid(const G4String& name,
+                       G4double pxSemiAxis,
+                       G4double pySemiAxis,
+                       G4double pzSemiAxis,
+                       G4double pzBottomCut = 0.0,
+                       G4double pzTopCut = 0.0);
 
+    /**
+     * Default destructor.
+     */
+    ~G4UEllipsoid() override = default;
+
+    /**
+     * Makes a clone of the object for use in multi-treading.
+     *  @returns A pointer to the new cloned allocated solid.
+     */
     G4VSolid* Clone() const override;
 
+    /**
+     * Accessors.
+     */
     G4double GetDx() const;
     G4double GetDy() const;
     G4double GetDz() const;
     G4double GetSemiAxisMax (G4int i) const;
     G4double GetZBottomCut() const;
     G4double GetZTopCut() const;
+
+    /**
+     * Modifiers.
+     */
     void SetSemiAxis (G4double x, G4double y, G4double z);
     void SetZCuts (G4double newzBottomCut, G4double newzTopCut);
 
+    /**
+     * Returns the type ID, "G4Ellipsoid" of the solid.
+     */
     inline G4GeometryType GetEntityType() const override;
 
-    G4UEllipsoid( const G4UEllipsoid &source );
-    G4UEllipsoid &operator=( const G4UEllipsoid &source );
-      // Copy constructor and assignment operator.
-
+    /**
+     * Computes the bounding limits of the solid.
+     *  @param[out] pMin The minimum bounding limit point.
+     *  @param[out] pMax The maximum bounding limit point.
+     */
     void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const override;
+
+    /**
+     * Calculates the minimum and maximum extent of the solid, when under the
+     * specified transform, and within the specified limits.
+     *  @param[in] pAxis The axis along which compute the extent.
+     *  @param[in] pVoxelLimit The limiting space dictated by voxels.
+     *  @param[in] pTransform The internal transformation applied to the solid.
+     *  @param[out] pMin The minimum extent value.
+     *  @param[out] pMax The maximum extent value.
+     *  @returns True if the solid is intersected by the extent region.
+     */
     G4bool CalculateExtent(const EAxis pAxis,
                            const G4VoxelLimits& pVoxelLimit,
                            const G4AffineTransform& pTransform,
                            G4double& pmin, G4double& pmax) const override;
+
+    /**
+     * Returns a generated polyhedron as graphical representations.
+     */
     G4Polyhedron* CreatePolyhedron() const override;
+
+    /**
+     * Copy constructor and assignment operator.
+     */
+    G4UEllipsoid( const G4UEllipsoid &source );
+    G4UEllipsoid &operator=( const G4UEllipsoid &source );
 };
 
 // --------------------------------------------------------------------

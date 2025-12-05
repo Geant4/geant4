@@ -47,6 +47,8 @@
 #include "G4INCLNuclearMassTable.hh"
 #include "G4INCLGlobalInfo.hh"
 #include "G4INCLNucleus.hh"
+#include "G4INCLDecayAvatar.hh"
+#include "G4INCLStore.hh"
 
 #include "G4INCLPauliBlocking.hh"
 
@@ -191,7 +193,7 @@ namespace G4INCL {
                  << "Target configuration rejected." << '\n');
       return false;
     }
-    if(projectileSpecies.theType==Composite &&
+    if((projectileSpecies.theType==Composite || projectileSpecies.theType == antiComposite)&&
        (projectileSpecies.theZ==projectileSpecies.theA || projectileSpecies.theZ==0)) {
       INCL_ERROR("Unsupported projectile: A = " << projectileSpecies.theA << " Z = " << projectileSpecies.theZ << " S = " << projectileSpecies.theS << '\n'
                  << "Projectile configuration rejected." << '\n');
@@ -209,12 +211,23 @@ namespace G4INCL {
     //reset
     G4bool ProtonIsTheVictim = false; 
     G4bool NeutronIsTheVictim = false;
+    G4bool DNbProtonIsTheVictim = false; 
+    G4bool DPbProtonIsTheVictim = false;
     theEventInfo.annihilationP = false;
     theEventInfo.annihilationN = false;
+    G4bool isModelA = true; //Antideuteron 
 
     //G4double AnnihilationBarrier = kineticEnergy;
-    if(projectileSpecies.theType == antiProton && kineticEnergy <= theConfig->getAtrestThreshold()){
-      G4double SpOverSn = 1.331;//from experiments with deuteron (E.Klempt)
+    if((projectileSpecies.theType == antiProton && kineticEnergy <= theConfig->getAtrestThreshold()) || (projectileSpecies.theType == antiNeutron && kineticEnergy <= theConfig->getnbAtrestThreshold())){
+      double SpOverSn;
+      if(projectileSpecies.theType == antiProton)
+        SpOverSn = 1.331;//from experiments with deuteron (E.Klempt)
+      else if(projectileSpecies.theType == antiNeutron)
+        SpOverSn = 1./1.331; //Opposite for antineutron
+      else{
+        SpOverSn = 1;
+        INCL_ERROR("Neither antiProton nor antiNeutron annihilated");
+      }
       //INCL_WARN("theA number set to A-1 from " << A <<'\n');
 
       G4double neutronprob;
@@ -241,8 +254,78 @@ namespace G4INCL {
         theZ = Z;
         NeutronIsTheVictim = true;
       }  
+    } else if(projectileSpecies.theType == antiComposite && kineticEnergy <= theConfig->getdbAtrestThreshold()){ 
+      if(Z > 30)
+        isModelA=false;
+      else if(Z > 9 && Z <=30){ //Maybe change and add another dependance than Z
+        double rndmA = Random::shoot();
+        if(rndmA > 0.5)//Random threshold : should be improved to take into account the orbit in which the separation takes place.
+          isModelA=false;
+      }
+      if(isModelA){
+        //Antideuteron Model A case : 2 annihilation at the same time
+        double pbarSpOverSn = 1.331;
+        double nbarSpOverSn = 1./1.331;
+        double pbarneutronprob;
+        double nbarneutronprob;
+        if(theConfig->isNaturalTarget()){
+          theA = ParticleTable::drawRandomNaturalIsotope(Z) - 2;
+          nbarneutronprob = (theA + 2 - Z)/(theA + 2 - Z + nbarSpOverSn*Z);  
+          pbarneutronprob = (theA + 2 - Z)/(theA + 2 - Z + pbarSpOverSn*Z);  
+        }
+        else{
+          theA = A - 2;
+          nbarneutronprob = (A - Z)/(A - Z + nbarSpOverSn*Z); 
+          pbarneutronprob = (A - Z)/(A - Z + pbarSpOverSn*Z);
     }
-    else{ // not annihilation of pbar
+        theS = S;
+        G4double rndm = Random::shoot(); //for nbar
+        G4double rndm2 = Random::shoot(); //for pbar
+
+        if (rndm >= nbarneutronprob){ // nbarp
+          DNbProtonIsTheVictim = true;
+          if(rndm2 >= pbarneutronprob){ // pbarp
+            theZ = Z - 2;
+            DPbProtonIsTheVictim = true;
+          } else if(rndm2 < pbarneutronprob){ //pbarn
+            theZ = Z - 1;
+          }
+        } else if(rndm < nbarneutronprob){//nbarn
+          if(rndm2 >= pbarneutronprob){ // pbarp
+            theZ = Z - 1;
+            DPbProtonIsTheVictim = true;
+          } else if(rndm2 < pbarneutronprob){ //pbarn
+            theZ = Z;
+          }
+        }
+      } else if (!isModelA){//Model B : Antiproton is detached from antideuteron
+        double SpOverSn = 1.331;
+        double neutronprob;
+        if(theConfig->isNaturalTarget()){
+          theA = ParticleTable::drawRandomNaturalIsotope(Z) - 1; 
+          neutronprob = (theA + 1 - Z)/(theA + 1 - Z + SpOverSn*Z);  
+        }
+        else{
+          theA = A - 1;
+          neutronprob = (A - Z)/(A - Z + SpOverSn*Z);
+        }
+
+        theS = S;
+      
+        double rndm = Random::shoot();
+        if(rndm >= neutronprob){     //proton is annihilated
+          theEventInfo.annihilationP = true;
+          theZ = Z - 1;
+          ProtonIsTheVictim = true;
+        }  
+        else{        //neutron is annihilated
+          theEventInfo.annihilationN = true;
+          theZ = Z;
+          NeutronIsTheVictim = true;
+        }  
+      }
+    }
+    else{ // not annihilation of pbar, nbar, dbar
       theZ = Z;
       theS = S;
       if(theConfig->isNaturalTarget())
@@ -256,6 +339,21 @@ namespace G4INCL {
     theAType = PType;
     if(NeutronIsTheVictim == true && ProtonIsTheVictim == false)
     theAType = NType;
+    if(projectileSpecies.theType == antiComposite && kineticEnergy <= theConfig->getdbAtrestThreshold() && isModelA){
+      if(DNbProtonIsTheVictim == true && DPbProtonIsTheVictim ==true)
+        theAType = DNbarPPbarPType;
+      else if(DNbProtonIsTheVictim == false && DPbProtonIsTheVictim ==true)
+        theAType = DNbarNPbarPType;
+      else if(DNbProtonIsTheVictim == false && DPbProtonIsTheVictim == false)
+        theAType = DNbarNPbarNType;
+      else if(DNbProtonIsTheVictim == true && DPbProtonIsTheVictim ==false)
+        theAType = DNbarPPbarNType;
+    } else if (projectileSpecies.theType == antiComposite && kineticEnergy <= theConfig->getdbAtrestThreshold() && !isModelA){
+      if(ProtonIsTheVictim == true && NeutronIsTheVictim == false)
+        theAType = PType;
+      if(NeutronIsTheVictim == true && ProtonIsTheVictim == false)
+        theAType = NType;
+    }
 
 //D
 
@@ -268,7 +366,8 @@ namespace G4INCL {
     // For forced CN events
     initMaxInteractionDistance(projectileSpecies, kineticEnergy);
 // Set the geometric cross sectiony section
-    if(projectileSpecies.theType == antiProton && kineticEnergy <= theConfig->getAtrestThreshold()){
+    if((projectileSpecies.theType == antiProton && kineticEnergy <= theConfig->getAtrestThreshold()) || (projectileSpecies.theType == antiNeutron && kineticEnergy <= theConfig->getnbAtrestThreshold())
+      || (projectileSpecies.theType == antiComposite && kineticEnergy <= theConfig->getdbAtrestThreshold()) ){
       G4int currentA = A;
       if(theConfig->isNaturalTarget()){
         currentA = ParticleTable::drawRandomNaturalIsotope(Z);
@@ -296,10 +395,13 @@ namespace G4INCL {
   G4bool INCL::initializeTarget(const G4int A, const G4int Z, const G4int S, AnnihilationType theAType) { 
     delete nucleus;
 
-    if (theAType==PType || theAType==NType) {
+    if (theAType==PType || theAType==NType || theAType==DNbarNPbarPType || theAType==DNbarNPbarNType ||theAType==DNbarPPbarPType || theAType==DNbarPPbarNType) {
       G4double newmaxUniverseRadius=0.;
       if (theAType==PType) newmaxUniverseRadius=initUniverseRadiusForAntiprotonAtRest(A+1, Z+1);
-      else newmaxUniverseRadius=initUniverseRadiusForAntiprotonAtRest(A+1, Z);
+      else if (theAType==NType) newmaxUniverseRadius=initUniverseRadiusForAntiprotonAtRest(A+1, Z);
+      else if (theAType==DNbarPPbarPType) newmaxUniverseRadius=initUniverseRadiusForAntiprotonAtRest(A+2, Z+2);
+      else if (theAType==DNbarNPbarNType) newmaxUniverseRadius=initUniverseRadiusForAntiprotonAtRest(A+2, Z);
+      else if (theAType==DNbarNPbarPType || theAType==DNbarPPbarNType) newmaxUniverseRadius=initUniverseRadiusForAntiprotonAtRest(A+2, Z+1);
       nucleus = new Nucleus(A, Z, S, theConfig, newmaxUniverseRadius, theAType);
     }
     else{
@@ -358,9 +460,12 @@ namespace G4INCL {
       }
       const G4String& dataPath0(G4FindDataDir("G4INCLDATA"));
       const G4String& dataPathppbar(dataPath0 + "/rawppbarFS.dat");
-//      const G4String& dataPathnpbar(dataPath0 + "/rawnpbarFS.dat");  // NOT used!
+      const G4String& dataPathnpbar(dataPath0 + "/rawnpbarFS.dat");
       const G4String& dataPathppbark(dataPath0 + "/rawppbarFSkaonic.dat");
-//      const G4String& dataPathnpbark(dataPath0 + "/rawnpbarFSkaonic.dat");  // NOT used!
+      const G4String& dataPathnpbark(dataPath0 + "/rawnpbarFSkaonic.dat");  
+
+      const G4String dataPathnbarp(dataPath0 + "/rawnbarpFS.dat");
+      const G4String dataPathnbarn(dataPath0 + "/rawnbarnFS.dat");
 #else
       std::string path;
       if (theConfig) path = theConfig->getINCLXXDataFilePath();
@@ -372,6 +477,13 @@ namespace G4INCL {
       INCL_DEBUG("Reading https://doi.org/10.1016/j.physrep.2005.03.002 ppbar kaonic final states" << dataPathppbark << '\n');
       const std::string& dataPathnpbark(path + "/rawnpbarFSkaonic.dat");
       INCL_DEBUG("Reading https://doi.org/10.1007/BF02818764 and https://link.springer.com/article/10.1007/BF02754930 npbar kaonic final states" << dataPathnpbark << '\n');
+
+      const std::string& dataPathnbarp(path + "/rawnnbarpFS.dat ");
+      INCL_DEBUG("Reading nbarp final states" << dataPathnbarp << '\n');
+      const std::string& dataPathnbarpk(path + "/rawnbarpFSkaonic.dat");
+      INCL_DEBUG("Reading nbarp kaonic final states");
+      const std::string& dataPathnbarn(path + "/rawnbarnFS.dat");
+      INCL_DEBUG("Reading nbarn final states" << dataPathnbarn << '\n');
 #endif
 
       //read probabilities and particle types from file
@@ -387,7 +499,10 @@ namespace G4INCL {
       ThreeVector annihilationPosition(0.,0.,0.);
       if (rdm < (1.-kaonicFSprob)) {  // pionic FS was chosen
         INCL_DEBUG("pionic pp final state chosen" << '\n');
-        sum = read_file(dataPathppbar, probabilities, particle_types);
+        if (targetA==1 || (targetA==2 && theEventInfo.annihilationP)) 
+          {sum = read_file(dataPathppbar, probabilities, particle_types);}
+        else
+          {sum = read_file(dataPathnpbar, probabilities, particle_types);}
         rdm = (rdm/(1.-kaonicFSprob))*sum;  //99.88 normalize by the sum of probabilities in the file
         //now get the line number in the file where the FS particles are stored:
         G4int n = findStringNumber(rdm, std::move(probabilities))-1;
@@ -441,7 +556,10 @@ namespace G4INCL {
         }
       } else {
         INCL_DEBUG("kaonic pp final state chosen" << '\n');
-        sum = read_file(dataPathppbark, probabilities, particle_types);
+        if (targetA==1 || (targetA==2 && theEventInfo.annihilationP)) 
+          {sum = read_file(dataPathppbark, probabilities, particle_types);}
+        else
+          {sum = read_file(dataPathnpbark, probabilities, particle_types);}
         rdm = ((1.-rdm)/kaonicFSprob)*sum;  //2670 normalize by the sum of probabilities in the file
         //now get the line number in the file where the FS particles are stored:
         G4int n = findStringNumber(rdm, std::move(probabilities))-1;
@@ -493,7 +611,7 @@ namespace G4INCL {
       }
 
       //compute energies of mesons with a phase-space model
-      G4double energyOfMesonStar=ParticleTable::getRealMass(Proton)+ParticleTable::getRealMass(antiProton);
+      G4double energyOfMesonStar=ParticleTable::getRealMass(Proton)+ParticleTable::getRealMass(antiProton)+kineticEnergy;
       if (starlist.size() < 2) {
         INCL_ERROR("should never happen, at least 2 final state particles!" << '\n');
       } else if (starlist.size() == 2) {
@@ -517,7 +635,210 @@ namespace G4INCL {
 
       theGlobalInfo.nShots++;
       return theEventInfo;
-    }  // pbar on H1
+    }  // pbar on H1/H2
+
+        if ((projectileSpecies.theType==antiNeutron)&& (targetA==1 || targetA==2) && targetZ==1 && targetS==0) {
+
+      if (targetA==1) {
+        preCascade_nbarH1(projectileSpecies, kineticEnergy);
+      } else {
+        preCascade_nbarH2(projectileSpecies, kineticEnergy);
+        theEventInfo.annihilationP = false;
+        theEventInfo.annihilationN = false;
+
+        G4double SpOverSn = 1./1.331;  //from experiments with deuteron (E.Klempt)
+
+        ThreeVector dummy(0.,0.,0.);
+        double rndm = Random::shoot()*(SpOverSn+1);
+        if (rndm <= SpOverSn) {  //proton is annihilated
+          theEventInfo.annihilationP = true;
+          Particle *p2 = new Particle(Neutron, dummy, dummy);
+          starlistH2.push_back(p2);
+          //delete p2;
+        } else {                 //neutron is annihilated
+          theEventInfo.annihilationN = true;
+          Particle *p2 = new Particle(Proton, dummy, dummy);
+          starlistH2.push_back(p2);
+          //delete p2;
+        }
+      }
+
+      // File names
+#ifdef INCLXX_IN_GEANT4_MODE
+      if (!G4FindDataDir("G4INCLDATA") ) {
+        G4ExceptionDescription ed;
+        ed << " Data missing: set environment variable G4INCLDATA\n"
+           << " to point to the directory containing data files needed\n"
+           << " by the INCL++ model" << G4endl;
+        G4Exception("G4INCLDataFile::readData()","rawpnbarFS.dat, ...", FatalException, ed);
+      }
+      G4String dataPath0{G4FindDataDir("G4INCLDATA")};
+      G4String dataPathnbarp(dataPath0 + "/rawnbarpFS.dat");
+      G4String dataPathnbarn(dataPath0 + "/rawnbarnFS.dat");
+      G4String dataPathnbarnk(dataPath0 + "/rawppbarFSkaonic.dat");
+      G4String dataPathnbarpk(dataPath0 + "/rawnbarpFSkaonic.dat");
+#else
+      G4String path;
+      if (theConfig) path = theConfig->getINCLXXDataFilePath();
+      std::string dataPathnbarn(path + "/rawnbarnFS.dat");
+      INCL_DEBUG("Reading nbarn final states" << dataPathnbarn << '\n');
+      std::string dataPathnbarp(path + "/rawnbarpFS.dat");
+      INCL_DEBUG("Reading nbarp final states" << dataPathnbarp << '\n');
+      std::string dataPathnbarnk(path + "/rawppbarFSkaonic.dat");
+      INCL_DEBUG("Reading nbarn kaonic final states" << dataPathnbarnk << '\n');
+      std::string dataPathnbarpk(path + "/rawnbarpFSkaonic.dat");
+      INCL_DEBUG("Reading nbarp kaonic final states" << dataPathnbarpk << '\n');
+#endif
+      //read probabilities and particle types from file
+      std::vector<double> probabilities;  //will store each FS yield
+      std::vector<std::vector<G4String>> particle_types;  //will store particle names
+      double sum = 0.0;  //will contain a sum of probabilities of all FS in the file
+      double kaonicFSprob=0.05;  //probability to kave kaonic FS
+
+      ParticleList starlist;
+      ThreeVector mommy;  //momentum to be assigned later
+
+      double rdm = Random::shoot();
+      ThreeVector annihilationPosition(0.,0.,0.);
+      if (rdm < (1.-kaonicFSprob)) {  // pionic FS was chosen
+        INCL_DEBUG("pionic nn final state chosen" << '\n');
+        if (targetA==1 || (targetA==2 && theEventInfo.annihilationP)) 
+          {sum = read_file(dataPathnbarp, probabilities, particle_types);}
+        else
+          {sum = read_file(dataPathnbarn, probabilities, particle_types);}
+        rdm = (rdm/(1.-kaonicFSprob))*sum;  //99.88 normalize by the sum of probabilities in the file
+        //now get the line number in the file where the FS particles are stored:
+        G4int n = findStringNumber(rdm, probabilities)-1;
+        if ( n < 0 ) return theEventInfo;
+        for (G4int j = 0; j < static_cast<int>(particle_types[n].size()); j++) {
+          if (particle_types[n][j] == "pi0") {
+            Particle *p = new Particle(PiZero, mommy, annihilationPosition);
+            starlist.push_back(p);
+          } else if (particle_types[n][j] == "pi-") {
+            Particle *p = new Particle(PiMinus, mommy, annihilationPosition);
+            starlist.push_back(p);
+          } else if (particle_types[n][j] == "pi+") {
+            Particle *p = new Particle(PiPlus, mommy, annihilationPosition);
+            starlist.push_back(p);
+          } else if (particle_types[n][j] == "omega") {
+            Particle *p = new Particle(Omega, mommy, annihilationPosition);
+            starlist.push_back(p);
+          } else if (particle_types[n][j] == "eta") {
+            Particle *p = new Particle(Eta, mommy, annihilationPosition);
+            starlist.push_back(p);
+          } else if (particle_types[n][j] == "rho-") {
+            Particle *p = new Particle(PiMinus, mommy, annihilationPosition);
+            starlist.push_back(p);
+            Particle *pp = new Particle(PiZero, mommy, annihilationPosition);
+            starlist.push_back(pp);
+          } else if (particle_types[n][j] == "rho+") {
+            Particle *p = new Particle(PiPlus, mommy, annihilationPosition);
+            starlist.push_back(p);
+            Particle *pp = new Particle(PiZero, mommy, annihilationPosition);
+            starlist.push_back(pp);
+          } else if (particle_types[n][j] == "rho0") {
+            Particle *p = new Particle(PiMinus, mommy, annihilationPosition);
+            starlist.push_back(p);
+            Particle *pp = new Particle(PiPlus, mommy, annihilationPosition);
+            starlist.push_back(pp);
+          } else {
+            INCL_ERROR("Some non-existing FS particle detected when reading pbar FS files");
+            for (int jj = 0; jj < static_cast<int>(particle_types[n].size()); jj++) {
+#ifdef INCLXX_IN_GEANT4_MODE
+              G4cout << "gotcha! " << particle_types[n][jj] << G4endl;
+#else
+              std::cout << "gotcha! " << particle_types[n][jj] << std::endl;
+#endif              
+            }
+#ifdef INCLXX_IN_GEANT4_MODE
+            G4cout << "Some non-existing FS particle detected when reading pbar FS files" << G4endl;
+#else
+            std::cout << "Some non-existing FS particle detected when reading pbar FS files" << std::endl;
+#endif              
+          }
+        }
+      } else {
+        INCL_DEBUG("kaonic pp final state chosen" << '\n');
+        if (targetA==1 || (targetA==2 && theEventInfo.annihilationP)) 
+          {sum = read_file(dataPathnbarpk, probabilities, particle_types);}
+        else
+          {sum = read_file(dataPathnbarnk, probabilities, particle_types);}
+        rdm = ((1.-rdm)/kaonicFSprob)*sum;  //2670 normalize by the sum of probabilities in the file
+        //now get the line number in the file where the FS particles are stored:
+        G4int n = findStringNumber(rdm, probabilities)-1;
+        if ( n < 0 ) return theEventInfo;
+        for (G4int j = 0; j < static_cast<int>(particle_types[n].size()); j++) {
+          if (particle_types[n][j] == "pi0") {
+            Particle *p = new Particle(PiZero, mommy, annihilationPosition);
+            starlist.push_back(p);
+          } else if (particle_types[n][j] == "pi-") {
+            Particle *p = new Particle(PiMinus, mommy, annihilationPosition);
+            starlist.push_back(p);
+          } else if (particle_types[n][j] == "pi+") {
+            Particle *p = new Particle(PiPlus, mommy, annihilationPosition);
+            starlist.push_back(p);
+          } else if (particle_types[n][j] == "omega") {
+            Particle *p = new Particle(Omega, mommy, annihilationPosition);
+            starlist.push_back(p);
+          } else if (particle_types[n][j] == "eta") {
+            Particle *p = new Particle(Eta, mommy, annihilationPosition);
+            starlist.push_back(p);
+          } else if (particle_types[n][j] == "K-") {
+            Particle *p = new Particle(KMinus, mommy, annihilationPosition);
+            starlist.push_back(p);
+          } else if (particle_types[n][j] == "K+") {
+            Particle *p = new Particle(KPlus, mommy, annihilationPosition);
+            starlist.push_back(p);
+          } else if (particle_types[n][j] == "K0") {
+            Particle *p = new Particle(KZero, mommy, annihilationPosition);
+            starlist.push_back(p);
+          } else if (particle_types[n][j] == "K0b") {
+            Particle *p = new Particle(KZeroBar, mommy, annihilationPosition);
+            starlist.push_back(p);
+          } else {
+            INCL_ERROR("Some non-existing FS particle detected when reading pbar FS files");
+            for (int jj = 0; jj < static_cast<int>(particle_types[n].size()); jj++) {
+#ifdef INCLXX_IN_GEANT4_MODE
+              G4cout << "gotcha! " << particle_types[n][jj] << G4endl;
+#else
+              std::cout << "gotcha! " << particle_types[n][jj] << std::endl;
+#endif              
+            }
+#ifdef INCLXX_IN_GEANT4_MODE
+            G4cout << "Some non-existing FS particle detected when reading pbar FS files" << G4endl;
+#else
+            std::cout << "Some non-existing FS particle detected when reading pbar FS files" << std::endl;
+#endif              
+          }
+        }
+      }
+
+      //compute energies of mesons with a phase-space model
+      G4double energyOfMesonStar=ParticleTable::getRealMass(Proton)+ParticleTable::getRealMass(antiProton)+kineticEnergy;
+      if (starlist.size() < 2) {
+        INCL_ERROR("should never happen, at least 2 final state particles!" << '\n');
+      } else if (starlist.size() == 2) {
+        ParticleIter first = starlist.begin();
+        ParticleIter last = std::next(first, 1);
+        G4double m1 = (*first)->getMass();
+        G4double m2 = (*last)->getMass();
+        G4double s = energyOfMesonStar*energyOfMesonStar;
+        G4double mom1 = std::sqrt(s/4. - (std::pow(m1,2) + std::pow(m2,2))/2. - std::pow(m1,2)*std::pow(m2,2)/s + (std::pow(m1,4) + 2.*std::pow(m1*m2,2) + std::pow(m2,4))/(4.*s));
+        ThreeVector momentello = Random::normVector(mom1);
+        (*first)->setMomentum(momentello);
+        (*first)->adjustEnergyFromMomentum();
+        (*last)->setMomentum(-momentello);
+        (*last)->adjustEnergyFromMomentum();
+      } else {
+        PhaseSpaceGenerator::generate(energyOfMesonStar, starlist);
+      }
+
+      if (targetA==1) postCascade_pbarH1(starlist);
+      else            postCascade_pbarH2(starlist,starlistH2);
+
+      theGlobalInfo.nShots++;
+      return theEventInfo;
+    }  // nbar on H1/H2
 
     // ReInitialize the bias vector
     Particle::INCLBiasVector.clear();
@@ -569,6 +890,22 @@ namespace G4INCL {
       theEventInfo.At = (Short_t)nucleus->getA()+1;
       theEventInfo.Zt = (Short_t)nucleus->getZ();
     }
+    else if(nucleus->getAnnihilationType()==DNbarNPbarNType ){
+      theEventInfo.annihilationN = true;
+      theEventInfo.At = (Short_t)nucleus->getA()+2;
+      theEventInfo.Zt = (Short_t)nucleus->getZ();
+    }
+    else if(nucleus->getAnnihilationType()==DNbarPPbarPType ){
+      theEventInfo.annihilationP = true;
+      theEventInfo.At = (Short_t)nucleus->getA()+2;
+      theEventInfo.Zt = (Short_t)nucleus->getZ()+2;
+    }
+    else if(nucleus->getAnnihilationType()==DNbarPPbarNType || nucleus->getAnnihilationType()==DNbarNPbarPType ){
+      theEventInfo.annihilationN = true;
+      theEventInfo.annihilationP = true;
+      theEventInfo.At = (Short_t)nucleus->getA()+2;
+      theEventInfo.Zt = (Short_t)nucleus->getZ()+1;
+    }
     else {
       theEventInfo.At = (Short_t)nucleus->getA();
       theEventInfo.Zt = (Short_t)nucleus->getZ();
@@ -578,7 +915,8 @@ namespace G4INCL {
       // Fill in the event information
     //Particle *pbar = new Particle;
     //PbarAtrestEntryChannel *obj = new PbarAtrestEntryChannel(nucleus, pbar);
-      if(projectileSpecies.theType == antiProton && kineticEnergy <= theConfig->getAtrestThreshold()){         //D
+      if((projectileSpecies.theType == antiProton && kineticEnergy <= theConfig->getAtrestThreshold()) || (projectileSpecies.theType==antiNeutron && kineticEnergy <= theConfig->getnbAtrestThreshold())
+        || (projectileSpecies.theType == antiComposite && kineticEnergy <= theConfig->getdbAtrestThreshold())){         //D
         INCL_DEBUG("at rest annihilation" << '\n');
         //theEventInfo.transparent = false;
       } else {       
@@ -671,7 +1009,8 @@ namespace G4INCL {
     theEventInfo.eventBias = (Double_t) Particle::getTotalBias();
 
     // Forced CN?
-    if(!(projectileSpecies.theType==antiProton && kineticEnergy<=theConfig->getAtrestThreshold())){
+    if(!(projectileSpecies.theType==antiProton && kineticEnergy<=theConfig->getAtrestThreshold()) && !(projectileSpecies.theType == antiNeutron && kineticEnergy<=theConfig->getnbAtrestThreshold()) 
+      && !(projectileSpecies.theType==antiComposite && kineticEnergy <= theConfig->getdbAtrestThreshold()) ){
       if(nucleus->getTryCompoundNucleus()) {
         INCL_DEBUG("Trying compound nucleus" << '\n');
         makeCompoundNucleus();
@@ -684,7 +1023,8 @@ namespace G4INCL {
       }
     }
 
-    if(!(projectileSpecies.theType==antiProton && kineticEnergy<=theConfig->getAtrestThreshold())){
+    if(!(projectileSpecies.theType==antiProton && kineticEnergy<=theConfig->getAtrestThreshold()) && !(projectileSpecies.theType == antiNeutron && kineticEnergy<=theConfig->getnbAtrestThreshold())
+      && !(projectileSpecies.theType==antiComposite && kineticEnergy <= theConfig->getdbAtrestThreshold())){
       theEventInfo.transparent = forceTransparent || nucleus->isEventTransparent();
     }
 
@@ -698,6 +1038,13 @@ namespace G4INCL {
         nucleus->getStore()->deleteIncoming();
       }
     } else {
+      //Check if the nucleus contains antinucleons
+      theEventInfo.antinucleonsInside = nucleus->containsAntinucleon();
+      //Annihilate antiparticles still inside the nucleus & emit the resulting particles
+      if(nucleus->containsAntinucleon())
+        theEventInfo.emitAntinucleon = nucleus->emitInsideAnnihilationProducts();
+      if(nucleus->containsAntilambda())
+        theEventInfo.emitAntilambda = nucleus->emitInsideAntilambda();
       
       // Check if the nucleus contains strange particles
       theEventInfo.sigmasInside = nucleus->containsSigma();
@@ -986,7 +1333,8 @@ namespace G4INCL {
       pTransThreshold = 0.1; // MeV/c
     }
     if(std::abs(theBalance.energy)>EThreshold) {
-      INCL_WARN("Violation of energy conservation > " << EThreshold << " MeV. EBalance = " << theBalance.energy << " Emit Lambda=" << theEventInfo.emitLambda << " afterRecoil = " << afterRecoil << " eventNumber=" << theEventInfo.eventNumber << '\n');
+      INCL_WARN("Violation of energy conservation > " << EThreshold << " MeV. EBalance = " << theBalance.energy << " Emit Lambda=" << theEventInfo.emitLambda << " afterRecoil = " << afterRecoil << " SRCevent ="
+              << nucleus->getStore()->getBook().getAcceptedSrcCollisions()<< " eventNumber=" << theEventInfo.eventNumber <<  '\n');
     }
     if(std::abs(pLongBalance)>pLongThreshold) {
       INCL_WARN("Violation of longitudinal momentum conservation > " << pLongThreshold << " MeV/c. pLongBalance = " << pLongBalance << " afterRecoil = " << afterRecoil << " eventNumber=" << theEventInfo.eventNumber << '\n');
@@ -1020,6 +1368,12 @@ namespace G4INCL {
     if(nucleus->getA() <= minRemnantSize) {
       INCL_DEBUG("Remnant size (" << nucleus->getA()
           << ") smaller than or equal to minimum (" << minRemnantSize
+          << "), stopping cascade" << '\n');
+      return false;
+    }
+    if((nucleus->getZ() <= 2) && (propagationModel->getCurrentTime() != 0)) {
+      INCL_DEBUG("Remnant size (" << nucleus->getZ()
+          << ") smaller than or equal to minimum (" << "2"
           << "), stopping cascade" << '\n');
       return false;
     }
@@ -1098,19 +1452,29 @@ namespace G4INCL {
   }
 
   void INCL::initMaxInteractionDistance(ParticleSpecies const &projectileSpecies, const G4double kineticEnergy) {
-    if(projectileSpecies.theType != Composite) {
+    if(projectileSpecies.theType != Composite && projectileSpecies.theType != antiComposite) {
       maxInteractionDistance = 0.;
       return;
     }
 
     const G4double r0 = std::max(ParticleTable::getNuclearRadius(Proton, theA, theZ),
                                ParticleTable::getNuclearRadius(Neutron, theA, theZ));
+    if (projectileSpecies.theType == Composite){
 
     const G4double theNNDistance = CrossSections::interactionDistanceNN(projectileSpecies, kineticEnergy);
     maxInteractionDistance = r0 + theNNDistance;
     INCL_DEBUG("Initialised interaction distance: r0 = " << r0 << '\n'
           << "    theNNDistance = " << theNNDistance << '\n'
           << "    maxInteractionDistance = " << maxInteractionDistance << '\n');
+  }
+    else if (projectileSpecies.theType == antiComposite){
+      const G4double theNbarNDistance = CrossSections::interactionDistanceNbarN(projectileSpecies, kineticEnergy);
+      maxInteractionDistance = r0 + theNbarNDistance;
+      INCL_DEBUG("Initialised interaction distance: r0 = " << r0 << '\n'
+          << "    theNbarNDistance = " << theNbarNDistance << '\n'
+          << "    maxInteractionDistance = " << maxInteractionDistance << '\n');
+    }
+    
   }
 
   void INCL::initUniverseRadius(ParticleSpecies const &p, const G4double kineticEnergy, const G4int A, const G4int Z) {
@@ -1156,6 +1520,12 @@ namespace G4INCL {
     }
       else if(p.theType==antiProton) {
       maxUniverseRadius = rMax;                 //check interaction distance!!!
+    } else if (p.theType==antiNeutron){
+      const G4double interactionDistancenbarN = CrossSections::interactionDistancenbarN(p,kineticEnergy);
+      maxUniverseRadius = rMax+ interactionDistancenbarN;
+    } else if (p.theType==antiComposite){
+      const G4double interactionDistanceNbarN = CrossSections::interactionDistanceNbarN(p,kineticEnergy);
+      maxUniverseRadius =rMax + interactionDistanceNbarN;
     }
     INCL_DEBUG("Initialised universe radius: " << maxUniverseRadius << '\n');
   }
@@ -1284,15 +1654,100 @@ namespace G4INCL {
     theEventInfo.Zt = 1;
   }
 
+  void INCL::preCascade_nbarH1(ParticleSpecies const &projectileSpecies, const G4double kineticEnergy) {
+    // Reset theEventInfo
+    theEventInfo.reset();
+
+    EventInfo::eventNumber++;
+
+    // Fill in the event information
+    theEventInfo.projectileType = projectileSpecies.theType;
+    theEventInfo.Ap = -1;
+    theEventInfo.Zp = 0;
+    theEventInfo.Sp = 0;
+    theEventInfo.Ep = kineticEnergy;
+    theEventInfo.St = 0;
+    theEventInfo.At = 1;
+    theEventInfo.Zt = 1;
+  }
 
   void INCL::postCascade_pbarH1(ParticleList const &outgoingParticles) {
     theEventInfo.nParticles = 0;
-
+    ParticleList outgoingParticles2;
     // Reset the remnant counter
     theEventInfo.nRemnants = 0;
     theEventInfo.history.clear();
+    
+    // Decay eta and omega
+        for(ParticleIter i=outgoingParticles.begin(), e=outgoingParticles.end(); i!=e; ++i) {
+          if( (*i)->isEta() || (*i)->isOmega() ) {
+            INCL_DEBUG("Decay outgoing eta/omega particle:" << '\n'
+                       << (*i)->print() << '\n');
+            const ThreeVector beta = -(*i)->boostVector();
+            const G4double pionResonanceMass = (*i)->getMass();
+            
+            // Set the pionResonance momentum to zero and sample the decay in the CM frame.
+            // This makes life simpler if we are using real particle masses.
+            (*i)->setMomentum(ThreeVector());
+            (*i)->setEnergy((*i)->getMass());
+            
+            // Use a DecayAvatar
+            IAvatar *decay = new DecayAvatar((*i), 0.0, NULL);
+            FinalState *fs = decay->getFinalState();
+            
+            Particle * const theModifiedParticle = fs->getModifiedParticles().front();
+            ParticleList const &created = fs->getCreatedParticles();
+            Particle * const theCreatedParticle1 = created.front();
+                            
+            if (created.size() == 1) {
+                
+                // Adjust the decay momentum if we are using the real masses
+                const G4double decayMomentum = KinematicsUtils::momentumInCM(pionResonanceMass,theModifiedParticle->getTableMass(),theCreatedParticle1->getTableMass());
+                ThreeVector newMomentum = theCreatedParticle1->getMomentum();
+                newMomentum *= decayMomentum / newMomentum.mag();
+                
+                theCreatedParticle1->setTableMass();
+                theCreatedParticle1->setMomentum(newMomentum);
+                theCreatedParticle1->adjustEnergyFromMomentum();
+                theCreatedParticle1->setEmissionTime((*i)->getEmissionTime());
+                theCreatedParticle1->boost(beta);
+                theCreatedParticle1->setBiasCollisionVector(theModifiedParticle->getBiasCollisionVector());
+                
+                theModifiedParticle->setTableMass();
+                theModifiedParticle->setMomentum(-newMomentum);
+                theModifiedParticle->adjustEnergyFromMomentum();
+                theModifiedParticle->boost(beta);
+                
+                outgoingParticles2.push_back(theCreatedParticle1);
+                outgoingParticles2.push_back(theModifiedParticle);
+            }
+            else if (created.size() == 2) {
+                Particle * const theCreatedParticle2 = created.back();
+                
+                theCreatedParticle1->boost(beta);
+                theCreatedParticle1->setBiasCollisionVector(theModifiedParticle->getBiasCollisionVector());
+                theCreatedParticle1->setEmissionTime((*i)->getEmissionTime());
+                theCreatedParticle2->boost(beta);
+                theCreatedParticle2->setBiasCollisionVector(theModifiedParticle->getBiasCollisionVector());
+                theCreatedParticle2->setEmissionTime((*i)->getEmissionTime());
+                theModifiedParticle->boost(beta);
+                
+                outgoingParticles2.push_back(theCreatedParticle1);
+                outgoingParticles2.push_back(theCreatedParticle2);
+                outgoingParticles2.push_back(theModifiedParticle);
+            }
+            else {
+                INCL_ERROR("Wrong number (< 2) of created particles during the decay of a pion resonance");
+            }
+            delete fs;
+            delete decay;
+         }
+         else {
+            outgoingParticles2.push_back(*i);
+         }
+      }// End of Decay eta and omega
 
-    for(ParticleIter i=outgoingParticles.begin(), e=outgoingParticles.end(); i!=e; ++i ) {
+    for(ParticleIter i=outgoingParticles2.begin(), e=outgoingParticles2.end(); i!=e; ++i ) {
       theEventInfo.A[theEventInfo.nParticles] = (Short_t)(*i)->getA();
       theEventInfo.Z[theEventInfo.nParticles] = (Short_t)(*i)->getZ();
       theEventInfo.S[theEventInfo.nParticles] = (Short_t)(*i)->getS();
@@ -1334,15 +1789,101 @@ namespace G4INCL {
     theEventInfo.Zt = 1;
   }
 
+  void INCL::preCascade_nbarH2(ParticleSpecies const &projectileSpecies, const G4double kineticEnergy) {
+    // Reset theEventInfo
+    theEventInfo.reset();
+
+    EventInfo::eventNumber++;
+
+    // Fill in the event information
+    theEventInfo.projectileType = projectileSpecies.theType;
+    theEventInfo.Ap = -1;
+    theEventInfo.Zp = 0;
+    theEventInfo.Sp = 0;
+    theEventInfo.Ep = kineticEnergy;
+    theEventInfo.St = 0;
+    theEventInfo.At = 2;
+    theEventInfo.Zt = 1;
+  }
 
   void INCL::postCascade_pbarH2(ParticleList const &outgoingParticles, ParticleList const &H2Particles) {
     theEventInfo.nParticles = 0;
+    ParticleList outgoingParticles2;
 
     // Reset the remnant counter
     theEventInfo.nRemnants = 0;
     theEventInfo.history.clear();
+    
+    // Decay eta and omega
+        for(ParticleIter i=outgoingParticles.begin(), e=outgoingParticles.end(); i!=e; ++i) {
+          if( (*i)->isEta() || (*i)->isOmega() ) {
+            INCL_DEBUG("Decay outgoing eta/omega particle:" << '\n'
+                       << (*i)->print() << '\n');
+            const ThreeVector beta = -(*i)->boostVector();
+            const G4double pionResonanceMass = (*i)->getMass();
+            
+            // Set the pionResonance momentum to zero and sample the decay in the CM frame.
+            // This makes life simpler if we are using real particle masses.
+            (*i)->setMomentum(ThreeVector());
+            (*i)->setEnergy((*i)->getMass());
+            
+            // Use a DecayAvatar
+            IAvatar *decay = new DecayAvatar((*i), 0.0, NULL);
+            FinalState *fs = decay->getFinalState();
+            
+            Particle * const theModifiedParticle = fs->getModifiedParticles().front();
+            ParticleList const &created = fs->getCreatedParticles();
+            Particle * const theCreatedParticle1 = created.front();
+                            
+            if (created.size() == 1) {
+                
+                // Adjust the decay momentum if we are using the real masses
+                const G4double decayMomentum = KinematicsUtils::momentumInCM(pionResonanceMass,theModifiedParticle->getTableMass(),theCreatedParticle1->getTableMass());
+                ThreeVector newMomentum = theCreatedParticle1->getMomentum();
+                newMomentum *= decayMomentum / newMomentum.mag();
+                
+                theCreatedParticle1->setTableMass();
+                theCreatedParticle1->setMomentum(newMomentum);
+                theCreatedParticle1->adjustEnergyFromMomentum();
+                theCreatedParticle1->setEmissionTime((*i)->getEmissionTime());
+                theCreatedParticle1->boost(beta);
+                theCreatedParticle1->setBiasCollisionVector(theModifiedParticle->getBiasCollisionVector());
+                
+                theModifiedParticle->setTableMass();
+                theModifiedParticle->setMomentum(-newMomentum);
+                theModifiedParticle->adjustEnergyFromMomentum();
+                theModifiedParticle->boost(beta);
+                
+                outgoingParticles2.push_back(theCreatedParticle1);
+                outgoingParticles2.push_back(theModifiedParticle);
+            }
+            else if (created.size() == 2) {
+                Particle * const theCreatedParticle2 = created.back();
+                
+                theCreatedParticle1->boost(beta);
+                theCreatedParticle1->setBiasCollisionVector(theModifiedParticle->getBiasCollisionVector());
+                theCreatedParticle1->setEmissionTime((*i)->getEmissionTime());
+                theCreatedParticle2->boost(beta);
+                theCreatedParticle2->setBiasCollisionVector(theModifiedParticle->getBiasCollisionVector());
+                theCreatedParticle2->setEmissionTime((*i)->getEmissionTime());
+                theModifiedParticle->boost(beta);
+                
+                outgoingParticles2.push_back(theCreatedParticle1);
+                outgoingParticles2.push_back(theCreatedParticle2);
+                outgoingParticles2.push_back(theModifiedParticle);
+            }
+            else {
+                INCL_ERROR("Wrong number (< 2) of created particles during the decay of a pion resonance");
+            }
+            delete fs;
+            delete decay;
+         }
+         else {
+            outgoingParticles2.push_back(*i);
+         }
+      }// End of Decay eta and omega
 
-    for(ParticleIter i=outgoingParticles.begin(), e=outgoingParticles.end(); i!=e; ++i ) {
+    for(ParticleIter i=outgoingParticles2.begin(), e=outgoingParticles2.end(); i!=e; ++i ) {
       theEventInfo.A[theEventInfo.nParticles] = (Short_t)(*i)->getA();
       theEventInfo.Z[theEventInfo.nParticles] = (Short_t)(*i)->getZ();
       theEventInfo.S[theEventInfo.nParticles] = (Short_t)(*i)->getS();

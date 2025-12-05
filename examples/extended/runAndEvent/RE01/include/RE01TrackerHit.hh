@@ -23,10 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file runAndEvent/RE01/include/RE01TrackerHit.hh
+/// \file RE01TrackerHit.hh
 /// \brief Definition of the RE01TrackerHit class
-//
-//
 
 #ifndef RE01TrackerHit_h
 #define RE01TrackerHit_h 1

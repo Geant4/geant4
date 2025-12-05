@@ -23,10 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file hadronic/Hadr02/include/StackingMessenger.hh
+/// \file StackingMessenger.hh
 /// \brief Definition of the StackingMessenger class
-//
-//
+
 /////////////////////////////////////////////////////////////////////////
 //
 // StackingMessenger

@@ -12,11 +12,6 @@ private:\
   typedef a__parent parent;\
 public:\
   TOOLS_SCLASS(a__sclass)\
-/*public:\
-  static bool is_a(const std::string& a_class) {\
-    if(!rcmp(a_class,s_class())) return true;\
-    return parent::is_a(a_class);\
-  }*/\
 public:\
   virtual void* cast(const std::string& a_class) const {\
     if(void* p = tools::cmp_cast<a__class>(this,a_class)) return p;\
@@ -24,15 +19,23 @@ public:\
   }\
   virtual const std::string& s_cls() const {return s_class();}
 
-#define TOOLS_HEADER_COPY(a__class,a__sclass,a__parent,a__to)\
-  TOOLS_HEADER(a__class,a__sclass,a__parent)\
-  virtual a__to* copy() const {return new a__class(*this);}
-
 #define TOOLS_T_HEADER(a__T,a__class,a__sclass,a__parent)\
 private:\
   typedef a__parent parent;\
 public:\
   TOOLS_T_SCLASS(a__T,a__sclass)\
+public:\
+  virtual void* cast(const std::string& a_class) const {\
+    if(void* p = tools::cmp_cast<a__class>(this,a_class)) return p;\
+    return parent::cast(a_class);\
+  }\
+  virtual const std::string& s_cls() const {return s_class();}
+
+#define TOOLS_T2_HEADER(a__T1,a__T2,a__class,a__sclass,a__parent)\
+private:\
+  typedef a__parent parent;\
+public:\
+  TOOLS_T2_SCLASS(a__T1,a__T2,a__sclass)\
 public:\
   virtual void* cast(const std::string& a_class) const {\
     if(void* p = tools::cmp_cast<a__class>(this,a_class)) return p;\

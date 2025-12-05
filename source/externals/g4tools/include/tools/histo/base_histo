@@ -4,10 +4,6 @@
 #ifndef tools_histo_base_histo
 #define tools_histo_base_histo
 
-#ifdef TOOLS_MEM
-#include "../mem"
-#endif
-
 #include "histo_data"
 
 #include <cmath>
@@ -45,32 +41,21 @@ protected:
   virtual TH get_bin_height(TO) const = 0;  //histo/profile
 protected:
   void base_from_data(const hd_t& a_from) {parent::operator=(a_from);}
-#ifdef tools_histo_base_histo //for backward compatibility with tools
   hd_t base_get_data() const {
     hd_t hd;
     hd = *this;
     return hd;
   }
-#endif
 public:
   const hd_t& dac() const {return *this;} //data accessor.
 protected:
   base_histo():parent() {
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
   }
 protected:
   virtual ~base_histo() {
-#ifdef TOOLS_MEM
-    mem::decrement(s_class().c_str());
-#endif
   }
 protected:
   base_histo(const base_histo& a_from):parent(a_from) {
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
   }
 
   base_histo& operator=(const base_histo& a_from) {
@@ -262,31 +247,6 @@ public: //histo_data
     }
   }
 
-/*
-  TW get_all_Sw() const {
-    TW sw = 0;
-    for(TO ibin=0;ibin<m_bin_number;ibin++) sw += m_bin_Sw[ibin];
-    return sw;
-  }
-  TN get_all_entries() const {
-    TN number = 0;
-    for(TO ibin=0;ibin<m_bin_number;ibin++) {
-      number += m_bin_entries[ibin];
-    }
-    return number;
-  }
-
-  // for tools/wroot/streamers :
-  TN get_entries() const {
-    TN number = 0;
-    for(TO ibin=0;ibin<m_bin_number;ibin++) {
-      if(!histo::is_out(m_axes,ibin)) {
-        number += m_bin_entries[ibin];
-      }
-    }
-    return number;
-  }
-*/
 protected:
   enum {AxisX=0,AxisY=1,AxisZ=2};
 
@@ -333,7 +293,7 @@ protected:
 
     parent::m_dimension = a_dim;
 
-    base_allocate(); //set m_bin_number.
+    base_allocate();
 
     return true;
   }
@@ -366,14 +326,13 @@ protected:
     // Setup axes :
     for(dim_t iaxis=0;iaxis<a_dim;iaxis++) {
       if(!parent::m_axes[iaxis].configure(a_edges[iaxis])) {
-        //m_axes.clear();
         return false;
       }
     }
 
     parent::m_dimension = a_dim;
 
-    base_allocate(); //set m_bin_number.
+    base_allocate();
 
     return true;
   }
@@ -459,7 +418,6 @@ public: //annotations :
     a_out << " * ANNOTATIONS :" << std::endl;
     annotations_t::const_iterator it;
     for(it=parent::m_annotations.begin();it!=parent::m_annotations.end();++it) {
-    //out << " * (" << index << ") "
       a_out << " *  " << (*it).first << " = " << (*it).second << std::endl;
     }
   }
@@ -505,7 +463,6 @@ protected:
       }
     }
 
- //{for(dim_t iplane=0;iplane<nplane;iplane++) parent::m_in_range_plane_Sxyw[iplane] ??? a_histo.m_in_range_plane_Sxyw[iplane];}
 
     parent::update_fast_getters();
   }
@@ -537,8 +494,6 @@ protected:
         parent::m_bin_Sx2w[ibin][iaxis] = x * x * sw;
       }
     }
-
- //{for(dim_t iplane=0;iplane<nplane;iplane++) parent::m_in_range_plane_Sxyw[iplane] ??? a_histo.m_in_range_plane_Sxyw[iplane];}
 
     parent::update_fast_getters();
     return true;
@@ -582,8 +537,6 @@ protected:
         }
       }
     }
-
- //{for(dim_t iplane=0;iplane<nplane;iplane++) parent::m_in_range_plane_Sxyw[iplane] ??? a_histo.m_in_range_plane_Sxyw[iplane];}
 
     parent::update_fast_getters();
     return true;

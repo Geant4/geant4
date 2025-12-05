@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file ChemistryWorld.cc
+/// \brief Implementation of the ChemistryWorld class
 
 #include "ChemistryWorld.hh"
 

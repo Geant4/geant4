@@ -25,9 +25,9 @@
 //
 // G4BFieldIntegrationDriver implementation
 //
-// Specialized integration driver for pure magnetic field
+// Specialised integration driver for pure magnetic field
 //
-// Author: D.Sorokin
+// Author: Dmitry Sorokin (CERN, Google Summer of Code 2017), 12.09.2018
 // --------------------------------------------------------------------
 
 #include "G4BFieldIntegrationDriver.hh"
@@ -40,10 +40,10 @@
 #include "templates.hh"
 
 
-namespace {
-
-G4Mag_EqRhs* toMagneticEquation(G4EquationOfMotion* equation)
+namespace
 {
+  G4Mag_EqRhs* toMagneticEquation(G4EquationOfMotion* equation)
+  {
     auto e = dynamic_cast<G4Mag_EqRhs*>(equation);
 
     if (e == nullptr) 
@@ -54,8 +54,7 @@ G4Mag_EqRhs* toMagneticEquation(G4EquationOfMotion* equation)
     }
 
     return e;
-}
-
+  }
 } // namespace
 
 
@@ -67,12 +66,12 @@ G4BFieldIntegrationDriver::G4BFieldIntegrationDriver(
       fCurrDriver(fSmallStepDriver.get()),
       fEquation(toMagneticEquation(fCurrDriver->GetEquationOfMotion()))
 {
-    if (fSmallStepDriver->GetEquationOfMotion()
+  if (fSmallStepDriver->GetEquationOfMotion()
      != fLargeStepDriver->GetEquationOfMotion())
-    {
-        G4Exception("G4BFieldIntegrationDriver Constructor:",
-                    "GeomField1001", FatalException, "different EoM");  
-    }
+  {
+    G4Exception("G4BFieldIntegrationDriver Constructor:",
+                "GeomField1001", FatalException, "different EoM");  
+  }
 }
 
 G4double G4BFieldIntegrationDriver::AdvanceChordLimited(G4FieldTrack& yCurrent, 
@@ -80,79 +79,80 @@ G4double G4BFieldIntegrationDriver::AdvanceChordLimited(G4FieldTrack& yCurrent,
                                                         G4double epsStep, 
                                                         G4double chordDistance)
 {
-    const G4double radius = CurvatureRadius(yCurrent);
+  const G4double radius = CurvatureRadius(yCurrent);
 
-    G4VIntegrationDriver* driver = nullptr;
-    if (chordDistance < 2 * radius)
-    {
-        stepMax = std::min(stepMax, twopi * radius);
-        driver = fSmallStepDriver.get();
-        ++fSmallDriverSteps;
-    } else
-    {
-        driver = fLargeStepDriver.get();
-        ++fLargeDriverSteps;
-    }
+  G4VIntegrationDriver* driver = nullptr;
+  if (chordDistance < 2 * radius)
+  {
+    stepMax = std::min(stepMax, twopi * radius);
+    driver = fSmallStepDriver.get();
+    ++fSmallDriverSteps;
+  }
+  else
+  {
+    driver = fLargeStepDriver.get();
+    ++fLargeDriverSteps;
+  }
 
-    if (driver != fCurrDriver)
-    {
-        driver->OnComputeStep();
-    }
+  if (driver != fCurrDriver)
+  {
+    driver->OnComputeStep();
+  }
 
-    fCurrDriver = driver;
+  fCurrDriver = driver;
 
-    return fCurrDriver->AdvanceChordLimited(yCurrent, stepMax,
-                                            epsStep, chordDistance);
+  return fCurrDriver->AdvanceChordLimited(yCurrent, stepMax,
+                                          epsStep, chordDistance);
 }
 
 void
 G4BFieldIntegrationDriver::SetEquationOfMotion(G4EquationOfMotion* equation)
 {
-    fEquation = toMagneticEquation(equation);
-    fSmallStepDriver->SetEquationOfMotion(equation);
-    fLargeStepDriver->SetEquationOfMotion(equation);
+  fEquation = toMagneticEquation(equation);
+  fSmallStepDriver->SetEquationOfMotion(equation);
+  fLargeStepDriver->SetEquationOfMotion(equation);
 }
 
 G4double
 G4BFieldIntegrationDriver::CurvatureRadius(const G4FieldTrack& track) const
 {
-    G4double field[G4Field::MAX_NUMBER_OF_COMPONENTS];
+  G4double field[G4Field::MAX_NUMBER_OF_COMPONENTS];
     
-    GetFieldValue(track, field);
-    
-    const G4double Bmag2 =   field[0] * field[0]
-                           + field[1] * field[1]
-                           + field[2] * field[2] ;
-    if (Bmag2 == 0.0 )
-    {
-       return DBL_MAX;
-    }
+  GetFieldValue(track, field);
 
-    const G4double momentum2 = track.GetMomentum().mag2();
-    const G4double fCof_inv = eplus / std::abs(fEquation->FCof());
+  const G4double Bmag2 = field[0] * field[0]
+                       + field[1] * field[1]
+                       + field[2] * field[2] ;
+  if (Bmag2 == 0.0 )
+  {
+    return DBL_MAX;
+  }
 
-    return std::sqrt(momentum2 / Bmag2) * fCof_inv;
+  const G4double momentum2 = track.GetMomentum().mag2();
+  const G4double fCof_inv = eplus / std::abs(fEquation->FCof());
+
+  return std::sqrt(momentum2 / Bmag2) * fCof_inv;
 }
 
 void
 G4BFieldIntegrationDriver::GetFieldValue(const G4FieldTrack& track,
                                          G4double Field[] ) const
 {
-    G4ThreeVector pos= track.GetPosition();
-    G4double positionTime[4]= { pos.x(), pos.y(), pos.z(),
-                                track.GetLabTimeOfFlight() } ;
+  G4ThreeVector pos= track.GetPosition();
+  G4double positionTime[4] = { pos.x(), pos.y(), pos.z(),
+                               track.GetLabTimeOfFlight() } ;
     
-    fEquation->GetFieldValue(positionTime, Field);
+  fEquation->GetFieldValue(positionTime, Field);
 }
 
 void G4BFieldIntegrationDriver::PrintStatistics() const
 {
-    const auto totSteps = fSmallDriverSteps + fLargeDriverSteps;
-    const auto toFraction = [&](double value) { return value / totSteps * 100; };
+  const auto totSteps = fSmallDriverSteps + fLargeDriverSteps;
+  const auto toFraction = [&](double value) { return value / totSteps * 100; };
 
-    G4cout << "============= G4BFieldIntegrationDriver statistics ===========\n"
-           << "total steps " << totSteps << " "
-           << "smallDriverSteps " << toFraction(fSmallDriverSteps) << " "
-           << "largeDriverSteps " << toFraction(fLargeDriverSteps) << "\n"
-           << "======================================\n";
+  G4cout << "============= G4BFieldIntegrationDriver statistics ===========\n"
+         << "total steps " << totSteps << " "
+         << "smallDriverSteps " << toFraction(fSmallDriverSteps) << " "
+         << "largeDriverSteps " << toFraction(fLargeDriverSteps) << "\n"
+         << "======================================\n";
 }

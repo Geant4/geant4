@@ -51,6 +51,7 @@ class G4GIDI_target {
         MCGIDI::Protare *m_MCGIDI_protare;
         std::string m_target;
         std::string m_fileName;
+        std::string m_evaluation;
         int m_targetZ;
         int m_targetA;
         int m_targetM;
@@ -70,6 +71,7 @@ class G4GIDI_target {
 
         std::string const *getName( ) const { return( &m_target ); }
         std::string const *getFilename( ) const { return( &m_fileName ); }
+        std::string const *getEvaluation( ) const { return( &m_evaluation ); }
         int getZ( ) const { return( m_targetZ ); }
         int getA( ) const { return( m_targetA ); }
         int getM( ) const { return( m_targetM ); }

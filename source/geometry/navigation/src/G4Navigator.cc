@@ -1810,7 +1810,7 @@ G4double G4Navigator::ComputeSafety( const G4ThreeVector& pGlobalpoint,
 //
 G4TouchableHandle G4Navigator::CreateTouchableHistoryHandle() const
 {
-  return G4TouchableHandle( CreateTouchableHistory() );
+  return { CreateTouchableHistory() };
 }
 
 // ********************************************************************

@@ -26,7 +26,7 @@
 // G4VCSGfaceted implementation; a virtual class of a CSG type shape
 // that is built entirely out of G4VCSGface faces.
 //
-// Author: David C. Williams (davidw@scipp.ucsc.edu)
+// Author: David C. Williams (UCSC), 1998
 // --------------------------------------------------------------------
 
 #include "G4VCSGfaceted.hh"
@@ -47,6 +47,7 @@
 namespace
 {
   G4Mutex polyhedronMutex = G4MUTEX_INITIALIZER;
+  G4Mutex vcsgMutex = G4MUTEX_INITIALIZER;
 }
 
 //
@@ -542,8 +543,12 @@ void G4VCSGfaceted::SetAreaAccuracy(G4double ep)
 //
 G4double G4VCSGfaceted::GetCubicVolume()
 {
-  if(fCubicVolume != 0.) {;}
-  else   { fCubicVolume = EstimateCubicVolume(fStatistics,fCubVolEpsilon); }
+  if (fCubicVolume == 0)
+  {
+    G4AutoLock l(&vcsgMutex);
+    fCubicVolume = EstimateCubicVolume(fStatistics,fCubVolEpsilon);
+    l.unlock();
+  }
   return fCubicVolume;
 }
 
@@ -553,8 +558,12 @@ G4double G4VCSGfaceted::GetCubicVolume()
 //
 G4double G4VCSGfaceted::GetSurfaceArea()
 {
-  if(fSurfaceArea != 0.) {;}
-  else   { fSurfaceArea = EstimateSurfaceArea(fStatistics,fAreaAccuracy); }
+  if (fSurfaceArea == 0)
+  {
+    G4AutoLock l(&vcsgMutex);
+    fSurfaceArea = EstimateSurfaceArea(fStatistics,fAreaAccuracy);
+    l.unlock();
+  }
   return fSurfaceArea;
 }
 

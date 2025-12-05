@@ -25,10 +25,6 @@
 //
 /// \file ExGflashMessenger.hh
 /// \brief Definition of the ExGflashMessenger class
-//
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef ExGflashMessenger_h
 #define ExGflashMessenger_h 1

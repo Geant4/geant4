@@ -93,7 +93,6 @@ geant4_add_module(G4hadronic_deex_gem_evaporation
     G4DeuteronGEMChannel.hh
     G4DeuteronGEMProbability.hh
     G4EvaporationGEMFactory.hh
-    G4EvaporationGEMFactoryVI.hh
     G4F17GEMProbability.hh
     G4F18GEMProbability.hh
     G4F19GEMProbability.hh
@@ -169,7 +168,6 @@ geant4_add_module(G4hadronic_deex_gem_evaporation
     G4DeuteronGEMChannel.cc
     G4DeuteronGEMProbability.cc
     G4EvaporationGEMFactory.cc
-    G4EvaporationGEMFactoryVI.cc
     G4F17GEMProbability.cc
     G4F18GEMProbability.cc
     G4F19GEMProbability.cc

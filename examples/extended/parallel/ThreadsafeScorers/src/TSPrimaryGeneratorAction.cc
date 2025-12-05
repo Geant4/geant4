@@ -23,12 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file parallel/ThreadsafeScorers/src/TSPrimaryGeneratorAction.cc
+/// \file TSPrimaryGeneratorAction.cc
 /// \brief Implementation of the TSPrimaryGeneratorAction class
-//
-//
-//
-//
+///
 /// Simple PrimaryGeneratorAction that produces a -Z surface flux of 1 MeV
 ///     neutrons into the world
 //

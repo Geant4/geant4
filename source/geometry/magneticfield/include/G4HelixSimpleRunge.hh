@@ -27,33 +27,61 @@
 //
 // Class description:
 //
-//  Helix Simple Runge-Kutta stepper for magnetic field:
-//        x_1 = x_0 + h * ( dx( t_0+h/2, x_0 + h/2 * dx( t_0, x_0) ) )
+// Helix Simple Runge-Kutta stepper for magnetic field:
+//       x_1 = x_0 + h * ( dx( t_0+h/2, x_0 + h/2 * dx( t_0, x_0) ) )
 //
-//  Second order solver.
-//  Take the derivative at a position to be assumed at the middle of the
-//  Step and add it to the current position.
+// Second order solver.
+// Take the derivative at a position to be assumed at the middle of the
+// Step and add it to the current position.
 
-// Author: W. Wander <wwc@mit.edu>, 03.12.1998
+// Author: W.Wander (MIT), 03.12.1998
 // -------------------------------------------------------------------
 #ifndef G4HELIXSIMPLERUNGE_HH
 #define G4HELIXSIMPLERUNGE_HH
 
 #include "G4MagHelicalStepper.hh"
 
+/**
+ * @brief G4HelixSimpleRunge implements a simple Helix stepper for magnetic
+ * field with 2nd order solver.
+ */
+
 class G4HelixSimpleRunge : public G4MagHelicalStepper
 {
   public:
 
+    /**
+     * Constructor for G4HelixSimpleRunge.
+     *  @param[in] EqRhs Pointer to the provided equation of motion.
+     */
     G4HelixSimpleRunge(G4Mag_EqRhs* EqRhs);
-   ~G4HelixSimpleRunge() override;
+
+    /**
+     * Default Destructor.
+     */
+    ~G4HelixSimpleRunge() override = default;
   
+    /**
+     * The stepper function for the integration.
+     *  @param[in] y Starting values array of integration variables.
+     *  @param[in] Bfld The field vector.
+     *  @param[in] h The given step size.
+     *  @param[out] yout Integration output.
+     */
     void  DumbStepper( const G4double y[],
                              G4ThreeVector Bfld,
-                             G4double      h,
-                             G4double      yout[] ) override;
+                             G4double h,
+                             G4double yout[] ) override;
 
+    /**
+     * Returns the order, 2, of integration.
+     */
     inline G4int IntegratorOrder() const override { return 2; }
+
+    /**
+     * Returns the stepper type-ID, "kHelixSimpleRunge".
+     */
+    inline G4StepperType StepperType() const override { return kHelixSimpleRunge; }
 };
 
 #endif

@@ -23,11 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file persistency/P02/include/ExP02DetConstrReader.hh
+/// \file ExP02DetConstrReader.hh
 /// \brief Definition of the ExP02DetConstrReader class
-//
-//
-//
+
 #ifndef ExP02DetConstrReader_h
 #define ExP02DetConstrReader_h 1
 

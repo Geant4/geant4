@@ -10,10 +10,6 @@
 
 #include "../ntuple_booking"
 
-#ifdef TOOLS_MEM
-#include "../mem"
-#endif
-
 namespace tools {
 namespace wroot {
 

@@ -27,7 +27,7 @@
 //
 // Implementation for singleton container
 //
-// 07.05.14 G.Cosmo Initial version
+// Author: Gabriele Cosmo (CERN), 07.05.2014 - Initial version
 // --------------------------------------------------------------------
 
 #include "globals.hh"

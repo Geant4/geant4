@@ -25,7 +25,7 @@
 //
 /// \file UserTrackInformation.cc
 /// \brief Implementation of the UserTrackInformation class
-//
+
 #include "UserTrackInformation.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

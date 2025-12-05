@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 /// \file VG01DetectorMessenger.cc
 /// \brief Implementation of the VG01DetectorMessenger class
 

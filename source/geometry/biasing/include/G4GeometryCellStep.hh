@@ -40,32 +40,53 @@
 // Author: Michael Dressel (CERN), 2002
 // ----------------------------------------------------------------------
 #ifndef G4GEOMETRYCELLSTEP_HH
-#define G4GEOMETRYCELLSTEP_HH 1
+#define G4GEOMETRYCELLSTEP_HH
 
 #include "G4GeometryCell.hh"
 
+/**
+ * @brief G4GeometryCellStep serves to address the "cell" a track previously
+ * touched and a "cell" a track is currently in. It is used for scoring and
+ * importance sampling in the "mass" geometry as well as in a "parallel"
+ * geometry.
+ */
+
 class G4GeometryCellStep
 {
-  public: // with description
+  public:
 
+    /**
+     * Constructor. Initialises pre and post G4GeometryCell.
+     *  @param[in] preCell The previous cell.
+     *  @param[in] postCell The next cell.
+     */
     G4GeometryCellStep(const G4GeometryCell& preCell, 
                        const G4GeometryCell& postCell);
-      // initialise pre and post G4GeometryCell 
 
-   ~G4GeometryCellStep();
+    /**
+     * Default Destructor.
+     */
+    ~G4GeometryCellStep() = default;
 
+    /**
+     * Returns the "cell" the track previously touched.
+     */
     inline const G4GeometryCell& GetPreGeometryCell() const; 
-      // addressing the  "cell" the track previously touched 
 
+    /**
+     * Returns the current "cell".
+     */
     inline const G4GeometryCell& GetPostGeometryCell() const; 
-      // addressing the current "cell"  
 
+    /**
+     * Returns true if the step crosses boundary of the geometry it refers to.
+     */
     inline G4bool GetCrossBoundary() const; 
-      // returns true if step crosses boundary of the geometry it refers to
 
-    // the following functions are used by the scoring and importance
-    // system to set the cell information.
-    //
+    /**
+     * Functions used by the scoring and importance system to set the cell
+     * information.
+     */
     inline void SetPreGeometryCell(const G4GeometryCell& preCell); 
     inline void SetPostGeometryCell(const G4GeometryCell& postCell);
     inline void SetCrossBoundary(G4bool b);

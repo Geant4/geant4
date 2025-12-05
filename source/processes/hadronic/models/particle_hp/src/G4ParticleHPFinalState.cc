@@ -270,7 +270,7 @@ void G4ParticleHPFinalState::adjust_final_state(G4LorentzVector init_4p_lab)
   G4LorentzVector dif_4p = init_4p_lab - secs_4p_lab;
 
   G4LorentzVector p4(0);
-  if (ires == -1) {
+  if (ires == -1 && nullptr != resi_pd) {
     // Create and Add Residual Nucleus
     ires = nSecondaries;
     nSecondaries += 1;

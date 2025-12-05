@@ -37,8 +37,6 @@
 // Usage (a): G4AttCheck(values,definitions);
 //    or (b): G4cout << G4AttCheck(values,definitions) << G4endl;
 //
-// For further details, see the HepRep home page at http://heprep.freehep.org
-//  
 // @author J.Allison
 // @author J.Perl
 // Class Description - End:

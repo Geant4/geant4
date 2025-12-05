@@ -6,6 +6,9 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2025-11-25 Vladimir Ivanchenko (hadr-qelastic-V11-03-00)
+- G4QuasiElRatios - fixed compilation warnings
+
 ## 2022-11-26 Gabriele Cosmo (hadr-qelastic-V11-00-01)
 - Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
 

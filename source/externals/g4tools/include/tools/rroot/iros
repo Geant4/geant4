@@ -49,15 +49,9 @@ public:
   iros(ifac& a_fac)
   :m_fac(a_fac)
   {
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
   }
   virtual ~iros(){
     _clear();
-#ifdef TOOLS_MEM
-    mem::decrement(s_class().c_str());
-#endif
   }
 public:
   iros(const iros& a_from)
@@ -65,9 +59,6 @@ public:
   ,parent()
   ,m_fac(a_from.m_fac)
   {
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
     tools_vforcit(iro*,a_from,it) {
       parent::push_back((*it)->copy());
       m_owns.push_back(true);
@@ -107,8 +98,6 @@ public:
     unsigned int s, c;
     if(!a_buffer.read_version(v,s,c)) return false;
 
-    //::printf("debug : iros::stream : version %d, byte count %d\n",v,c);
-
    {uint32 id,bits;
     if(!Object_stream(a_buffer,id,bits)) return false;}
     std::string name;
@@ -118,19 +107,13 @@ public:
     int lowerBound;
     if(!a_buffer.read(lowerBound)) return false;
 
-    //::printf("debug : iros : name \"%s\", nobject %d, lowerBound %d\n",
-    //  name.c_str(),nobjects,lowerBound);
-
     for (int i=0;i<nobjects;i++) {
-      //::printf("debug : iros :    n=%d i=%d ...\n",nobjects,i);
-
       iro* obj;
       bool created;
       if(!a_buffer.read_object(m_fac,a_args,obj,created)){
         a_buffer.out() << "tools::rroot::iros::stream : can't read object." << std::endl;
         return false;
       }
-      //::printf("debug : iros :    n=%d i=%d : ok\n",nobjects,i);
       if(obj) {
         if(created) {
           parent::push_back(obj);
@@ -168,15 +151,6 @@ protected:
   ifac& m_fac;
   std::vector<bool> m_owns;
 };
-
-/*
-inline bool dummy_TObjArray_pointer_stream(buffer& a_buffer,ifac& a_fac,bool a_owner,bool a_warn) {
-  iros oa(a_fac,a_owner,a_warn);
-  iros oa(a_fac,true,true);
-  ifac::args args;
-  return oa.stream(a_buffer,args);
-}
-*/
 
 }}
 

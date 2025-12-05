@@ -70,6 +70,15 @@
 /crystal/setNSmallTrajectorySteps 10000 # G4BaierKatkov default
 /crystal/setRadiationAngleFactor 4. # G4BaierKatkov default
 
+#the following can be changed or commented:
+#For scoring purposes only: the maximal energy in the output spectrum from the Baier-Katkov method.
+#Note it does not modifies the simulations.
+#Note: the minimal energy in the spectrum = the minimal energy defined above.
+/crystal/MaxBKPhotonEnergyInSpectrum 1 GeV # G4BaierKatkov default; must be > setMinPhotonEnergy
+/crystal/NBinsInSpectrum 110 # G4BaierKatkov default; note these bins are not equidistant.
+#Virtual collimator sets the selection of photon angles to be written in the output spectrum
+/crystal/setVirtualCollimatorHalfSize 2.3183 mrad #setting the angular radius of virtual collimator
+
 #add statistics of sampling photons in G4BaierKatkov in specific energy range
 #use if necessary (usually in the crystalline undulator case):
 #CAUTION: this energy range must not be below minimum photon energy
@@ -99,11 +108,11 @@
 /gps/ang/rot1 1  0  0
 /gps/ang/rot2 0 -1  0
 /gps/ang/sigma_x 30.E-6 rad
-/gps/ang/sigma_y 30.E-6 rad
+/gps/ang/sigma_y 70.E-6 rad
 
 #energy distribution (constant)
 /gps/ene/mono 0.855 GeV
 
 #statistics
-/run/printProgress 10
+/run/printProgress 100
 /run/beamOn 1000

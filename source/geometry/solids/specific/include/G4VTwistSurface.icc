@@ -25,20 +25,43 @@
 //
 // G4VTwistSurface class inline methods
 //
-// 01-Aug-2002 - Kotoyo Hoshina (hoshina@hepburn.s.chiba-u.ac.jp), created.
-// 13-Nov-2003 - O.Link (Oliver.Link@cern.ch), Integration in Geant4
+// Author: Kotoyo Hoshina (Chiba University), 01.08.2002 - Created.
+//         Oliver Link (CERN), 13.11.2003 - Integration in Geant4
 //               from original version in Jupiter-2.5.02 application.
 // --------------------------------------------------------------------
+
+struct Intersection
+{    
+  G4double phi ;  // parameter phi
+  G4double u ;    // parameter u
+  G4ThreeVector xx ;   // intersection point in cartesian
+  G4double distance ;  // distance to intersection
+  G4int areacode ;     // the areacode of the intersection
+  G4bool isvalid ;     // valid intersection ??
+
+};
+
+inline
+G4bool DistanceSort( const Intersection& a, const Intersection& b) 
+{
+  return a.distance < b.distance ;
+}
+
+inline
+G4bool EqualIntersection( const Intersection& a, const Intersection& b)
+{
+  return ( ( a.xx - b.xx ).mag() < 1E-9*CLHEP::mm ) ;  
+}
 
 //=====================================================================
 //* DistanceToPlaneWithV ----------------------------------------------
 
 inline
 G4double G4VTwistSurface::DistanceToPlaneWithV(const G4ThreeVector& p,
-                                          const G4ThreeVector& v,
-                                          const G4ThreeVector& x0,
-                                          const G4ThreeVector& n0,
-                                                G4ThreeVector& xx)
+                                               const G4ThreeVector& v,
+                                               const G4ThreeVector& x0,
+                                               const G4ThreeVector& n0,
+                                                     G4ThreeVector& xx)
 {
    G4double q = n0 * v;
    G4double t = kInfinity;
@@ -177,14 +200,13 @@ G4bool G4VTwistSurface::IsOutside(G4int areacode) const
 inline
 G4bool G4VTwistSurface::IsInside(G4int areacode, G4bool testbitmode) const 
 {
-   if ((areacode & sInside) != 0) {
-      if (testbitmode) {
-         return true;
-      } else {
-       if (((areacode & sBoundary) == 0) && ((areacode & sCorner) == 0)) return true;
-      }
-   }
-   return false;
+  if ((areacode & sInside) != 0)
+  {
+    if (testbitmode) { return true; }
+    if (((areacode & sBoundary) == 0)
+     && ((areacode & sCorner) == 0)) { return true; }
+  }
+  return false;
 }
 
 //=====================================================================
@@ -193,14 +215,12 @@ G4bool G4VTwistSurface::IsInside(G4int areacode, G4bool testbitmode) const
 inline
 G4bool G4VTwistSurface::IsBoundary(G4int areacode, G4bool testbitmode) const 
 {
-   if ((areacode & sBoundary) == sBoundary) {
-      if (testbitmode) {
-         return true; 
-      } else {
-         if ((areacode & sInside) == sInside) return true;
-      }
-   }
-   return false;
+  if ((areacode & sBoundary) == sBoundary)
+  {
+    if (testbitmode) { return true; }
+    if ((areacode & sInside) == sInside) { return true; }
+  }
+  return false;
 }
 
 //=====================================================================
@@ -209,14 +229,12 @@ G4bool G4VTwistSurface::IsBoundary(G4int areacode, G4bool testbitmode) const
 inline
 G4bool G4VTwistSurface::IsCorner(G4int areacode, G4bool testbitmode) const 
 {
-   if ((areacode & sCorner) == sCorner) {
-      if (testbitmode) {
-         return true;
-      } else {
-         if ((areacode & sInside) == sInside) return true;
-      }
-   }
-   return false;
+  if ((areacode & sCorner) == sCorner)
+  {
+    if (testbitmode) { return true; }
+    if ((areacode & sInside) == sInside) { return true; }
+  }
+  return false;
 }
 
 //=====================================================================
@@ -225,31 +243,40 @@ G4bool G4VTwistSurface::IsCorner(G4int areacode, G4bool testbitmode) const
 inline
 G4int G4VTwistSurface::GetAxisType(G4int areacode, G4int whichaxis) const
 {
-   G4int axiscode = areacode & sAxisMask & whichaxis;
-   
-   if (axiscode == (sAxisX & sAxis0) ||
-       axiscode == (sAxisX & sAxis1)) {
-      return sAxisX;
-   } else if (axiscode == (sAxisY & sAxis0) ||
-              axiscode == (sAxisY & sAxis1)) {
-      return sAxisY;
-   } else if (axiscode == (sAxisZ & sAxis0) ||
-              axiscode == (sAxisZ & sAxis1)) {
-      return sAxisZ;
-   } else if (axiscode == (sAxisRho & sAxis0) ||
-              axiscode == (sAxisRho & sAxis1)) {
-      return sAxisRho;
-   } else if (axiscode == (sAxisPhi & sAxis0) ||
-              axiscode == (sAxisPhi & sAxis1)) {
-      return sAxisPhi;
-   } else {
-      std::ostringstream message;
-      message << "Configuration not supported." << G4endl
-              << "        areacode = " << areacode;
-      G4Exception("G4VTwistSurface::GetAxisType()","GeomSolids0001",
-                  FatalException, message);
-   }
-   return 1;
+  G4int axiscode = areacode & sAxisMask & whichaxis;
+
+  if (axiscode == (sAxisX & sAxis0) ||
+      axiscode == (sAxisX & sAxis1))
+  {
+    return sAxisX;
+  }
+  if (axiscode == (sAxisY & sAxis0) ||
+      axiscode == (sAxisY & sAxis1))
+  {
+    return sAxisY;
+  }
+  if (axiscode == (sAxisZ & sAxis0) ||
+      axiscode == (sAxisZ & sAxis1))
+  {
+    return sAxisZ;
+  }
+  if (axiscode == (sAxisRho & sAxis0) ||
+      axiscode == (sAxisRho & sAxis1))
+  {
+    return sAxisRho;
+  }
+  if (axiscode == (sAxisPhi & sAxis0) ||
+      axiscode == (sAxisPhi & sAxis1))
+  {
+    return sAxisPhi;
+  }
+
+  std::ostringstream message;
+  message << "Configuration not supported." << G4endl
+          << "        areacode = " << areacode;
+  G4Exception("G4VTwistSurface::GetAxisType()","GeomSolids0001",
+              FatalException, message);
+  return 1;
 }
 
 //=====================================================================
@@ -325,21 +352,21 @@ G4VTwistSurface::GetNeighbours(G4int areacode, G4VTwistSurface** surfaces)
   {
      surfaces[i] = fNeighbours[1] ;
     ++i ;
-    if ( i == 2 ) return i ;
+    if ( i == 2 ) { return i ; }
   }
 
   if ( ( areacode & sAxis0Max ) == sAxis0Max )
   {
     surfaces[i] = fNeighbours[2] ;
     ++i ;
-    if ( i == 2 ) return i ;
+    if ( i == 2 ) { return i ; }
   }
   
   if ( ( areacode & sAxis1Max ) == sAxis1Max )
   {
     surfaces[i] = fNeighbours[3] ;
     ++i ;
-    if ( i == 2 ) return i ;
+    if ( i == 2 ) { return i ; }
   }
     
   return i ;
@@ -351,29 +378,37 @@ G4VTwistSurface::GetNeighbours(G4int areacode, G4VTwistSurface** surfaces)
 inline
 G4ThreeVector G4VTwistSurface::GetCorner(G4int areacode) const
 {
-   if ((areacode & sCorner) == 0)
-   {
-      std::ostringstream message;
-      message << "Area code must represent corner." << G4endl
-              << "        areacode = " << areacode;
-      G4Exception("G4VTwistSurface::GetCorner()","GeomSolids0002",
-                  FatalException, message);
-   }
+  if ((areacode & sCorner) == 0)
+  {
+    std::ostringstream message;
+    message << "Area code must represent corner." << G4endl
+            << "        areacode = " << areacode;
+    G4Exception("G4VTwistSurface::GetCorner()","GeomSolids0002",
+                FatalException, message);
+  }
    
-   if ((areacode & sC0Min1Min) == sC0Min1Min) { 
-      return fCorners[0];
-   } else if ((areacode & sC0Max1Min) == sC0Max1Min) { 
-      return fCorners[1];
-   } else if ((areacode & sC0Max1Max) == sC0Max1Max) {
-      return fCorners[2];
-   } else if ((areacode & sC0Min1Max) == sC0Min1Max) { 
-      return fCorners[3];
-   } else {
-      std::ostringstream message;
-      message << "Configuration not supported." << G4endl
-              << "        areacode = " << areacode;
-      G4Exception("G4VTwistSurface::GetCorner()", "GeomSolids0001",
-                  FatalException, message);
-   }
-   return fCorners[0];
+  if ((areacode & sC0Min1Min) == sC0Min1Min)
+  { 
+    return fCorners[0];
+  }
+  if ((areacode & sC0Max1Min) == sC0Max1Min)
+  { 
+    return fCorners[1];
+  }
+  if ((areacode & sC0Max1Max) == sC0Max1Max)
+  {
+    return fCorners[2];
+  }
+  if ((areacode & sC0Min1Max) == sC0Min1Max)
+  { 
+    return fCorners[3];
+  }
+
+  std::ostringstream message;
+  message << "Configuration not supported." << G4endl
+          << "        areacode = " << areacode;
+  G4Exception("G4VTwistSurface::GetCorner()", "GeomSolids0001",
+              FatalException, message);
+
+  return fCorners[0];
 }

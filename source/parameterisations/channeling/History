@@ -6,6 +6,22 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2025-09-10 Gabriele Cosmo (fastsimchanneling-V11-03-02)
+- Fixed compilation warnings on macOS/XCode for implicit type conversions
+  in G4VChannelingFastSimCrystalData.
+
+## 2025-08-16 Alexei Sytov (fastsimchanneling-V11-03-01)
+- Considerable updates of functionality:
+- Introduced reading from an input file of custom internal geometry of
+  a periodically bent crystal which also works, if necessary, with multiple
+  input files, each per logical volume of an oriented crystal;
+- Introduced various types of radiation virtual collimators in
+  G4BaierKatkov;
+- Deleted redundant lines setting up the defaults of angular and low
+  energy cuts in void G4ChannelingFastSimModel::Input;
+- Polishing of the code according to the Geant4 guidelines.
+  NOT AFFECTING THE CURRENT VERSION OF EXISTING EXAMPLES ch1, ch2, ch3.
+
 ## 2025-04-06 Dmitri Konstantinov (fastsimchanneling-V11-03-00)
 - In G4VChannelingFastSimCrystalData::IonizationLosses(), fixed bug
   in the electron ionization loss correction formula.

@@ -23,14 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file OpNovice/include/OpNovicePrimaryGeneratorMessenger.hh
+/// \file OpNovicePrimaryGeneratorMessenger.hh
 /// \brief Definition of the OpNovicePrimaryGeneratorMessenger class
-//
-//
-//
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef OpNovicePrimaryGeneratorMessenger_h
 #define OpNovicePrimaryGeneratorMessenger_h 1

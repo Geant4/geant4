@@ -23,9 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file B1/include/SteppingAction.hh
-/// \brief Definition of the B1::SteppingAction class
+/// \file SteppingAction.hh
+/// \brief Definition of the VtkVis::SteppingAction class
 
 #ifndef B1SteppingAction_h
 #define B1SteppingAction_h 1

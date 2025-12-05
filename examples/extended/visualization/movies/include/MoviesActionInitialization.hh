@@ -25,7 +25,6 @@
 //
 /// \file MoviesActionInitialization.hh
 /// \brief Definition of the MoviesActionInitialization class
-//
 
 #ifndef MoviesActionInitialization_h
 #define MoviesActionInitialization_h 1

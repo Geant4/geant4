@@ -136,12 +136,6 @@ inline SELECTABLE* search_selectable(std::ostream& a_out,node& a_from) {
     SELECTABLE* _node = tail<SELECTABLE>(*it);
     if(_node && _node->border_visible.value()) return _node;
   }
-/*
-  tools_vforcit(sg::path_t,paths,it) {
-    SELECTABLE* _node = sg::tail<SELECTABLE>(*it);
-    if(_node) return _node;
-  }
-*/
   return 0;
 }
 

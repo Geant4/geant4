@@ -12,8 +12,6 @@
 
 #include "field"
 
-#include "../vdata"
-
 namespace tools {
 namespace sg {
 
@@ -26,7 +24,6 @@ public:
     static const std::string s_v("tools::sg::bmf");
     return s_v;
   }
-//static bool is_a(const std::string& a_class) {return rcmp(a_class,s_class());}
   virtual void* cast(const std::string& a_class) const {
     if(void* p = cmp_cast< bmf<T> >(this,a_class)) {return p;}
     return parent::cast(a_class);
@@ -123,13 +120,6 @@ public:
   }
 
 public: //for iv2sg
-  //bool setValues(size_t a_index,size_t a_num,const T* a_vs) {
-  //  for(size_t index=0;index<a_num;index++) {
-  //    if(!set1Value(a_index+index,a_vs[index])) return false;
-  //  }
-  //  return true;
-  //}
-
   bool setValues(size_t a_index,size_t a_num,const T* a_vs) {
     //  012345678
     //    234
@@ -156,7 +146,7 @@ public: //for iv2sg
   size_t getNum() const {return m_values.size();}
   T* getValues(size_t a_start) { //for gopaw.
     if(a_start>=(m_values.size()+1)) return 0;
-    T* data = vec_data(m_values);
+    T* data = m_values.data();
     return data+a_start;
   }
 protected:

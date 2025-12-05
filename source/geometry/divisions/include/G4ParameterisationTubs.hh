@@ -30,8 +30,8 @@
 // This class represents the parameterised positioning equivalent to 
 // dividing a G4Tubs along one of each axis Rho, Phi, Z.
 
-// 09.05.01 - P.Arce, Initial version
-// 08.04.04 - I.Hrivnacova, Implemented reflection
+// Author: Pedro Arce (CIEMAT), 09.05.2001 - Initial version
+//         Ivana Hrivnacova (Orsay), 08.04.2004 - Implemented reflection
 // --------------------------------------------------------------------
 #ifndef G4PARAMETERISATIONTUBS_HH
 #define G4PARAMETERISATIONTUBS_HH 1
@@ -54,28 +54,67 @@ class G4Hype;
 class G4Polycone;
 class G4Polyhedra;
 
+/**
+ * @brief G4VParameterisationTubs is the base class for the parameterised
+ * positioning equivalent to dividing a G4Tubs along one of each axis Rho,
+ * Phi, Z.
+ */
+
 class G4VParameterisationTubs : public G4VDivisionParameterisation
 { 
-  public:  // with description
+  public:
   
+    /**
+     * Initialises a parameterised tubs, given the axis of parameterisation
+     * 'axis' and the number of divided slices 'nCopies'.
+     *  @param[in] axis The axis along which apply the parameterisation.
+     *  @param[in] nCopies The total number of divided slices.
+     *  @param[in] offset Potential initial offset along the axis.
+     *  @param[in] step The width of the divided slice.
+     *  @param[in] pSolid Pointer to the original shape to parameterise.
+     *  @param[in] divType String identifier for the kind of division.
+     */
     G4VParameterisationTubs( EAxis axis, G4int nCopies,
                             G4double offset, G4double step,
-                            G4VSolid* msolid, DivisionType divType );
-  
+                            G4VSolid* pSolid, DivisionType divType );
+
+    /**
+     * Default Destructor.
+     */  
     ~G4VParameterisationTubs() override;
 };
 
 class G4ParameterisationTubsRho : public G4VParameterisationTubs
 { 
-  public:  // with description
+  public:
 
+    /**
+     * Initialises a parameterised tubs, along the Rho axis.
+     *  @param[in] axis The axis along which apply the parameterisation.
+     *  @param[in] nCopies The total number of divided slices.
+     *  @param[in] offset Potential initial offset along the axis.
+     *  @param[in] step The width of the divided slice.
+     *  @param[in] pSolid Pointer to the original shape to parameterise.
+     *  @param[in] divType String identifier for the kind of division.
+     */
     G4ParameterisationTubsRho( EAxis axis, G4int nCopies,
                                G4double offset, G4double step,
-                               G4VSolid* motherSolid, DivisionType divType );
+                               G4VSolid* pSolid, DivisionType divType );
+
+    /**
+     * Default Destructor.
+     */
    ~G4ParameterisationTubsRho() override;
 
+    /**
+     * Returns the max width along Rho.
+     *  @returns The maximum width of the solid to divide along the Rho axis.
+     */
     G4double GetMaxParameter() const override;
 
+    /**
+     * Concrete methods implementing the parameterisation.
+     */
     void ComputeTransformation(const G4int copyNo,
                                      G4VPhysicalVolume* physVol) const override;
     void ComputeDimensions(G4Tubs& tubs, const G4int copyNo,
@@ -112,15 +151,35 @@ class G4ParameterisationTubsRho : public G4VParameterisationTubs
 
 class G4ParameterisationTubsPhi : public G4VParameterisationTubs
 { 
-  public:  // with description
+  public:
 
+    /**
+     * Initialises a parameterised tubs, along the Phi axis.
+     *  @param[in] axis The axis along which apply the parameterisation.
+     *  @param[in] nCopies The total number of divided slices.
+     *  @param[in] offset Potential initial offset along the axis.
+     *  @param[in] step The width of the divided slice.
+     *  @param[in] pSolid Pointer to the original shape to parameterise.
+     *  @param[in] divType String identifier for the kind of division.
+     */
     G4ParameterisationTubsPhi( EAxis axis, G4int nCopies,
                                G4double offset, G4double step,
-                               G4VSolid* motherSolid, DivisionType divType );
+                               G4VSolid* pSolid, DivisionType divType );
+
+    /**
+     * Default Destructor.
+     */
    ~G4ParameterisationTubsPhi() override;
 
+    /**
+     * Returns the max width along Phi.
+     *  @returns The maximum width of the solid to divide along the Phi axis.
+     */
     G4double GetMaxParameter() const override;
 
+    /**
+     * Concrete methods implementing the parameterisation.
+     */
     void ComputeTransformation(const G4int copyNo,
                                      G4VPhysicalVolume* physVol) const override;
     void ComputeDimensions(G4Tubs& tubs, const G4int copyNo,
@@ -157,15 +216,35 @@ class G4ParameterisationTubsPhi : public G4VParameterisationTubs
 
 class G4ParameterisationTubsZ : public G4VParameterisationTubs
 { 
-  public:  // with description
+  public:
 
+    /**
+     * Initialises a parameterised tubs, along the Z axis.
+     *  @param[in] axis The axis along which apply the parameterisation.
+     *  @param[in] nCopies The total number of divided slices.
+     *  @param[in] offset Potential initial offset along the axis.
+     *  @param[in] step The width of the divided slice.
+     *  @param[in] pSolid Pointer to the original shape to parameterise.
+     *  @param[in] divType String identifier for the kind of division.
+     */
     G4ParameterisationTubsZ( EAxis axis, G4int nCopies,
                              G4double offset, G4double step,
-                             G4VSolid* motherSolid, DivisionType divType );
+                             G4VSolid* pSolid, DivisionType divType );
+
+    /**
+     * Default Destructor.
+     */
    ~G4ParameterisationTubsZ() override;
 
+    /**
+     * Returns the max width along Z.
+     *  @returns The maximum width of the solid to divide along the Z axis.
+     */
     G4double GetMaxParameter() const override;
 
+    /**
+     * Concrete methods implementing the parameterisation.
+     */
     void ComputeTransformation(const G4int copyNo,
                                      G4VPhysicalVolume* physVol) const override;
     void ComputeDimensions(G4Tubs& tubs, const G4int copyNo,

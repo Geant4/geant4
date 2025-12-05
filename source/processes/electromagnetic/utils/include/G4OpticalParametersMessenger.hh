@@ -107,6 +107,9 @@ class G4OpticalParametersMessenger : public G4UImessenger
   /// setStackPhotons command
   G4UIcmdWithABool* fCerenkovStackPhotonsCmd;
 
+  /// setOffloadPhotons command
+  G4UIcmdWithABool* fCerenkovOffloadPhotonsCmd;
+
   G4UIcmdWithABool* fCerenkovTrackSecondariesFirstCmd;
   G4UIcmdWithAnInteger* fCerenkovVerboseLevelCmd;
 
@@ -120,6 +123,9 @@ class G4OpticalParametersMessenger : public G4UImessenger
 
   /// setStackPhotons command
   G4UIcmdWithABool* fScintStackPhotonsCmd;
+
+  /// setOffloadPhotons command
+  G4UIcmdWithABool* fScintOffloadPhotonsCmd;
 
   G4UIcmdWithABool* fScintTrackSecondariesFirstCmd;
 

@@ -48,6 +48,7 @@ geant4_add_module(G4run
   PRIVATE_HEADERS
     G4AdjointSimMessenger.hh
     G4CopyRandomState.hh
+    G4ExceptionHandlerMessenger.hh
     G4MatScanMessenger.hh
     G4RunMessenger.hh
     G4UserPhysicsListMessenger.hh
@@ -56,6 +57,7 @@ geant4_add_module(G4run
     G4AdjointSimManager.cc
     G4AdjointSimMessenger.cc
     G4ExceptionHandler.cc
+    G4ExceptionHandlerMessenger.cc
     G4MaterialScanner.cc
     G4MatScanMessenger.cc
     G4MSSteppingAction.cc

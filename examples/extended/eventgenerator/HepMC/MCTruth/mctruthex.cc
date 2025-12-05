@@ -23,10 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file eventgenerator/HepMC/MCTruth/mctruthex.cc
-/// \brief Main program of the eventgenerator/HepMC/MCTruth example
-//
-//
+/// \file mctruthex.cc
+/// \brief Main program of the HepMC/MCTruth example
+
 #include "DetectorConstruction.hh"
 #include "FTFP_BERT.hh"
 #include "MCTruthEventAction.hh"

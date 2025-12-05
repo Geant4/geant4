@@ -4,12 +4,25 @@
 #ifndef tools_get_lines
 #define tools_get_lines
 
-#include "cstr"
-
+#include <cstdlib>  // malloc,free
+#include <cstring>  // strcpy
 #include <string>
 #include <vector>
 
-namespace tools {
+namespace tools
+{
+
+inline char* str_dup(const char* a_cstr)
+{
+  return ::strcpy((char*)::malloc(::strlen(a_cstr) + 1), a_cstr);
+}
+
+inline void str_del(char*& a_cstr)
+{
+  if (a_cstr == NULL) return;
+  ::free(a_cstr);
+  a_cstr = NULL;
+}
 
 inline void get_lines(const std::string& a_string,std::vector<std::string>& a_lines){
   // a_string is a list separated by "\n" or "\\n".

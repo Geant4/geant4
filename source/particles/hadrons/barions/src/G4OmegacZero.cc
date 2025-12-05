@@ -31,6 +31,8 @@
 // **********************************************************************
 //  New impelemenataion as an utility class       M.Asai, 26 July 2004
 //  Updated width and lifetime following PDG 2023 S.Okada, 5 November 2023
+//  Updated mass, width and lifetime
+//    following PDG 2025                          S.Okada, 4 November 2025
 // ----------------------------------------------------------------------
 
 #include "G4OmegacZero.hh"
@@ -61,11 +63,11 @@ G4OmegacZero* G4OmegacZero::Definition()
 
     // clang-format off
    anInstance = new G4ParticleDefinition(
-                 name,      2.6952*GeV,   2.46e-9*MeV,    0.*eplus,
+                 name,      2.6953*GeV,   2.41e-9*MeV,    0.*eplus,
                     1,              +1,             0,
                     0,               0,             0,
              "baryon",               0,            +1,        4332,
-                false,      2.68e-4*ns,       nullptr,
+                false,      2.73e-4*ns,       nullptr,
                 false,       "omega_c");
     // clang-format on
   }

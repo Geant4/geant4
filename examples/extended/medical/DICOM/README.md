@@ -1,0 +1,116 @@
+/\page Examples_DICOM Category "medical/DICOM"
+
+# Geant4 DICOM Examples
+
+The DICOM applications were originally developed by the Geant4 users: \n
+Louis Archambault,(1)Luc Beaulieu, (2)Vincent Hubert-Tremblay.
+
+- (1) Centre Hospitalier Universitaire de Quebec (CHUQ),   \n
+Hotel-Dieu de Quebec, departement de Radio-oncologie  \n
+11 cote du palais. Quebec, QC, Canada, G1R 2J6        \n
+tel (418) 525-4444 #6720                              \n
+fax (418) 691 5268                                    \n
+web : thomson.phy.ulaval.ca/phys_med                  \n
+
+- (2) Universite Laval, Quebec (QC) Canada
+
+It has since been deeply reviewed by Pedro Arce in December 2007. \n
+Very small changes by Stephane Chauvie in January 2008. \n
+Stephane Chauvie, Oct 2009: changed Physics list; changes in DICOM read.  \n
+Stephane Chauvie and Andrea Armando; June 2010 adapted for reading  whatever DICOM file \n
+Jonathan Madsen, Nov 2013: updated DICOM to utilize multithreading now available in Geant4.10 \n
+
+## Introduction
+
+This example consists of the following applications:
+
+- \ref ExampleDICOM1
+- \ref ExampleDICOM2
+
+with two libraries that implement capabilities common to both applications:
+
+- G4DicomCore: providing the core Geant4 application structure.
+- G4DicomReader: **Optional** utility library to read DICOM files and RT structure in DICOM format, as well as RT plans.
+  It uses the [DCMTK library](http://dicom.offis.de/dcmtk.php.en), which must be installed if you wish to use this capability.
+  - Requires DCMTK 3.6.1 or newer, with the `dcmrt` package available.
+
+Both application can optionally use the DICOM Digital Head developed by S. Guatelli (susanna@uow.edu.au) and V. Giacometti.
+This digital model is documented in: Giacometti, V., Guatelli, S., Bazalova-Carter, M., Rosenfeld, A.B., Schulte, R.W.,
+"Development of a high resolution voxelised head phantom for medical physics applications", (2017) Physica Medica, 33, pp. 182-188.
+
+## Compiling the libraries and applications
+
+A standard Geant4 example `CMakeLists.txt` is provided, and thus the project may be configured and built using:
+
+```
+$ cmake -DCMAKE_PREFIX_PATH=/path/to/geant4-install -S. -Bbuild
+$ cmake --build ./build
+```
+
+Note that this assumes you run `cmake` in the top level `DICOM` directory.
+
+To build the applications and libraries with support for reading DICOM files using DCMTK, run `cmake` as
+
+```
+$ cmake \
+  -DCMAKE_PREFIX_PATH=/path/to/geant4-install \
+  -DG4DICOM_USE_DCMTK=ON \
+  -S. -Bbuild 
+$ cmake --build ./build
+```
+
+This requires that you have DCMTK v3.6.1 or newer with the `dcmrt` package installed. If CMake has problems
+located the install of DCMTK, add its install path to the `CMAKE_PREFIX_PATH` argument, e.g.
+
+```
+$ cmake \
+  -DCMAKE_PREFIX_PATH="/path/to/geant4-install;/path/to/dcmtk-install" \
+  -DG4DICOM_USE_DCMTK=ON \
+  -S. -Bbuild 
+$ cmake --build ./build
+```
+
+To enable use of the DICOM Digital Head model, run cmake as:
+
+```
+$ cmake \
+  -DCMAKE_PREFIX_PATH=/path/to/geant4-install \
+  -DG4DICOM_USE_HEAD=ON \
+  -S. -Bbuild 
+$ cmake --build ./build
+```
+
+This requires a working network connection in order to download the model from the Geant4 website.
+
+
+## Running the applications
+
+Both applications can have their runtime behaviour configured using a series on environment variables:
+
+- `DICOM_CHANGE_MATERIAL_DENSITY`
+  - set to the minimum density difference before making a separate material
+  - e.g. if DenseBone is from > 1.496 to <= 1.654 and `DICOM_CHANGE_MATERIAL_DENSITY=0.079`
+      then DenseBone would be separated into DenseBone > 1.496 to <= 1.575 and DenseBone > 1.575 to <= 1.654
+- `DICOM_PARTIAL_PARAM`
+  - set to 1 to build the partial build instead of regular or nested construction (see section 9)
+- `DICOM_NESTED_PARAM`
+  - set to 1 to build the nested construction (see section 9; overridden by `DICOM_PARTIAL_PARAM`)
+- `DICOM_NTHREADS`
+  - To set the number of threads (only when Geant4 itself has been built with multithreading capability)
+  - Needs to be set to the number of desired threads, e.g. `DICOM_NTHREADS=8` (default is 4 threads)
+- `DICOM_USE_HEAD`
+  - set to 1 (export DICOM_USE_HEAD=1) to use the digital head phantom documented in Giacometti, V., Guatelli, S., Bazalova-Carter, M., Rosenfeld, A.B., Schulte, R.W.,
+    "Development of a high resolution voxelised head phantom for medical physics applications", (2017) Physica Medica, 33, pp. 182-188. 
+    To use this option, the DICOM library needs to be downloaded. This is distributed with the other Geant4 data files on the Geant4 Download site.
+    For convenience of use, it is suggested to have the DICOM library directory in the DICOM Geant4 extended example or in the directory containing the DICOM executable.
+    When using this option,
+    1) export DICOM_USE_HEAD=1
+    2) export DICOM_PATH=path/to/DICOM1.1/DICOM_HEAD - to use the full DICOM HEAD project 
+       or
+       export DICOM_PATH=path/to/DICOM1.1/DICOM_HEAD_TEST - to use 4 DICOM files of the DICOM HEAD project. This option is useful for testing purposes.
+    3) THE DICOM_HEAD uses the OLD version of the Metadata files (see point 4a)
+    Note 1: The Conversion of Hounsfield numbers to materials (point 5) is not used. The material is associated to the voxel in the Detector Construction 
+            without using the calibration curve.This happens because the DICOM project has already been segmented and cleaned from artefacts (see publication).
+
+Detailed information on the capabilities of, and how to run, the `DICOM1` and `DICOM2` applications
+are available in the [DICOM1 README](DICOM1/README) and [DICOM2 README](DICOM2/README) respectively. 

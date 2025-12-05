@@ -52,7 +52,7 @@ FissionFragmentData::FissionFragmentData( Construction::Settings const &a_constr
     for( std::size_t i1 = 0; i1 < m_delayedNeutrons.size( ); ++i1 ) {
         DelayedNeutron *delayedNeutron = m_delayedNeutrons.get<DelayedNeutron>( i1 );
 
-        delayedNeutron->setDelayedNeutronIndex( i1 );
+        delayedNeutron->setDelayedNeutronIndex( static_cast<int>( i1 ) );
     }
 }
 
@@ -253,7 +253,8 @@ Vector FissionFragmentData::multiGroupQ( LUPI::StatusMessageReporting &a_smr, Tr
  ***********************************************************************************************************/
 
 Matrix FissionFragmentData::multiGroupProductMatrix( LUPI::StatusMessageReporting &a_smr, Transporting::MG const &a_settings, 
-                Styles::TemperatureInfo const &a_temperatureInfo, Transporting::Particles const &a_particles, std::string const &a_productID, int a_order ) const {
+                Styles::TemperatureInfo const &a_temperatureInfo, Transporting::Particles const &a_particles, std::string const &a_productID, 
+                std::size_t a_order ) const {
 
     Matrix matrix( 0, 0 );
 
@@ -395,8 +396,7 @@ void FissionFragmentData::continuousEnergyProductData( Transporting::Settings co
  ***********************************************************************************************************/
 
 void FissionFragmentData::mapContinuousEnergyProductData( Transporting::Settings const &a_settings, std::string const &a_particleID,
-
-                std::vector<double> const &a_energies, int a_offset, std::vector<double> &a_productEnergies, std::vector<double> &a_productMomenta,
+                std::vector<double> const &a_energies, std::size_t a_offset, std::vector<double> &a_productEnergies, std::vector<double> &a_productMomenta,
                 std::vector<double> &a_productGains, bool a_ignoreIncompleteParticles ) const {
 
     if( a_settings.delayedNeutrons( ) != Transporting::DelayedNeutrons::on ) return;

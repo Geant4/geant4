@@ -23,10 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file hadronic/Hadr02/src/HadronPhysicsCRMC_FTFP_BERT.cc
-/// \brief Implementation of the CRMC_FTFP_BERT class methods
-//
-//
+/// \file HadronPhysicsCRMC_FTFP_BERT.cc
+/// \brief Implementation of the HadronPhysicsCRMC_FTFP_BERT class
+
 //---------------------------------------------------------------------------
 //
 // ClassName:   HadronPhysicsCRMC_FTFP_BERT

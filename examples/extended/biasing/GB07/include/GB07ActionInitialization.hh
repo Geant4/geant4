@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 /// \file GB07ActionInitialization.hh
 /// \brief Definition of the GB07ActionInitialization class
 

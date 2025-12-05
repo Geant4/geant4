@@ -86,6 +86,11 @@ namespace G4INCL {
   {
     return modified;
   }
+ 
+  ParticleList &FinalState::getSrcModifiedParticles()
+  {
+    return modified;
+  }
 
   ParticleList const &FinalState::getOutgoingParticles() const
   {

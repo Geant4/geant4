@@ -9,12 +9,6 @@
 #include <X11/CompositeP.h>
 #include <X11/StringDefs.h>
 
-//#define TOOLX_XT_IMAGEAREA_DEBUG
-
-#ifdef TOOLX_XT_IMAGEAREA_DEBUG
-#include <stdio.h>
-#endif
-
 namespace toolx {
 namespace Xt {
 
@@ -81,37 +75,20 @@ public:
   }
 protected:
   static void initialize_class(void) {
-#ifdef TOOLX_XT_IMAGEAREA_DEBUG
-    ::printf("debug: toolx::Xt::ImageArea: initialize_class.\n");
-#endif
   }
 
   static void initialize_widget(Widget a_request,Widget a_this,ArgList,Cardinal*) {
     if(a_request->core.width<=0)  a_this->core.width  = 100;
     if(a_request->core.height<=0) a_this->core.height = 100;
 
-#ifdef TOOLX_XT_IMAGEAREA_DEBUG
-    ::printf("debug: toolx::Xt::ImageArea: initialize_widget: %s\n",::XtName(a_this));
-#endif
-
     ::XtAddEventHandler
        (a_this,ButtonPressMask|ButtonReleaseMask|ButtonMotionMask|KeyPressMask|KeyReleaseMask,0,event_handler,NULL);
-
-#ifdef TOOLX_XT_IMAGEAREA_DEBUG
-    ::printf("debug: toolx::Xt::ImageArea: initialize_widget: end\n");
-#endif
   }
 
   static void destroy_widget(Widget) {
-#ifdef TOOLX_XT_IMAGEAREA_DEBUG
-    ::printf("debug: toolx::Xt::ImageArea: destroy_widget.\n");
-#endif
   }
 
   static void change_widget_size(Widget a_this) {
-#ifdef TOOLX_XT_IMAGEAREA_DEBUG
-    ::printf("debug: toolx::Xt::ImageArea: change_widget_size: %s\n",XtName(a_this));
-#endif
 
     if(widget_class()->core_class.superclass->core_class.resize!=NULL)
       (widget_class()->core_class.superclass->core_class.resize)(a_this);
@@ -121,15 +98,9 @@ protected:
     value.event = 0;
     ::XtCallCallbacks(a_this,XoN_resizeCallback(),(XtPointer)&value);
 
-#ifdef TOOLX_XT_IMAGEAREA_DEBUG
-    ::printf("debug: toolx::Xt::ImageArea: change_widget_size: end\n");
-#endif
 }
 
   static void draw_widget(Widget  a_this,XEvent* a_event,Region a_region) {
-#ifdef TOOLX_XT_IMAGEAREA_DEBUG
-    ::printf("debug: toolx::Xt::ImageArea: draw_widget: %s\n",XtName(a_this));
-#endif
 
     if(widget_class()->core_class.superclass->core_class.expose!=NULL)
       (widget_class()->core_class.superclass->core_class.expose)(a_this,a_event,a_region);
@@ -138,10 +109,6 @@ protected:
     value.reason = XoCR_PAINT();
     value.event = a_event;
     ::XtCallCallbacks(a_this,XoN_paintCallback(),(XtPointer)&value);
-  
-#ifdef TOOLX_XT_IMAGEAREA_DEBUG
-    ::printf("debug: toolx::Xt::ImageArea: draw_widget: end\n");
-#endif
   }
 
 protected:

@@ -23,11 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file runAndEvent/RE01/include/RE01RegionInformation.hh
+/// \file RE01RegionInformation.hh
 /// \brief Definition of the RE01RegionInformation class
-//
-//
-//
 
 #ifndef RE01RegionInformation_H
 #define RE01RegionInformation_H 1

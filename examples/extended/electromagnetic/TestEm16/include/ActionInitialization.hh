@@ -23,10 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm16/include/ActionInitialization.hh
+/// \file ActionInitialization.hh
 /// \brief Definition of the ActionInitialization class
-//
-//
+
 #ifndef ActionInitialization_h
 #define ActionInitialization_h 1
 

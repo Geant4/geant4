@@ -74,8 +74,12 @@ namespace G4INCL {
       virtual G4double omegaNToPiN(Particle const * const p1, Particle const * const p2);
       virtual G4double etaPrimeNToPiN(Particle const * const p1, Particle const * const p2);
 
-			   /// \brief Cross sections for mesonic resonance absorption on nucleon - pipiN Channel
-			   virtual G4double etaNToPiPiN(Particle const * const p1, Particle const * const p2);
+			/// \brief Cross sections for mesonic resonance absorption on nucleon - pipiN Channel
+			virtual G4double etaNToPiPiN(Particle const * const p1, Particle const * const p2);
+      
+      /// \brief Cross sections for eta-N --> LK/SK
+      virtual G4double etaNToLK(Particle const * const p1, Particle const * const p2);
+      virtual G4double etaNToSK(Particle const * const p1, Particle const * const p2);            
 			
       /// \brief Cross section for Eta production (inclusive) - NN entrance channel
       virtual G4double NNToNNEta(Particle const * const particle1, Particle const * const particle2);
@@ -92,11 +96,11 @@ namespace G4INCL {
       /// \brief Cross section for X pion production - NN Channel
       virtual G4double NNToxPiNN(const G4int xpi, Particle const * const p1, Particle const * const p2);
 	  
-		   	/// \brief Cross section for X pion production - NNEta Channel
-		   	virtual G4double NNToNNEtaxPi(const G4int xpi, Particle const * const p1, Particle const * const p2);
+		  /// \brief Cross section for X pion production - NNEta Channel
+		  virtual G4double NNToNNEtaxPi(const G4int xpi, Particle const * const p1, Particle const * const p2);
 	  
-			   /// \brief Cross section for N-Delta-Eta production - NNEta Channel
-			   virtual G4double NNToNDeltaEta(Particle const * const p1, Particle const * const p2);
+			/// \brief Cross section for N-Delta-Eta production - NNEta Channel
+			virtual G4double NNToNDeltaEta(Particle const * const p1, Particle const * const p2);
 	  
       /// \brief Cross section for X pion production - NNOmega Channel
       virtual G4double NNToNNOmegaxPi(const G4int xpi, Particle const * const p1, Particle const * const p2);
@@ -161,9 +165,9 @@ namespace G4INCL {
 	  G4double piMinuspToOmegaN(Particle const * const p1, Particle const * const p2);
 	  G4double piMinuspToOmegaN(const G4double ECM);
 //      G4double piPluspOnePi(Particle const * const p1, Particle const * const p2);
-//	  G4double piMinuspOnePi(Particle const * const p1, Particle const * const p2);
+//	    G4double piMinuspOnePi(Particle const * const p1, Particle const * const p2);
 //      G4double piPluspTwoPi(Particle const * const p1, Particle const * const p2);
-//	  G4double piMinuspTwoPi(Particle const * const p1, Particle const * const p2);
+//	    G4double piMinuspTwoPi(Particle const * const p1, Particle const * const p2);
 
       /// \brief Cross section for One (more) pion production - piN entrance channel
 //      virtual G4double piNOnePi(Particle const * const p1, Particle const * const p2);
@@ -174,22 +178,22 @@ namespace G4INCL {
       /// \brief Cross section for Three (more) pion production - piN entrance channel
       ///virtual G4double piNThreePi(Particle const * const p1, Particle const * const p2);
 	  
-		   	/// \brief Isotopic Cross section for Eta production (inclusive) - NN entrance channel
-		   	virtual G4double NNToNNEtaIso(const G4double ener, const G4int iso);
+		  /// \brief Isotopic Cross section for Eta production (inclusive) - NN entrance channel
+		  virtual G4double NNToNNEtaIso(const G4double ener, const G4int iso);
 	  
-		   /// \brief Isotopic Cross section for Eta production (exclusive) - NN entrance channel
-		   	virtual G4double NNToNNEtaExcluIso(const G4double ener, const G4int iso);
+		  /// \brief Isotopic Cross section for Eta production (exclusive) - NN entrance channel
+		  virtual G4double NNToNNEtaExcluIso(const G4double ener, const G4int iso);
 			
-		   	/// \brief Cross section for direct 1-pion production - NNEta  channel
-			   virtual G4double NNToNNEtaOnePi(Particle const * const part1, Particle const * const part2);
-						/// \brief Cross section for direct 1-pion production - NNEta  channel
-		   	virtual G4double NNToNNEtaOnePiOrDelta(Particle const * const part1, Particle const * const part2);
-			   /// \brief Cross section for direct 2-pion production - NNEta  channel
-		   	virtual G4double NNToNNEtaTwoPi(Particle const * const part1, Particle const * const part2);
-   			/// \brief Cross section for direct 3-pion production - NNEta  channel
-	   		virtual G4double NNToNNEtaThreePi(Particle const * const part1, Particle const * const part2);
-	   		/// \brief Cross section for direct 4-pion production - NNEta  channel
-	   		virtual G4double NNToNNEtaFourPi(Particle const * const part1, Particle const * const part2);
+		  /// \brief Cross section for direct 1-pion production - NNEta  channel
+			virtual G4double NNToNNEtaOnePi(Particle const * const part1, Particle const * const part2);
+			/// \brief Cross section for direct 1-pion production - NNEta  channel
+		  virtual G4double NNToNNEtaOnePiOrDelta(Particle const * const part1, Particle const * const part2);
+			/// \brief Cross section for direct 2-pion production - NNEta  channel
+		  virtual G4double NNToNNEtaTwoPi(Particle const * const part1, Particle const * const part2);
+   		/// \brief Cross section for direct 3-pion production - NNEta  channel
+	   	virtual G4double NNToNNEtaThreePi(Particle const * const part1, Particle const * const part2);
+	   	/// \brief Cross section for direct 4-pion production - NNEta  channel
+	   	virtual G4double NNToNNEtaFourPi(Particle const * const part1, Particle const * const part2);
 
 	  
       /// \brief Isotopic Cross section for Omega production (inclusive) - NN entrance channel
@@ -210,8 +214,8 @@ namespace G4INCL {
       virtual G4double NNToNNOmegaFourPi(Particle const * const part1, Particle const * const part2);
    
 			
-		   	/// \brief Cross sections for mesonic resonance absorption on nucleon - elastic Channel
-		   	virtual G4double etaNElastic(Particle const * const p1, Particle const * const p2);					
+		  /// \brief Cross sections for mesonic resonance absorption on nucleon - elastic Channel
+		  virtual G4double etaNElastic(Particle const * const p1, Particle const * const p2);					
       virtual G4double omegaNElastic(Particle const * const p1, Particle const * const p2);					
 
 			
@@ -219,7 +223,9 @@ namespace G4INCL {
       virtual G4double omegaNInelastic(Particle const * const p1, Particle const * const p2);					
 			
       /// \brief Cross sections for omega-induced 2Pi emission on nucleon
-      virtual G4double omegaNToPiPiN(Particle const * const p1, Particle const * const p2);					
+      virtual G4double omegaNToPiPiN(Particle const * const p1, Particle const * const p2);         
+      virtual G4double omegaNToLK(Particle const * const p1, Particle const * const p2);       
+      virtual G4double omegaNToSK(Particle const * const p1, Particle const * const p2);  					
    
 		};
 }

@@ -25,12 +25,10 @@
 //
 // Implementation of G4PolyhedraHistorical, polyhedra data
 //
-// Author: David C. Williams (davidw@scipp.ucsc.edu)
+// Author: David C. Williams (UCSC), 1998
 // --------------------------------------------------------------------
 
 #include "G4PolyhedraHistorical.hh"
-
-G4PolyhedraHistorical::G4PolyhedraHistorical() = default;
 
 G4PolyhedraHistorical::G4PolyhedraHistorical( G4int z_planes )
   : Num_z_planes(z_planes)
@@ -77,7 +75,7 @@ G4PolyhedraHistorical( const G4PolyhedraHistorical& source )
 G4PolyhedraHistorical&
 G4PolyhedraHistorical::operator=( const G4PolyhedraHistorical& right )
 {
-  if ( &right == this ) return *this;
+  if ( &right == this ) { return *this; }
 
   Start_angle   = right.Start_angle;
   Opening_angle = right.Opening_angle;

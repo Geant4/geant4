@@ -23,10 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file medical/GammaTherapy/include/CheckVolumeSD.hh
+/// \file CheckVolumeSD.hh
 /// \brief Definition of the CheckVolumeSD class
-//
+
 #ifndef CheckVolumeSD_h
 #define CheckVolumeSD_h 1
 

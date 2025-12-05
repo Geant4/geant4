@@ -23,10 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file hadronic/Hadr02/src/HadronPhysicsHIJING.cc
+/// \file HadronPhysicsHIJING.cc
 /// \brief Implementation of the HadronPhysicsHIJING class
-//
-//
+
 //---------------------------------------------------------------------------
 //
 // ClassName:

@@ -111,11 +111,6 @@ G4PVParameterised::G4PVParameterised( __void__& a )
 }
 
 // ----------------------------------------------------------------------
-// Destructor
-//
-G4PVParameterised::~G4PVParameterised() = default;
-
-// ----------------------------------------------------------------------
 // GetParameterisation
 //
 G4VPVParameterisation* G4PVParameterised::GetParameterisation() const

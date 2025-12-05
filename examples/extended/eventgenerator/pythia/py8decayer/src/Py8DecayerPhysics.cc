@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file eventgenerator/pythia/pythia8decayer/src/Py8DecayerPhysics.cc
+/// \file Py8DecayerPhysics.cc
 /// \brief Implementation of the Py8DecayerPhysics class
 ///
 /// \author J. Yarba; FNAL

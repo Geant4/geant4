@@ -24,9 +24,7 @@
 // ********************************************************************
 //
 /// \file SAXSPhysicsList.hh
-/// \brief Implementation of the SAXSPhysicsList class
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// \brief Definition of the SAXSPhysicsList class
 
 #ifndef SAXSPhysicsList_h
 #define SAXSPhysicsList_h 1

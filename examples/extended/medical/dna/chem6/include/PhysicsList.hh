@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file PhysicsList.hh
+/// \brief Definition of the PhysicsList class
+
 // This example is provided by the Geant4-DNA collaboration
 // chem6 example is derived from chem4 and chem5 examples
 //
@@ -38,18 +41,16 @@
 // Authors: W. G. Shin and S. Incerti (CENBG, France)
 //
 //
-/// \file PhysicsList.hh
-/// \brief Definition of the PhysicsList class
 
 #ifndef CHEM6_PhysicsList_h
 #define CHEM6_PhysicsList_h 1
 
 #include "G4VModularPhysicsList.hh"
-#include "G4VUserChemistryList.hh"
-#include "globals.hh"
-class G4VPhysicsConstructor;
 
-class PhysicsList : public G4VModularPhysicsList
+class G4VPhysicsConstructor;
+class PhysicsListMessenger;
+
+class PhysicsList final : public G4VModularPhysicsList
 {
   public:
     explicit PhysicsList();
@@ -63,6 +64,8 @@ class PhysicsList : public G4VModularPhysicsList
   private:
     std::unique_ptr<G4VPhysicsConstructor> fEmDNAPhysicsList;
     std::unique_ptr<G4VPhysicsConstructor> fEmDNAChemistryList;
-    G4String fPhysDNAName;
+    G4String fPhysDNAName = "G4EmDNAPhysics_option2";
+    G4String fChemDNAName = "G4EmDNAChemistry_option3";
+    std::unique_ptr<PhysicsListMessenger> fMessenger;
 };
 #endif

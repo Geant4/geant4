@@ -1,0 +1,45 @@
+/tracking/verbose 0
+
+/testem/det/setMat G4_Si
+/testem/det/setSize 500 nm
+/testem/det/setWidth 500 nm
+
+/testem/det/setMatLayer4 G4_Si
+/testem/det/setSizeLayer4 4 nm
+
+/testem/det/setMatLayer3 G4_Si
+/testem/det/setSizeLayer3 4 nm
+
+/testem/det/setMatLayer2 G4_Si
+/testem/det/setSizeLayer2 2.0 nm
+
+/testem/det/setMatLayer1 G4_Si
+/testem/det/setSizeLayer1 1.0 mm
+
+/testem/det/setMatSurf  G4_SILICON_DIOXIDE
+/testem/det/setSizeSurf 20.0 nm
+
+/testem/det/update
+
+/gps/pos/type Plane
+/gps/pos/shape Square
+/gps/pos/halfx 0.00 mm
+/gps/pos/halfy 0.00 mm
+/gps/pos/centre 0.000 0 -50.0 nm
+
+/gps/ang/type cos
+/gps/ang/mintheta 30.000 deg
+/gps/ang/maxtheta 30.000 deg
+/gps/ang/minphi 0.000 deg
+/gps/ang/maxphi 0.000 deg
+/gps/pos/rot1 0 1 0
+/gps/pos/rot2 1 0 0
+
+/gps/particle e-
+/run/printProgress 10
+
+/run/initialize
+
+/gps/ene/mono 200 eV
+/run/beamOn 100
+

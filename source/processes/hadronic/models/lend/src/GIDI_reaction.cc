@@ -18,8 +18,9 @@ namespace GIDI {
  * Parses a <**reaction**> node.
  ***********************************************************************************************************/
 
-Reaction::Reaction( int a_ENDF_MT, std::string a_fissionGenre ) :
+Reaction::Reaction( int a_ENDF_MT, std::string const &a_fissionGenre ) :
         Form( FormType::reaction ),
+        m_reactionIndex( 0 ),
         m_active( true ),
         m_ENDF_MT( a_ENDF_MT ),
         m_fissionGenre( a_fissionGenre ),
@@ -272,7 +273,7 @@ void Reaction::setOutputChannel( OutputChannel *a_outputChannel ) {
  *                                                  for the TNSL data for that boundary.
  ***********************************************************************************************************/
 
-void Reaction::modifiedMultiGroupElasticForTNSL( std::map<std::string,std::size_t> a_maximumTNSL_MultiGroupIndex ) {
+void Reaction::modifiedMultiGroupElasticForTNSL( std::map<std::string,std::size_t> const &a_maximumTNSL_MultiGroupIndex ) {
 
     m_crossSection.modifiedMultiGroupElasticForTNSL( a_maximumTNSL_MultiGroupIndex );
     m_availableEnergy.modifiedMultiGroupElasticForTNSL( a_maximumTNSL_MultiGroupIndex );
@@ -340,16 +341,18 @@ bool Reaction::areAllProductsTracked( Transporting::Particles const &a_particles
  * @param a_smr                 [Out]   If errors are not to be thrown, then the error is reported via this instance.
  * @param a_settings            [in]    Specifies the requested label.
  * @param a_temperatureInfo     [in]    Specifies the temperature and labels use to lookup the requested data.
+ * @param a_label               [in]    If not an empty string, this is used as the label for the form to return and the *a_temperatureInfo* labels are ignored.
  *
  * @return                              The requested multi-group cross section as a GIDI::Vector.
  ***********************************************************************************************************/
 
 Vector Reaction::multiGroupCrossSection( LUPI::StatusMessageReporting &a_smr, Transporting::MG const &a_settings, 
-                Styles::TemperatureInfo const &a_temperatureInfo ) const {
+                Styles::TemperatureInfo const &a_temperatureInfo, std::string const &a_label ) const {
 
     Vector vector( 0 );
 
-    Functions::Gridded1d const *form = dynamic_cast<Functions::Gridded1d const*>( a_settings.form( a_smr, m_crossSection, a_temperatureInfo, "cross section" ) );
+    Functions::Gridded1d const *form = dynamic_cast<Functions::Gridded1d const*>( 
+            a_settings.form( a_smr, m_crossSection, a_temperatureInfo, "cross section", a_label ) );
     if( form != nullptr ) vector = form->data( );
 
     return( vector );
@@ -390,7 +393,8 @@ Vector Reaction::multiGroupQ( LUPI::StatusMessageReporting &a_smr, Transporting:
  ***********************************************************************************************************/
 
 Matrix Reaction::multiGroupProductMatrix( LUPI::StatusMessageReporting &a_smr, Transporting::MG const &a_settings, 
-                Styles::TemperatureInfo const &a_temperatureInfo, Transporting::Particles const &a_particles, std::string const &a_productID, int a_order ) const {
+                Styles::TemperatureInfo const &a_temperatureInfo, Transporting::Particles const &a_particles, std::string const &a_productID, 
+                std::size_t a_order ) const {
 
     Matrix matrix( 0, 0 );
 
@@ -405,7 +409,7 @@ Matrix Reaction::multiGroupProductMatrix( LUPI::StatusMessageReporting &a_smr, T
                 Matrix matrix2( productionCrossSection.size( ), productionCrossSection.size( ) );
 
                 for( std::size_t i1 = 0; i1 < productionCrossSection.size( ); ++i1 ) {
-                    matrix2.set( i1, multiGroupIndexFromEnergy, productionCrossSection[i1] );
+                    matrix2.set( i1, static_cast<std::size_t>( multiGroupIndexFromEnergy ), productionCrossSection[i1] );
                 }
                 matrix += matrix2;
             }
@@ -430,7 +434,7 @@ Matrix Reaction::multiGroupProductMatrix( LUPI::StatusMessageReporting &a_smr, T
  ***********************************************************************************************************/
 
 Matrix Reaction::multiGroupFissionMatrix( LUPI::StatusMessageReporting &a_smr, Transporting::MG const &a_settings, 
-                Styles::TemperatureInfo const &a_temperatureInfo, Transporting::Particles const &a_particles, int a_order ) const {
+                Styles::TemperatureInfo const &a_temperatureInfo, Transporting::Particles const &a_particles, std::size_t a_order ) const {
 
     Matrix matrix( 0, 0 );
 
@@ -687,7 +691,7 @@ void Reaction::continuousEnergyProductData( Transporting::Settings const &a_sett
  ***********************************************************************************************************/
 
 void Reaction::mapContinuousEnergyProductData( Transporting::Settings const &a_settings, std::string const &a_particleID, 
-                std::vector<double> const &a_energies, int a_offset, std::vector<double> &a_productEnergies, std::vector<double> &a_productMomenta, 
+                std::vector<double> const &a_energies, std::size_t a_offset, std::vector<double> &a_productEnergies, std::vector<double> &a_productMomenta, 
                 std::vector<double> &a_productGains, bool a_ignoreIncompleteParticles ) const {
 
 //    if( ENDF_MT( ) == 516 ) return;             // FIXME, may be something wrong with the way FUDGE converts ENDF to GNDS.

@@ -25,8 +25,8 @@
 //
 // G4NystromRK4 inline methods implementation
 //
-// Created: I.Gavrilenko, 15.05.2009 (as G4AtlasRK4)
-// Adaptations: J.Apostolakis, November 2009
+// Author: Igor Gavrilenko (CERN), 15.05.2009 (as G4AtlasRK4)
+// Adaptations: John Apostolakis (CERN), 05.11.2009
 // -------------------------------------------------------------------
 
 void G4NystromRK4::GetFieldValue(const G4double point[4], G4double field[3])
@@ -37,4 +37,14 @@ void G4NystromRK4::GetFieldValue(const G4double point[4], G4double field[3])
 G4double G4NystromRK4::GetFCof()
 {
   return static_cast<G4Mag_EqRhs*>(GetEquationOfMotion())->FCof();
+}
+
+G4int G4NystromRK4::IntegratorOrder() const
+{
+  return 4;
+}
+
+G4StepperType G4NystromRK4::StepperType() const
+{
+  return kNystromRK4;
 }

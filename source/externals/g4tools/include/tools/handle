@@ -4,10 +4,6 @@
 #ifndef tools_handle
 #define tools_handle
 
-#ifdef TOOLS_MEM
-#include "mem"
-#endif
-
 #include <string>
 
 namespace tools {
@@ -23,25 +19,13 @@ public:
   virtual void disown() = 0;
 public:
   base_handle(){
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
   }
   base_handle(const std::string& a_class):m_class(a_class){
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
   }
   virtual ~base_handle(){
-#ifdef TOOLS_MEM
-    mem::decrement(s_class().c_str());
-#endif
   }
 protected:
   base_handle(base_handle& a_from):m_class(a_from.m_class){
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
   }
 private:
   base_handle& operator=(base_handle& a_from){
@@ -75,7 +59,6 @@ private:
     } else {
       m_owner = false;
     }
-    //a_from.m_obj = 0; //we do not remove the obj ref in a_from.
   }
 private:
   // in principle the below are not used.

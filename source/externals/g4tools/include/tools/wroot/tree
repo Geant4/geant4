@@ -15,12 +15,6 @@ namespace tools {
 namespace wroot {
 
 class tree : public virtual iobject, public virtual itree {
-#ifdef TOOLS_MEM
-  static const std::string& s_class() {
-    static const std::string s_v("tools::wroot::tree");
-    return s_v;
-  }
-#endif
 public: //iobject
   virtual const std::string& name() const {return m_name;}
   virtual const std::string& title() const {return m_title;}
@@ -78,8 +72,6 @@ public: //iobject
     return true;
   }
 public: //itree
-  //virtual void add_tot_bytes(uint32 a_n) {m_tot_bytes += a_n;}
-  //virtual void add_zip_bytes(uint32 a_n) {m_zip_bytes += a_n;}
   virtual idir& dir() {return m_dir;}
   virtual const idir& dir() const {return m_dir;}
 public:
@@ -92,15 +84,9 @@ public:
   ,m_tot_bytes(0)
   ,m_zip_bytes(0)
   {
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
     if(a_managed) a_dir.append_object(this); //a_dir takes ownership of tree.
   }
   virtual ~tree(){
-#ifdef TOOLS_MEM
-    mem::decrement(s_class().c_str());
-#endif
   }
 protected:
   tree(const tree& a_from)
@@ -112,8 +98,6 @@ protected:
 public:
   std::ostream& out() const {return m_out;}
   const std::vector<branch*>& branches() const {return m_branches;}
-  //uint64 tot_bytes() const {return m_tot_bytes;}
-  //uint64 zip_bytes() const {return m_zip_bytes;}
   uint64 entries() const {return m_entries;}
 
   branch* create_branch(const std::string& a_name){
@@ -214,10 +198,6 @@ public:
 
     m_entries++;
 
-    //if (fTotBytes - fSavedBytes > fAutoSave) {
-    //  if(!autoSave()) return false;
-    //}
-
     return true;
   }
 
@@ -226,9 +206,6 @@ public:
     m_entries       = 0;
     m_tot_bytes     = 0;
     m_zip_bytes     = 0;
-  //fSavedBytes     = 0;
-  //fTotalBuffers   = 0;
-  //fChainOffset    = 0;
    {tools_vforcit(branch*,m_branches,it) (*it)->reset();}
   }
 protected:

@@ -32,12 +32,19 @@
 // volume, solid and region stores.
 // See G4VNotifier for the details.
 
-// 01.09.04, G.Cosmo - Initial version
+// Author: Gabriele Cosmo (CERN), 01.09.2004
 // --------------------------------------------------------------------
 #ifndef G4VSTORENOTIFIER_HH
 #define G4VSTORENOTIFIER_HH
 
 #include "G4VNotifier.hh"
+
+/**
+ * @brief G4VStoreNotifier is a simple abstract class allowing for
+ * the implementation of user notifiers to be activated at the registration
+ * or deregistration of objects in the volume, solid and region stores.
+ * See G4VNotifier for the details.
+ */
 
 using G4VStoreNotifier = G4VNotifier;
 

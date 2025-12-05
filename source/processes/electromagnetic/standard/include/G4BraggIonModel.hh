@@ -97,8 +97,10 @@ public:
 				G4double kineticEnergy) override;
 
   // add correction to energy loss and ompute non-ionizing energy loss
-  void CorrectionsAlongStep(const G4MaterialCutsCouple*,
-			    const G4DynamicParticle*,
+  void CorrectionsAlongStep(const G4Material*,
+			    const G4ParticleDefinition*,
+			    const G4double kinEnergy,
+			    const G4double cutEnergy,
 			    const G4double& length,
 			    G4double& eloss) override;
 

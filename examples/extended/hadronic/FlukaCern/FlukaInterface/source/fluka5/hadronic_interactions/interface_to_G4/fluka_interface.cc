@@ -75,19 +75,21 @@ static std::unordered_map<G4int, G4int> encounteredMaterials;
 // initialize the necessary FLUKA COMMONs,
 // set physics options as requested.
 // ***************************************************************************
-void initialize(bool activateCoalescence, G4bool activateHeavyFragmentsEvaporation)
+void initialize(G4bool activateCoalescence,
+                G4bool activateHeavyFragmentsEvaporation)
 {
   G4cout << "        !!!!!!!!!!!!! fluka_interface::initialize()" << G4endl;
 
   // CHECK THAT THE FLUKA-G4 INTERFACE ENV HAS BEEN SOURCED
   if (std::getenv("FLUKA_PATH") == nullptr) {
-    G4Exception("fluka_interface", "FLUKA-G4 interface environment", FatalException,
-                "FLUKA-G4 interface environment was not sourced.\n"
-                "NB: Do not forget to first compile the FLUKA interface itself.\n"
-                "For example: cd geant4/examples/extended/hadronic/FlukaCern/FlukaInterface/ "
-                "&& make interface && make env\n"
-                "FlukaInterface/env_FLUKA_G4_interface.sh then needs to be sourced\n"
-                "in whichever terminal you want to use the FLUKA interface.\n");
+    G4Exception("fluka_interface", "FLUKA-G4 interface environment",
+                FatalException,
+     "FLUKA-G4 interface environment was not sourced.\n"
+     "NB: Do not forget to first compile the FLUKA interface itself.\n"
+     "For example: cd geant4/examples/extended/hadronic/FlukaCern/FlukaInterface/ "
+     "&& make interface && make env\n"
+     "FlukaInterface/env_FLUKA_G4_interface.sh then needs to be sourced\n"
+     "in whichever terminal you want to use the FLUKA interface.\n");
   }
 
   // FLUKA ZEROING AND INITIALIZATION ROUTINES.
@@ -174,7 +176,8 @@ void initialize(bool activateCoalescence, G4bool activateHeavyFragmentsEvaporati
   // Unfortunately, as a result, FLUKA also returns charmed Xi resonances,
   // which do not exist in G4, hence prevents the full use of this option.
   //
-  // Could circumvent this issue by activating only the charmed Xi resonances decays in FLUKA,
+  // Could circumvent this issue by activating only the charmed Xi resonances
+  // decays in FLUKA,
   // (it is a resonance anyway!!), but this was a hack inside FLUKA code
   // (not possible from an offical FLUKA release).
   const G4bool activateCharmedHadronTransport = false;
@@ -199,7 +202,8 @@ void initialize(bool activateCoalescence, G4bool activateHeavyFragmentsEvaporati
   // Hence synchronize them, in order to get a meaningful printout order.
   cpp_to_fortran::flush();
 
-  G4cout << "        !!!!!!!!!!!!! END OF fluka_interface::initialize()" << G4endl;
+  G4cout << "        !!!!!!!!!!!!! END OF fluka_interface::initialize()"
+         << G4endl;
 }
 
 // ***************************************************************************
@@ -209,15 +213,15 @@ void initialize(bool activateCoalescence, G4bool activateHeavyFragmentsEvaporati
 // In that case, FLUKA will loop on the element's natural isotopic composition,
 // (composition defined in FLUKA data).
 // ***************************************************************************
-G4double computeInelasticScatteringXS(const G4DynamicParticle* projectile, const G4int targetZ,
-                                      const G4int targetA)
+G4double computeInelasticScatteringXS(const G4DynamicParticle* projectile,
+                                      const G4int targetZ, const G4int targetA)
 {
   const G4ParticleDefinition* const projectileDefinition = projectile->GetDefinition();
 
   const G4bool projectileIsGenericHeavyIon =
     (projectileDefinition->IsGeneralIon() && projectileDefinition->GetAtomicNumber() > 2);
-  const G4int projectileFLUKAId =
-    (projectileIsGenericHeavyIon ? -2 : fluka_particle_table::geant2fluka(projectileDefinition));
+  const G4int projectileFLUKAId = (projectileIsGenericHeavyIon ? -2
+                      : fluka_particle_table::geant2fluka(projectileDefinition));
   const G4double projectileKineticEnergy = projectile->GetKineticEnergy() / GeV;
 
   // RENAME INTO FLUKA-WORLD VARIABLES
@@ -236,7 +240,8 @@ G4double computeInelasticScatteringXS(const G4DynamicParticle* projectile, const
   // PRINTOUT INTERACTION INFO
 #  if DEBUG
   G4cout << "        !!!!!!!!!!!!! Call computeInelasticScatteringXS:"
-         << " kproj = " << kproj << ", ekproj [GeV] = " << ekproj << ", pproj = " << pproj
+         << " kproj = " << kproj << ", ekproj [GeV] = " << ekproj
+         << ", pproj = " << pproj
          << ", ibtar = " << ibtar << ", ichtar = " << ichtar << G4endl;
 #  endif
 
@@ -261,8 +266,8 @@ G4double computeInelasticScatteringXS(const G4DynamicParticle* projectile, const
 #  endif
     G4int izdumm;
     logical lncmss = false;
-    resnuc_.ammtar =
-      bbtar * AMUGEV + EMVGEV * exmsaz_(bbtar, flkmat_.ztar[mmat - 1], lncmss, izdumm);
+    resnuc_.ammtar = bbtar * AMUGEV
+           + EMVGEV * exmsaz_(bbtar, flkmat_.ztar[mmat - 1], lncmss, izdumm);
     atmss = resnuc_.ammtar / AMUGEV;
   }
   // element:
@@ -270,8 +275,8 @@ G4double computeInelasticScatteringXS(const G4DynamicParticle* projectile, const
     flkmat_.mssnum[mmat - 1] = 0;
     atmss = ZERZER;
     // Loop on the stable isotopes
-    for (G4int is = (isotop_.isondx[ichtar - 1][0] - 1); is <= (isotop_.isondx[ichtar - 1][1] - 1);
-         ++is)
+    for (G4int is = (isotop_.isondx[ichtar - 1][0] - 1);
+         is <= (isotop_.isondx[ichtar - 1][1] - 1); ++is)
     {
       G4double bbtar = isotop_.isomnm[is];
 #  if DEBUG
@@ -279,8 +284,8 @@ G4double computeInelasticScatteringXS(const G4DynamicParticle* projectile, const
 #  endif
       G4int izdumm;
       logical lncmss = false;
-      resnuc_.ammtar =
-        bbtar * AMUGEV + EMVGEV * exmsaz_(bbtar, flkmat_.ztar[mmat - 1], lncmss, izdumm);
+      resnuc_.ammtar = bbtar * AMUGEV
+            + EMVGEV * exmsaz_(bbtar, flkmat_.ztar[mmat - 1], lncmss, izdumm);
       atmss = atmss + resnuc_.ammtar / AMUGEV * isotop_.abuiso[is];
     }
   }
@@ -289,7 +294,8 @@ G4double computeInelasticScatteringXS(const G4DynamicParticle* projectile, const
 
 #  if DEBUG
   G4cout << "flkmat_.amss [mmat - 1] = " << flkmat_.amss[mmat - 1]
-         << ", flkmat_.msindx [mmat - 1] = " << flkmat_.msindx[mmat - 1] << G4endl;
+         << ", flkmat_.msindx [mmat - 1] = " << flkmat_.msindx[mmat - 1]
+         << G4endl;
 #  endif
 
   // COMPUTES XS
@@ -306,7 +312,8 @@ G4double computeInelasticScatteringXS(const G4DynamicParticle* projectile, const
 #  endif
     G4double pphnsg = ZERZER;
     pphcho_(ekin, mmat, pphnsg, false);
-    sigrea = pphnsg / flkmat_.rho[mmat - 1] * flkmat_.amss[mmat - 1] / AVOGAD * 1.E+27;
+    sigrea = pphnsg / flkmat_.rho[mmat - 1]
+           * flkmat_.amss[mmat - 1] / AVOGAD * 1.E+27;
   }
   // standard case
   else {
@@ -324,8 +331,10 @@ G4double computeInelasticScatteringXS(const G4DynamicParticle* projectile, const
 
     // VERY IMPORTANT: In FLUKA, all inelastic XS (except the cases below),
     // are set to 0 when kE/n < EKSIG0.
-    // See SIGTAB->SGTINL (initialization) and the runtime calls to SGTTOT (from KASKAD).
-    if (projectileKineticEnergyPerNucleon < EKSIG0 && kproj != 12 && kproj != 19 && kproj != 24
+    // See SIGTAB->SGTINL (initialization) and the runtime calls
+    // to SGTTOT (from KASKAD).
+    if (projectileKineticEnergyPerNucleon < EKSIG0 && kproj != 12
+        && kproj != 19 && kproj != 24
         && kproj != 25  // neutron kaons
         && kproj != 9  // antineutron
         && kproj != -3  // deuteron
@@ -340,8 +349,8 @@ G4double computeInelasticScatteringXS(const G4DynamicParticle* projectile, const
   }
 
 #  if DEBUG
-  G4cout << " Adopted reaction sigma :" << cpp_utils::sformat("%#9.4f", sigrea) << "[mb]."
-         << G4endl;
+  G4cout << " Adopted reaction sigma :" << cpp_utils::sformat("%#9.4f", sigrea)
+         << "[mb]." << G4endl;
 #  endif
 
   // FLUKA returned XS in mb
@@ -361,7 +370,8 @@ void setNuclearInelasticFinalState(G4HadFinalState* const finalState,
   const G4bool projectileIsGenericHeavyIon =
     (projectileDefinition->IsGeneralIon() && projectileDefinition->GetAtomicNumber() > 2);
   const G4int projectileFLUKAId =
-    (projectileIsGenericHeavyIon ? -2 : fluka_particle_table::geant2fluka(projectileDefinition));
+    (projectileIsGenericHeavyIon ? -2
+    : fluka_particle_table::geant2fluka(projectileDefinition));
   const G4int projectileA =
     (projectileIsGenericHeavyIon ? projectileDefinition->GetAtomicMass() : 0);
   const G4int projectileZ =
@@ -378,7 +388,8 @@ void setNuclearInelasticFinalState(G4HadFinalState* const finalState,
   // the FLUKA event generator should work in a local frame 
   // whose localZ is the projectile direction.
   // Geant4 is in charge of transforming the final state 
-  // from that local frame back to the lab (rotateUz), using the cached projectile direction.
+  // from that local frame back to the lab (rotateUz), using the cached
+  // projectile direction.
   G4double txx = 0.;
   G4double tyy = 0.;
   G4double tzz = 1.;
@@ -394,7 +405,8 @@ void setNuclearInelasticFinalState(G4HadFinalState* const finalState,
 
   // PRINTOUT INTERACTION INFO
 #  if DEBUG
-  G4cout << std::setprecision(16) << "        !!!!!!!!!!!!! Call setNuclearInelasticFinalState:"
+  G4cout << std::setprecision(16)
+         << "        !!!!!!!!!!!!! Call setNuclearInelasticFinalState:"
          << " kproj = " << kproj << ", ekproj [GeV] = "
          << ekproj
          //<< ", pproj = " << pproj
@@ -402,9 +414,10 @@ void setNuclearInelasticFinalState(G4HadFinalState* const finalState,
 #  endif
 
   // Some initialization magic directly taken from FLUKA
-  if (kproj == -1 || kproj == -8 || kproj == -9 || kproj == -13 || kproj == -14 || kproj == -23
-      || kproj == -15 || kproj == -16 || kproj == -24 || kproj == -25 || kproj == -11
-      || kproj == -7)
+  if (kproj == -1 || kproj == -8 || kproj == -9 || kproj == -13
+      || kproj == -14 || kproj == -23
+      || kproj == -15 || kproj == -16 || kproj == -24 || kproj == -25
+      || kproj == -11 || kproj == -7)
   {
     if (-kproj != 7) {
       parevt_.lpreex = false;
@@ -456,12 +469,13 @@ void setNuclearInelasticFinalState(G4HadFinalState* const finalState,
 
   // CHECK WHETHER THE MATERIAL WAS ALREADY ENCOUNTERED
   // - If (targetZ, targetA) has never been encountered:
-  // associate it to a mmat, and initialize the relevant materials COMMONS at mmat index.
+  // associate it to a mmat, and initialize the relevant materials COMMONS
+  // at mmat index.
   // - If (targetZ, targetA) has already been encountered:
   // just return the associated mmat index.
   // Values from the materials COMMONS are read with mmat index.
-  // - IMPORTANT NB: In ANY case, before EACH event, LIKE IS DONE IN FLUKA eventv,
-  // mssnum and icriso(2) are always set properly
+  // - IMPORTANT NB: In ANY case, before EACH event, LIKE IS DONE IN FLUKA
+  // eventv, mssnum and icriso(2) are always set properly
   G4int mmat = -1;
   const G4int targetLinearizedIndex = targetZ * 100000 + targetA;
   const auto& foundMaterial = encounteredMaterials.find(targetLinearizedIndex);
@@ -526,7 +540,8 @@ void setNuclearInelasticFinalState(G4HadFinalState* const finalState,
 #  endif
       G4int izdum;
       logical lncmss = true;
-      resnuc_.amnres = bbres * AMUC12 + EMVGEV * exmsaz_(bbres, zzres, lncmss, izdum);
+      resnuc_.amnres = bbres * AMUC12
+                     + EMVGEV * exmsaz_(bbres, zzres, lncmss, izdum);
 #  if DEBUG
       G4cout << "CALL amnama" << G4endl;
 #  endif
@@ -536,8 +551,8 @@ void setNuclearInelasticFinalState(G4HadFinalState* const finalState,
 #  if DEBUG
       G4cout << "PROTON / NEUTRON CALL WSTOAP" << G4endl;
 #  endif
-      wstoap_(niso, iaiso.data(), iziso.data(), iiiso.data(), lrmsch, lrd1o2, ltrasp,
-              0);  // 8
+      wstoap_(niso, iaiso.data(), iziso.data(), iiiso.data(),
+              lrmsch, lrd1o2, ltrasp, 0);  // 8
 #  if DEBUG
       cpp_to_fortran::flush();
 #  endif
@@ -553,8 +568,8 @@ void setNuclearInelasticFinalState(G4HadFinalState* const finalState,
 #  endif
       G4int izdumm;
       logical lncmss = false;
-      resnuc_.ammtar =
-        bbtar * AMUGEV + EMVGEV * exmsaz_(bbtar, flkmat_.ztar[mmat - 1], lncmss, izdumm);
+      resnuc_.ammtar = bbtar * AMUGEV
+             + EMVGEV * exmsaz_(bbtar, flkmat_.ztar[mmat - 1], lncmss, izdumm);
 
       atmss = resnuc_.ammtar / AMUGEV;
 
@@ -595,12 +610,14 @@ void setNuclearInelasticFinalState(G4HadFinalState* const finalState,
 
       // Initialize nuclear geometry data
       // WARNING: This call is extremely time-consuming
-      // (hence the need to call it only the first time the material is encountered).
+      // (hence the need to call it only the first time the material
+      // is encountered).
       if (nucgid_.rhotab[ibtar - 2] < 0.1) {
 #  if DEBUG
         G4cout << "ISOTOPE CALL WSTOAP" << G4endl;
 #  endif
-        wstoap_(niso, iaiso.data(), iziso.data(), iiiso.data(), lrmsch, lrd1o2, ltrasp, 0);
+        wstoap_(niso, iaiso.data(), iziso.data(), iiiso.data(),
+                lrmsch, lrd1o2, ltrasp, 0);
       }
     }
     // Element:
@@ -621,8 +638,8 @@ void setNuclearInelasticFinalState(G4HadFinalState* const finalState,
 #  endif
         G4int izdumm;
         logical lncmss = false;
-        resnuc_.ammtar =
-          bbtar * AMUGEV + EMVGEV * exmsaz_(bbtar, flkmat_.ztar[mmat - 1], lncmss, izdumm);
+        resnuc_.ammtar = bbtar * AMUGEV
+              + EMVGEV * exmsaz_(bbtar, flkmat_.ztar[mmat - 1], lncmss, izdumm);
 
         atmss = atmss + resnuc_.ammtar / AMUGEV * isotop_.abuiso[is];
 
@@ -642,7 +659,8 @@ void setNuclearInelasticFinalState(G4HadFinalState* const finalState,
 #  if DEBUG
         G4cout << "ELEMENT CALL WSTOAP" << G4endl;
 #  endif
-        wstoap_(niso, iaiso.data(), iziso.data(), iiiso.data(), lrmsch, lrd1o2, ltrasp, 0);  // 8
+        wstoap_(niso, iaiso.data(), iziso.data(), iiiso.data(),
+                lrmsch, lrd1o2, ltrasp, 0);  // 8
 #  if DEBUG
         cpp_to_fortran::flush();
 #  endif
@@ -661,10 +679,12 @@ void setNuclearInelasticFinalState(G4HadFinalState* const finalState,
     ncdcyi_(kproj, kkproj, mmat);
 #  if DEBUG
     G4cout << G4endl;
-    G4cout << "   " << chpprp_.prname[ndnicm_.ndnitr + 6] << " decay into:" << G4endl;
+    G4cout << "   " << chpprp_.prname[ndnicm_.ndnitr + 6]
+           << " decay into:" << G4endl;
     G4cout << G4endl;
     for (G4int is = 1; is <= ndnicm_.ncdcsc; ++is) {
-      G4cout << "             " << chpprp_.prname[ndnicm_.kncdcs[is] + 6] << G4endl;
+      G4cout << "             " << chpprp_.prname[ndnicm_.kncdcs[is] + 6]
+             << G4endl;
     }
     G4cout << G4endl;
     G4cout << "CALL NCDCYR" << G4endl;
@@ -684,10 +704,12 @@ void setNuclearInelasticFinalState(G4HadFinalState* const finalState,
   // STATUS SUMMARY
 #  if DEBUG
   if (parevt_.lpreex) {
-    G4cout << "    Most energetic intranuclear interactions treated explicitly" << G4endl;
+    G4cout << "    Most energetic intranuclear interactions treated explicitly"
+           << G4endl;
   }
   else {
-    G4cout << "    No explicit treatment of intranuclear interactions" << G4endl;
+    G4cout << "    No explicit treatment of intranuclear interactions"
+           << G4endl;
   }
 
   if (parevt_.lhlfix) {
@@ -700,15 +722,18 @@ void setNuclearInelasticFinalState(G4HadFinalState* const finalState,
   }
   if (incpot_.lrhfl1[currpt_.iptcur - 1]) {
     G4cout << G4endl;
-    G4cout << "    Target nucleon center distribution unfolded and used" << G4endl;
+    G4cout << "    Target nucleon center distribution unfolded and used"
+           << G4endl;
   }
   if (incpot_.lrhfl2[currpt_.iptcur - 1]) {
     G4cout << G4endl;
-    G4cout << "    Projectile RMS radius folded with the density distribution" << G4endl;
+    G4cout << "    Projectile RMS radius folded with the density distribution"
+           << G4endl;
   }
   if (incpot_.lrhfl3[currpt_.iptcur - 1]) {
     G4cout << G4endl;
-    G4cout << "    Effective range for pion-nuc. G4int. folded in the pion pot." << G4endl;
+    G4cout << "    Effective range for pion-nuc. G4int. folded in the pion pot."
+           << G4endl;
   }
 #  endif
 
@@ -731,9 +756,11 @@ void setNuclearInelasticFinalState(G4HadFinalState* const finalState,
 
 #  if DEBUG
   G4cout << G4endl;
-  const G4String particleName = fortran_to_cpp::convertString(chpprp_.prname[kproj + 6], 8);
+  const G4String particleName =
+        fortran_to_cpp::convertString(chpprp_.prname[kproj + 6], 8);
 
-  G4cout << "  Projectile: " << particleName << " E =" << cpp_utils::sformat("%#9.4f", ekin)
+  G4cout << "  Projectile: " << particleName << " E ="
+         << cpp_utils::sformat("%#9.4f", ekin)
          << " GeV" << G4endl;
 #  endif
 
@@ -746,11 +773,11 @@ void setNuclearInelasticFinalState(G4HadFinalState* const finalState,
 #  if DEBUG
   cpp_to_fortran::flush();
 #  endif
-  ///////////////////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////
   // IMPORTANT
   // FLUKA HADRONIC EVENT GENERATOR!!
   eventv_(kkproj, pproj, ekin, txx, tyy, tzz, wee, mmat);
-  ///////////////////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////
 #  if DEBUG
   cpp_to_fortran::flush();
 #  endif
@@ -759,11 +786,11 @@ void setNuclearInelasticFinalState(G4HadFinalState* const finalState,
     nucge2_.opacty = AINFNT;
   }
 
-  ///////////////////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////
   // IMPORTANT:
   // LOOP ON ALL SECONDARIES, THE HEAVY FRAGMENTS AND THE RESNUC
   // AND ADD THEM TO FINAL STATE
-  ///////////////////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////
 
   // SECONDARIES
 #  if DEBUG
@@ -773,17 +800,18 @@ void setNuclearInelasticFinalState(G4HadFinalState* const finalState,
     const G4int flukaId = genstk_.kpart[secondaryIndex];
 
     // Map FLUKA Id to G4 id.
-    const G4ParticleDefinition* const definition = fluka_particle_table::fluka2geant(flukaId);
+    const G4ParticleDefinition* const definition =
+          fluka_particle_table::fluka2geant(flukaId);
     if (!definition) {
       G4cout << "ERROR! FLUKA to G4 particle id conversion."
              << " Could not find FLUKA id = " << flukaId << G4endl;
     }
 
-    // const G4double momentum = genstk_.plr[secondaryIndex] * GeV;        // GeV/c in FLUKA
+    // const G4double momentum = genstk_.plr[secondaryIndex] * GeV; // GeV/c in FLUKA
     const G4double momentumX = genstk_.cxr[secondaryIndex];
     const G4double momentumY = genstk_.cyr[secondaryIndex];
     const G4double momentumZ = genstk_.czr[secondaryIndex];
-    const G4double kineticEnergy = genstk_.tki[secondaryIndex] * GeV;  // GeV in FLUKA
+    const G4double kineticEnergy = genstk_.tki[secondaryIndex] * GeV; // GeV in FLUKA
 
 #  if DEBUG
     G4cout << "FLUKA id = " << flukaId << G4endl;
@@ -794,7 +822,8 @@ void setNuclearInelasticFinalState(G4HadFinalState* const finalState,
            << ", momentumZ = " << momentumZ << G4endl;
 #  endif
 
-    const G4ThreeVector momentumDirection = G4ThreeVector(momentumX, momentumY, momentumZ);
+    const G4ThreeVector momentumDirection =
+          G4ThreeVector(momentumX, momentumY, momentumZ);
 
     G4DynamicParticle* const secondaryParticle =
       new G4DynamicParticle(definition, momentumDirection, kineticEnergy);
@@ -828,11 +857,11 @@ void setNuclearInelasticFinalState(G4HadFinalState* const finalState,
              << " Could not find FLUKA id = " << flukaId << G4endl;
     }
 
-    // const G4double momentum = fheavy_.pheavy[fragmentIndex] * GeV;        // GeV/c in FLUKA
+    // const G4double momentum = fheavy_.pheavy[fragmentIndex] * GeV; // GeV/c in FLUKA
     const G4double momentumX = fheavy_.cxheav[fragmentIndex];
     const G4double momentumY = fheavy_.cyheav[fragmentIndex];
     const G4double momentumZ = fheavy_.czheav[fragmentIndex];
-    const G4double kineticEnergy = fheavy_.tkheav[fragmentIndex] * GeV;  // GeV in FLUKA
+    const G4double kineticEnergy = fheavy_.tkheav[fragmentIndex] * GeV; // GeV in FLUKA
 
 #  if DEBUG
     G4cout << "FLUKA id = " << flukaId << G4endl;
@@ -843,7 +872,8 @@ void setNuclearInelasticFinalState(G4HadFinalState* const finalState,
            << ", momentumZ = " << momentumZ << G4endl;
 #  endif
 
-    const G4ThreeVector momentumDirection = G4ThreeVector(momentumX, momentumY, momentumZ);
+    const G4ThreeVector momentumDirection =
+          G4ThreeVector(momentumX, momentumY, momentumZ);
 
     G4DynamicParticle* const heavyFragment =
       new G4DynamicParticle(definition, momentumDirection, kineticEnergy);
@@ -873,13 +903,15 @@ void setNuclearInelasticFinalState(G4HadFinalState* const finalState,
 
 #  if DEBUG
     G4cout << G4endl;
-    G4cout << "Residual nucleus A = " << residualNucleusA << ", Z = " << residualNucleusZ
-           << ", kineticEnergy [MeV] = " << resnuc_.ekres << ", momentum [MeV] = " << resnuc_.ptres
+    G4cout << "Residual nucleus A = " << residualNucleusA
+           << ", Z = " << residualNucleusZ
+           << ", kineticEnergy [MeV] = " << resnuc_.ekres
+           << ", momentum [MeV] = " << resnuc_.ptres
            << G4endl;
 #  endif
 
     const G4ThreeVector momentumDirection =
-      G4ThreeVector(momentumX / momentum, momentumY / momentum, momentumZ / momentum);
+      G4ThreeVector(momentumX/momentum, momentumY/momentum, momentumZ/momentum);
 
     G4DynamicParticle* const residualNucleus =
       new G4DynamicParticle(definition, momentumDirection, kineticEnergy);
@@ -911,9 +943,10 @@ void setNuclearInelasticFinalState(G4HadFinalState* const finalState,
 // ***************************************************************************
 void updateFLUKAProjectileId(G4int& kproj)
 {
-  if (kproj == -1 || kproj == -8 || kproj == -9 || kproj == -13 || kproj == -14 || kproj == -23
-      || kproj == -15 || kproj == -16 || kproj == -24 || kproj == -25 || kproj == -11
-      || kproj == -7)
+  if (kproj == -1 || kproj == -8 || kproj == -9 || kproj == -13
+      || kproj == -14 || kproj == -23
+      || kproj == -15 || kproj == -16 || kproj == -24 || kproj == -25
+      || kproj == -11 || kproj == -7)
   {
     kproj = -kproj;
   }
@@ -943,8 +976,10 @@ void transformNonSupportedHadrons(G4int& kproj, G4double& ekproj)
   else if (kproj == 26) {
     kproj = 23;
   }
-  else if (kproj == 17 || kproj == 18 || kproj == 20 || kproj == 21 || kproj == 22 || kproj == 30
-           || kproj == 31 || kproj == 32 || kproj == 33 || kproj == 34 || kproj == 35 || kproj == 36
+  else if (kproj == 17 || kproj == 18 || kproj == 20 || kproj == 21
+           || kproj == 22 || kproj == 30
+           || kproj == 31 || kproj == 32 || kproj == 33
+           || kproj == 34 || kproj == 35 || kproj == 36
            || kproj == 37 || kproj == 38 || kproj == 39)
   {
     // Boolean used to signal that we are changing particle id.
@@ -1027,9 +1062,11 @@ void transformNonSupportedHadrons(G4int& kproj, G4double& ekproj)
 // ***************************************************************************
 // Kinetic energy and momentum utility from FLUKA.
 // ***************************************************************************
-std::pair<G4double, G4double> getKineticEnergyAndMomentum(const G4double ekproj, const G4int kproj)
+std::pair<G4double, G4double>
+getKineticEnergyAndMomentum(const G4double ekproj, const G4int kproj)
 {
-  const G4double ekin = ekproj * (kproj != -2 ? 1. : paprop_.am[-2 + 6] / AMUC12);
+  const G4double ekin = ekproj
+                      * (kproj != -2 ? 1. : paprop_.am[-2 + 6] / AMUC12);
   const G4double pproj = std::sqrt(ekin * (ekin + TWOTWO * paprop_.am[kproj + 6]));
   return {ekin, pproj};
 }

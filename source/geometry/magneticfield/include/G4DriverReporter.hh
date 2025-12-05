@@ -27,32 +27,37 @@
 //
 // Class description:
 //
-// Auxiliary class to print information from integration drivers
-//   Can be used by different types of drivers.
+// Auxiliary class to print information from integration drivers.
+// Can be used by different types of drivers.
 
-// Authors: J.Apostolakis        -   January/March 2020
+// Author: John Apostolakis (CERN), January/March 2020
 // -------------------------------------------------------------------
-
 #ifndef G4DRIVERREPORTER_HH
 #define G4DRIVERREPORTER_HH
 
 #include "G4FieldTrack.hh"
 
+/**
+ * @brief G4DriverReporter is an auxiliary utility class to print information
+ * from integration drivers. It can be used by different types of drivers.
+ */
+
 class G4DriverReporter 
 {
   public:
+
     static void PrintStatus(const G4double* StartArr,
-                            G4double        xstart,
+                            G4double xstart,
                             const G4double* CurrentArr,
-                            G4double        xcurrent,
-                            G4double        requestStep,
-                            unsigned int    subStepNo,
-                            unsigned int    noIntegrationVariables);    
+                            G4double xcurrent,
+                            G4double requestStep,
+                            unsigned int subStepNo,
+                            unsigned int noIntegrationVariables);    
    
     static void PrintStatus(const G4FieldTrack& StartFT,
                             const G4FieldTrack& CurrentFT,
-                            G4double            requestStep,
-                            unsigned int        subStepNo);
+                            G4double requestStep,
+                            unsigned int subStepNo);
    
     static void PrintStat_Aux(const G4FieldTrack& aFieldTrack,
                               G4double requestStep,
@@ -60,9 +65,5 @@ class G4DriverReporter
                               G4int subStepNo,
                               G4double subStepSize,
                               G4double dotVelocities);
-  
-  private: 
-    // G4int          fVerboseLevel;      // Verbose output for debugging
-    // unsigned int   fNoIntegrationVariables);    
 };
 #endif

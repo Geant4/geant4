@@ -58,10 +58,6 @@ public: //curve
                            vec3f& a_tan,
                            vec3f& a_nor) const {
 
-    //float r = radius.value();
-    //float cs = fcos(a_s);
-    //float sn = fsin(a_s);
-
     float x,y,z;
 
    {//x = r*cs;y = r*sn;z = 0;
@@ -176,8 +172,8 @@ protected:
     float r1 = rx.value();
     float r2 = ry.value();
 
-    float phi1 = mn<float>(phimin,phimax);
-    float phi2 = mx<float>(phimin,phimax);
+    float phi1 = min_of<float>(phimin,phimax);
+    float phi2 = max_of<float>(phimin,phimax);
 
     float angle,dx,dy;
     float dphi = (phi2-phi1)/float(num);
@@ -190,25 +186,6 @@ protected:
       m_xyzs[pos]  = dy;pos++;
       m_xyzs[pos]  = 0;pos++;
     }
-    /*
-    TString opt = option;
-    opt.ToLower();
-    if (phi2-phi1 >= 360 ) {
-      if (GetFillStyle()) gPad->PaintFillArea(n,x,y);
-      if (GetLineStyle()) gPad->PaintPolyLine(n+1,x,y);
-    } else {
-      x[n+1] = gPad->XtoPad(x1);
-      y[n+1] = gPad->YtoPad(y1);
-      x[n+2] = x[0];
-      y[n+2] = y[0];
-      if (GetFillStyle()) gPad->PaintFillArea(n+2,x,y);
-      if (GetLineStyle()) {
-         if (TestBit(kNoEdges) || opt.Contains("only")) gPad->PaintPolyLine(n+1,x,y);
-         else                                           gPad->PaintPolyLine(n+3,x,y);
-      }
-    }
-    */
-
   }
 
 protected:

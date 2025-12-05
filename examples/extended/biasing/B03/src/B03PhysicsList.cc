@@ -23,11 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file biasing/B03/src/B03PhysicsList.cc
+/// \file B03PhysicsList.cc
 /// \brief Implementation of the B03PhysicsList class
-//
-//
-//
 
 #include "B03PhysicsList.hh"
 

@@ -6,6 +6,11 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2025-09-27 Vladimir Ivanchenko (hadr-hpp-V11-03-04)
+- G4FissionFragmentGenerator, G4FissionFragmentGenerator, G4ParticleHPElementData,
+  G4ParticleHPKallbachMannSyst, G4ParticleHPThermalScattering,
+  G4ParticleHPFinalState - fixed Coverity warnings
+
 ## 2025-06-12 Vladimir Ivanchenko (hadr-hpp-V11-03-03)
 - G4ParticleHPInelastic - fixed AllHP physics - proper initialisation of neutrons
   and light ions (problem report #2591 and some other problems).

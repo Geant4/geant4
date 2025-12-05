@@ -73,13 +73,6 @@ G4UGenericPolycone::G4UGenericPolycone(const G4String& name,
 
 //////////////////////////////////////////////////////////////////////////
 //
-// Destructor
-//
-G4UGenericPolycone::~G4UGenericPolycone() = default;
-
-
-//////////////////////////////////////////////////////////////////////////
-//
 // Copy constructor
 //
 G4UGenericPolycone::G4UGenericPolycone(const G4UGenericPolycone& source)

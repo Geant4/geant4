@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file OpNoviceDetectorMessenger.cc
+/// \brief Implementation of the OpNoviceDetectorMessenger class
 
 #include "OpNoviceDetectorMessenger.hh"
 

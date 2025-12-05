@@ -6,6 +6,54 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2025-12-05 Gabriele Cosmo (examples-V11-04-00)
+- Updated reference outputs according to reference tag geant4-11-04-ref-00.
+- Includes tags: doxygen-V11-03-09, exadvanced-V11-03-01, IAEAphsp-V11-03-01,
+                 eFLASH_radiotherapy-V11-03-00, exp_microdosimetry-V11-03-00,
+                 molecularDNA-V11-03-15, exbasic-V11-03-01, ch2-V11-03-01,
+                 exextended-V11-03-01, channelingExamples-V11-03-00,
+                 ReverseMC01-V11-03-01, ch5-V11-03-00, NeutronSource-V11-03-04,
+                 VecGeomNavigation-V11-03-02, exdna-V11-03-04, AuNP-V11-03-01,
+                 FlukaCern-V11-03-04, dnaphysics-V11-03-04, expar04-V11-03-05,
+                 microtrack-V11-03-00, molcounters-V11-03-01, UHDR-V11-03-07,
+                 phasespace-V11-03-01.
+
+## 2025-10-31 Gabriele Cosmo (examples-V11-03-10)
+- Updated reference outputs according to reference tag geant4-11-03-ref-10.
+- Includes tags: molecularDNA-V11-03-14, gammaknife-V11-03-00, ch2-V11-03-00,
+                 exampleB1-V11-03-01, exampleB3-V11-03-00, exhadr03-V11-03-01,
+                 exhadr05-V11-03-01, exhadr06-V11-03-01, exhadr07-V11-03-01,
+                 NeutronSource-V11-03-02, AuNP-V11-03-00, exampleRE03-V11-03-00,
+                 neuron-V11-03-00, expar04-V11-03-03, activation-V11-03-01.
+
+## 2025-09-30 Gabriele Cosmo (examples-V11-03-09)
+- Updated reference outputs according to reference tag geant4-11-03-ref-09.
+- Includes tags: CaTS-V11-03-00, molecularDNA-V11-03-13, GB03-V11-03-02
+                 chem6-V11-03-02, dnadamage2-V11-03-02, UHDR-V11-03-05.
+
+## 2025-08-31 Gabriele Cosmo (examples-V11-03-08)
+- Updated reference outputs according to reference tag geant4-11-03-ref-08.
+- Includes tags: doxygen-V11-03-08, molecularDNA-V11-03-12, exbiasing-V11-03-01,
+                 analysisExample-V11-03-00, electromagnetic-V11-03-00,
+                 testem5-V11-03-00, testem7-V11-03-00, fieldex-V11-03-00,
+                 exErrorpropagation-V11-03-00, exEventGenerator-V11-03-00,
+                 exExoticPhysics-V11-03-00, exGeometry-V11-03-00,
+                 exHadronic-V11-03-00, NeutronSource-V11-03-01, exdna-V11-03-03,
+                 exMedical-V11-03-00, dnadamage1-V11-03-00, exOptical-V11-03-00,
+                 exparallel-V11-03-01, exParameterisations-V11-03-00,
+                 exPersistency-V11-03-00, exRadioactiveDecay-V11-03-00,
+                 exPhysicsLists-V11-03-00, exPolarisation-V11-03-00,
+                 exRunAndEvent-V11-03-00, exVisualization-V11-03-00.
+
+## 2025-07-31 Gabriele Cosmo (examples-V11-03-07)
+- Updated reference outputs according to reference tag geant4-11-03-ref-07.
+- Includes tags: doxygen-V11-03-05  molecularDNA-V11-03-11, exbasic-V11-03-00,
+                 microelec-SEY-V11-03-00, common-V11-03-00, testem0-V11-03-00,
+                 p6decayer-V11-03-00, g3tog4Tests-V11-03-00, DICOM-V11-03-01,
+                 FlukaCern-V11-03-03, exdna-V11-03-02, phasespace-V11-03-00,
+                 radial-V11-03-01, spower-V11-03-03, svalue-V11-03-03,
+                 MPI-V11-03-03, expar04-V11-03-02.
+
 ## 2025-06-26 Gabriele Cosmo (examples-V11-03-06)
 - Updated reference outputs according to reference tag geant4-11-03-ref-06.
 - Included tags: molecularDNA-V11-03-09, testem2-V11-03-00, exgps-V11-03-00,

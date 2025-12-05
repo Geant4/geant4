@@ -25,8 +25,6 @@
 //
 /// \file DetectorConstruction.cc
 /// \brief Implementation of the DetectorConstruction class
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "DetectorConstruction.hh"
 
@@ -71,8 +69,13 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     G4Material* world_mat = nist->FindOrBuildMaterial("G4_Galactic");
     G4Material* silicon = nist->FindOrBuildMaterial("G4_Si");
 
+    //to use a diamond crystal
+    G4Element* elC = nist->FindOrBuildElement("C");
+    G4Material* diamond = new G4Material("G4_Diamond", 3.520*CLHEP::g/CLHEP::cm3, 1);
+    diamond->AddElement(elC, 1);
+
     //World
-    G4Box* solidWorld = new G4Box("World", 0.2*CLHEP::m, 0.2*CLHEP::m, 10.*CLHEP::m);
+    G4Box* solidWorld = new G4Box("World", 0.2*CLHEP::m, 0.2*CLHEP::m, 30.*CLHEP::m);
     G4LogicalVolume* logicWorld = new G4LogicalVolume(solidWorld, world_mat, "World");  
     G4VPhysicalVolume* physWorld = new G4PVPlacement
                                     (0,                     // no rotation
@@ -135,6 +138,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     G4cout << "Crystal size: " << fCrystalSize.x()/CLHEP::mm
            << "x" << fCrystalSize.y()/CLHEP::mm
            << "x" << fCrystalSize.z()/CLHEP::mm << " mm3" << G4endl;
+
     if (fActivateChannelingModel)
     {
         G4cout << "G4ChannelingFastSimModel activated" << G4endl;
@@ -144,18 +148,36 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
         G4cout << "Crystal angleY: " << fAngleY << " rad" << G4endl;
         G4cout << "ActivateRadiationModel: " << fActivateRadiationModel << G4endl;
 
-        if (fCrystallineUndulatorAmplitude > DBL_EPSILON &&
-            fCrystallineUndulatorPeriod > DBL_EPSILON) {
-            G4cout << "Crystalline undulator activated: " << G4endl;
-            G4cout << "undulator amplitude: "
-                   << fCrystallineUndulatorAmplitude/CLHEP::nm
-                   << " nm" << G4endl;
-            G4cout << "undulator period: "
-                   << fCrystallineUndulatorPeriod/CLHEP::mm
-                   << " mm" << G4endl;
-            G4cout << "undulator phase: "
-                   << fCrystallineUndulatorPhase
-                   << " rad" << G4endl;
+        if(fVirtualCollimatorHalfSize<CLHEP::halfpi)
+        {
+            G4cout << "Setting virtual collimator angular radius: "
+                   << fVirtualCollimatorHalfSize/CLHEP::mrad << " mrad" << G4endl;
+        }
+        else
+        {
+            G4cout << "No virtual collimator set." << G4endl;
+        }
+
+        if(fCrystalInternalGeometryPath != "")
+        {
+            G4cout << "Reading crystal internal geometry activated: " << G4endl;
+            G4cout << "reading from the file: " << fCrystalInternalGeometryPath << G4endl;
+        }
+        else
+        {
+            if (fCrystallineUndulatorAmplitude > DBL_EPSILON &&
+                fCrystallineUndulatorPeriod > DBL_EPSILON) {
+                G4cout << "Crystalline undulator activated: " << G4endl;
+                G4cout << "undulator amplitude: "
+                       << fCrystallineUndulatorAmplitude/CLHEP::nm
+                       << " nm" << G4endl;
+                G4cout << "undulator period: "
+                       << fCrystallineUndulatorPeriod/CLHEP::mm
+                       << " mm" << G4endl;
+                G4cout << "undulator phase: "
+                       << fCrystallineUndulatorPhase
+                       << " rad" << G4endl;
+            }
         }
 
         G4cout << G4endl;
@@ -218,16 +240,26 @@ void DetectorConstruction::ConstructSDandField()
     //setting bending angle of the crystal planes (default is 0)
     channelingModel->GetCrystalData()->SetBendingAngle(fBendingAngle, fLogicCrystal);
 
-    //setting crystalline undulator parameters
-    //NOTE: they are incompatible with a bent crystal
-    if (fCrystallineUndulatorAmplitude > DBL_EPSILON &&
-        fCrystallineUndulatorPeriod > DBL_EPSILON)
+    //reading internal crystal geometry from file has a priority vs its setup from parameters;
+    //it is used to setup a realistic undulator, but may be used also for a bent crystal geometry
+    if(fCrystalInternalGeometryPath != "")
     {
-        channelingModel->GetCrystalData()->SetCrystallineUndulatorParameters(
-            fCrystallineUndulatorAmplitude,
-            fCrystallineUndulatorPeriod,
-            fCrystallineUndulatorPhase,
-            fLogicCrystal);
+        channelingModel->GetCrystalData()->
+            SetCrystallineUndulatorParameters(fLogicCrystal,fCrystalInternalGeometryPath);
+    }
+    else
+    {
+        //setting crystalline undulator parameters
+        //NOTE: they are incompatible with a bent crystal
+        if (fCrystallineUndulatorAmplitude > DBL_EPSILON &&
+            fCrystallineUndulatorPeriod > DBL_EPSILON)
+        {
+            channelingModel->GetCrystalData()->SetCrystallineUndulatorParameters(
+                fCrystallineUndulatorAmplitude,
+                fCrystallineUndulatorPeriod,
+                fCrystallineUndulatorPhase,
+                fLogicCrystal);
+        }
     }
 
     /*
@@ -335,6 +367,35 @@ void DetectorConstruction::ConstructSDandField()
         Generally 1 MeV is a recommended value.
         */
         channelingModel->GetRadiationModel()->SetMinPhotonEnergy(fMinPhotonEnergy);
+
+        /*
+        Set the maximal energy in the spectrum to be written into the output file.
+        Note: the minimal energy written is equal to fMinPhotonEnergy.
+        Note: unlike the minimal energy, the maximal one is just a scoring parameter,
+        it does not modify the simulations.
+        */
+        if(fMaxPhotonEnergySpectrum > fMinPhotonEnergy + DBL_EPSILON)
+        {
+            channelingModel->GetRadiationModel()->SetMaxPhotonEnergy(fMaxPhotonEnergySpectrum);
+        }
+        else
+        {
+            G4cout << "Warning: the maximal energy in BK spectrum <= the minimal energy." << G4endl;
+            G4cout << "The maximal energy is default now." << G4endl;
+            G4cout << " "<< G4endl;
+        }
+
+        /*
+        Set the maximal energy in the spectrum to be written into the output file
+        */
+        channelingModel->GetRadiationModel()->SetNBinsSpectrum(fNBinsSpectrum);
+
+        /*
+        Set the angular size of virtual round collimator to accumulate the spectrum the output file
+        to be written into the output file. Default is infinite => no collimator.
+        */
+        channelingModel->GetRadiationModel()->
+            SetRoundVirtualCollimator(fVirtualCollimatorHalfSize,-fAngleX,fAngleY);
 
         /*
         Set the number of trajectory steps after which the radiation probability

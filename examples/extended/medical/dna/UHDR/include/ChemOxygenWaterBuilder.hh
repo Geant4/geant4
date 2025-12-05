@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file ChemOxygenWaterBuilder.hh
+/// \brief Definition of the ChemOxygenWaterBuilder class
 
 #ifndef ChemOxygenWaterBuilder_hh
 #  define ChemOxygenWaterBuilder_hh 1

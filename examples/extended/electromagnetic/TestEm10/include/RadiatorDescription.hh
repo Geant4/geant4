@@ -23,12 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm10/include/DetectorConstruction.hh
-/// \brief Definition of the DetectorConstruction class
-//
-//
-//
-//
+/// \file RadiatorDescription.hh
+/// \brief Definition of the RadiatorDescription class
 
 #ifndef RadiatorDescription_h
 #define RadiatorDescription_h 1

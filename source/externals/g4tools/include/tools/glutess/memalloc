@@ -7,26 +7,6 @@
 /// inlined C code : ///////////////////////////////////
 ////////////////////////////////////////////////////////
 
-#ifdef TOOLS_MEM
-#include "../mem"
-#include <cstdlib>
-namespace tools {
-inline void* mem_alloc(size_t a_size){
-  mem::increment(tools::s_malloc().c_str());
-  return ::malloc(a_size);
-}
-inline void* mem_realloc(void* a_ptr,size_t a_size){
-  if(a_ptr==NULL) mem::increment(tools::s_malloc().c_str());
-  return ::realloc(a_ptr,a_size);
-}
-inline void mem_free(void* a_ptr){
-  if(a_ptr!=NULL) mem::decrement(tools::s_malloc().c_str());
-  ::free(a_ptr);
-}
-inline int mem_init( size_t /*maxFast*/) {return 1;}
-
-}
-#else
 #include <cstdlib>
 #include <cstring>
 namespace tools {
@@ -35,7 +15,6 @@ inline void* mem_realloc(void* a_ptr,size_t a_size){return ::realloc(a_ptr,a_siz
 inline void mem_free(void* a_ptr){::free(a_ptr);}
 inline int mem_init( size_t /*maxFast*/) {return 1;}
 }
-#endif
 
 #define memAlloc	tools::mem_alloc
 #define memRealloc	tools::mem_realloc

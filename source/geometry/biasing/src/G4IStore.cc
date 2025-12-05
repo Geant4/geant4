@@ -66,8 +66,6 @@ G4IStore::G4IStore(const G4String& ParallelWorldName)
 #endif
 }
 
-G4IStore::~G4IStore() = default;
-
 void G4IStore::Clear()
 {
   fGeometryCelli.clear();

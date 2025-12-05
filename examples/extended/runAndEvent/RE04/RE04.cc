@@ -23,10 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file runAndEvent/RE04/RE04.cc
+/// \file RE04.cc
 /// \brief Main program of the runAndEvent/RE04 example
-//
-//
+
 #include "FTFP_BERT.hh"
 #include "RE04ActionInitialization.hh"
 #include "RE04DetectorConstruction.hh"

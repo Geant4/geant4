@@ -23,10 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file field/field04/include/F04PhysicsList.hh
+/// \file F04PhysicsList.hh
 /// \brief Definition of the F04PhysicsList class
-//
 
 #ifndef F04PhysicsList_h
 #define F04PhysicsList_h 1

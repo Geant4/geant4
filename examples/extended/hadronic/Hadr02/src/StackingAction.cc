@@ -23,10 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file hadronic/Hadr02/src/StackingAction.cc
+/// \file StackingAction.cc
 /// \brief Implementation of the StackingAction class
-//
-//
+
 /////////////////////////////////////////////////////////////////////////
 //
 // StackingAction

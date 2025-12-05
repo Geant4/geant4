@@ -67,6 +67,8 @@ namespace G4INCL {
        * \param n distorting nucleus
        **/
       ParticleEntryAvatar *bringToSurface(Particle * const p, Nucleus * const n) const;
+ 
+     ParticleEntryAvatar *bringToSurfaceAbar(Particle * const p, Nucleus * const n) const;
 
       /** \brief Modify the momentum of the incoming cluster and position it on
        *         the surface of the nucleus.

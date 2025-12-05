@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file Par04DefineMeshModel.hh
+/// \brief Definition of the Par04DefineMeshModel class
+
 #ifndef PAR04DEFINEMESHMODEL_HH
 #define PAR04DEFINEMESHMODEL_HH
 

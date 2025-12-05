@@ -57,6 +57,10 @@ namespace G4INCL {
     ParticleEntryAvatar *bringToSurface(Particle *p, Nucleus * const n) {
       return theCoulomb->bringToSurface(p, n);
     }
+ 
+    ParticleEntryAvatar *bringToSurfaceAbar(Particle *p, Nucleus * const n) {
+      return theCoulomb->bringToSurfaceAbar(p, n);
+    }
 
     IAvatarList bringToSurface(Cluster * const c, Nucleus * const n) {
       return theCoulomb->bringToSurface(c, n);

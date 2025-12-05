@@ -31,26 +31,58 @@
 // The most simple approach for solving linear differential equations.
 // Take the current derivative and add it to the current position.
 
-// Created: W.Wander <wwc@mit.edu>, 12.09.1997
+// Author: W.Wander (MIT), 12.09.1997
 // -------------------------------------------------------------------
 #ifndef G4EXPLICITEULER_HH
 #define G4EXPLICITEULER_HH
 
 #include "G4MagErrorStepper.hh"
 
+/**
+ * @brief G4ExplicitEuler implements an Explicit Euler stepper for magnetic
+ * field: x_1 = x_0 + h * dx_0. The most simple approach for solving linear
+ * differential equations. Takes the current derivative and adds it to the
+ * current position.
+ */
+
 class G4ExplicitEuler : public G4MagErrorStepper
 {
   public:
 
-    G4ExplicitEuler(G4EquationOfMotion* EqRhs, G4int numberOfVariables = 6) ;
-   ~G4ExplicitEuler() override;
+    /**
+     * Constructor for G4ExplicitEuler.
+     *  @param[in] EqRhs Pointer to the provided equation of motion.
+     *  @param[in] numberOfVariables The number of integration variables.
+     */
+    G4ExplicitEuler(G4EquationOfMotion* EqRhs,
+                    G4int numberOfVariables = 6) ;
 
-    void  DumbStepper( const G4double y[],
+    /**
+     * Default Destructor.
+     */
+    ~G4ExplicitEuler() override = default;
+
+    /**
+     * The stepper function for the integration.
+     *  @param[in] y Starting values array of integration variables.
+     *  @param[in] dydx Derivatives array.
+     *  @param[in] h The given step size.
+     *  @param[out] yout Integration output.
+     */
+    void DumbStepper( const G4double y[],
                        const G4double dydx[],
                              G4double h,
                              G4double yout[] ) override;
 
-    G4int IntegratorOrder() const override { return 1; }
+    /**
+     * Returns the order, 1, of integration.
+     */
+    inline G4int IntegratorOrder() const override { return 1; }
+
+    /**
+     * Returns the stepper type-ID, "kExplicitEuler".
+     */
+    inline G4StepperType StepperType() const override { return kExplicitEuler; }
 };
 
 #endif

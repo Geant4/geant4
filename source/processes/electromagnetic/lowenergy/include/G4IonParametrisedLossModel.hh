@@ -158,11 +158,12 @@ class G4IonParametrisedLossModel : public G4VEmModel {
 			      const G4Material*,  // Target Material
 			      G4double) override; // Kinetic energy of projectile 
 
-   void CorrectionsAlongStep(
-                             const G4MaterialCutsCouple*,// Mat.-Cut couple
-			     const G4DynamicParticle*,   // Dyn. particle
-                             const G4double&,            // Length of current step
-			     G4double&) override;        // Energy loss in current step
+   void CorrectionsAlongStep(const G4Material*,
+			     const G4ParticleDefinition*,
+			     const G4double kinEnergy,
+			     const G4double cutEnergy,
+			     const G4double& length,
+			     G4double& eloss) override;
 
    // Function which allows to add additional stopping power tables
    // in combination with a scaling algorithm, which may depend on dynamic
@@ -299,9 +300,8 @@ class G4IonParametrisedLossModel : public G4VEmModel {
    // to stopping powers) 
    G4EmCorrections* corrections;
 
-   // Corrections factor for effective charge, computed for each particle
-   // step
-   G4double corrFactor;
+   // Effective charge, computed for each particle step
+   G4double chargeSquareRatio;
 
    // Parameter indicating the maximal fraction of kinetic energy, which
    // a particle may loose along a step, in order that the simple relation

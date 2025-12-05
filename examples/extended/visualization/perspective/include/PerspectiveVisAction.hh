@@ -23,10 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file visualization/perspective/include/PerspectiveVisAction.hh
+/// \file PerspectiveVisAction.hh
 /// \brief Definition of the PerspectiveVisAction class
-//
-//
 
 #ifndef PERSPECTIVEVISACTION_HH
 #define PERSPECTIVEVISACTION_HH

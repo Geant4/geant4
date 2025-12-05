@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file Par04LwtnnInference.cc
+/// \brief Implementation of the Par04LwtnnInference class
+
 #ifdef USE_INFERENCE_LWTNN
 #  include "Par04LwtnnInference.hh"
 

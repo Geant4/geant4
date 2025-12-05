@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file ScoreSpecies.hh
+/// \brief Definition of the ScoreSpecies class
+
 // This example is provided by the Geant4-DNA collaboration
 // Any report or published results obtained using the Geant4-DNA software
 // shall cite the following Geant4-DNA collaboration publication:
@@ -41,8 +44,6 @@
 #include <set>
 
 class G4MolecularConfiguration;
-
-/** \file ScoreSpecies.hh*/
 
 // Description:
 //   This is a primitive scorer class for scoring the radiolitic species

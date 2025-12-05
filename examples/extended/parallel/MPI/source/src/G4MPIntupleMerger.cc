@@ -22,7 +22,9 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
+/// @file G4MPIntupleMerger.cc
+/// @brief Ntuple merger
+
 // Class for configuring G4analysis for merging ntuples via MPI
 //
 // Author: Ivana Hrivnacova, 21/11/2018 (ivana@ipno.in2p3.fr)

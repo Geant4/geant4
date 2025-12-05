@@ -16,7 +16,6 @@
 #define PoPI_leptonsChars "leptons"
 #define PoPI_baryonsChars "baryons"
 #define PoPI_unorthodoxesChars "unorthodoxes"
-#define PoPI_chemicalElementsChars "chemicalElements"
 
 #define MsgSize (8 * 1024)
 #ifdef _WIN32
@@ -169,7 +168,7 @@ void Database::addDatabase( HAPI::Node const &a_database, LUPI_maybeUnused bool 
 
     std::vector<Alias *> unresolvedAliases2;
     for( std::vector<Alias *>::iterator iter = m_unresolvedAliases.begin( ); iter != m_unresolvedAliases.end( ); ++iter ) {
-        std::map<std::string, int>::const_iterator pidIter = m_idsMap.find( (*iter)->pid( ) );            // Locate pid.
+        auto pidIter = m_idsMap.find( (*iter)->pid( ) );            // Locate pid.
 
         if( pidIter == m_idsMap.end( ) ) {
             unresolvedAliases2.push_back( *iter ); }
@@ -244,9 +243,9 @@ std::vector<std::string> Database::unresolvedAliasIds( ) const {
  * @return                                      The internal index for the specified particle.
  ***********************************************************************************************************/
 
-int Database::operator[]( std::string const &a_id ) const {
+std::size_t Database::operator[]( std::string const &a_id ) const {
 
-    std::map<std::string, int>::const_iterator iter = m_idsMap.find( a_id );
+    auto iter = m_idsMap.find( a_id );
     if( iter == m_idsMap.end( ) ) {
         std::string errorMessage( "particle '" + a_id + "' not in database -3." );
         throw Exception( errorMessage );
@@ -264,9 +263,9 @@ int Database::operator[]( std::string const &a_id ) const {
  * @return                                      **true** is the specified index is valid and **false** otherwise.
  ***********************************************************************************************************/
 
-bool Database::exists( int a_index ) const {
+bool Database::exists( std::size_t a_index ) const {
 
-    if( ( a_index < 0 ) || ( a_index >= (int) m_list.size( ) ) ) return( false );
+    if( a_index >= m_list.size( ) ) return( false );
     return( true );
 }
 
@@ -280,7 +279,7 @@ bool Database::exists( int a_index ) const {
 
 bool Database::exists( std::string const &a_id ) const {
 
-    std::map<std::string, int>::const_iterator iter = m_idsMap.find( a_id );
+    auto iter = m_idsMap.find( a_id );
     return( iter != m_idsMap.end( ) );
 }
 
@@ -329,7 +328,7 @@ std::vector<std::string> Database::aliasReferences( std::string const &a_id ) {
 
 std::string Database::final( std::string const &a_id, bool a_returnAtMetaStableAlias ) const {
 
-    int index( final( (*this)[a_id], a_returnAtMetaStableAlias ) );
+    std::size_t index( final( (*this)[a_id], a_returnAtMetaStableAlias ) );
 
     return( m_list[index]->ID( ) );
 }
@@ -345,7 +344,7 @@ std::string Database::final( std::string const &a_id, bool a_returnAtMetaStableA
  * @return                                      The revolved index for *a_index*.
  ***********************************************************************************************************/
 
-int Database::final( int a_index, bool a_returnAtMetaStableAlias ) const {
+std::size_t Database::final( std::size_t a_index, bool a_returnAtMetaStableAlias ) const {
 
     while( isAlias( a_index ) ) {
         if( a_returnAtMetaStableAlias && isMetaStableAlias( a_index ) ) break;
@@ -368,13 +367,13 @@ std::string Database::chemicalElementSymbol( std::string const &a_id ) const {
     std::string symbol1;
     Base const *base = nullptr;
 
-    std::map<std::string, int>::const_iterator iter = m_idsMap.find( a_id );
+    auto iter = m_idsMap.find( a_id );
     if( iter != m_idsMap.end( ) ) {
         std::string finalId = final( a_id );
         iter = m_idsMap.find( finalId );
         base = m_list[iter->second]; }
     else {
-        std::map<std::string,int>::const_iterator iter2 = m_symbolMap.find( a_id );
+        auto iter2 = m_symbolMap.find( a_id );
         if( iter2 != m_symbolMap.end( ) ) base = m_symbolList[iter2->second];
     }
 
@@ -401,14 +400,14 @@ std::string Database::isotopeSymbol( std::string const &a_id ) const {
     
     std::string symbol1;
     Base const *base = nullptr;
-    
-    std::map<std::string, int>::const_iterator iter = m_idsMap.find( a_id );
+
+    auto iter = m_idsMap.find( a_id );
     if( iter != m_idsMap.end( ) ) {
         std::string finalId = final( a_id );
         iter = m_idsMap.find( finalId );
         base = m_list[iter->second]; }
     else {
-        std::map<std::string,int>::const_iterator iter2 = m_symbolMap.find( a_id );
+        auto iter2 = m_symbolMap.find( a_id );
         if( iter2 != m_symbolMap.end( ) ) base = m_symbolList[iter2->second];
     }
     
@@ -449,7 +448,7 @@ int Database::intid( std::string const &a_id ) const {
  * @return                                      The intid for *a_index* or -1 if *a_index* not in *this*.
  ***********************************************************************************************************/
 
-int Database::intid( int a_index ) const {
+int Database::intid( std::size_t a_index ) const {
 
     int intid2 = -1;
 
@@ -473,16 +472,14 @@ int Database::intid( int a_index ) const {
  * @return                                      The intid for *a_index* or -1 if *a_index* not in *this*.
  ***********************************************************************************************************/
 
-int Database::indexFromIntid( int a_intid ) const {
-
-    int index2 = -1;
+std::size_t Database::indexFromIntid( int a_intid ) const {
 
     auto iter = m_intidsMap.find( a_intid );
-    if( iter != m_intidsMap.end( ) ) {
-        index2 = iter->second;
+    if( iter == m_intidsMap.end( ) ) {
+        throw Exception( "Intid " + LUPI::Misc::argumentsToString( "%d", a_intid ) + " not in pops" );
     }
 
-    return( index2 );
+    return( iter->second );
 }
 
 /* *********************************************************************************************************//**
@@ -493,9 +490,9 @@ int Database::indexFromIntid( int a_intid ) const {
  * @return                                      The index for the added **PoPI::Base** instance.
  ***********************************************************************************************************/
 
-int Database::add( Base *a_item ) {
+std::size_t Database::add( Base *a_item ) {
 
-    int index = (int) m_list.size( );
+    std::size_t index = m_list.size( );
 
     m_idsMap[a_item->ID( )] = index;
     m_list.push_back( a_item );
@@ -516,11 +513,11 @@ int Database::add( Base *a_item ) {
  ***********************************************************************************************************/
     
 
-int Database::addSymbol( SymbolBase *a_item ) {
+std::size_t Database::addSymbol( SymbolBase *a_item ) {
 
     if( a_item->Class( ) == Particle_class::chemicalElement ) return( this->add( a_item ) );
 
-    int index = (int) m_symbolList.size( );
+    std::size_t index = m_symbolList.size( );
 
     m_symbolMap[a_item->symbol( )] = index;
     m_symbolList.push_back( a_item );
@@ -538,7 +535,7 @@ int Database::addSymbol( SymbolBase *a_item ) {
  ***********************************************************************************************************/
 
 void Database::calculateNuclideGammaBranchStateInfos( NuclideGammaBranchStateInfos &a_nuclideGammaBranchStateInfos, Database const *a_pops2,
-                std::vector<std::string> a_extraGammaBranchStates ) const {
+                std::vector<std::string> &a_extraGammaBranchStates ) const {
 
 
     calculateNuclideGammaBranchStateInfos2( a_nuclideGammaBranchStateInfos );
@@ -623,11 +620,11 @@ void Database::toXMLList( std::vector<std::string> &a_XMLList, std::string const
     std::string indent3 = indent2 + "  ";
 
     std::string header1 = a_indent1 + "<PoPs name=\"" + m_name + "\" version=\"" + m_version + "\" format=\"" + m_formatVersion.format( ) + "\">";
-    a_XMLList.push_back( header1 );
+    a_XMLList.push_back( std::move( header1 ) );
 
     if( m_aliases.size( ) > 0 ) {
         std::string header2 = indent2 + "<" + PoPI_aliasesChars + ">";
-        a_XMLList.push_back( header2 );
+        a_XMLList.push_back( std::move( header2 ) );
         for( std::vector<Alias *>::const_iterator iter = m_aliases.begin( ); iter != m_aliases.end( ); ++iter )
             (*iter)->toXMLList( a_XMLList, indent3 );
         appendXMLEnd( a_XMLList, PoPI_aliasesChars );
@@ -649,16 +646,16 @@ void Database::toXMLList( std::vector<std::string> &a_XMLList, std::string const
 
 void Database::print( bool a_printIndices ) {
 
-    for( std::map<std::string,int>::const_iterator iter = m_idsMap.begin( ); iter != m_idsMap.end( ); ++iter ) {
+    for( auto iter = m_idsMap.begin( ); iter != m_idsMap.end( ); ++iter ) {
         std::string label( iter->first );
-        int index = iter->second;
+        std::size_t index = iter->second;
         Base *item = m_list[index];
         std::string is_alias( "" );
         std::string mass( "" );
 
         if( item->isAlias( ) ) {
             is_alias = " is an alias (final is label = '";
-            int finalIndex = final( index );
+            std::size_t finalIndex = final( index );
             IDBase const &myfinal = get<IDBase>( finalIndex );
             is_alias += std::string( myfinal.ID( ) );
             is_alias += std::string( "')" ); }

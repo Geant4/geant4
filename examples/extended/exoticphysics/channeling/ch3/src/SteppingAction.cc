@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 /// \file SteppingAction.cc
 /// \brief Implementation of the SteppingAction class
 

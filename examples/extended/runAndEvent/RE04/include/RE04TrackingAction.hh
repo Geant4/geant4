@@ -23,10 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file runAndEvent/RE04/include/RE04TrackingAction.hh
+/// \file RE04TrackingAction.hh
 /// \brief Definition of the RE04TrackingAction class
-//
-//
+
 #ifndef RE04TrackingAction_h
 #define RE04TrackingAction_h 1
 

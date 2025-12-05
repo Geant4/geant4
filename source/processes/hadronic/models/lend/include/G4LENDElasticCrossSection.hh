@@ -49,7 +49,7 @@ class G4LENDElasticCrossSection : public G4LENDCrossSection
       //G4LENDElasticCrossSection()
       //{;};
       G4LENDElasticCrossSection( G4ParticleDefinition* pd )
-      :G4LENDCrossSection("LENDElasitcCrossSection")
+      :G4LENDCrossSection("LENDElasticCrossSection")
       {
          proj = pd; 
          //name = "LEND Elastic Cross Section for ";

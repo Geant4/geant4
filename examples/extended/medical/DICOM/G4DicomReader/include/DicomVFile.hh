@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file DicomVFile.hh
+/// \brief Definition of the DicomVFile class
+
 #ifndef DicomVFile__HH
 #define DicomVFile__HH
 #include "dcmtk/dcmdata/dcfilefo.h"

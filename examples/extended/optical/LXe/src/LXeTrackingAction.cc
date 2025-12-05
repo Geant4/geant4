@@ -23,11 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file optical/LXe/src/LXeTrackingAction.cc
+/// \file LXeTrackingAction.cc
 /// \brief Implementation of the LXeTrackingAction class
-//
-//
+
 #include "LXeTrackingAction.hh"
 
 #include "LXeDetectorConstruction.hh"

@@ -23,11 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm0/DirectAccess.cc
+/// \file DirectAccess.cc
 /// \brief Main program of the electromagnetic/TestEm0 example
-//
-//
-//
+
 // ------------------------------------------------------------
 //
 //  To print cross sections per atom and mean free path for simple material

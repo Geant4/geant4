@@ -31,7 +31,7 @@
 // magnetic field. The three components of the particle's spin are
 // treated utilising BMT equation.
 
-// Created: J.Apostolakis, P.Gumplinger - 08.02.1999
+// Authors: John Apostolakis (CERN) & Peter Gumplinger (TRIUMF), 08.02.1999
 // --------------------------------------------------------------------
 #ifndef G4MAG_SPIN_EQRHS_HH
 #define G4MAG_SPIN_EQRHS_HH
@@ -42,33 +42,60 @@
 
 class G4MagneticField;
 
+/**
+ * @brief G4Mag_SpinEqRhs defines the equation of motion for a particle with
+ * spin in a pure magnetic field. The three components of the particle's spin
+ * are treated utilising BMT equation.
+ */
+
 class G4Mag_SpinEqRhs : public G4Mag_EqRhs
 {
-   public:
+  public:
 
-     G4Mag_SpinEqRhs( G4MagneticField* MagField );
-    ~G4Mag_SpinEqRhs() override;
-       // Constructor and destructor. No actions.
+    /**
+     * Constructor for G4Mag_SpinEqRhs.
+     *  @param[in] MagField Pointer to the associated magnetic field.
+     */
+    G4Mag_SpinEqRhs( G4MagneticField* MagField );
 
-     void SetChargeMomentumMass(G4ChargeState particleCharge,
-                                G4double MomentumXc,
-                                G4double mass) override; 
+    /**
+     * Default Destructor.
+     */
+    ~G4Mag_SpinEqRhs() override = default;
 
-     void EvaluateRhsGivenB( const  G4double y[],
-                             const  G4double B[3],
-                                    G4double dydx[] ) const override;
-       // Given the value of the magnetic field B, this function 
-       // calculates the value of the derivative dydx.
+    /**
+     * Sets the charge momentum mass value.
+     */
+    void SetChargeMomentumMass(G4ChargeState particleCharge,
+                               G4double MomentumXc,
+                               G4double mass) override; 
 
-     inline void SetAnomaly(G4double a) { anomaly = a; }
-     inline G4double GetAnomaly() const { return anomaly; }
-       // set/get magnetic anomaly
+    /**
+     * Calculates the value of the derivative, given the value of the field.
+     *  @param[in] y Coefficients array.
+     *  @param[in] B Field value.
+     *  @param[out] dydx Derivatives array.
+     */
+    void EvaluateRhsGivenB( const G4double y[],
+                            const G4double B[3],
+                                  G4double dydx[] ) const override;
 
-   private:
+    /**
+     * Setter and getter for the magnetic anomaly.
+     */
+    inline void SetAnomaly(G4double a) { anomaly = a; }
+    inline G4double GetAnomaly() const { return anomaly; }
 
-     G4double charge=0.0, mass=0.0, magMoment=0.0, spin=0.0;
-     G4double omegac=0.0, anomaly=0.0011659208;
-     G4double beta=0.0, gamma=0.0;
+    /**
+     * Returns the equation of motion type ID, i.e. "kEqMagneticWithSpin".
+     */
+    inline G4EquationType GetEquationType() const override { return kEqMagneticWithSpin; }
+
+  private:
+
+    G4double charge=0.0, mass=0.0, magMoment=0.0, spin=0.0;
+    G4double omegac=0.0, anomaly=0.0011659208;
+    G4double beta=0.0, gamma=0.0;
 };
 
 #endif

@@ -6,6 +6,16 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2025-08-14 Alberto Ribon (hadr-string-diff-V11-03-00)
+- G4FTFModel, G4DiffractiveExcitation : introduced the classification of
+  quasi-elastic and diffractive interactions among the inelastic interactions
+  of the FTF string model.
+  In the G4FTFModel class, the boolean flags fIsQuasiElasticInteraction and
+  fIsDiffractiveInteraction - inherited from the base class
+  G4VHighEnergyGenerator - are used in the methods Init and ExciteParticipants.
+  In the class G4DiffractiveExcitation, an extra, boolean parameter is added
+  to the method ExciteParticipants to tag diffractive interactions.
+
 ## 2024-07-18 Alberto Ribon (hadr-string-diff-V11-02-00)
 - G4FTFParameters : renamed method SetElastis as SetElastic.
   This does not have any effect - the random sequence stays the same.

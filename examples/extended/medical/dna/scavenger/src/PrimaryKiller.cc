@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file scavenger/src/PrimaryKiller.cc
+/// \file PrimaryKiller.cc
 /// \brief Implementation of the scavenger::PrimaryKiller class
 
 #include "PrimaryKiller.hh"

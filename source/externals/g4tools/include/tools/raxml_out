@@ -53,32 +53,5 @@ protected:
 
 }
 
-#include <vector>
-
-namespace tools {
-
-//for tools::holder<raxml_outs>
-class raxml_outs : public std::vector<raxml_out> {
-public:
-  static const std::string& s_class() {
-    static const std::string s_v("tools::raxml_outs");
-    return s_v;
-  }
-public:
-  raxml_outs(){}
-  raxml_outs(const std::vector<raxml_out>& a_v)
-  :std::vector<raxml_out>(a_v)
-  {}
-public:
-  raxml_outs(const raxml_outs& a_from)
-  :std::vector<raxml_out>(a_from)
-  {}
-  raxml_outs& operator=(const raxml_outs& a_from){
-    std::vector<raxml_out>::operator=(a_from);
-    return *this;
-  }
-};
-
-}
 
 #endif

@@ -47,7 +47,7 @@ void G4RegularNavigationHelper::ClearStepLengths()
 //
 void G4RegularNavigationHelper::AddStepLength( G4int copyNo, G4double slen )
 {
-  theStepLengths.push_back( std::pair<G4int,G4double>(copyNo,slen) );
+  theStepLengths.emplace_back(copyNo,slen );
 }
 
 // --------------------------------------------------------------------

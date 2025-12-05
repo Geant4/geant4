@@ -35,6 +35,11 @@
 #include "G4SystemOfUnits.hh"
 #include "G4NuclearRadii.hh"
 
+namespace
+{
+  constexpr G4double e0 = 2*CLHEP::MeV;
+}
+
 G4CoulombBarrier::G4CoulombBarrier(G4int A, G4int Z)
   : G4VCoulombBarrier(A, Z)
 {
@@ -45,9 +50,8 @@ G4CoulombBarrier::G4CoulombBarrier(G4int A, G4int Z)
 G4double G4CoulombBarrier::GetCoulombBarrier(
          G4int ARes, G4int ZRes, G4double U) const 
 {
-  if (0 == theZ) { return 0.0; }
   G4double cb = factor*ZRes/(G4NuclearRadii::RadiusCB(ZRes,ARes) + theRho);
-  if (U > 0.0) { cb /= (1.0 + std::sqrt( U/((2*(ARes + theA))*CLHEP::MeV) )); }
+  cb /= (1.0 + std::sqrt( U / ((ARes + theA)*e0)));
   return cb;
 }
 

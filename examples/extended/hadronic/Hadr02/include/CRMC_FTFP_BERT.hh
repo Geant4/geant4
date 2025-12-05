@@ -23,10 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file hadronic/Hadr02/include/CRMC_FTFP_BERT.hh
+/// \file CRMC_FTFP_BERT.hh
 /// \brief Definition of the CRMC_FTFP_BERT class
-//
-//
+
 //---------------------------------------------------------------------------
 //
 // ClassName: CRMC_FTFP_BERT

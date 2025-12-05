@@ -400,7 +400,7 @@ G4double G4CrystalUnitCell::ComputeCellVolume()
       break;
     case Triclinic:
       return a * b * c *
-             std::sqrt(1. - cosa * cosa - cosb * cosb - cosg * cosg * 2. * cosa * cosb * cosg);
+             std::sqrt(1. - cosa * cosa - cosb * cosb - cosg * cosg + 2. * cosa * cosb * cosg);
       break;
     case Hexagonal:
       return std::sqrt(3.0) / 2. * a * a * c;
@@ -513,7 +513,7 @@ G4double G4CrystalUnitCell::GetRecIntSp2(G4int h, G4int k, G4int l)
       return (h2 + k2) * a2 + l2 * c2;
       break;
     case Orthorhombic:
-      return h2 * a2 + k2 + b2 + h2 * c2;
+      return h2 * a2 + k2 * b2 + l2 * c2;
       break;
     case Rhombohedral:
       return (h2 + k2 + l2 + 2. * (h * k + k * l + h * l) * cosar) * a2;
@@ -562,7 +562,7 @@ G4double G4CrystalUnitCell::GetIntCosAng(G4int h1, G4int k1, G4int l1, G4int h2,
       return 0.;
       break;
     case Cubic:
-      return (h1 * h2 + k1 * k2 + l1 + l2) /
+      return (h1 * h2 + k1 * k2 + l1 * l2) /
              (std::sqrt(h1 * h1 + k1 * k1 + l1 * l1) * std::sqrt(h2 * h2 + k2 * k2 + l2 * l2));
       break;
     case Tetragonal:
@@ -571,7 +571,7 @@ G4double G4CrystalUnitCell::GetIntCosAng(G4int h1, G4int k1, G4int l1, G4int h2,
       break;
     case Orthorhombic:
       dsp1dsp2 = std::sqrt(GetIntSp2(h1, k1, l1) * GetIntSp2(h2, k2, l2));
-      return dsp1dsp2 * (h1 * h2 * a2 + k1 * k2 * a2 + l1 * l2 * c2);
+      return dsp1dsp2 * (h1 * h2 * a2 + k1 * k2 * b2 + l1 * l2 * c2);
       break;
     case Rhombohedral:
       dsp1dsp2 = std::sqrt(GetIntSp2(h1, k1, l1) * GetIntSp2(h2, k2, l2));

@@ -23,12 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file biasing/ReverseMC01/exampleRMC01.cc
+/// \file exampleRMC01.cc
 /// \brief Main program of the biasing/ReverseMC01 example
-//
-//
-//
-//
+
 // --------------------------------------------------------------
 //      GEANT 4 - exampleRMC01
 //
@@ -42,11 +39,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "RMC01AdjointEventAction.hh"
+#include "RMC01ActionInitialization.hh"
 #include "RMC01DetectorConstruction.hh"
-#include "RMC01EventAction.hh"
-#include "RMC01PrimaryGeneratorAction.hh"
-#include "RMC01RunAction.hh"
 
 #include "G4AdjointPhysicsList.hh"
 #include "G4AdjointSimManager.hh"
@@ -68,31 +62,14 @@ int main(int argc, char** argv)
   }
 
   // Construct a serial run manager
-  auto* theRunManager = G4RunManagerFactory::CreateRunManager(G4RunManagerType::SerialOnly);
+   auto* runManager = G4RunManagerFactory::CreateRunManager();
 
-  RMC01DetectorConstruction* detector = new RMC01DetectorConstruction();
 
   // Physics and geometry are declared as in a normal G4 application
   //--------------------------------------------
-  theRunManager->SetUserInitialization(detector);
-  theRunManager->SetUserInitialization(new G4AdjointPhysicsList);
-
-  theRunManager->SetUserAction(new RMC01PrimaryGeneratorAction);
-  theRunManager->SetUserAction(new RMC01EventAction);
-  RMC01RunAction* theRunAction = new RMC01RunAction;
-  theRunManager->SetUserAction(theRunAction);
-
-  // The adjoint simulation manager will control the Reverse MC mode
-  //---------------------------------------------------------------
-
-  G4AdjointSimManager* theAdjointSimManager = G4AdjointSimManager::GetInstance();
-
-  // It is possible to define action that will be used during
-  //                                         the adjoint tracking phase
-
-  theAdjointSimManager->SetAdjointRunAction(theRunAction);
-  // theAdjointSimManager->SetAdjointEventAction(new RMC01AdjointEventAction);
-  theAdjointSimManager->SetAdjointEventAction(new RMC01EventAction);
+  runManager->SetUserInitialization( new RMC01DetectorConstruction());
+  runManager->SetUserInitialization(new G4AdjointPhysicsList);
+  runManager->SetUserInitialization(new RMC01ActionInitialization);
 
   // visualization manager
   G4VisManager* visManager = new G4VisExecutive;
@@ -114,7 +91,8 @@ int main(int argc, char** argv)
 
   // job termination
   delete visManager;
-  delete theRunManager;
+
+  if (runManager)  delete runManager;
 
   return 0;
 }

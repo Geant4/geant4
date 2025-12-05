@@ -23,11 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file radiobiology/src/PhysicsList.cc
+/// \file PhysicsList.cc
 /// \brief Implementation of the RadioBio::PhysicsList class
-//
-//
+
 // 'HADRONTHERAPY_1' and 'HADRONTHERAPY_2' are both suggested;
 // It can be activated inside any macro file using the command:
 // /Physics/addPhysics HADRONTHERAPY_1 (HADRONTHERAPY_2)

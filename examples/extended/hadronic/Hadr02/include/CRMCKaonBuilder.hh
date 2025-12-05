@@ -23,10 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file hadronic/Hadr02/include/CRMCKaonBuilder.hh
+/// \file CRMCKaonBuilder.hh
 /// \brief Definition of the CRMCKaonBuilder class
-//
-//
+
 //---------------------------------------------------------------------------
 //
 // ClassName: CRMCKaonBuilder

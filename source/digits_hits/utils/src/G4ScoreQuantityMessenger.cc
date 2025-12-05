@@ -173,6 +173,9 @@ void G4ScoreQuantityMessenger::QuantityCommands()
   param = new G4UIparameter("unit", 's', true);
   param->SetDefaultValue("percm2");
   qCellFluxCmd->SetParameter(param);
+  param = new G4UIparameter("scoreweighted", 'b', true);
+  param->SetDefaultValue("false");
+  qCellFluxCmd->SetParameter(param);
   //
   qPassCellFluxCmd = new G4UIcommand("/score/quantity/passageCellFlux", this);
   qPassCellFluxCmd->SetGuidance("Passage cell flux scorer");
@@ -633,6 +636,7 @@ void G4ScoreQuantityMessenger::SetNewValue(G4UIcommand* command,
         ps = new G4PSCellFlux(token[0]);
       }
       ps->SetUnit(token[1]);
+      ps->ScoreWeighted(StoB(token[2]));
       mesh->SetPrimitiveScorer(ps);
     }
   }

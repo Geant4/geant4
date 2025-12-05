@@ -108,10 +108,10 @@ double Nuclide::massValue( char const *a_unit ) const {
     PQ_double const *pq_mass;
 
     if( mass( ).size( ) > 0 ) {
-        pq_mass = dynamic_cast<PQ_double const *>( mass( )[0] ); }
+        pq_mass = static_cast<PQ_double const *>( mass( )[0] ); }
     else {
         if( baseMass( ).size( ) == 0 ) throw Exception( "nuclide::massValue: no mass in level 0 for particle '" + ID( ) + "'." );
-        pq_mass = dynamic_cast<PQ_double const *>( baseMass( )[0] );
+        pq_mass = static_cast<PQ_double const *>( baseMass( )[0] );
     }
     double _mass = pq_mass->value( a_unit );
 

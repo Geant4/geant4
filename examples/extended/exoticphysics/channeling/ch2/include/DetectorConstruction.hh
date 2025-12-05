@@ -23,10 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file DetectorConstruction.cc
-/// \brief Implementation of the DetectorConstruction class
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// \file DetectorConstruction.hh
+/// \brief Definition of the DetectorConstruction class
 
 #ifndef B1DetectorConstruction_h
 #define B1DetectorConstruction_h 1
@@ -78,7 +76,11 @@ class DetectorConstruction : public G4VUserDetectorConstruction
     {fCrystallineUndulatorPhase = val;}
 
     void SetPotentialPath(const G4String& path){fPotentialPath = path;}
+    void SetCrystalInternalGeometryPath(const G4String& path){fCrystalInternalGeometryPath = path;}
+    void SetVirtualCollimatorHalfSize(G4double val) {fVirtualCollimatorHalfSize = val;}
     void SetMinPhotonEnergy(G4double val) {fMinPhotonEnergy = val;}
+    void SetMaxBKPhotonEnergyInSpectrum(G4double val) {fMaxPhotonEnergySpectrum = val;}
+    void SetNBinsSpectrum(G4int val) {fNBinsSpectrum = val;}
     void SetSamplingPhotonsNumber(G4int val) {fSamplingPhotonsNumber = val;}
     void SetNSmallTrajectorySteps(G4int val) {fNSmallTrajectorySteps = val;}
     void SetRadiationAngleFactor(G4double val) {fRadiationAngleFactor = val;}
@@ -134,12 +136,16 @@ class DetectorConstruction : public G4VUserDetectorConstruction
       G4double fDetectorFrontPosZ = 1*CLHEP::m;
 
       G4String fPotentialPath = "";
+      G4String fCrystalInternalGeometryPath = "";
 
       G4double fMinPhotonEnergy = 1*CLHEP::MeV; //G4BaierKatkov default value
+      G4double fMaxPhotonEnergySpectrum = 1*CLHEP::GeV; //G4BaierKatkov default value
+      G4int fNBinsSpectrum = 110; //G4BaierKatkov default value
       G4int fSamplingPhotonsNumber = 150; //G4BaierKatkov default value
       G4int fNSmallTrajectorySteps = 10000; //G4BaierKatkov default value
       G4double fRadiationAngleFactor = 4; //G4BaierKatkov default value
 
+      G4double fVirtualCollimatorHalfSize = 10.; // infinite collimator size
       G4double fMinPhotonEnergyAddStat = 1*CLHEP::MeV;
       G4double fMaxPhotonEnergyAddStat = 20*CLHEP::MeV;
       G4int fTimesPhotonStatistics = 1;

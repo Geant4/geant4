@@ -32,6 +32,8 @@
 //      - Created                 Hisaya Kurashige, 11 Aug. 2011
 //      - Update mass and width
 //        following PDG 2023      Shogo Okada, 5 Nov. 2023
+//      - Update mass and width
+//        following PDG 2025      Shogo Okada, 4 Nov. 2025
 // **********************************************************************
 //
 
@@ -67,7 +69,7 @@ G4AntiSigmabMinus* G4AntiSigmabMinus::Definition()
 
     // clang-format off
    anInstance = new G4ParticleDefinition(
-                 name,     5.81564*GeV,       5.3*MeV,  +1.0*eplus,
+                 name,     5.81056*GeV,      4.95*MeV,  +1.0*eplus,
                     1,              +1,             0,
                     2,              +2,             0,
              "baryon",               0,            -1,       -5112,

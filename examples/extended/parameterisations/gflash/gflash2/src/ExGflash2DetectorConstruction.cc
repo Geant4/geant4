@@ -23,10 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 /// \file ExGflash2DetectorConstruction.cc
 /// \brief Implementation of the ExGflash2DetectorConstruction class
-//
+
 // Created by Joanna Weng 26.11.2004
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

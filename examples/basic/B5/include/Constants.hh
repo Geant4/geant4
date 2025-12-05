@@ -23,9 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file B5/include/Constants.hh
-/// \brief Definition of B5 example constants.
+/// \file Constants.hh
+/// \brief Definition of the B5::Constants class
 
 #ifndef B5Constants_h
 #define B5Constants_h 1

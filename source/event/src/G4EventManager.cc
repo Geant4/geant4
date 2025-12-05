@@ -341,7 +341,18 @@ void G4EventManager::DoProcessing(G4Event* anEvent,
     }
   }
 
-  if(!subEventParaWorker) stateManager->SetNewState(G4State_GeomClosed);
+  if(subEventParaWorker)
+  {
+    // check if the current sub-event is completed
+    currentEvent->GetSubEvent()->SetCompleted();
+    // if incomplete current event should be stored in processingEevnts vector
+    //// processingEevnts.push_back(currentEvent);
+    // also, once it is completed, it must be moved to completedEvents vector
+    // to be retrieved by the G4SubEvtWorkerRunManager
+  }
+  else
+  { stateManager->SetNewState(G4State_GeomClosed); }
+    
   currentEvent = nullptr;
   abortRequested = false;
 }

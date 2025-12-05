@@ -25,7 +25,7 @@
 //
 // G4TwistTrapAlphaSide implementation
 //
-// Author: 18/03/2005 - O.Link (Oliver.Link@cern.ch)
+// Author: Oliver Link (CERN), 27.10.2004 - Created
 // --------------------------------------------------------------------
 
 #include <cmath>
@@ -116,12 +116,6 @@ G4TwistTrapAlphaSide::G4TwistTrapAlphaSide( __void__& a )
 
 
 //=====================================================================
-//* destructor --------------------------------------------------------
-
-G4TwistTrapAlphaSide::~G4TwistTrapAlphaSide() = default;
-
-
-//=====================================================================
 //* GetNormal ---------------------------------------------------------
 
 G4ThreeVector
@@ -208,15 +202,14 @@ G4TwistTrapAlphaSide::DistanceToSurface(const G4ThreeVector& gp,
     }
     return fCurStatWithV.GetNXX();
   }
-  else  // initialise
+
+  // initialise
+  for (G4int j=0; j<G4VSURFACENXX ; ++j)
   {
-    for (G4int j=0; j<G4VSURFACENXX ; ++j)
-    {
-      distance[j] = kInfinity;
-      areacode[j] = sOutside;
-      isvalid[j]  = false;
-      gxx[j].set(kInfinity, kInfinity, kInfinity);
-    }
+    distance[j] = kInfinity;
+    areacode[j] = sOutside;
+    isvalid[j]  = false;
+    gxx[j].set(kInfinity, kInfinity, kInfinity);
   }
 
   G4ThreeVector p = ComputeLocalPoint(gp);
@@ -440,7 +433,7 @@ G4TwistTrapAlphaSide::DistanceToSurface(const G4ThreeVector& gp,
         tmpareacode = GetAreaCode(tmpxx);
         if (!IsOutside(tmpareacode))
         {
-          if (tmpdist >= 0) tmpisvalid = true;
+          if (tmpdist >= 0) { tmpisvalid = true; }
         }
       }
       else if (validate == kValidateWithoutTol)
@@ -694,14 +687,13 @@ G4TwistTrapAlphaSide::DistanceToSurface(const G4ThreeVector& gp,
       }
       return fCurStat.GetNXX();
    }
-   else  // initialize
+
+   // initialize
+   for (G4int i=0; i<G4VSURFACENXX; ++i)
    {
-      for (G4int i=0; i<G4VSURFACENXX; ++i)
-      {
-         distance[i] = kInfinity;
-         areacode[i] = sOutside;
-         gxx[i].set(kInfinity, kInfinity, kInfinity);
-      }
+      distance[i] = kInfinity;
+      areacode[i] = sOutside;
+      gxx[i].set(kInfinity, kInfinity, kInfinity);
    }
 
    G4ThreeVector p = ComputeLocalPoint(gp);
@@ -897,12 +889,11 @@ G4TwistTrapAlphaSide::GetAreaCode(const G4ThreeVector& xx, G4bool withTol)
       }
       return areacode;
    }
-   else
-   {
-      G4Exception("G4TwistTrapAlphaSide::GetAreaCode()",
-                  "GeomSolids0001", FatalException,
-                  "Feature NOT implemented !");
-   }
+   
+   G4Exception("G4TwistTrapAlphaSide::GetAreaCode()",
+               "GeomSolids0001", FatalException,
+               "Feature NOT implemented !");
+
    return areacode;
 }
 
@@ -1082,12 +1073,9 @@ G4TwistTrapAlphaSide::ProjectPoint(const G4ThreeVector& p, G4bool isglobal)
 
   if (isglobal)
   {
-     return (fRot * xx + fTrans);
+    return (fRot * xx + fTrans);
   }
-  else
-  {
-     return xx;
-  }
+  return xx;
 }
 
 //=====================================================================

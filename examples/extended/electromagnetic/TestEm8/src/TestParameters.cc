@@ -23,10 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm8/src/TestParameters.cc
+/// \file TestParameters.cc
 /// \brief Implementation of the TestParameters class
-//
-//
+
 //---------------------------------------------------------------------------
 //
 // ClassName:   TestParameters

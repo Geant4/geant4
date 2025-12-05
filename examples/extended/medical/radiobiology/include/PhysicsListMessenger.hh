@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file radiobiology/include/PhysicsListMessenger.hh
+/// \file PhysicsListMessenger.hh
 /// \brief Definition of the RadioBio::PhysicsListMessenger class
 
 #ifndef RadiobiologyPhysicsListMessenger_h

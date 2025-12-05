@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file radiobiology/include/RBE.hh
+/// \file RBE.hh
 /// \brief Definition of the RadioBio::RBE class
 
 #ifndef RadiobiologyRBE_H

@@ -57,20 +57,9 @@ public:
 
     uint16 basket_key_length = a_buffer.length()-startpos;
     if(basket_key_length!=m_key_length) {
-      //m_out << "tools::rroot::basket::stream :"
-      //             << " key length not consistent."
-      //             << " read " << m_key_length
-      //             << ", expected " << basket_key_length
-      //             << ". Continue with " << basket_key_length
-      //             << std::endl;
       m_key_length = basket_key_length;
     }
     if(!m_object_size) {
-      //m_out << "tools::rroot::basket::stream :"
-      //             << " m_object_size is found to be zero."
-      //             << " Continue with (m_nbytes-m_key_length) "
-      //             << (m_nbytes-m_key_length)
-      //             << std::endl;
       m_object_size = m_nbytes-m_key_length;
     }
 
@@ -120,13 +109,6 @@ public:
           return false;
         }
       }
-/* Due to the upper "G.Barrand if", flag can't be in ]20,40[, then to quiet Coverity we comment the below test.
-      if((20<flag)&&(flag<40)) {
-        for(uint32 i=0;i<m_nev;i++){
-          m_entry_offset[i] &= ~kDisplacementMask();
-        }
-      }
-*/
       if(flag>40) {
         m_displacement = new int[m_nev_buf_size];
         uint32 n;
@@ -175,8 +157,6 @@ public:
         }
         m_buffer = _buf;
         m_buf_size = fBufferSize;
-        //fBufferRef->inline_setBufferOffset(m_last);
-        //fBranch.tree().incrementTotalBuffers(fBufferSize);
       }
     }
 
@@ -191,9 +171,6 @@ public:
   ,m_entry_offset(0)
   ,m_displacement(0)
   {
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
   }
   basket(std::ostream& a_out,seek a_pos,uint32 a_nbytes)
   :parent(a_out,a_pos,a_nbytes)
@@ -203,15 +180,9 @@ public:
   ,m_entry_offset(0)
   ,m_displacement(0)
   {
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
   }
   virtual ~basket(){
     _clear();
-#ifdef TOOLS_MEM
-    mem::decrement(s_class().c_str());
-#endif
   }
 public:
   basket(const basket& a_from)
@@ -223,9 +194,6 @@ public:
   ,m_entry_offset(0)
   ,m_displacement(0)
   {
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
     if(a_from.m_nev && a_from.m_entry_offset) {
       m_entry_offset = new int[a_from.m_nev];
       if(!m_entry_offset) {

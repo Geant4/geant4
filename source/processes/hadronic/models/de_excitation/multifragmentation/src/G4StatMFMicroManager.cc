@@ -31,33 +31,6 @@
 #include "G4StatMFMicroManager.hh"
 #include "G4HadronicException.hh"
 
-// Copy constructor
-G4StatMFMicroManager::G4StatMFMicroManager(const G4StatMFMicroManager & )
-{
-    throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMicroManager::copy_constructor meant to not be accessible");
-}
-
-// Operators
-
-G4StatMFMicroManager & G4StatMFMicroManager::
-operator=(const G4StatMFMicroManager & )
-{
-    throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMicroManager::operator= meant to not be accessible");
-    return *this;
-}
-
-
-G4bool G4StatMFMicroManager::operator==(const G4StatMFMicroManager & ) const
-{
-    return false;
-}
- 
-
-G4bool G4StatMFMicroManager::operator!=(const G4StatMFMicroManager & ) const
-{
-    return true;
-}
-
 // constructor
 G4StatMFMicroManager::G4StatMFMicroManager(const G4Fragment & theFragment, 
 					   G4int multiplicity,
@@ -71,11 +44,9 @@ G4StatMFMicroManager::G4StatMFMicroManager(const G4Fragment & theFragment,
 // destructor
 G4StatMFMicroManager::~G4StatMFMicroManager() 
 {
-  if (!_Partition.empty()) 
-    {
-      std::for_each(_Partition.begin(),_Partition.end(),
-		      DeleteFragment());
-    }
+  if (!_Partition.empty()) {
+    for (auto & p : _Partition) { delete p; }
+  }
 }
 
 void G4StatMFMicroManager::Initialize(const G4Fragment & theFragment, G4int im, 
@@ -172,15 +143,13 @@ G4StatMFMicroManager::ChooseChannel(G4int A0, G4int Z0, G4double MeanT)
   G4double RandNumber = _Normalization * _WW * G4UniformRand();
   G4double AccumWeight = 0.0;
 	
-  for (std::vector<G4StatMFMicroPartition*>::iterator i = _Partition.begin();
-       i != _Partition.end(); ++i)
-    {
-	AccumWeight += (*i)->GetProbability();
-	if (RandNumber < AccumWeight)
-	  return (*i)->ChooseZ(A0,Z0,MeanT);
-    }
+  for (auto & p : _Partition) {
+    AccumWeight += p->GetProbability();
+    if (RandNumber <= AccumWeight)
+      return p->ChooseZ(A0,Z0,MeanT);
+  }
 
   throw G4HadronicException(__FILE__, __LINE__, 
-			    "G4StatMFMicroCanonical::ChooseChannel: Couldn't find a channel.");
-  return 0;
+			    "G4StatMFMicroManager::ChooseChannel: Couldn't find a channel.");
+  return nullptr;
 }

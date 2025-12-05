@@ -25,13 +25,7 @@
 // 
 // class G4LogicalVolume inline implementation
 //
-// 15.01.13 - G.Cosmo, A.Dotti: Modified for thread-safety for MT
-// 10.20.97 - P. MoraDeFreitas : Added SetFastSimulation method
-// 05.11.98 - M. Verderi: Add Get/Set methods for fBiasWeight
-// 09.11.98 - J.Apostolakis:  Changed MagneticField to FieldManager
-// 12.02.99 - S.Giani: Added set/get methods for voxelization quality
-// 18.04.01 - G.Cosmo: Migrated to STL vector
-// 17.05.02 - G.Cosmo: Added IsToOptimise() method
+// Author: Paul Kent (CERN), 11.07.1995 - Initial version
 // --------------------------------------------------------------------
 
 // ********************************************************************

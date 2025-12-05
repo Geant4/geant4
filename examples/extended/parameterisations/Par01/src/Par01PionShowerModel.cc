@@ -23,11 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file Par01/src/Par01PionShowerModel.cc
+/// \file Par01PionShowerModel.cc
 /// \brief Implementation of the Par01PionShowerModel class
-//
-//
-//
+
 #include "Par01PionShowerModel.hh"
 
 #include "Par01EnergySpot.hh"

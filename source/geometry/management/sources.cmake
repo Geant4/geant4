@@ -56,6 +56,7 @@ geant4_add_module(G4geometrymng
     G4TouchableHistory.icc
     G4TouchableHistoryHandle.hh
     G4UAdapter.hh
+    G4UAdapter.icc
     G4VCurvedTrajectoryFilter.hh
     G4VNestedParameterisation.hh
     G4VPVDivisionFactory.hh
@@ -68,6 +69,7 @@ geant4_add_module(G4geometrymng
     G4VTouchable.hh
     G4VUserRegionInformation.hh
     G4VVolumeMaterialScanner.hh
+    G4VoxelisationHelper.hh
     G4VoxelLimits.hh
     G4VoxelLimits.icc
     geomwdefs.hh
@@ -78,8 +80,6 @@ geant4_add_module(G4geometrymng
     G4BoundingEnvelope.cc
     G4ErrorCylSurfaceTarget.cc
     G4ErrorPlaneSurfaceTarget.cc
-    G4ErrorSurfaceTarget.cc
-    G4ErrorTanPlaneTarget.cc
     G4ErrorTarget.cc
     G4GeomTools.cc
     G4GeometryManager.cc
@@ -107,6 +107,7 @@ geant4_add_module(G4geometrymng
     G4VPVParameterisation.cc
     G4VPhysicalVolume.cc
     G4VSolid.cc
+    G4VoxelisationHelper.cc
     G4VoxelLimits.cc)
 
 # - Add path to generated header

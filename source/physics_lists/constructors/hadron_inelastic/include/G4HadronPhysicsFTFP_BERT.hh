@@ -50,7 +50,7 @@ class G4HadronPhysicsFTFP_BERT : public G4VPhysicsConstructor
   public: 
     G4HadronPhysicsFTFP_BERT(G4int verbose =1);
     G4HadronPhysicsFTFP_BERT(const G4String& name, G4bool quasiElastic=false);
-    virtual ~G4HadronPhysicsFTFP_BERT();
+    ~G4HadronPhysicsFTFP_BERT() override = default;
 
     void ConstructParticle() override;
     void ConstructProcess() override;

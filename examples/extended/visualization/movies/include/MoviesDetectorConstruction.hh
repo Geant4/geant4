@@ -25,7 +25,6 @@
 //
 /// \file MoviesDetectorConstruction.hh
 /// \brief Definition of the MoviesDetectorConstruction class
-//
 
 #ifndef MoviesDetectorConstruction_h
 #define MoviesDetectorConstruction_h 1

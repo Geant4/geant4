@@ -12,20 +12,12 @@
 #include "../lina/vec4f"
 #include "../colorf"
 
-#ifdef TOOLS_MEM
-#include "../mem"
-#include "../S_STRING"
-#endif
-
 #include "enums"
 
 namespace tools {
 namespace sg {
 
 class state {
-#ifdef TOOLS_MEM
-  TOOLS_SCLASS(tools::sg::state)
-#endif
 public:
   state()
   //must be consistent with tools::sg::viewer::render.
@@ -61,19 +53,10 @@ public:
   ,m_camera_zfar(10)
   ,m_camera_position(vec3f(0,0,1))
   ,m_camera_orientation(rotf(vec3f(0,0,1),0))
-  //,m_camera_near_height(0)
   ,m_camera_lrbt(0,0,0,0)
   {
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
-    //m_proj.set_identity();
-    //m_model.set_identity();
   }
   virtual ~state(){
-#ifdef TOOLS_MEM
-    mem::decrement(s_class().c_str());
-#endif
   }
 public:
   state(const state& a_from)
@@ -112,12 +95,8 @@ public:
   ,m_camera_zfar(a_from.m_camera_zfar)
   ,m_camera_position(a_from.m_camera_position)
   ,m_camera_orientation(a_from.m_camera_orientation)
-  //,m_camera_near_height(a_from.m_camera_near_height)
   ,m_camera_lrbt(a_from.m_camera_lrbt)
   {
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
   }
   state& operator=(const state& a_from){
     m_ww = a_from.m_ww;
@@ -155,7 +134,6 @@ public:
     m_camera_zfar = a_from.m_camera_zfar;
     m_camera_position = a_from.m_camera_position;
     m_camera_orientation = a_from.m_camera_orientation;
-    //m_camera_near_height = a_from.m_camera_near_height;
     m_camera_lrbt = a_from.m_camera_lrbt;
 
     return *this;
@@ -211,7 +189,6 @@ public:
   bool screen2pwc(int a_x,int a_y, //signed because of wall.
                   float& a_wcx,float& a_wcy,float& a_wcz) const {
     mat4f mtx = m_proj;
-    //mtx.mul_mtx(m_model);
     mat4f inv;
     if(!mtx.invert(inv)) {a_wcx = 0;a_wcy = 0;a_wcz = 0;return false;}
     float w;
@@ -274,7 +251,6 @@ public:
   float m_camera_zfar;
   vec3f m_camera_position;
   rotf m_camera_orientation; //used by head_light
-  //float m_camera_near_height;
   vec4f m_camera_lrbt;
 };
 

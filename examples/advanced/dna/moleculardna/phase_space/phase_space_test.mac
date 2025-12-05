@@ -1,46 +1,77 @@
-#/process/dna/e-SolvationSubType Meesungnoen2002
-#/process/dna/e-SolvationSubType Ritchie1994
-#/process/dna/e-SolvationSubType Terrisol1990
+### Phase space file test
 
+#
+# See more details on moleculardna specific UI commands:
+# - https://geant4-dna.github.io/molecular-docs/docs/overview/configuration
+# - https://geant4-dna.github.io/molecular-docs/docs/overview/macro-anatomy
+# - the README file
+# - the messenger classes of the moleculardna example
+#
+
+# Run with one thread only
 /run/numberOfThreads 1
-#/run/verbose 2
-#/control/verbose 1
-#/dnageom/verbose 1
-/tracking/verbose 2
 
-/chem/activate true
-/scheduler/verbose 0
+# Verbosity: settings
+/control/verbose 1
+/run/verbose 2
 /material/verbose 2
+/dnageom/verbose 1
 
-/world/worldSize 10200 nm
-/cell/radiusSize 3 3 3 um
+# Chemistry: selection of IRT_syn
+/process/chem/TimeStepModel IRT_syn
 
-/dnageom/setSmartVoxels 1
-/dnageom/checkOverlaps false
+# Chemistry: activation
+/chem/activate true
+
+# Chemistry: verbosity
+/scheduler/verbose 0
+
+# Chemistry: end time of chemistry stage
 /scheduler/endTime 1 us
 
-/dnageom/radicalKillDistance 9 nm
-/dnageom/interactionDirectRange 7 angstrom
+# Geometry: size of World volume
+/world/worldSize 10200 nm
 
+# Geometry: size of cell volume
+# See https://geant4-dna.github.io/molecular-docs/docs/examples/parameter-study
+/cell/radiusSize 3 3 3 um
+
+# Geometry: optimisation of voxelisation
+/dnageom/setSmartVoxels 1
+
+# Geometry: check overlaps in DNA geometry region
+/dnageom/checkOverlaps false
+
+# Geometry: creation
+# See https://geant4-dna.github.io/molecular-docs/docs/examples/parameter-study
+#  - Side length for each placement
 /dnageom/placementSize 30 30 100 nm
+#  - Scaling of XYZ in fractal definition file
 /dnageom/fractalScaling 1 1 1 nm
+#  - Path to file that defines placement locations
 /dnageom/definitionFile geometries/prisms200k_r3000.txt
+#  - Set a placement volume
 /dnageom/placementVolume prism geometries/straight-216-0.txt
 
-
+# Geometry: take the angles in the voxel placement file as multiples of pi
 /dnageom/setVoxelPlacementAnglesAsMultiplesOfPi false
+
+# Geometry: enable custom molecule sizes
 /dnageom/useCustomMoleculeSizes false
 
-# used default moleculeSize
-#/dnageom/moleculeSize
-
+# Geometry: draw cell/chromosome volumes rather than DNA
 /dnageom/drawCellVolumes false
+
+# Geometry: distance from base pairs at which radicals are killed
+/dnageom/radicalKillDistance 9 nm
+
+# Geometry: deposited energy accumulation range limit to start recording SBs from direct effects
+/dnageom/interactionDirectRange 6 angstrom
+
+# Geometry: activate Histone scavenging function
 /dnageom/activateHistoneScavenging true
 
-
-/chromosome/add cylinder sphere 3000 0 0 0 nm
-
-# Damage Model
+# Damage: model settings
 /dnadamage/directDamageLower 17.5 eV
 /dnadamage/directDamageUpper 17.5 eV
 
@@ -50,29 +81,47 @@
 
 /dnadamage/indirectHBaseChance 1.0
 /dnadamage/indirectHStrandChance 0.65
-/dnadamage/inductionHChance 0.00
+/dnadamage/inductionHChance 0.0
 
 /dnadamage/indirectEaqBaseChance 1.0
 /dnadamage/indirectEaqStrandChance 0.65
-/dnadamage/inductionEaqChance 0.00
+/dnadamage/inductionEaqChance 0.0
 
+# Analysis: add spherical chromosomal region of interest, with the name "cylinder"
+/chromosome/add cylinder sphere 3000 0 0 0 nm
+
+# Analysis: set whether strands ought be saved
 /analysisDNA/saveStrands false
-/analysisDNA/fragmentGap 0  # do not join
+
+# Analysis: gap between DNA fragments in base pair
+#  Set to zero to score placement volumes independently
+/analysisDNA/fragmentGap 0
+
+# Analysis: save the position of hits histones only on one chain
 #/analysisDNA/diagnosticChain
 
+# Run: initialization
 /run/initialize
 
-# Uncomment the next line to visualize cylinder DNA geometry
+# Visualization: to visualize cylinder DNA geometry
+# - uncomment the next line and save
 #/control/execute vis.mac
+# - comment the last line (/run/beamOn ...) and save
+# - then, run ./moleculardna -t 1 -v 1
+# - then, in the Session window of the Qt interface, do /control/execute cylinders.mac
 
-# unit tests
+# Unit tests only
 #/dnatests/uniqueid
 #/dnatests/basepairs
 #/dnatests/chromosome
 #/analysisDNA/testClassifier
-# end unit tests
+# End unit tests
 
+# Run: progress display
 /run/printProgress 100
 
+# Selection of phase space file
 /primarygenerator/inputFile phase_space.csv
-/run/beamOn 2
+
+# Beam on
+/run/beamOn 10

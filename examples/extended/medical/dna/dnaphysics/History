@@ -1,8 +1,13 @@
 # Example dnaphysics History
 
 See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
-which **must** added in reverse chronological order (newest at the top). It must **not**
-be used as a substitute for writing good git commit messages!
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
+
+-------------------------------------------------------------------------------
+
+## 2025-11-10 Gabriele Cosmo (dnaphysics-V11-03-04)
+- Fixed coding conventions for long lines in SteppingAction source.
 
 ## 2025-05-06 Sebastien Incerti (dnaphysics-V11-03-03)
 - Added UI command to record first step only; elastic.in updated accordingly

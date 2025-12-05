@@ -40,6 +40,7 @@
 #define G4ATOMICFORMFACTOR_HH 1
 
 #include "G4Exp.hh"
+#include <CLHEP/Units/PhysicalConstants.h>
 #include "globals.hh"
 
 #include <map>
@@ -62,9 +63,9 @@ class G4AtomicFormFactor
       LoadCoefficiencts(GetIndex(Z, charge));
     }
     G4double result = 0.;
-    G4double kVecOn4PiSquared =
-      (kScatteringVector / 1.e-7 / 3.1415926536) * 0.125;  // (k/(4pi))/   angstrom
-    kVecOn4PiSquared = kVecOn4PiSquared * kVecOn4PiSquared;  // (k/(4pi))^2
+    // Convert k from mm^-1 to Å^-1 and divide by 4π , then square.
+    const G4double kVecOn4Pi = (kScatteringVector * 1.0e-7) * (1.0 / (4.0 * CLHEP::pi));
+    G4double kVecOn4PiSquared = kVecOn4Pi * kVecOn4Pi;  // (k/(4π))^2 in Å^-2
 
     for (unsigned int i0 = 0; i0 < 4; i0++) {
       result += theCoefficients[i0 * 2] * G4Exp(-theCoefficients[i0 * 2 + 1] * kVecOn4PiSquared);

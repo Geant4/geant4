@@ -27,6 +27,7 @@ if(GEANT4_USE_QT)
   if(GEANT4_USE_VTK)
     geant4_module_compile_definitions(G4UIimplementation PRIVATE G4VIS_USE_VTK_QT)
     geant4_module_link_libraries(G4UIimplementation PRIVATE ${VTK_LIBRARIES})
+    geant4_module_compile_definitions(G4UIimplementation PRIVATE TOOLS_USE_GL_VERSION_3_2)
   endif()
 endif()
 

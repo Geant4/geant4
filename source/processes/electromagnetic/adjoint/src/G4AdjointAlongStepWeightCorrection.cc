@@ -90,10 +90,7 @@ G4VParticleChange* G4AdjointAlongStepWeightCorrection::AlongStepDoIt(
   // This happens after weight correction of gamma for photo electric effect.
   // When the new weight is 0 it will be later on considered as NaN by G4.
   // Therefore we put a lower limit of 1.e-300. for new_weight
-  if(new_weight == 0. || (new_weight <= 0. && new_weight > 0.))
-  {
-    new_weight = 1.e-300;
-  }
+  new_weight = std::max(new_weight, 1.e-300);
 
   fParticleChange->SetParentWeightByProcess(false);
   fParticleChange->SetSecondaryWeightByProcess(false);

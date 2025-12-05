@@ -248,8 +248,10 @@ void G4VAnalysisManager::SetP2Manager(G4VTBaseHnManager<kDim3>* p2Manager)
 void G4VAnalysisManager::SetNtupleManager(std::shared_ptr<G4VNtupleManager> ntupleManager)
 {
   fVNtupleManager = std::move(ntupleManager);
-  fVNtupleManager->SetFirstId(fNtupleBookingManager->GetFirstId());
-  fVNtupleManager->SetFirstNtupleColumnId(fNtupleBookingManager->GetFirstNtupleColumnId());
+  if (fVNtupleManager != nullptr) {
+    fVNtupleManager->SetFirstId(fNtupleBookingManager->GetFirstId());
+    fVNtupleManager->SetFirstNtupleColumnId(fNtupleBookingManager->GetFirstNtupleColumnId());
+  }
 }
 
 //_____________________________________________________________________________

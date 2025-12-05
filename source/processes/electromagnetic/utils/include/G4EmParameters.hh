@@ -303,6 +303,12 @@ public:
   void SetMaxEnergyFor5DMuPair(G4double val);
   G4double MaxEnergyFor5DMuPair() const;
 
+  void SetMaxDNAElectronEnergy(G4double val);
+  G4double MaxDNAElectronEnergy() const;
+
+  void SetMaxDNAIonEnergy(G4double val);
+  G4double MaxDNAIonEnergy() const;
+
   void SetStepFunction(G4double v1, G4double v2);
   void SetStepFunctionMuHad(G4double v1, G4double v2);
   void SetStepFunctionLightIons(G4double v1, G4double v2);

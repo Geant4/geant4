@@ -30,10 +30,10 @@
 // A Logical Surface class for the surface surrounding a single logical
 // volume.
 
-// Author: John Apostolakis (CERN), 16 June 1997
+// Author: John Apostolakis (CERN), 16.06.1997
 // --------------------------------------------------------------------
 #ifndef G4LogicalSkinSurface_hh
-#define G4LogicalSkinSurface_hh 1
+#define G4LogicalSkinSurface_hh
 
 #include <map>
 
@@ -60,7 +60,7 @@ class G4LogicalSkinSurface : public G4LogicalSurface
     G4LogicalSkinSurface( const G4String& name,
                                 G4LogicalVolume* vol,
                                 G4SurfaceProperty* surfaceProperty );
-    ~G4LogicalSkinSurface() override;
+    ~G4LogicalSkinSurface() override = default;
 
     /**
      * Copy constructor and assignment operator are not allowed.
@@ -79,7 +79,7 @@ class G4LogicalSkinSurface : public G4LogicalSurface
      */
     static G4LogicalSkinSurface* GetSurface(const G4LogicalVolume* vol);
     inline const G4LogicalVolume* GetLogicalVolume() const;
-    inline void  SetLogicalVolume(G4LogicalVolume* vol);
+    inline void SetLogicalVolume(G4LogicalVolume* vol);
 
     /**
      * Handling of the table of surfaces.

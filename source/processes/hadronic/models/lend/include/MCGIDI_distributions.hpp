@@ -55,6 +55,7 @@ class Distribution {
         LUPI_HOST_DEVICE MCGIDI_VIRTUAL_FUNCTION double angleBiasing( Reaction const *a_reaction, double a_temperature, double a_energy_in, double a_mu_lab, 
                 RNG && a_rng, double &a_energy_out ) const MCGIDI_TRUE_VIRTUAL;
         LUPI_HOST_DEVICE void serialize( LUPI::DataBuffer &a_buffer, LUPI::DataBuffer::Mode a_mode );
+
 };
 
 /*

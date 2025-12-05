@@ -1,3 +1,59 @@
+Handle OpenGL-3.2:
+- toolx/sg/GL_manager, GL_action, GL_viewer: template the access to the OpenGL functions.
+  By default, the code still use a OpenGL-1.1 logic.
+  If the cpp macrp TOOLS_USE_GL_VERSION_3_2 is defined, then the logic passes on OpenGL-3.2.
+  In particular then, in GL_manager_T::create_shader_program(), we activate the "shader" logic.
+- toolx/GL/gl_functions: "OpenGL functions accessor" to be used with the upper templates.
+  By default it defines accessors for OpenGL-1.1 and for OpenGL-3.2 if the cpp macrp
+  TOOLS_USE_GL_VERSION_3_2 is defined.
+- toolx/Qt/gl_function: OpenGL-1.1 and 3.2 accessors by using the Qt QOpenGLFunctions_1_1
+  or QOpenGLFunctions_3_2_Core classes. We are then complient to what Qt recommand to access OpenGL.
+  This way of doing permits to build (in particular access) OpenGL-3.2 on Windows.
+- toolx/Qt/glarea: instanciate GL_manager, GL_action, GL_viewer with the adequate OpenGL accessor
+  by using toolx/Qt/gl_functions.
+- toolx/Qt/sg_viewer: have a get_infos() method to be able to get which version of OpenGL we use.
+- toolx/X11/sg_viewer: instanciate GL_manager, GL_action, GL_viewer with the adequate OpenGL accessor
+  by using toolx/GL/gl_functions. Have also a dispatch() method to handle Buttons as what is done in zb_viewer.
+- toolx/Xt/sg_viewer: instanciate GL_manager, GL_action, GL_viewer with the adequate OpenGL accessor
+  by using toolx/GL/gl_functions. Have a get_infos() method to be able to get which version of OpenGL we use.
+- toolx/Xt/OpenGLArea: before including gl.h and glext.h, have the GL_GLEXT_LEGACY, GL_GLEXT_PROTOTYPES
+  logic to master when OpenGL extensions are included.
+- toolx/Windows/gl_function: OpenGL-1.1 and 3.2 accessors. For 3.2 functions not in 1.1, we use
+  the "wglGetProcAddress" technic to dynamic-load them. (The functions ">1.1" are seen as "extensions"
+  by Microsoft and not made public for linking in the opengl32.lib).
+- toolx/Windows/sg_viewer: instanciate GL_manager, GL_action, GL_viewer with the adequate OpenGL accessor
+  by using toolx/Windows/gl_functions. Have also a dispatch() method to handle Buttons as done in zb_viewer.
+- toolx/OpenGL: this file is removed since all the include of the OpenGL API is now too specific and be done in
+  the various toolx/[Qt,X11,Xt,Windows]/sg_viewer.
+- toolx/glbuf, sg/gl: suppressed. The utility functions over OpenGL found here are now within sg/GL_manager,
+  sg/GL_action in order to be "under" the OpenGL accessor mechanism.
+- toolx/sg/text_freetype, text_freetype_marker: remove #ifdef ANDROID cases.
+- tools/HEADER: have TOOLS_T_HEADER, TOOLS_T2_HEADER used in the GL_manager_T, GL_action_T, GL_viewer_T templates.
+- tools/sg/viewer: set_use_gsto()/use_gsto() : to change the "graphical store mode" (used by OpenGL-3.2).
+- tools/version: pass to 8.0.0.
+
+7.1.0:
+- tools/sg/vertices, atb_vertices: remove the "#ifdef __APPLE__" logic related to blending. It permits
+  to have same rendering as OGLI/OGLS for G4Polymarker::dots if "dots smoothing" is actived on the
+  advanced/ICRP110_HumanPhantoms example.
+- tools/sg/draw_style: have the point_smooth smart field.
+- toolx/[Qt,X11,Xt,Windows]/[sg_viewer,zb_viewer]:
+  have win_render() enforcing an immediate rendering, and introduce an emit_win_render() to
+  "ask to render at the next windowing/GUI event loop processing".
+- add tools/sg/shade_model node to handle Gouraud shading.
+- tools/version: pass to 7.1.0.
+
+7.0.0:
+- tools/zb/buffer, edge_table, line, point, polygon: modifications to avoid
+  the "ToolsSG-ZB too much zoom in" crash. It came from the "#define LARGE_COORDINAT 100000" limit
+  in the original scan-line algorithm that were exceeded in the case of "too much zoom in" for some triangles.
+  (In this case the "edge_table" linked list were badly initialized and the original alogorithm was led to
+  crash at some point in the treatment of a large triangle). The modifications avoid the usage of this limit
+  and also arrange to avoid treating triangles outside the zbuffer viewport.
+- toolx/X11/sg_viewer: correct the head comment.
+- tools/version: pass to 7.0.0 after all the modifications done in the various files of Geant4
+  g4tools-V11-03-06 and g4tools-V11-03-05 tags.
+
 6.5.1:
 - toolx/Qt/glarea: bug: Qt5: in mouseMoveEvent() for Qt5, correct a bad cut/paste when creating the
   mouse_move_event (instead of "x,shift,control,y" have "x,y,shift,control").

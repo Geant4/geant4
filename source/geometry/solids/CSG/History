@@ -6,6 +6,20 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2025-11-12 Gabriele Cosmo (geom-csg-V11-03-08)
+- Fixed potential thread-safety issue in GetCubicVolume() and GetSurfaceArea()
+  on all solids in case those functions are called from worker threads.
+
+## 2025-09-23 Gabriele Cosmo (geom-csg-V11-03-07)
+- Reorganised and enriched comments in headers to follow Doxygen style.
+
+## 2025-09-10 Evgueni Tcherniaev (geom-csg-V11-03-06)
+- G4Box: Optimization of normal calculation in DistanceToOut().
+
+## 2025-08-25 Gabriele Cosmo (geom-csg-V11-03-05)
+- Applied clang-tidy fixes: readability-implicit-bool-conversion,
+  readability-braces-around-statements, readability-else-after-return.
+
 ## 2025-04-04 Evgueni Tcherniaev (geom-csg-V11-03-04)
 - G4Box: Code restructuring in DistanceToOut().
 

@@ -8,6 +8,7 @@
 /vis/viewer/set/autoRefresh false
 /vis/verbose errors
 #
+/vis/open OGLSQt
 # Draw geometry:
 /vis/drawVolume
 #

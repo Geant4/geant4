@@ -5,12 +5,6 @@
 
   template <class T>
   class column_ref : public virtual icol {
-#ifdef TOOLS_MEM
-    static const std::string& s_class() {
-      static const std::string s_v("tools::wroot::ntuple::column_ref<"+stype(T())+">");
-      return s_v;
-    }
-#endif
   public:
     static cid id_class() {
       static const T s_v = T(); //do that for T = std::string.
@@ -32,15 +26,9 @@
     column_ref(branch& a_branch,const std::string& a_name,const T& a_ref)
     :m_branch(a_branch),m_leaf(0)
     {
-#ifdef TOOLS_MEM
-      mem::increment(s_class().c_str());
-#endif
       m_leaf = m_branch.create_leaf_ref<T>(a_name,a_ref);
     }
     virtual ~column_ref(){
-#ifdef TOOLS_MEM
-      mem::decrement(s_class().c_str());
-#endif
     }
   protected:
     column_ref(const column_ref& a_from)
@@ -64,12 +52,6 @@
   template <class T>
   class column : public column_ref<T> {
     typedef column_ref<T> parent;
-#ifdef TOOLS_MEM
-    static const std::string& s_class() {
-      static const std::string s_v("tools::wroot::ntuple::column<"+stype(T())+">");
-      return s_v;
-    }
-#endif
   public:
     static cid id_class() {
       static const T s_v = T(); //do that for T = std::string.
@@ -87,14 +69,8 @@
     :parent(a_branch,a_name,m_value)
     ,m_def(a_def),m_value(a_def)
     {
-#ifdef TOOLS_MEM
-      mem::increment(s_class().c_str());
-#endif
     }
     virtual ~column(){
-#ifdef TOOLS_MEM
-      mem::decrement(s_class().c_str());
-#endif
     }
   protected:
     column(const column& a_from)
@@ -119,12 +95,6 @@
   };
 
   class column_string_ref : public virtual icol {
-#ifdef TOOLS_MEM
-    static const std::string& s_class() {
-      static const std::string s_v("tools::wroot::ntuple::column_string_ref");
-      return s_v;
-    }
-#endif
   public:
     static cid id_class() {
       static const std::string s_v;
@@ -146,15 +116,9 @@
     column_string_ref(branch& a_branch,const std::string& a_name,const std::string& a_ref)
     :m_branch(a_branch),m_leaf(0)
     {
-#ifdef TOOLS_MEM
-      mem::increment(s_class().c_str());
-#endif
       m_leaf = m_branch.create_leaf_string_ref(a_name,a_ref);
     }
     virtual ~column_string_ref(){
-#ifdef TOOLS_MEM
-      mem::decrement(s_class().c_str());
-#endif
     }
   protected:
     column_string_ref(const column_string_ref& a_from)
@@ -177,12 +141,6 @@
 
   class column_string : public column_string_ref {
     typedef column_string_ref parent;
-#ifdef TOOLS_MEM
-    static const std::string& s_class() {
-      static const std::string s_v("tools::wroot::ntuple::column_string");
-      return s_v;
-    }
-#endif
   public:
     static cid id_class() {
       static const std::string s_v;
@@ -200,14 +158,8 @@
     :parent(a_branch,a_name,m_value)
     ,m_def(a_def),m_value(a_def)
     {
-#ifdef TOOLS_MEM
-      mem::increment(s_class().c_str());
-#endif
     }
     virtual ~column_string(){
-#ifdef TOOLS_MEM
-      mem::decrement(s_class().c_str());
-#endif
     }
   protected:
     column_string(const column_string& a_from)
@@ -233,12 +185,6 @@
 
   class column_vector_string_ref : public column_string_ref {
     typedef column_string_ref parent;
-#ifdef TOOLS_MEM
-    static const std::string& s_class() {
-      static const std::string s_v("tools::wroot::ntuple::column_vector_string_ref");
-      return s_v;
-    }
-#endif
   public:
     static cid id_class() {return _cid_std_vector<std::string>()+10000;}
     virtual void* cast(cid a_class) const {
@@ -261,14 +207,8 @@
     ,m_ref(a_ref)
     ,m_sep(a_sep)
     {
-#ifdef TOOLS_MEM
-      mem::increment(s_class().c_str());
-#endif
     }
     virtual ~column_vector_string_ref(){
-#ifdef TOOLS_MEM
-      mem::decrement(s_class().c_str());
-#endif
     }
   protected:
     column_vector_string_ref(const column_vector_string_ref& a_from)
@@ -293,12 +233,6 @@
 
   class column_vector_string : public column_vector_string_ref {
     typedef column_vector_string_ref parent;
-#ifdef TOOLS_MEM
-    static const std::string& s_class() {
-      static const std::string s_v("tools::wroot::ntuple::column_vector_string");
-      return s_v;
-    }
-#endif
   public:
     static cid id_class() {return _cid_std_vector<std::string>();}
     virtual void* cast(cid a_class) const {
@@ -313,14 +247,8 @@
     :parent(a_branch,a_name,m_value,a_sep)
     ,m_def(a_def),m_value(a_def)
     {
-#ifdef TOOLS_MEM
-      mem::increment(s_class().c_str());
-#endif
     }
     virtual ~column_vector_string(){
-#ifdef TOOLS_MEM
-      mem::decrement(s_class().c_str());
-#endif
     }
   protected:
     column_vector_string(const column_vector_string& a_from)
@@ -346,12 +274,6 @@
 
   template <class T>
   class std_vector_column_ref : public virtual icol {
-#ifdef TOOLS_MEM
-    static const std::string& s_class() {
-      static const std::string s_v("tools::wroot::ntuple::std_vector_column_ref<"+stype(T())+">");
-      return s_v;
-    }
-#endif
   public:
     static cid id_class() {return _cid_std_vector<T>()+10000;}
     virtual void* cast(cid a_class) const {
@@ -375,9 +297,6 @@
     ,m_leaf(0)
     ,m_leaf_count(0) //row_wise
     {
-#ifdef TOOLS_MEM
-      mem::increment(s_class().c_str());
-#endif
       if(a_branch.store_cls()==branch_element_store_class()) {
         //::printf("debug : std_vector_column_ref : column_wise\n");
         int id = -1;  //same as in std_vector_be.
@@ -392,9 +311,6 @@
       }
     }
     virtual ~std_vector_column_ref(){
-#ifdef TOOLS_MEM
-      mem::decrement(s_class().c_str());
-#endif
     }
   protected:
     std_vector_column_ref(const std_vector_column_ref& a_from)
@@ -423,12 +339,6 @@
   template <class T>
   class std_vector_column : public std_vector_column_ref<T> {
     typedef std_vector_column_ref<T> parent;
-#ifdef TOOLS_MEM
-    static const std::string& s_class() {
-      static const std::string s_v("tools::wroot::ntuple::std_vector_column<"+stype(T())+">");
-      return s_v;
-    }
-#endif
   public:
     static cid id_class() {return _cid_std_vector<T>();}
     virtual void* cast(cid a_class) const {
@@ -443,14 +353,8 @@
     :parent(a_branch,a_name,m_value)
     ,m_def(a_def),m_value(a_def)
     {
-#ifdef TOOLS_MEM
-      mem::increment(s_class().c_str());
-#endif
     }
     virtual ~std_vector_column(){
-#ifdef TOOLS_MEM
-      mem::decrement(s_class().c_str());
-#endif
     }
   protected:
     std_vector_column(const std_vector_column& a_from)

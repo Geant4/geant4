@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file B5/include/DriftChamberSD.hh
+/// \file DriftChamberSD.hh
 /// \brief Definition of the B5::DriftChamberSD class
 
 #ifndef B5DriftChamberSD_h

@@ -219,6 +219,16 @@ namespace G4INCL {
     /// \brief Set the ABLAXX datafile path
 #ifdef INCL_DEEXCITATION_ABLAXX
     void setABLAXXDataFilePath(std::string const &path) { ablaxxDataFilePath=path; }
+    G4double getFissionDispCoeff() const { return fissdisscoeff; }
+    G4double getLevDensAv() const { return levdensav; }
+    G4double getLevDensAs() const { return levdensas; }
+    G4double getLevDensAk() const { return levdensak; }
+    G4double getTempFreezeOut() const { return tfreezeout; }
+    G4float getEmissionBarrierFactorH2() const { return barrierfactorh2; }
+    G4float getEmissionBarrierFactorH3() const { return barrierfactorh3; }
+    G4float getEmissionBarrierFactorHe3() const { return barrierfactorhe3; }
+    G4float getEmissionBarrierFactorHe4() const { return barrierfactorhe4; }
+    G4float getEmissionBarrierFactorHe6() const { return barrierfactorhe6; }
 #endif    
 
     std::string const &getINCLXXDataFilePath() const {
@@ -382,6 +392,19 @@ namespace G4INCL {
 
     /// \brief Set the pbar at rest annihilation threshold
     void setAtrestThreshold(const G4double t) { atrestThreshold=t; }
+ 
+    /// \brief Get the nbar at rest annihilation threshold
+    G4double getnbAtrestThreshold() const {return nbatrestThreshold;} 
+
+    /// \brief Set the nbar at rest annihilation threshold
+    void setnbAtrestThreshold(const G4double t){ nbatrestThreshold=t;}
+ 
+    /// \brief Get the dbar at rest annihilation threshold
+    G4double getdbAtrestThreshold() const {return dbatrestThreshold;}
+
+    /// \brief Set the dbar at rest annihilation threshold
+    void setdbAtrestThreshold(const G4double t){ dbatrestThreshold=t;} 
+
 
   private:
 
@@ -430,6 +453,16 @@ namespace G4INCL {
     DeExcitationType deExcitationType;
 #ifdef INCL_DEEXCITATION_ABLAXX
     std::string ablaxxDataFilePath;
+    G4double fissdisscoeff;
+    G4double levdensav;
+    G4double levdensas;
+    G4double levdensak;
+    G4double tfreezeout;
+    G4float barrierfactorh2;
+    G4float barrierfactorh3;
+    G4float barrierfactorhe3;
+    G4float barrierfactorhe4;
+    G4float barrierfactorhe6;
 #endif
 #ifdef INCL_DEEXCITATION_ABLA07
     std::string abla07DataFilePath;
@@ -460,11 +493,15 @@ namespace G4INCL {
 
     G4double cutNN;
 
-    G4bool ann;
+    //G4bool ann;
     
     G4double bias;
 
     G4double atrestThreshold;
+ 
+    G4double nbatrestThreshold;
+ 
+    G4double dbatrestThreshold;
 
 #ifdef INCL_ROOT_USE
     std::string rootSelectionString;

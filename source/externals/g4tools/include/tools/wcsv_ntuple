@@ -8,14 +8,12 @@
 // (csv = comma separated value).
 // Each add_row() write a row at the csv format.
 
-#include "vfind"
 #include "vmanip"
 #include <ostream>
 
 #include "scast"
 #include "ntuple_booking"
 #include "sout"
-//#include "srep"
 
 namespace tools {
 namespace wcsv {
@@ -120,14 +118,6 @@ public:
     T m_tmp;
   };
 
-/*
-  template <class T>
-  static void escape(T&,const std::string&){}
-  static void escape(std::string& a_s,const std::string& a_sep){
-    replace(a_s,a_sep,"\\"+a_sep); //if changing here, change rcsv_ntuple/_vec_read() too.
-  }
-*/
-
   template <class T>
   class std_vector_column : public virtual icol {
   public:
@@ -140,16 +130,11 @@ public:
   public: //icol
     virtual void add() {
       if(m_ref.empty()) {
-        //m_writer << "none";
       } else {
-        //std::string sep;sep+=m_vec_sep;
-        //T value;
         typedef typename std::vector<T>::const_iterator it_t;
         for(it_t it=m_ref.begin();it!=m_ref.end();++it) {
           if(it!=m_ref.begin()) m_writer << m_vec_sep;
           m_writer << *it;
-          //value = *it;escape(value,sep);
-          //m_writer << value;
         }
       }
     }

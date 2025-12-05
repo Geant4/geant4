@@ -110,7 +110,6 @@ inline hid_t compound_mem_type(hid_t a_file_type){
   if(t_class!=H5T_COMPOUND) return failure();
 
   size_t sz = H5Tget_size(a_file_type);
-  //printf("debug : compound_mem_type : sz %lu\n",sz);
 
   hid_t mem_type = ::H5Tcreate(H5T_COMPOUND,sz);
   if(mem_type<0) return failure();
@@ -119,12 +118,10 @@ inline hid_t compound_mem_type(hid_t a_file_type){
 
   int mn = H5Tget_nmembers(a_file_type);
   std::vector<unsigned int> szs(mn);
-  //printf("debug : members : %d\n",mn);
   for(int index=0;index<mn;index++) {
     char* mname = H5Tget_member_name(a_file_type,index);
     size_t moffset = H5Tget_member_offset(a_file_type,index);
     hid_t mtype = H5Tget_member_type(a_file_type,index);
-    //printf("debug : members :   %d (%d) : %s : begin\n",index,mn,mname);
 
    {H5T_class_t mclass = H5Tget_class(mtype);
     if( (mclass==H5T_INTEGER) ||
@@ -222,7 +219,6 @@ inline hid_t compound_mem_type(hid_t a_file_type){
       return failure();
     }}
     ::H5Tclose(mtype);
-    //printf("debug : compound_mem_type :   %d (%d) : %s : end\n",index,mn,mname);
     if(mname) toolx_H5free_memory(mname);
   }
 
@@ -300,7 +296,6 @@ inline bool dataset_vec_size(hid_t a_loc,const std::string& a_name,hsize_t& a_si
     a_size = 0;
     return false;
   }
-  //printf("debug : read dimn %d\n",dimn);
 
   hsize_t dims[1];
  {if(H5Sget_simple_extent_dims(file_space,dims,NULL)<0) {
@@ -537,7 +532,6 @@ inline bool write_append_string_dataset(hid_t a_dataset,const std::string& a_str
 
  {hsize_t exts[1];
   exts[0] = old_size+1;
-//  if(H5Dextend(dataset,exts)<0) {
   if(H5Dset_extent(a_dataset,exts)<0) return false;}
 
   hid_t file_space = H5Dget_space(a_dataset);
@@ -858,15 +852,6 @@ inline bool read_sub_string(hid_t a_loc,const std::string& a_name,unsigned int a
     a_string.clear();
     return false;
   }
-
-//size_t sz = H5Tget_size(file_type); //it gives the largest string size in the dataset.
-//if(!sz) {
-//  ::H5Tclose(file_type);
-//  ::H5Sclose(file_space);
-//  ::H5Dclose(dataset);
-//  a_string.clear();
-//  return false;
-//}
 
   ::H5Tclose(file_type);
 

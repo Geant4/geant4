@@ -13,16 +13,6 @@
 
 namespace tools {
 
-/*
-inline bool num2s(unsigned char a_value,std::string& a_s){
-  return print2s(a_s,32,"%c",a_value);
-}
-
-inline bool num2s(char a_value,std::string& a_s){
-  return print2s(a_s,32,"%c",a_value);
-}
-*/
-
 inline bool num2s(unsigned short a_value,std::string& a_s) { //used in value
   return print2s(a_s,32,"%u",a_value);
 }
@@ -34,12 +24,6 @@ inline bool num2s(short a_value,std::string& a_s){ //used in value
 inline bool num2s(unsigned int a_value,std::string& a_s) {
   return print2s(a_s,32,"%u",a_value);
 }
-
-/*
-inline bool num2sx(unsigned int a_value,std::string& a_s) {
-  return print2s(a_s,32,"%x",a_value);
-}
-*/
 
 inline bool num2s(int a_value,std::string& a_s){
   return print2s(a_s,32,"%d",a_value);
@@ -61,30 +45,6 @@ inline bool num2s(double a_value,std::string& a_s){
   return print2s(a_s,32,"%g",a_value);
 }
 
-inline bool size_t2s(size_t a_value,std::string& a_s) {
-  if(sizeof(size_t)==8) {
-    return num2s((uint64)a_value,a_s);
-  } else { //assume 4 :
-    return num2s((uint32)a_value,a_s);
-  }
-}
-
-inline bool ptrdiff_t2s(ptrdiff_t a_value,std::string& a_s) {  //used in write_bsg.
-  if(sizeof(ptrdiff_t)==8) {
-    return num2s((int64)a_value,a_s);
-  } else { //assume 4 :
-    return num2s((int32)a_value,a_s);
-  }
-}
-
-/*
-inline bool num2s(bool a_value,std::string& a_s){
-  //a_s = a_value?"true":"false";
-  a_s = a_value?"1":"0";
-  return true;
-}
-*/
-
 template <class T>
 inline bool numas(const T& a_value,std::string& a_s){
   std::string stmp;
@@ -93,35 +53,12 @@ inline bool numas(const T& a_value,std::string& a_s){
   return true;
 }
 
-template <class T>
-inline bool size_tas(const T& a_value,std::string& a_s){
-  std::string stmp;
-  if(!size_t2s(a_value,stmp)) return false;
-  a_s += stmp;
-  return true;
-}
-
-/*
-inline bool num2s(unsigned int a_linen,const char* a_lines[],std::string& a_s) {
-  a_s.clear();
-  for(unsigned int index=0;index<a_linen;index++) {
-    a_s += a_lines[index];
-    a_s += "\n";
-  }
-  return true;
-}
-*/
-
 // for the below std::vector num2s in case T=std::string :
 inline bool num2s(const std::string& a_value,std::string& a_s){a_s = a_value;return true;}
 
 template <class T>
 class num_out : public std::string {
   typedef std::string parent;
-private:
-  //typedef typename std::enable_if<std::is_floating_point<T>::value, T>::type type_t;
-  //typedef typename std::enable_if<std::is_integral<T>::value, T>::type type_t;
-  //typedef typename std::enable_if<std::is_arithmetic<T>::value, T>::type type_t;
 public:
   num_out(const T& a_value) {
     parent::operator+=("\"");

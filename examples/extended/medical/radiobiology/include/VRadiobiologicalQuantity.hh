@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file radiobiology/include/VRadiobiologicalQuantity.hh
+/// \file VRadiobiologicalQuantity.hh
 /// \brief Definition of the RadioBio::VRadiobiologicalQuantity class
 
 // This is a purely virtual class giving the framework for the

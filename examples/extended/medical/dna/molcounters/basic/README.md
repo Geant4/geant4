@@ -1,0 +1,100 @@
+\page Examplebasic Example basic
+
+This molecule counter basic example is provided by the Geant4-DNA collaboration
+  (http://geant4-dna.org).
+
+The custom (spatially-aware) molecule counter used here
+is further described in:
+- Radiat. Phys. Chem. 212 (2023) 111194 \
+doi:10.1016/j.radphyschem.2023.111194
+
+  Any report or published results obtained using the Geant4-DNA software
+  shall cite the following Geant4-DNA collaboration publications:\n
+  Med. Phys. 51 (2024) 5873–5889\n
+  Med. Phys. 45 (2018) e722-e739\n
+  Phys. Med. 31 (2015) 861-874\n
+  Med. Phys. 37 (2010) 4692-4708\n
+  Int. J. Model. Simul. Sci. Comput. 1 (2010) 157–178\n
+
+\Description:
+
+
+## Geometry
+
+A box of liquid water with a 8 µm (radius) spherical cell placed at its center.
+The cell contains a 4 µm (radius) nucleus and 100 mitochondria.
+
+## Particles
+
+Electrons with 1 keV energy, which can be changed in
+the simple_sbs.ini macro file.
+They are shot from the center of the box (inside the nucleus).
+
+## Physics
+
+The default Geant4-DNA physics constructor 2 is used in
+the PhysicsList class with chemistry constructor 3.
+
+## Counters
+
+Counters are defined and registered in the ActionInitialization
+class for master & workers using the BuildMoleculeCounters(), and
+BuildMultipleAndCustomMoleculeCounters() methods.
+To switch between either of these methods, change the
+boolean value of fBuildMultipleAndCustomMoleculeCounters in
+ActionInitialization.hh.
+
+By default, the molecule counter manager will accumulate counts from
+worker instances into the master instance. To facilitate this the user
+__must__ create a `UserEventAction` and `UserRunAction` and override
+the `(Begin|End)Of(Event|Run)Action` methods and call the corresponding
+method on the `G4DNAChemistryManager::Instance()`. See the example's
+`EventAction.hh` and `RunAction.(hh|cc)` on how to do this.
+
+    __Default Method: `BuildMoleculeCounters()`:__
+    * Reset counters before each run but not keep counter values between events
+    * Register a default `G4MoleculeCounter` instance called "Molecules"
+    * Register a default `G4MoleculeReactionCounter` instance called "Reactions"
+
+
+    __Alternative Method: `BuildMultipleAndCustomMoleculeCounters()`:__
+    * Reset counters before each run but not keep counter values between events
+    * Register a `G4MoleculeCounter` instance called "BasicCounter":
+        * set its time precision to 25 ps
+    * Register a `G4MoleculeCounter` instance called "BasicCounter_Restricted":
+        * set its time precision to 25 ps
+        * activate the counter for global times in [500 ps, 10 ns]
+    * Register a `G4MoleculeCounter` instance called "BasicCounter_VariablePrecision":
+        * set its time precision to vary with global time:
+        ```
+            <= 10 ps: 5 ps
+            <= 100 ps: 50 ps
+            <= 1 ns: 0.5 ns
+            <= 1 µs: 50 ns
+        ```
+        * activate the counter for global times in [500 ps, 10 ns]
+    * Register a custom `MoleculeCounter` instance called "MoleculeCounter"
+        * set its time precision to vary with global time:
+        ```
+            <= 10 ps: 5 ps
+            <= 100 ps: 50 ps
+            <= 1 ns: 0.5 ns
+            <= 1 µs: 50 ns
+        ```
+        * __(important)__ `SetSensitiveToStepping(true)` to change molecule count when traversing geometry boundaries
+        * `SetIgnoreMoleculePosition(false)` if set to `true` the counter behaves like `G4MoleculeCounter`
+        * `SetNegativeCountsAreFatal(true)` to throw a FatalException if any molecule count drops below 0 through misregistration
+    * Register a `G4MoleculeReactionCounter` instance called "Reactions":
+        * set its time precision to 50 ps
+        * activate the counter for global times in [0 ps, 1 µs]
+
+## Execute the code by running:
+
+```
+./molcounters_basic [simple_sbs.in,simple_irt_syn_react.in]
+```
+
+The `simple_sbs.in` macro __only__ includes molecule transport (diffusion)!
+
+Contents of the molecule counters are dumped to `stdout`
+at the end of each run by the RunAction::EndOfRunAction()

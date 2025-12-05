@@ -14,7 +14,6 @@
 #include "gstos"
 #include "base_tex"
 
-#include "../pointer"
 #include "../num2s"
 
 namespace tools {
@@ -55,8 +54,6 @@ private:
   }
 public:
   virtual void render(render_action& a_action) {
-    //a_action.out() << "tools::tex_quadrilateral::render : " << std::endl;
-
     //NOTE : we draw border (show_border is true) and background even if
     //       gen_texture() failed.
 
@@ -80,7 +77,6 @@ public:
       _front(xyzs,nms/*,0.01f*/); //have to revisit a_epsil.
 
       a_action.color4f(1,0,0,1);
-    //a_action.line_width(4);
       a_action.line_width(1);
 
       a_action.draw_vertex_array(gl::line_loop(),12,xyzs);
@@ -100,12 +96,10 @@ public:
     a_action.color4f(state.m_color);}
 
     if(_id) {
-      //a_action.color4f(back_color.value()); //do we want that ?
       _front(xyzs,nms);
       float tcs[8];
       set_tcs(tcs);
       a_action.draw_vertex_normal_array_texture(gl::triangle_fan(),12,xyzs,nms,_id,tcs);
-      //a_action.color4f(state.m_color);
     }
     a_action.set_polygon_offset(state.m_GL_POLYGON_OFFSET_FILL);
   }
@@ -175,10 +169,6 @@ public:
     m_pick_bbox_check_image = a_from.m_pick_bbox_check_image;
     return *this;
   }
-public:
-
-  //const img_byte& rendered_img() const {return m_img;}
-
 protected:
   void update_sg(std::ostream& a_out) {
     plane<vec3f> plane(corners[0],corners[1],corners[3]);
@@ -272,21 +262,9 @@ protected:
     if(l_03==0.0f) {a_point.set_value(0,0,0);return false;}
 
     float alpha = x_axis.dot(y_axis);
-    //float alpha_sq = alpha*alpha;
-    //if(alpha_sq==1.0f) {a_point.set_value(0,0,0);return false;}
 
     float lambda = a_x*l_01;
     float mu = a_y*l_03;
-
-    // px-alpha*py = lambda*(1.0f-alpha_sq);
-    // py-alpha*px = mu*(1-alpha_sq);
-
-    // px-alpha*(alpha*px+mu*(1-alpha_sq)) = lambda*(1-alpha_sq)
-    // px*(1-alpha_sq)-mu*alpha*(1-alpha_sq)) = lambda*(1-alpha_sq)
-    // px*(1-alpha_sq) = lambda*(1-alpha_sq)+mu*alpha*(1-alpha_sq));
-    // px = lambda+mu*alpha;
-
-    // py = lambda*alpha+mu;
 
     float px = lambda+mu*alpha;
     float py = lambda*alpha+mu;
@@ -297,34 +275,6 @@ protected:
 
     return true;
   }
-
-/*
-  float max_height() const {
-    const std::vector<vec3f>& cs = corners.values();
-    float _mn = cs[0].y();
-    _mn = mn<float>(_mn,cs[1].y());
-    _mn = mn<float>(_mn,cs[2].y());
-    _mn = mn<float>(_mn,cs[3].y());
-    float _mx = cs[0].y();
-    _mx = mx<float>(_mx,cs[1].y());
-    _mx = mx<float>(_mx,cs[2].y());
-    _mx = mx<float>(_mx,cs[3].y());
-    return (_mx-_mn);
-  }
-
-  float max_width() const {
-    const std::vector<vec3f>& cs = corners.values();
-    float _mn = cs[0].x();
-    _mn = mn<float>(_mn,cs[1].x());
-    _mn = mn<float>(_mn,cs[2].x());
-    _mn = mn<float>(_mn,cs[3].x());
-    float _mx = cs[0].x();
-    _mx = mx<float>(_mx,cs[1].x());
-    _mx = mx<float>(_mx,cs[2].x());
-    _mx = mx<float>(_mx,cs[3].x());
-    return (_mx-_mn);
-  }
-*/
 
   typedef float f12[12];
   void _front(f12& a_front,f12& a_nms,float a_epsil = 0.0f) {

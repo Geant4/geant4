@@ -23,10 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 /// \file ExGflash3DetectorConstruction.hh
 /// \brief Definition of the ExGflash3DetectorConstruction class
-//
+
 #ifndef ExGflash3DetectorConstruction_h
 #define ExGflash3DetectorConstruction_h 1
 

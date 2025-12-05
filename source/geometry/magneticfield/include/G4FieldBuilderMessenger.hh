@@ -22,12 +22,15 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
+//
+// G4FieldBuilderMessenger
+//
+// Class description:
+//
+// Messenger class that defines commands for G4FieldBuilder.
 
-/// \file G4FieldBuilderMessenger.h
-/// \brief Definition of the G4FieldBuilderMessenger class
-///
-/// \author I. Hrivnacova; IJCLab, Orsay
-
+// Author: Ivana Hrivnacova (IJCLab, Orsay), 2024
+// --------------------------------------------------------------------
 #ifndef G4FIELDBUILDERMESSENGER_HH
 #define G4FIELDBUILDERMESSENGER_HH
 
@@ -41,44 +44,45 @@ class G4UIdirectory;
 class G4UIcmdWithoutParameter;
 class G4UIcmdWithAnInteger;
 
-/// \ingroup geometry
-/// \brief Messenger class that defines commands for G4FieldBuilder
-///
-/// Implements commands:
-/// - /field/verboseLevel level
-///
-/// \author I. Hrivnacova; IJCLab, Orsay
+/**
+ * @brief G4FieldBuilderMessenger is messenger class that defines
+ * commands for G4FieldBuilder.
+ */
 
 class G4FieldBuilderMessenger : public G4UImessenger
 {
- public:
-  /// Standard constructor
-  G4FieldBuilderMessenger(G4FieldBuilder* fieldBuilder);
-  /// Destructor
-  ~G4FieldBuilderMessenger() override;
+  public:
 
-  // methods
-  /// Apply command to the associated object.
-  void SetNewValue(G4UIcommand* command, G4String newValues) override;
+    /**
+     * Standard Constructor and Destructor.
+     */
+    G4FieldBuilderMessenger(G4FieldBuilder* fieldBuilder);
+    ~G4FieldBuilderMessenger() override;
 
- private:
-  /// Not implemented
-  G4FieldBuilderMessenger() = delete;
-  /// Not implemented
-  G4FieldBuilderMessenger(const G4FieldBuilderMessenger& right) = delete;
-  /// Not implemented
-  G4FieldBuilderMessenger& operator=(
-    const G4FieldBuilderMessenger& right) = delete;
+    /**
+     * Default constructor, copy constructor and assignment operator not allowed.
+     */
+    G4FieldBuilderMessenger() = delete;
+    G4FieldBuilderMessenger(const G4FieldBuilderMessenger&) = delete;
+    G4FieldBuilderMessenger& operator=(const G4FieldBuilderMessenger&) = delete;
 
-  // \data members
-  G4FieldBuilder* fFieldBuilder = nullptr; ///< associated class
-  G4UIdirectory* fDirectory = nullptr;     ///< command directory
+    /**
+     * Applies command to the associated object.
+     */
+    void SetNewValue(G4UIcommand* command, G4String newValues) override;
 
-  //
-  // commands data members
+  private:
 
-  /// command: fieldType
-  G4UIcmdWithAnInteger* fVerboseLevelCmd = nullptr; 
+    /** Associated class object. */
+    G4FieldBuilder* fFieldBuilder = nullptr;
+
+    /** Associated commands directory. */
+    G4UIdirectory* fDirectory = nullptr;
+
+    // Commands data members
+
+    /** Command: fieldType. */
+    G4UIcmdWithAnInteger* fVerboseLevelCmd = nullptr; 
 };
 
-#endif // G4FIELDBUILDERMESSENGER_HH
+#endif

@@ -9,27 +9,14 @@
 
 #include <vector>
 
-// fied_desc are used in static and then we do not master their destruction.
-//#ifdef TOOLS_MEM
-//#include "../mem"
-//#include "../S_STRING"
-//#endif
-
 namespace tools {
 namespace sg {
 
 class field_desc {
-  //typedef int offset_t; //could be <0 ?
-//#ifdef TOOLS_MEM
-//  TOOLS_SCLASS(tools::sg::field_desc)
-//#endif
 public:
   typedef ptrdiff_t offset_t;
 public:
   field_desc():m_offset(0){ //touchy
-//#ifdef TOOLS_MEM
-//    mem::increment(s_class().c_str());
-//#endif
   }
   field_desc(const std::string& a_name,
              const std::string& a_class,
@@ -40,14 +27,8 @@ public:
   ,m_offset(a_offset)
   ,m_editable(a_editable)
   {
-//#ifdef TOOLS_MEM
-//    mem::increment(s_class().c_str());
-//#endif
   }
   virtual ~field_desc(){
-//#ifdef TOOLS_MEM
-//    mem::decrement(s_class().c_str());
-//#endif
   }
 public:
   field_desc(const field_desc& a_from)

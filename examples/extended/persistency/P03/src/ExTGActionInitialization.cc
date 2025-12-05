@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file persistency/P03/src/ExTGActionInitialization.cc
+/// \file ExTGActionInitialization.cc
 /// \brief Implementation of the ExTGActionInitialization class
 
 #include "ExTGActionInitialization.hh"

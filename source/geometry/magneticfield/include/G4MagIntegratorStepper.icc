@@ -25,7 +25,7 @@
 //
 // G4MagIntegratorStepper inline methods implementation
 //
-// Author: J.Apostolakis, CERN - 15.01.1997
+// Author: John Apostolakis (CERN), 15.01.1997
 // --------------------------------------------------------------------
 
 inline
@@ -71,6 +71,18 @@ inline
 G4bool G4MagIntegratorStepper::IsFSAL() const
 {
   return fIsFSAL;
+}
+
+inline
+G4bool G4MagIntegratorStepper::isQSS() const
+{
+  return fIsQSS;
+}
+
+inline
+void G4MagIntegratorStepper::SetIsQSS(G4bool val)
+{
+  fIsQSS = val;
 }
 
 inline

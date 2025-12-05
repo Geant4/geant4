@@ -41,7 +41,7 @@
 #include "globals.hh"
 #include "G4VAntiBarionBuilder.hh"
 
-class G4HadronElasticProcess;
+class G4HadronInelasticProcess;
 class G4VCrossSectionDataSet;
 class G4TheoFSGenerator;
 
@@ -49,13 +49,12 @@ class G4TheoFSGenerator;
 class G4QGSPAntiBarionBuilder : public G4VAntiBarionBuilder {
   public: 
     G4QGSPAntiBarionBuilder( G4bool quasiElastic = false );
-    virtual ~G4QGSPAntiBarionBuilder() {};
+    ~G4QGSPAntiBarionBuilder() override = default;
 
-    virtual void Build( G4HadronElasticProcess* ) final override {}  
-    virtual void Build( G4HadronInelasticProcess* aP ) final override;
+    void Build( G4HadronInelasticProcess* aP );
   
-    virtual void SetMinEnergy( G4double val ) final override { theMin = val; }
-    virtual void SetMaxEnergy( G4double val ) final override { theMax = val; }
+    void SetMinEnergy( G4double val ) final override { theMin = val; }
+    void SetMaxEnergy( G4double val ) final override { theMax = val; }
 
     using G4VAntiBarionBuilder::Build;  // Prevent compiler warning
 

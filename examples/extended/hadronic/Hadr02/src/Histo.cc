@@ -23,10 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file hadronic/Hadr02/src/Histo.cc
+/// \file Histo.cc
 /// \brief Implementation of the Histo class
-//
-//
+
 //---------------------------------------------------------------------------
 //
 // ClassName:   Histo - Generic histogram/ntuple manager class

@@ -29,18 +29,13 @@
 // A. I. Sytov, V. V. Tikhomirov, and L. Bandiera PRAB 22, 064601 (2019)
 
 #include "G4VChannelingFastSimCrystalData.hh"
-#include "G4SystemOfUnits.hh"
-#include "G4PhysicalConstants.hh"
 #include "G4Log.hh"
 
-G4VChannelingFastSimCrystalData::G4VChannelingFastSimCrystalData()
-{
-
-}
+G4VChannelingFastSimCrystalData::G4VChannelingFastSimCrystalData(){}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4VChannelingFastSimCrystalData::~G4VChannelingFastSimCrystalData(){;}
+G4VChannelingFastSimCrystalData::~G4VChannelingFastSimCrystalData(){}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -133,7 +128,7 @@ void G4VChannelingFastSimCrystalData::SetMiscutAngle(G4double tetam,
 
     // fMiscutAngle>0: rotation of xz coordinate planes clockwise in the xz plane
     fMiscutAngle=tetam;
-    if (std::abs(tetam)>1.*mrad)
+    if (std::abs(tetam)>1.*CLHEP::mrad)
     {
         G4cout << "Channeling model: volume " << crystallogic->GetName() << G4endl;
         G4cout << "Warning: miscut angle is higher than 1 mrad => " << G4endl;
@@ -166,6 +161,133 @@ void G4VChannelingFastSimCrystalData::SetCrystallineUndulatorParameters(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+void G4VChannelingFastSimCrystalData::SetCrystallineUndulatorParameters(
+                                       const G4LogicalVolume *crystallogic,
+                                       const G4String &filename)
+{
+    G4int crystalID = crystallogic->GetInstanceID();
+    fMapImportCrystalGeometry[crystalID] = true;
+
+    G4PhysicsLinearVector vec(true);  //CU geometry data x=f(z) - transverse coordinate vs longitudinal
+    G4PhysicsLinearVector vecD(true); // = first derivative of vec
+    G4PhysicsLinearVector vecDD(true);// = second derivative of vec
+
+    //open input file for CU data
+    std::ifstream vfilein;
+    vfilein.open(filename);
+
+    if (!vfilein) {
+        G4String message = "Input file " +
+                           filename +
+                           " is not found!";
+        G4Exception("SetCrystallineUndulatorParameters",// Origin of the exception
+                    "001",                   // Unique error code
+                    FatalException,          // Terminate the program
+                    message);
+    }
+
+    G4cout << "Importing the Crystal geometry from the file: "
+           << filename << G4endl;
+
+    //reading from file
+    //CAUTION: all the values in the file in mm!!!
+    vec.Retrieve(vfilein,true);
+
+    vfilein.close();
+
+    //check the start coordinate (10.*DBL_EPSILON to add more flexibility, if not equal, no problem)
+    if(std::abs(vec.GetMinEnergy()) > 10.*DBL_EPSILON)
+    {
+        G4Exception("SetCrystallineUndulatorParameters",// Origin of the exception
+                    "001",                   // Unique error code
+                    FatalException,          // Terminate the program
+                    "The interpolation of the crystalline undulator does not start from 0.! "
+                    "The program will terminate.");
+
+    }
+
+    //check the end coordinate (1.e8*DBL_EPSILON - single precision check)
+    if(std::abs(vec.GetMaxEnergy() - 2.*fHalfDimBoundingBox.z()) > 100000000.*DBL_EPSILON)
+    {
+        G4Exception("SetCrystallineUndulatorParameters",// Origin of the exception
+                    "001",                   // Unique error code
+                    FatalException,          // Terminate the program
+                    "The interpolation of the crystalline undulator does not end with at"
+                    "the boundary of the volume => check the crystal thickness in z! "
+                    "The program will terminate.");
+    }
+
+    // Get the total length of vectors
+    std::size_t inodes = vec.GetVectorLength();
+
+    //check if the interpolation nodes are equidistant (otherwise )
+    for(std::size_t i=1; i<inodes-1; i++)
+    {
+        if(std::abs((vec.Energy(i+1)-vec.Energy(i))-
+                    (vec.Energy(i)  -vec.Energy(i-1)))>100000000.*DBL_EPSILON)//single precision
+        {
+            G4String message = "The interpolation nodes in the file " + filename +
+                               " are not equidistant! The program will terminate.";
+            G4Exception("SetCrystallineUndulatorParameters",// Origin of the exception
+                        "001",                   // Unique error code
+                        FatalException,          // Terminate the program
+                        message);
+        }
+    }
+
+    //necessary to use spline interpolation
+    vec.FillSecondDerivatives(G4SplineType::Base);
+
+    //setting up the vectors (to have the same arguments)
+    vecD = vec;
+    vecDD = vec;
+
+    //calculating the derivatives
+    for(std::size_t i=1; i<inodes-1; i++)
+    {
+        vecD.PutValue(i,(vec[i+1]-vec[i-1])/(vec.Energy(i+1)-vec.Energy(i-1)));
+        vecDD.PutValue(i,((vec[i+1]-vec[i])/(vec.Energy(i+1)-vec.Energy(i)) -
+                          (vec[i]-vec[i-1])/(vec.Energy(i)-vec.Energy(i-1)))*
+                          2./(vec.Energy(i+1)-vec.Energy(i-1)));
+    }
+
+    //end points have the same values as neighbouring
+    vecD.PutValue(0,vecD[1]);
+    vecD.PutValue(inodes-1,vecD[inodes-2]);
+    vecDD.PutValue(0,vecDD[1]);
+    vecDD.PutValue(inodes-1,vecDD[inodes-2]);
+
+    //necessary to use spline interpolation
+    vecD.FillSecondDerivatives(G4SplineType::Base);
+    vecDD.FillSecondDerivatives(G4SplineType::Base);
+
+    fVecCUx.push_back(vec);
+    fVecCUtetax.push_back(vecD);
+    fVecCUCurv.push_back(vecDD);
+
+    //check if the fVecCUx was already set up for this logical volume
+    if(fMapCUID.count(crystalID) > 0)
+    {
+        G4Exception("SetCrystallineUndulatorParameters",// Origin of the exception
+                    "001",                   // Unique error code
+                    FatalException,          // Terminate the program
+                    "It is not allowed to set up the crystalline undulator geometry "
+                    "the second time for the same logical volume! The program will terminate.");
+    }
+
+    //save the number of current element in fVecCUx, fVecCUtetax, fVecCUCurv
+    //to call them later using crystalID
+    fMapCUID[crystalID] = (G4int)fVecCUx.size()-1;
+
+    SetCUParameters(G4ThreeVector(1.,1.,0.),crystallogic);// input G4ThreeVector(1.,1.,0.)
+                                                          // is needed just to setup
+                                                          // the undulator in a normal way =>
+                                                          // first 2 arguments > 0.
+                                                          // values do not matter
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 void G4VChannelingFastSimCrystalData::SetCUParameters(
                                       const G4ThreeVector &amplitudePeriodPhase,
                                       const G4LogicalVolume *crystallogic)
@@ -177,6 +299,11 @@ void G4VChannelingFastSimCrystalData::SetCUParameters(
     fCUAmplitude=amplitudePeriodPhase.x();
     G4double period = amplitudePeriodPhase.y();
     fCUPhase = amplitudePeriodPhase.z();
+
+    // flag of custom crystal geometry uploaded from a file
+    fImportCrystalGeometry = (fMapImportCrystalGeometry.count(crystalID) > 0) ?
+                              fMapImportCrystalGeometry[crystalID] :
+                              false;
 
     //if the amplidude of the crystalline undulator is 0 => no undulator
     if(fCUAmplitude>DBL_EPSILON&&period>DBL_EPSILON)
@@ -194,6 +321,13 @@ void G4VChannelingFastSimCrystalData::SetCUParameters(
             G4cout << "Channeling model: volume " << crystallogic->GetName() << G4endl;
             G4cout << "Warning: crystalline undulator is not compatible with "
                       "a bent crystal mode => setting bending angle to 0." << G4endl;
+        }
+
+        //setup crystal internal geometry data to access the correct elements of
+        //fVecCUx, fVecCUtetax, fVecCUCurv
+        if(fImportCrystalGeometry)
+        {
+            fCUID = fMapCUID[crystalID];
         }
     }
     else
@@ -463,7 +597,7 @@ G4ThreeVector G4VChannelingFastSimCrystalData::CoulombElectronScattering(
     // eMinIonization - minimal energy transfered to electron
     // a cut to reduce the number of calls of electron scattering
     // is needed only at low density regions, in many cases does not do anything at all
-    if (eMinIonization<0.5*eV){eMinIonization=0.5*eV;}
+    if (eMinIonization<0.5*CLHEP::eV){eMinIonization=0.5*CLHEP::eV;}
 
     //  single scattering on electrons routine
     if ((eMinIonization<fTmax)&&(electronDensity>DBL_EPSILON))
@@ -523,19 +657,19 @@ G4double G4VChannelingFastSimCrystalData::IonizationLosses(G4double dz,
     // 1/2 already taken into account in fKD
 
     G4double loge = G4Log(fMe2Gamma*fGamma*fV2/fI0[ielement]);
-    G4double delta= 2*(G4Log(fBeta*fGamma)+fLogPlasmaEdI0[ielement]-0.5);
-    if(delta<0){delta=0;}
+    G4double delta= 2.*(G4Log(fBeta*fGamma)+fLogPlasmaEdI0[ielement]-0.5);
+    if(delta<0.){delta=0.;}
     loge-=delta;
     if(fParticleName=="e-")
     {
-       loge+=(-G4Log(2.) + 1
-              -(2*fGamma - 1)/fGamma/fGamma*G4Log(2.) +
-               1./8.*((fGamma - 1)/fGamma)*((fGamma - 1)/fGamma));
+       loge+=(-G4Log(2.) + 1.
+              -(2.*fGamma - 1.)/fGamma/fGamma*G4Log(2.) +
+               1./8.*((fGamma - 1.)/fGamma)*((fGamma - 1.)/fGamma));
     }
     else if(fParticleName=="e+")
     {
-       loge+=(-fV2/12*(11 + 14/(fGamma + 1) + 10/(fGamma + 1)/(fGamma + 1) +
-                      4/(fGamma + 1)/(fGamma + 1)/(fGamma + 1)));
+       loge+=(-fV2/12.*(11. + 14./(fGamma + 1.) + 10./(fGamma + 1.)/(fGamma + 1.) +
+                      4./(fGamma + 1.)/(fGamma + 1.)/(fGamma + 1.)));
     }
     else
     {

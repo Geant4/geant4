@@ -28,7 +28,7 @@
 //
 //      Created                 Hisaya Kurashige, 16 June 1997
 // **********************************************************************
-//
+//      Update mass and width (PDG2023), Shogo Okada, 4, Nov. 2025
 
 #include "G4Upsilon.hh"
 
@@ -58,7 +58,7 @@ G4Upsilon* G4Upsilon::Definition()
 
     // clang-format off
    anInstance = new G4ParticleDefinition(
-                 name,     9.46030*GeV,     54.00*keV,          0.,
+                 name,      9.4604*GeV,     54.02*keV,          0.,
                     2,              -1,            -1,
                     0,               0,            -1,
               "meson",               0,             0,         553,

@@ -25,7 +25,7 @@
 //
 // Implementation of G4Polycone, a CSG polycone
 //
-// Author: David C. Williams (davidw@scipp.ucsc.edu)
+// Author: David C. Williams (UCSC), 1998
 // --------------------------------------------------------------------
 
 #include "G4Polycone.hh"
@@ -49,6 +49,7 @@
 namespace
 {
   G4Mutex surface_elementsMutex = G4MUTEX_INITIALIZER;
+  G4Mutex polyconeMutex = G4MUTEX_INITIALIZER;
 }
 
 using namespace CLHEP;
@@ -221,7 +222,9 @@ void G4Polycone::Create( G4double phiStart,
 
   startPhi = phiStart;
   while( startPhi < 0. )    // Loop checking, 13.08.2015, G.Cosmo
+  {
     startPhi += twopi;
+  }
   //
   // Phi opening? Account for some possible roundoff, and interpret
   // nonsense value as representing no phi opening
@@ -274,11 +277,11 @@ void G4Polycone::Create( G4double phiStart,
   do    // Loop checking, 13.08.2015, G.Cosmo
   {
     next = corner+1;
-    if (next >= corners+numCorner) next = corners;
+    if (next >= corners+numCorner) { next = corners; }
     nextNext = next+1;
-    if (nextNext >= corners+numCorner) nextNext = corners;
+    if (nextNext >= corners+numCorner) { nextNext = corners; }
 
-    if (corner->r < 1/kInfinity && next->r < 1/kInfinity) continue;
+    if (corner->r < 1/kInfinity && next->r < 1/kInfinity) { continue; }
 
     //
     // We must decide here if we can dare declare one of our faces
@@ -364,7 +367,7 @@ G4Polycone::G4Polycone( const G4Polycone& source )
 //
 G4Polycone &G4Polycone::operator=( const G4Polycone& source )
 {
-  if (this == &source) return *this;
+  if (this == &source) { return *this; }
 
   G4VCSGfaceted::operator=( source );
 
@@ -469,7 +472,7 @@ EInside G4Polycone::Inside( const G4ThreeVector& p ) const
   //
   // Quick test
   //
-  if (enclosingCylinder->MustBeOutside(p)) return kOutside;
+  if (enclosingCylinder->MustBeOutside(p)) { return kOutside; }
 
   //
   // Long answer
@@ -488,8 +491,7 @@ G4double G4Polycone::DistanceToIn( const G4ThreeVector& p,
   //
   // Quick test
   //
-  if (enclosingCylinder->ShouldMiss(p,v))
-    return kInfinity;
+  if (enclosingCylinder->ShouldMiss(p,v)) { return kInfinity; }
 
   //
   // Long answer
@@ -515,10 +517,10 @@ void G4Polycone::BoundingLimits(G4ThreeVector& pMin,
   for (G4int i=0; i<GetNumRZCorner(); ++i)
   {
     G4PolyconeSideRZ corner = GetCorner(i);
-    if (corner.r < rmin) rmin = corner.r;
-    if (corner.r > rmax) rmax = corner.r;
-    if (corner.z < zmin) zmin = corner.z;
-    if (corner.z > zmax) zmax = corner.z;
+    if (corner.r < rmin) { rmin = corner.r; }
+    if (corner.r > rmax) { rmax = corner.r; }
+    if (corner.z < zmin) { zmin = corner.z; }
+    if (corner.z > zmax) { zmax = corner.z; }
   }
 
   if (IsOpen())
@@ -592,7 +594,7 @@ G4bool G4Polycone::CalculateExtent(const EAxis pAxis,
   }
   G4GeomTools::RemoveRedundantVertices(contourRZ,iout,2*kCarTolerance);
   G4double area = G4GeomTools::PolygonArea(contourRZ);
-  if (area < 0.) std::reverse(contourRZ.begin(),contourRZ.end());
+  if (area < 0.) { std::reverse(contourRZ.begin(),contourRZ.end()); }
 
   // triangulate RZ countour
   if (!G4GeomTools::TriangulatePolygon(contourRZ,triangles))
@@ -630,8 +632,14 @@ G4bool G4Polycone::CalculateExtent(const EAxis pAxis,
   std::vector<const G4ThreeVectorList *> polygons;
   polygons.resize(ksteps+2);
   G4ThreeVectorList pols[NSTEPS+2];
-  for (G4int k=0; k<ksteps+2; ++k) pols[k].resize(6);
-  for (G4int k=0; k<ksteps+2; ++k) polygons[k] = &pols[k];
+  for (G4int k=0; k<ksteps+2; ++k)
+  {
+    pols[k].resize(6);
+  }
+  for (G4int k=0; k<ksteps+2; ++k)
+  {
+    polygons[k] = &pols[k];
+  }
   G4double r0[6],z0[6]; // contour with original edges of triangle
   G4double r1[6];       // shifted radii of external edges of triangle
 
@@ -652,7 +660,7 @@ G4bool G4Polycone::CalculateExtent(const EAxis pAxis,
       // set shifted radii
       r1[k2+0] = r0[k2+0];
       r1[k2+1] = r0[k2+1];
-      if (z0[k2+1] - z0[k2+0] <= 0) continue;
+      if (z0[k2+1] - z0[k2+0] <= 0) { continue; }
       r1[k2+0] /= cosHalf;
       r1[k2+1] /= cosHalf;
     }
@@ -660,23 +668,35 @@ G4bool G4Polycone::CalculateExtent(const EAxis pAxis,
     // rotate countour, set sequence of 6-sided polygons
     G4double sinCur = sinStart*cosHalf + cosStart*sinHalf;
     G4double cosCur = cosStart*cosHalf - sinStart*sinHalf;
-    for (G4int j=0; j<6; ++j) pols[0][j].set(r0[j]*cosStart,r0[j]*sinStart,z0[j]);
+    for (G4int j=0; j<6; ++j)
+    {
+      pols[0][j].set(r0[j]*cosStart,r0[j]*sinStart,z0[j]);
+    }
     for (G4int k=1; k<ksteps+1; ++k)
     {
-      for (G4int j=0; j<6; ++j) pols[k][j].set(r1[j]*cosCur,r1[j]*sinCur,z0[j]);
+      for (G4int j=0; j<6; ++j)
+      {
+        pols[k][j].set(r1[j]*cosCur,r1[j]*sinCur,z0[j]);
+      }
       G4double sinTmp = sinCur;
       sinCur = sinCur*cosStep + cosCur*sinStep;
       cosCur = cosCur*cosStep - sinTmp*sinStep;
     }
-    for (G4int j=0; j<6; ++j) pols[ksteps+1][j].set(r0[j]*cosEnd,r0[j]*sinEnd,z0[j]);
+    for (G4int j=0; j<6; ++j)
+    {
+      pols[ksteps+1][j].set(r0[j]*cosEnd,r0[j]*sinEnd,z0[j]);
+    }
 
     // set sub-envelope and adjust extent
     G4double emin,emax;
     G4BoundingEnvelope benv(polygons);
-    if (!benv.CalculateExtent(pAxis,pVoxelLimit,pTransform,emin,emax)) continue;
-    if (emin < pMin) pMin = emin;
-    if (emax > pMax) pMax = emax;
-    if (eminlim > pMin && emaxlim < pMax) return true; // max possible extent
+    if (!benv.CalculateExtent(pAxis,pVoxelLimit,pTransform,emin,emax))
+    {
+      continue;
+    }
+    if (emin < pMin) { pMin = emin; }
+    if (emax > pMax) { pMax = emax; }
+    if (eminlim > pMin && emaxlim < pMax) { return true; } // max possible extent
   }
   return (pMin < pMax);
 }
@@ -759,8 +779,9 @@ std::ostream& G4Polycone::StreamInfo( std::ostream& os ) const
 
 G4double G4Polycone::GetCubicVolume()
 {
-  if (fCubicVolume == 0.)
+  if (fCubicVolume == 0)
   {
+    G4AutoLock l(&polyconeMutex);
     G4double total = 0.;
     G4int nrz = GetNumRZCorner();
     G4PolyconeSideRZ a = GetCorner(nrz - 1);
@@ -771,6 +792,7 @@ G4double G4Polycone::GetCubicVolume()
       a = b;
     }
     fCubicVolume = std::abs(total)*(GetEndPhi() - GetStartPhi())/6.;
+    l.unlock();
   }
   return fCubicVolume;
 }
@@ -781,8 +803,9 @@ G4double G4Polycone::GetCubicVolume()
 
 G4double G4Polycone::GetSurfaceArea()
 {
-  if (fSurfaceArea == 0.)
+  if (fSurfaceArea == 0)
   {
+    G4AutoLock l(&polyconeMutex);
     // phi cut area
     G4int nrz = GetNumRZCorner();
     G4double scut = 0.;
@@ -809,6 +832,7 @@ G4double G4Polycone::GetSurfaceArea()
     }
     slat *= (GetEndPhi() - GetStartPhi())/2.;
     fSurfaceArea = scut + slat;
+    l.unlock();
   }
   return fSurfaceArea;
 }
@@ -836,7 +860,7 @@ void G4Polycone::SetSurfaceElements() const
     selem.i1 = ib;
     selem.i2 = -1;
     ia = ib;
-    if (a.r == 0. && b.r == 0.) continue;
+    if (a.r == 0. && b.r == 0.) { continue; }
     G4double h = std::sqrt((b.r - a.r)*(b.r - a.r) + (b.z - a.z)*(b.z - a.z));
     total += 0.5*dphi*(b.r + a.r)*h;
     selem.area = total;
@@ -950,7 +974,9 @@ G4Polyhedron* G4Polycone::CreatePolyhedron() const
 {
   std::vector<G4TwoVector> rz(numCorner);
   for (G4int i = 0; i < numCorner; ++i)
+  {
     rz[i].set(corners[i].r, corners[i].z);
+  }
   return new G4PolyhedronPcon(startPhi, endPhi - startPhi, rz);
 }
 
@@ -1002,7 +1028,7 @@ G4bool  G4Polycone::SetOriginalParameters(G4ReduciblePolygon* rz)
     inextr=1+icurr;
     inextl=(icurl <= 0)? numPlanes-1 : icurl-1;
 
-    if((corners[inextr].z >= Zmax) & (corners[inextl].z >= Zmax))  { break; }
+    if((static_cast<int>(corners[inextr].z >= Zmax) & static_cast<int>(corners[inextl].z >= Zmax)) != 0)  { break; }
 
     G4double Zleft = corners[inextl].z;
     G4double Zright = corners[inextr].z;

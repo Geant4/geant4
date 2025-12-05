@@ -6,8 +6,6 @@
 
 #include "base_session"
 
-#include <tools/saui>
-
 namespace toolx {
 namespace X11 {
 

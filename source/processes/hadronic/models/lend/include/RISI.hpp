@@ -37,7 +37,10 @@ class Reaction {
                 std::vector<std::string> const &a_intermediates, std::string const &a_process, std::string const &reactionLabel,
                 std::string const &convarianceFlag );
 
+        bool isFission( ) const;
+        int multiplicity( std::string const &a_productId ) const;
         void products( double a_energyMax, std::set<std::string> &a_products ) const ;
+        void printAsRIS_file( int a_labelWidth ) const ;
 };
 
 class Protare {
@@ -47,9 +50,10 @@ class Protare {
         std::string m_projectile;                           /**< The PoPs id for the projectile. */
         std::string m_target;                               /**< The PoPs id for the target. */
         std::string m_evaluation;                           /**< The evaluation for the protare. */
+        std::string m_energyUnit;                           /**< The energy unit in the file for the protare. */
         double m_energyConversionFactor;                    /**< Factor to convert from file energy units to user energy units. */
 
-        std::map<std::string, std::string> m_aliases;       /**< The list of meta-stable aliases in the protare. */
+        std::vector<std::pair<std::string, std::string> > m_aliases;       /**< The list of meta-stable aliases in the protare and the nuclide they alias. */
         std::vector<Reaction *> m_reactions;                /**< The list of **Reaction** instances for the protare. */
 
     public:
@@ -60,15 +64,18 @@ class Protare {
         std::string const &projectile( ) { return( m_projectile ); }
         std::string const &target( ) { return( m_target ); }
         std::string const &evaluation( ) { return( m_evaluation ); }
+        std::vector<Reaction *> const &reactions( ) const { return( m_reactions ); }
 
         void Oops( std::vector<std::string> const &a_elements );
         void addAlias( std::vector<std::string> const &a_elements );
+        bool fissionPresent( ) const;
         void setAddingAliases( ) { m_addMode = 1; }         /**< Tells **add** method to call the **addAlias** method. */
         void addReaction( std::vector<std::string> const &a_elements );
         void setAddingReactions( ) { m_addMode = 2; }       /**< Tells **add** method to call the **addReaction** method. */
         void add( std::vector<std::string> const &a_elements );
 
         void products( Projectile const *a_projectile, int a_level, int a_maxLevel, double a_energyMax, std::map<std::string, int> &a_products ) const ;
+        void printAsRIS_file( ) const ;
 };
 
 class Target {
@@ -84,8 +91,11 @@ class Target {
         ~Target( );
 
         void add( Protare *a_protare );
+        bool fissionPresent( ) const;
+        std::vector<Reaction *> const &reactions( ) const { return( m_protares[0]->reactions( ) ); }
         void products( Projectile const *a_projectile, int a_level, int a_maxLevel, double a_energyMax, std::map<std::string, int> &a_products ) const ;
         void print( std::string const &a_indent = "" ) const ;
+        void printAsRIS_file( ) const ;
 };
 
 class Projectile {
@@ -101,8 +111,13 @@ class Projectile {
         ~Projectile( );
 
         void add( Protare *a_protare );
+        bool fissionPresent( std::vector<std::string> targetIds ) const;
+        std::vector<std::string> targetIds( ) const ;
         void products( std::string const &a_target, int a_level, int a_maxLevel, double a_energyMax, std::map<std::string, int> &a_products ) const ;
+        std::vector<std::string> filterProducts( std::vector<std::string> const &a_productIds ) const ;
+        Target const *target( std::string const &a_targetName ) const;
         void print( std::string const &a_indent = "" ) const ;
+        void printAsRIS_file( ) const ;
 };
 
 class Projectiles {
@@ -116,9 +131,12 @@ class Projectiles {
 
         void add( Protare *a_protare );
         void clear( );
+        std::vector<std::string> projectileIds( ) const ;
+        Projectile const *projectile( std::string const &a_projectile ) const ;
         std::vector<std::string> products( std::string const &a_projectile, std::vector<std::string> const &a_seedTargets, int a_maxLevel, 
-                double a_energyMax ) const ;
+                double a_energyMax, bool a_onlyIncludeTargets = true ) const ;
         void print( std::string const &a_indent = "" ) const ;
+        void printAsRIS_file( ) const ;
 };
 
 void readRIS( std::string const &a_fileName, std::string const &a_energyUnit, Projectiles &a_projectiles );

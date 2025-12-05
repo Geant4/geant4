@@ -25,7 +25,6 @@
 //
 /// \file MoviesActionInitialization.cc
 /// \brief Implementation of the MoviesActionInitialization class
-//
 
 #include "MoviesActionInitialization.hh"
 

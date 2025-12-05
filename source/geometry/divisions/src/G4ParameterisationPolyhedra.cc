@@ -628,9 +628,13 @@ ComputeTransformation( const G4int copyNo, G4VPhysicalVolume* physVol) const
     posi = fOrigParamMother->Z_values[0];
     
     if ( !fReflectedSolid )
+    {
       posi += foffset + (2*copyNo + 1) * fwidth/2.;
+    }
     else
+    {
       posi -= foffset + (2*copyNo + 1) * fwidth/2.;
+    }
     
     physVol->SetTranslation( G4ThreeVector(0, 0, posi) );
   }   
@@ -739,8 +743,8 @@ ComputeDimensions( G4Polyhedra& phedra, const G4int copyNo,
 
     // It can happen due to rounding errors
     //
-    if ( origparam.Rmin[0]    < 0.0 ) origparam.Rmin[0] = 0.0;
-    if ( origparam.Rmin[nz-1] < 0.0 ) origparam.Rmin[1] = 0.0;
+    if ( origparam.Rmin[0]    < 0.0 ) { origparam.Rmin[0] = 0.0; }
+    if ( origparam.Rmin[nz-1] < 0.0 ) { origparam.Rmin[1] = 0.0; }
   }  
 
   phedra.SetOriginalParameters(&origparam);  // copy values & transfer pointers

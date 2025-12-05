@@ -25,8 +25,8 @@
 //
 // G4DormandPrinceRK56 implementation
 //
-// Created: Somnath Banerjee, Google Summer of Code 2015, 26 June 2015
-// Supervision: John Apostolakis, CERN
+// Author: Somnath Banerjee (CERN, Google Summer of Code 2015), 26.06.2015
+// Supervision: John Apostolakis (CERN)
 // --------------------------------------------------------------------
 
 #include "G4DormandPrinceRK56.hh"
@@ -354,7 +354,7 @@ void G4DormandPrinceRK56::Stepper(const G4double yInput[],
 
 // DistChord
 //
-G4double  G4DormandPrinceRK56::DistChord() const
+G4double G4DormandPrinceRK56::DistChord() const
 {
     G4double distLine, distChord;
     G4ThreeVector initialPoint, finalPoint, midPoint;

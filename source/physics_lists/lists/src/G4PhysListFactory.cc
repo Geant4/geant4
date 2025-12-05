@@ -99,7 +99,7 @@ G4PhysListFactory::G4PhysListFactory(G4int ver)
 
   nlists_em = 12;
   G4String s1[12] = {"","_EMV","_EMX","_EMY","_EMZ","_LIV","_PEN",
-		     "__GS","__SS","_EM0","_WVI","__LE"};
+    "__GS","__SS","_EM0","_WVI","__LE"};
   for (std::size_t i=0; i<nlists_em; ++i) {
     listnames_em.push_back(s1[i]);
   }
@@ -114,9 +114,9 @@ G4VModularPhysicsList*
 G4PhysListFactory::ReferencePhysList()
 {
   // instantiate PhysList by environment variable "PHYSLIST"
-  G4String name = "";
-  char* path = std::getenv("PHYSLIST");
-  if (path) {
+  G4String name;
+  const char* path = std::getenv("PHYSLIST");
+  if (nullptr != path) {
     name = G4String(path);
   } else {
     name = defName;
@@ -137,28 +137,32 @@ G4PhysListFactory::GetReferencePhysList(const G4String& name)
   std::size_t n = name.size();
 
   // last characters in the string
-  size_t em_opt = 0;
-  G4String em_name = "";
+  std::size_t em_opt = 0;
+  G4String em_name;
 
   // check EM options
-  if(n > 4) {
-    em_name = name.substr(n - 4, 4);
+  if (n > 4) {
+    G4String ss = name.substr(n - 4, 4);
     for (std::size_t i=1; i<nlists_em; ++i) { 
-      if(listnames_em[i] == em_name) { 
+      if (listnames_em[i] == ss) { 
 	em_opt = i;
+	em_name = ss;
         n -= 4;
         break; 
       }
     }
-    if(0 == em_opt) { em_name = ""; }
+    // default EM physics
+    if ("_EM0" == em_name) {
+      em_opt = 0;
+    }
   }
 
-  // hadronic pHysics List
+  // hadronic physics 
   G4String had_name = name.substr(0, n);
 
   if(0 < verbose) {
     G4cout << "G4PhysListFactory::GetReferencePhysList <" << had_name
-	   << em_name << ">  EMoption= " << em_opt << G4endl;
+	   << em_name << ">" << G4endl;
   }
   G4VModularPhysicsList* p = nullptr;
   if(had_name == "FTFP_BERT")               {p = new FTFP_BERT(verbose);}
@@ -215,28 +219,26 @@ G4PhysListFactory::GetReferencePhysList(const G4String& name)
     return nullptr;
   }
   if(nullptr != p) {
-    if(0 < em_opt && had_name != "LBE") {
-      if(1 == em_opt) { 
+    if (had_name != "LBE") {
+      if (1 == em_opt) { 
 	p->ReplacePhysics(new G4EmStandardPhysics_option1(verbose)); 
-      } else if(2 == em_opt) {
+      } else if (2 == em_opt) {
 	p->ReplacePhysics(new G4EmStandardPhysics_option2(verbose)); 
-      } else if(3 == em_opt) {
+      } else if (3 == em_opt) {
 	p->ReplacePhysics(new G4EmStandardPhysics_option3(verbose)); 
-      } else if(4 == em_opt) {
+      } else if (4 == em_opt) {
 	p->ReplacePhysics(new G4EmStandardPhysics_option4(verbose)); 
-      } else if(5 == em_opt) {
+      } else if (5 == em_opt) {
 	p->ReplacePhysics(new G4EmLivermorePhysics(verbose)); 
-      } else if(6 == em_opt) {
+      } else if (6 == em_opt) {
 	p->ReplacePhysics(new G4EmPenelopePhysics(verbose)); 
-      } else if(7 == em_opt) {
+      } else if (7 == em_opt) {
 	p->ReplacePhysics(new G4EmStandardPhysicsGS(verbose)); 
-      } else if(8 == em_opt) {
+      } else if (8 == em_opt) {
 	p->ReplacePhysics(new G4EmStandardPhysicsSS(verbose)); 
-      } else if(9 == em_opt) {
-	p->ReplacePhysics(new G4EmStandardPhysics(verbose)); 
-      } else if(10 == em_opt) {
+      } else if (10 == em_opt) {
 	p->ReplacePhysics(new G4EmStandardPhysicsWVI(verbose)); 
-      } else if(11 == em_opt) {
+      } else if (11 == em_opt) {
 	p->ReplacePhysics(new G4EmLowEPPhysics(verbose)); 
       }
     }

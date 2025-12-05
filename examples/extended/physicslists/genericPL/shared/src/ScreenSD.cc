@@ -23,10 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 /// \file ScreenSD.cc
 /// \brief Implementation of the ScreenSD class
-//
 
 #include "ScreenSD.hh"
 

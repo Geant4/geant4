@@ -10,8 +10,6 @@
 #include "base_freetype"
 
 #include <cstdio> //sscanf
-//#include <sstream>
-//#include <cmath>
 
 namespace tools {
 namespace sg {
@@ -66,9 +64,6 @@ inline void add_string(
 
     text->font = a_font;
 
-    //text->modeling.value(font_outline);
-    //text->encoding.value(a_encoding);
-    //text->smooting.value(a_smoothing);
     text->strings.add(a_string);
     text->hjust.value(a_hjust);
     text->vjust.value(a_vjust);
@@ -117,9 +112,6 @@ inline matrix* add_string_opt(
       if(::sscanf(a_string.c_str(),"10^%d?",&mag)==1) {
         _s[2] = 'e';
         _s = _s.substr(0,_s.size()-1);
-        //std::ostringstream oss;
-        //oss << ::pow(10.0,mag);
-        //_s = oss.str();
       }
     }
 
@@ -127,9 +119,6 @@ inline matrix* add_string_opt(
 
     text->font = a_font;
 
-    //text->modeling.value(font_outline);
-    //text->encoding.value(a_encoding);
-    //text->smooting.value(a_smoothing);
     text->strings.add(_s);
     text->hjust.value(a_hjust);
     text->vjust.value(a_vjust);

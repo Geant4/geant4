@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 /// \file scavenger.cc
-/// \brief Scavenger example
+/// \brief Main program of the dna/scavenger example
 
 #include "ActionInitialization.hh"
 #include "DetectorConstruction.hh"

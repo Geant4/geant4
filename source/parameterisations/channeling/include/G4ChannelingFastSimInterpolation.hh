@@ -28,10 +28,9 @@
 #ifndef G4ChannelingFastSimInterpolation_h
 #define G4ChannelingFastSimInterpolation_h
 
-#include "G4PhysicsVector.hh"
-#include "G4Physics2DVector.hh"
-#include "G4ThreeVector.hh"
-#include "G4PhysicsLinearVector.hh"
+#include "globals.hh"
+#include "G4ios.hh"
+#include <vector>
 
 /** \file G4ChannelingFastSimInterpolation.hh
 * \brief Definition of the G4ChannelingFastSimInterpolation class

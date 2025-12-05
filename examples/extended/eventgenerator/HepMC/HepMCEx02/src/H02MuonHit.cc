@@ -23,10 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file eventgenerator/HepMC/HepMCEx02/src/H02MuonHit.cc
+/// \file H02MuonHit.cc
 /// \brief Implementation of the H02MuonHit class
-//
-//
+
 #include "H02MuonHit.hh"
 
 #include "G4Circle.hh"

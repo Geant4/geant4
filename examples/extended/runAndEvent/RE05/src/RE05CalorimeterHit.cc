@@ -23,10 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file RE05/src/RE05CalorimeterHit.cc
+/// \file RE05CalorimeterHit.cc
 /// \brief Implementation of the RE05CalorimeterHit class
-//
 
 #include "RE05CalorimeterHit.hh"
 

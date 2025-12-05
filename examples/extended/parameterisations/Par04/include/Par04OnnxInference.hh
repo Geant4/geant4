@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file Par04OnnxInference.hh
+/// \brief Definition of the Par04OnnxInference class
 
 #ifdef USE_INFERENCE_ONNX
 #  ifndef PAR04ONNXINFERENCE_HH

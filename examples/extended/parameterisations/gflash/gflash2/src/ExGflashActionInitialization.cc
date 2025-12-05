@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 /// \file ExGflashActionInitialization.cc
 /// \brief Implementation of the ExGflashActionInitialization class
 

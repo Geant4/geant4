@@ -354,7 +354,6 @@ endif()
 
 # - Qt (UI and Vis!)
 set(Geant4_qt_FOUND @GEANT4_USE_QT@)
-set(Geant4_qt3d_FOUND @GEANT4_USE_QT3D@)
 if(Geant4_qt_FOUND)
   # Must always refind Qt to recreate imported targets. Because these
   # are in the public interface, always need linking.
@@ -366,12 +365,6 @@ if(Geant4_qt_FOUND)
     find_dependency(Qt@QT_VERSION_MAJOR@OpenGLWidgets REQUIRED)
   endif()
 
-  if(Geant4_qt3d_FOUND)
-    find_dependency(Qt@QT_VERSION_MAJOR@3DCore @QT3D_MINIMUM_VERSION@ REQUIRED)
-    find_dependency(Qt@QT_VERSION_MAJOR@3DExtras @QT3D_MINIMUM_VERSION@ REQUIRED)
-    find_dependency(Qt@QT_VERSION_MAJOR@3DRender @QT3D_MINIMUM_VERSION@ REQUIRED)
-  endif()
-
   # Also require OpenGL
   find_dependency(OpenGL)
 
@@ -380,8 +373,6 @@ if(Geant4_qt_FOUND)
      OR ("vis_openinventor" IN_LIST Geant4_FIND_COMPONENTS)
      OR Geant4_ui_all_FOUND OR Geant4_vis_all_FOUND)
     set(_geant4_use_opengl_library ON)
-    # Qt3D is always on if available
-    set(_geant4_use_qt3D_library ${Geant4_qt3d_FOUND})
   endif()
 endif()
 
@@ -514,7 +505,6 @@ set(_geant4_internal_libraries
   Geant4::G4Tree${_geant4_lib_use_suffix}
   Geant4::G4FR${_geant4_lib_use_suffix}
   Geant4::G4GMocren${_geant4_lib_use_suffix}
-  Geant4::G4visHepRep${_geant4_lib_use_suffix}
   Geant4::G4RayTracer${_geant4_lib_use_suffix}
   Geant4::G4VRML${_geant4_lib_use_suffix}
   Geant4::G4ToolsSG${_geant4_lib_use_suffix})
@@ -522,11 +512,6 @@ set(_geant4_internal_libraries
 # - G4OpenGL if it's requested.
 if(_geant4_use_opengl_library)
   list(APPEND _geant4_internal_libraries Geant4::G4OpenGL${_geant4_lib_use_suffix})
-endif()
-
-# - Qt3D if it's requested.
-if(_geant4_use_qt3D_library)
-  list(APPEND _geant4_internal_libraries Geant4::G4visQt3D${_geant4_lib_use_suffix})
 endif()
 
 # - G4OpenInventor if it's requested.

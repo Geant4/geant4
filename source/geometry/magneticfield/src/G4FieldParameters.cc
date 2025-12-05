@@ -23,15 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-
-/// \file G4FieldParameters.cc
-/// \brief Implementation of the G4FieldParameters class
-///
-/// This code was initially developed in Geant4 VMC package
-/// (https://github.com/vmc-project)
-/// and adapted to Geant4.
-///
-/// \author I. Hrivnacova; IJCLab, Orsay
+// Implementation of the G4FieldParameters class
+//
+// Author: Ivana Hrivnacova (IJCLab, Orsay), 2024.
+// --------------------------------------------------------------------
 
 #include "G4FieldParameters.hh"
 #include "G4FieldParametersMessenger.hh"
@@ -48,19 +43,22 @@ G4String G4FieldParameters::FieldTypeName(G4FieldType field)
 {
   // Return the field type as a string
 
-  switch (field) {
+  switch (field)
+  {
     case kMagnetic:
-      return G4String("Magnetic");
+      return {"Magnetic"};
     case kElectroMagnetic:
-      return G4String("ElectroMagnetic");
+      return {"ElectroMagnetic"};
     case kGravity:
-      return G4String("Gravity");
+      return {"Gravity"};
+    case kUserFieldType:
+      return {"UserDefinedField"};
   }
 
   G4Exception(
     "G4FieldParameters::FieldTypeName:", "GeomFieldParameters0001",
     FatalErrorInArgument, "Unknown field value.");
-  return G4String();
+  return {};
 }
 
 //_____________________________________________________________________________
@@ -68,25 +66,32 @@ G4String G4FieldParameters::EquationTypeName(G4EquationType equation)
 {
   // Return the equation type as a string
 
-  switch (equation) {
+  switch (equation)
+  {
     case kEqMagnetic:
-      return G4String("EqMagnetic");
+      return {"EqMagnetic"};
     case kEqMagneticWithSpin:
-      return G4String("EqMagneticWithSpin");
+      return {"EqMagneticWithSpin"};
     case kEqElectroMagnetic:
-      return G4String("EqElectroMagnetic");
+      return {"EqElectroMagnetic"};
     case kEqEMfieldWithSpin:
-      return G4String("EqEMfieldWithSpin");
+      return {"EqEMfieldWithSpin"};
     case kEqEMfieldWithEDM:
-      return G4String("EqEMfieldWithEDM");
+      return {"EqEMfieldWithEDM"};
+    case kEqGravity:
+      return {"EqGravity"};
+    case kEqMonopole:
+      return {"EqMonopole"};
+    case kEqReplate:
+      return {"EqReplate"};
     case kUserEquation:
-      return G4String("UserDefinedEq");
+      return {"UserDefinedEq"};
   }
 
   G4Exception(
     "G4FieldParameters::EquationTypeName:", "GeomFieldParameters0001",
     FatalErrorInArgument, "Unknown equation value.");
-  return G4String();
+  return {};
 }
 
 //_____________________________________________________________________________
@@ -94,63 +99,74 @@ G4String G4FieldParameters::StepperTypeName(G4StepperType stepper)
 {
   // Return the stepper type as a string
 
-  switch (stepper) {
+  switch (stepper)
+  {
     case kBogackiShampine23:
-      return G4String("BogackiShampine23");
+      return {"BogackiShampine23"};
     case kBogackiShampine45:
-      return G4String("BogackiShampine45");
+      return {"BogackiShampine45"};
     case kCashKarpRKF45:
-      return G4String("CashKarpRKF45");
+      return {"CashKarpRKF45"};
     case kClassicalRK4:
-      return G4String("ClassicalRK4");
+      return {"ClassicalRK4"};
+    case kDoLoMcPriRK34:
+      return {"DoLoMcPriRK34"};
     case kDormandPrince745:
-      return G4String("DormandPrince745");
+      return {"DormandPrince745"};
     case kDormandPrinceRK56:
-      return G4String("DormandPrinceRK56");
+      return {"DormandPrinceRK56"};
     case kDormandPrinceRK78:
-      return G4String("DormandPrinceRK78");
+      return {"DormandPrinceRK78"};
     case kExplicitEuler:
-      return G4String("ExplicitEuler");
+      return {"ExplicitEuler"};
     case kImplicitEuler:
-      return G4String("ImplicitEuler");
+      return {"ImplicitEuler"};
     case kSimpleHeum:
-      return G4String("SimpleHeum");
+      return {"SimpleHeum"};
     case kSimpleRunge:
-      return G4String("SimpleRunge");
+      return {"SimpleRunge"};
     case kConstRK4:
-      return G4String("ConstRK4");
+      return {"ConstRK4"};
     case kExactHelixStepper:
-      return G4String("ExactHelixStepper");
+      return {"ExactHelixStepper"};
     case kHelixExplicitEuler:
-      return G4String("HelixExplicitEuler");
+      return {"HelixExplicitEuler"};
     case kHelixHeum:
-      return G4String("HelixHeum");
+      return {"HelixHeum"};
     case kHelixImplicitEuler:
-      return G4String("HelixImplicitEuler");
+      return {"HelixImplicitEuler"};
     case kHelixMixedStepper:
-      return G4String("HelixMixedStepper");
+      return {"HelixMixedStepper"};
     case kHelixSimpleRunge:
-      return G4String("HelixSimpleRunge");
+      return {"HelixSimpleRunge"};
     case kNystromRK4:
-      return G4String("NystromRK4");
+      return {"NystromRK4"};
     case kRKG3Stepper:
-      return G4String("RKG3_Stepper");
+      return {"RKG3_Stepper"};
     case kTsitourasRK45:
-      return G4String("TsitourasRK45");
+      return {"TsitourasRK45"};
     case kUserStepper:
-      return G4String("UserDefinedStepper");
+      return {"UserDefinedStepper"};
     case kRK547FEq1:
-      return G4String("RK547FEq1");
+      return {"RK547FEq1"};
     case kRK547FEq2:
-      return G4String("RK547FEq2");
+      return {"RK547FEq2"};
     case kRK547FEq3:
-      return G4String("RK547FEq3");
+      return {"RK547FEq3"};
+    case kTCashKarpRKF45:
+      return {"TCashKarpRKF45"};
+    case kTDormandPrince45:
+      return {"TDormandPrince45"};
+    case kTMagErrorStepper:
+      return {"TMagErrorStepper"};
+    case kQSStepper:
+      return {"QSStepper"};
   }
 
   G4Exception(
     "G4FieldParameters::StepperTypeName:", "GeomFieldParameters0001",
     FatalErrorInArgument, "Unknown stepper value.");
-  return G4String();
+  return {};
 }
 
 //_____________________________________________________________________________
@@ -158,9 +174,10 @@ G4FieldType G4FieldParameters::GetFieldType(const G4String& name)
 {
   // Return the field type for given field type name
 
-  if (name == FieldTypeName(kMagnetic)) return kMagnetic;
-  if (name == FieldTypeName(kElectroMagnetic)) return kElectroMagnetic;
-  if (name == FieldTypeName(kGravity)) return kGravity;
+  if (name == FieldTypeName(kMagnetic)) { return kMagnetic; }
+  if (name == FieldTypeName(kElectroMagnetic)) { return kElectroMagnetic; }
+  if (name == FieldTypeName(kGravity)) { return kGravity; }
+  if (name == FieldTypeName(kUserFieldType)) { return kUserFieldType; }
 
   G4Exception(
     "G4FieldParameters::GetFieldType:", "GeomFieldParameters0001",
@@ -173,12 +190,15 @@ G4EquationType G4FieldParameters::GetEquationType(const G4String& name)
 {
   // Return the equation type for given equation type name
 
-  if (name == EquationTypeName(kEqMagnetic)) return kEqMagnetic;
-  if (name == EquationTypeName(kEqMagneticWithSpin)) return kEqMagneticWithSpin;
-  if (name == EquationTypeName(kEqElectroMagnetic)) return kEqElectroMagnetic;
-  if (name == EquationTypeName(kEqEMfieldWithSpin)) return kEqEMfieldWithSpin;
-  if (name == EquationTypeName(kEqEMfieldWithEDM)) return kEqEMfieldWithEDM;
-  if (name == EquationTypeName(kUserEquation)) return kUserEquation;
+  if (name == EquationTypeName(kEqMagnetic)) { return kEqMagnetic; }
+  if (name == EquationTypeName(kEqMagneticWithSpin)) { return kEqMagneticWithSpin; }
+  if (name == EquationTypeName(kEqElectroMagnetic)) { return kEqElectroMagnetic; }
+  if (name == EquationTypeName(kEqEMfieldWithSpin)) { return kEqEMfieldWithSpin; }
+  if (name == EquationTypeName(kEqEMfieldWithEDM)) { return kEqEMfieldWithEDM; }
+  if (name == EquationTypeName(kEqGravity)) { return kEqGravity; }
+  if (name == EquationTypeName(kEqMonopole)) { return kEqMonopole; }
+  if (name == EquationTypeName(kEqReplate)) {  return kEqReplate; }
+  if (name == EquationTypeName(kUserEquation)) { return kUserEquation; }
 
   G4Exception(
     "G4FieldParameters::GetEquationType:", "GeomFieldParameters0001",
@@ -190,31 +210,36 @@ G4EquationType G4FieldParameters::GetEquationType(const G4String& name)
 G4StepperType G4FieldParameters::GetStepperType(const G4String& name)
 {
   // Return the stepper type for given stepper type name
-  if (name == StepperTypeName(kBogackiShampine23)) return kBogackiShampine23;
-  if (name == StepperTypeName(kBogackiShampine45)) return kBogackiShampine45;
-  if (name == StepperTypeName(kCashKarpRKF45)) return kCashKarpRKF45;
-  if (name == StepperTypeName(kClassicalRK4)) return kClassicalRK4;
-  if (name == StepperTypeName(kDormandPrince745)) return kDormandPrince745;
-  if (name == StepperTypeName(kDormandPrinceRK56)) return kDormandPrinceRK56;
-  if (name == StepperTypeName(kDormandPrinceRK78)) return kDormandPrinceRK78;
-  if (name == StepperTypeName(kExplicitEuler)) return kExplicitEuler;
-  if (name == StepperTypeName(kImplicitEuler)) return kImplicitEuler;
-  if (name == StepperTypeName(kSimpleHeum)) return kSimpleHeum;
-  if (name == StepperTypeName(kSimpleRunge)) return kSimpleRunge;
-  if (name == StepperTypeName(kConstRK4)) return kConstRK4;
-  if (name == StepperTypeName(kExactHelixStepper)) return kExactHelixStepper;
-  if (name == StepperTypeName(kHelixExplicitEuler)) return kHelixExplicitEuler;
-  if (name == StepperTypeName(kHelixHeum)) return kHelixHeum;
-  if (name == StepperTypeName(kHelixImplicitEuler)) return kHelixImplicitEuler;
-  if (name == StepperTypeName(kHelixMixedStepper)) return kHelixMixedStepper;
-  if (name == StepperTypeName(kHelixSimpleRunge)) return kHelixSimpleRunge;
-  if (name == StepperTypeName(kNystromRK4)) return kNystromRK4;
-  if (name == StepperTypeName(kRKG3Stepper)) return kRKG3Stepper;
-  if (name == StepperTypeName(kRK547FEq1)) return kRK547FEq1;
-  if (name == StepperTypeName(kRK547FEq2)) return kRK547FEq2;
-  if (name == StepperTypeName(kRK547FEq3)) return kRK547FEq3;
-  if (name == StepperTypeName(kTsitourasRK45)) return kTsitourasRK45;
-  if (name == StepperTypeName(kUserStepper)) return kUserStepper;
+  if (name == StepperTypeName(kBogackiShampine23)) { return kBogackiShampine23; }
+  if (name == StepperTypeName(kBogackiShampine45)) { return kBogackiShampine45; }
+  if (name == StepperTypeName(kCashKarpRKF45)) { return kCashKarpRKF45; }
+  if (name == StepperTypeName(kClassicalRK4)) { return kClassicalRK4; }
+  if (name == StepperTypeName(kDoLoMcPriRK34)) { return kDoLoMcPriRK34; }
+  if (name == StepperTypeName(kDormandPrince745)) { return kDormandPrince745; }
+  if (name == StepperTypeName(kDormandPrinceRK56)) { return kDormandPrinceRK56; }
+  if (name == StepperTypeName(kDormandPrinceRK78)) { return kDormandPrinceRK78; }
+  if (name == StepperTypeName(kExplicitEuler)) { return kExplicitEuler; }
+  if (name == StepperTypeName(kImplicitEuler)) { return kImplicitEuler; }
+  if (name == StepperTypeName(kSimpleHeum)) { return kSimpleHeum; }
+  if (name == StepperTypeName(kSimpleRunge)) { return kSimpleRunge; }
+  if (name == StepperTypeName(kConstRK4)) { return kConstRK4; }
+  if (name == StepperTypeName(kExactHelixStepper)) { return kExactHelixStepper; }
+  if (name == StepperTypeName(kHelixExplicitEuler)) { return kHelixExplicitEuler; }
+  if (name == StepperTypeName(kHelixHeum)) { return kHelixHeum; }
+  if (name == StepperTypeName(kHelixImplicitEuler)) { return kHelixImplicitEuler; }
+  if (name == StepperTypeName(kHelixMixedStepper)) { return kHelixMixedStepper; }
+  if (name == StepperTypeName(kHelixSimpleRunge)) { return kHelixSimpleRunge; }
+  if (name == StepperTypeName(kNystromRK4)) { return kNystromRK4; }
+  if (name == StepperTypeName(kQSStepper)) { return kQSStepper; }
+  if (name == StepperTypeName(kRKG3Stepper)) { return kRKG3Stepper; }
+  if (name == StepperTypeName(kRK547FEq1)) { return kRK547FEq1; }
+  if (name == StepperTypeName(kRK547FEq2)) { return kRK547FEq2; }
+  if (name == StepperTypeName(kRK547FEq3)) { return kRK547FEq3; }
+  if (name == StepperTypeName(kTsitourasRK45)) { return kTsitourasRK45; }
+  if (name == StepperTypeName(kTCashKarpRKF45)) { return kTCashKarpRKF45; }
+  if (name == StepperTypeName(kTDormandPrince45)) { return kTDormandPrince45; }
+  if (name == StepperTypeName(kTMagErrorStepper)) { return kTMagErrorStepper; }
+  if (name == StepperTypeName(kUserStepper)) { return kUserStepper; }
 
   G4Exception(
     "G4FieldParameters::GetStepperType:", "GeomFieldParameters0001",
@@ -253,7 +278,8 @@ void G4FieldParameters::PrintParameters() const
   // Prints all customizable accuracy parameters
 
   G4cout << "Magnetic field parameters: " << G4endl;
-  if (fVolumeName.size()) {
+  if (!fVolumeName.empty())
+  {
     G4cout << "  volume name = " << fVolumeName << G4endl;
   }
   G4cout << "  field type = " << FieldTypeName(fField) << G4endl

@@ -25,7 +25,7 @@
 //
 // G4VTwistedFaceted implementation
 //
-// Author: 04-Nov-2004 - O.Link (Oliver.Link@cern.ch)
+// Author: Oliver Link (CERN), 27.10.2004 - Created
 // --------------------------------------------------------------------
 
 #include "G4VTwistedFaceted.hh"
@@ -51,6 +51,7 @@
 namespace
 {
   G4Mutex polyhedronMutex = G4MUTEX_INITIALIZER;
+  G4Mutex vtwMutex = G4MUTEX_INITIALIZER;
 }
 
 
@@ -391,13 +392,19 @@ EInside G4VTwistedFaceted::Inside(const G4ThreeVector& p) const
     if ( posy <= yMax - kCarTolerance*0.5
       && posy >= yMin + kCarTolerance*0.5 )
     {
-      if      (std::fabs(posz) <= fDz - kCarTolerance*0.5 ) tmpin = kInside ;
-      else if (std::fabs(posz) <= fDz + kCarTolerance*0.5 ) tmpin = kSurface ;
+      if      (std::fabs(posz) <= fDz - kCarTolerance*0.5 )
+      {
+        tmpin = kInside ;
+      }
+      else if (std::fabs(posz) <= fDz + kCarTolerance*0.5 )
+      {
+        tmpin = kSurface ;
+      }
     }
     else if ( posy <= yMax + kCarTolerance*0.5
            && posy >= yMin - kCarTolerance*0.5 )
     {
-      if (std::fabs(posz) <= fDz + kCarTolerance*0.5 ) tmpin = kSurface ;
+      if (std::fabs(posz) <= fDz + kCarTolerance*0.5 ) { tmpin = kSurface ; }
     }
   }
   else if ( posx <= xMax + kCarTolerance*0.5
@@ -406,7 +413,7 @@ EInside G4VTwistedFaceted::Inside(const G4ThreeVector& p) const
     if ( posy <= yMax + kCarTolerance*0.5
       && posy >= yMin - kCarTolerance*0.5 )
     {
-      if (std::fabs(posz) <= fDz + kCarTolerance*0.5) tmpin = kSurface ;
+      if (std::fabs(posz) <= fDz + kCarTolerance*0.5) { tmpin = kSurface ; }
     }
   }
 
@@ -887,19 +894,6 @@ void G4VTwistedFaceted::CreateSurfaces()
 }
 
 //=====================================================================
-//* GetCubicVolume ----------------------------------------------------
-
-G4double G4VTwistedFaceted::GetCubicVolume()
-{
-  if(fCubicVolume == 0.)
-  {
-    fCubicVolume = ((fDx1 + fDx2 + fDx3 + fDx4)*(fDy1 + fDy2) +
-                    (fDx4 + fDx3 - fDx2 - fDx1)*(fDy2 - fDy1)/3)*fDz;
-  }
-  return fCubicVolume;
-}
-
-//=====================================================================
 //* GetLateralFaceArea ------------------------------------------------
 
 G4double
@@ -975,12 +969,28 @@ G4VTwistedFaceted::GetLateralFaceArea(const G4TwoVector& p1,
 }
 
 //=====================================================================
+//* GetCubicVolume ----------------------------------------------------
+
+G4double G4VTwistedFaceted::GetCubicVolume()
+{
+  if(fCubicVolume == 0)
+  {
+    G4AutoLock l(&vtwMutex);
+    fCubicVolume = ((fDx1 + fDx2 + fDx3 + fDx4)*(fDy1 + fDy2) +
+                    (fDx4 + fDx3 - fDx2 - fDx1)*(fDy2 - fDy1)/3)*fDz;
+    l.unlock();
+  }
+  return fCubicVolume;
+}
+
+//=====================================================================
 //* GetSurfaceArea ----------------------------------------------------
 
 G4double G4VTwistedFaceted::GetSurfaceArea()
 {
-  if (fSurfaceArea == 0.)
+  if (fSurfaceArea == 0)
   {
+    G4AutoLock l(&vtwMutex);
     G4TwoVector vv[8];
     vv[0] = G4TwoVector(-fDx1 - fDy1*fTAlph,-fDy1);
     vv[1] = G4TwoVector( fDx1 - fDy1*fTAlph,-fDy1);
@@ -995,6 +1005,7 @@ G4double G4VTwistedFaceted::GetSurfaceArea()
       GetLateralFaceArea(vv[1], vv[3], vv[5], vv[7]) +
       GetLateralFaceArea(vv[3], vv[2], vv[7], vv[6]) +
       GetLateralFaceArea(vv[2], vv[0], vv[6], vv[4]);
+    l.unlock();
   }
   return fSurfaceArea;
 }
@@ -1026,25 +1037,6 @@ G4Polyhedron* G4VTwistedFaceted::GetPolyhedron() const
     }
 
   return fpPolyhedron;
-}
-
-
-//=====================================================================
-//* GetPointInSolid ---------------------------------------------------
-
-G4ThreeVector G4VTwistedFaceted::GetPointInSolid(G4double z) const
-{
-
-
-  // this routine is only used for a test
-  // can be deleted ...
-
-  if ( z == fDz ) z -= 0.1*fDz ;
-  if ( z == -fDz ) z += 0.1*fDz ;
-
-  G4double phi = z/(2*fDz)*fPhiTwist ;
-
-  return { fdeltaX * phi/fPhiTwist, fdeltaY * phi/fPhiTwist, z };
 }
 
 
@@ -1088,28 +1080,28 @@ G4ThreeVector G4VTwistedFaceted::GetPointOnSurface() const
     u = umin + (umax - umin)*G4QuickRand();
     return  fSide0->SurfacePoint(phi, u, true) ;   // point on 0 deg surface
   }
-  else if( (chose >= a1) && (chose < a1 + a2 ) )
+  if( (chose >= a1) && (chose < a1 + a2 ) )
   {
     umin = fSide90->GetBoundaryMin(phi) ;
     umax = fSide90->GetBoundaryMax(phi) ;
     u = umin + (umax - umin)*G4QuickRand();
     return fSide90->SurfacePoint(phi, u, true);   // point on 90 deg surface
   }
-  else if( (chose >= a1 + a2 ) && (chose < a1 + a2 + a3 ) )
+  if( (chose >= a1 + a2 ) && (chose < a1 + a2 + a3 ) )
   {
     umin = fSide180->GetBoundaryMin(phi) ;
     umax = fSide180->GetBoundaryMax(phi) ;
     u = umin + (umax - umin)*G4QuickRand();
     return fSide180->SurfacePoint(phi, u, true); // point on 180 deg surface
   }
-  else if( (chose >= a1 + a2 + a3  ) && (chose < a1 + a2 + a3 + a4  ) )
+  if( (chose >= a1 + a2 + a3  ) && (chose < a1 + a2 + a3 + a4  ) )
   {
     umin = fSide270->GetBoundaryMin(phi) ;
     umax = fSide270->GetBoundaryMax(phi) ;
     u = umin + (umax - umin)*G4QuickRand();
     return fSide270->SurfacePoint(phi, u, true); // point on 270 deg surface
   }
-  else if( (chose >= a1 + a2 + a3 + a4  ) && (chose < a1 + a2 + a3 + a4 + a5 ) )
+  if( (chose >= a1 + a2 + a3 + a4  ) && (chose < a1 + a2 + a3 + a4 + a5 ) )
   {
     y = fDy1*(2.*G4QuickRand() - 1.);
     umin = fLowerEndcap->GetBoundaryMin(y) ;
@@ -1117,14 +1109,11 @@ G4ThreeVector G4VTwistedFaceted::GetPointOnSurface() const
     u = umin + (umax - umin)*G4QuickRand();
     return fLowerEndcap->SurfacePoint(u,y,true); // point on lower endcap
   }
-  else
-  {
-    y = fDy2*(2.*G4QuickRand() - 1.);
-    umin = fUpperEndcap->GetBoundaryMin(y) ;
-    umax = fUpperEndcap->GetBoundaryMax(y) ;
-    u = umin + (umax - umin)*G4QuickRand();
-    return fUpperEndcap->SurfacePoint(u,y,true); // point on upper endcap
-  }
+  y = fDy2*(2.*G4QuickRand() - 1.);
+  umin = fUpperEndcap->GetBoundaryMin(y) ;
+  umax = fUpperEndcap->GetBoundaryMax(y) ;
+  u = umin + (umax - umin)*G4QuickRand();
+  return fUpperEndcap->SurfacePoint(u,y,true); // point on upper endcap
 }
 
 

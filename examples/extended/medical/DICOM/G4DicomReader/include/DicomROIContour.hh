@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file DicomROIContour.hh
+/// \brief Definition of the DicomROIContour class
+
 #ifndef DicomROIContour__HH
 #define DicomROIContour__HH
 

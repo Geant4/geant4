@@ -27,7 +27,7 @@
 //
 // Class description:
 //
-// A node in the smart voxel hierarchy - a `slice' of space along a given
+// A node in the smart voxel hierarchy - a 'slice' of space along a given
 // axis between given minima and maxima. Note that the node is not aware
 // of its position - this information being available/derivable by the
 // node's owner(s) (voxelheaders).
@@ -41,11 +41,11 @@
 // std::vector<G4int> fcontents
 //   - Vector of no.s of volumes inside the node.
 
-// 18.04.01, G.Cosmo - Migrated to STL vector
-// 12.07.95, P.Kent - Initial version
+// Author: Paul Kent (CERN), 12.07.1995 - Initial version
+//         Gabriele Cosmo (CERN), 18.04.2001 - Migrated to STL vector
 // --------------------------------------------------------------------
 #ifndef G4SMARTVOXELNODE_HH
-#define G4SMARTVOXELNODE_HH 1
+#define G4SMARTVOXELNODE_HH
 
 #include <vector>
 
@@ -54,52 +54,89 @@
 
 using G4SliceVector = std::vector<G4int>;
 
+/**
+ * @brief G4SmartVoxelNode defines a node in the smart voxel hierarchy, i.e.
+ * a 'slice' of space along a given axis between given minima and maxima.
+ * The node is not aware of its position - this information being
+ * available/derivable by the node's owner(s), the voxel headers.
+ */
+
 class G4SmartVoxelNode
 {
   public:
 
-    G4SmartVoxelNode(G4int pSlice = 0) : fminEquivalent(pSlice),
-                                         fmaxEquivalent(pSlice) {}
-      // Constructor. Create an empty node with slice number pSlice.
-      // This number is not stored, but used to provide defaults for the
-      // minimum and maximum equivalent node numbers.
+    /**
+     * Constructor for G4SmartVoxelNode. It creates an empty node with slice
+     * number 'pSlice'; this number is not stored, but used to provide defaults
+     * for the minimum and maximum equivalent node numbers.
+     *  @param[in] pSlice Max & min equivalent slice numbers for the header.
+     */
+    inline G4SmartVoxelNode(G4int pSlice = 0);
 
+    /**
+     * Default destructor.
+     */
     ~G4SmartVoxelNode() = default;
       // Destructor. No actions.
 
-    inline G4int GetVolume(G4int pVolumeNo) const;
-      // Return contained volume number pVolumeNo.
-      // Note: starts from 0 and no bounds checking performed.
-
-    inline void Insert(G4int pVolumeNo);
-      // Add the specified volume number to the contents.
-
-    inline std::size_t GetNoContained() const;
-      // Return the number of volumes inside the node.
-
-    inline std::size_t GetCapacity() const;
-      // Return the maximum capacity of the buffer.
-
-    inline void Reserve(G4int noSlices);
-      // Reserve memory in the vector of slices according to the specified
-      // quantity, relative to the maximum number of slices.
-
-    inline void Shrink();
-      // Shrink buffer capacity to actual size to reduce wasted memory.
-
-    inline G4int GetMaxEquivalentSliceNo() const;
-      // Return the maximum slice (node/header) number with the same contents,
-      // and with all intermediate slice also having the same contents.
-    inline void SetMaxEquivalentSliceNo(G4int pMax);
-      // Set the maximum slice number (as above).
-    inline G4int GetMinEquivalentSliceNo() const;
-      // Return the minimum slice (node/header) number with the same contents,
-      // and with all intermediate nodes also having the same contents.
-    inline void SetMinEquivalentSliceNo(G4int pMin);
-      // Set the minimum slice number (as above).
-
+    /**
+     * Equality operator.
+     */
     G4bool operator == (const G4SmartVoxelNode& v) const;
-      // Equality operator.
+
+    /**
+     * Returns the contained volume number 'pVolumeNo'.
+     * Note: starts from 0 and no bounds checking is performed.
+     */
+    inline G4int GetVolume(G4int pVolumeNo) const;
+
+    /**
+     * Adds the specified volume number 'pVolumeNo' to the contents.
+     */
+    inline void Insert(G4int pVolumeNo);
+
+    /**
+     * Returns the number of volumes inside the node.
+     */
+    inline std::size_t GetNoContained() const;
+
+    /**
+     * Returns the maximum capacity of the buffer.
+     */
+    inline std::size_t GetCapacity() const;
+
+    /**
+     * Reserves memory in the vector of slices according to the specified
+     * quantity, relative to the maximum number of slices.
+     */
+    inline void Reserve(G4int noSlices);
+
+    /**
+     * Shrinks the buffer capacity to the actual size to reduce wasted memory.
+     */
+    inline void Shrink();
+
+    /**
+     * Returns the maximum slice (node/header) number with the same contents
+     * and with all intermediate slice also having the same contents.
+     */
+    inline G4int GetMaxEquivalentSliceNo() const;
+
+    /**
+     * Sets the maximum slice number (as above).
+     */
+    inline void SetMaxEquivalentSliceNo(G4int pMax);
+
+    /**
+     * Returns the minimum slice (node/header) number with the same contents
+     * and with all intermediate nodes also having the same contents.
+     */
+    inline G4int GetMinEquivalentSliceNo() const;
+
+    /**
+     * Sets the minimum slice number (as above).
+     */
+    inline void SetMinEquivalentSliceNo(G4int pMin);
 
   private:
 

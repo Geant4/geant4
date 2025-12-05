@@ -87,6 +87,9 @@ G4DNAMakeReaction::MakeReaction(const G4Track &trackA,
 
     const auto pReactionData = fMolReactionTable->GetReactionData(pMoleculeA, pMoleculeB);
     const G4int nbProducts = pReactionData->GetNbProducts();
+    //add Equilibrium process for particle-based models.
+    if(fpScavengerMaterial != nullptr) { fpScavengerMaterial->SetEquilibrium(pReactionData, trackA.GetGlobalTime()); }
+
     // Notify molecule (reaction) counter
     if (G4MoleculeCounterManager::Instance()->GetIsActive()) {
       G4MoleculeCounterManager::Instance()->RecordReaction(pReactionData, trackA.GetGlobalTime());

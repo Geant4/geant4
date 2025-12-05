@@ -23,11 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 /// \file ch2.cc
-/// \brief Main program of the ch2 example
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// \brief Main program of the channeling/ch2 example
 
 #include "DetectorConstruction.hh"
 #include "ActionInitialization.hh"
@@ -133,9 +130,54 @@ int main(int argc,char** argv)
   // owned and deleted by the run manager, so they should not be deleted
   // in the main() program !
 
+  G4int nofEventsTot = runManager->GetNumberOfEventsToBeProcessed();
+
   delete visManager;
   delete runManager;
-  
+
+  //final output for the spectrum
+  std::vector<G4double> photonEnergyInSpectrum;
+  std::vector<G4double> spectrum;
+  G4bool spectrumWrite = false;
+
+  for (G4int ii = 0; ; ++ii)
+  {
+      std::string filename = "Spectrum_"+std::to_string(ii)+".dat";
+      std::ifstream fileN1(filename);
+
+      //if no file
+      if (!fileN1) break;
+      spectrumWrite = true; //if a temporary file exist => final output will be written
+
+      G4int jj = 0;
+      G4double eph, spec=0.;
+      while (fileN1 >> eph >> spec)
+      {
+          if (ii==0)
+          {
+              photonEnergyInSpectrum.push_back(eph);//the same for all the files
+              spectrum.push_back(spec); //the same data size for all the files
+          }
+          else{spectrum[jj++] += spec;} // spectrum accumulation
+      }
+      fileN1.close();
+
+      std::remove(filename.c_str());
+  }
+
+  std::remove("Spectrum.dat");//delete a previous file if existed
+  if(spectrumWrite)// if radiation model = false => no spectrum
+  {
+      std::ofstream file1;
+      file1.open("Spectrum.dat");
+      //CAUTION: spectrum is normalized onto a probability of radiation W, IT IS NOT A PDF
+      file1 << "# E_photon [MeV]" <<
+          "  dW_rad/dE_photon [MeV^-1]; W_rad - radiation probability" << G4endl;
+      for(std::size_t i = 0; i<spectrum.size(); i++)
+      {file1 << photonEnergyInSpectrum[i] << " " << spectrum[i]/nofEventsTot << G4endl;}
+      file1.close();
+  }
+
   theTimer->Stop();
   G4cout << "Execution terminated" << G4endl;
   G4cout << (*theTimer) << G4endl;

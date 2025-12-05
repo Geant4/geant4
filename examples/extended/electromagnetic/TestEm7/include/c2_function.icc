@@ -25,7 +25,7 @@
 //
 //
 /**
- *  \file electromagnetic/TestEm7/include/c2_function.icc
+ *  \file c2_function.icc
  *  \brief Provides code for the general c2_function algebra which supports 
  *  fast, flexible operations on piecewise-twice-differentiable functions
  *

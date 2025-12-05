@@ -5,6 +5,12 @@ which **must** added in reverse chronological order (newest at the top). It must
 be used as a substitute for writing good git commit messages!
 
 
+## 2025-07-30 I. Hrivnacova (fieldex-V11-03-00)
+- Migration of README pages to Markdown:
+  - .README.txt replaced with README.md and removed README
+  - Reviewed and fixed external links, references to code,
+    improved formatting.
+
 ## 2023-11-15 I. Hrivnacova (fieldex-V11-01-01)
 - Updated vis.mac macros:
   - Changed "/vis/open XYZ [600x600-0+0]" to "/vis/open" to allow run-time choices

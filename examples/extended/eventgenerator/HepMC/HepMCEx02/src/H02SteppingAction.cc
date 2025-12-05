@@ -23,10 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file eventgenerator/HepMC/HepMCEx02/src/H02SteppingAction.cc
+/// \file H02SteppingAction.cc
 /// \brief Implementation of the H02SteppingAction class
-//
-//
+
 #include "H02SteppingAction.hh"
 
 #include "G4ParticleDefinition.hh"

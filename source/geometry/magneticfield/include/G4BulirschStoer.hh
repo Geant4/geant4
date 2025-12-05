@@ -30,8 +30,8 @@
 // and order of the method. The algorithm uses the modified midpoint and
 // a polynomial extrapolation computes the solution.
 
-// Author: Dmitry Sorokin, Google Summer of Code 2016
-// Supervision: John Apostolakis, CERN
+// Author: Dmitry Sorokin (CERN, Google Summer of Code 2016), 13.02.2018
+// Supervision: John Apostolakis (CERN)
 // --------------------------------------------------------------------
 #ifndef G4BULIRSCH_STOER_HH
 #define G4BULIRSCH_STOER_HH
@@ -40,87 +40,136 @@
 
 #include "G4FieldTrack.hh"
 
+/**
+ * @brief G4BulirschStoer is a controlled driver that adjusts both step size
+ * and order of the method. The algorithm uses the modified midpoint and
+ * a polynomial extrapolation computes the solution.
+ */
+
 class G4BulirschStoer
 {
   public:
 
-    enum class step_result
-    {
-      success,
-      fail
-    };
+    enum class step_result { success, fail };
 
-    G4BulirschStoer( G4EquationOfMotion* equation, G4int nvar,
-                     G4double eps_rel, G4double max_dt = DBL_MAX);
+    /**
+     * Constructor for G4BulirschStoer.
+     *  @param[in] equation Pointer to the provided equation of motion.
+     *  @param[in] nvar The number of integration variables.
+     *  @param[in] eps_rel Relative tolerance.
+     *  @param[in] max_dt Maximum allowed time step.
+     */
+    G4BulirschStoer(G4EquationOfMotion* equation, G4int nvar,
+                    G4double eps_rel, G4double max_dt = DBL_MAX);
 
+    /**
+     * Default Destructor.
+     */
+    ~G4BulirschStoer() = default;
+
+    /**
+     * Modifiers.
+     */
     inline void set_max_dt(G4double max_dt);
     inline void set_max_relative_error(G4double eps_rel);
 
-    // Stepper method
-    //
+    /**
+     * Stepper method.
+     *  @param[in] in Initial position.
+     *  @param[in] dxdt dxdt for mid-point calculation.
+     *  @param[out] t The updated step.
+     *  @param[out] out Updated position.
+     *  @param[in,out] dt Step size.
+     *  @returns success if step is not rejected.
+     */
     step_result try_step(const G4double in[], const G4double dxdt[],
                          G4double& t, G4double out[], G4double& dt);
 
-    // Reset the internal state of the stepper
-    //
+    /**
+     * Resets the internal state of the stepper.
+     */
     void reset();
 
+    /**
+     * Setter and getter for the equation of motion.
+     */
     inline void SetEquationOfMotion(G4EquationOfMotion* equation);
-    inline G4EquationOfMotion* GetEquationOfMotion();
+    inline G4EquationOfMotion* GetEquationOfMotion() const;
 
+    /**
+     * Returns the number of integration variables.
+     */
     inline G4int GetNumberOfVariables() const;
 
   private:
 
-    const static G4int m_k_max = 8;
-
+    /**
+     * Polynomial extrapolation.
+     */
     void extrapolate(std::size_t k, G4double xest[]);
+
+    /**
+     * Calculates the optimal step size for a given error and stage number.
+     */
     G4double calc_h_opt(G4double h, G4double error, std::size_t k) const;
 
+    /**
+     * Calculates the optimal stage number.
+     */
     G4bool set_k_opt(std::size_t k, G4double& dt);
+
+    /**
+     * Utilities.
+     */
     G4bool in_convergence_window(G4int k) const;
     G4bool should_reject(G4double error, G4int k) const;
 
-    // Number of vars to be integrated
+  private:
+
+    /** Maximum number of stages. */
+    const static G4int m_k_max = 8;
+
+    /** Number of vars to be integrated. */
     G4int fnvar;
 
-    // Relative tolerance
+    /** Relative tolerance. */
     G4double m_eps_rel;
 
-    // Modified midpoint algorithm
+    /** Modified midpoint algorithm. */
     G4ModifiedMidpoint m_midpoint;
 
+    /** Flags for step. */
     G4bool m_last_step_rejected{false};
     G4bool m_first{true};
 
+    /** Last step size. */
     G4double m_dt_last{0.0};
-    // G4double m_t_last;
 
-    // Max allowed time step
+    /** Max allowed time step. */
     G4double m_max_dt;
 
+    /** Crude estimate of optimal order. */
     G4int m_current_k_opt;
 
-    // G4double m_xnew[G4FieldTrack::ncompSVEC];
+    /** Error estimate. */
     G4double m_err[G4FieldTrack::ncompSVEC];
-    // G4double m_dxdt[G4FieldTrack::ncompSVEC];
 
-    // Stores the successive interval counts
+    /** Stores the successive interval counts. */
     G4int m_interval_sequence[m_k_max+1];
 
-    // Extrapolation coeffs (Neville’s algorithm)
+    /** Extrapolation coeffs (Neville's algorithm). */
     G4double m_coeff[m_k_max+1][m_k_max];
 
-    // Costs for interval count
+    /** Costs for interval count. */
     G4int m_cost[m_k_max+1];
 
-    // Sequence of states for extrapolation
+    /** Sequence of states for extrapolation. */
     G4double m_table[m_k_max][G4FieldTrack::ncompSVEC];
 
-    // Optimal step size
+    /** Optimal step size. */
     G4double h_opt[m_k_max+1];
 
-    // Work per unit step
+    /** Work per unit step. */
     G4double work[m_k_max+1];
 };
 

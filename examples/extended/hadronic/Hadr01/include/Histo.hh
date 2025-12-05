@@ -23,9 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file hadronic/Hadr01/include/Histo.hh
+/// \file Histo.hh
 /// \brief Definition of the Histo class
-//
 
 #ifndef Histo_h
 #define Histo_h 1

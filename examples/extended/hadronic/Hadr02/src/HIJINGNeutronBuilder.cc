@@ -23,10 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file hadronic/Hadr02/src/HIJINGNeutronBuilder.cc
+/// \file HIJINGNeutronBuilder.cc
 /// \brief Implementation of the HIJINGNeutronBuilder class
-//
-//
+
 //---------------------------------------------------------------------------
 //
 // ClassName:   HIJINGNeutronBuilder

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 // G4LogicalSurface class inline methods
-
-// Created: John Apostolakis, 26-06-1997
+//
+// Authors: John Apostolakis (CERN) & Peter Gumplinger (TRIUMF), 26.06.1997
 // ------------------------------------------------------------------------
 
 inline G4SurfaceProperty*

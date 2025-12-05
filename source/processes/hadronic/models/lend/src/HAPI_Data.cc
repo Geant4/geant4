@@ -39,7 +39,7 @@ Data::~Data( ) {
 
 }
 
-int Data::length( ) const {
+size_t Data::length( ) const {
 
     return m_data->length();
 

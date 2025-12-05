@@ -88,17 +88,10 @@ public:
   void InsertValues(const G4double energy, const G4double value);
 
   void EnableLogBinSearch(const G4int n = 1);
- 
+  
   // Obsolete method
-  inline void PutValue(const std::size_t index, 
-                       const G4double e, const G4double value);
+  void PutValue(const std::size_t index, const G4double e, const G4double value);
+  
 };
-
-inline void G4PhysicsFreeVector::PutValue(const std::size_t index, 
-                                          const G4double e,
-                                          const G4double value)
-{
-  PutValues(index, e, value);
-}
 
 #endif

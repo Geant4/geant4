@@ -23,12 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file persistency/gdml/G01/load_gdml.cc
-/// \brief Main program of the persistency/gdml/G01 example
-//
-//
-//
-//
+/// \file load_gdml.cc
+/// \brief Main program of the gdml/G01 example
+
 // --------------------------------------------------------------
 //      GEANT 4 - load_gdml
 //

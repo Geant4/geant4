@@ -13,7 +13,6 @@ public:
 public:
   virtual bool lock() = 0;
   virtual bool unlock() = 0;
-  //virtual bool trylock() = 0;
 };
 
 }}

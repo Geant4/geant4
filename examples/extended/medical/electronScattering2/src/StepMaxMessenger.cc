@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file medical/electronScattering2/src/StepMaxMessenger.cc
+/// \file StepMaxMessenger.cc
 /// \brief Implementation of the StepMaxMessenger class
 
 #include "StepMaxMessenger.hh"

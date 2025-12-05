@@ -23,9 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 /// \file ExGflashHistoManager.hh
-/// \brief Definition of the ExGflasHistoManager class
+/// \brief Definition of the ExGflashHistoManager class
 
 #ifndef ExGflashHistoManager_h
 #define ExGflashHistoManager_h 1

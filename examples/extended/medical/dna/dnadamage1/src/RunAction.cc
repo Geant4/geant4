@@ -24,6 +24,9 @@
 // ********************************************************************
 // Authors: S. Meylan and C. Villagrasa (IRSN, France)
 // Updated: H. Tran (IRSN), France: 20/12/2018
+//
+/// \file RunAction.cc
+/// \brief Implementation of the RunAction class
 
 #include "RunAction.hh"
 
@@ -36,10 +39,6 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 RunAction::RunAction() : G4UserRunAction() {}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-RunAction::~RunAction() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

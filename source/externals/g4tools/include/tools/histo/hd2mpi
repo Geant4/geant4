@@ -20,9 +20,6 @@ namespace histo {
 /////////////////////////////////////////////////////////////////////////////
 
 inline bool axis_dui_pack(impi& a_mpi,const axis<double,unsigned int>& a_axis) {
-  //typedef double TC;
-  //typedef unsigned int TO;
-  //typedef unsigned int bn_t;
   if(!a_mpi.pack(a_axis.m_offset)) return false; //TO
   if(!a_mpi.pack(a_axis.m_number_of_bins)) return false; //bn_t
   if(!a_mpi.pack(a_axis.m_minimum_value)) return false; //TC
@@ -34,11 +31,6 @@ inline bool axis_dui_pack(impi& a_mpi,const axis<double,unsigned int>& a_axis) {
 }
 
 inline bool histo_data_duiuid_pack(impi& a_mpi,const histo_data<double,unsigned int,unsigned int,double>& a_hd) {
-  //typedef double TC;
-  //typedef unsigned int TO;
-  //typedef unsigned int TN;
-  //typedef double TW;
-  //typedef unsigned int dim_t;
   typedef unsigned int num_t;
 
   if(!a_mpi.spack(a_hd.m_title)) return false;
@@ -65,7 +57,7 @@ inline bool histo_data_duiuid_pack(impi& a_mpi,const histo_data<double,unsigned 
 
   // Annotations :
  {if(!a_mpi.pack((num_t)a_hd.m_annotations.size())) return false; //num_t
-  tools_mforcit(std::string,std::string,a_hd.m_annotations,it) {
+  for(auto it = a_hd.m_annotations.cbegin(); it != a_hd.m_annotations.cend(); ++it) {
     if(!a_mpi.spack((*it).first)) return false;
     if(!a_mpi.spack((*it).second)) return false;
   }}
@@ -86,10 +78,6 @@ inline bool histo_data_duiuid_pack(impi& a_mpi,const histo_data<double,unsigned 
 /////////////////////////////////////////////////////////////////////////////
 
 inline bool axis_dui_unpack(impi& a_mpi,axis<double,unsigned int>& a_axis) {
-  //typedef double TC;
-  //typedef unsigned int TO;
-  //typedef unsigned int bn_t;
-
   if(!a_mpi.unpack(a_axis.m_offset)) return false; //TO
   if(!a_mpi.unpack(a_axis.m_number_of_bins)) return false; //bn_t
   if(!a_mpi.unpack(a_axis.m_minimum_value)) return false; //TC
@@ -102,11 +90,6 @@ inline bool axis_dui_unpack(impi& a_mpi,axis<double,unsigned int>& a_axis) {
 }
 
 inline bool histo_data_duiuid_unpack(impi& a_mpi,histo_data<double,unsigned int,unsigned int,double>& a_hd) {
-  //typedef double TC;
-  //typedef unsigned int TO;
-  //typedef unsigned int TN;
-  //typedef double TW;
-  //typedef unsigned int dim_t;
   typedef unsigned int num_t;
 
   if(!a_mpi.sunpack(a_hd.m_title)) return false;

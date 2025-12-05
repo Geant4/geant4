@@ -23,9 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file persistency/P02/include/ExP02GeoTree.hh
+/// \file ExP02GeoTree.hh
 /// \brief Definition of the ExP02GeoTree class
-//
 
 #ifndef INCLUDE_EXP02GEOTREE_H
 #define INCLUDE_EXP02GEOTREE_H 1

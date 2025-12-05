@@ -23,13 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file OpNovice/include/OpNovicePrimaryGeneratorAction.hh
+/// \file OpNovicePrimaryGeneratorAction.hh
 /// \brief Definition of the OpNovicePrimaryGeneratorAction class
-//
-//
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef OpNovicePrimaryGeneratorAction_h
 #define OpNovicePrimaryGeneratorAction_h 1

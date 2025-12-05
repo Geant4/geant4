@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file DicomROI.hh
+/// \brief Definition of the DicomROI class
+
 #ifndef DicomROI__HH
 #define DicomROI__HH
 

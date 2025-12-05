@@ -31,11 +31,18 @@
 #include "G4ios.hh"
 
 #include "G4coutDestination.hh"
+#include "G4Threading.hh"
+#include "G4AutoLock.hh"
 
 #include <iostream>
 
 namespace
 {
+// We need a mutex to be able to syncronize writes to std::cout etc at shutdown
+#ifdef G4MULTITHREADED
+G4Mutex g_stream_finalization_mutex;
+#endif
+
 // Concrete streambuf redirecting output to G4coutDestination via G4cout etc
 // Templated on two policy types to determine:
 // - DestinationPolicy: which member member function of G4coutDestination to redirect to
@@ -212,6 +219,7 @@ void G4iosInitialization()
 
 void G4iosFinalization()
 {
+  G4AutoLock lock_(&g_stream_finalization_mutex);
   // Reverse order
   // --- Flush
   _G4debug_p()->flush();

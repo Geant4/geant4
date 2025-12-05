@@ -23,10 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file runAndEvent/RE01/src/RE01CalorimeterParametrisation.cc
+/// \file RE01CalorimeterParametrisation.cc
 /// \brief Implementation of the RE01CalorimeterParametrisation class
-//
-//
 
 #include "RE01CalorimeterParametrisation.hh"
 

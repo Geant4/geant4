@@ -23,10 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file exoticphysics/phonon/include/XAluminumElectrodeSensitivity.hh
+/// \file XAluminumElectrodeSensitivity.hh
 /// \brief Definition of the XAluminumElectrodeSensitivity class
-//
-//
+
 // 20150818  Improve MT compatibility; hits collection should not be static
 
 #ifndef XAluminumElectrodeSensitivity_h

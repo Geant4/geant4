@@ -23,10 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file RE05/include/RE05TrackerSD.hh
+/// \file RE05TrackerSD.hh
 /// \brief Definition of the RE05TrackerSD class
-//
 
 #ifndef RE05TrackerSD_h
 #define RE05TrackerSD_h 1

@@ -25,8 +25,6 @@
 //
 /// \file ActionInitialization.cc
 /// \brief Implementation of the ActionInitialization class
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "ActionInitialization.hh"
 #include "PrimaryGeneratorAction.hh"

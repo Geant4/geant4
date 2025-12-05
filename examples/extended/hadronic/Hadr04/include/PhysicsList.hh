@@ -25,8 +25,6 @@
 //
 /// \file PhysicsList.hh
 /// \brief Definition of the PhysicsList class
-//
-//
 
 #ifndef PhysicsList_h
 #define PhysicsList_h 1

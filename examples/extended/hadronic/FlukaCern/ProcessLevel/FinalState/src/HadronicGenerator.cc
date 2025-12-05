@@ -25,7 +25,7 @@
 //
 /// \file HadronicGenerator.cc
 /// \brief Implementation of the HadronicGenerator class
-//
+
 //------------------------------------------------------------------------
 // Class: HadronicGenerator
 // Author: Alberto Ribon (CERN EP/SFT), May 2020

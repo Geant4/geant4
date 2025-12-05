@@ -6,6 +6,14 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2025-10-30 I. Hrivnacova (digits_hits-V11-03-00)
+- G4VPrimitiveScorer : Implemented mechanism to weight score
+  - The weighting is activated with 'scoreWeighted' option (default is off)
+  - The applied weighting function is defined via std::function
+    which can be set via new setter method
+  - The weighting function is taken into account only in the G4PSCellFlux scorer type
+  Based on initial implementation by A. Morsch, CERN
+
 ## 2024-05-07 Gabriele Cosmo (digits_hits-V11-02-00)
 - Fixed compilation error in G4THitsMap on macOS/clang with C++23 Standard
   enabled.

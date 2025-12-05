@@ -55,8 +55,8 @@ void FlashPrimaryGeneratorAction::SetDefaultPrimaryParticle() {
   particleGun->SetParticleDefinition(particle);
 
 
-  G4double defaultX0 = -113 * cm; //the beam propagates in the x direction from x=-100cm
-
+   G4double defaultX0 = -113 * cm; //DEFAULT CONFIGURATION- 100 MM DIAMETER APPLICATOR
+  // G4double defaultX0 =-74.70005*cm;// SET THIS FOR MINIBEAM CONFIGURATION
   X0 = defaultX0;
 
   G4double defaultY0 = 0.0 * mm;

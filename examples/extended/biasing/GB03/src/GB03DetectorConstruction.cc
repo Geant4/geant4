@@ -23,29 +23,24 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 /// \file GB03DetectorConstruction.cc
 /// \brief Implementation of the GB03DetectorConstruction class
 
 #include "GB03DetectorConstruction.hh"
 
 #include "GB03BOptrGeometryBasedBiasing.hh"
-#include "GB03DetectorMessenger.hh"
+#include "GB03HodoSD.hh"
 
 #include "G4Box.hh"
 #include "G4Colour.hh"
+#include "G4GenericMessenger.hh"
 #include "G4LogicalVolume.hh"
 #include "G4Material.hh"
-#include "G4MultiFunctionalDetector.hh"
-#include "G4PSEnergyDeposit.hh"
-#include "G4PSFlatSurfaceFlux.hh"
 #include "G4PVPlacement.hh"
 #include "G4PVReplica.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4RunManager.hh"
-#include "G4SDChargedFilter.hh"
 #include "G4SDManager.hh"
-#include "G4SDNeutralFilter.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4VisAttributes.hh"
 #include "G4ios.hh"
@@ -65,12 +60,10 @@ GB03DetectorConstruction::GB03DetectorConstruction(G4bool bf)
     fGapMaterial(nullptr),
     fLayerSolid(nullptr),
     fGapSolid(nullptr),
-    fWorldLogical(nullptr),
     fCalorLogical(nullptr),
     fLayerLogical(nullptr),
     fGapLogical(nullptr),
     fWorldPhysical(nullptr),
-    fCalorPhysical(nullptr),
     fLayerPhysical(nullptr),
     fGapPhysical(nullptr),
     fDetectorMessenger(nullptr),
@@ -79,7 +72,45 @@ GB03DetectorConstruction::GB03DetectorConstruction(G4bool bf)
 {
   fLayerThickness = fTotalThickness / fNumberOfLayers;
   fCalName = "Calor";
-  fDetectorMessenger = new GB03DetectorMessenger(this);
+
+  DefineMaterials();
+
+  // Material List
+  G4String matList;
+  const G4MaterialTable* matTbl = G4Material::GetMaterialTable();
+  for (size_t i = 0; i < G4Material::GetNumberOfMaterials(); i++) {
+    matList += (*matTbl)[i]->GetName();
+    matList += " ";
+  }
+
+  // Detector Messenger
+  fDetectorMessenger = new G4GenericMessenger(this, "/GB03/", "UI commands of this example");
+  fDetectorMessenger
+    ->DeclareMethod("setAbsMat", &GB03DetectorConstruction::SetAbsorberMaterial,
+                    "Select Material of the Absorber.")
+    .SetParameterName("material", false)
+    .SetStates(G4State_Idle)
+    .SetCandidates(matList);
+
+  fDetectorMessenger
+    ->DeclareMethod("setGapMat", &GB03DetectorConstruction::SetGapMaterial,
+                    "Select Material of the Gap.")
+    .SetParameterName("choice", false)
+    .SetStates(G4State_Idle)
+    .SetCandidates(matList);
+
+  fDetectorMessenger
+    ->DeclareMethod("numberOfLayers", &GB03DetectorConstruction::SetNumberOfLayers,
+                    "Set number of layers.")
+    .SetParameterName("nl", false)
+    .SetStates(G4State_Idle)
+    .SetRange("nl>0");
+
+  fDetectorMessenger
+    ->DeclareMethod("verbose", &GB03DetectorConstruction::SetVerboseLevel, "Set verbosity level.")
+    .SetParameterName("verbose", false)
+    .SetStates(G4State_Idle)
+    .SetRange("verbose>=0");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -95,7 +126,6 @@ G4VPhysicalVolume* GB03DetectorConstruction::Construct()
 {
   if (!fConstructed) {
     fConstructed = true;
-    DefineMaterials();
     SetupGeometry();
   }
   if (GetVerboseLevel() > 0) {
@@ -217,6 +247,7 @@ void GB03DetectorConstruction::DefineMaterials()
   fWorldMaterial = Vacuum;
   fAbsorberMaterial = Pb;
   fGapMaterial = Sci;
+  fHodoMaterial = Sci;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -227,17 +258,17 @@ void GB03DetectorConstruction::SetupGeometry()
   // World
   //
   G4VSolid* worldSolid = new G4Box("World", 2. * m, 2. * m, fTotalThickness * 2.);
-  fWorldLogical = new G4LogicalVolume(worldSolid, fWorldMaterial, "World");
+  auto* WorldLogical = new G4LogicalVolume(worldSolid, fWorldMaterial, "World");
   fWorldPhysical =
-    new G4PVPlacement(nullptr, G4ThreeVector(), fWorldLogical, "World", nullptr, false, 0);
+    new G4PVPlacement(nullptr, G4ThreeVector(), WorldLogical, "World", nullptr, false, 0);
 
   //
   // Calorimeter
   //
   G4VSolid* calorSolid = new G4Box("Calor", 0.5 * m, 0.5 * m, fTotalThickness / 2.);
   fCalorLogical = new G4LogicalVolume(calorSolid, fAbsorberMaterial, fCalName);
-  fCalorPhysical = new G4PVPlacement(nullptr, G4ThreeVector(0., 0., 0.), fCalorLogical, fCalName,
-                                     fWorldLogical, false, 0);
+  new G4PVPlacement(nullptr, G4ThreeVector(0., 0., 0.), fCalorLogical, fCalName, WorldLogical,
+                    false, 0);
 
   //
   // Layers --- as absorbers
@@ -256,63 +287,40 @@ void GB03DetectorConstruction::SetupGeometry()
                                    fGapLogical, fCalName + "_gap", fLayerLogical, false, 0);
 
   //
+  // Hodoscope plane
+  //
+  G4VSolid* measSolid = new G4Box("Hodo", 0.5 * m, 0.5 * m, 5 * cm);
+  fHodoLogical = new G4LogicalVolume(measSolid, fHodoMaterial, "Hodo_l");
+  new G4PVPlacement(nullptr, G4ThreeVector(0., 0., fTotalThickness / 2. + 5 * cm), fHodoLogical,
+                    "Hodo_p", WorldLogical, false, 0);
+  //
   // Visualization attributes
   //
-  fWorldLogical->SetVisAttributes(G4VisAttributes::GetInvisible());
+  WorldLogical->SetVisAttributes(G4VisAttributes::GetInvisible());
   auto simpleBoxVisAtt = new G4VisAttributes(G4Colour(1.0, 1.0, 1.0));
+  auto GapBoxVisAtt = new G4VisAttributes(G4Colour::Blue());
+  // auto LayerBoxVisAtt = new G4VisAttributes(G4Colour::Green());
+  auto HodoBoxVisAtt = new G4VisAttributes(G4Colour::Red());
   simpleBoxVisAtt->SetVisibility(true);
   fCalorLogical->SetVisAttributes(simpleBoxVisAtt);
   fLayerLogical->SetVisAttributes(simpleBoxVisAtt);
-  fGapLogical->SetVisAttributes(simpleBoxVisAtt);
+  fGapLogical->SetVisAttributes(GapBoxVisAtt);
+  fHodoLogical->SetVisAttributes(HodoBoxVisAtt);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void GB03DetectorConstruction::SetupDetectors()
 {
-  G4SDManager::GetSDMpointer()->SetVerboseLevel(1);
-  G4String filterName;
-
-  auto neutralFilter = new G4SDNeutralFilter(filterName = "neutralFilter");
-  auto chargedFilter = new G4SDChargedFilter(filterName = "chargedFilter");
-
-  for (G4int j = 0; j < 2; j++) {
-    // Loop counter j = 0 : absorber
-    //                = 1 : gap
-    G4String detName = fCalName;
-    if (j == 0) {
-      detName += "_abs";
-    }
-    else {
-      detName += "_gap";
-    }
-    auto det = new G4MultiFunctionalDetector(detName);
-    G4SDManager::GetSDMpointer()->AddNewDetector(det);
-    // The second argument in each primitive means the "level" of geometrical
-    // hierarchy, the copy number of that level is used as the key of the
-    // G4THitsMap.
-    // For absorber (j = 0), the copy number of its own physical volume is used.
-    // For gap (j = 1), the copy number of its mother physical volume is used,
-    // since there is only one physical volume of gap is placed with respect
-    // to its mother.
-    G4VPrimitiveScorer* primitive;
-    primitive = new G4PSEnergyDeposit("eDep", j);
-    det->RegisterPrimitive(primitive);
-    primitive = new G4PSFlatSurfaceFlux("nNeutral", 1, j);
-    primitive->SetFilter(neutralFilter);
-    det->RegisterPrimitive(primitive);
-    primitive = new G4PSFlatSurfaceFlux("nCharged", 1, j);
-    primitive->SetFilter(chargedFilter);
-    det->RegisterPrimitive(primitive);
-
-    if (j == 0) {
-      SetSensitiveDetector(fLayerLogical, det);
-    }
-    else {
-      SetSensitiveDetector(fGapLogical, det);
-    }
-  }
-  G4SDManager::GetSDMpointer()->SetVerboseLevel(0);
+  // ---------------------------------------------------------------------------------
+  // -- Attach sensitive detector to print information on particle exiting the shield:
+  // ---------------------------------------------------------------------------------
+  // -- create and register sensitive detector code module:
+  G4SDManager* SDman = G4SDManager::GetSDMpointer();
+  G4VSensitiveDetector* sd = new GB03HodoSD("HodoSD");
+  SDman->AddNewDetector(sd);
+  // -- Fetch volume for sensitivity and attach sensitive module to it:
+  fHodoLogical->SetSensitiveDetector(sd);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

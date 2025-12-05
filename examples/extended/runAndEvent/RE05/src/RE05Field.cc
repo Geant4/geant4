@@ -23,10 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file RE05/src/RE05Field.cc
+/// \file RE05Field.cc
 /// \brief Implementation of the RE05Field class
-//
 
 #include "RE05Field.hh"
 

@@ -77,6 +77,8 @@ namespace G4INCL {
        * \return the ParticleEntryAvatar for the projectile particle
        **/
       virtual ParticleEntryAvatar *bringToSurface(Particle * const p, Nucleus * const n) const = 0;
+ 
+      virtual ParticleEntryAvatar *bringToSurfaceAbar(Particle * const p, Nucleus * const n) const = 0;
 
       /** \brief Modify the momentum of an incoming cluster and position it on
        *         the surface of the target.

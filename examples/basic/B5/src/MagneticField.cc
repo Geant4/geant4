@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file B5/src/MagneticField.cc
+/// \file MagneticField.cc
 /// \brief Implementation of the B5::MagneticField class
 
 #include "MagneticField.hh"

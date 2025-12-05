@@ -29,9 +29,9 @@
 //
 // This is the right-hand side of equation of motion for monopole
 // in a combined electric and magnetic field:
-// d(p_c)/ds=g{c-energyB_ - p_c x E}/pc
+// d(p_c)/ds=g{c-energyB_ - p_c x E}/pc.
 
-// Created: V.Grichine, 17.11.2009
+// Author: Vladimir Grichine (CERN), 17.11.2009
 // -------------------------------------------------------------------
 #ifndef G4EQMAGELECTRICFIELD_HH
 #define G4EQMAGELECTRICFIELD_HH
@@ -40,22 +40,52 @@
 #include "G4EquationOfMotion.hh"
 #include "G4ElectroMagneticField.hh"
 
+/**
+ * @brief G4MonopoleEq defines the right-hand side of equation of motion
+ * for monopole in a combined electric and magnetic field:
+ * d(p_c)/ds=g{c-energyB_ - p_c x E}/pc.
+ */
+
 class G4MonopoleEq : public G4EquationOfMotion
 {
   public:
 
-    G4MonopoleEq(G4ElectroMagneticField* emField );
-   ~G4MonopoleEq() override;
+    /**
+     * Constructor for G4MonopoleEq.
+     *  @param[in] emField Pointer to the field.
+     */
+    G4MonopoleEq(G4ElectroMagneticField* emField);
 
+    /**
+     * Default Destructor.
+     */
+    ~G4MonopoleEq() override = default;
+
+    /**
+     * Sets the charge, momentum and mass of the current particle.
+     * Used to set the equation's coefficients.
+     *  @param[in] particleCharge Magnetic charge and moments in e+ units.
+     *  @param[in] MomentumXc Particle momentum.
+     *  @param[in] mass Particle mass.
+     */
     void  SetChargeMomentumMass(G4ChargeState particleCharge,
                                 G4double MomentumXc,
                                 G4double mass) override;
 
+    /**
+     * Calculates the value of the derivative, given the value of the field.
+     *  @param[in] y Coefficients array.
+     *  @param[in] Field Field value.
+     *  @param[out] dydx Derivatives array.
+     */
     void EvaluateRhsGivenB(const G4double y[],
                            const G4double Field[],
                                  G4double dydx[] ) const override;
-      // Given the value of the electromagnetic field, this function 
-      // calculates the value of the derivative dydx.
+
+    /**
+     * Returns the equation type-ID, "kEqMonopole".
+     */
+    inline G4EquationType GetEquationType() const override { return kEqMonopole; }
 
   private:
 

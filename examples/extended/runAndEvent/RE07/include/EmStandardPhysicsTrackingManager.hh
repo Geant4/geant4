@@ -23,14 +23,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// EmStandardPhysicsTrackingManager
-//
-// Class description:
-//
-// An implementation of the G4VTrackingManager interface for e-/e+ and gamma
-// with the same processes as G4EmStandardPhysics.
-//
-// Original author: Jonas Hahnfeld, 2021
+/// \file EmStandardPhysicsTrackingManager.hh
+/// \brief Definition of the EmStandardPhysicsTrackingManager class
+
+/// \class EmStandardPhysicsTrackingManager
+///
+/// Class description:
+///
+/// An implementation of the G4VTrackingManager interface for e-/e+ and gamma
+/// with the same processes as G4EmStandardPhysics.
+///
+/// Original author: Jonas Hahnfeld, 2021
 
 #ifndef EmStandardPhysicsTrackingManager_h
 #define EmStandardPhysicsTrackingManager_h 1

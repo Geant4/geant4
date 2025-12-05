@@ -25,7 +25,7 @@
 //
 // Tube/Cone Meshing constants for extent calculations
 
-// 13.08.95, P.Kent - Created separate file
+// Author: Paul Kent (CERN), 13.08.1995
 // --------------------------------------------------------------------
 #ifndef MESHDEFS_HH
 #define MESHDEFS_HH
@@ -34,15 +34,13 @@
 
 #include "G4Types.hh"
 
+/** Angle for mesh `wedges' in rads. Works best when simple fraction of pi/2. */
 const G4double kMeshAngleDefault = (CLHEP::pi/4);
-  // Angle for mesh `wedges' in rads
-  // Works best when simple fraction of pi/2
 
+/** Min wedges+1 to make. */
 const G4int kMinMeshSections = 3;
-  // Min wedges+1 to make
 
+/** Max wedges+1 to make, greater than 10 degrees/wedge for a complete tube. */
 const G4int kMaxMeshSections = 37;
-  // max wedges+1 to make
-  // =>10 degrees/wedge for complete tube
 
 #endif

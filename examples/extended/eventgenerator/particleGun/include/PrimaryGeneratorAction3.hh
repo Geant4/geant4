@@ -23,13 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file eventgenerator/particleGun/include/PrimaryGeneratorAction3.hh
+/// \file PrimaryGeneratorAction3.hh
 /// \brief Definition of the PrimaryGeneratorAction3 class
-//
-//
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef PrimaryGeneratorAction3_h
 #define PrimaryGeneratorAction3_h 1

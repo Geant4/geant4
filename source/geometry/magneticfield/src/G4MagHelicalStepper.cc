@@ -29,7 +29,7 @@
 // (as in the normal runge-kutta-methods) is to add helix segments to the
 // current position
 //
-// Created: J.Apostolakis, CERN - 05.11.1998
+// Author: John Apostolakis (CERN), 05.11.1998
 // --------------------------------------------------------------------
 
 #include "G4MagHelicalStepper.hh"
@@ -48,8 +48,6 @@ G4MagHelicalStepper::G4MagHelicalStepper(G4Mag_EqRhs *EqRhs)
      fPtrMagEqOfMot(EqRhs)
 {
 }
-
-G4MagHelicalStepper::~G4MagHelicalStepper() = default;
 
 void
 G4MagHelicalStepper::AdvanceHelix( const G4double yIn[],
@@ -245,8 +243,7 @@ G4MagHelicalStepper::DistChord() const
   {
     return GetRadHelix()*(1+std::cos(0.5*(twopi-Ang)));
   }
-  else  // return Diameter of projected circle
-  {
-    return 2*GetRadHelix();
-  } 
+
+  // return Diameter of projected circle
+  return 2*GetRadHelix();
 }

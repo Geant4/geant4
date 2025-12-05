@@ -283,10 +283,12 @@ G4GeometryMessenger::SetNewValue( G4UIcommand* command, G4String newValues )
   else if (command == recCmd) {
     Init();
     G4cout << "Running geometry overlaps check..." << G4endl;
-    if( OverlapMode::placed == newValues )
+    if( OverlapMode::placed == newValues ) {
       RecursiveOverlapTest();
-    else if( OverlapMode::logical == newValues )
+    }
+    else if( OverlapMode::logical == newValues ) {
       TreeOverlapTest();
+    }
     G4cout << "Geometry overlaps check completed !" << G4endl;
   }
 }

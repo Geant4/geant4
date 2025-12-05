@@ -23,12 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file eventgenerator/HepMC/MCTruth/include/MCTruthTrackingAction.hh
+/// \file MCTruthTrackingAction.hh
 /// \brief Definition of the MCTruthTrackingAction class
-//
-//
-//
-//
+
 // --------------------------------------------------------------
 //      GEANT 4 - MCTruthTrackingAction class
 // --------------------------------------------------------------

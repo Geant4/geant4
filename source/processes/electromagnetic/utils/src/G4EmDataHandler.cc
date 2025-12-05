@@ -45,8 +45,6 @@
 #include "G4ParticleDefinition.hh"
 #include "G4EmParameters.hh"
 #include "G4PhysicsTableHelper.hh"
-#include "G4VEmProcess.hh"
-#include "G4VEnergyLossProcess.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -64,33 +62,28 @@ G4EmDataHandler::G4EmDataHandler(std::size_t n, const G4String& nam)
 
 G4EmDataHandler::~G4EmDataHandler() 
 {
-  if (!fUseBaseParticleTable) {
+  if (!fUseBaseParticleTable && 0 < tLength) {
     for (std::size_t i=0; i<tLength; ++i) {
       CleanTable(i);
     }
+    data.clear();
+    tLength = 0;
     delete fMaxXS;
+    fMaxXS = nullptr;
     delete fXSpeaks;
+    fXSpeaks = nullptr;
   }
   if (!fElemSelectors.empty()) {
     for (auto const & ptr : fElemSelectors) {
       if (nullptr != ptr) {
 	for (auto const & p : *ptr) { delete p; }
+	ptr->clear();
+	delete ptr;
       }
     }
+    fElemSelectors.clear();
   }
   fRegistry->DeRegister(this);  
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-std::size_t G4EmDataHandler::SetTable(G4PhysicsTable* ptr)
-{
-  for (std::size_t i=0; i<tLength; ++i) {
-    if (ptr == data[i]) { return i; }
-  }
-  data.push_back(ptr);
-  ++tLength;
-  return tLength-1; 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -98,11 +91,8 @@ std::size_t G4EmDataHandler::SetTable(G4PhysicsTable* ptr)
 void G4EmDataHandler::UpdateTable(G4PhysicsTable* ptr, std::size_t idx)
 {
   // update table pointer but not delete previous
-  if (idx < tLength) { 
-    if (ptr != data[idx]) {
-      data[idx] = ptr;
-    }
-    data[idx] = G4PhysicsTableHelper::PreparePhysicsTable(data[idx]);
+  if (idx < tLength) {
+    data[idx] = ptr;
   } else {
     G4cout << "### G4EmDataHandler::UpdateTable fail for idx=" << idx 
            << " length=" << tLength << G4endl;
@@ -111,22 +101,13 @@ void G4EmDataHandler::UpdateTable(G4PhysicsTable* ptr, std::size_t idx)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4EmDataHandler::SaveTable(G4PhysicsTable* ptr, std::size_t idx)
+G4PhysicsTable* G4EmDataHandler::MakeTable(std::size_t idx)
 {
-  if (idx < tLength) { 
-    data[idx] = ptr;
-  }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4PhysicsTable* G4EmDataHandler::MakeTable(std::size_t i)
-{
-  std::size_t idx = i; 
-  if (idx >= tLength) { 
-    data.push_back(nullptr);
-    idx = tLength;
-    ++tLength;
+  if (idx >= tLength) {
+    for (std::size_t j=tLength; j<=idx; ++j) {
+      data.push_back(nullptr);
+    }
+    tLength = idx + 1;
   }
   data[idx] = G4PhysicsTableHelper::PreparePhysicsTable(data[idx]);
   return data[idx];
@@ -134,22 +115,16 @@ G4PhysicsTable* G4EmDataHandler::MakeTable(std::size_t i)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4PhysicsTable* G4EmDataHandler::MakeTable(G4PhysicsTable* ptr, std::size_t i)
+G4PhysicsTable* G4EmDataHandler::MakeTable(G4PhysicsTable* ptr, std::size_t idx)
 {
-  std::size_t idx = i; 
-  // create new table only if index corresponds to the
-  // position in the vector
-  if (idx < tLength) { 
-    if (ptr != data[idx]) { 
-      CleanTable(idx);
-      data[idx] = ptr;
+  if (idx >= tLength) {
+    for (std::size_t j=tLength; j<=idx; ++j) {
+      data.push_back(nullptr);
     }
-  } else {
-    data.push_back(ptr);
-    idx = tLength;
-    ++tLength;
+    tLength = idx + 1;
   }
-  data[idx] = G4PhysicsTableHelper::PreparePhysicsTable(data[idx]);
+  data[idx] = G4PhysicsTableHelper::PreparePhysicsTable(ptr);
+    
   return data[idx];
 }
 
@@ -160,10 +135,10 @@ void G4EmDataHandler::CleanTable(std::size_t i)
   if (i < tLength && nullptr != data[i]) {
     auto ptr = data[i];
     ptr->clearAndDestroy();
-    delete ptr;
     for (std::size_t j=0; j<tLength; ++j) {
       if (ptr == data[j]) { data[j] = nullptr; }
     }
+    delete ptr;
   }
 }
 

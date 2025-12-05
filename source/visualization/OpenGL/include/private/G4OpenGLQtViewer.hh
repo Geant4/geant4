@@ -170,6 +170,8 @@ public:
   bool isTouchableVisible(int POindex);
   void clearTreeWidget();
   bool exportImage(std::string name="", int width=-1, int height=-1);
+  G4bool GetWindowSize(unsigned int& a_w, unsigned int& a_h);
+  G4bool GetRenderAreaSize(unsigned int& a_w, unsigned int& a_h);
 
 public:
   void G4MousePressEvent(QMouseEvent *event);

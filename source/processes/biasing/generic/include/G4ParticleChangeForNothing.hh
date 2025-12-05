@@ -46,6 +46,7 @@ class G4ParticleChangeForNothing : public G4VParticleChange
     // -- from base class G4VParticleChange:
     virtual void Initialize(const G4Track& track)
     {
+      G4VParticleChange::Initialize(track);
       theStatusChange = track.GetTrackStatus();
       theNumberOfSecondaries = 0;
     }

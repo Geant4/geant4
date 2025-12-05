@@ -88,8 +88,8 @@ private:
     void FragmentsMomenta(G4int NF, G4int idx, G4double T);	
 
     // Rotates a 3-vector P to close momentum triangle Pa + V + P = 0
-    G4ThreeVector RotateMomentum(G4ThreeVector Pa, G4ThreeVector V, 
-				 G4ThreeVector P);
+    G4ThreeVector RotateMomentum(G4ThreeVector& Pa, G4ThreeVector& V, 
+				 G4ThreeVector& P);
 
 private:
 

@@ -106,10 +106,7 @@ class axis {
     else        return -half_pi();
   }
 
-  //static short TMath_Abs(short d)  { return (d >= 0) ? d : -d; }
   static int TMath_Abs(int d) { return (d >= 0) ? d : -d; }
-  //static long TMath_Abs(long d) { return (d >= 0) ? d : -d; }
-  //static float TMath_Abs(float d) { return (d >= 0) ? d : -d; }
   static double TMath_Abs(double d) { return (d >= 0) ? d : -d; }
 
   static void TGaxis_Rotate(
@@ -371,8 +368,6 @@ public:
      double rwmi = wmin;
      double rwma = wmax;
 
-     //out_error(m_out,"android_debug","start");
-
      bool noExponent = testBit(TAxis_kNoExponent);
 
      // If MoreLogLabels = true more Log Intermediate Labels are drawn.
@@ -442,7 +437,6 @@ public:
        //    fTimeFormat.c_str());
      }
 
-     //out_error(m_out,"android_debug","0000");
      // Determine time format
      std::string timeformat;
      std::string::size_type IdF = fTimeFormat.find("%F");
@@ -452,7 +446,6 @@ public:
        timeformat = fTimeFormat;
      }
 
-     //out_error(m_out,"android_debug","0001");
      // determine the time offset and correct for time offset not being integer
      double timeoffset = 0;
      if (OptionTime) {
@@ -528,9 +521,9 @@ public:
      int N1A   = ndiv%100;
      int N2A   = (ndiv%10000 - N1A)/100;
      int N3A   = ndiv/10000;
-     int NN3   = mx<int>(N3A,1);
-     int NN2   = mx<int>(N2A,1)*NN3;
-     int NN1   = mx<int>(N1A,1)*NN2+1;
+     int NN3   = max_of<int>(N3A,1);
+     int NN2   = max_of<int>(N2A,1)*NN3;
+     int NN1   = max_of<int>(N1A,1)*NN2+1;
      int Nticks= NN1;
 
      // Axis bining optimization is ignored if:
@@ -549,7 +542,6 @@ public:
         out_error(m_out,"PaintAxis", "option I not available");
         OptionInt = 0;
      }
-     //out_error(m_out,"android_debug","0002");
      if (!OptionNoopt || OptionInt ) {
 
         // Primary divisions optimization
@@ -616,13 +608,12 @@ public:
         N1Aold = N1A;
         NN1old = NN1;
         N1A    = nbins;
-        NN3    = mx<int>(NB3,1);
-        NN2    = mx<int>(NB2,1)*NN3;
-        NN1    = mx<int>(N1A,1)*NN2+1;
+        NN3    = max_of<int>(NB3,1);
+        NN2    = max_of<int>(NB2,1)*NN3;
+        NN1    = max_of<int>(N1A,1)*NN2+1;
         Nticks = NN1;
      }
 
-     //out_error(m_out,"android_debug","0003");
      // Coordinates are normalized
 
      ratio1 = 1/(RWxmax-RWxmin);
@@ -638,7 +629,6 @@ public:
         YY1 = ratio2*(Yymax-RWymin);
      }
 
-     //out_error(m_out,"android_debug","0004");
      if ((X0 == X1) && (Y0 == Y1)) {
         out_error(m_out,"PaintAxis", "length of axis is 0");
         return;
@@ -675,7 +665,6 @@ public:
         return; //goto L210;
      }
 
-     //out_error(m_out,"android_debug","0005");
      if (!OptionNoopt || OptionInt) {
         axis_lengthN = ::sqrt((XX1-XX0)*(XX1-XX0)+(YY1-YY0)*(YY1-YY0));
         axis_length0 = ::sqrt((XX0-X0)*(XX0-X0)+(YY0-Y0)*(YY0-Y0));
@@ -695,7 +684,6 @@ public:
         }
      }
 
-     //out_error(m_out,"android_debug","0006");
      if (X0 == X1) {
         phi  = 0.5*kPI;
         phil = phi;
@@ -715,7 +703,6 @@ public:
      if (acosphi <= epsilon) { acosphi = 0;  cosphi  = 0; }
      if (asinphi <= epsilon) { asinphi = 0;  sinphi  = 0; }
 
-     //out_error(m_out,"android_debug","0007");
      // Mside positive, tick marks on positive side
      // Mside negative, tick marks on negative side
      // Mside zero, tick marks on both sides
@@ -752,7 +739,6 @@ public:
      else                          grid_side = 1;
 
 
-     //out_error(m_out,"android_debug","0008");
      // Compute Values if Function is given
      /*GB if(fFunction) {
         rwmi = fFunction->Eval(wmin);
@@ -776,7 +762,6 @@ public:
         aLinesAxis.push_back((float)ypl2);
      }
 
-     //out_error(m_out,"android_debug","0009");
      // No bining
 
      if (ndiv == 0) return; //goto L210;
@@ -831,7 +816,6 @@ public:
         }
      }
 
-     //out_error(m_out,"android_debug","0010");
      // Labels preparation:
      // Get character height
      // Compute the labels orientation in case of overlaps
@@ -902,7 +886,6 @@ public:
         }
      }
 
-     //out_error(m_out,"android_debug","0011");
      // Now determine orientation of labels on axis
   /*FIXME
      if (!gPad->IsBatch()) {
@@ -930,7 +913,6 @@ public:
      }
      textAlign = 10*Xalign+Yalign;
 
-     //out_error(m_out,"android_debug","0012");
      // Position of labels in Y
      if (X0 == X1) {
         if (OptionPlus && !OptionMinus) {
@@ -955,7 +937,6 @@ public:
      }
      if (OptionText) Ylabel /= 2;
 
-     //out_error(m_out,"android_debug","0013");
      // Draw the linear tick marks if needed...
      if (!OptionLog) {
         if (ndiv) {
@@ -1147,7 +1128,6 @@ public:
         }
      }
 
-     //out_error(m_out,"android_debug","0014");
      // Draw the numeric labels if needed...
      if (!drawGridOnly && !OptionUnlab) {
         if (!OptionLog) {
@@ -1174,7 +1154,7 @@ public:
                  NEXE   = 0;
                  bool FLEXPO = false;
                  bool FLEXNE = false;
-                 WW  = mx<double>(TMath_Abs(wmin),TMath_Abs(wmax));
+                 WW  = max_of<double>(TMath_Abs(wmin),TMath_Abs(wmax));
 
                  // First case : (wmax-wmin)/N1A less than 0.001
                  // 0.001 fMaxDigits of 5 (fMaxDigits) characters).
@@ -1246,10 +1226,10 @@ public:
                  }
 
                  IF2 = NA;
-                 IF1 = mx<int>(NF+NA,maxDigits)+1;
+                 IF1 = max_of<int>(NF+NA,maxDigits)+1;
   L110:
-                 if (mn<double>(wmin,wmax) < 0)IF1 = IF1+1;
-                 IF1 = mn<int>(IF1,32);
+                 if (min_of<double>(wmin,wmax) < 0)IF1 = IF1+1;
+                 IF1 = min_of<int>(IF1,32);
 
                  // In some cases, IF1 and IF2 are too small....
                  while (DWlabel < ::pow(10.,-IF2)) {
@@ -1440,7 +1420,6 @@ public:
 
      // Log axis
 
-     //out_error(m_out,"android_debug","0015");
      if (OptionLog && ndiv) {
         unsigned int xi1=0,xi2 = 0,wi = 0,yi1=0,yi2,hi = 0;
         bool firstintlab = true, overlap = false;
@@ -1703,7 +1682,6 @@ public:
      }  //endif (OptionLog && ndiv)
 
 
-     //out_error(m_out,"android_debug","end");
   //L210:
   }
 
@@ -1877,12 +1855,12 @@ private:
      int OptionTime;
      SETOPT(aCHOPT,'t',OptionTime);
 
-     double AL = mn<double>(A1,A2);
-     double AH = mx<double>(A1,A2);
+     double AL = min_of<double>(A1,A2);
+     double AH = max_of<double>(A1,A2);
      if (AL == AH) AH = AL+1;
      // if nold  ==  -1 , program uses binwidth input from calling routine
      if (nold == -1 && BinWidth > 0 ) goto L90;
-     ntemp = (int)mx<double>(nold,2);
+     ntemp = (int)max_of<double>(nold,2);
      if (ntemp < 1) ntemp = 1;
 
   L20:

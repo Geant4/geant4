@@ -6,6 +6,11 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2025-10-01 John Allison (openinventor-V11-03-03)
+- G4OpenInventorViewer.cc:
+  - CompareForKernelVisit():
+    - Include dotsSize and dotsSmooth for decision on kernel visit.
+
 ## 2025-03-06 John Allison (openinventor-V11-03-02)
 - G4OpenInventorViewer:
   - Implement CompareForTransientsRedraw().

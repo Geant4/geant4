@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file DetectorConstruction.cc
+/// \brief Implementation of the DetectorConstruction class
+
 // This example is provided by the Geant4-DNA collaboration
 // Any report or published results obtained using the Geant4-DNA software
 // shall cite the following Geant4-DNA collaboration publications:
@@ -34,8 +37,6 @@
 //
 // The Geant4-DNA web site is available at http://geant4-dna.org
 //
-/// \file DetectorConstruction.cc
-/// \brief Implementation of the DetectorConstruction class
 
 #include "DetectorConstruction.hh"
 #include "DetectorMessenger.hh"
@@ -54,13 +55,14 @@ DetectorConstruction::DetectorConstruction(PhysicsList* pl)
 
   // World size
   fWorldRadius = 1*um;
-  fWorldLength = 10*um;
+  fWorldOffsetLength = 0;
 
   // Cylinders
-  fThicknessCylinders = 1*nm;
-  fMinRadiusCylinders = 0;
+  fCylinderLength = 10*um;
+  fCylinderThickness = 1*nm;
+  fCylinderMinRadius = 0;
 
-  fNumberCylinders = (fWorldRadius-fMinRadiusCylinders) / fThicknessCylinders;
+  fCylinderNumber = (fWorldRadius-fCylinderMinRadius) / fCylinderThickness;
 
   // Materials
   G4NistManager* man = G4NistManager::Instance();
@@ -103,10 +105,10 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   // World volume
 
   G4Tubs* solidWorld =
-    new G4Tubs("World", 0., fWorldRadius, fWorldLength / 2, 0., 360*deg);
+    new G4Tubs("World", 0., fWorldRadius, fWorldOffsetLength + (fCylinderLength / 2), 0., 360*deg);
 
   fLogicWorld = new G4LogicalVolume(solidWorld,  // its solid
-                                    fVacuumMaterial,  // its material
+                                    fWaterMaterial,  // its material
                                     "World");  // its name
 
   fPhysiWorld = new G4PVPlacement(0,  // no rotation
@@ -124,33 +126,34 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
   // Cylinders
 
-  fNumberCylinders = (fWorldRadius-fMinRadiusCylinders) / fThicknessCylinders;
+  fCylinderNumber = (fWorldRadius-fCylinderMinRadius) / fCylinderThickness;
 
   // Check values
   /*
-  G4cout << fMinRadiusCylinders/nm << G4endl;
+  G4cout << fCylinderMinRadius/nm << G4endl;
   G4cout << fWorldRadius/nm << G4endl;
-  G4cout << fThicknessCylinders/nm << G4endl;
-  G4cout << fWorldLength/nm << G4endl;
+  G4cout << fCylinderThickness/nm << G4endl;
+  G4cout << fCylinderLength/nm << G4endl;
+  G4cout << fWorldOffsetLength/nm << G4endl;
   */
 
   G4cout << G4endl;
   G4cout
     << "*******************************************************************"
     << G4endl;
-  G4cout << "*** NUMBER OF HOLLOW CYLINDERS = "<< fNumberCylinders << G4endl;
+  G4cout << "*** NUMBER OF HOLLOW CYLINDERS = "<< fCylinderNumber << G4endl;
   G4cout
     << "*******************************************************************"
     << G4endl;
   G4cout << G4endl;
 
-  for (G4int i = 0; i < fNumberCylinders; i++) {
+  for (G4int i = 0; i < fCylinderNumber; i++) {
 
-    G4double rIn = i*fThicknessCylinders;
-    G4double rOut = (i+1) * fThicknessCylinders;
+    G4double rIn = i*fCylinderThickness;
+    G4double rOut = (i+1) * fCylinderThickness;
 
     G4Tubs* solidCylinder =
-      new G4Tubs("Cylinder", rIn, rOut, fWorldLength / 2, 0., 360*deg);
+      new G4Tubs("Cylinder", rIn, rOut, fCylinderLength / 2, 0., 360*deg);
 
     G4LogicalVolume* logicCylinder =
       new G4LogicalVolume(solidCylinder, fWaterMaterial, "Cylinder");
@@ -189,21 +192,28 @@ void DetectorConstruction::SetWorldRadius(const G4double& value)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void DetectorConstruction::SetWorldLength(const G4double& value)
+void DetectorConstruction::SetCylinderLength(const G4double& value)
 {
-  fWorldLength = value;
+  fCylinderLength = value;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void DetectorConstruction::SetThicknessCylinders(const G4double& value)
+void DetectorConstruction::SetWorldOffsetLength(const G4double& value)
 {
-  fThicknessCylinders = value;
+  fWorldOffsetLength = value;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void DetectorConstruction::SetMinRadiusCylinders(const G4double& value)
+void DetectorConstruction::SetCylinderThickness(const G4double& value)
 {
-  fMinRadiusCylinders = value;
+  fCylinderThickness = value;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void DetectorConstruction::SetCylinderMinRadius(const G4double& value)
+{
+  fCylinderMinRadius = value;
 }

@@ -149,11 +149,7 @@ void G4Scintillation::ProcessDescription(std::ostream& out) const
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4bool G4Scintillation::IsApplicable(const G4ParticleDefinition& aParticleType)
 {
-  if(aParticleType.GetParticleName() == "opticalphoton")
-    return false;
-  if(aParticleType.IsShortLived())
-    return false;
-  return true;
+  return (!aParticleType.IsShortLived());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -280,6 +276,9 @@ G4VParticleChange* G4Scintillation::PostStepDoIt(const G4Track& aTrack,
   G4double t0      = pPreStepPoint->GetGlobalTime();
 
   G4double TotalEnergyDeposit = aStep.GetTotalEnergyDeposit();
+  if (0.0 >= TotalEnergyDeposit) {
+    G4VRestDiscreteProcess::PostStepDoIt(aTrack, aStep);
+  }
 
   G4MaterialPropertiesTable* MPT = aMaterial->GetMaterialPropertiesTable();
   if(!MPT)
@@ -381,11 +380,16 @@ G4VParticleChange* G4Scintillation::PostStepDoIt(const G4Track& aTrack,
 
   // Retrieve the Scintillation Integral for this material
   // new G4PhysicsFreeVector allocated to hold CII's
-  std::size_t numPhot                = fNumPhotons;
+  G4int numPhot                      = fNumPhotons;
   G4double scintTime                 = 0.;
   G4double riseTime                  = 0.;
   G4PhysicsFreeVector* scintIntegral = nullptr;
   G4ScintillationType scintType      = Slow;
+
+  G4bool isNeutral = (aParticle->GetDefinition()->GetPDGCharge() == 0);
+  G4double deltaVelocity = pPostStepPoint->GetVelocity() -
+    pPreStepPoint->GetVelocity();
+  auto touchableHandle = aStep.GetPreStepPoint()->GetTouchableHandle();
 
   for(G4int scnt = 0; scnt < N_timeconstants; ++scnt)
   {
@@ -463,7 +467,7 @@ G4VParticleChange* G4Scintillation::PostStepDoIt(const G4Track& aTrack,
     if(!scintIntegral)
       continue;
 
-    for(std::size_t i = 0; i < numPhot; ++i)
+    for(G4int i = 0; i < numPhot; ++i)
     {
       // Determine photon energy
       G4double sampledEnergy = scintIntegral->Value(G4UniformRand());
@@ -495,19 +499,12 @@ G4VParticleChange* G4Scintillation::PostStepDoIt(const G4Track& aTrack,
       scintPhoton->SetKineticEnergy(sampledEnergy);
 
       // Generate new G4Track object:
-      G4double rand = G4UniformRand();
-      if(aParticle->GetDefinition()->GetPDGCharge() == 0)
-      {
-        rand = 1.0;
-      }
+      G4double rand = (isNeutral) ? 1.0 : G4UniformRand();
 
       // emission time distribution
       G4double delta = rand * aStep.GetStepLength();
       G4double deltaTime =
-        delta /
-        (pPreStepPoint->GetVelocity() +
-         rand * (pPostStepPoint->GetVelocity() - pPreStepPoint->GetVelocity()) /
-           2.);
+        delta / (pPreStepPoint->GetVelocity() + 0.5 * rand * deltaVelocity);
       if(riseTime == 0.0)
       {
         deltaTime -= scintTime * std::log(G4UniformRand());
@@ -521,8 +518,7 @@ G4VParticleChange* G4Scintillation::PostStepDoIt(const G4Track& aTrack,
       G4ThreeVector secPosition = x0 + rand * aStep.GetDeltaPosition();
 
       G4Track* secTrack = new G4Track(scintPhoton, secTime, secPosition);
-      secTrack->SetTouchableHandle(
-        aStep.GetPreStepPoint()->GetTouchableHandle());
+      secTrack->SetTouchableHandle(touchableHandle);
       secTrack->SetParentID(aTrack.GetTrackID());
       secTrack->SetCreatorModelID(secID);
       if(fScintillationTrackInfo)

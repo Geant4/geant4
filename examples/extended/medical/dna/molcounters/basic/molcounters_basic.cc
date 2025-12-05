@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file molcounters_basic.cc
+/// \brief Main program of the molcounters/basic example
+
 // The `molcounters` example(s) are provided as part of Geant4-DNA
 // and any report or published result obtained using it shall cite
 // the respective Geant4-DNA collaboration publications.

@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file RunAction.hh
+/// \brief Definition of the RunAction class
+
 // This example is provided by the Geant4-DNA collaboration
 // dnadamage3 example is derived from the chem6 example
 // chem6 example authors: W. G. Shin and S. Incerti (CENBG, France)
@@ -40,8 +43,6 @@
 //          J. Ramos-Mendez and B. Faddegon (UCSF, US)
 //
 //
-/// \file RunAction.hh
-/// \brief Definition of the RunAction class
 
 #ifndef DNADAMAGE2_RunAction_h
 #define DNADAMAGE2_RunAction_h 1

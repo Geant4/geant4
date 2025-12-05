@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file Par04InferenceSetup.cc
+/// \brief Implementation of the Par04InferenceSetup class
+
 #ifdef USE_INFERENCE
 #  include "Par04InferenceSetup.hh"
 

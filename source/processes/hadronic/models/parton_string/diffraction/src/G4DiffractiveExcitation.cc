@@ -89,7 +89,8 @@ G4DiffractiveExcitation::~G4DiffractiveExcitation() {}
 G4bool G4DiffractiveExcitation::ExciteParticipants( G4VSplitableHadron*    projectile, 
                                                     G4VSplitableHadron*    target,
                                                     G4FTFParameters*       theParameters,
-                                                    G4ElasticHNScattering* theElastic ) const {
+                                                    G4ElasticHNScattering* theElastic,
+						    G4bool&                isDiffractive ) const {
 
   #ifdef debugFTFexcitation
   G4cout << G4endl << "FTF ExciteParticipants --------------" << G4endl;
@@ -294,7 +295,9 @@ G4bool G4DiffractiveExcitation::ExciteParticipants( G4VSplitableHadron*    proje
     if ( G4UniformRand() < common.ProbOfDiffraction ) {
       
       returnResult = ExciteParticipants_doDiffraction( projectile, target, theParameters, common );
-      
+
+      if ( returnResult ) isDiffractive = true;
+
     } else {
       
       returnResult = ExciteParticipants_doNonDiffraction( projectile, target, theParameters, common );

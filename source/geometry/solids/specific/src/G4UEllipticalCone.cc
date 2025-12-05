@@ -54,12 +54,6 @@ G4UEllipticalCone::G4UEllipticalCone(const G4String& pName,
 
 //////////////////////////////////////////////////////////////////////////
 //
-// Destructor
-
-G4UEllipticalCone::~G4UEllipticalCone() = default;
-
-//////////////////////////////////////////////////////////////////////////
-//
 // Copy constructor
 
 G4UEllipticalCone::G4UEllipticalCone(const G4UEllipticalCone& rhs)

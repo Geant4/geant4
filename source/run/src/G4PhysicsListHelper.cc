@@ -720,7 +720,7 @@ void G4PhysicsListHelper::ReadInDefaultOrderingParameter()
   tmp.processSubType = fCerenkov;
   tmp.ordering[0] = -1;
   tmp.ordering[1] = -1;
-  tmp.ordering[2] = 1000;
+  tmp.ordering[2] = 100;  // step limit should be after any other step limits
   tmp.isDuplicable = false;
   theTable->push_back(tmp);
   sizeOfTable += 1;
@@ -740,7 +740,7 @@ void G4PhysicsListHelper::ReadInDefaultOrderingParameter()
   tmp.processSubType = fSynchrotronRadiation;
   tmp.ordering[0] = -1;
   tmp.ordering[1] = -1;
-  tmp.ordering[2] = 1000;
+  tmp.ordering[2] = 100;  // step limit should be after any other step limits
   tmp.isDuplicable = false;
   theTable->push_back(tmp);
   sizeOfTable += 1;
@@ -750,7 +750,7 @@ void G4PhysicsListHelper::ReadInDefaultOrderingParameter()
   tmp.processSubType = fTransitionRadiation;
   tmp.ordering[0] = -1;
   tmp.ordering[1] = -1;
-  tmp.ordering[2] = 1000;
+  tmp.ordering[2] = 100;  // step limit should be after any other step limits
   tmp.isDuplicable = false;
   theTable->push_back(tmp);
   sizeOfTable += 1;
@@ -1048,9 +1048,9 @@ void G4PhysicsListHelper::ReadInDefaultOrderingParameter()
   tmp.processTypeName = "MuAtomCapture";
   tmp.processType = fHadronic;
   tmp.processSubType = fMuAtomicCapture;
-  tmp.ordering[0] = -1;
+  tmp.ordering[0] = 10;
   tmp.ordering[1] = -1;
-  tmp.ordering[2] = 1000;
+  tmp.ordering[2] = -1;
   tmp.isDuplicable = false;
   theTable->push_back(tmp);
   sizeOfTable += 1;
@@ -1068,7 +1068,7 @@ void G4PhysicsListHelper::ReadInDefaultOrderingParameter()
   tmp.processTypeName = "HadAtRest";
   tmp.processType = fHadronic;
   tmp.processSubType = fHadronAtRest;
-  tmp.ordering[0] = 1000;
+  tmp.ordering[0] = 10;
   tmp.ordering[1] = -1;
   tmp.ordering[2] = -1;
   tmp.isDuplicable = false;

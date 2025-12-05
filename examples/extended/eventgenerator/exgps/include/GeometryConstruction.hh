@@ -23,13 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file eventgenerator/exgps/include/GeometryConstruction.hh
+/// \file GeometryConstruction.hh
 /// \brief Definition of the GeometryConstruction class
-//
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef GeometryConstruction1_h
 #define GeometryConstruction1_h 1

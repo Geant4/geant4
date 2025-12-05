@@ -72,6 +72,7 @@ private:
 	void ConstructSiliconBridgeDetector();
 	void ConstructDiamondTelescope();
   	void ConstructSiC();
+  	void ConstructTEPC();
 	
 	// store these variable across various Construct*() above
 	G4VPhysicalVolume* physical_world;

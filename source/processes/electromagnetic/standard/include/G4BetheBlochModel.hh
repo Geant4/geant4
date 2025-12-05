@@ -104,8 +104,10 @@ public:
 			     const G4Material* mat,
 			     G4double kineticEnergy) override;
 
-  void CorrectionsAlongStep(const G4MaterialCutsCouple* couple,
-			    const G4DynamicParticle* dp,
+  void CorrectionsAlongStep(const G4Material*,
+			    const G4ParticleDefinition*,
+			    const G4double kinEnergy,
+			    const G4double cutEnergy,
 			    const G4double& length,
 			    G4double& eloss) override;
 
@@ -115,6 +117,8 @@ public:
 			 G4double tmin,
 			 G4double maxEnergy) override;
 
+  inline void SetChargeSquareRatio(G4double val);
+
   // hide assignment operator
   G4BetheBlochModel & operator=(const G4BetheBlochModel &right) = delete;
   G4BetheBlochModel(const G4BetheBlochModel&) = delete;
@@ -123,10 +127,6 @@ protected:
 
   G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
 			      G4double kinEnergy) override;
-
-  inline G4double GetChargeSquareRatio() const;
-
-  inline void SetChargeSquareRatio(G4double val);
 
 private:
 
@@ -145,7 +145,7 @@ private:
   G4double tlimit = DBL_MAX;
   G4double spin = 0.0;
   G4double magMoment2 = 0.0;
-  G4double chargeSquare = 1.0;
+  G4double chargeSquareRatio = 1.0;
   G4double ratio = 1.0;
   G4double formfact = 0.0;
   G4double twoln10;
@@ -159,16 +159,9 @@ private:
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4double G4BetheBlochModel::GetChargeSquareRatio() const
-{
-  return chargeSquare;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 inline void G4BetheBlochModel::SetChargeSquareRatio(G4double val)
 {
-  chargeSquare = val;
+  chargeSquareRatio = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

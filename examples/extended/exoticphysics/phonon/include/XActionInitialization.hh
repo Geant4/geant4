@@ -23,10 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file exoticphysics/phonon/include/XActionInitialization.hh
+/// \file XActionInitialization.hh
 /// \brief Definition of the XActionInitialization class
-//
-//
 
 #ifndef XActionInitialization_h
 #define XActionInitialization_h 1

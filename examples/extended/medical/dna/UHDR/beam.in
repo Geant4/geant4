@@ -6,8 +6,8 @@
 /process/chem/TimeStepModel IRT_syn
 
 # Set the simulation volume (half Side Length)
-#/UHDR/env/volume 0.8 um # for UHDR
-/UHDR/env/volume 1.6 um # for CONV
+#/UHDR/env/volume 0.8 um
+/UHDR/env/volume 1.6 um
 
 /UHDR/Detector/PBC true
 

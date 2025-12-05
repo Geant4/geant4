@@ -23,11 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file exoticphysics/ucn/src/ExUCNExtraPhysics.cc
+/// \file ExUCNExtraPhysics.cc
 /// \brief Implementation of the ExUCNExtraPhysics class
-//
-//
+
 #include "ExUCNExtraPhysics.hh"
 
 #include "G4Decay.hh"

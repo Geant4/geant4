@@ -23,10 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file GB07/include/GB07SD.hh
+/// \file GB07SD.hh
 /// \brief Definition of the GB07SD class
-//
-//
 
 #ifndef GB07SD_h
 #define GB07SD_h 1

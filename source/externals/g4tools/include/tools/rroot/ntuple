@@ -13,14 +13,9 @@
 #include "stl_vector"
 
 #include "../cids"
-#include "../vfind"
 #include "../vmanip"
 #include "../ntuple_binding"
 #include "../get_lines"
-
-#ifdef TOOLS_MEM
-#include "../mem"
-#endif
 
 namespace tools {
 namespace rroot {
@@ -92,7 +87,6 @@ public:
       return *this;
     }
   protected:
-    //typedef typename LEAF::value_t value_t;
     bool _fetch_entry() const {
       unsigned int n;
       if(!m_branch.find_entry(m_file,uint32(m_index),n)) {m_ref = T();return false;}
@@ -108,7 +102,6 @@ public:
     LEAF& m_leaf;
     int64& m_index; //WARNING : a ref.
     T& m_ref;
-    //value_t m_tmp;
   };
 
   template <class T,class LEAF>
@@ -486,22 +479,13 @@ public:
 
 public:
   ntuple(tree& a_tree):m_tree(a_tree),m_index(-1){
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
   }
   virtual ~ntuple() {
     safe_clear<read::icol>(m_cols);
-#ifdef TOOLS_MEM
-    mem::decrement(s_class().c_str());
-#endif
   }
 protected:
   ntuple(const ntuple& a_from)
   :parent(a_from),m_tree(a_from.m_tree){
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
   }
   ntuple& operator=(const ntuple&){return *this;}
 public:
@@ -529,10 +513,6 @@ public:
         return false;
       }
 
-      //a_out << "tools::rroot::ntuple::initialize :"
-      //      << " branch " << _branch->name()
-      //      << ", entries " << _branch->entry_number() << "."
-      //      << std::endl;
 
 #define TOOLS_RROOT_NTUPLE_CREATE_COL(a__type) \
       if(leaf<a__type>* lf_##a__type = safe_cast<base_leaf, leaf<a__type> >(*bl) ){\
@@ -550,7 +530,6 @@ public:
         } else {\
           const base_leaf* lfc = bl->leaf_count();\
           if(lfc) {\
-            /*::printf("debug : ntuple : create col leaf count : %s\n",bl->name().c_str());*/\
             if(user_cid!=_cid_std_vector<a__type>()) {\
               a_out << "tools::rroot::ntuple::initialize :"\
                     << " for leaf with name " << sout(bl->name())\
@@ -564,7 +543,6 @@ public:
 	      (m_tree.file(),*_branch,*lf_##a__type,m_index,*user_var);\
             m_cols.push_back(col);\
           } else {\
-            /*::printf("debug : ntuple : create col : %s\n",bl->name().c_str());*/\
             if(user_cid!=_cid(a__type())) {\
               a_out << "tools::rroot::ntuple::initialize :"\
                     << " for leaf with name " << sout(bl->name())\
@@ -634,7 +612,6 @@ public:
 
 #define TOOLS_RROOT_NTUPLE_CREATE_VEC_COL(a__name,a__type) \
         if(be->class_name()==a__name) {\
-          /*::printf("debug : ntuple : create vec col : %s\n",bl->name().c_str());*/\
           typedef a__type el_t;\
           std::vector<el_t>* user_var = a_bd.find_vector_variable<el_t>(bl->name());\
           if(user_var) {\
@@ -650,24 +627,9 @@ public:
 
              TOOLS_RROOT_NTUPLE_CREATE_VEC_COL("vector<char>",char)
         else TOOLS_RROOT_NTUPLE_CREATE_VEC_COL("vector<short>",short)
-      //else TOOLS_RROOT_NTUPLE_CREATE_VEC_COL("vector<unsigned short>",unsigned short)
-      //else TOOLS_RROOT_NTUPLE_CREATE_VEC_COL("vector<unsigned int>",unsigned int)
         else TOOLS_RROOT_NTUPLE_CREATE_VEC_COL("vector<int>",int)
         else TOOLS_RROOT_NTUPLE_CREATE_VEC_COL("vector<float>",float)
         else TOOLS_RROOT_NTUPLE_CREATE_VEC_COL("vector<double>",double)
-
-      //else TOOLS_RROOT_NTUPLE_CREATE_VEC_COL("vector<string>",std::string)
-      //else TOOLS_RROOT_NTUPLE_CREATE_VEC_COL("vector<unsigned long>",uint64) //beurk
-
-        // WARNING : take care of the space in "> >".
-	/* VisualC++ : the below does not compile.
-        else TOOLS_RROOT_NTUPLE_CREATE_VEC_COL("vector<vector<unsigned short> >",std::vector<unsigned short>)
-        else TOOLS_RROOT_NTUPLE_CREATE_VEC_COL("vector<vector<short> >",std::vector<short>)
-        else TOOLS_RROOT_NTUPLE_CREATE_VEC_COL("vector<vector<unsigned int> >",std::vector<unsigned int>)
-        else TOOLS_RROOT_NTUPLE_CREATE_VEC_COL("vector<vector<int> >",std::vector<short>)
-        else TOOLS_RROOT_NTUPLE_CREATE_VEC_COL("vector<vector<float> >",std::vector<float>)
-        else TOOLS_RROOT_NTUPLE_CREATE_VEC_COL("vector<vector<double> >",std::vector<double>)
-        */
 
         else {
           a_out << "tools::rroot::ntuple::initialize :"
@@ -711,11 +673,6 @@ public:
         return false;
       }
     }}
-
-    //a_out << "tools::rroot::ntuple::initialize :"
-    //      << " number of columns " << num << "."
-    //      << std::endl;
-
     return true;
   }
 

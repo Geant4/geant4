@@ -23,10 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-///  \file HadNucIneEvents.cc
-///  \brief Main program,
-///         hadronic/FlukaCern/ProcessLevel/FinalState example.
+/// \file HadNucIneEvents.cc
+/// \brief Main program of the ProcessLevel/FinalState example
+
 //
 //  Author: A. Ribbon, 8 November 2020
 //  Modified: G. Hugo, 8 December 2022

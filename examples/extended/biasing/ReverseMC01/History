@@ -1,14 +1,23 @@
 # Example ReverseMC01 History
 
 See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
-which **must** added in reverse chronological order (newest at the top). It must **not**
-be used as a substitute for writing good git commit messages!
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
+
+-------------------------------------------------------------------------------
+
+## 2025-11-09 Gabriele Cosmo (ReverseMC01-V11-03-01)
+- Fixed coding conventions (removal of tabs and code formatting).
+
+## 2025-11-06 Laurent Desorgher (ReverseMC01-V11-03-00)
+- Modified the example to work with MT.
+  Works with event-V11-03-03 and run-V11-03-06.
 
 ## 2022-12-14 Ben Morgan (ReverseMC01-V11-01-00)
-- Remove inclusion of unneeded and now obsolete G4strstreambuf header
+- Remove inclusion of unneeded and now obsolete G4strstreambuf header.
 
 ## 2021-12-10 Ben Morgan (ReverseMC01-V11-00-00)
-- Change to new Markdown History format
+- Change to new Markdown History format.
 
 ---
 

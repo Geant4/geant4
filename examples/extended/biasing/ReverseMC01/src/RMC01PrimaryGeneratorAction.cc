@@ -23,11 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file biasing/ReverseMC01/src/RMC01PrimaryGeneratorAction.cc
+/// \file RMC01PrimaryGeneratorAction.cc
 /// \brief Implementation of the RMC01PrimaryGeneratorAction class
-//
-//
-//////////////////////////////////////////////////////////////
+
 //      Class Name:        RMC01PrimaryGeneratorAction
 //        Author:               L. Desorgher
 //         Organisation:         SpaceIT GmbH
@@ -52,7 +50,7 @@ RMC01PrimaryGeneratorAction::RMC01PrimaryGeneratorAction()
 
 RMC01PrimaryGeneratorAction::~RMC01PrimaryGeneratorAction()
 {
-  delete fParticleSource;
+  if (fParticleSource) delete fParticleSource;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

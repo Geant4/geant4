@@ -87,6 +87,8 @@ namespace G4INCL {
       if(t==Composite) {
         return transmissionRadius[t] +
           ParticleTable::getNuclearRadius(t, p->getA(), p->getZ());
+      } else if(t==antiComposite){
+        return transmissionRadius[t] + ParticleTable::getNuclearRadius(t,-(p->getA()),-(p->getZ()));
       } else
         return transmissionRadius[t];
     };
@@ -97,6 +99,7 @@ namespace G4INCL {
      */
     G4double getTransmissionRadius(ParticleType type) const {
 // assert(type!=Composite);
+// assert(type!=antiComposite);
       return transmissionRadius[type];
     };
 

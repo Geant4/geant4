@@ -1,0 +1,208 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef toolx_Qt_gl_functions
+#define toolx_Qt_gl_functions
+
+#include <QtCore/qglobal.h> //For QT_VERSION.
+
+#ifdef TOOLS_USE_GL_VERSION_3_2
+
+#if QT_VERSION < 0x060000
+  #include <QtGui/QOpenGLFunctions_3_2_Core>
+#else
+  #include <QtOpenGL/QOpenGLFunctions_3_2_Core>
+#endif
+namespace toolx {namespace Qt {typedef QOpenGLFunctions_3_2_Core qopengl_functions;}}
+
+namespace toolx {
+namespace Qt {
+
+class gl_functions: protected qopengl_functions {
+  typedef qopengl_functions parent;
+public:
+  gl_functions() {}
+  virtual ~gl_functions() {}
+protected:
+  gl_functions(const gl_functions&) {}
+  gl_functions& operator=(const gl_functions&) {return *this;}
+public:
+  virtual bool initialize() {return parent::initializeOpenGLFunctions();}
+public:
+  /*GL_VERSION_1_1*/
+  void gl__BindTexture(GLenum target, GLuint texture) {parent::glBindTexture(target,texture);}
+  void gl__BlendFunc(GLenum sfactor, GLenum dfactor) {parent::glBlendFunc(sfactor,dfactor);}
+  void gl__ClearDepth(GLdouble depth) {parent::glClearDepth(depth);}
+  void gl__ClearStencil(GLint s) {parent::glClearStencil(s);}
+  void gl__ClearColor(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha) {parent::glClearColor(red,green,blue,alpha);}
+  void gl__Clear(GLbitfield mask) {parent::glClear(mask);}
+
+  void gl__DeleteTextures(GLsizei n, const GLuint *textures) {parent::glDeleteTextures(n,textures);}
+  void gl__Disable(GLenum cap) {parent::glDisable(cap);}
+  void gl__DrawArrays(GLenum mode, GLint first, GLsizei count) {parent::glDrawArrays(mode,first,count);}
+
+  void gl__Enable(GLenum cap) {parent::glEnable(cap);}
+  void gl__FrontFace(GLenum mode) {parent::glFrontFace(mode);}
+  void gl__GenTextures(GLsizei n, GLuint *textures) {parent::glGenTextures(n,textures);}
+  GLenum gl__GetError() {return parent::glGetError();}
+  void gl__GetIntegerv(GLenum pname, GLint *params) {parent::glGetIntegerv(pname,params);}
+  const GLubyte * gl__GetString(GLenum name) {return parent::glGetString(name);}
+  GLboolean gl__IsTexture(GLuint texture) {return parent::glIsTexture(texture);}
+  void gl__LineWidth(GLfloat width) {parent::glLineWidth(width);}
+  void gl__PixelStorei(GLenum pname, GLint param) {parent::glPixelStorei(pname,param);}
+  void gl__PointSize(GLfloat size) {parent::glPointSize(size);}
+  void gl__PolygonOffset(GLfloat factor, GLfloat units) {parent::glPolygonOffset(factor,units);}
+  void gl__ReadBuffer(GLenum mode) {parent::glReadBuffer(mode);}
+  void gl__ReadPixels(GLint x, GLint y, GLsizei width, GLsizei height, GLenum format, GLenum type, GLvoid *pixels) {parent::glReadPixels(x,y,width,height,format,type,pixels);}
+  void gl__TexImage2D(GLenum target, GLint level, GLint internalformat, GLsizei width, GLsizei height, GLint border, GLenum format, GLenum type, const GLvoid *pixels) {parent::glTexImage2D(target,level,internalformat,width,height,border,format,type,pixels);}
+  void gl__TexParameteriv(GLenum target, GLenum pname, const GLint *params) {parent::glTexParameteriv(target,pname,params);}
+  void gl__TexParameteri(GLenum target, GLenum pname, GLint param) {parent::glTexParameteri(target,pname,param);}
+  void gl__Viewport(GLint x, GLint y, GLsizei width, GLsizei height) {parent::glViewport(x,y,width,height);}
+  void gl__Hint(GLenum target,GLenum mode) {parent::glHint(target,mode);}
+  void gl__DepthFunc(GLenum func) {parent::glDepthFunc(func);}
+  void gl__DepthMask(GLboolean flag) {parent::glDepthMask(flag);}
+
+  /*GL_VERSION_1_5*/
+  void gl__GenBuffers(GLsizei n, GLuint *buffers) {parent::glGenBuffers(n,buffers);}
+  void gl__BindBuffer(GLenum target, GLuint buffer) {parent::glBindBuffer(target,buffer);}
+  void gl__DeleteBuffers(GLsizei n, const GLuint *buffers) {parent::glDeleteBuffers(n,buffers);}
+  void gl__BufferData(GLenum target, GLsizeiptr size, const GLvoid *data, GLenum usage) {parent::glBufferData(target,size,data,usage);}
+  void gl_EnableVertexAttribArray(GLuint index) {parent::glEnableVertexAttribArray(index);}
+  void gl__DisableVertexAttribArray(GLuint index) {parent::glDisableVertexAttribArray(index);}
+  void gl__EnableVertexAttribArray(GLuint index) {parent::glEnableVertexAttribArray(index);}
+  GLboolean gl__IsBuffer(GLuint buffer) {return parent::glIsBuffer(buffer);}
+
+  /*GL_VERSION_2_0*/
+  GLuint gl__CreateProgram() {return parent::glCreateProgram();}
+  void gl__DeleteProgram(GLuint program) {parent::glDeleteProgram(program);}
+  void gl__UseProgram(GLuint program) {parent::glUseProgram(program);}
+  void gl__LinkProgram(GLuint program) {parent::glLinkProgram(program);}
+  void gl__GetProgramiv(GLuint program, GLenum pname, GLint *params) {parent::glGetProgramiv(program,pname,params);}
+
+  void gl__Uniform1i(GLint location, GLint v0) {parent::glUniform1i(location,v0);}
+  void gl__Uniform1f(GLint location, GLfloat v0) {parent::glUniform1f(location,v0);}
+  void gl__Uniform3f(GLint location, GLfloat v0, GLfloat v1, GLfloat v2) {parent::glUniform3f(location,v0,v1,v2);}
+  void gl__Uniform4f(GLint location, GLfloat v0, GLfloat v1, GLfloat v2, GLfloat v3) {parent::glUniform4f(location,v0,v1,v2,v3);}
+  void gl__UniformMatrix4fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value) {parent::glUniformMatrix4fv(location,count,transpose,value);}
+  void gl__glUniformMatrix4fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value) {parent::glUniformMatrix4fv(location,count,transpose,value);}
+  GLint gl__GetUniformLocation(GLuint program, const GLchar *name) {return parent::glGetUniformLocation(program,name);}
+  void gl__ShaderSource(GLuint shader, GLsizei count, const GLchar* const *string, const GLint *length) {parent::glShaderSource(shader,count,string,length);}
+  GLboolean gl__IsShader(GLuint shader) {return parent::glIsShader(shader);}
+  void gl__GetShaderSource(GLuint shader, GLsizei bufSize, GLsizei *length, GLchar *source) {return parent::glGetShaderSource(shader,bufSize,length,source);}
+  void gl__GetShaderInfoLog(GLuint shader, GLsizei bufSize, GLsizei *length, GLchar *infoLog) {parent::glGetShaderInfoLog(shader,bufSize,length,infoLog);}
+  void gl__GetShaderiv(GLuint shader, GLenum pname, GLint *params) {parent::glGetShaderiv(shader,pname,params);}
+  void gl__GetAttachedShaders(GLuint program, GLsizei maxCount, GLsizei *count, GLuint *obj) {parent::glGetAttachedShaders(program,maxCount,count,obj);}
+  void gl__DetachShader(GLuint program, GLuint shader) {parent::glDetachShader(program,shader);}
+  void gl__DeleteShader(GLuint shader) {parent::glDeleteShader(shader);}
+  GLuint gl__CreateShader(GLenum type) {return parent::glCreateShader(type);}
+  void gl__CompileShader(GLuint shader) {parent::glCompileShader(shader);}
+  void gl__AttachShader(GLuint program, GLuint shader) {parent::glAttachShader(program,shader);}
+
+  void gl__VertexAttribPointer(GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const GLvoid *pointer) {parent::glVertexAttribPointer(index,size,type,normalized,stride,pointer);}
+  GLint gl__GetAttribLocation(GLuint program, const GLchar *name) {return parent::glGetAttribLocation(program,name);}
+
+  /*GL_VERSION_3_0*/
+  void gl__BindVertexArray(GLuint array) {parent::glBindVertexArray(array);}
+  void gl__GenVertexArrays(GLsizei n, GLuint *arrays) {parent::glGenVertexArrays(n,arrays);}
+  void gl__DeleteVertexArrays(GLsizei n, const GLuint *arrays) {parent::glDeleteVertexArrays(n,arrays);}
+  GLboolean gl__IsVertexArray(GLuint array) {return parent::glIsVertexArray(array);}
+
+  GLenum gl__CheckFramebufferStatus(GLenum target) {return parent::glCheckFramebufferStatus(target);}
+};
+
+}}
+
+#else //not TOOLS_USE_GL_VERSION_3_2
+
+  #if QT_VERSION < 0x060000
+    #include <QtGui/QOpenGLFunctions_1_1>
+  #else
+    #include <QtOpenGL/QOpenGLFunctions_1_1>
+  #endif
+  namespace toolx {namespace Qt {typedef QOpenGLFunctions_1_1 qopengl_functions;}}
+
+namespace toolx {
+namespace Qt {
+
+class gl_functions: protected qopengl_functions {
+  typedef qopengl_functions parent;
+public:
+  gl_functions() {}
+  virtual ~gl_functions() {}
+protected:
+  gl_functions(const gl_functions&) {}
+  gl_functions& operator=(const gl_functions&) {return *this;}
+public:
+  virtual bool initialize() {return parent::initializeOpenGLFunctions();}
+public:
+  /*GL_VERSION_1_1*/
+  void gl__Accum(GLenum op, GLfloat value) {parent::glAccum(op,value);}
+  void gl__Begin(GLenum mode) {parent::glBegin(mode);}
+  void gl__BindTexture(GLenum target, GLuint texture) {parent::glBindTexture(target,texture);}
+  void gl__BlendFunc(GLenum sfactor, GLenum dfactor) {parent::glBlendFunc(sfactor,dfactor);}
+  void gl__ClearDepth(GLdouble depth) {parent::glClearDepth(depth);}
+  void gl__ClearStencil(GLint s) {parent::glClearStencil(s);}
+  void gl__ClearColor(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha) {parent::glClearColor(red,green,blue,alpha);}
+  void gl__Clear(GLbitfield mask) {parent::glClear(mask);}
+  void gl__ClearIndex(GLfloat c) {parent::glClearIndex(c);}
+  void gl__ClearAccum(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha) {parent::glClearAccum(red,green,blue,alpha);}
+  void gl__Color4fv(const GLfloat *v) {parent::glColor4fv(v);}
+  void gl__Color4f(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha) {parent::glColor4f(red,green,blue,alpha);}
+  void gl__ColorPointer(GLint size, GLenum type, GLsizei stride, const GLvoid *pointer) {parent::glColorPointer(size,type,stride,pointer);}
+  void gl__DeleteTextures(GLsizei n, const GLuint *textures) {parent::glDeleteTextures(n,textures);}
+  void gl__Disable(GLenum cap) {parent::glDisable(cap);}
+  void gl__DisableClientState(GLenum array) {parent::glDisableClientState(array);}
+  void gl__DrawArrays(GLenum mode, GLint first, GLsizei count) {parent::glDrawArrays(mode,first,count);}
+  void gl__Enable(GLenum cap) {parent::glEnable(cap);}
+  void gl__EnableClientState(GLenum array) {parent::glEnableClientState(array);}
+  void gl__End() {parent::glEnd();}
+  void gl__FrontFace(GLenum mode) {parent::glFrontFace(mode);}
+  void gl__GenTextures(GLsizei n, GLuint *textures) {parent::glGenTextures(n,textures);}
+  GLenum gl__GetError() {return parent::glGetError();}
+  void gl__GetIntegerv(GLenum pname, GLint *params) {parent::glGetIntegerv(pname,params);}
+  void gl__GetLightfv(GLenum light, GLenum pname, GLfloat *params) {parent::glGetLightfv(light,pname,params);}
+  void gl__GetMaterialfv(GLenum face, GLenum pname, GLfloat *params) {parent::glGetMaterialfv(face,pname,params);}
+  const GLubyte * gl__GetString(GLenum name) {return parent::glGetString(name);}
+  GLboolean gl__IsTexture(GLuint texture) {return parent::glIsTexture(texture);}
+  void gl__Lightfv(GLenum light, GLenum pname, const GLfloat *params) {parent::glLightfv(light,pname,params);}
+  void gl__Lightf(GLenum light, GLenum pname, GLfloat param) {parent::glLightf(light,pname,param);}
+  void gl__LineWidth(GLfloat width) {parent::glLineWidth(width);}
+  void gl__LoadIdentity() {parent::glLoadIdentity();}
+  void gl__LoadMatrixf(const GLfloat *m) {parent::glLoadMatrixf(m);}
+  void gl__MatrixMode(GLenum mode) {parent::glMatrixMode(mode);}
+  void gl__Normal3fv(const GLfloat *v) {parent::glNormal3fv(v);}
+  void gl__Normal3f(GLfloat nx, GLfloat ny, GLfloat nz) {parent::glNormal3f(nx,ny,nz);}
+  void gl__NormalPointer(GLenum type, GLsizei stride, const GLvoid *pointer) {parent::glNormalPointer(type,stride,pointer);}
+  void gl__PixelStorei(GLenum pname, GLint param) {parent::glPixelStorei(pname,param);}
+  void gl__PointSize(GLfloat size) {parent::glPointSize(size);}
+  void gl__PolygonOffset(GLfloat factor, GLfloat units) {parent::glPolygonOffset(factor,units);}
+  void gl__ReadBuffer(GLenum mode) {parent::glReadBuffer(mode);}
+  void gl__ReadPixels(GLint x, GLint y, GLsizei width, GLsizei height, GLenum format, GLenum type, GLvoid *pixels) {parent::glReadPixels(x,y,width,height,format,type,pixels);}
+  void gl__ShadeModel(GLenum mode) {parent::glShadeModel(mode);}
+  void gl__TexCoordPointer(GLint size, GLenum type, GLsizei stride, const GLvoid *pointer) {parent::glTexCoordPointer(size,type,stride,pointer);}
+  void gl__TexImage2D(GLenum target, GLint level, GLint internalformat, GLsizei width, GLsizei height, GLint border, GLenum format, GLenum type, const GLvoid *pixels) {parent::glTexImage2D(target,level,internalformat,width,height,border,format,type,pixels);}
+  void gl__TexParameteriv(GLenum target, GLenum pname, const GLint *params) {parent::glTexParameteriv(target,pname,params);}
+  void gl__TexParameteri(GLenum target, GLenum pname, GLint param) {parent::glTexParameteri(target,pname,param);}
+  void gl__Vertex3fv(const GLfloat *v) {parent::glVertex3fv(v);}
+  void gl__Vertex3f(GLfloat x, GLfloat y, GLfloat z) {parent::glVertex3f(x,y,z);}
+  void gl__VertexPointer(GLint size, GLenum type, GLsizei stride, const GLvoid *pointer) {parent::glVertexPointer(size,type,stride,pointer);}
+  void gl__Viewport(GLint x, GLint y, GLsizei width, GLsizei height) {parent::glViewport(x,y,width,height);}
+  void gl__Hint(GLenum target,GLenum mode) {parent::glHint(target,mode);}
+  void gl__DepthFunc(GLenum func) {parent::glDepthFunc(func);}
+  void gl__DepthMask(GLboolean flag) {parent::glDepthMask(flag);}
+
+  void gl__NewList(GLuint list, GLenum mode) {parent::glNewList(list,mode);}
+  void gl__DeleteLists(GLuint list, GLsizei range) {parent::glDeleteLists(list,range);}
+  void gl__CallLists(GLsizei n, GLenum type, const GLvoid *lists) {parent::glCallLists(n,type,lists);}
+  void gl__CallList(GLuint list) {parent::glCallList(list);}
+  void gl__EndList() {parent::glEndList();}
+  GLuint gl__GenLists(GLsizei range) {return parent::glGenLists(range);}
+  GLboolean gl__IsList(GLuint list) {return parent::glIsList(list);}
+
+};
+
+}}
+
+#endif //not TOOLS_USE_GL_VERSION_3_2
+
+#endif

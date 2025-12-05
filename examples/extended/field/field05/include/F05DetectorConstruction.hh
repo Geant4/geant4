@@ -23,13 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file field/field05/include/F05DetectorConstruction.hh
+/// \file F05DetectorConstruction.hh
 /// \brief Definition of the F05DetectorConstruction class
-//
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef F05DetectorConstruction_h
 #define F05DetectorConstruction_h 1

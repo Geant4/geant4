@@ -23,9 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-/// \file optical/OpNovice2/include/ActionInitialization.hh
+/// \file ActionInitialization.hh
 /// \brief Definition of the ActionInitialization class
 
 #ifndef ActionInitialization_h

@@ -25,16 +25,12 @@ public:
     m_deviceWidth = (8.5f-1.f)*72*METAFILE_SCALE(); // 540 * METAFILE_SCALE
     m_deviceHeight = 11*72*METAFILE_SCALE();        // 792 * METAFILE_SCALE
     m_pageNumber = 0;
-  //m_pagePos = 0;
-  //m_markSize = 2;
     m_file = 0;
     m_fname.clear();
     m_string.clear();
     m_gsave = 0;
     m_buffer = new Uchar[METAFILE_RECORD_LENGTH()+1];
     m_number = 0;
-
-    //m_param.shade = shade_color;
   }
 
   virtual ~wps(){
@@ -48,14 +44,10 @@ public:
     m_gsave = 0;
     delete [] m_buffer;
   }
-//protected:
 private:
   wps(const wps& a_from):m_out(a_from.m_out){}
   wps& operator=(const wps&){return *this;}
 public:
-  //const std::string& file_name() const {return m_fname;}
-  //FILE* get_FILE() const {return m_file;}
-
   bool open_file(const std::string& a_name,bool a_anonymous = false){
     if(m_file) return false;
 
@@ -81,42 +73,6 @@ public:
     PrintFLN("%%%%EndComments");
     // postscript :
     PS_SAVE();
-/*
-    // General :
-    in_buffer("/n {newpath} def ");
-    in_buffer("/cl {closepath} def ");
-    in_buffer("/s {stroke} def ");
-    in_buffer("/f {fill} def ");
-    // Move :
-    in_buffer("/m  {moveto} def ");
-    in_buffer("/rm {rmoveto} def ");
-    in_buffer("/rl {rlineto} def ");
-    // Line :
-    in_buffer("/lc {setlinecap} def ");
-    in_buffer("/lw {setlinewidth} def ");
-    in_buffer("/rgb {setrgbcolor} def ");
-    in_buffer("/ss {[] 0 setdash} def ");     // style solid.
-    in_buffer("/sd {[12 6] 0 setdash} def "); // style dashed
-    in_buffer("/so {[6 12] 0 setdash} def "); // style dotted
-    in_buffer("/sdo {[18 12 6 12] 0 setdash} def "); // dash dotted
-    // Mark :
-    m_markSize = 2.;
-    in_buffer("/ms 2. def /msi .5 def ");        // mark size
-    in_buffer("/cross {ms ms scale -1. -1. rm  ");
-    in_buffer ("2. 2. rl 0. -2. rm -2. 2. rl msi msi scale} def ");
-    in_buffer("/plus  {ms ms scale -1. 0. rm 2. 0. rl ");
-    in_buffer("-1. 1. rm 0. -2. rl msi msi scale} def ");
-    in_buffer("/asterisk {ms ms scale -1. 0. rm 2. 0. rl -1. 1. rm ");
-    in_buffer("0. -2. rl 0. 1. rm -0.707 -0.707 rm 1.414 1.414 rl ");
-    in_buffer("0. -1.414 rm -1.414 1.414 rl msi msi scale} def ");
-    in_buffer("/star {ms ms scale 0. 1. rm -0.6 -1.5 rl ");
-    in_buffer("1.2 0. rl -0.6 1.5 rl msi msi scale} def ");
-    // Text :
-    in_buffer("/sh {show} def ");
-    in_buffer("/df {/Courier-Bold findfont} def ");
-    in_buffer("/mf {makefont setfont} def ");
-*/
-
     PrintFLN("%%%%EndProlog");
 
     return true;
@@ -426,85 +382,14 @@ protected:
   float         m_deviceWidth;
   float         m_deviceHeight;
   unsigned int  m_pageNumber;
-//double        m_markSize;
   FILE*         m_file;
   std::string   m_fname;
   std::string   m_string;
   int           m_gsave;
   Uchar*        m_buffer;
   size_t        m_number;
-//struct {
-//  int shade;
-//  int nbit;
-//} m_param;
 };
 
 }
 
 #endif
-
-/*
-  enum {
-    shade_color = 0,
-    shade_grey = 1,
-    shade_black_white = 2
-  };
-
-  void PS_BACKGROUND(double a_r,double a_g,double a_b,
-                     double a_width,double a_height,
-                     bool a_do_back = true){
-    PS_NEWPATH();
-    PS_MOVE       (0.,0.);
-    PS_RLINETO    (a_width,0.);
-    PS_RLINETO    (0.,a_height);
-    PS_RLINETO    (-a_width,0.);
-    PS_RLINETO    (0.,-a_height);
-    PS_CLOSEPATH();
-    if(a_do_back) {
-      PS_SAVE();
-      PS_RGB(a_r,a_g,a_b);
-      PS_FILL();
-      PS_RESTORE();
-    }
-    in_buffer("clip ");
-  }
-
-  void PS_RGB(double a_r,double a_g,double a_b){
-    if(m_param.shade==shade_color)
-      in_buffer("%.2f %.2f %.2f rgb ",a_r,a_g,a_b);
-    else if(m_param.shade==shade_grey)
-      in_buffer("%.2f setgray ",rgb2grey(a_r,a_g,a_b));
-    else if(m_param.shade==shade_black_white)
-      in_buffer("0. setgray ",rgb2grey(a_r,a_g,a_b));
-  }
-
-  void PS_LINE_WIDTH(int a_width){in_buffer("%.1f lw ",float(a_width));}
-
-  void PS_NEWPATH() {in_buffer("n ");}
-  void PS_STROKE() {in_buffer("s ");}
-  void PS_FILL() {in_buffer("f ");}
-  void PS_CLOSEPATH() {in_buffer("cl ");}
-  void PS_CAP(double a_x) {in_buffer ("%1d lc ",a_x);}
-  void PS_RLINETO(double a_x,double a_y) {
-    in_buffer ("%.2f %.2f rl ",a_x,a_y);
-  }
-  void PS_MOVE(double a_x,double a_y) {
-    in_buffer ("%.2f %.2f m ",a_x,a_y);
-  }
-
-  void PS_FRAME(double a_r,double a_g,double a_b,
-                double a_width,double a_height){
-    PS_NEWPATH   ();
-    PS_MOVE      (0.,0.);
-    PS_RLINETO   (a_width,0.);
-    PS_RLINETO   (0.,a_height);
-    PS_RLINETO   (-a_width,0.);
-    PS_RLINETO   (0.,-a_height);
-    PS_CLOSEPATH ();
-    PS_RGB       (a_r,a_g,a_b);
-    PS_LINE_WIDTH(1);
-    PS_CAP       (1);
-    in_buffer    ("ss ");
-    PS_STROKE();
-  }
-*/

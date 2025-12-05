@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file MoleculeCounter.cc
+/// \brief Implementation of the MoleculeCounter class
+
 // The `molcounters` example(s) are provided as part of Geant4-DNA
 // and any report or published result obtained using it shall cite
 // the respective Geant4-DNA collaboration publications.
@@ -80,8 +83,8 @@ std::unique_ptr<G4VMoleculeCounterIndex> MoleculeCounter::BuildIndex(const G4Tra
 
     if (touchable == nullptr) touchable = aTrack->GetTouchable();
     if (touchable == nullptr) {
-	  auto touchableHandle = G4MoleculeLocator::Instance()->LocateMoleculeTrack(aTrack);
-	  touchable = touchableHandle();
+      auto touchableHandle = G4MoleculeLocator::Instance()->LocateMoleculeTrack(aTrack);
+      touchable = touchableHandle();
     }
     if (touchable == nullptr) {  // still not found -- should never fire
       G4ExceptionDescription errMsg;

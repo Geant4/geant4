@@ -23,10 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file runAndEvent/RE04/src/RE04ParallelWorldParam.cc
+/// \file RE04ParallelWorldParam.cc
 /// \brief Implementation of the RE04ParallelWorldParam class
-//
-//
+
 #include "RE04ParallelWorldParam.hh"
 
 #include "G4Box.hh"

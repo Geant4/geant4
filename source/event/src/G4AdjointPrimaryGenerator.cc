@@ -42,6 +42,19 @@
 #include "G4Material.hh"
 #include "Randomize.hh"
 
+
+
+
+// --------------------------------------------------------------------
+//
+G4AdjointPrimaryGenerator* G4AdjointPrimaryGenerator::GetInstance()
+{
+  static G4ThreadLocal G4AdjointPrimaryGenerator theInstance;
+  return &theInstance;
+
+}
+
+
 // --------------------------------------------------------------------
 //
 G4AdjointPrimaryGenerator::G4AdjointPrimaryGenerator()
@@ -49,7 +62,6 @@ G4AdjointPrimaryGenerator::G4AdjointPrimaryGenerator()
   center_spherical_source = G4ThreeVector(0.,0.,0.);
   type_of_adjoint_source="Spherical";
   theSingleParticleSource  = new G4SingleParticleSource();
- 
   theSingleParticleSource->GetEneDist()->SetEnergyDisType("Pow");
   theSingleParticleSource->GetEneDist()->SetAlpha(-1.);
   theSingleParticleSource->GetPosDist()->SetPosDisType("Point");

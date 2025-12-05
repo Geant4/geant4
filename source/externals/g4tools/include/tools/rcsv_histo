@@ -5,8 +5,8 @@
 #define tools_rcsv_histo
 
 #include "sto"
-#include "chars"
-#include "words"
+#include "charmanip"
+#include "tokenize"
 #include "forit"
 #include "sout"
 
@@ -15,11 +15,6 @@
 #include "histo/h3d"
 #include "histo/p1d"
 #include "histo/p2d"
-//#include "histo/h1df"
-
-#ifdef TOOLS_MEM
-#include "mem"
-#endif
 
 #include <istream>
 #include <utility>
@@ -28,33 +23,17 @@ namespace tools {
 namespace rcsv {
 
 class histo {
-#ifdef TOOLS_MEM
-public:
-  static const std::string& s_class() {
-    static const std::string s_v("tools::rcsv::histo");
-    return s_v;
-  }
-#endif
 public:
   histo(std::istream& a_reader)
   :m_reader(a_reader)
   {
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
   }
   virtual ~histo() {
-#ifdef TOOLS_MEM
-    mem::decrement(s_class().c_str());
-#endif
   }
 protected:
   histo(const histo& a_from)
   :m_reader(a_from.m_reader)
   {
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
   }
   histo& operator=(const histo&){return *this;}
 public:
@@ -89,7 +68,6 @@ public:
     typedef tools::histo::axis<double,unsigned int> axis_t;
    {std::string line;
     while(read_header_line(m_reader,file_sz,line)) {
-//      a_out << "line : " << sout(s) << std::endl;
       std::vector<std::string> _words;
       words(line," ",false,_words);
       if(!_words.size()) {
@@ -245,7 +223,7 @@ public:
     if(a_verbose) {
       a_out << "class " << _class << std::endl;
       a_out << "title " << hdata.m_title << std::endl;
-      tools_mforcit(std::string,std::string,hdata.m_annotations,it) {
+      for(auto it = hdata.m_annotations.cbegin(); it != hdata.m_annotations.cend(); ++it) {
          a_out << "annotation " << (*it).first << " " << sout((*it).second) << std::endl;
       }
     }
@@ -287,12 +265,6 @@ public:
     std::vector<double> bin_Sxw(hdata.m_dimension);
     std::vector<double> bin_Sx2w(hdata.m_dimension);
     while(read_data_line(m_reader,file_sz,labels.size(),vals)) {
-/*
-      for(unsigned int index=0;index<vals.size();index++) {
-        a_out << vals[index] << " ";
-      }
-      a_out << std::endl;
-*/
       if(vals.size()!=valn) {
          a_out << "tools::rcsv::histo::read :"
                << " bad number of items in data line " << vals.size() << ". Expected " << valn << "."
@@ -352,7 +324,6 @@ public:
       }
       tools::histo::h1d* h = new tools::histo::h1d("",10,0,1);
       h->copy_from_data(hdata);
-      //if(a_verbose) h->hprint(a_out);
       if(a_verbose) {
         a_out << "h1d : " << h->title()
               << ", all entries " << h->all_entries()
@@ -372,7 +343,6 @@ public:
       }
       tools::histo::h2d* h = new tools::histo::h2d("",10,0,1,10,0,1);
       h->copy_from_data(hdata);
-      //if(a_verbose) h->hprint(a_out);
       if(a_verbose) {
         a_out << "h2d : " << h->title()
               << ", all entries " << h->all_entries()
@@ -393,7 +363,6 @@ public:
       }
       tools::histo::h3d* h = new tools::histo::h3d("",10,0,1,10,0,1,10,0,1);
       h->copy_from_data(hdata);
-      //if(a_verbose) h->hprint(a_out);
       if(a_verbose) {
         a_out << "h3d : " << h->title()
               << ", all entries " << h->all_entries()
@@ -415,7 +384,6 @@ public:
       }
       tools::histo::p1d* h = new tools::histo::p1d("",10,0,1);
       h->copy_from_data(pdata);
-      //if(a_verbose) h->hprint(a_out);
       if(a_verbose) {
         a_out << "p1d : " << h->title()
               << ", all entries " << h->all_entries()
@@ -435,7 +403,6 @@ public:
       }
       tools::histo::p2d* h = new tools::histo::p2d("",10,0,1,10,0,1);
       h->copy_from_data(pdata);
-      //if(a_verbose) h->hprint(a_out);
       if(a_verbose) {
         a_out << "p2d : " << h->title()
               << ", all entries " << h->all_entries()
@@ -446,20 +413,6 @@ public:
       }
       a_class = std::move(_class);
       a_obj = h;
-
-/*
-    } else if(_class==tools::histo::h1df::s_class()) {
-      if(hdata.m_dimension!=1) {
-        a_out << "tools::rcsv::histo::read :"
-              << " inconsistent dimension data."
-              << std::endl;
-        return false;
-      }
-      tools::histo::h1df* h = new tools::histo::h1df("",10,0,1);
-      h->copy_from_data(hdata);
-      //return h; //give ownership to caller.
-      if(a_verbose) h->hprint(a_out);
-*/
 
     } else {
       a_out << "tools::rcsv::histo::read : unknown class " << sout(_class) << std::endl;
@@ -496,7 +449,6 @@ protected:
   static bool _read(std::istream& a_reader,double& a_v) {
     a_reader >> a_v;
     if(a_reader.tellg()==std::streampos(-1)) {a_v = 0;return false;}
-    //std::cout << "debug : _read(double) " << a_v << std::endl;
     return true;
   }
 

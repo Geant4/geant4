@@ -25,7 +25,7 @@
 //
 // G4RKIntegrationDriver inline implementation
 //
-// Created: D.Sorokin, 2017
+// Author: Dmitry Sorokin (CERN, Google Summer of Code 2017), 20.10.2017
 // --------------------------------------------------------------------
 
 #include "globals.hh"

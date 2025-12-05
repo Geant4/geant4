@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file DicomBeamCompensator.cc
+/// \brief Implementation of the DicomBeamCompensator class
+
 #include "DicomBeamCompensator.hh"
 
 #include "dcmtk/dcmrt/seq/drtcos.h"

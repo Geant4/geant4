@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-03-ref-06    (30-June-2025)
+ Geant4 version Name: geant4-11-04-ref-00    (5-December-2025)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -113,7 +113,7 @@ Lowest muon/hadron kinetic energy                  1 keV
 Use ICRU90 data                                    0
 Fluctuations of dE/dx are enabled                  1
 Type of fluctuation model for leptons and hadrons  Urban
-Use built-in Birks satuaration                     0
+Use built-in Birks saturation                      0
 Build CSDA range enabled                           0
 Use cut as a final range enabled                   0
 Enable angular generator interface                 0
@@ -265,7 +265,7 @@ hBrems:  for proton  XStype:1  SubType=3
 hPairProd:  for proton  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
-      Sampling table 17x1001 from 7.50618 GeV to 100 TeV 
+      Sampling table 17x1001, from 7.50618 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
@@ -340,7 +340,7 @@ hBrems:  for anti_proton  XStype:1  SubType=3
 hPairProd:  for anti_proton  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
-      Sampling table 17x1001 from 7.50618 GeV to 100 TeV 
+      Sampling table 17x1001, from 7.50618 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
@@ -372,7 +372,7 @@ hBrems:  for kaon+  XStype:1  SubType=3
 hPairProd:  for kaon+  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
-      Sampling table 18x1001 from 3.94942 GeV to 100 TeV 
+      Sampling table 18x1001, from 3.94942 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
@@ -404,7 +404,7 @@ hBrems:  for kaon-  XStype:1  SubType=3
 hPairProd:  for kaon-  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
-      Sampling table 18x1001 from 3.94942 GeV to 100 TeV 
+      Sampling table 18x1001, from 3.94942 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
@@ -436,7 +436,7 @@ muBrems:  for mu+  XStype:1  SubType=3
 muPairProd:  for mu+  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
-      Sampling table 21x1001 from 0.85 GeV to 100 TeV 
+      Sampling table 21x1001, from 0.85 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
@@ -468,7 +468,7 @@ muBrems:  for mu-  XStype:1  SubType=3
 muPairProd:  for mu-  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
-      Sampling table 21x1001 from 0.85 GeV to 100 TeV 
+      Sampling table 21x1001, from 0.85 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
@@ -500,7 +500,7 @@ hBrems:  for pi+  XStype:1  SubType=3
 hPairProd:  for pi+  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
-      Sampling table 20x1001 from 1.11656 GeV to 100 TeV 
+      Sampling table 20x1001, from 1.11656 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
@@ -532,7 +532,7 @@ hBrems:  for pi-  XStype:1  SubType=3
 hPairProd:  for pi-  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
-      Sampling table 20x1001 from 1.11656 GeV to 100 TeV 
+      Sampling table 20x1001, from 1.11656 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
@@ -756,8 +756,8 @@ CoulombScat:  for pi- XStype:1 SubType=1 BuildTable=1
 Type of pre-compound model                          0
 Type of pre-compound inverse x-section              1
 Pre-compound model active                           1
-Pre-compound excitation low energy                  100 keV
-Pre-compound excitation high energy                 30 MeV
+Pre-compound excitation low energy                  0.1 MeV 
+Pre-compound excitation high energy                 15 MeV 
 Angular generator for pre-compound model            1
 Use NeverGoBack option for pre-compound model       0
 Use SoftCutOff option for pre-compound model        0
@@ -771,13 +771,12 @@ Type of de-excitation inverse x-section             3
 Type of de-excitation factory                       Evaporation+GEM
 Number of de-excitation channels                    68
 Type of Fermi BreakUp model                         ModelVI
-Min excitation energy                               10 eV 
-Min energy per nucleon for multifragmentation       200 GeV
-Limit excitation energy for Fermi BreakUp           20 MeV
+Min excitation energy                               0.01 keV 
+Min energy per nucleon for multifragmentation       2e+05 MeV
 Level density (1/MeV)                               0.075
 Use simple level density model                      1
 Use discrete excitation energy of the residual      0
-Time limit for long lived isomeres                  0.14427 ps 
+Time limit for long lived isomeres                  0.00014427 ns 
 Isomer production flag                              1
 Internal e- conversion flag                         1
 Store e- internal conversion data                   1
@@ -833,53 +832,53 @@ Index : 2     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.400000s Real=0.402979s Sys=0.000000s
+  User=0.340000s Real=0.341072s Sys=0.000000s
 
  The run is 10000 Ne24 of 0 eV  through : 
  Target   : Length = 1 cm  Radius    = 5 mm  Material = G4_CESIUM_IODIDE
  Detector : Length = 5 cm  Thickness = 2 cm  Material = Germanium
 
- Mean energy deposit in target,   in time window = 813.67 keV  rms = 418.96 keV
- Mean energy deposit in detector, in time window = 18.104 keV  rms = 106.08 keV
+ Mean energy deposit in target,   in time window = 809.51 keV  rms = 420.05 keV
+ Mean energy deposit in detector, in time window = 19.216 keV  rms = 109.68 keV
 
  Process calls frequency in target :
-            NoProcess=  10000      RadioactiveDecay=  50767                  Rayl=    278
-       Transportation=  50242               annihil=    176                 compt=   4289
-                 conv=    188                 eIoni=  26105               ionIoni=  38047
-                  msc=   3839                  phot=   1579 
+            NoProcess=  10000      RadioactiveDecay=  50775                  Rayl=    282
+       Transportation=  50253               annihil=    177                 compt=   4240
+                 conv=    186                 eIoni=  26032               ionIoni=  38082
+                  msc=   3558                  phot=   1561 
 
  Process calls frequency in detector:
-                 Rayl=   1183        Transportation=  45897               annihil=    359
-                compt=  22830                  conv=    350                 eIoni=  27849
-                  msc=   6677                  phot=   4324 
+                 Rayl=   1176        Transportation=  45929               annihil=    351
+                compt=  22676                  conv=    345                 eIoni=  27661
+                  msc=   6356                  phot=   4305 
 
  List of generated particles in target:
-           Mg24:   10000  Emean =  42.405 eV 	( 41.931 eV  --> 804.71 eV )
-  Mg24[1368.667]:    9990  Emean =  169.92 eV 	( 169.78 eV  --> 334.58 eV )
-  Mg24[4122.853]:    9984  Emean =  39.091 eV 	( 98.622 meV --> 74.56 eV )
-  Mg24[5235.160]:       6  Emean =  2.6297 eV 	( 1.178 eV  --> 5.646 eV )
-           Na24:    9990  Emean =  4.9933 eV 	( 4.9901 eV  --> 15.742 eV )
-  Na24[1346.635]:     794  Emean =  27.494 eV 	( 649.04 meV --> 51.388 eV )
-  Na24[472.207]:   10000  Emean =  67.791 eV 	( 101.68 meV --> 133.55 eV )
-  Na24[563.199]:       3  Emean =  13.735 eV 	( 13.735 eV  --> 13.735 eV )
-      anti_nu_e:   20000  Emean =  975.22 keV	( 29.746 keV --> 5.0943 MeV)
-             e+:     188  Emean =  774.41 keV	( 1.7102 keV --> 1.6964 MeV)
-             e-:   26087  Emean =  640.71 keV	( 72.714 eV  --> 4.5674 MeV)
-          gamma:   31108  Emean =  1.5032 MeV	( 90.992 keV --> 3.8662 MeV)
+           Mg24:   10000  Emean =  42.533 eV 	( 41.931 eV  --> 877.14 eV )
+  Mg24[1368.667]:    9988  Emean =  169.94 eV 	( 169.78 eV  --> 334.58 eV )
+  Mg24[4122.853]:    9980  Emean =  39.411 eV 	( 98.622 meV --> 74.362 eV )
+  Mg24[5235.160]:       9  Emean =  2.2431 eV 	( 126.19 meV --> 5.646 eV )
+           Na24:    9989  Emean =  4.9922 eV 	( 4.9901 eV  --> 15.735 eV )
+  Na24[1346.635]:     804  Emean =  27.135 eV 	( 649.04 meV --> 51.829 eV )
+  Na24[472.207]:   10000  Emean =  68.122 eV 	( 127.74 meV --> 134.01 eV )
+  Na24[563.199]:       5  Emean =  13.735 eV 	( 13.735 eV  --> 13.735 eV )
+      anti_nu_e:   20000  Emean =  976.28 keV	( 27.433 keV --> 3.241 MeV)
+             e+:     186  Emean =  774.42 keV	( 1.7102 keV --> 1.6823 MeV)
+             e-:   26006  Emean =   640.1 keV	( 100.71 eV  --> 4.5674 MeV)
+          gamma:   31122  Emean =  1.5031 MeV	( 90.992 keV --> 5.2345 MeV)
 
  List of generated particles in detector:
-             e+:     350  Emean =  787.78 keV	( 7.5284 keV --> 2.6942 MeV)
-             e-:   27488  Emean =  375.51 keV	( 111.92 eV  --> 3.6219 MeV)
-          gamma:     718  Emean =   525.3 keV	( 393 keV --> 1.8258 MeV)
+             e+:     345  Emean =  785.82 keV	( 4.4427 keV --> 2.6942 MeV)
+             e-:   27313  Emean =  377.76 keV	( 111.92 eV  --> 3.6176 MeV)
+          gamma:     702  Emean =  522.91 keV	( 393 keV --> 1.8258 MeV)
 
 ... write file : rdecay02.root - done
 ... close file : rdecay02.root - done
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1705873180, 586740664
+ Current couple of seeds = 1820759931, 2073339151
 ----------------------------------------
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 10 of which, static: 0
-Dynamic pools deleted: 10 / Total memory freed: 0.024 MB
+Dynamic pools deleted: 10 / Total memory freed: 0.026 MB
 ============================================================

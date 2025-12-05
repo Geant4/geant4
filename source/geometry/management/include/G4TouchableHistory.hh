@@ -37,18 +37,13 @@
 // Utilisation:
 // -----------
 // A touchable is a geometrical volume (solid) which has a unique
-// placement in a detector description. It is an abstract base class which 
-// can be implemented in a variety of ways. Each way must provide the 
-// capabilities of obtaining the transformation and solid that is described
-// by the touchable. 
-//
-// All touchable implementations must respond to the two following "requests": 
+// placement in a detector description.
+// It must respond to the two following "requests": 
 //
 //   1) GetTranslation and GetRotation that return the components of the
 //      volume's transformation.
 //
 //   2) GetSolid that gives the solid of this touchable.
-//
 //
 // Additional capabilities are available from implementations with more
 // information. These have a default implementation that causes an exception. 
@@ -87,7 +82,7 @@
 //   8) UpdateYourself takes a physical volume pointer and can additionally
 //      take a NavigationHistory.
 
-// Created: Paul Kent, August 1996
+// Author: Paul Kent (CERN), August 1996
 // ----------------------------------------------------------------------
 #ifndef G4TOUCHABLEHISTORY_HH
 #define G4TOUCHABLEHISTORY_HH
@@ -100,46 +95,78 @@
 
 #include "geomwdefs.hh"
 
+/**
+ * @brief G4TouchableHistory is an object representing a touchable detector
+ * element, and its history in the geometrical hierarchy, including its net
+ * resultant local->global transform.
+ * A touchable is a geometrical volume (solid) which has a unique placement
+ * in a detector description.
+ */
+
 class G4TouchableHistory
 {
   public:
 
+    /**
+     * Default Constructor. It produces a touchable-history of 'zero-depth',
+     * i.e. an "unphysical" and not very usable one; for initialisation only.
+     */
     G4TouchableHistory(); 
-      // The default constructor produces a touchable-history of 
-      // 'zero-depth', ie an "unphysical" and not very unusable one.
-      // It is for initialisation only.  
 
+    /**
+     * Default Destructor. Virtual, as it is a reference-counted object,
+     * but there is no provision for this class to be subclassed; if subclassed,
+     * it may fail and not give explicit errors!
+     */
+    virtual ~G4TouchableHistory() = default;
+
+    /**
+     * Copy constructor.
+     */
     G4TouchableHistory( const G4NavigationHistory& history );
-      // Copy constructor
 
-    virtual ~G4TouchableHistory();
-      // Destructor
+    /**
+     * Accessors.
+     */
+    inline G4VPhysicalVolume* GetVolume( G4int depth = 0 ) const;
+    inline G4VSolid* GetSolid( G4int depth = 0 ) const;
+    const G4ThreeVector& GetTranslation( G4int depth = 0 ) const;
+    const G4RotationMatrix* GetRotation( G4int depth = 0 ) const;
 
-    inline virtual G4VPhysicalVolume* GetVolume( G4int depth = 0 ) const;
-    inline virtual G4VSolid* GetSolid( G4int depth = 0 ) const;
-    virtual const G4ThreeVector& GetTranslation( G4int depth = 0 ) const;
-    virtual const G4RotationMatrix* GetRotation( G4int depth = 0 ) const;
-
-    inline virtual G4int GetReplicaNumber( G4int depth = 0 ) const;
+    /**
+     * Accessors for touchables with history.
+     */
+    inline G4int GetReplicaNumber( G4int depth = 0 ) const;
     inline G4int GetCopyNumber( G4int depth = 0 ) const;
-    inline virtual G4int GetHistoryDepth()  const;
-    virtual G4int MoveUpHistory( G4int num_levels = 1 );
-      // Access methods for touchables with history
+    inline G4int GetHistoryDepth()  const;
+    G4int MoveUpHistory( G4int num_levels = 1 );
 
-    virtual void  UpdateYourself( G4VPhysicalVolume* pPhysVol,
-                            const G4NavigationHistory* history = nullptr ); 
-      // Update methods for touchables with history
+    /**
+     * Update method for touchables with history.
+     */
+    void UpdateYourself( G4VPhysicalVolume* pPhysVol,
+                         const G4NavigationHistory* history = nullptr ); 
 
-    inline virtual const G4NavigationHistory* GetHistory() const;
-      // Internal: used in G4Navigator::LocateGlobalPointAndSetup().
+    /**
+     * Returns a pointer to the navigation history; used in
+     * G4Navigator::LocateGlobalPointAndSetup().
+     */
+    inline const G4NavigationHistory* GetHistory() const;
 
+    /**
+     * Operators overriding new/delete for use by G4Allocator.
+     */
     inline void* operator new(std::size_t);
     inline void operator delete(void* aTH);
-      // Override "new" and "delete" to use "G4Allocator".
 
-   private:
+  private:
 
+    /**
+     * Calculates and returns the history index, given a depth 'stackDepth'.
+     */
     inline G4int CalculateHistoryIndex( G4int stackDepth ) const;
+
+  private:
 
     G4RotationMatrix frot;
     G4ThreeVector ftlate;

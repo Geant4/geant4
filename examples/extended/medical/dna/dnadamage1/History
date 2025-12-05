@@ -6,6 +6,10 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2025-08-23 LE TUAN ANH (dnadamage1-V11-03-00)
+- Access DetectorConstruction via G4RunManager::GetUserDetectorConstruction
+- Use '=default' for trival deconstructors
+
 ## 2024-05-08 G. Cosmo (dnadamage1-V11-02-00)
 - Fixed compilation errors on macOS/clang with C++23 enabled.
 

@@ -25,16 +25,10 @@
 //
 // G4ElectricField implementation
 //
-// Created: J.Apostolakis - 04.11.2003
+// Author: John Apostolakis (CERN), 04.11.2003
 // --------------------------------------------------------------------
 
 #include "G4ElectricField.hh"
-
-G4ElectricField::G4ElectricField() = default;
-
-G4ElectricField::~G4ElectricField() = default;
-
-G4ElectricField::G4ElectricField(const G4ElectricField& p) = default;
 
 G4ElectricField& G4ElectricField::operator = (const G4ElectricField& p)
 {

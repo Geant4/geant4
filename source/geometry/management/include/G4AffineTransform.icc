@@ -25,6 +25,8 @@
 //
 // G4AffineTransformation Inline implementation
 //
+// Author: Paul R C Kent (CERN), 06.08.1996 - Initial version
+//         E.Tcherniaev (CERN), 19.09.1996, 06.05.2018 - Revised
 // --------------------------------------------------------------------
 
 inline G4AffineTransform::G4AffineTransform()

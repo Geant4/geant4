@@ -178,6 +178,8 @@ class G4VScoringMesh
   inline void SetVerboseLevel(G4int vl) { verboseLevel = vl; }
   // get the primitive scorer map
   inline MeshScoreMap GetScoreMap() const { return fMap; }
+  // get the associated detector
+  inline const G4MultiFunctionalDetector* GetMFD() const { return fMFD; }
   // get whether this mesh setup has been ready
   inline G4bool ReadyForQuantity() const { return (sizeIsSet && nMeshIsSet); }
 

@@ -147,7 +147,8 @@ G4VParticleChange* G4ContinuousGainOfEnergy::AlongStepDoIt(const G4Track& track,
   dynParticle->SetKineticEnergy(Tkin + degain);
 
   // Corrections, which cannot be tabulated for ions
-  fCurrentModel->CorrectionsAlongStep(fCurrentCouple, dynParticle, dlength, degain);
+  fCurrentModel->CorrectionsAlongStep(fCurrentMaterial, fDirectPartDef, Tkin,
+				      fCurrentTcut, dlength, degain);
 
   // Sample fluctuations
   G4double deltaE = 0.;

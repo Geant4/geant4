@@ -6,6 +6,10 @@ be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2025-08-29 Igor Semeniouk (GB03-V11-03-02)
+ - add histograms and counters for particles penetrated the shield volume
+ - replace GB03DetectorMessenger with GenericMessenger
+
 ## 2025-03-10 Igor Semeniouk (GB03-V11-03-01)
 - Remove unused WITH_GEANT4_UIVIS cmake option
 - Propagate biasing on/off to detector construction to initialization of biasing classes only if biasing requested.

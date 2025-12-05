@@ -23,10 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file RE06/include/RE06DetectorConstruction.hh
+/// \file RE06DetectorConstruction.hh
 /// \brief Definition of the RE06DetectorConstruction class
-//
-//
 
 #ifndef RE06DetectorConstruction_h
 #define RE06DetectorConstruction_h 1

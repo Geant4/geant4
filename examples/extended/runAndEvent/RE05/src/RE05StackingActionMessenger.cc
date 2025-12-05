@@ -23,10 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file RE05/src/RE05StackingActionMessenger.cc
+/// \file RE05StackingActionMessenger.cc
 /// \brief Implementation of the RE05StackingActionMessenger class
-//
 
 #include "RE05StackingActionMessenger.hh"
 

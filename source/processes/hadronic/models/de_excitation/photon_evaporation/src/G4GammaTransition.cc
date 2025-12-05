@@ -61,78 +61,85 @@ G4GammaTransition::SampleTransition(G4Fragment* nucleus,
 				    G4int  MP,
 				    G4int  shell,
 				    G4bool isDiscrete,
-				    G4bool isGamma)
+				    G4bool gamma)
 {
   G4Fragment* result = nullptr;
-  G4double bond_energy = 0.0;
+  G4double bondEnergy = 0.0;
+  G4bool isGamma = gamma;
+  if (!isDiscrete) { isGamma = true; }
 
+  G4double excEnergy = nucleus->GetExcitationEnergy();
+
+  // check is IC electron can be emitted 
   if (!isGamma) { 
     if(0 <= shell) {
       G4int Z = nucleus->GetZ_asInt();
       if(Z <= 104) {
 	G4int idx = std::min(shell, G4AtomicShells::GetNumberOfShells(Z)-1);
-	bond_energy = G4AtomicShells::GetBindingEnergy(Z, idx);
+	bondEnergy = G4AtomicShells::GetBindingEnergy(Z, idx);
+	if (bondEnergy > excEnergy) {
+	  isGamma = true;
+	}
+      } else {
+	isGamma = true;
       }
+    } else {
+      isGamma = true;
     }
   }
-  G4double etrans = nucleus->GetExcitationEnergy() - newExcEnergy 
-    - bond_energy;
-  if(fVerbose > 2) {
-    G4cout << "G4GammaTransition::GenerateGamma - Etrans(MeV)= " 
-	   << etrans << "  Eexnew= " << newExcEnergy 
-	   << " Ebond= " << bond_energy << G4endl;
+  if (fVerbose > 2) {
+    G4cout << "G4GammaTransition::GenerateGamma " << " Eexnew=" << newExcEnergy 
+	   << " Ebond=" << bondEnergy << G4endl;
   } 
-  if(etrans <= 0.0) { 
-    etrans += bond_energy;
-    bond_energy = 0.0;
-  }
   
-  // Do complete Lorentz computation 
-  G4LorentzVector lv = nucleus->GetMomentum();
-
-  // final mass
-  G4double mass = nucleus->GetGroundStateMass() + newExcEnergy;
-
-  // select secondary
+  // complete selection of secondary
   G4ParticleDefinition* part;
+  G4int ne = nucleus->GetNumberOfElectrons();
+  if (0 == ne) { isGamma = true; }
 
-  if(isGamma) { part = G4Gamma::Gamma(); }
+  if ( isGamma ) { part = G4Gamma::Gamma(); }
   else {
     part = G4Electron::Electron();
-    G4int ne = std::max(nucleus->GetNumberOfElectrons() - 1, 0);
+    --ne;
     nucleus->SetNumberOfElectrons(ne);
   }
 
-  if(polarFlag && isDiscrete && JP1 <= fTwoJMAX) {
+  if (isGamma && polarFlag && isDiscrete && JP1 <= fTwoJMAX) {
     SampleDirection(nucleus, mpRatio, JP1, JP2, MP);
   } else {
     fDirection = G4RandomDirection();
   }
 
+  // 4-vector of initial fragnet 
+  G4LorentzVector lv = nucleus->GetMomentum();
+
+  // kinematics of the decay
   G4double emass = part->GetPDGMass();
+  G4double m0 = nucleus->GetGroundStateMass() + excEnergy;
+  G4double m1 = nucleus->GetGroundStateMass() + newExcEnergy;
+  if (!isGamma) {
+    m0 += (ne + 1)*CLHEP::electron_mass_c2 - bondEnergy;
+    m1 += ne*CLHEP::electron_mass_c2;
+  }
 
   // 2-body decay in rest frame
-  G4double ecm = lv.mag();
   const G4double elim2 = 100.*CLHEP::eV*CLHEP::eV;
   G4bool atRest = (lv.vect().mag2() < elim2);
   G4ThreeVector bst(0.0, 0.0, 0.0);
-  if (!atRest) { bst = lv.boostVector(); } 
-  if(!isGamma) { ecm += (CLHEP::electron_mass_c2 - bond_energy); }
+  if (!atRest) { bst = lv.boostVector(); }
 
   //G4cout << "Ecm= " << ecm << " mass= " << mass << " emass= " << emass << G4endl;
 
-  ecm = std::max(ecm, mass + emass);
-  G4double energy = 0.5*((ecm - mass)*(ecm + mass) + emass*emass)/ecm;
-  G4double mom = (emass > 0.0) ? std::sqrt((energy - emass)*(energy + emass))
-    : energy;
+  G4double energy = 0.5*((m0 - m1)*(m0 + m1) + emass*emass)/m0;
+  G4double mom = (isGamma) ? energy : std::sqrt((energy - emass)*(energy + emass));
 
   // emitted gamma or e-
   G4LorentzVector res4mom(mom * fDirection.x(),
 			  mom * fDirection.y(),
 			  mom * fDirection.z(), energy);
   // residual
-  energy = std::max(ecm - energy, mass);
-  mom = std::sqrt(energy*energy - mass*mass);
+  energy = m0 - energy;
+  mom = std::sqrt((energy - m1)*(energy + m1));
   lv.set(-mom*fDirection.x(), -mom*fDirection.y(), -mom*fDirection.z(), energy);
 
   // Lab system transform for short lived level

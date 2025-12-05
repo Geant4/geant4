@@ -23,10 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file RE05/include/RE05TrackerHit.hh
+/// \file RE05TrackerHit.hh
 /// \brief Definition of the RE05TrackerHit class
-//
 
 #ifndef RE05TrackerHit_h
 #define RE05TrackerHit_h 1

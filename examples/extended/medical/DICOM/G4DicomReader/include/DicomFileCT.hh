@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file DicomFileCT.hh
+/// \brief Definition of the DicomFileCT class
+
 #ifndef DicomFileCT__HH
 #define DicomFileCT__HH
 

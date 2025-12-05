@@ -66,6 +66,7 @@ G4EmDataRegistry::~G4EmDataRegistry()
   for (auto const & p : fDataHandlers) {
     delete p;
   }
+  fDataHandlers.clear();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

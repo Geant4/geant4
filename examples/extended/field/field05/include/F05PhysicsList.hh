@@ -23,13 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file field/field05/include/F05PhysicsList.hh
+/// \file F05PhysicsList.hh
 /// \brief Definition of the F05PhysicsList class
-//
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #ifndef F05PhysicsList_h
 #define F05PhysicsList_h 1

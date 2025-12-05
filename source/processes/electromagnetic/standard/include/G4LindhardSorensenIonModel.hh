@@ -105,9 +105,11 @@ public:
 			     const G4Material* mat,
                              G4double kineticEnergy) override;
 
-  void CorrectionsAlongStep(const G4MaterialCutsCouple* couple,
-                            const G4DynamicParticle* dp,
-                            const G4double& length,
+  void CorrectionsAlongStep(const G4Material*,
+			    const G4ParticleDefinition*,
+			    const G4double kinEnergy,
+			    const G4double cutEnergy,
+			    const G4double& length,
                             G4double& eloss) override;
 
   void SampleSecondaries(std::vector<G4DynamicParticle*>*,
@@ -125,8 +127,6 @@ protected:
 
   G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
                               G4double kinEnergy) override;
-
-  inline void SetChargeSquareRatio(G4double val);
 
 private:
 
@@ -158,7 +158,7 @@ private:
   G4double tlimit = DBL_MAX;
   G4double spin = 0.0;
   G4double magMoment2 = 0.0;
-  G4double chargeSquare = 1.0;
+  G4double chargeSquareRatio = 1.0;
   G4double charge = 1.0;
   G4double eRatio = 0.0;
   G4double pRatio = 1.0;
@@ -177,13 +177,6 @@ G4LindhardSorensenIonModel::SetParticle(const G4ParticleDefinition* p)
     particle = p;
     SetupParameters();
   }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline void G4LindhardSorensenIonModel::SetChargeSquareRatio(G4double val)
-{
-  chargeSquare = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

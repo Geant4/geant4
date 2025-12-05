@@ -23,12 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file include/PhysicsListEmStandardTracking.hh
+/// \file PhysicsListEmStandardTracking.hh
 /// \brief Definition of the PhysicsListEmStandardTracking class
-//
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef PhysicsListEmStandardTracking_h
 #define PhysicsListEmStandardTracking_h 1

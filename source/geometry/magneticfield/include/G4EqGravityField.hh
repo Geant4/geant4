@@ -29,8 +29,8 @@
 //
 // This is the right-hand side of equation of motion in a gravity field.
 
-// Created: P.Gumplinger, 14.06.11 - Adopted from G4EqMagElectricField
-//          Thanks to P.Fierlinger (PSI) and A.Capra and A.Fontana (INFN Pavia)
+// Author: Peter Gumplinger (TRIUMF), 14.06.11 - Adopted from G4EqMagElectricField
+//         Thanks to P.Fierlinger (PSI) and A.Capra and A.Fontana (INFN Pavia)
 // -------------------------------------------------------------------
 #ifndef G4EQGRAVITYFIELD_HH
 #define G4EQGRAVITYFIELD_HH
@@ -39,22 +39,52 @@
 #include "G4EquationOfMotion.hh"
 #include "G4UniformGravityField.hh"
 
+/**
+ * @brief G4EqGravityField implements the right-hand side of equation
+ * of motion in a gravity field.
+ */
+
 class G4EqGravityField : public G4EquationOfMotion
 {
   public:
 
+    /**
+     * Constructor for G4EqGravityField.
+     *  @param[in] gField Pointer to the uniform gravity field.
+     */
     G4EqGravityField(G4UniformGravityField* gField);
-   ~G4EqGravityField() override;
 
+    /**
+     * Default Destructor.
+     */
+    ~G4EqGravityField() override = default;
+
+    /**
+     * Sets the charge, momentum and mass of the current particle.
+     * Used to set the equation's coefficients.
+     *  @param[in] particleCharge Magnetic charge and moments in e+ units.
+     *  @param[in] MomentumXc Particle momentum.
+     *  @param[in] mass Particle mass.
+     */
     void SetChargeMomentumMass(G4ChargeState particleCharge, // in e+ units
                                G4double MomentumXc,
                                G4double mass) override;
 
+    /**
+     * Calculates the value of the derivative, given the value of the
+     * electromagnetic field.
+     *  @param[in] y Coefficients array.
+     *  @param[in] Field Field value.
+     *  @param[out] dydx Derivatives array.
+     */
     void EvaluateRhsGivenB( const G4double y[],
                             const G4double Field[],
                                   G4double dydx[] ) const override;
-      // Given the value of the gravitational field, this function
-      // calculates the value of the derivative dydx.
+
+    /**
+     * Returns the equation type-ID, "kEqGravity".
+     */
+    inline G4EquationType GetEquationType() const override { return kEqGravity; }
 
   private:
 

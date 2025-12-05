@@ -52,31 +52,7 @@ public:
   void value(mat4f& a_m) const {parent::value(a_m);}
   void set_value(const mat4f& a_m) {parent::set_value(a_m,::sqrtf);}
 
-  //NOTE : don't handle a static object because of mem balance.
-  //static const rotf& identity() {
-  //  static const rotf s_v(0,0,0,1);
-  //  return s_v;
-  //}
 };
-
-}
-
-#include <sstream>
-
-namespace tools {
-
-inline bool tos(const rotf& a_v,std::string& a_s) {
-  vec3f axis;
-  float angle = 0;
-  if(!a_v.value(axis,angle)) {a_s.clear();return false;}
-  std::ostringstream strm;
-  strm << axis[0] << " "
-       << axis[1] << " "
-       << axis[2] << " "
-       << angle;
-  a_s = strm.str();
-  return true;
-}
 
 }
 

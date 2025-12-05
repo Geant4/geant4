@@ -25,7 +25,7 @@
 //
 // G4TwistTrapParallelSide implementation
 //
-// Author: Oliver Link (Oliver.Link@cern.ch)
+// Author: Oliver Link (CERN), 27.10.2004 - Created
 // --------------------------------------------------------------------
 
 #include <cmath>
@@ -113,11 +113,6 @@ G4TwistTrapParallelSide::G4TwistTrapParallelSide( __void__& a )
 }
 
 //=====================================================================
-//* destructor --------------------------------------------------------
-
-G4TwistTrapParallelSide::~G4TwistTrapParallelSide() = default;
-
-//=====================================================================
 //* GetNormal ---------------------------------------------------------
 
 G4ThreeVector G4TwistTrapParallelSide::GetNormal(const G4ThreeVector& tmpxx, 
@@ -203,15 +198,14 @@ G4int G4TwistTrapParallelSide::DistanceToSurface(const G4ThreeVector& gp,
     }
     return fCurStatWithV.GetNXX();
   }
-  else   // initialize
+
+  // initialize
+  for (G4int i=0; i<G4VSURFACENXX ; ++i)
   {
-    for (G4int i=0; i<G4VSURFACENXX ; ++i)
-    {
-      distance[i] = kInfinity;
-      areacode[i] = sOutside;
-      isvalid[i]  = false;
-      gxx[i].set(kInfinity, kInfinity, kInfinity);
-    }
+    distance[i] = kInfinity;
+    areacode[i] = sOutside;
+    isvalid[i]  = false;
+    gxx[i].set(kInfinity, kInfinity, kInfinity);
   }
 
   G4ThreeVector p = ComputeLocalPoint(gp);
@@ -392,7 +386,7 @@ G4int G4TwistTrapParallelSide::DistanceToSurface(const G4ThreeVector& gp,
       if ( deltaX <= factor*ctol ) { IsConverged = true ; break ; }
     }  // end iterative loop (i)
     
-    if ( std::fabs(tmpdist)<ctol ) tmpdist = 0 ; 
+    if ( std::fabs(tmpdist)<ctol ) { tmpdist = 0 ; }
 
 #ifdef G4TWISTDEBUG
     G4cout << "refined solution "  << phi << " , " << u  <<  G4endl ;
@@ -409,7 +403,7 @@ G4int G4TwistTrapParallelSide::DistanceToSurface(const G4ThreeVector& gp,
         tmpareacode = GetAreaCode(tmpxx);
         if (!IsOutside(tmpareacode))
         {
-          if (tmpdist >= 0) tmpisvalid = true;
+          if (tmpdist >= 0) { tmpisvalid = true; }
         }
       }
       else if (validate == kValidateWithoutTol)
@@ -417,7 +411,7 @@ G4int G4TwistTrapParallelSide::DistanceToSurface(const G4ThreeVector& gp,
         tmpareacode = GetAreaCode(tmpxx, false);
         if (IsInside(tmpareacode))
         {
-          if (tmpdist >= 0) tmpisvalid = true;
+          if (tmpdist >= 0) { tmpisvalid = true; }
         }
       }
       else  // kDontValidate
@@ -532,7 +526,7 @@ G4int G4TwistTrapParallelSide::DistanceToSurface(const G4ThreeVector& gp,
         if ( deltaX <= factor*ctol ) { IsConverged = true ; break ; }
       }  // end iterative loop (i)
 
-      if ( std::fabs(tmpdist)<ctol ) tmpdist = 0 ; 
+      if ( std::fabs(tmpdist)<ctol ) { tmpdist = 0 ; }
 
 #ifdef G4TWISTDEBUG
       G4cout << "refined solution "  << phi << " , " << u  <<  G4endl ;
@@ -549,7 +543,7 @@ G4int G4TwistTrapParallelSide::DistanceToSurface(const G4ThreeVector& gp,
           tmpareacode = GetAreaCode(tmpxx);
           if (!IsOutside(tmpareacode))
           {
-            if (tmpdist >= 0) tmpisvalid = true;
+            if (tmpdist >= 0) { tmpisvalid = true; }
           }
         }
         else if (validate == kValidateWithoutTol)
@@ -557,7 +551,7 @@ G4int G4TwistTrapParallelSide::DistanceToSurface(const G4ThreeVector& gp,
           tmpareacode = GetAreaCode(tmpxx, false);
           if (IsInside(tmpareacode))
           {
-            if (tmpdist >= 0) tmpisvalid = true;
+            if (tmpdist >= 0) { tmpisvalid = true; }
           }
         }
         else  // kDontValidate
@@ -652,16 +646,15 @@ G4int G4TwistTrapParallelSide::DistanceToSurface(const G4ThreeVector& gp,
       }
       return fCurStat.GetNXX();
    }
-   else  // initialize
+
+   // initialize
+   for (G4int i=0; i<G4VSURFACENXX; ++i)
    {
-      for (G4int i=0; i<G4VSURFACENXX; ++i)
-      {
-         distance[i] = kInfinity;
-         areacode[i] = sOutside;
-         gxx[i].set(kInfinity, kInfinity, kInfinity);
-      }
+      distance[i] = kInfinity;
+      areacode[i] = sOutside;
+      gxx[i].set(kInfinity, kInfinity, kInfinity);
    }
-   
+
    G4ThreeVector p = ComputeLocalPoint(gp);
    G4ThreeVector xx;  // intersection point
    G4ThreeVector xxonsurface ; // interpolated intersection point 
@@ -700,10 +693,10 @@ G4int G4TwistTrapParallelSide::DistanceToSurface(const G4ThreeVector& gp,
    G4double uMax = GetBoundaryMax(phiR) ;
    G4double uMin = GetBoundaryMin(phiR) ;
 
-   if (  phiR > halfphi ) phiR =  halfphi ;
-   if ( phiR < -halfphi ) phiR = -halfphi ;
-   if ( uR > uMax ) uR = uMax ;
-   if ( uR < uMin ) uR = uMin ;
+   if (  phiR > halfphi ) { phiR =  halfphi ; }
+   if ( phiR < -halfphi ) { phiR = -halfphi ; }
+   if ( uR > uMax ) { uR = uMax ; }
+   if ( uR < uMin ) { uR = uMin ; }
 
    xxonsurface = SurfacePoint(phiR,uR) ;
    distance[0] = (  p - xx ).mag() ;
@@ -762,40 +755,50 @@ G4int G4TwistTrapParallelSide::GetAreaCode(const G4ThreeVector& xx,
       
       if (withTol)
       {
-        G4bool isoutside = false;
+         G4bool isoutside = false;
         
-        // test boundary of xaxis
+         // test boundary of xaxis
 
          if (yprime < fXAxisMin + ctol)
          {
-            areacode |= (sAxis0 & (sAxisX | sAxisMin)) | sBoundary; 
-            if (yprime <= fXAxisMin - ctol) isoutside = true;
-
+           areacode |= (sAxis0 & (sAxisX | sAxisMin)) | sBoundary; 
+           if (yprime <= fXAxisMin - ctol) { isoutside = true; }
          }
          else if (yprime > fXAxisMax - ctol)
          {
-            areacode |= (sAxis0 & (sAxisX | sAxisMax)) | sBoundary;
-            if (yprime >= fXAxisMax + ctol)  isoutside = true;
+           areacode |= (sAxis0 & (sAxisX | sAxisMax)) | sBoundary;
+           if (yprime >= fXAxisMax + ctol) {  isoutside = true; }
          }
 
          // test boundary of z-axis
 
          if (xx.z() < fAxisMin[zaxis] + ctol)
          {
-            areacode |= (sAxis1 & (sAxisZ | sAxisMin)); 
+           areacode |= (sAxis1 & (sAxisZ | sAxisMin)); 
 
-            if   ((areacode & sBoundary) != 0) areacode |= sCorner;  // xx is on corner.
-            else                        areacode |= sBoundary;
-            if (xx.z() <= fAxisMin[zaxis] - ctol) isoutside = true;
-
+           if ((areacode & sBoundary) != 0)
+           {
+             areacode |= sCorner;  // xx is on corner.
+           }
+           else
+           {
+             areacode |= sBoundary;
+           }
+           if (xx.z() <= fAxisMin[zaxis] - ctol) { isoutside = true; }
          }
          else if (xx.z() > fAxisMax[zaxis] - ctol)
          {
-            areacode |= (sAxis1 & (sAxisZ | sAxisMax));
+           areacode |= (sAxis1 & (sAxisZ | sAxisMax));
 
-            if   ((areacode & sBoundary) != 0) areacode |= sCorner;  // xx is on corner.
-            else                        areacode |= sBoundary; 
-            if (xx.z() >= fAxisMax[zaxis] + ctol) isoutside = true;
+           if ((areacode & sBoundary) != 0)
+           {
+             areacode |= sCorner;  // xx is on corner.
+           }
+           else
+           { 
+             areacode |= sBoundary; 
+           }
+           if (xx.z() >= fAxisMax[zaxis] + ctol) { isoutside = true; }
          }
 
          // if isoutside = true, clear inside bit.             
@@ -803,12 +806,12 @@ G4int G4TwistTrapParallelSide::GetAreaCode(const G4ThreeVector& xx,
          
          if (isoutside)
          {
-            G4int tmpareacode = areacode & (~sInside);
-            areacode = tmpareacode;
+           G4int tmpareacode = areacode & (~sInside);
+           areacode = tmpareacode;
          }
          else if ((areacode & sBoundary) != sBoundary)
          {
-            areacode |= (sAxis0 & sAxisX) | (sAxis1 & sAxisZ);
+           areacode |= (sAxis0 & sAxisX) | (sAxis1 & sAxisZ);
          }           
          
       }
@@ -818,42 +821,52 @@ G4int G4TwistTrapParallelSide::GetAreaCode(const G4ThreeVector& xx,
 
          if (yprime < fXAxisMin )
          {
-            areacode |= (sAxis0 & (sAxisX | sAxisMin)) | sBoundary;
+           areacode |= (sAxis0 & (sAxisX | sAxisMin)) | sBoundary;
          }
          else if (yprime > fXAxisMax)
          {
-            areacode |= (sAxis0 & (sAxisX | sAxisMax)) | sBoundary;
+           areacode |= (sAxis0 & (sAxisX | sAxisMax)) | sBoundary;
          }
          
          // boundary of z-axis
 
          if (xx.z() < fAxisMin[zaxis])
          {
-            areacode |= (sAxis1 & (sAxisZ | sAxisMin));
-            if   ((areacode & sBoundary) != 0) areacode |= sCorner;  // xx is on corner.
-            else                        areacode |= sBoundary; 
-           
+           areacode |= (sAxis1 & (sAxisZ | sAxisMin));
+           if ((areacode & sBoundary) != 0)
+           {
+             areacode |= sCorner;  // xx is on corner.
+           }
+           else
+           {  
+             areacode |= sBoundary; 
+           }
          }
          else if (xx.z() > fAxisMax[zaxis])
          {
-            areacode |= (sAxis1 & (sAxisZ | sAxisMax)) ;
-            if   ((areacode & sBoundary) != 0) areacode |= sCorner;  // xx is on corner.
-            else                        areacode |= sBoundary; 
+           areacode |= (sAxis1 & (sAxisZ | sAxisMax)) ;
+           if ((areacode & sBoundary) != 0)
+           {
+             areacode |= sCorner;  // xx is on corner.
+           }
+           else
+           {
+             areacode |= sBoundary; 
+           }
          }
 
          if ((areacode & sBoundary) != sBoundary)
          {
-            areacode |= (sAxis0 & sAxisX) | (sAxis1 & sAxisZ);
+           areacode |= (sAxis0 & sAxisX) | (sAxis1 & sAxisZ);
          }           
       }
       return areacode;
    }
-   else
-   {
-      G4Exception("G4TwistTrapParallelSide::GetAreaCode()",
-                  "GeomSolids0001", FatalException,
-                  "Feature NOT implemented !");
-   }
+
+   G4Exception("G4TwistTrapParallelSide::GetAreaCode()",
+               "GeomSolids0001", FatalException,
+               "Feature NOT implemented !");
+  
    return areacode;
 }
 
@@ -1006,10 +1019,7 @@ G4ThreeVector G4TwistTrapParallelSide::ProjectPoint(const G4ThreeVector& p,
   {
      return (fRot * xx + fTrans);
   }
-  else
-  {
-     return xx;
-  }
+  return xx;
 }
 
 //=====================================================================

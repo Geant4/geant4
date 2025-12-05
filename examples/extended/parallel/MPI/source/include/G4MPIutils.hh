@@ -22,8 +22,9 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-// Utility functions for MPI G4 interface
+/// @file G4MPIutils.hh
+/// @brief Utility functions for MPI G4 interface
+
 #ifndef G4MPIUTILS_HH
 #define G4MPIUTILS_HH
 #include <functional>

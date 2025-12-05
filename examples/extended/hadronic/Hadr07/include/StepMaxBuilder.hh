@@ -25,10 +25,6 @@
 //
 /// \file StepMaxBuilder.hh
 /// \brief Definition of the StepMaxBuilder class
-//
-//
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef StepMaxBuilder_h
 #define StepMaxBuilder_h 1

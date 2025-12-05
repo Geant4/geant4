@@ -27,23 +27,22 @@
 //
 // Class description:
 //
-//   A G4Paraboloid represents a solid with parabolic profile with possible
-//   cuts along the Z axis.
+// A G4Paraboloid represents a solid with parabolic profile with possible
+// cuts along the Z axis.
 //
-//   Member Data:
-//
+// Member Data:
 //      dz              z half lenght
 //      r1              radius at -dz
 //      r2              radius at  dz
 //      r2  > r1
 //
-//      Equation for the solid:
-//        rho^2 <= k1 * z + k2;
-//        -dz <= z <= dz
-//        r1^2 = k1 * (-dz) + k2
-//        r2^2 = k1 * ( dz) + k2
+// Equation for the solid:
+//      rho^2 <= k1 * z + k2;
+//      -dz <= z <= dz
+//      r1^2 = k1 * (-dz) + k2
+//      r2^2 = k1 * ( dz) + k2
 
-// 10.07.2007, L.Lindroos (CERN) - First implementation
+// Author: Lukas Lindroos (CERN), 10.07.2007 - First implementation
 // --------------------------------------------------------------------
 #ifndef G4PARABOLOID_HH
 #define G4PARABOLOID_HH
@@ -64,33 +63,72 @@
 #include "G4VSolid.hh"
 #include "G4Polyhedron.hh"
 
+/**
+ * @brief G4Paraboloid represents a solid with parabolic profile
+ * with possible cuts along the Z axis.
+ */
+
 class G4Paraboloid : public G4VSolid
 {
   public:
 
+    /**
+     * Constructs a paraboloid, given its parameters.
+     *  @param[in] pName The solid name.
+     *  @param[in] pDz Half length in Z.
+     *  @param[in] pR1 Radius at -Dz.
+     *  @param[in] pR2 Radius at +Dz greater than pR1.
+     */
     G4Paraboloid(const G4String& pName,
-                       G4double  pDz,
-                       G4double  pR1,
-                       G4double  pR2);
+                       G4double pDz,
+                       G4double pR1,
+                       G4double pR2);
 
+    /**
+     * Destructor.
+     */
     ~G4Paraboloid() override;
 
-    // Access functions
+    /**
+     * Accessors.
+     */
     inline G4double GetZHalfLength() const;
     inline G4double GetRadiusMinusZ() const;
     inline G4double GetRadiusPlusZ() const;
 
-    // Modifiers functions
+    /**
+     * Modifiers.
+     */
     void SetZHalfLength(G4double dz);
     void SetRadiusMinusZ(G4double R1);
     void SetRadiusPlusZ(G4double R2);
 
-    // Solid standard methods
+    /**
+     * Computes the bounding limits of the solid.
+     *  @param[out] pMin The minimum bounding limit point.
+     *  @param[out] pMax The maximum bounding limit point.
+     */
     void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const override;
+
+    /**
+     * Calculates the minimum and maximum extent of the solid, when under the
+     * specified transform, and within the specified limits.
+     *  @param[in] pAxis The axis along which compute the extent.
+     *  @param[in] pVoxelLimit The limiting space dictated by voxels.
+     *  @param[in] pTransform The internal transformation applied to the solid.
+     *  @param[out] pMin The minimum extent value.
+     *  @param[out] pMax The maximum extent value.
+     *  @returns True if the solid is intersected by the extent region.
+     */
     G4bool CalculateExtent(const EAxis pAxis,
                            const G4VoxelLimits& pVoxelLimit,
                            const G4AffineTransform& pTransform,
                                  G4double& pmin, G4double& pmax) const override;
+
+    /**
+     * Concrete implementations of the expected query interfaces for
+     * solids, as defined in the base class G4VSolid.
+     */
     EInside Inside(const G4ThreeVector& p) const override;
     G4ThreeVector SurfaceNormal( const G4ThreeVector& p) const override;
     G4double DistanceToIn(const G4ThreeVector& p,
@@ -103,34 +141,63 @@ class G4Paraboloid : public G4VSolid
                                  G4ThreeVector* n = nullptr) const override;
     G4double DistanceToOut(const G4ThreeVector& p) const override;
 
+    /**
+     * Returns the type ID, "G4Paraboloid" of the solid.
+     */
     G4GeometryType GetEntityType() const override;
 
+    /**
+     * Makes a clone of the object for use in multi-treading.
+     *  @returns A pointer to the new cloned allocated solid.
+     */
     G4VSolid* Clone() const override;
 
+    /**
+     * Streams the object contents to an output stream.
+     */
     std::ostream& StreamInfo(std::ostream& os) const override;
 
+    /**
+     * Returning an estimation of the solid volume (capacity) and
+     * surface area, in internal units.
+     */
     G4double GetCubicVolume() override;
     G4double GetSurfaceArea() override;
 
+    /**
+     * Returns a random point located and uniformly distributed on the
+     * surface of the solid.
+     */
     G4ThreeVector GetPointOnSurface() const override;
 
-    // Visualisation functions
+    /**
+     * Methods for creating graphical representations (i.e. for visualisation).
+     */
     void DescribeYourselfTo(G4VGraphicsScene& scene) const override;
     G4Polyhedron* CreatePolyhedron() const override;
     G4Polyhedron* GetPolyhedron () const override;
 
-    // Fake default constructor for usage restricted to direct object
-    // persistency for clients requiring preallocation of memory for
-    // persistifiable objects.
+    /**
+     * Fake default constructor for usage restricted to direct object
+     * persistency for clients requiring preallocation of memory for
+     * persistifiable objects.
+     */
     G4Paraboloid(__void__&);
 
-    // Copy constructor and assignment operator.
+    /**
+     * Copy constructor and assignment operator.
+     */
     G4Paraboloid(const G4Paraboloid& rhs);
     G4Paraboloid& operator=(const G4Paraboloid& rhs);
 
   private:
 
+    /**
+     * Utility method to cache the computation of the solid's surface area.
+     */
     G4double CalculateSurfaceArea() const;
+
+  private:
 
     G4double fSurfaceArea = 0.0;
     G4double fCubicVolume = 0.0;

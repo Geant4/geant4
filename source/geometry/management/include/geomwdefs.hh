@@ -25,9 +25,10 @@
 //
 // Defines for Windows DLLs import/export
 //
+// Author: Gabriele Cosmo (CERN), 07.03.2013
 // --------------------------------------------------------------------
-#ifndef GEOMWDEFS_HH
-#define GEOMWDEFS_HH
+#ifndef G4GEOMWDEFS_HH
+#define G4GEOMWDEFS_HH
 
 #include "G4Types.hh"
 
@@ -42,6 +43,6 @@
   #endif
 #else
   #define G4GEOM_DLL
-#endif
+#endif /* WIN32 */
 
 #endif /* G4GEOMWDEFS_HH */

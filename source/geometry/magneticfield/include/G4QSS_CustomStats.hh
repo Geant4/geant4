@@ -27,10 +27,10 @@
 //
 // QSS statistics
 
-// Authors: Lucio Santi, Rodrigo Castro (Univ. Buenos Aires) - 2018-2021
+// Authors: Lucio Santi, Rodrigo Castro (Univ. Buenos Aires), 2018-2021
 // --------------------------------------------------------------------
-#ifndef _QSS_CUSTOM_STATS_HH_
-#define _QSS_CUSTOM_STATS_HH_ 1
+#ifndef QSS_CUSTOM_STATS_HH
+#define QSS_CUSTOM_STATS_HH
 
 #include <time.h>
 
@@ -44,8 +44,14 @@
 
 #include "G4qss_misc.hh"
 #include "G4Types.hh"
+#include "G4ios.hh"
 
 #include <atomic>
+#include <map>
+
+/**
+ * @brief QSSStats contains functions for statistics on the QSS drivers.
+ */
 
 struct QSSStats
 {
@@ -69,7 +75,8 @@ struct QSSStats
     reset_time = 0;
     integration_time = 0;
 
-    for (size_t i = 0; i < Qss_misc::VAR_IDX_END; i++) {
+    for (std::size_t i = 0; i < Qss_misc::VAR_IDX_END; ++i)
+    {
       dqrel_changes[i] = 0;
       dqmin_changes[i] = 0;
       max_error[i] = 0;
@@ -98,12 +105,12 @@ struct QSSStats
        << " Substeps average per step: " << avg_substeps << std::endl;
 
     ss << " Substeps by track-step:" << std::endl;
-    for (auto it = substepsByStepNumberByTrackID.begin(); it != substepsByStepNumberByTrackID.end();
-         ++it)
+    for (const auto& stp : substepsByStepNumberByTrackID)
     {
-      ss << "  Track #" << it->first << std::endl;
-      for (auto it2 = it->second.begin(); it2 != it->second.end(); ++it2) {
-        ss << "    Step " << it2->first << " => " << it2->second << " substeps" << std::endl;
+      ss << "  Track #" << stp.first << std::endl;
+      for (const auto& stp2 : stp.second)
+      {
+        ss << "    Step " << stp2.first << " => " << stp2.second << " substeps" << std::endl;
       }
     }
 
@@ -114,14 +121,15 @@ struct QSSStats
     ss << " Reset time: " << reset_time << std::endl
        << " Reset time average: " << avg_reset_time << std::endl;
 
-    for (G4int index = 0; index < Qss_misc::VAR_IDX_END; index++) {
+    for (std::size_t index = 0; index < Qss_misc::VAR_IDX_END; ++index)
+    {
       ss << " Variable " << vars[index] << ":" << std::endl;
       ss << "  dQRel changes: " << dqrel_changes[index] << std::endl;
       ss << "  dQMin changes: " << dqmin_changes[index] << std::endl;
       ss << "  Max error: " << max_error[index] << std::endl;
     }
 
-    std::cout << ss.rdbuf();
+    G4cout << ss.rdbuf();
   };
 };
 

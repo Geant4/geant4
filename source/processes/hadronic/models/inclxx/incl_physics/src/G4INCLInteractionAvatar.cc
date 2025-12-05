@@ -54,6 +54,7 @@
 #include "G4INCLLogger.hh"
 #include "G4INCLConfigEnums.hh"
 #include "G4INCLConfig.hh"
+#include "G4INCLEventInfo.hh"
 // #include <cassert>
 
 namespace G4INCL {
@@ -62,6 +63,10 @@ namespace G4INCL {
   const G4int InteractionAvatar::maxIterLocE = 50;
   G4ThreadLocal Particle *InteractionAvatar::backupParticle1 = NULL;
   G4ThreadLocal Particle *InteractionAvatar::backupParticle2 = NULL;
+  G4ThreadLocal Particle *InteractionAvatar::backupPartner = NULL;
+  ThreeVector InteractionAvatar::mbackupPartner;
+  
+  G4ThreadLocal InteractionAvatar *InteractionAvatar::interactionAvatar = 0;
 
   InteractionAvatar::InteractionAvatar(G4double time, G4INCL::Nucleus *n, G4INCL::Particle *p1)
     : IAvatar(time), theNucleus(n),
@@ -70,6 +75,7 @@ namespace G4INCL {
     weight(1.),
     violationEFunctor(NULL)
   {
+   interactionAvatar = this;
   }
 
   InteractionAvatar::InteractionAvatar(G4double time, G4INCL::Nucleus *n, G4INCL::Particle *p1,
@@ -80,17 +86,35 @@ namespace G4INCL {
     weight(1.),
     violationEFunctor(NULL)
   {
+   interactionAvatar = this;
   }
+ 
+  InteractionAvatar *InteractionAvatar::Instance() { return interactionAvatar; }
 
   InteractionAvatar::~InteractionAvatar() {
+  }
+ 
+  void InteractionAvatar::setSrcPartner(Particle *p) {
+
+  if (backupPartner) {
+    (*backupPartner) = (*p);
+  } else {
+    backupPartner = new Particle(*p);
+  }
+  INCL_DEBUG("setSrcPartner:" << backupPartner->print());
+
+  return;
   }
 
   void InteractionAvatar::deleteBackupParticles() {
     delete backupParticle1;
     if(backupParticle2)
       delete backupParticle2;
+    if (backupPartner)
+      delete backupPartner;
     backupParticle1 = NULL;
     backupParticle2 = NULL;
+    backupPartner = NULL;
   }
 
   void InteractionAvatar::preInteractionBlocking() {
@@ -175,7 +199,14 @@ namespace G4INCL {
     ModifiedAndDestroyed.insert(ModifiedAndDestroyed.end(), Destroyed.begin(), Destroyed.end());
 
     // Boost back to lab
-    modifiedAndCreated.boost(-boostVector);
+    //modifiedAndCreated.boost(-boostVector);
+    
+    for (ParticleIter i = modifiedAndCreated.begin(),
+                      e = modifiedAndCreated.end();
+                      i != e; ++i)
+    if ((*i)->isSrcPartner() == false){
+      (*i)->boost(-boostVector);
+    }
 
     // If there is no Nucleus, just return
     if(!theNucleus) return;
@@ -192,13 +223,78 @@ namespace G4INCL {
       }
 
     // Try to enforce energy conservation
-    fs->setTotalEnergyBeforeInteraction(oldTotalEnergy);
+  G4int check = 0;
+  G4double oldTotalEnergy2 = 0.;
+  if (modifiedAndCreated.size() == 3 &&
+      theNucleus->getStore()->getBook().getAcceptedSrcCollisions() == 1) {
+    for (ParticleIter i = modifiedAndCreated.begin(),
+                      e = modifiedAndCreated.end();
+                      i != e; ++i) {
+      if ((*i)->getSrcPair() > 0.) {
+        check++;
+      }
+    }
+  }
+
+  G4double ediff = 0., partnerE = 0.;
+  if (check == 2) {
+    G4double oldTotalEnergy3 = 0.;
+    partnerE = backupPartner->getEnergy() - backupPartner->getPotentialEnergy();
+    for (ParticleIter i = modifiedAndCreated.begin(),
+                      e = modifiedAndCreated.end();
+                      i != e; ++i) {
+      if ((*i)->isNucleon())
+        oldTotalEnergy3 += (*i)->getEnergy() - (*i)->getPotentialEnergy();
+      else if ((*i)->isResonance())
+        oldTotalEnergy3 += (*i)->getEnergy() - (*i)->getPotentialEnergy() -
+                           ParticleTable::effectiveNucleonMass;
+    }
+
+    INCL_DEBUG("check initial energies: "
+               << backupParticle1->getEnergy() << " , "
+               << backupParticle2->getEnergy() << " , "
+               << backupPartner->getEnergy() << '\n');
+
+    INCL_DEBUG("check initial energies total: "
+               << backupParticle1->getEnergy() -
+                      backupParticle1->getPotentialEnergy() +
+                      backupParticle2->getEnergy() -
+                      backupParticle2->getPotentialEnergy() +
+                      backupPartner->getEnergy() -
+                      backupPartner->getPotentialEnergy()
+               << '\n');
+
+    ediff =
+        oldTotalEnergy3 -
+        (backupParticle1->getEnergy() - backupParticle1->getPotentialEnergy() +
+         backupParticle2->getEnergy() - backupParticle2->getPotentialEnergy() +
+         backupPartner->getEnergy() - backupPartner->getPotentialEnergy());
+
+    INCL_DEBUG("check diff. src energies: " << oldTotalEnergy3 << " , " << ediff
+                                            << '\n');
+  }
+
+    // Try to enforce energy conservation
+    fs->setTotalEnergyBeforeInteraction(oldTotalEnergy + ediff + partnerE);
+
+    INCL_DEBUG("postInteraction before enforceEnergyConservation final state: "
+             << oldTotalEnergy + oldTotalEnergy2 << "  \n Einit= "
+             << oldTotalEnergy << "  \n Ecor= " << oldTotalEnergy2 << '\n'
+             << fs->print() << '\n');
     G4bool success = enforceEnergyConservation(fs);
+    INCL_DEBUG("enforceEnergyConservation finish " << success << '\n');
+
     if(!success) {
       INCL_DEBUG("Enforcing energy conservation: failed!" << '\n');
 
       // Restore the state of the initial particles
       restoreParticles();
+ 
+      if (check == 2) {
+      INCL_DEBUG("Enforcing energy conservation: failed for SRC"
+                 << " , eventnb: " << theEventInfo.eventNumber << '\n');
+      restoreSrcPartner(fs);
+      }
 
       // Delete newly created particles
       for(ParticleIter i=created.begin(), e=created.end(); i!=e; ++i )
@@ -223,6 +319,12 @@ namespace G4INCL {
 
         // Restore the state of the initial particles
         restoreParticles();
+ 
+        if (check == 2) {
+        INCL_DEBUG("Mass of the produced delta below decay threshold for SRC"
+                   << " , eventnb: " << theEventInfo.eventNumber << '\n');
+        restoreSrcPartner(fs);
+        }
 
         // Delete newly created particles
         for(ParticleIter j=created.begin(), end=created.end(); j!=end; ++j )
@@ -239,11 +341,17 @@ namespace G4INCL {
     // Test Pauli blocking
     G4bool isBlocked = Pauli::isBlocked(modifiedAndCreated, theNucleus);
 
-    if(isBlocked) {
+    if (isBlocked && check < 2) {
       INCL_DEBUG("Pauli: Blocked!" << '\n');
 
       // Restore the state of the initial particles
       restoreParticles();
+ 
+    if (check == 2) {
+      INCL_DEBUG("Pauli: Blocked SRC!"
+                 << " , eventnb: " << theEventInfo.eventNumber << '\n');
+      restoreSrcPartner(fs);
+    }
 
       // Delete newly created particles
       for(ParticleIter i=created.begin(), e=created.end(); i!=e; ++i )
@@ -259,12 +367,25 @@ namespace G4INCL {
 
     // Test CDPP blocking
     G4bool isCDPPBlocked = Pauli::isCDPPBlocked(created, theNucleus);
+    G4int cntB = 0; //Do not pass through CDPP if Nbar annihilation
+    for(ParticleIter i=modifiedAndCreated.begin(), e=modifiedAndCreated.end(); i!=e; ++i ){
+      if((*i)->isBaryon())
+        cntB++;
+    }
+    if(cntB==0)
+      isCDPPBlocked=false;
 
     if(isCDPPBlocked) {
       INCL_DEBUG("CDPP: Blocked!" << '\n');
 
       // Restore the state of the initial particles
       restoreParticles();
+ 
+      if (check == 2) {
+      INCL_DEBUG("CDPP: Blocked for SRC"
+                 << " , eventnb: " << theEventInfo.eventNumber << '\n');
+      restoreSrcPartner(fs);
+      }
 
       // Delete newly created particles
       for(ParticleIter i=created.begin(), e=created.end(); i!=e; ++i )
@@ -330,25 +451,62 @@ namespace G4INCL {
           (*i)->makeParticipant();
         }
       }
+      (*i)->resetSrcPartner();
     }
     ParticleList destroyed = fs->getDestroyedParticles();
     for(ParticleIter i=destroyed.begin(), e=destroyed.end(); i!=e; ++i )
       if(!(*i)->isTargetSpectator())
         theNucleus->getStore()->getBook().decrementCascading();
+        
+    if (check == 2) {
+     theNucleus->setSrcInternalEnergy(ediff);
+     for (ParticleIter i = modifiedAndCreated.begin(),
+                       e = modifiedAndCreated.end();
+                       i != e; ++i) {
+      (*i)->resetSrcPartner();
+    }
+    INCL_DEBUG("postInteraction end, src energy: "
+               << ediff << " , eventnb: " << theEventInfo.eventNumber << '\n');
+    }
     return;
   }
 
   void InteractionAvatar::restoreParticles() const {
     (*particle1) = (*backupParticle1);
-    if(particle2)
+    particle1->resetSrcPartner();
+    if(particle2){
       (*particle2) = (*backupParticle2);
+      particle2->resetSrcPartner();
+    }
+  }
+
+  void InteractionAvatar::restoreSrcPartner(FinalState *fs) {
+
+    theNucleus->getStore()->getBook().setAcceptedSrcCollisions(0);
+
+    auto m = fs->getSrcModifiedParticles();
+
+    if (backupPartner) {
+      for (ParticleIter i = m.begin(), e = m.end(); i != e; ++i) {
+        if ((*i)->getType() == backupPartner->getType() &&
+            (*i)->getSrcPair() == backupPartner->getSrcPair()) {
+              (*i)->setPosition(backupPartner->getPosition());
+              (*i)->setMomentum(backupPartner->getMomentum());
+              (*i)->adjustEnergyFromMomentum();
+              (*i)->resetSrcPartner();
+              theNucleus->updatePotentialEnergy(*i);
+        }
+      }
+    }
+  theNucleus->setSrcInternalEnergy(0.0);
   }
 
   G4bool InteractionAvatar::shouldUseLocalEnergy() const {
     if(!theNucleus) return false;
     LocalEnergyType theLocalEnergyType;
     if(theNucleus->getStore()->getConfig()->getProjectileType()==antiProton ||
-     theNucleus->getStore()->getConfig()->getProjectileType()==antiNeutron){
+       theNucleus->getStore()->getConfig()->getProjectileType()==antiNeutron||
+       theNucleus->getStore()->getConfig()->getProjectileType()==antiComposite){
       return false;
     }
     if(getType()==DecayAvatarType || isPiN)
@@ -414,7 +572,9 @@ namespace G4INCL {
     // Store the particle momenta (necessary for the calls to
     // scaleParticleMomenta() to work)
     for(ParticleIter i=finalParticles.begin(), e=finalParticles.end(); i!=e; ++i) {
+     if ((*i)->isSrcPartner() == false){
       (*i)->boost(boostVector);
+     }
       particleMomenta.push_back((*i)->getMomentum());
     }
   }
@@ -439,8 +599,10 @@ namespace G4INCL {
     for(ParticleIter i=finalParticles.begin(), e=finalParticles.end(); i!=e; ++i, ++iP) {
       (*i)->setMomentum((*iP)*alpha);
       (*i)->adjustEnergyFromMomentum();
-      (*i)->rpCorrelate();
-      (*i)->boost(-boostVector);
+      if ((*i)->isSrcPartner() == false) {
+        (*i)->rpCorrelate();
+        (*i)->boost(-boostVector);
+      }
       if(theNucleus){
         theNucleus->updatePotentialEnergy(*i);
       } else {
@@ -448,7 +610,7 @@ namespace G4INCL {
       }
 
       if(shouldUseLocalEnergy && !(*i)->isPion() && !(*i)->isEta() && !(*i)->isOmega() &&
-         !(*i)->isKaon() && !(*i)->isAntiKaon()  && !(*i)->isSigma() && !(*i)->isPhoton() && !(*i)->isLambda() && !(*i)->isAntiBaryon()) { // This translates AECSVT's loops 1, 3 and 4
+           !(*i)->isKaon() && !(*i)->isAntiKaon()  && !(*i)->isSigma() && !(*i)->isPhoton() && !(*i)->isLambda() && !(*i)->isAntiBaryon() && !(*i)->isSrcPartner()) { // This translates AECSVT's loops 1, 3 and 4
 // assert(theNucleus); // Local energy without a nucleus doesn't make sense
          const G4double energy = (*i)->getEnergy(); // Store the energy of the particle
          G4double locE = KinematicsUtils::getLocalEnergy(theNucleus, *i); // Initial value of local energy
@@ -467,7 +629,7 @@ namespace G4INCL {
       }
 
 //jlrs  For lambdas and nuclei with masses higher than 19 also local energy
-        if(shouldUseLocalEnergy && (*i)->isLambda() && theNucleus->getA()>19) {
+        if(shouldUseLocalEnergy && (*i)->isLambda() && theNucleus->getA()>19 && !(*i)->isSrcPartner()) {
 // assert(theNucleus); // Local energy without a nucleus doesn't make sense
          const G4double energy = (*i)->getEnergy(); // Store the energy of the particle
          G4double locE = KinematicsUtils::getLocalEnergy(theNucleus, *i); // Initial value of local energy

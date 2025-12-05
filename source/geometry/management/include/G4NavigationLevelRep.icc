@@ -25,7 +25,7 @@
 //
 // G4NavigationLevelRep inline implementation
 //
-// 1 October 1997, J.Apostolakis Initial version
+// Author: John Apostolakis (CERN), 01.10.1997- Initial version
 // ----------------------------------------------------------------------
 
 extern G4GEOM_DLL G4Allocator<G4NavigationLevelRep>*& aNavigLevelRepAllocator();

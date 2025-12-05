@@ -25,9 +25,8 @@
 //
 // G4MagInt_Driver implementation
 //
-// V.Grichine, 07.10.1996 - Created
-// W.Wander, 28.01.1998 - Added ability for low order integrators
-// J.Apostolakis, 08.11.2001 - Respect minimum step in AccurateAdvance
+// Author: Vladimir Grichine (CERN), 07.10.1996 - Created
+//         W.Wander (MIT), 28.01.1998 - Added ability for low order integrators
 // --------------------------------------------------------------------
 
 #include <iomanip>

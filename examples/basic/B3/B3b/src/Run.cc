@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file B3/B3b/src/Run.cc
+/// \file Run.cc
 /// \brief Implementation of the B3b::Run class
 
 #include "Run.hh"

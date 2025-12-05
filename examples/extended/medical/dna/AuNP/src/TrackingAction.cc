@@ -23,13 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file medical/dna/range/src/TrackingAction.cc
+/// \file TrackingAction.cc
 /// \brief Implementation of the TrackingAction class
-//
-// $Id: TrackingAction.cc 78723 2014-01-20 10:32:17Z gcosmo $
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "TrackingAction.hh"
 
@@ -42,37 +37,35 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-TrackingAction::TrackingAction(PrimaryGeneratorAction* /*prim*/)
-  : G4UserTrackingAction(),
-    // fPrimary(prim),
-    fpDetector(0)
+TrackingAction::TrackingAction()
 {
-  fpDetector = dynamic_cast<const DetectorConstruction*>(
+  fpDetector = dynamic_cast<const DetectorConstruction *>(
     G4RunManager::GetRunManager()->GetUserDetectorConstruction());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void TrackingAction::PreUserTrackingAction(const G4Track* track)
+void TrackingAction::PreUserTrackingAction(const G4Track *track)
 {
-  fpDetector = dynamic_cast<const DetectorConstruction*>(
+  fpDetector = dynamic_cast<const DetectorConstruction *>(
     G4RunManager::GetRunManager()->GetUserDetectorConstruction());
 
   G4int trackID = track->GetTrackID();
   if (trackID == 1) fTrackLength = 0;
 
-  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  G4AnalysisManager *analysisManager = G4AnalysisManager::Instance();
 
-  G4ThreeVector pos = track->GetPosition();
-  G4double RNP = fpDetector->GetNPRadius() / CLHEP::nm;
-  G4double R = std::sqrt(pos.x() * pos.x() + pos.y() * pos.y() + pos.z() * pos.z()) / CLHEP::nm;
+  const G4ThreeVector pos = track->GetPosition();
+  const G4double RNP = fpDetector->GetNPRadius() / CLHEP::nm;
+  const G4double R = std::sqrt(pos.x() * pos.x()
+                             + pos.y() * pos.y()
+                             + pos.z() * pos.z()) / CLHEP::nm;
   // G4double ene   = track->GetKineticEnergy();
-  G4double trackE = track->GetKineticEnergy() / CLHEP::eV;
+  const G4double trackE = track->GetKineticEnergy() / CLHEP::eV;
   if (RNP > R && track->GetTrackID() != 1) {
     if (track->GetDefinition()->GetPDGCharge() != 0) {
       analysisManager->FillH1(2, trackE);
-    }
-    else {
+    } else {
       analysisManager->FillH1(3, trackE);
     }
   }
@@ -80,16 +73,11 @@ void TrackingAction::PreUserTrackingAction(const G4Track* track)
     if (track->GetDefinition()->GetPDGCharge() != 0) {
       analysisManager->FillH1(6, R);
       analysisManager->FillH2(1, R, trackE);
-    }
-    else {
+    } else {
       analysisManager->FillH1(7, R);
       analysisManager->FillH2(2, R, trackE);
     }
   }
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void TrackingAction::PostUserTrackingAction(const G4Track* /*track*/) {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -3,6 +3,7 @@
 // in collaboration with the whole team of molecularDNA Geant4-DNA example       //
 // For any question please contact through:                                      //
 // k.chatzipapas@yahoo.com                                                       //
+// dousatsu.sakata@aist.go.jp                                                    //
 //-------------------------------------------------------------------------------//
 //
 // This macro requires the molecular-dna.root file generated from molecularDNA example
@@ -18,9 +19,6 @@
 
 {
 //*******************************************************************************//
-// If you need to add multiple root outputs, by multithreading, use this command:
-system ("hadd -O -f molecular-dna.root molecular-dna_t*.root");
-
 // Define these parameters of the simulation
 char ifile[256] = "molecular-dna.root";  // input filepath
 Double_t r3 = 10575e-9 * 3450e-9 * 10575e-9;  // a * b * c   // Chromosome size, as defined in the mac file, but in meters. If sphere, a=b=c
@@ -228,12 +226,12 @@ if (DSBBPID.size() >= 2) {
 }
 
 // Calculate the SEM
-SD_EB  = sqrt(abs(((total_EB2  / number) - pow(total_EB  / number,2)))/(number -1));
-SD_ES  = sqrt(abs(((total_ES2  / number) - pow(total_ES  / number,2)))/(number -1));
-SD_OHB = sqrt(abs(((total_OHB2 / number) - pow(total_OHB / number,2)))/(number -1));
-SD_OHS = sqrt(abs(((total_OHS2 / number) - pow(total_OHS / number,2)))/(number -1));
-SD_HB  = sqrt(abs(((total_HB2  / number) - pow(total_HB  / number,2)))/(number -1));
-SD_HS  = sqrt(abs(((total_HS2  / number) - pow(total_HS  / number,2)))/(number -1));
+SD_EB  = sqrt(abs(((total_EB2  / nentries) - pow(total_EB  / nentries,2)))/(nentries -1));
+SD_ES  = sqrt(abs(((total_ES2  / nentries) - pow(total_ES  / nentries,2)))/(nentries -1));
+SD_OHB = sqrt(abs(((total_OHB2 / nentries) - pow(total_OHB / nentries,2)))/(nentries -1));
+SD_OHS = sqrt(abs(((total_OHS2 / nentries) - pow(total_OHS / nentries,2)))/(nentries -1));
+SD_HB  = sqrt(abs(((total_HB2  / nentries) - pow(total_HB  / nentries,2)))/(nentries -1));
+SD_HS  = sqrt(abs(((total_HS2  / nentries) - pow(total_HS  / nentries,2)))/(nentries -1));
 
 // Read damage classification SSB, SSB+, 2SSB, DSB, DSB+, DSB++
 // As they have been defined in: Nikjoo, H., O’Neill, O., Goodhead, T., & Terrissol, M. 1997,
@@ -271,13 +269,12 @@ for(int i = 0;i<nentriesC;i++){
   }
 
 // Calculate the SEM
-SD_SSB   = sqrt(abs(((total_SSB2   / number) - pow(total_SSB   / number,2)))/(number -1));
-SD_SSBp  = sqrt(abs(((total_SSBp2  / number) - pow(total_SSBp  / number,2)))/(number -1));
-SD_SSB2p = sqrt(abs(((total_SSB2p2 / number) - pow(total_SSB2p / number,2)))/(number -1));
-
-SD_DSB   = sqrt(abs(((total_DSB2   / number) - pow(total_DSB   / number,2)))/(number -1));
-SD_DSBp  = sqrt(abs(((total_DSBp2  / number) - pow(total_DSBp  / number,2)))/(number -1));
-SD_DSBpp = sqrt(abs(((total_DSBpp2 / number) - pow(total_DSBpp / number,2)))/(number -1));
+SD_SSB   = sqrt(abs(((total_SSB2   / nentriesC) - pow(total_SSB   / nentriesC,2)))/(nentriesC -1));
+SD_SSBp  = sqrt(abs(((total_SSBp2  / nentriesC) - pow(total_SSBp  / nentriesC,2)))/(nentriesC -1));
+SD_SSB2p = sqrt(abs(((total_SSB2p2 / nentriesC) - pow(total_SSB2p / nentriesC,2)))/(nentriesC -1));
+SD_DSB   = sqrt(abs(((total_DSB2   / nentriesC) - pow(total_DSB   / nentriesC,2)))/(nentriesC -1));
+SD_DSBp  = sqrt(abs(((total_DSBp2  / nentriesC) - pow(total_DSBp  / nentriesC,2)))/(nentriesC -1));
+SD_DSBpp = sqrt(abs(((total_DSBpp2 / nentriesC) - pow(total_DSBpp / nentriesC,2)))/(nentriesC -1));
 
 // Read damage classification SSBd, SSBi, SSBm, DSBd, DSBi, DSBm, DSBh
 // As they have been defined in: Nikjoo, H., O’Neill, O., Goodhead, T., & Terrissol, M. 1997,
@@ -321,30 +318,22 @@ for(int i = 0;i<nentriesS;i++){
   }
 
 // Calculate the SEM
-SD_sSSB = sqrt(abs(((total_sSSB2 / number) - pow(total_sSSB / number,2)))/(number -1));
-SD_SSBd = sqrt(abs(((total_SSBd2 / number) - pow(total_SSBd / number,2)))/(number -1));
-SD_SSBi = sqrt(abs(((total_SSBi2 / number) - pow(total_SSBi / number,2)))/(number -1));
-SD_SSBm = sqrt(abs(((total_SSBm2 / number) - pow(total_SSBm / number,2)))/(number -1));
-
-SD_sDSB = sqrt(abs(((total_sDSB2 / number) - pow(total_sDSB / number,2)))/(number -1));
-SD_DSBd = sqrt(abs(((total_DSBd2 / number) - pow(total_DSBd / number,2)))/(number -1));
-SD_DSBi = sqrt(abs(((total_DSBi2 / number) - pow(total_DSBi / number,2)))/(number -1));
-SD_DSBm = sqrt(abs(((total_DSBm2 / number) - pow(total_DSBm / number,2)))/(number -1));
-SD_DSBh = sqrt(abs(((total_DSBh2 / number) - pow(total_DSBh / number,2)))/(number -1));
-
+SD_sSSB = sqrt(abs(((total_sSSB2 / nentriesS) - pow(total_sSSB / nentriesS,2)))/(nentriesS -1));
+SD_SSBd = sqrt(abs(((total_SSBd2 / nentriesS) - pow(total_SSBd / nentriesS,2)))/(nentriesS -1));
+SD_SSBi = sqrt(abs(((total_SSBi2 / nentriesS) - pow(total_SSBi / nentriesS,2)))/(nentriesS -1));
+SD_SSBm = sqrt(abs(((total_SSBm2 / nentriesS) - pow(total_SSBm / nentriesS,2)))/(nentriesS -1));
+SD_sDSB = sqrt(abs(((total_sDSB2 / nentriesS) - pow(total_sDSB / nentriesS,2)))/(nentriesS -1));
+SD_DSBd = sqrt(abs(((total_DSBd2 / nentriesS) - pow(total_DSBd / nentriesS,2)))/(nentriesS -1));
+SD_DSBi = sqrt(abs(((total_DSBi2 / nentriesS) - pow(total_DSBi / nentriesS,2)))/(nentriesS -1));
+SD_DSBm = sqrt(abs(((total_DSBm2 / nentriesS) - pow(total_DSBm / nentriesS,2)))/(nentriesS -1));
+SD_DSBh = sqrt(abs(((total_DSBh2 / nentriesS) - pow(total_DSBh / nentriesS,2)))/(nentriesS -1));
 
 // Measure the Deposited Energy in the whole volume that includes DNA chain (chromosome)
-
+Long64_t totnentries =0;
 tree = (TTree *) f->Get("tuples/chromosome_hits");
 tree->SetBranchAddress("e_chromosome_kev",&EnergyDeposited_eV);
 nentries = tree->GetEntries();
-for(int i = 0;i<nentries;i++){
-  tree->GetEntry(i);
-  acc_edep += EnergyDeposited_eV *1e3;
-  acc_edep2 += EnergyDeposited_eV *EnergyDeposited_eV *1e6;
-}
-tree->SetBranchAddress("e_dna_kev",&EnergyDeposited_eV);
-nentries = tree->GetEntries();
+totnentries+=nentries;
 for(int i = 0;i<nentries;i++){
   tree->GetEntry(i);
   acc_edep += EnergyDeposited_eV *1e3;
@@ -356,6 +345,7 @@ f->Close();
 
 // Calculate the absorbed dose
 dose = acc_edep * eVtoJ / mass;
+SD_dose = sqrt(abs(((acc_edep2 / totnentries) - pow(acc_edep / totnentries,2)))/(totnentries -1))* eVtoJ / mass;
 
 // This is a normalization factor to produce the output in Gy-1 Gbp-1, or else.
 // Default value is 1 to produce the result in Gy-1 Mbp-1
@@ -370,13 +360,19 @@ OHS_yield = (Double_t) total_OHS / dose / Nbp;
 HB_yield  = (Double_t) total_HB  / dose / Nbp;
 HS_yield  = (Double_t) total_HS  / dose / Nbp;
 
-SD_EB_yield  = SD_EB  / dose / Nbp;
-SD_ES_yield  = SD_ES  / dose / Nbp;
-SD_OHB_yield = SD_OHB / dose / Nbp;
-SD_OHS_yield = SD_OHS / dose / Nbp;
-SD_HB_yield  = SD_HB  / dose / Nbp;
-SD_HS_yield  = SD_HS  / dose / Nbp;
-
+SD_EB_yield  = total_EB  / dose / Nbp * sqrt(pow(SD_EB  /total_EB  ,2)+pow(SD_dose/dose,2));
+SD_ES_yield  = total_ES  / dose / Nbp * sqrt(pow(SD_ES  /total_ES  ,2)+pow(SD_dose/dose,2));
+SD_OHB_yield = total_OHB / dose / Nbp * sqrt(pow(SD_OHB /total_OHB ,2)+pow(SD_dose/dose,2));
+SD_OHS_yield = total_OHS / dose / Nbp * sqrt(pow(SD_OHS /total_OHS ,2)+pow(SD_dose/dose,2));
+SD_HB_yield  = total_HB  / dose / Nbp * sqrt(pow(SD_HB  /total_HB  ,2)+pow(SD_dose/dose,2));
+SD_HS_yield  = total_HS  / dose / Nbp * sqrt(pow(SD_HS  /total_HS  ,2)+pow(SD_dose/dose,2));
+//Previous method
+//SD_EB_yield  = SD_EB  / dose / Nbp;
+//SD_ES_yield  = SD_ES  / dose / Nbp;
+//SD_OHB_yield = SD_OHB / dose / Nbp;
+//SD_OHS_yield = SD_OHS / dose / Nbp;
+//SD_HB_yield  = SD_HB  / dose / Nbp;
+//SD_HS_yield  = SD_HS  / dose / Nbp;
 
 SSB_yield   = (Double_t) norm * total_SSB   / dose / Nbp;
 SSBp_yield  = (Double_t) norm * total_SSBp  / dose / Nbp;
@@ -386,14 +382,19 @@ DSB_yield   = (Double_t) norm * total_DSB   / dose / Nbp;
 DSBp_yield  = (Double_t) norm * total_DSBp  / dose / Nbp;
 DSBpp_yield = (Double_t) norm * total_DSBpp / dose / Nbp;
 
-SD_SSB_yield   = norm * SD_SSB   / dose / Nbp;
-SD_SSBp_yield  = norm * SD_SSBp  / dose / Nbp;
-SD_SSB2p_yield = norm * SD_SSB2p / dose / Nbp;
-
-SD_DSB_yield   = norm * SD_DSB   / dose / Nbp;
-SD_DSBp_yield  = norm * SD_DSBp  / dose / Nbp;
-SD_DSBpp_yield = norm * SD_DSBpp / dose / Nbp;
-
+SD_SSB_yield   = norm * total_SSB   / dose / Nbp * sqrt(pow(SD_SSB   /total_SSB   ,2)+pow(SD_dose/dose,2));
+SD_SSBp_yield  = norm * total_SSBp  / dose / Nbp * sqrt(pow(SD_SSBp  /total_SSBp  ,2)+pow(SD_dose/dose,2));
+SD_SSB2p_yield = norm * total_SSB2p / dose / Nbp * sqrt(pow(SD_SSB2p /total_SSB2p ,2)+pow(SD_dose/dose,2));
+SD_DSB_yield   = norm * total_DSB   / dose / Nbp * sqrt(pow(SD_DSB   /total_DSB   ,2)+pow(SD_dose/dose,2));
+SD_DSBp_yield  = norm * total_DSBp  / dose / Nbp * sqrt(pow(SD_DSBp  /total_DSBp  ,2)+pow(SD_dose/dose,2));
+SD_DSBpp_yield = norm * total_DSBpp / dose / Nbp * sqrt(pow(SD_DSBpp /total_DSBpp ,2)+pow(SD_dose/dose,2));
+//Previous method
+//SD_SSB_yield   = norm * SD_SSB   / dose / Nbp;
+//SD_SSBp_yield  = norm * SD_SSBp  / dose / Nbp;
+//SD_SSB2p_yield = norm * SD_SSB2p / dose / Nbp;
+//SD_DSB_yield   = norm * SD_DSB   / dose / Nbp;
+//SD_DSBp_yield  = norm * SD_DSBp  / dose / Nbp;
+//SD_DSBpp_yield = norm * SD_DSBpp / dose / Nbp;
 
 sSSB_yield = (Double_t) norm * total_sSSB / dose / Nbp;
 SSBi_yield = (Double_t) norm * total_SSBi / dose / Nbp;
@@ -406,17 +407,25 @@ DSBd_yield = (Double_t) norm * total_DSBd / dose / Nbp;
 DSBm_yield = (Double_t) norm * total_DSBm / dose / Nbp;
 DSBh_yield = (Double_t) norm * total_DSBh / dose / Nbp;
 
-SD_sSSB_yield = norm * SD_sSSB / dose / Nbp;
-SD_SSBi_yield = norm * SD_SSBi / dose / Nbp;
-SD_SSBd_yield = norm * SD_SSBd / dose / Nbp;
-SD_SSBm_yield = norm * SD_SSBm / dose / Nbp;
-
-SD_sDSB_yield = norm * SD_sDSB / dose / Nbp;
-SD_DSBi_yield = norm * SD_DSBi / dose / Nbp;
-SD_DSBd_yield = norm * SD_DSBd / dose / Nbp;
-SD_DSBm_yield = norm * SD_DSBm / dose / Nbp;
-SD_DSBh_yield = norm * SD_DSBh / dose / Nbp;
-
+SD_sSSB_yield = norm * total_sSSB/ dose / Nbp* sqrt(pow(SD_sSSB /total_sSSB,2)+pow(SD_dose/dose,2));
+SD_SSBi_yield = norm * total_SSBi/ dose / Nbp* sqrt(pow(SD_SSBi /total_SSBi,2)+pow(SD_dose/dose,2));
+SD_SSBd_yield = norm * total_SSBd/ dose / Nbp* sqrt(pow(SD_SSBd /total_SSBd,2)+pow(SD_dose/dose,2));
+SD_SSBm_yield = norm * total_SSBm/ dose / Nbp* sqrt(pow(SD_SSBm /total_SSBm,2)+pow(SD_dose/dose,2));
+SD_sDSB_yield = norm * total_sDSB/ dose / Nbp* sqrt(pow(SD_sDSB /total_sDSB,2)+pow(SD_dose/dose,2));
+SD_DSBi_yield = norm * total_DSBi/ dose / Nbp* sqrt(pow(SD_DSBi /total_DSBi,2)+pow(SD_dose/dose,2));
+SD_DSBd_yield = norm * total_DSBd/ dose / Nbp* sqrt(pow(SD_DSBd /total_DSBd,2)+pow(SD_dose/dose,2));
+SD_DSBm_yield = norm * total_DSBm/ dose / Nbp* sqrt(pow(SD_DSBm /total_DSBm,2)+pow(SD_dose/dose,2));
+SD_DSBh_yield = norm * total_DSBh/ dose / Nbp* sqrt(pow(SD_DSBh /total_DSBh,2)+pow(SD_dose/dose,2));
+//Previous method
+//SD_sSSB_yield = norm * SD_sSSB / dose / Nbp;
+//SD_SSBi_yield = norm * SD_SSBi / dose / Nbp;
+//SD_SSBd_yield = norm * SD_SSBd / dose / Nbp;
+//SD_SSBm_yield = norm * SD_SSBm / dose / Nbp;
+//SD_sDSB_yield = norm * SD_sDSB / dose / Nbp;
+//SD_DSBi_yield = norm * SD_DSBi / dose / Nbp;
+//SD_DSBd_yield = norm * SD_DSBd / dose / Nbp;
+//SD_DSBm_yield = norm * SD_DSBm / dose / Nbp;
+//SD_DSBh_yield = norm * SD_DSBh / dose / Nbp;
 
 // Print output in terminal
 

@@ -23,7 +23,6 @@ TOOLS_GLOBAL_STRING(camera_type)
 TOOLS_GLOBAL_STRING(camera_ortho)
 TOOLS_GLOBAL_STRING(camera_perspective)
 
-//TOOLS_GLOBAL_STRING(layout_policy)
 // values :
 TOOLS_GLOBAL_STRING(layout_text_under_image)
 TOOLS_GLOBAL_STRING(layout_text_at_left_of_image)

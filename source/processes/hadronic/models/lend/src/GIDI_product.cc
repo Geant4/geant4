@@ -134,7 +134,7 @@ int Product::depth( ) const {
  *                                                  for the TNSL data for that boundary.
  ***********************************************************************************************************/
 
-void Product::modifiedMultiGroupElasticForTNSL( std::map<std::string,std::size_t> a_maximumTNSL_MultiGroupIndex ) {
+void Product::modifiedMultiGroupElasticForTNSL( std::map<std::string,std::size_t> const &a_maximumTNSL_MultiGroupIndex ) {
 
     m_multiplicity.modifiedMultiGroupElasticForTNSL( a_maximumTNSL_MultiGroupIndex );
     m_distribution.modifiedMultiGroupElasticForTNSL( a_maximumTNSL_MultiGroupIndex );
@@ -283,7 +283,7 @@ int Product::maximumLegendreOrder( LUPI::StatusMessageReporting &a_smr, Transpor
             if( form != nullptr ) {
                 Functions::Gridded3d const &gdata = form->data( );
                 Array3d const &data = gdata.data( );
-                _maximumLegendreOrder = data.size( ) - 1;
+                _maximumLegendreOrder = static_cast<int>( data.size( ) ) - 1;
             }
         } }
     else {
@@ -362,7 +362,8 @@ Vector Product::multiGroupQ( LUPI::StatusMessageReporting &a_smr, Transporting::
  ***********************************************************************************************************/
 
 Matrix Product::multiGroupProductMatrix( LUPI::StatusMessageReporting &a_smr, Transporting::MG const &a_settings, 
-                Styles::TemperatureInfo const &a_temperatureInfo, Transporting::Particles const &a_particles, std::string const &a_productID, int a_order ) const {
+                Styles::TemperatureInfo const &a_temperatureInfo, Transporting::Particles const &a_particles, std::string const &a_productID, 
+                std::size_t a_order ) const {
 
     Matrix matrix( 0, 0 );
 
@@ -485,7 +486,7 @@ void Product::continuousEnergyProductData( Transporting::Settings const &a_setti
  ***********************************************************************************************************/
  
 void Product::mapContinuousEnergyProductData( Transporting::Settings const &a_settings, std::string const &a_particleID, 
-                std::vector<double> const &a_energies, int a_offset, std::vector<double> &a_productEnergies, std::vector<double> &a_productMomenta, 
+                std::vector<double> const &a_energies, std::size_t a_offset, std::vector<double> &a_productEnergies, std::vector<double> &a_productMomenta, 
                 std::vector<double> &a_productGains, bool a_ignoreIncompleteParticles ) const {
 
     if( m_outputChannel == nullptr ) {

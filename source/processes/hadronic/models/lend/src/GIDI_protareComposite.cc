@@ -239,7 +239,7 @@ Documentation_1_10::Suite &ProtareComposite::documentations( ) {
  * @return                              The style with label *a_label*.
  ******************************************************************/
 
-Styles::Base &ProtareComposite::style( std::string const a_label ) {
+Styles::Base &ProtareComposite::style( std::string const &a_label ) {
 
     return( m_protares[0]->style( a_label ) );
 }
@@ -479,7 +479,7 @@ Reaction const *ProtareComposite::orphanProduct( std::size_t a_index ) const {
  *
  ***********************************************************************************************************/
     
-void ProtareComposite::updateReactionIndices( LUPI_maybeUnused int a_offset ) const {
+void ProtareComposite::updateReactionIndices( LUPI_maybeUnused std::size_t a_offset ) const {
 
     std::size_t reactionOffset = 0;
 
@@ -558,18 +558,19 @@ Vector ProtareComposite::multiGroupInverseSpeed( LUPI::StatusMessageReporting &a
  * @param a_settings            [in]    Specifies the requested label.
  * @param a_temperatureInfo     [in]    Specifies the temperature and labels use to lookup the requested data.
  * @param a_reactionsToExclude  [in]    A list of reaction indices that are to be ignored when calculating the cross section.
+ * @param a_label               [in]    If not an empty string, this is used as the label for the form to return and the *a_temperatureInfo* labels are ignored.
  *
  * @return                              The requested multi-group cross section as a GIDI::Vector.
  ***********************************************************************************************************/
 
 Vector ProtareComposite::multiGroupCrossSection( LUPI::StatusMessageReporting &a_smr, Transporting::MG const &a_settings, 
-                Styles::TemperatureInfo const &a_temperatureInfo, ExcludeReactionsSet const &a_reactionsToExclude ) const {
+                Styles::TemperatureInfo const &a_temperatureInfo, ExcludeReactionsSet const &a_reactionsToExclude, std::string const &a_label ) const {
 
     Vector vector;
     ExcludeReactionsSet excludeReactionsSet( a_reactionsToExclude );
 
     for( std::size_t i1 = 0; i1 < m_protares.size( ); ++i1 ) {
-        vector += m_protares[i1]->multiGroupCrossSection( a_smr, a_settings, a_temperatureInfo, a_reactionsToExclude );
+        vector += m_protares[i1]->multiGroupCrossSection( a_smr, a_settings, a_temperatureInfo, a_reactionsToExclude, a_label );
         excludeReactionsSetAdjust( excludeReactionsSet, *m_protares[i1] );
     }
 
@@ -698,7 +699,7 @@ Vector ProtareComposite::multiGroupFissionGammaMultiplicity( LUPI::StatusMessage
 
 Matrix ProtareComposite::multiGroupProductMatrix( LUPI::StatusMessageReporting &a_smr, Transporting::MG const &a_settings, 
                 Styles::TemperatureInfo const &a_temperatureInfo, Transporting::Particles const &a_particles, 
-                std::string const &a_productID, int a_order, ExcludeReactionsSet const &a_reactionsToExclude ) const {
+                std::string const &a_productID, std::size_t a_order, ExcludeReactionsSet const &a_reactionsToExclude ) const {
 
     Matrix matrix( 0, 0 );
     ExcludeReactionsSet excludeReactionsSet( a_reactionsToExclude );
@@ -726,7 +727,7 @@ Matrix ProtareComposite::multiGroupProductMatrix( LUPI::StatusMessageReporting &
  ***********************************************************************************************************/
 
 Matrix ProtareComposite::multiGroupFissionMatrix( LUPI::StatusMessageReporting &a_smr, Transporting::MG const &a_settings, 
-                Styles::TemperatureInfo const &a_temperatureInfo, Transporting::Particles const &a_particles, int a_order,
+                Styles::TemperatureInfo const &a_temperatureInfo, Transporting::Particles const &a_particles, std::size_t a_order,
                 ExcludeReactionsSet const &a_reactionsToExclude ) const {
 
     Matrix matrix( 0, 0 );
@@ -757,7 +758,7 @@ Matrix ProtareComposite::multiGroupFissionMatrix( LUPI::StatusMessageReporting &
  ***********************************************************************************************************/
 
 Vector ProtareComposite::multiGroupTransportCorrection( LUPI::StatusMessageReporting &a_smr, Transporting::MG const &a_settings, 
-                Styles::TemperatureInfo const &a_temperatureInfo, Transporting::Particles const &a_particles, int a_order, 
+                Styles::TemperatureInfo const &a_temperatureInfo, Transporting::Particles const &a_particles, std::size_t a_order, 
                 TransportCorrectionType a_transportCorrectionType, double a_temperature, ExcludeReactionsSet const &a_reactionsToExclude ) const {
 
     Vector vector;

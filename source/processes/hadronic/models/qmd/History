@@ -6,6 +6,14 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2025-11-06 L.G. Sarmiento (qmd-V11-03-00)
+- Resolving Coverity 105675 Division or modulo by float zero
+
+## 2025-07-15 Yoshihide Sato (hadr-qmd-V11-03-00)
+- G4QMDReaction.cc and G4LightIonQMDReaction.cc: Random rotation of the momentum 
+  around the z-axis is added to solve the directional bias of the momentum 
+  of the secondary particles.
+
 ## 2024-08-21 Gabriele Cosmo (hadr-qmd-V11-02-02, 01)
 - Fixed reported Coverity defects for use of std::move() and const std::string&.
 

@@ -90,12 +90,20 @@ namespace G4INCL {
     
       /// \brief Cross section for EtaN->PiPiN
       virtual G4double etaNToPiPiN(Particle const * const p1, Particle const * const p2) = 0;
+     
+      /// \brief Cross section for EtaN->LK/SK
+      virtual G4double etaNToLK(Particle const * const p1, Particle const * const p2) = 0;
+      virtual G4double etaNToSK(Particle const * const p1, Particle const * const p2) = 0;
     
       /// \brief Cross section for OmegaN->PiN
       virtual G4double omegaNToPiN(Particle const * const p1, Particle const * const p2) = 0;
    
       /// \brief Cross section for OmegaN->PiPiN
       virtual G4double omegaNToPiPiN(Particle const * const p1, Particle const * const p2) = 0;
+    
+      /// \brief Cross section for OmegaN->LK/SK
+      virtual G4double omegaNToLK(Particle const * const p1, Particle const * const p2) = 0;
+      virtual G4double omegaNToSK(Particle const * const p1, Particle const * const p2) = 0;
    
       /// \brief Cross section for EtaPrimeN->PiN
       virtual G4double etaPrimeNToPiN(Particle const * const p1, Particle const * const p2) = 0;

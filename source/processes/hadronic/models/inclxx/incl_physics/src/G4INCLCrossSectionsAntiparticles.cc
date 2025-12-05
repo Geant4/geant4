@@ -62,6 +62,7 @@ namespace G4INCL {
     
     const G4int CrossSectionsAntiparticles::nMaxPiNN = 4;
     const G4int CrossSectionsAntiparticles::nMaxPiPiN = 4;
+    const G4double nbar_pbarThreshold =1.; //Threshold above which nbar and pbar are considered the same particle
 
     CrossSectionsAntiparticles::CrossSectionsAntiparticles() :
     s11pzHC(-2.228000000000294018,8.7560000000005723725,-0.61000000000023239325,-5.4139999999999780324,3.3338333333333348023,-0.75835000000000022049,0.060623611111111114688),
@@ -81,9 +82,32 @@ namespace G4INCL {
 
     G4double CrossSectionsAntiparticles::total(Particle const * const p1, Particle const * const p2) {
         G4double inelastic;
-        if ((p1->isNucleon() && p2->isAntiNucleon()) || (p1->isAntiNucleon() && p2->isNucleon()))
+        if ((p1->isNucleon() && p2->isAntiNucleon()) || (p1->isAntiNucleon() && p2->isNucleon())){
+            const G4int iso = ParticleTable::getIsospin(p1->getType()) + ParticleTable::getIsospin(p2->getType());
+            const Particle *antinucleon;
+            const Particle *nucleon;
+            if (p1->isAntiNucleon()) {
+                antinucleon = p1;
+                nucleon = p2;
+            }
+            else {
+               antinucleon = p2;
+               nucleon = p1;
+            }
+            const G4double pLab = 0.001*KinematicsUtils::momentumInLab(antinucleon, nucleon); // GeV
+            const std::vector<G4double> coef_nbarp_total = {1.69447, 5.26254E+08, -5.36346, -0.39766, 0.0243057};//OBELIX data
+            G4double sigma = KinematicsUtils::compute_xs(coef_nbarp_total,pLab*1000);
+            if(iso == 2 && pLab < nbar_pbarThreshold){//nbarp low energy
+                return sigma*1000;
+
+            }
+            else if(antinucleon->getType() == antiNeutron && nucleon->getType() == Neutron && pLab < nbar_pbarThreshold){ //nbarn low energy
+                return 1000*sigma + NNbarCEX(p1, p2);
+            }
+            else {
             inelastic = NNbarCEX(p1, p2) + NNbarToNNbarpi(p1, p2) + NNbarToNNbar2pi(p1, p2) + NNbarToNNbar3pi(p1, p2) + NNbarToAnnihilation(p1, p2) + NNbarToLLbar(p1, p2);   
-        else if(p1->isNucleon() && p2->isNucleon()) {
+            }
+        } else if(p1->isNucleon() && p2->isNucleon()) {
             return CrossSectionsMultiPions::NNTot(p1, p2);
         } else if((p1->isNucleon() && p2->isDelta()) ||
                   (p1->isDelta() && p2->isNucleon())) {
@@ -93,7 +117,7 @@ namespace G4INCL {
             return CrossSectionsMultiPions::piNTot(p1,p2);
         } else if((p1->isNucleon() && p2->isEta()) ||
                   (p1->isEta() && p2->isNucleon())) {
-            inelastic = CrossSectionsMultiPionsAndResonances::etaNToPiN(p1,p2) + CrossSectionsMultiPionsAndResonances::etaNToPiPiN(p1,p2);
+            inelastic = CrossSectionsMultiPionsAndResonances::etaNToPiN(p1,p2) + CrossSectionsMultiPionsAndResonances::etaNToPiPiN(p1,p2) + CrossSectionsStrangeness::etaNToLK(p1,p2) + CrossSectionsStrangeness::etaNToSK(p1,p2);
         } else if((p1->isNucleon() && p2->isOmega()) ||
                   (p1->isOmega() && p2->isNucleon())) {
             inelastic = CrossSectionsMultiPionsAndResonances::omegaNInelastic(p1,p2);
@@ -206,7 +230,7 @@ namespace G4INCL {
         // n nbar -> n nbar (same as BFMM 2)
         //
         //brief pnbar 
-        // p nbar -> p nbar (same as BFMM 472)
+        // p nbar -> p nbar (same as BFMM 472) --> Total -annihilation
         //
 
 // assert((p1->isAntiNucleon() && p2->isNucleon()) || (p1->isNucleon() && p2->isAntiNucleon()));
@@ -235,11 +259,25 @@ namespace G4INCL {
         const G4double pLab = 0.001*KinematicsUtils::momentumInLab(antinucleon, nucleon); // GeV
         
         if(iso == 2 || iso == -2){ // npbar or pnbar
-            sigma = KinematicsUtils::compute_xs(std::move(BFMM472), pLab);
+            if (iso ==2 && pLab < nbar_pbarThreshold){//nbarp low energy
+                sigma = total(p1, p2) - NNbarToAnnihilation(p1, p2);// Total minus annihilation
+            }
+            else{
+            sigma = KinematicsUtils::compute_xs(BFMM472, pLab); //pbarn
+            }
             return sigma;
         }
         else { // ppbar or nnbar
-            sigma = KinematicsUtils::compute_xs(std::move(BFMM2), pLab);
+            if(p1->getType()==antiProton || p1->getType()==Proton)
+                 sigma = KinematicsUtils::compute_xs(BFMM2, pLab); // ppbar case
+            else{
+                if (pLab < nbar_pbarThreshold){ //nnbar low energy case
+                    sigma = total(p1, p2) - NNbarToAnnihilation(p1, p2) - NNbarCEX(p1, p2);// Total minus annihilation minus CEX
+                }
+                else{
+                    sigma = KinematicsUtils::compute_xs(BFMM2, pLab); // nnbar high energy case (same as ppbar)
+                }
+            }
             return sigma;
         }
     }
@@ -575,10 +613,33 @@ namespace G4INCL {
         }
         
         const G4double pLab = 0.001*KinematicsUtils::momentumInLab(antinucleon, nucleon); // GeV
+        const G4double mu = (ParticleTable::getRealMass(Proton)*ParticleTable::getRealMass(antiNeutron))/(ParticleTable::getRealMass(Proton)+ParticleTable::getRealMass(antiNeutron)); 
+        const G4double hbar_c = 197.326968; // MeV.fm
+        const G4double Ek_cm = std::sqrt(mu*mu + std::pow(KinematicsUtils::momentumInCM(antinucleon,nucleon),2)) - mu;
+        const G4double k = std::sqrt(2*mu*Ek_cm)/(hbar_c);
+        const G4double K = std::sqrt(std::pow(k,2)+2*mu*85/std::pow(hbar_c,2)); //Strong Interaction Potential (MeV)
+        const G4double x_m = (k*0.97); //Nuclear contact radius (fm)
+        const G4double X_m = (K*0.97);
+        const G4double T_0 = 4*K*k/(std::pow(K+k,2));
+        const G4double v_1 = std::pow(x_m,2)/(1+std::pow(x_m,2));
+        const G4double v_1_prime = (1/std::pow(x_m,2))+std::pow(1-1/std::pow(x_m,2),2);
+        const G4double T_1 = (4*x_m*X_m*v_1)/(std::pow(X_m,2)+(2*x_m*X_m+std::pow(x_m,2)*v_1_prime)*v_1);
+        const G4double v_2 = std::pow(x_m,4)/(9+3*std::pow(x_m,2)+std::pow(x_m,4));
+        const G4double v_2_prime = std::pow(1-(6/std::pow(x_m,2)),2) + std::pow((6/std::pow(x_m,3))-(3/std::pow(x_m,2)),2);
+        const G4double T_2 = (4*x_m*X_m*v_2)/(std::pow(X_m,2)+(2*x_m*X_m+std::pow(x_m,2)*v_2_prime)*v_2);
+        const G4double v_3 = std::pow(x_m,6)/(225+45*std::pow(x_m,2)+6*std::pow(x_m,4)+std::pow(x_m,6));
+        const G4double v_3_prime = (1 - (21/std::pow(x_m,2)) + (45/std::pow(x_m,4))) + std::pow((45/std::pow(x_m,3))-(6/x_m),2);
+        const G4double T_3 = (4*x_m*X_m*v_3)/(std::pow(X_m,2)+(2*x_m*X_m+std::pow(x_m,2)*v_3_prime)*v_3);
+        G4double sigma_nbar_low = (Math::pi/std::pow(k,2)) * (T_0 + 3*T_1 + 5*T_2 + 7*T_3) * 10 ; //GeV 
         
         if(iso == 2 || iso == -2){ // pnbar or npbar
-            sigma = KinematicsUtils::compute_xs(std::move(BFMM6), pLab)*KinematicsUtils::compute_xs(std::move(BFMM471), pLab)/KinematicsUtils::compute_xs(std::move(BFMM1), pLab);
-            return sigma;
+            if (iso ==2 && pLab < nbar_pbarThreshold) { //nbarp != pbarn at low momenta
+                return sigma_nbar_low;
+            }        
+            else { //pbarn
+                sigma = KinematicsUtils::compute_xs(std::move(BFMM6), pLab)*KinematicsUtils::compute_xs(std::move(BFMM471), pLab)/KinematicsUtils::compute_xs(std::move(BFMM1), pLab);
+                return sigma;
+            }
         }
         else if(p1->getType()==antiProton || p2->getType()==Proton){ // ppbar case
             sigma = KinematicsUtils::compute_xs(std::move(BFMM6), pLab);

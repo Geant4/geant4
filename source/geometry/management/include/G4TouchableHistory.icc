@@ -23,16 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// class G4TouchableHistory inline implementation
+// G4TouchableHistory inline implementation
 //
-// Created: Paul Kent, August 1996
+// Author: Paul Kent (CERN), August 1996
 // ----------------------------------------------------------------------
 
 extern G4GEOM_DLL G4Allocator<G4TouchableHistory>*& aTouchableHistoryAllocator();
 
 inline
-void  G4TouchableHistory::UpdateYourself(       G4VPhysicalVolume*   pPhysVol,
-                                          const G4NavigationHistory* pHistory )
+void G4TouchableHistory::UpdateYourself( G4VPhysicalVolume* pPhysVol,
+                                         const G4NavigationHistory* pHistory )
 {
   fhistory = *pHistory;
   const G4AffineTransform& tf = fhistory.GetTopTransform();

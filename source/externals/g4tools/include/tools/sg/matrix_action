@@ -56,18 +56,12 @@ public:
     m_cur++;
     m_projs[m_cur].set_matrix(m_projs[m_cur-1]);
     m_models[m_cur].set_matrix(m_models[m_cur-1]);
-//OPTIMIZATION : in fact the two lines below are not needed !
-//    m_state.m_proj = m_projs[m_cur];
-//    m_state.m_model = m_models[m_cur];
   }
 
   //WARNING : in the three below methods, there is no
   //          protection against m_cur<0 being zero here.
   void pop_matrices() {
     m_cur--;
-//OPTIMIZATION : in fact the two lines below are not needed !
-//    m_state.m_proj = m_projs[m_cur];
-//    m_state.m_model = m_models[m_cur];
   }
   mat4f& projection_matrix() {return m_projs[m_cur];}
   mat4f& model_matrix() {return m_models[m_cur];}
@@ -85,12 +79,6 @@ public:
     a_z /= a_w;
     return true;
   }
-
-//  bool project_normal(float& a_x,float& a_y,float& a_z) {
-//    model_matrix().mul_dir_3f(a_x,a_y,a_z);
-//    projection_matrix().mul_dir_3f(a_x,a_y,a_z);
-//    return true;
-//  }
 
   void model_point(float& a_x,float& a_y,float& a_z,float& a_w) {
     a_w = 1;

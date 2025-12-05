@@ -83,7 +83,8 @@ LUPI_HOST int MCGIDI_popsIntid( PoPI::Database const &a_pops, std::string const 
 LUPI_HOST int MCGIDI_popsIndex( PoPI::Database const &a_pops, std::string const &a_id ) {
 
     if( !a_pops.exists( a_id ) ) return( -1 );
-    return( a_pops[a_id] );
+
+    return( static_cast<int>( a_pops[a_id] ) );
 }
 
 /* *********************************************************************************************************//**

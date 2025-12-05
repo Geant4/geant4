@@ -23,10 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file hadronic/Hadr02/src/CRMCPiKBuilder.cc
+/// \file CRMCPiKBuilder.cc
 /// \brief Implementation of the CRMCPiKBuilder class
-//
-//
+
 //---------------------------------------------------------------------------
 //
 // ClassName: CRMCPiKBuilder

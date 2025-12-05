@@ -10,15 +10,40 @@
 #include "wbuf"
 #include "../sout"
 
-#ifdef TOOLS_MEM
-#include "../mem"
-#endif
-
 #include <ostream>
 
 namespace tools {
 namespace wroot {
 
+//doc :
+//////////////////////////////////////////////////////////////////////////
+//                                                                      //
+//  The Key class includes functions to book space on a file,           //
+//   to create I/O buffers, to fill these buffers                       //
+//   to compress/uncompress data buffers.                               //
+//                                                                      //
+//  Before saving (making persistent) an object on a file, a key must   //
+//  be created. The key structure contains all the information to       //
+//  uniquely identify a persistent object on a file.                    //
+//     fNbytes    = number of bytes for the compressed object+key       //
+//     version of the Key class                                         //
+//     fObjlen    = Length of uncompressed object                       //
+//     fDatime    = Date/Time when the object was written               //
+//     fKeylen    = number of bytes for the key structure               //
+//     fCycle     = cycle number of the object                          //
+//     fSeekKey   = Address of the object on file (points to fNbytes)   //
+//                  This is a redundant information used to cross-check //
+//                  the data base integrity.                            //
+//     fSeekPdir  = Pointer to the directory supporting this object     //
+//     fClassName = Object class name                                   //
+//     fName      = name of the object                                  //
+//     fTitle     = title of the object                                 //
+//                                                                      //
+//  The Key class is used by ROOT to:                                   //
+//    - to write an object in the Current Directory                     //
+//    - to write a new ntuple buffer                                    //
+//                                                                      //
+//////////////////////////////////////////////////////////////////////////
 class key {
   static uint32 class_version() {return 2;}
   static const std::string& s_class() {
@@ -55,10 +80,6 @@ public:
   ,m_object_name(a_object_name)
   ,m_object_title(a_object_title)
   {
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
-
     if(a_seek_directory>START_BIG_FILE()) m_version += big_file_version_tag();
 
     m_key_length = record_size(m_version);
@@ -91,10 +112,6 @@ public:
   ,m_object_name(a_object_name)
   ,m_object_title(a_object_title)
   {
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
-
     if(a_object_size) {
       if(a_file.END()>START_BIG_FILE()) m_version += big_file_version_tag();
     }
@@ -111,15 +128,9 @@ public:
   }
   virtual ~key(){
     delete [] m_buffer;
-#ifdef TOOLS_MEM
-    mem::decrement(s_class().c_str());
-#endif
   }
 protected:
   key(const key& a_from):m_out(a_from.m_out){
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
   }
   key& operator=(const key &){return *this;}
 public:
@@ -298,32 +309,3 @@ protected:
 
 #endif
 
-//doc :
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-//  The Key class includes functions to book space on a file,           //
-//   to create I/O buffers, to fill these buffers                       //
-//   to compress/uncompress data buffers.                               //
-//                                                                      //
-//  Before saving (making persistent) an object on a file, a key must   //
-//  be created. The key structure contains all the information to       //
-//  uniquely identify a persistent object on a file.                    //
-//     fNbytes    = number of bytes for the compressed object+key       //
-//     version of the Key class                                         //
-//     fObjlen    = Length of uncompressed object                       //
-//     fDatime    = Date/Time when the object was written               //
-//     fKeylen    = number of bytes for the key structure               //
-//     fCycle     = cycle number of the object                          //
-//     fSeekKey   = Address of the object on file (points to fNbytes)   //
-//                  This is a redundant information used to cross-check //
-//                  the data base integrity.                            //
-//     fSeekPdir  = Pointer to the directory supporting this object     //
-//     fClassName = Object class name                                   //
-//     fName      = name of the object                                  //
-//     fTitle     = title of the object                                 //
-//                                                                      //
-//  The Key class is used by ROOT to:                                   //
-//    - to write an object in the Current Directory                     //
-//    - to write a new ntuple buffer                                    //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////

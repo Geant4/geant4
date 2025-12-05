@@ -6,6 +6,34 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2025-11-12 Gabriele Cosmo (geom-specific-V11-03-11)
+- Fixed potential thread-safety issue in GetCubicVolume() and GetSurfaceArea()
+  on all solids in case those functions are called from worker threads.
+
+## 2025-09-25 Gabriele Cosmo (geom-specific-V11-03-10)
+- Reorganised and enriched comments in headers to follow Doxygen style.
+- Removed virtual specifications from utility class G4ClippablePolygon.
+- Removed static protected functions in G4Hype and made them private.
+- Removed unneeded static data/specifications in G4Voxelizer.
+- Moved inline methods definitions of G4TriangularFacet, G4QuadrangularFacet,
+  G4SurfBits, G4TwistBoxSide, G4TwistTrapParallelSide and G4TwistTrapAlphaSide
+  to .icc files.
+
+## 2025-08-31 Evgueni Tcherniaev (geom-specific-V11-03-09)
+- G4GenericTrap: improved estimation of safety distance by adopting
+  Lipschitz-based implementation.
+  Contribution by Nazar Misyats (ENS, Rennes), CERN summer student 2025.
+
+## 2025-08-26 Gabriele Cosmo (geom-specific-V11-03-08)
+- Applied clang-tidy fixes: basic, modernize-loop-convert,
+  modernize-use-default-member-init, readability-redundant-member-init,
+  readability-implicit-bool-conversion, readability-braces-around-statements,
+  readability-else-after-return.
+
+## 2025-08-21 Andrei Gheata (geom-specific-V11-03-07)
+- G4UGenericTrap.cc: Using a backward-compatible different interface to
+  retrieve vertices from VecGeom, allowing for some arrays cleanup.
+
 ## 2025-03-13 Evgueni Tcherniaev (geom-specific-V11-03-06)
 - G4PolyPhiFace.cc, G4PolyconeSide.cc, G4PolyhedraSide.cc, G4TwistedTubs.cc,
   G4VCSGfaceted.cc, G4VTwistedFaceted.cc: used G4QuickRand()

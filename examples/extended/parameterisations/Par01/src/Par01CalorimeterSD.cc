@@ -23,11 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file Par01/src/Par01CalorimeterSD.cc
+/// \file Par01CalorimeterSD.cc
 /// \brief Implementation of the Par01CalorimeterSD class
-//
-//
-//
 
 #include "Par01CalorimeterSD.hh"
 

@@ -23,16 +23,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
+//
+// Modification: 13.08.2025 V.Ivanchenko rewrite
 
 #ifndef G4StatMFMicroCanonical_h
 #define G4StatMFMicroCanonical_h 1
 
 #include <vector>
 
+#include "globals.hh"
 #include "G4VStatMFEnsemble.hh"
 #include "G4StatMFMicroPartition.hh"
 #include "G4StatMFMicroManager.hh"
@@ -40,74 +41,57 @@
 #include "G4StatMFChannel.hh"
 
 #include "G4Fragment.hh"
-#include "Randomize.hh"
+#include "G4VStatMFMacroCluster.hh"
+#include "G4FunctionSolver.hh"
 
+class G4Pow;
 
 class G4StatMFMicroCanonical : public G4VStatMFEnsemble {
 
 public:
 
-    // G4StatMFMicroCanonical class must be initialized with a G4Fragment.
-    G4StatMFMicroCanonical(const G4Fragment & theFragment);
+  G4StatMFMicroCanonical();
 
-    // destructor
-    ~G4StatMFMicroCanonical();
+  ~G4StatMFMicroCanonical() override;
 
-private:
-    // default constructor
-    G4StatMFMicroCanonical() {};
+  // Initialise for a given G4Fragment
+  void Initialise(const G4Fragment& theFragment) override;
 
+  // Choice of the channel
+  G4StatMFChannel* ChooseAandZ(const G4Fragment &theFragment) override;
 
-    // copy constructor
-    G4StatMFMicroCanonical(const G4StatMFMicroCanonical &right);
+  G4double Function(G4double T)
+  { return (fExEnergy + pFreeInternalE0 - CalcFreeInternalEnergy(T)); }
 
-
-    // operators
-    G4StatMFMicroCanonical & operator=(const G4StatMFMicroCanonical & right);
-    G4bool operator==(const G4StatMFMicroCanonical & right) const;
-    G4bool operator!=(const G4StatMFMicroCanonical & right) const;
-
-
-public:
-
-    // Choice of fragment atomic numbers and charges.
-    G4StatMFChannel * ChooseAandZ(const G4Fragment & theFragment);
-	
-    enum {MaxAllowedMultiplicity = 4};
+  // copy constructor
+  G4StatMFMicroCanonical(const G4StatMFMicroCanonical& right) = delete;
+  G4StatMFMicroCanonical& operator=(const G4StatMFMicroCanonical& right) = delete;
+  G4bool operator==(const G4StatMFMicroCanonical& right) const = delete;
+  G4bool operator!=(const G4StatMFMicroCanonical& right) const = delete;
 
 private:
 
-    // Initailization method
-    void Initialize(const G4Fragment & theFragment);
+  // Calculate Entropy of Compound Nucleus
+  G4double CalcEntropyOfCompoundNucleus(G4double& T);
 
-    // Calculate Entropy of Compound Nucleus
-    G4double CalcEntropyOfCompoundNucleus(const G4Fragment & theFragment, G4double & TConf);
+  G4double CalcFreeInternalEnergy(G4double T);
 
-    G4double CalcFreeInternalEnergy(const G4Fragment & theFragment, G4double T);
-
-    G4double CalcInvLevelDensity(G4int anA);
+  G4int Z{0};
+  G4int A{0};
 	
-	
-// Data members
-private:
-	
-    // This is a vector of partitions managers for partitions of different 
-    // multiplicities:
-    
-    std::vector<G4StatMFMicroManager*> _ThePartitionManagerVector;
-	
-    // Statistical weight of compound nucleus
-    G4double _WCompoundNucleus;
+  // Statistical weight of compound nucleus
+  G4double fWCompoundNucleus{0.0};
+  G4double fExEnergy{0.0};
 
-
-  struct DeleteFragment 
-  {
-    template<typename T>
-    void operator()(const T* ptr) const
-    {
-      delete ptr;
-    }
-  };
+  G4double A13{0.0};
+  G4double fInvLevelDensity{1.0};
+  G4double fSymmetryTerm{1.0};
+  G4double fCoulombTerm{0.0};
+  
+  G4Pow* g4calc;
+  G4FunctionSolver<G4StatMFMicroCanonical>* fSolver;
+  // This is a vector of partitions provided different multiplicities
+  std::vector<G4StatMFMicroManager*> fPartitionManagerVector;
 
 };
 

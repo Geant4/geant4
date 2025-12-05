@@ -52,6 +52,8 @@ class G4ElementDataRegistry
 
   G4ElementData* GetElementDataByName(const G4String&);
 
+  G4ElementData* NewElementData(const G4String&, G4int length);
+
  private:
 
   G4ElementDataRegistry();

@@ -45,8 +45,7 @@
 // relevant Trajectory, Trajectory Point or Sensitive Detector Hit.
 // The association between the G4AttValue and the G4AttDef object is
 // made through the data member "name".
-// For details, see the HepRep home page at http://heprep.freehep.org
-//  
+//
 // @author M.Frailis 
 // @author R.Giannitrapani
 // @author J.Perl

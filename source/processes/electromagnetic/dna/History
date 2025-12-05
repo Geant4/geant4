@@ -6,6 +6,43 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2025-10-18 Sebastien Incerti, Wook Geun Shin (emdna-V11-03-20)
+- Extended G4DNAELSEPAElasticModel up to 10 MeV for water.
+Requires G4EMLOW8.8 
+
+## 2025-10-10 Le Tuan Anh (emdna-V11-03-19)
+- Changed the condition in calculateDistanceFromTimeStep     
+  (G4ChemReboundTransportation) to allow calculate even with DiffusionCoefficient = 0.
+
+## 2025-09-30 Vladimir Ivanchenko (emdna-V11-03-18)
+- G4DNARuddIonisationDynamicModel - use G4ExtendedPhysicsVector for data,
+  results are unchanged, performance should be improved.
+
+## 2025-09-22 Hoang Tran (emdna-V11-03-17)
+- Fixed the state update in AlongStepDoIt (G4ChemReboundTransportation) to
+  avoid setting incorrect molecule positions (leading tracks) when the scavenger
+  process is called.
+- Fixed the IRT_syn model (Stepper) to ensure it does not use minTimeStep (default = 1 ps)
+  when DNA reactions do not yet share the same minTimeStep(The MinTimeStep is
+  used to optimize the chemistry).
+- Fixed the missed Equilibrium process (in G4DNAMakeReaction) for particle-based
+  models (SBS, IRT_syn).
+- Deleted exception of no reactant (or reactions for the defined molecules) that
+  should return nullptr for no reaction data.
+
+## 2025-09-10 Vladimir Ivanchenko (emdna-V11-03-16)
+- for DNA Rudd and Born models enable atomic de-excitation in stationary regime.
+
+## 2025-07-06 Vladimir Ivanchenko (emdna-V11-03-15)
+- G4DNARuddIonisationDynamicModel - simplified model using alpha and alpha+ data
+
+## 2025-07-23 Sebastien Incerti (emdna-V11-03-14)
+- force cross section to zero below limit of validity of G4DNACPA100ElasticModel
+
+## 2025-07-06 Vladimir Ivanchenko (emdna-V11-03-13)
+- G4DNARuddIonisationDynamicModel - fixed problem in sampling of electron energy
+- G4DNARuddIonisationExtendedModel - improved debug printout
+
 ## 2025-05-28 Hoang Tran (emdna-V11-03-12)
 - Fixed COVERTY issues on new moleculecounter imple
 

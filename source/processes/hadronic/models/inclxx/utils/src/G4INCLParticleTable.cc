@@ -208,7 +208,7 @@ namespace G4INCL {
         /* Z=8 */ {-1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, 100.}
       };
 
-      const G4int elementTableSize = 113; // up to Cn
+      const G4int elementTableSize = 123; // up to Unbibio (Ubb)
 
       /// \brief Table of chemical element names
       const std::string elementTable[elementTableSize] = {
@@ -324,7 +324,17 @@ namespace G4INCL {
         "Mt",
         "Ds",
         "Rg",
-        "Cn"
+        "Cn",
+        "Nh",
+        "Fl",
+        "Mc",
+        "Lv",
+        "Ts",
+        "Og",
+        "Uue",
+        "Ubn",
+        "Ubu",
+        "Ubb"
       };
 
       /// \brief Digit names to compose IUPAC element names
@@ -334,16 +344,21 @@ namespace G4INCL {
       const G4double theINCLProtonSeparationEnergy = INCL_DEFAULT_SEPARATION_ENERGY;
       const G4double theINCLNeutronSeparationEnergy = INCL_DEFAULT_SEPARATION_ENERGY;
       const G4double theINCLLambdaSeparationEnergy = INCL_DEFAULT_SEPARATION_ENERGY;
-      //const G4double theINCLantiProtonSeparationEnergy = INCL_DEFAULT_SEPARATION_ENERGY;
-      const G4double theINCLantiProtonSeparationEnergy = 0.;
+      const G4double theINCLantiNeutronSeparationEnergy = INCL_DEFAULT_SEPARATION_ENERGY;
+      const G4double theINCLantiProtonSeparationEnergy = INCL_DEFAULT_SEPARATION_ENERGY;
+      const G4double theINCLantiLambdaSeparationEnergy = INCL_DEFAULT_SEPARATION_ENERGY;
       G4ThreadLocal G4double protonSeparationEnergy = INCL_DEFAULT_SEPARATION_ENERGY;
       G4ThreadLocal G4double neutronSeparationEnergy = INCL_DEFAULT_SEPARATION_ENERGY;
       G4ThreadLocal G4double lambdaSeparationEnergy = INCL_DEFAULT_SEPARATION_ENERGY;
-      //G4ThreadLocal G4double antiprotonSeparationEnergy = INCL_DEFAULT_SEPARATION_ENERGY;
-      //G4ThreadLocal G4double antiprotonSeparationEnergy = 0.;
+      G4ThreadLocal G4double antineutronSeparationEnergy = INCL_DEFAULT_SEPARATION_ENERGY;
+      G4ThreadLocal G4double antiprotonSeparationEnergy = INCL_DEFAULT_SEPARATION_ENERGY;
+      G4ThreadLocal G4double antilambdaSeparationEnergy = INCL_DEFAULT_SEPARATION_ENERGY;
 #undef INCL_DEFAULT_SEPARATION_ENERGY
 
       G4ThreadLocal G4double rpCorrelationCoefficient[UnknownParticle];
+ 
+      G4ThreadLocal bool srcPairConfig = false;
+      G4ThreadLocal float srcPairDist = 0.0;
 
       G4ThreadLocal G4double neutronSkin = 0.0;
       G4ThreadLocal G4double neutronHalo = 0.0;
@@ -353,7 +368,7 @@ namespace G4INCL {
 #endif
 
       /// \brief Default value for constant Fermi momentum
-      G4ThreadLocal G4double constantFermiMomentum = 0.0;
+      G4ThreadLocal double constantFermiMomentum = PhysicalConstants::Pf;
 
       /// \brief Transform a IUPAC char to an char representing an integer digit
       char iupacToInt(char c) {
@@ -516,12 +531,14 @@ namespace G4INCL {
       // Initialise the r-p correlation coefficients
       std::fill(rpCorrelationCoefficient, rpCorrelationCoefficient + UnknownParticle, 1.);
       if(theConfig) {
+        // Initialise the rp correlations
         rpCorrelationCoefficient[Proton] = theConfig->getRPCorrelationCoefficient(Proton);
         rpCorrelationCoefficient[Neutron] = theConfig->getRPCorrelationCoefficient(Neutron);
-      }
+        // Initialise the SRC parameters
+        srcPairConfig = theConfig->getsrcPairConfig(); 
+        srcPairDist = theConfig->getsrcPairDist();
 
-      // Initialise the neutron-skin parameters
-      if(theConfig) {
+        // Initialise the neutron-skin parameters
         neutronSkin = theConfig->getNeutronSkin();
         neutronHalo = theConfig->getNeutronHalo();
       }
@@ -606,6 +623,8 @@ namespace G4INCL {
         return getShortName(sp.theA,sp.theZ);
       else if(sp.theType==Composite)
         return getName(sp.theA,sp.theZ,sp.theS);
+      else if (sp.theType==antiComposite)
+        return getShortName(sp.theA,sp.theZ);
       else
         return getShortName(sp.theType);
     }
@@ -615,13 +634,18 @@ namespace G4INCL {
         return getName(sp.theA,sp.theZ);
       else if(sp.theType==Composite)
         return getName(sp.theA,sp.theZ,sp.theS);
+      else if(sp.theType==antiComposite)
+        return getName(sp.theA,sp.theZ);
       else
         return getName(sp.theType);
     }
 
     std::string getName(const G4int A, const G4int Z) {
       std::stringstream stream;
-      stream << getElementName(Z) << "-" << A;
+      if(A<0)
+        stream << getElementName(-Z) << "b" << -A;
+      else
+        stream << getElementName(Z) << "-" << A;
       return stream.str();
     }
 
@@ -632,15 +656,18 @@ namespace G4INCL {
       else if(S == -1)
         stream << getElementName(Z) << "-" << A << "_" << "Lambda";
       else
-        stream << getElementName(Z) << "-" << A << "_" << S << "-Lambda";
+        stream << getElementName(Z) << "-" << A << "_" << -S << "-Lambda";
       return stream.str();
     }
 
     std::string getShortName(const G4int A, const G4int Z) {
       std::stringstream stream;
-      stream << getElementName(Z);
       if(A>0)
-        stream << A;
+        stream << getElementName(Z) << A;
+      else if(A<0)
+        stream << getElementName(-Z) << "b" << -A;
+      else
+        stream << getElementName(Z);
       return stream.str();
     }
 
@@ -713,6 +740,8 @@ namespace G4INCL {
         return std::string("etaprime");
       } else if(p == G4INCL::Photon) {
         return std::string("photon");  
+      } else if(p == G4INCL::antiComposite){
+        return std::string("anticomposite");  
       }
       return std::string("unknown");
     }
@@ -786,6 +815,8 @@ namespace G4INCL {
         return std::string("etap");
       } else if(p == G4INCL::Photon) {
         return std::string("photon");
+      } else if(p == G4INCL::antiComposite) {
+        return std::string("anticomp");
       }
       return std::string("unknown");
     }
@@ -1006,6 +1037,8 @@ namespace G4INCL {
     G4double getTableSpeciesMass(const ParticleSpecies &p) {
       if(p.theType == Composite)
         return (*getTableMass)(p.theA, p.theZ, p.theS);
+      else if (p.theType == antiComposite)
+        return (*getTableMass)(-p.theA,-p.theZ,p.theS);
       else
         return (*getTableParticleMass)(p.theType);
     }
@@ -1306,8 +1339,12 @@ namespace G4INCL {
         return theINCLNeutronSeparationEnergy;
       else if(t==Lambda)
         return theINCLLambdaSeparationEnergy;
+      else if(t==antiLambda)
+        return theINCLantiLambdaSeparationEnergy;
       else if(t==antiProton)
         return theINCLantiProtonSeparationEnergy;
+      else if(t==antiNeutron)
+        return theINCLantiNeutronSeparationEnergy;
       else {
         INCL_ERROR("ParticleTable::getSeparationEnergyINCL : Unknown particle type." << '\n');
         return 0.0;
@@ -1322,6 +1359,12 @@ namespace G4INCL {
         return (*getTableParticleMass)(Neutron) + (*getTableMass)(A-1,Z,0) - (*getTableMass)(A,Z,0);
       else if(t==Lambda)
         return (*getTableParticleMass)(Lambda) + (*getTableMass)(A-1,Z,0) - (*getTableMass)(A,Z,-1);
+      else if(t==antiLambda)
+        return (*getTableParticleMass)(antiLambda) + (*getTableMass)(A+1,Z,0) - (*getTableMass)(A,Z,+1);
+      else if(t==antiProton)
+        return (*getTableParticleMass)(antiProton) + (*getTableMass)(A+1,Z+1,0) - (*getTableMass)(A,Z,0);
+      else if(t==antiNeutron)
+        return (*getTableParticleMass)(antiNeutron) + (*getTableMass)(A+1,Z,0) - (*getTableMass)(A,Z,0);
       else {
         INCL_ERROR("ParticleTable::getSeparationEnergyReal : Unknown particle type." << '\n');
         return 0.0;
@@ -1335,18 +1378,30 @@ namespace G4INCL {
       else
         return getSeparationEnergyINCL(t, A, Z);
     }
+ 
+    G4bool getsrcPairConfig() { return srcPairConfig; }
+    
+    G4float getsrcPairDistance() { return srcPairDist; }
 
     G4double getProtonSeparationEnergy() { return protonSeparationEnergy; }
 
     G4double getNeutronSeparationEnergy() { return neutronSeparationEnergy; }
 
     G4double getLambdaSeparationEnergy() { return lambdaSeparationEnergy; }
+ 
+    G4double getantiLambdaSeparationEnergy() { return antilambdaSeparationEnergy; }
+
+    G4double getantiProtonSeparationEnergy() { return antiprotonSeparationEnergy; }
+
+    G4double getantiNeutronSeparationEnergy() { return antineutronSeparationEnergy; }
 
     void setProtonSeparationEnergy(const G4double sen) { protonSeparationEnergy = sen; }
 
     void setNeutronSeparationEnergy(const G4double sen) { neutronSeparationEnergy  = sen; }
 
     void setLambdaSeparationEnergy(const G4double sen) { lambdaSeparationEnergy  = sen; }
+ 
+    void setantiLambdaSeparationEnergy(const G4double sen) { antilambdaSeparationEnergy  = sen; }
 
     std::string getElementName(const G4int Z) {
       if(Z<1) {

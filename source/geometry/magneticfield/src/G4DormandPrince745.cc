@@ -46,8 +46,8 @@
 //          35/384     0          500/1113    125/192 2187/6784    11/84    0
 //          5179/57600 0          7571/16695  393/640 92097/339200 187/2100 1/40
 //
-// Created: Somnath Banerjee, Google Summer of Code 2015, 25 May 2015
-// Supervision: John Apostolakis, CERN
+// Author: Somnath Banerjee (CERN, Google Summer of Code 2015), 25.05.2015
+// Supervision: John Apostolakis (CERN)
 // --------------------------------------------------------------------
 
 #include "G4DormandPrince745.hh"
@@ -58,7 +58,7 @@
 using namespace field_utils;
 
 // Name of this steppers
-const G4String& G4DormandPrince745::StepperType() const
+const G4String& G4DormandPrince745::StepperTypeName() const
 {
   static G4String _stepperType("G4DormandPrince745: 5th order");
   return _stepperType;

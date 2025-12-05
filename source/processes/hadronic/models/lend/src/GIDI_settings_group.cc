@@ -108,7 +108,7 @@ MultiGroup &MultiGroup::operator=( MultiGroup const &a_rhs ) {
 
 int MultiGroup::multiGroupIndexFromEnergy( double a_energy, bool a_encloseOutOfRange ) const {
 
-    int iMin = 0, iMid, iMax = (int) m_boundaries.size( ), iMaxM1 = iMax - 1;
+    std::size_t iMin = 0, iMid, iMax = m_boundaries.size( ), iMaxM1 = iMax - 1;
 
     if( iMax == 0 ) return( -3 );
     if( a_energy < m_boundaries[0] ) {
@@ -116,7 +116,7 @@ int MultiGroup::multiGroupIndexFromEnergy( double a_energy, bool a_encloseOutOfR
         return( -2 );
     }
     if( a_energy > m_boundaries[iMaxM1] ) {
-        if( a_encloseOutOfRange ) return( iMax - 2 );
+        if( a_encloseOutOfRange ) return( static_cast<int>( iMax ) - 2 );
         return( -1 );
     }
     while( 1 ) {
@@ -129,7 +129,7 @@ int MultiGroup::multiGroupIndexFromEnergy( double a_energy, bool a_encloseOutOfR
         }
     }
     if( iMin == iMaxM1 ) iMin--;
-    return( iMin );
+    return( static_cast<int>( iMin ) );
 }
 
 /* *********************************************************************************************************//**
@@ -151,14 +151,14 @@ void MultiGroup::set( std::string const &a_label, std::vector<double> const &a_b
  * @param a_valuesPerLine           [in]    The number of points (i.e., energy, flux pairs) to print per line.
  ***********************************************************************************************************/
 
-void MultiGroup::print( std::string const &a_indent, bool a_outline, int a_valuesPerLine ) const {
+void MultiGroup::print( std::string const &a_indent, bool a_outline, unsigned int a_valuesPerLine ) const {
 
-    int nbs = size( );
+    std::size_t nbs = size( );
     bool printIndent( true );
 
     std::cout << a_indent << "GROUP: label = '" << m_label << "': length = " << nbs << std::endl;
     if( a_outline ) return;
-    for( int ib = 0; ib < nbs; ib++ ) {
+    for( std::size_t ib = 0; ib < nbs; ib++ ) {
         if( printIndent ) std::cout << a_indent;
         printIndent = false;
         std::cout << LUPI::Misc::argumentsToString( "%16.8e", m_boundaries[ib] );
@@ -223,8 +223,8 @@ void Groups_from_bdfls::initialize( char const *a_fileName ) {
         numberOfBoundaries = strtol( buffer, &pEnd, 10 );
         if( numberOfBoundaries == -1 ) throw Exception( "Groups_from_bdfls::initialize: converting gid to long failed." );
 
-        long index( 0 );
-        std::vector<double> boundaries( numberOfBoundaries );
+        std::size_t index( 0 );
+        std::vector<double> boundaries( static_cast<std::size_t>( numberOfBoundaries ) );
         while( numberOfBoundaries > 0 ) {
             long i1, n1( 6 );
             if( numberOfBoundaries < 6 ) n1 = numberOfBoundaries;
@@ -258,7 +258,7 @@ Groups_from_bdfls::~Groups_from_bdfls( ) {
 
 MultiGroup Groups_from_bdfls::viaLabel( std::string const &a_label ) const {
 
-    for( int ig = 0; ig < (int) m_multiGroups.size( ); ++ig ) {
+    for( std::size_t ig = 0; ig < m_multiGroups.size( ); ++ig ) {
         if( m_multiGroups[ig].label( ) ==  a_label ) return( m_multiGroups[ig] );
     }
     throw Exception( "Groups_from_bdfls::viaLabel: label not found." );
@@ -286,10 +286,10 @@ MultiGroup Groups_from_bdfls::getViaGID( int a_gid ) const {
 
 std::vector<std::string> Groups_from_bdfls::labels( ) const {
 
-    int size = (int) m_multiGroups.size( );
+    std::size_t size = m_multiGroups.size( );
     std::vector<std::string> _labels( size );
 
-    for( int if1 = 0; if1 < size; ++if1 ) _labels[if1] = m_multiGroups[if1].label( );
+    for( std::size_t if1 = 0; if1 < size; ++if1 ) _labels[if1] = m_multiGroups[if1].label( );
     return( _labels );
 }
 
@@ -301,11 +301,11 @@ std::vector<std::string> Groups_from_bdfls::labels( ) const {
 
 std::vector<int> Groups_from_bdfls::GIDs( ) const {
 
-    int size = (int) m_multiGroups.size( );
+    std::size_t size = m_multiGroups.size( );
     std::vector<int> fids( size );
     char *e;
 
-    for( int if1 = 0; if1 < size; ++if1 ) {
+    for( std::size_t if1 = 0; if1 < size; ++if1 ) {
         fids[if1] = (int) strtol( &(m_multiGroups[if1].label( ).c_str( )[9]), &e, 10 );
     }
     return( fids );
@@ -318,12 +318,12 @@ std::vector<int> Groups_from_bdfls::GIDs( ) const {
  * @param a_valuesPerLine           [in]    Passed to each MultiGroup print method.
  ***********************************************************************************************************/
 
-void Groups_from_bdfls::print( bool a_outline, int a_valuesPerLine ) const {
+void Groups_from_bdfls::print( bool a_outline, unsigned int a_valuesPerLine ) const {
 
-    int ngs = (int) m_multiGroups.size( );
+    std::size_t ngs = m_multiGroups.size( );
 
     std::cout << "BDFLS GROUPs: number of groups = " << ngs << std::endl;
-    for( int if1 = 0; if1 < ngs ; ++if1 ) m_multiGroups[if1].print( "  ", a_outline, a_valuesPerLine );
+    for( std::size_t if1 = 0; if1 < ngs ; ++if1 ) m_multiGroups[if1].print( "  ", a_outline, a_valuesPerLine );
 }
 
 }

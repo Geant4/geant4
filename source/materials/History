@@ -6,6 +6,30 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2025-10-16 Dmitri Konstantinov (materials-V11-03-05)
+- G4AtomicFormFactor: corrected k conversion and 4*pi factor.
+- Fixed s computation in Cromer-Mann form f(s)=E a_i*exp(-b_i*s^2)+c 
+  to s = (k * 1e-7) / (4*pi) (k in mm^-1).
+
+## 2025-09-30 Vladimir Ivanchenko (materials-V11-03-04)
+- G4MatUtils - added a new utility class with static methods
+
+## 2025-08-08 Dmitri Konstantinov (materials-V11-03-03)
+- Fixed several typos in crystallographic formulae:
+  - Corrected orthorhombic interplanar angle cosine formula.
+  - Corrected cubic interplanar angle cosine formula.
+  - Corrected orthorhombic branch of GetRecIntSp2().
+  - Corrected triclinic cell volume formula.
+- Formulas can be checked following:
+  - https://geoweb.princeton.edu/archival/duffy/xtalgeometry.pdf
+  - https://onlinelibrary.wiley.com/doi/pdf/10.1002/9781119961468.app3
+
+## 2025-07-17 Vladimir Ivanchenko (materials-V11-03-02)
+- G4ElementData, G4ElementDataRegistry - code clean-up, added extra method.
+
+## 2025-07-11 Vladimir Ivanchenko (materials-V11-03-01)
+- G4ICRU90StoppingData - (Matjaz Subic) fixed problem of initialisation (#2663)
+
 ## 2025-02-11 Ben Morgan (materials-V11-03-00)
 - Migrate unit tests under tests/ to dedicated category under ctests_source so
   they are run regularly and always available to developers.

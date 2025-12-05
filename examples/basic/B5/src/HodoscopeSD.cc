@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file B5/src/HodoscopeSD.cc
+/// \file HodoscopeSD.cc
 /// \brief Implementation of the B5::HodoscopeSD class
 
 #include "HodoscopeSD.hh"

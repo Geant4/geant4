@@ -25,7 +25,7 @@
 //
 // G4Mag_EqRhs implementation
 //
-// Created: J.Apostolakis, CERN - 13.01.1997
+// Author: John Apostolakis (CERN), 13.01.1997
 // --------------------------------------------------------------------
 
 #include "G4MagneticField.hh"
@@ -40,8 +40,6 @@ G4Mag_EqRhs::G4Mag_EqRhs( G4MagneticField* magField )
   : G4EquationOfMotion(magField)
 { 
 }
-
-G4Mag_EqRhs::~G4Mag_EqRhs() = default;
 
 void  
 G4Mag_EqRhs::SetChargeMomentumMass( G4ChargeState particleCharge,

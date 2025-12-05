@@ -6,6 +6,10 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2025-11-26 Vladimir ivanchenko (hadr-casc-V11-03-01)
+- G4BigBanger - fixed typo in the computation of probability, which is
+    identified by the new compiler and should not change any result.
+
 ## 2025-04-22 Alberto Ribon (hadr-casc-V11-03-00)
 - G4CascadeFinalStateAlgorithm, G4NucleiModel : introduced the possibility to
   retrieve either the behavior of these classes as in Geant4 version 11.3

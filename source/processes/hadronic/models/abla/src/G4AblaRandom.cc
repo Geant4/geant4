@@ -32,11 +32,15 @@
 //
 
 #include "G4AblaRandom.hh"
+
 #include "Randomize.hh"
 #include "globals.hh"
 
 namespace G4AblaRandom
 {
 
-    G4double flat() { return G4UniformRand(); }
-} // namespace G4AblaRandom
+G4double flat()
+{
+  return G4UniformRand();
+}
+}  // namespace G4AblaRandom

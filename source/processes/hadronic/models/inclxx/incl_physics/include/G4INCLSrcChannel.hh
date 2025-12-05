@@ -1,0 +1,85 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+// INCL++ intra-nuclear cascade model
+// Alain Boudard, CEA-Saclay, France
+// Joseph Cugnon, University of Liege, Belgium
+// Jean-Christophe David, CEA-Saclay, France
+// Pekka Kaitaniemi, CEA-Saclay, France, and Helsinki Institute of Physics, Finland
+// Sylvie Leray, CEA-Saclay, France
+// Davide Mancusi, CEA-Saclay, France
+//
+#define INCLXX_IN_GEANT4_MODE 1
+
+#include "globals.hh"
+
+/*
+ * \file G4INCLSrcChannel.hh
+ *
+ * \date Feb 24, 2022
+ * \author Jose Luis Rodriguez-Sanchez
+ */
+
+#include "G4INCLAllocationPool.hh"
+#include "G4INCLFinalState.hh"
+#include "G4INCLIChannel.hh"
+#include "G4INCLNucleus.hh"
+#include "G4INCLParticle.hh"
+
+#include "G4INCLEventInfo.hh"
+
+#ifndef G4INCLSrcChannel_HH
+#define G4INCLSrcChannel_HH 1
+
+namespace G4INCL {
+class SrcChannel : public IChannel {
+
+public:
+  SrcChannel(Particle *p1, Particle *p2, Nucleus *n);
+  virtual ~SrcChannel();
+
+  void fillFinalState(FinalState *fs);
+  void fillFinalState(FinalState *fs, ParticleType , ParticleType);
+
+private:
+  Particle *particle1, *particle2;
+  ParticleType ftype1, ftype2;
+  Particle *srcpartner;
+  Nucleus *thenucleus;
+  double fDistSrc;
+  
+  EventInfo theEventInfo;
+
+  /**
+   *  Compute the current number of src pairs.
+   */
+  Particle *findpairpartner(Particle *pt);
+
+  INCL_DECLARE_ALLOCATION_POOL(SrcChannel)
+};
+
+} // namespace G4INCL
+
+#endif /* G4INCLSrcChannel_HH */

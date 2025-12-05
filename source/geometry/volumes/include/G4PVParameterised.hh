@@ -32,10 +32,10 @@
 // of a G4VParameterisation object. The positioning is assumed to
 // be dominant along a specified Cartesian axis.
 
-// Author: Paul Kent (CERN), 29 July 1995 - first non-stub version
+// Author: Paul Kent (CERN), 29.07.1995 - First non-stub version
 // ----------------------------------------------------------------------
 #ifndef G4PVPARAMETERISED_HH
-#define G4PVPARAMETERISED_HH 1
+#define G4PVPARAMETERISED_HH
 
 #include "G4PVReplica.hh"
 
@@ -99,9 +99,9 @@ class G4PVParameterised : public G4PVReplica
     G4PVParameterised(__void__&);
 
     /**
-     * Virtual empty Destructor.
+     * Default Destructor.
      */
-    ~G4PVParameterised() override;
+    ~G4PVParameterised() override = default;
 
     /**
      * Returns true to identify if it is a parameterised physical volume.

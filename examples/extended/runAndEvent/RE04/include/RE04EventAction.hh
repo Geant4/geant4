@@ -23,10 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file runAndEvent/RE04/include/RE04EventAction.hh
+/// \file RE04EventAction.hh
 /// \brief Definition of the RE04EventAction class
-//
-//
+
 #ifndef RE04EventAction_h
 #define RE04EventAction_h 1
 

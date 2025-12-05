@@ -6,6 +6,16 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2025-11-12 Vladimir Ivanchenko (phys-list-V11-03-05)
+- G4PhysListFactory - for HP physics use the default EM constructor as it was
+    in Geant4 11.3.
+
+## 2025-10-30 Vladimir Ivanchenko (phys-list-V11-03-04)
+- G4PhysListFactory - allowed definition of EM  physics Opt0 on top of
+    any reference Physics Lists (currently this provides more simple EM physics
+    together with HP), improved printout for the HP case - now EMZ option is
+    printed in the name.
+
 ## 2025-04-23 Alberto Ribon (phys-lists-V11-03-03)
 - FTFP_BERT_ATL : removed the special FTF tune for ATLAS (introduced in
   phys-lists-V11-01-05 to overcome the problem of too optimistic (i.e. narrow)

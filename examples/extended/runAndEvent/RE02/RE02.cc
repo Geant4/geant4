@@ -23,12 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file runAndEvent/RE02/RE02.cc
+/// \file RE02.cc
 /// \brief Main program of the runAndEvent/RE02 example
-//
-//
-//
-//
 
 #include "QGS_BIC.hh"
 #include "RE02ActionInitialization.hh"

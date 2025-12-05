@@ -23,10 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 /// \file Hadr09.cc
 /// \brief Main program of the hadronic/Hadr09 example
-//
+
 //------------------------------------------------------------------------
 // This program shows how to use the class Hadronic Generator.
 // The class HadronicGenerator is a kind of "hadronic generator", i.e.

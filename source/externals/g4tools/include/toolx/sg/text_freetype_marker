@@ -51,7 +51,7 @@ public:
       size_t pos = item.first;
       size_t num = item.second;
       if(!num) continue;
-      const float* data = tools::vec_data<float>(m_xys)+pos;
+      const float* data = m_xys.data()+pos;
       a_action.draw_vertex_array_xy(tools::gl::line_strip(),num*2,data);
     }}
 
@@ -67,7 +67,7 @@ public:
       //      << " num points " << num
       //      << std::endl;
 
-      const float* data = tools::vec_data<float>(m_xys)+pos;
+      const float* data = m_xys.data()+pos;
       a_action.draw_vertex_array_xy((*it).first,num*2,data);
     }}
 
@@ -75,18 +75,7 @@ public:
     /// bitmap ////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////
     if(m_bitmaps.size()) {
-#if defined(ANDROID) /*|| TARGET_OS_IPHONE*/
-      // we do not have transparent texture here (see also gl/tex_img() that does img/4-bytes => img/3-bytes) :
-     {tools::sg::state& _state = a_action.state();
-      tools::colorf old_color = _state.m_color;
-      _state.m_color = tools::colorf_white();
-      a_action.color4f(_state.m_color);
       m_bitmaps.render(a_action);
-      _state.m_color = old_color;
-      a_action.color4f(_state.m_color);}
-#else
-      m_bitmaps.render(a_action);
-#endif
     }
 
     ///////////////////////////////////////////////////////////
@@ -129,7 +118,7 @@ public:
       size_t num = item.second;
       if(!num) continue;
 
-      const float* data = tools::vec_data<float>(m_xys)+pos;
+      const float* data = m_xys.data()+pos;
       float* vp = _trans2(num,data,x,y);
       if(!vp) continue;
 
@@ -152,7 +141,7 @@ public:
       size_t num = item.second.second;
       if(!num) continue;
 
-      const float* data = tools::vec_data<float>(m_xys)+pos;
+      const float* data = m_xys.data()+pos;
       float* vp = _trans2(num,data,x,y);
       if(!vp) continue;
       if(a_action.add__primitive_xy(*this,item.first,2*num,vp,true)){
@@ -183,46 +172,6 @@ public:
       reset_touched();
     }}
     a_action.add_one_point(0,0,0);
-/*
-   {tools_vforcit(line_t,m_lines,it) {
-      const line_t& item = *it;
-      size_t num = item.second;
-      const float* data = tools::vec_data<float>(m_xys)+item.first;
-
-      float px,py,pz;
-      float* pos = (float*)data;
-      for(size_t index=0;index<num;index++) {
-        px = *pos;pos++;
-        py = *pos;pos++;
-        pz = 0;
-        a_action.add_one_point(px,py,pz);
-      }
-
-    }}
-
-    ///////////////////////////////////////////////////////////
-    /// triangles /////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////
-   {tools_vforcit(gl_triangle_t,m_triangles,it) {
-      const std::pair<GLUenum,triangle_t>& item = *it;
-      size_t num = item.second.second;
-      const float* data = tools::vec_data<float>(m_xys)+item.second.first;
-
-      float px,py,pz;
-      float* pos = (float*)data;
-      for(size_t index=0;index<num;index++) {
-        px = *pos;pos++;
-        py = *pos;pos++;
-        pz = 0;
-        a_action.add_one_point(px,py,pz);
-      }
-    }}
-    
-    ///////////////////////////////////////////////////////////
-    /// bitmap ////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////
-    m_bitmaps.bbox(a_action);
-*/
   }
 
 public:
@@ -239,8 +188,6 @@ protected:
     float sy = 2.0f*float(height.value())/float(a_state.m_wh); //in [-1,1]
     float old_height = height.value();
     height.value_no_cmp(sy);
-    //update_what what = lines;
-    //if(modeling==tools::sg::font_filled) what = faces_and_lines;
     parent::update_sg(a_out,a_load_font);
     height.value_no_cmp(old_height);
   }

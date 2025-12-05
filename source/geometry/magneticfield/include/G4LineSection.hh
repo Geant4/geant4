@@ -30,7 +30,7 @@
 // A utility class that calculates the distance of a point from a 
 // line section.
 
-// Created: J.Apostolakis, 1999
+// Author: John Apostolakis (CERN), 1999
 // --------------------------------------------------------------------
 
 #ifndef G4LineSection_hh
@@ -39,25 +39,49 @@
 #include "G4Types.hh" 
 #include "G4ThreeVector.hh"
 
+/**
+ * @brief G4LineSection is a utility class that calculates the distance
+ * of a point from a line section.
+ */
+
 class G4LineSection
 {
-  public:  // with description
+  public:
 
-     G4LineSection( const G4ThreeVector& PntA,
-                    const G4ThreeVector& PntB );
+    /**
+     * Constructor for G4LineSection.
+     *  @param[in] PntA Coordinates of point A defining the line.
+     *  @param[in] PntB Coordinates of point B defining the line.
+     */
+    G4LineSection( const G4ThreeVector& PntA,
+                   const G4ThreeVector& PntB );
 
-     G4double Dist( const G4ThreeVector& OtherPnt ) const;
+    /**
+     * Default Destructor.
+     */
+    ~G4LineSection() = default;
 
-     inline G4double GetABdistanceSq() const;
+    /**
+     * Returns the distance of point 'OtherPnt' from the line.
+     */
+    G4double Dist( const G4ThreeVector& OtherPnt ) const;
 
-     inline static G4double Distline( const G4ThreeVector& OtherPnt, 
-                                      const G4ThreeVector& LinePntA, 
-                                      const G4ThreeVector& LinePntB );
+    /**
+     * Returns the distance squared.
+     */
+    inline G4double GetABdistanceSq() const;
+
+    /**
+     * Defines line and returns the distance of point 'OtherPnt' from it.
+     */
+    inline static G4double Distline( const G4ThreeVector& OtherPnt, 
+                                     const G4ThreeVector& LinePntA, 
+                                     const G4ThreeVector& LinePntB );
   private:
 
-     G4ThreeVector EndpointA;
-     G4ThreeVector VecAtoB;
-     G4double fABdistanceSq = 0.0;
+    G4ThreeVector EndpointA;
+    G4ThreeVector VecAtoB;
+    G4double fABdistanceSq = 0.0;
 };
 
 // Inline methods implementations

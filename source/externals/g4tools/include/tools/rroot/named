@@ -6,7 +6,6 @@
 
 #include "object"
 #include "../scast"
-#include "../vdata"
 #include "cids"
 
 namespace tools {
@@ -85,7 +84,7 @@ inline bool Array_stream(buffer& a_buffer,std::vector<T>& a_v) {
   //check sz is not crazy :
   if(!a_buffer.check_eob(sz)) return false;
   a_v.resize(sz);
-  if(!a_buffer.read_fast_array<T>(vec_data(a_v),sz)) return false;
+  if(!a_buffer.read_fast_array<T>(a_v.data(),sz)) return false;
   return true;
 }
 
@@ -123,7 +122,6 @@ public:
     if(void* p = cmp_cast<named>(this,a_class)) {return p;}
     else return 0;
   }
-  //virtual void* cast(cid) const {return named_cid();}
 public:
   virtual iro* copy() const {return new named(*this);}
   virtual bool stream(buffer& a_buffer) {
@@ -131,20 +129,11 @@ public:
   }
 public:
   named() {
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
   }
   virtual ~named() {
-#ifdef TOOLS_MEM
-    mem::decrement(s_class().c_str());
-#endif
   }
 protected:
   named(const named& a_from):iro(a_from),m_name(a_from.m_name),m_title(a_from.m_title) {
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
   }
   named& operator=(const named& a_from){
     m_name = a_from.m_name;

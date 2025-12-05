@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file DicomBeamDeviceRef.cc
+/// \brief Implementation of the DicomBeamDeviceRef class
+
 #include "DicomBeamDeviceRef.hh"
 
 #include "dcmtk/dcmrt/seq/drtrbs8.h"  // DRTReferencedBeamSequenceInRTFractionSchemeModule

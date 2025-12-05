@@ -23,9 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file GB07/src/GB07DetectorConstruction.cc
+/// \file GB07DetectorConstruction.cc
 /// \brief Implementation of the GB07DetectorConstruction class
-//
+
 #include "GB07DetectorConstruction.hh"
 
 #include "GB07BOptrLeadingParticle.hh"

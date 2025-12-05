@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file radiobiology/src/LETMessenger.cc
+/// \file LETMessenger.cc
 /// \brief Implementation of the RadioBio::LETMessenger class
 
 #include "LETMessenger.hh"

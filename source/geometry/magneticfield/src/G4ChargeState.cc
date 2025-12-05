@@ -25,7 +25,7 @@
 //
 // G4ChargeState implementation
 //
-// Authors: J.Apostolakis, P.Gumplinger - 10 April 2013  
+// Authors: J.Apostolakis (CERN), P.Gumplinger (TRIUMF), 10.04.2013  
 // -------------------------------------------------------------------
 
 #include "G4ChargeState.hh"

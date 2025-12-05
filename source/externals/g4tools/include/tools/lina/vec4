@@ -6,21 +6,10 @@
 
 #include <cstddef> //size_t
 
-#ifdef TOOLS_MEM
-#include "../mem"
-#endif
-
 namespace tools {
 
 template <class T>
 class vec4 {
-#ifdef TOOLS_MEM
-public:
-  static const std::string& s_class() {
-    static const std::string s_v("tools::vec4");
-    return s_v;
-  }
-#endif
 protected:
   static T zero() {return T();}
   static T minus_one() {return T(-1);}
@@ -29,46 +18,27 @@ public:
   unsigned int dimension() const {return 4;}
 public:
   vec4(){
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
     m_data[0] = T();
     m_data[1] = T();
     m_data[2] = T();
     m_data[3] = T();
   }
   vec4(const T a_vec[4]) {
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
     m_data[0] = a_vec[0];
     m_data[1] = a_vec[1];
     m_data[2] = a_vec[2];
     m_data[3] = a_vec[3];
   }
-  vec4(const T& a0,const T& a1,const T& a2,const T& a3
-#ifdef TOOLS_MEM
-       ,bool a_inc = true
-#endif
-       ) {
-#ifdef TOOLS_MEM
-    if(a_inc) mem::increment(s_class().c_str());
-#endif
+  vec4(const T& a0,const T& a1,const T& a2,const T& a3) {
     m_data[0] = a0;
     m_data[1] = a1;
     m_data[2] = a2;
     m_data[3] = a3;
   }
   virtual ~vec4() {
-#ifdef TOOLS_MEM
-    mem::decrement(s_class().c_str());
-#endif
   }
 public:
   vec4(const vec4& a_from){
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
     m_data[0] = a_from.m_data[0];
     m_data[1] = a_from.m_data[1];
     m_data[2] = a_from.m_data[2];

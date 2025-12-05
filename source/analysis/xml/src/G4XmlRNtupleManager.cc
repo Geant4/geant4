@@ -43,7 +43,7 @@ namespace aida {
 template <class T>
 bool to_vector(base_ntu& a_ntu,std::vector<T>& a_vec) {
   a_vec.clear();
-  const std::vector<base_col*>& cols = a_ntu.cols();
+  const std::vector<base_col*>& cols = a_ntu.columns();
   if(cols.empty()) return false;
   base_col* _base_col = cols.front();
   aida_col<T>* _col = safe_cast<base_col, aida_col<T> >(*_base_col);

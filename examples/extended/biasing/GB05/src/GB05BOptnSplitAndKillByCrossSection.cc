@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 /// \file GB05BOptnSplitAndKillByCrossSection.cc
 /// \brief Implementation of the GB05BOptnSplitAndKillByCrossSection class
 

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 /// \file G04DetectorConstruction.cc
 /// \brief Implementation of the G04DetectorConstruction class
 

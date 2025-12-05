@@ -33,7 +33,8 @@
 //        use Stepper for small step(ClassicalRK4 by default)
 // Else use  HelixExplicitEuler Stepper
 //
-// Created: T.Nikitina, CERN - 18.05.2007, derived from G4ExactHelicalStepper
+// Author: Tatiana Nikitina (CERN), 18.05.2007
+//         Derived from G4ExactHelicalStepper
 // -------------------------------------------------------------------------
 
 #include "G4HelixMixedStepper.hh"

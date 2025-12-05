@@ -57,6 +57,9 @@ G4HadronicAbsorptionINCLXX::G4HadronicAbsorptionINCLXX( G4ParticleDefinition* pd
   G4INCLXXInterface* theModel = new G4INCLXXInterface;
   G4double theMin =  0.0*GeV;
   G4double theMax =  0.2*GeV;
+  if (pdef == G4AntiNeutron::AntiNeutron()) {
+    theMax =  0.01*GeV;
+  }
   theModel->SetMinEnergy( theMin );
   theModel->SetMaxEnergy( theMax );
   RegisterMe( theModel );
@@ -68,7 +71,7 @@ G4HadronicAbsorptionINCLXX::~G4HadronicAbsorptionINCLXX() {}
 
 // Applies to constructor-specified particle, or to all known cases
 G4bool G4HadronicAbsorptionINCLXX::IsApplicable( const G4ParticleDefinition& particle ) {
-  return ( (  pdefApplicable == nullptr  && ( &particle == G4AntiProton::Definition() ) )
+  return ( (  pdefApplicable == nullptr  && ( &particle == G4AntiProton::Definition() || &particle == G4AntiNeutron::Definition() ) )
 	   || ( &particle == pdefApplicable ) );
 }
 

@@ -8,10 +8,6 @@
 #include "../long_out"
 #include "../charp_out"
 
-#ifdef TOOLS_MEM
-#include "../mem"
-#endif
-
 #include <ostream>
 #include <vector>
 #include <cstring> //memcpy
@@ -87,15 +83,9 @@ public:
   ,m_r_4_func(0)
   ,m_r_8_func(0)
   {
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
     set_byte_swap(a_byte_swap);
   }
   virtual ~rbuf(){
-#ifdef TOOLS_MEM
-    mem::decrement(s_class().c_str());
-#endif
   }
 public:
   rbuf(const rbuf& a_from)
@@ -107,9 +97,6 @@ public:
   ,m_r_4_func(a_from.m_r_4_func)
   ,m_r_8_func(a_from.m_r_8_func)
   {
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
     set_byte_swap(a_from.m_byte_swap);
   }
   rbuf& operator=(const rbuf& a_from){

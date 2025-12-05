@@ -49,11 +49,10 @@
 //   G4SurfaceProperty*             theSurfaceProperty
 //   G4TransitionRadiationSurface*  theTransRadSurface
 
-// Created: 1997, June, 4th to 17th
-// Author:  John Apostolakis, (with help of Peter Gumplinger)
+// Authors: John Apostolakis (CERN) & Peter Gumplinger (TRIUMF), 26.06.1997
 // ------------------------------------------------------------------------
 #ifndef G4LOGICALSURFACE_HH
-#define G4LOGICALSURFACE_HH 1
+#define G4LOGICALSURFACE_HH
 
 #include "G4Types.hh"
 #include "G4String.hh"
@@ -61,41 +60,68 @@
 class G4SurfaceProperty;
 class G4TransitionRadiationSurface;
 
+/**
+ * @brief G4LogicalSurface is an abstraction of a geometrical surface, it is
+ * an abstract base class for different implementations of surfaces.
+ * Its primary function is to hold pointers to objects that describe the
+ * surface's physical properties. For example it holds a pointer to a
+ * surface's optical properties, and because of this it is used in processes
+ * like G4OpBoundaryProcess.
+ */
+
 class G4LogicalSurface
 {
+  public:
 
- public:
+    /**
+     * Default Destructor.
+     */
+    virtual ~G4LogicalSurface() = default;
 
-   inline G4SurfaceProperty* GetSurfaceProperty() const;
-   inline void SetSurfaceProperty(G4SurfaceProperty* ptrSurfaceProperty);
+    /**
+     * Copy constructor and assignment operator not allowed.
+     */
+    G4LogicalSurface(const G4LogicalSurface&) = delete;
+    G4LogicalSurface& operator=(const G4LogicalSurface&) = delete;
 
-   inline const G4String& GetName() const;
-   inline void SetName(const G4String& name);
+    /**
+     * Getter and setter for the surface property object.
+     */
+    inline G4SurfaceProperty* GetSurfaceProperty() const;
+    inline void SetSurfaceProperty(G4SurfaceProperty* ptrSurfaceProperty);
 
-   inline G4TransitionRadiationSurface* GetTransitionRadiationSurface() const;
-   inline void SetTransitionRadiationSurface(G4TransitionRadiationSurface* trs);
+    /**
+     * Getter and setter for the surface name.
+     */
+    inline const G4String& GetName() const;
+    inline void SetName(const G4String& name);
 
-   virtual ~G4LogicalSurface() = default;
+    /**
+     * Getter and setter for the transition radiation surface attribute.
+     */
+    inline G4TransitionRadiationSurface* GetTransitionRadiationSurface() const;
+    inline void SetTransitionRadiationSurface(G4TransitionRadiationSurface* trs);
 
-   G4LogicalSurface(const G4LogicalSurface&) = delete;
-   G4LogicalSurface& operator=(const G4LogicalSurface&) = delete;
+    /**
+     * Equality and disequality operators.
+     */
+    inline G4bool operator==(const G4LogicalSurface &right) const;
+    inline G4bool operator!=(const G4LogicalSurface &right) const;
 
-   inline G4bool operator==(const G4LogicalSurface &right) const;
-   inline G4bool operator!=(const G4LogicalSurface &right) const;
+  protected:
 
- protected:
+    /**
+     * Protected constructor. There should be no free instances of this class.
+     */
+    G4LogicalSurface(const G4String& name, G4SurfaceProperty* prop); 
 
-   // There should be no instances of this class
+  private:
 
-   G4LogicalSurface(const G4String& name, G4SurfaceProperty* prop); 
-     // Is the name more meaningful for the properties or the logical surface ?
+    /** Surface name. */
+    G4String theName;
 
- private:
-
-   G4String theName;              // Surface name
-
-   G4SurfaceProperty*             theSurfaceProperty = nullptr;
-   G4TransitionRadiationSurface*  theTransRadSurface = nullptr;
+    G4SurfaceProperty* theSurfaceProperty = nullptr;
+    G4TransitionRadiationSurface* theTransRadSurface = nullptr;
 };
 
 #include "G4LogicalSurface.icc"

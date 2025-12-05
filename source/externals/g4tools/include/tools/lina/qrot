@@ -11,7 +11,6 @@ namespace tools {
 template <class VEC3,class VEC4>
 class qrot {
 protected:
-//typedef typename VEC3::elem_t T3;
   typedef typename VEC4::elem_t T; //we assume = T3
 public:
   qrot()
@@ -286,11 +285,6 @@ public:
     a_m.v21(2*y*z + 2*w*x);
     a_m.v22(w*w - x*x - y*y + z*z);
 
-    // fourth row :
-    //a_m.v30(0);
-    //a_m.v31(0);
-    //a_m.v32(0);
-    //a_m.v33(w*w + x*x + y*y + z*z);
     return w*w + x*x + y*y + z*z;  //should be 1.
   }
 
@@ -373,15 +367,6 @@ protected:
 
 protected:
   VEC4 m_quat;
-
-public:
-  //NOTE : don't handle a static object because of mem balance.
-  //static const qrot<double>& identity() {
-  //  static const qrot<double> s_v(0,0,0,1);
-  //  return s_v;
-  //}
-
-//private:static void check_instantiation() {qrot<float> v;}
 };
 
 }

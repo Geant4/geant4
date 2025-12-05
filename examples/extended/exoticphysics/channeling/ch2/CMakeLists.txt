@@ -30,6 +30,10 @@ set(TESTch2_SCRIPTS
   vis.mac
   run.mac
   analysis_ch2.py
+  special_macros/run_Bent_Crystal_Deflection_Radiation.mac
+  special_macros/run_Bent_Crystal_HE_Deflection.mac
+  special_macros/run_Radiation.mac
+  special_macros/run_Positron_Source.mac
   )
 
 foreach(_script ${TESTch2_SCRIPTS})

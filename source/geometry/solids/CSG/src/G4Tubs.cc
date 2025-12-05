@@ -47,6 +47,12 @@
 
 #include "G4VGraphicsScene.hh"
 #include "G4Polyhedron.hh"
+#include "G4AutoLock.hh"
+
+namespace
+{
+  G4Mutex tubsMutex = G4MUTEX_INITIALIZER;
+}
 
 using namespace CLHEP;
 
@@ -109,18 +115,6 @@ G4Tubs::G4Tubs( __void__& a )
   : G4CSGSolid(a)
 {
 }
-
-//////////////////////////////////////////////////////////////////////////
-//
-// Destructor
-
-G4Tubs::~G4Tubs() = default;
-
-//////////////////////////////////////////////////////////////////////////
-//
-// Copy constructor
-
-G4Tubs::G4Tubs(const G4Tubs&) = default;
 
 //////////////////////////////////////////////////////////////////////////
 //
@@ -289,7 +283,10 @@ G4bool G4Tubs::CalculateExtent( const EAxis              pAxis,
 
     // set quadrilaterals
     G4ThreeVectorList pols[NSTEPS+2];
-    for (G4int k=0; k<ksteps+2; ++k) pols[k].resize(4);
+    for (G4int k=0; k<ksteps+2; ++k)
+    {
+      pols[k].resize(4);
+    }
     pols[0][0].set(rmin*cosStart,rmin*sinStart, dz);
     pols[0][1].set(rmin*cosStart,rmin*sinStart,-dz);
     pols[0][2].set(rmax*cosStart,rmax*sinStart,-dz);
@@ -313,7 +310,10 @@ G4bool G4Tubs::CalculateExtent( const EAxis              pAxis,
     // set envelope and calculate extent
     std::vector<const G4ThreeVectorList *> polygons;
     polygons.resize(ksteps+2);
-    for (G4int k=0; k<ksteps+2; ++k) polygons[k] = &pols[k];
+    for (G4int k=0; k<ksteps+2; ++k)
+    {
+      polygons[k] = &pols[k];
+    }
     G4BoundingEnvelope benv(bmin,bmax,polygons);
     exist = benv.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);
   }
@@ -834,12 +834,12 @@ G4double G4Tubs::DistanceToIn( const G4ThreeVector& p,
             {
               return sd ;
             }
-            else
+            xi     = p.x() + sd*v.x() ;
+            yi     = p.y() + sd*v.y() ;
+            cosPsi = (xi*cosCPhi + yi*sinCPhi)/fRMax ;
+            if (cosPsi >= cosHDPhiIT)
             {
-              xi     = p.x() + sd*v.x() ;
-              yi     = p.y() + sd*v.y() ;
-              cosPsi = (xi*cosCPhi + yi*sinCPhi)/fRMax ;
-              if (cosPsi >= cosHDPhiIT)  { return sd ; }
+              return sd ;
             }
           }  //  end if std::fabs(zi)
         }    //  end if (sd>=0)
@@ -872,22 +872,18 @@ G4double G4Tubs::DistanceToIn( const G4ThreeVector& p,
             {
               return 0.0;
             }
-            else
+            
+            c = c/t1 ;
+            d = b*b-c;
+            if ( d>=0.0 )
             {
-              c = c/t1 ;
-              d = b*b-c;
-              if ( d>=0.0 )
-              {
-                snxt = c/(-b+std::sqrt(d)); // using safe solution
-                                            // for quadratic equation
-                if ( snxt < halfCarTolerance ) { snxt=0; }
-                return snxt ;
-              }
-              else
-              {
-                return kInfinity;
-              }
+              snxt = c/(-b+std::sqrt(d)); // using safe solution
+                                          // for quadratic equation
+              if ( snxt < halfCarTolerance ) { snxt=0; }
+              return snxt ;
             }
+            
+            return kInfinity;
           }
         }
         else
@@ -903,22 +899,18 @@ G4double G4Tubs::DistanceToIn( const G4ThreeVector& p,
           {
             return 0.0;
           }
-          else
+          
+          c = c/t1 ;
+          d = b*b-c;
+          if ( d>=0.0 )
           {
-            c = c/t1 ;
-            d = b*b-c;
-            if ( d>=0.0 )
-            {
-              snxt= c/(-b+std::sqrt(d)); // using safe solution
-                                         // for quadratic equation
-              if ( snxt < halfCarTolerance ) { snxt=0; }
-              return snxt ;
-            }
-            else
-            {
-              return kInfinity;
-            }
+            snxt= c/(-b+std::sqrt(d)); // using safe solution
+                                       // for quadratic equation
+            if ( snxt < halfCarTolerance ) { snxt=0; }
+            return snxt ;
           }
+          
+          return kInfinity;
         } // end if   (!fPhiFullTube)
       }   // end if   (t3>tolIRMin2)
     }     // end if   (Inside Outer Radius)
@@ -951,18 +943,16 @@ G4double G4Tubs::DistanceToIn( const G4ThreeVector& p,
             {
               return sd ;
             }
-            else
-            {
-              xi     = p.x() + sd*v.x() ;
-              yi     = p.y() + sd*v.y() ;
-              cosPsi = (xi*cosCPhi + yi*sinCPhi)*fInvRmin;
-              if (cosPsi >= cosHDPhiIT)
-              {
-                // Good inner radius isect
-                // - but earlier phi isect still possible
 
-                snxt = sd ;
-              }
+            xi     = p.x() + sd*v.x() ;
+            yi     = p.y() + sd*v.y() ;
+            cosPsi = (xi*cosCPhi + yi*sinCPhi)*fInvRmin;
+            if (cosPsi >= cosHDPhiIT)
+            {
+              // Good inner radius isect
+              // - but earlier phi isect still possible
+
+              snxt = sd ;
             }
           }        //    end if std::fabs(zi)
         }          //    end if (sd>=0)
@@ -1732,6 +1722,40 @@ G4ThreeVector G4Tubs::GetPointOnSurface() const
     }
   }
   return {0., 0., 0.};
+}
+
+/////////////////////////////////////////////////////////////////////////
+//
+// GetCubicVolume
+
+G4double G4Tubs::GetCubicVolume()
+{
+  if (fCubicVolume == 0)
+  {
+    G4AutoLock l(&tubsMutex);
+    fCubicVolume = fDPhi*fDz*(fRMax*fRMax-fRMin*fRMin);
+    l.unlock();
+  }
+  return fCubicVolume;
+}
+
+/////////////////////////////////////////////////////////////////////////
+//
+// GetSurfaceArea
+
+G4double G4Tubs::GetSurfaceArea()
+{
+  if (fSurfaceArea == 0)
+  {
+    G4AutoLock l(&tubsMutex);
+    fSurfaceArea = fDPhi*(fRMin+fRMax)*(2*fDz+fRMax-fRMin);
+    if (!fPhiFullTube)
+    {
+      fSurfaceArea = fSurfaceArea + 4*fDz*(fRMax-fRMin);
+    }
+    l.unlock();
+  }
+  return fSurfaceArea;
 }
 
 ///////////////////////////////////////////////////////////////////////////

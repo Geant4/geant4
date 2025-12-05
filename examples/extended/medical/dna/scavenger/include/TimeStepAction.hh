@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file scavenger/include/TimeStepAction.hh
+/// \file TimeStepAction.hh
 /// \brief Definition of the scavenger::TimeStepAction class
 
 #ifndef TimeStepAction_h

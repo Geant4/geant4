@@ -1,0 +1,26 @@
+#================================================
+# Macro file to test IAEAphsp reader
+#================================================
+/control/verbose 1
+/run/verbose 1
+/tracking/verbose 1
+/event/verbose 0
+#
+/action/IAEAphspReader/fileName   phsp/test
+#
+/my_geom/worldXY   25.0 cm
+/my_geom/worldZ   100.0 cm
+#
+/my_phys/setList    QGSP_BIC_HP_EMZ
+#
+/run/initialize
+#
+/run/setCut      0.1 mm
+#
+/IAEAphspReader/verbose   2
+/IAEAphspReader/numberOfParallelRuns 4   # tot_parallel >= 1
+/IAEAphspReader/parallelRun          2   # 1 <= value <= tot_parallel 
+#
+#/run/printProgress  10
+/run/beamOn     50
+#

@@ -1,0 +1,81 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+// Implementation of inline methods of G4SurfBits
+// --------------------------------------------------------------------
+
+inline void G4SurfBits::SetBitNumber(unsigned int bitnumber, G4bool value)
+{
+  // set bit number 'bitnumber' to be value
+
+  if (bitnumber >= fNBits)
+  {
+    unsigned int new_size = (bitnumber/8) + 1;
+    if (new_size > fNBytes)
+    {
+      if (new_size < 100 * 1024 * 1024) { new_size *= 2; }
+      unsigned char *old_location = fAllBits;
+      fAllBits = new unsigned char[new_size];
+      std::memcpy(fAllBits,old_location,fNBytes);
+      std::memset(fAllBits+fNBytes ,0, new_size-fNBytes);
+      fNBytes = new_size;
+      delete [] old_location;
+    }
+    fNBits = bitnumber+1;
+  }
+  unsigned int loc = bitnumber/8;
+  unsigned char bit = bitnumber%8;
+  if (value)
+  {
+    fAllBits[loc] |= (1<<bit);
+  }
+  else
+  {
+    fAllBits[loc] &= (0xFF ^ (1<<bit));
+  }
+}
+
+inline G4bool G4SurfBits::TestBitNumber(unsigned int bitnumber) const
+{
+  // Return the current value of the bit
+
+  if (bitnumber >= fNBits) { return false; }
+  unsigned int loc = bitnumber/8;
+  unsigned char value = fAllBits[loc];
+  unsigned char bit = bitnumber%8;
+  G4bool result = (value & (1<<bit)) != 0;
+  return result;
+  // short: return 0 != (fAllBits[bitnumber/8] & (1<< (bitnumber%8)));
+}
+
+inline void G4SurfBits::ResetBitNumber(unsigned int bitnumber)
+{
+  SetBitNumber(bitnumber,false);
+}
+
+inline G4bool G4SurfBits::operator[](unsigned int bitnumber) const
+{
+  return TestBitNumber(bitnumber);
+}

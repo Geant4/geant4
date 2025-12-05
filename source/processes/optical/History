@@ -5,6 +5,28 @@ which **must** added in reverse chronological order (newest at the top).
 It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
+## 2025-09-16 Soon Yung Jun (op-V11-03-03)
+- G4OpBoundaryProcess: Refactor boundary handling at dielectric-dielectric
+  interfaces by replacing goto with a do-while loop to improve readability.
+  Extract transmission logic into a new inline function DoTransmission() and
+  introduce constexpr helper IsBackpainted() to identify backpainted surfaces.
+
+## 2025-09-03 Soon Yung Jun (op-V11-03-02)
+- G4OpMieHG.cc: Remove redundant acos/cos calls in angular sampling to improve
+  performance and readability.
+
+## 2025-08-10 Soon Yung Jun (op-V11-03-01)
+- G4OpBoundaryProcess: Refactor for readability and efficiency
+- Reuse local variables for trigonometric and exponential function results,
+  as well as other repeated expressions.
+- Improve code readability by replacing simple if–else clauses with ternary
+  operators and making other minor rearrangements.
+- Replace h_Planck * c_light with a static function for clarity and reuse.
+
+## 2025-07-30 Soon Yung Jun (op-V11-03-00)
+- G4OpWLS, G4OpWLS2: improve WLS photon energy sampling: enforce energy below
+  the primary photon's energy
+
 ## 2024-07-18 Hans Wenzel (op-V11-02-01)
 - G4OpWLS2.cc: change SetProcessSubType from fOpWLS to fOpWLS2 
 

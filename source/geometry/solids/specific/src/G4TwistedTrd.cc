@@ -25,12 +25,19 @@
 //
 // G4TwistedTrd
 //
-// Author: 18/03/2005 - O.Link (Oliver.Link@cern.ch)
+// Author: Oliver Link (CERN), 18.03.2005 - Created
 // --------------------------------------------------------------------
 
 #include "G4TwistedTrd.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4Polyhedron.hh"
+#include "G4AutoLock.hh"
+
+namespace
+{
+  G4Mutex twtrdMutex = G4MUTEX_INITIALIZER;
+}
+
 
 //=====================================================================
 //* Constructor -------------------------------------------------------
@@ -55,11 +62,6 @@ G4TwistedTrd::G4TwistedTrd( __void__& a )
   : G4VTwistedFaceted(a)
 {
 }
-
-//=====================================================================
-//* Destructor --------------------------------------------------------
-
-G4TwistedTrd::~G4TwistedTrd() = default;
 
 //=====================================================================
 //* Copy constructor --------------------------------------------------
@@ -132,14 +134,16 @@ G4VSolid* G4TwistedTrd::Clone() const
 
 double G4TwistedTrd::GetCubicVolume()
 {
-  if (fCubicVolume == 0.)
+  if (fCubicVolume == 0)
   {
+    G4AutoLock l(&twtrdMutex);
     G4double x1 = GetX1HalfLength();
     G4double x2 = GetX2HalfLength();
     G4double y1 = GetY1HalfLength();
     G4double y2 = GetY2HalfLength();
     G4double h = 2.*GetZHalfLength();
     fCubicVolume = h*((x1 + x2)*(y1 + y2) + (x2 - x1)*(y2 - y1)/3.);
+    l.unlock();
   }
   return fCubicVolume;
 }
@@ -149,8 +153,9 @@ double G4TwistedTrd::GetCubicVolume()
 
 double G4TwistedTrd::GetSurfaceArea()
 {
-  if (fSurfaceArea == 0.)
+  if (fSurfaceArea == 0)
   {
+    G4AutoLock l(&twtrdMutex);
     G4double ang = GetPhiTwist();
     G4double x1 = GetX1HalfLength();
     G4double x2 = GetX2HalfLength();
@@ -221,6 +226,7 @@ double G4TwistedTrd::GetSurfaceArea()
       areaY /= delY*ang*ang;
     }
     fSurfaceArea = areaX + areaY + 4.*(x1*y1 + x2*y2);
+    l.unlock();
   }
   return fSurfaceArea;
 }

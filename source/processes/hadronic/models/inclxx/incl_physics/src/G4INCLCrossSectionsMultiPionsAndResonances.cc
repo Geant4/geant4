@@ -335,6 +335,20 @@ namespace G4INCL {
         if (sigma < 0.) sigma = 0.;
         return sigma; // Parameterization from the ANL-Osaka DCC model [PRC88(2013)035209] - eta p --> "pi+pi0 n" + "pi0 pi0 p" total XS
     }
+         
+    G4double CrossSectionsMultiPionsAndResonances::etaNToLK(Particle const * const, Particle const * const) {
+       //
+       //     Eta-Nucleon producing K Lambda cross sections
+       //
+        return 0.;
+    }
+  
+    G4double CrossSectionsMultiPionsAndResonances::etaNToSK(Particle const * const, Particle const * const) {
+       //
+       //     Eta-Nucleon producing K Sigma cross sections
+       //
+        return 0.;
+    }
         
         
     G4double CrossSectionsMultiPionsAndResonances::etaNElastic(Particle const * const particle1, Particle const * const particle2) {
@@ -486,6 +500,20 @@ namespace G4INCL {
         sigma = omegaNInelastic(particle1,particle2) - omegaNToPiN(particle1,particle2) ;
         
         return sigma;
+    }
+   
+    G4double CrossSectionsMultiPionsAndResonances::omegaNToLK(Particle const * const, Particle const * const) {
+       //
+       //     Omega-Nucleon producing K Lambda cross sections
+       //
+        return 0.;
+    }
+  
+    G4double CrossSectionsMultiPionsAndResonances::omegaNToSK(Particle const * const, Particle const * const) {
+       //
+       //     Omega-Nucleon producing K Sigma cross sections
+       //
+        return 0.;
     }
   
     

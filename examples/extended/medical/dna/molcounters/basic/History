@@ -1,8 +1,13 @@
+# Example molcounter-basic History
 
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
 
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
+-------------------------------------------------------------------------------
+
+## 2025-11-10 G Cosmo (molcounter-basic-V11-03-03)
+- Fixed coding conventions for tabs in MoleculeCounter source.
 
 ## 2025-05-28  H Tran (molcounter-basic-V11-03-02)
 - Fixed warning in windows

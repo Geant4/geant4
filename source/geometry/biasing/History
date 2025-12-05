@@ -6,6 +6,15 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2025-10-06 Gabriele Cosmo (geombias-V11-03-01)
+- Reorganised and enriched comments in headers to follow Doxygen style.
+- Removed empty source files for G4VGCellFinder, G4VIStore,
+  G4VImportanceAlgorithm, G4VImportanceSplitExaminer, G4VWeightWindowStore,
+  G4VWeightWindowAlgorithm.
+
+## 2025-08-22 Gabriele Cosmo (geombias-V11-03-00)
+- Applied basic clang-tidy fixes.
+
 ## 2024-07-17 Gabriele Cosmo (geombias-V11-02-01)
 - Fixed reported Coverity defect in G4WeightWindowStore, to use std::move()
   for avoiding implicit copy.

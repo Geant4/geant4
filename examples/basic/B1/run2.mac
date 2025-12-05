@@ -15,13 +15,13 @@
 /gun/particle gamma
 /gun/energy 6 MeV
 #
-/run/printProgress 100
-/run/beamOn 1000
+/run/printProgress 1000
+/run/beamOn 10000
 # 
 # proton 210 MeV to the direction (0.,0.,1.)
-# 1000 events
+# 10000 events
 #
 /gun/particle proton
 /gun/energy 210 MeV
 #
-/run/beamOn 1000
+/run/beamOn 10000

@@ -37,7 +37,6 @@ public:
   void set_last(seek a_v) {m_last = a_v;}
 
   unsigned int record_size() const {
-    //GB if(fLast>RIO_START_BIG_FILE) {
     if((m_first>START_BIG_FILE())|| //GB
        (m_last>START_BIG_FILE()) ){
       return sizeof(short) +  2 * sizeof(seek);
@@ -49,7 +48,6 @@ public:
   bool fill_buffer(wbuf& a_wb) {
     short version = 1;
 
-    //GB if(fLast>START_BIG_FILE()) version += big_file_version_tag();
     if((m_first>START_BIG_FILE())||
        (m_last>START_BIG_FILE())) version += big_file_version_tag();
 

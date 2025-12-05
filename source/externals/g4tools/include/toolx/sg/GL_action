@@ -8,14 +8,14 @@
 
 #include <tools/sg/render_action>
 
-//#include <tools/mathf>
-//#include <tools/lina/matout>
-
 namespace toolx {
 namespace sg {
 
-class GL_action : public tools::sg::render_action {
-  TOOLS_ACTION(GL_action,toolx::sg::GL_action,tools::sg::render_action)
+template <class GL_FUNCTIONS>
+class GL_action_T : public tools::sg::render_action, protected GL_FUNCTIONS {
+  using parent_gl_functions = GL_FUNCTIONS;
+private:
+  TOOLS_T_ACTION(GL_FUNCTIONS,GL_action_T,toolx::sg::GL_action_T,tools::sg::render_action)
 public:
   virtual void draw_vertex_array(tools::gl::mode_t a_mode,size_t a_floatn,const float* a_xyzs){
     size_t num = a_floatn/3;
@@ -26,6 +26,58 @@ public:
   virtual void draw_vertex_array_xy(tools::gl::mode_t a_mode,size_t a_floatn,const float* a_xys){
     size_t num = a_floatn/2;
     if(!num) return;
+
+#ifdef TOOLS_USE_GL_VERSION_3_2
+
+    GLuint vao_id = 0;
+    parent_gl_functions::gl__GenVertexArrays(1,&vao_id);
+    if(!vao_id) {
+      m_out << "toolx::sg::GL_action_T::draw_vertex_array_xy : glGenVertexArrays failed ()." << std::endl;
+      return;
+    }
+
+    parent_gl_functions::gl__BindVertexArray(vao_id);
+    ////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////
+    unsigned int vbo_id = 0;
+    parent_gl_functions::gl__GenBuffers(1,&vbo_id);
+    if(!vbo_id) {
+      m_out << "toolx::sg::GL_action_T::draw_vertex_array_xy : glGenBuffers failed ()." << std::endl;
+      parent_gl_functions::gl__DeleteVertexArrays(1,&vao_id);
+      return;
+    }
+    std::vector<float> gsto_data;
+    size_t ngsto = num*2; //num points * 2 coords
+    gsto_data.resize(ngsto);
+    float* _gsto_data = gsto_data.data();
+    ::memcpy(_gsto_data,a_xys,ngsto*sizeof(float));
+
+    parent_gl_functions::gl__BindBuffer(GL_ARRAY_BUFFER,vbo_id);
+    parent_gl_functions::gl__BufferData(GL_ARRAY_BUFFER,gsto_data.size()*sizeof(float),_gsto_data,GL_STATIC_DRAW);
+    parent_gl_functions::gl__BindBuffer(GL_ARRAY_BUFFER,0);
+    ////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////
+    parent_gl_functions::gl__BindVertexArray(0);
+
+    parent_gl_functions::gl__BindVertexArray(vao_id);
+    parent_gl_functions::gl__BindBuffer(GL_ARRAY_BUFFER,vbo_id);
+    parent_gl_functions::gl__VertexAttribPointer(m_mgr.g_one_pos_location(),2,GL_FLOAT,GL_FALSE,0,NULL);
+    parent_gl_functions::gl__BindBuffer(GL_ARRAY_BUFFER,0);
+    parent_gl_functions::gl__BindVertexArray(0);
+
+    parent_gl_functions::gl__BindVertexArray(vao_id);
+    parent_gl_functions::gl__EnableVertexAttribArray(m_mgr.g_one_pos_location());
+    parent_gl_functions::gl__DrawArrays(a_mode,0,(GLsizei)num);
+    parent_gl_functions::gl__DisableVertexAttribArray(m_mgr.g_one_pos_location());
+    parent_gl_functions::gl__BindVertexArray(0);
+
+    ////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////
+    parent_gl_functions::gl__DeleteBuffers(1,&vbo_id);
+    parent_gl_functions::gl__DeleteVertexArrays(1,&vao_id);
+
+#else //not TOOLS_USE_GL_VERSION_3_2
+
 #ifdef _WIN32
     float* vp = new float[num*3];
     if(!vp) return;
@@ -36,17 +88,19 @@ public:
       *pos = *pda;pos++;pda++;
       *pos = 0;pos++; //Windows GL needs a z = 0.
     }
-    ::glEnableClientState(GL_VERTEX_ARRAY);
-    ::glVertexPointer(3,GL_FLOAT,0,vp);
-    ::glDrawArrays(a_mode,0,(GLsizei)num);
-    ::glDisableClientState(GL_VERTEX_ARRAY);
+    parent_gl_functions::gl__EnableClientState(GL_VERTEX_ARRAY);
+    parent_gl_functions::gl__VertexPointer(3,GL_FLOAT,0,vp);
+    parent_gl_functions::gl__DrawArrays(a_mode,0,(GLsizei)num);
+    parent_gl_functions::gl__DisableClientState(GL_VERTEX_ARRAY);
     delete [] vp;
-#else
-    ::glEnableClientState(GL_VERTEX_ARRAY);
-    ::glVertexPointer(2,GL_FLOAT,0,a_xys);
-    ::glDrawArrays(a_mode,0,(GLsizei)num);
-    ::glDisableClientState(GL_VERTEX_ARRAY);
-#endif
+#else //not _WIN32
+    parent_gl_functions::gl__EnableClientState(GL_VERTEX_ARRAY);
+    parent_gl_functions::gl__VertexPointer(2,GL_FLOAT,0,a_xys);
+    parent_gl_functions::gl__DrawArrays(a_mode,0,(GLsizei)num);
+    parent_gl_functions::gl__DisableClientState(GL_VERTEX_ARRAY);
+#endif //not _WIN32
+
+#endif //not TOOLS_USE_GL_VERSION_3_2
   }
 
   virtual void draw_vertex_color_array(tools::gl::mode_t a_mode,size_t a_floatn,const float* a_xyzs,const float* a_rgbas){
@@ -91,74 +145,214 @@ public:
 
     //expect 2*num a_tex_coords.
 
-    ::glEnable(GL_TEXTURE_2D);
+#ifdef TOOLS_USE_GL_VERSION_3_2
+
+    GLuint vao_id = 0;
+    parent_gl_functions::gl__GenVertexArrays(1,&vao_id);
+    if(!vao_id) {
+      m_out << "toolx::sg::GL_action_T::draw_vertex_array_texture : glGenVertexArrays failed ()." << std::endl;
+      return;
+    }
+
+    size_t nxyzs = a_floatn;
+
+    parent_gl_functions::gl__BindVertexArray(vao_id);
+    ////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////
+    unsigned int vbo_id = 0;
+    parent_gl_functions::gl__GenBuffers(1,&vbo_id);
+    if(!vbo_id) {
+      m_out << "toolx::sg::GL_action_T::draw_vertex_array_texture : glGenBuffers failed ()." << std::endl;
+      parent_gl_functions::gl__DeleteVertexArrays(1,&vao_id);
+      return;
+    }
+   {size_t ntcs = num*2;
+    size_t ngsto = nxyzs+ntcs;
+    std::vector<float> gsto_data;
+    gsto_data.resize(ngsto);
+    float* _gsto_data = gsto_data.data();
+    ::memcpy(_gsto_data,a_xyzs,a_floatn*sizeof(float));
+    ::memcpy(_gsto_data+nxyzs,a_tex_coords,ntcs*sizeof(float));
+
+    parent_gl_functions::gl__BindBuffer(GL_ARRAY_BUFFER,vbo_id);
+    parent_gl_functions::gl__BufferData(GL_ARRAY_BUFFER,gsto_data.size()*sizeof(float),_gsto_data,GL_STATIC_DRAW);
+    parent_gl_functions::gl__BindBuffer(GL_ARRAY_BUFFER,0);
+    ////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////
+    parent_gl_functions::gl__BindVertexArray(0);}
+
+    ////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////
+    parent_gl_functions::gl__BindVertexArray(vao_id);
+    parent_gl_functions::gl__BindBuffer(GL_ARRAY_BUFFER,vbo_id);
+   {char* pos_xyzs = NULL;
+    char* pos_tcs = NULL;pos_tcs += nxyzs*sizeof(float);
+    parent_gl_functions::gl__VertexAttribPointer(m_mgr.g_one_pos_location(),3,GL_FLOAT,GL_FALSE,0,pos_xyzs);
+    parent_gl_functions::gl__VertexAttribPointer(m_mgr.g_one_tex_location(),2,GL_FLOAT,GL_FALSE,0,pos_tcs);}
+    parent_gl_functions::gl__BindBuffer(GL_ARRAY_BUFFER,0);
+    parent_gl_functions::gl__BindVertexArray(0);
+
+    m_mgr.bind_gsto(a_tex);
+    parent_gl_functions::gl__BindVertexArray(vao_id);
+    parent_gl_functions::gl__Uniform1i(m_mgr.g_tex_on_location(),1);
+    parent_gl_functions::gl__Uniform1i(m_mgr.g_sampler_location(),0);
+    parent_gl_functions::gl__EnableVertexAttribArray(m_mgr.g_one_pos_location());
+    parent_gl_functions::gl__EnableVertexAttribArray(m_mgr.g_one_tex_location());
+    parent_gl_functions::gl__DrawArrays(a_mode,0,(GLsizei)num);
+    parent_gl_functions::gl__DisableVertexAttribArray(m_mgr.g_one_pos_location());
+    parent_gl_functions::gl__DisableVertexAttribArray(m_mgr.g_one_tex_location());
+    parent_gl_functions::gl__Uniform1i(m_mgr.g_tex_on_location(),0);
+    parent_gl_functions::gl__BindVertexArray(0);
+    parent_gl_functions::gl__BindTexture(GL_TEXTURE_2D,0);
+
+    ////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////
+    parent_gl_functions::gl__DeleteBuffers(1,&vbo_id);
+    parent_gl_functions::gl__DeleteVertexArrays(1,&vao_id);
+
+#else //not TOOLS_USE_GL_VERSION_3_2
+    parent_gl_functions::gl__Enable(GL_TEXTURE_2D);
 
     m_mgr.bind_gsto(a_tex);
 
-    ::glEnableClientState(GL_VERTEX_ARRAY);
-    ::glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-    ::glVertexPointer(3,GL_FLOAT,0,a_xyzs);
-    ::glTexCoordPointer(2,GL_FLOAT,0,a_tex_coords);
-    ::glDrawArrays(a_mode,0,(GLsizei)num);
-    ::glDisableClientState(GL_VERTEX_ARRAY);
-    ::glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+    parent_gl_functions::gl__EnableClientState(GL_VERTEX_ARRAY);
+    parent_gl_functions::gl__EnableClientState(GL_TEXTURE_COORD_ARRAY);
+    parent_gl_functions::gl__VertexPointer(3,GL_FLOAT,0,a_xyzs);
+    parent_gl_functions::gl__TexCoordPointer(2,GL_FLOAT,0,a_tex_coords);
+    parent_gl_functions::gl__DrawArrays(a_mode,0,(GLsizei)num);
+    parent_gl_functions::gl__DisableClientState(GL_VERTEX_ARRAY);
+    parent_gl_functions::gl__DisableClientState(GL_TEXTURE_COORD_ARRAY);
 
-    ::glBindTexture(GL_TEXTURE_2D,0);
+    parent_gl_functions::gl__BindTexture(GL_TEXTURE_2D,0);
 
-    ::glDisable(GL_TEXTURE_2D);
+    parent_gl_functions::gl__Disable(GL_TEXTURE_2D);
+#endif //not TOOLS_USE_GL_VERSION_3_2
   }
 
   virtual void draw_vertex_normal_array_texture(tools::gl::mode_t a_mode,
-                                         size_t a_floatn,
-                                         const float* a_xyzs,
-                                         const float* a_nms,
-                                         gstoid a_tex,
-                                         const float* a_tex_coords) {
+                                                size_t a_floatn,
+                                                const float* a_xyzs,
+                                                const float* a_nms,
+                                                gstoid a_tex,
+                                                const float* a_tex_coords) {
     size_t num = a_floatn/3;
     if(!num) return;
 
     //expect 2*num a_tex_coords.
 
-    ::glEnable(GL_TEXTURE_2D);
+#ifdef TOOLS_USE_GL_VERSION_3_2
+
+    GLuint vao_id = 0;
+    parent_gl_functions::gl__GenVertexArrays(1,&vao_id);
+    if(!vao_id) {
+      m_out << "toolx::sg::GL_action_T::draw_vertex_normal_array_texture : glGenVertexArrays failed ()." << std::endl;
+      return;
+    }
+
+    size_t nxyzs = a_floatn;
+    size_t nnms = nxyzs;
+
+    parent_gl_functions::gl__BindVertexArray(vao_id);
+    ////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////
+    unsigned int vbo_id = 0;
+    parent_gl_functions::gl__GenBuffers(1,&vbo_id);
+    if(!vbo_id) {
+      m_out << "toolx::sg::GL_action_T::draw_vertex_normal_array_texture : glGenBuffers failed ()." << std::endl;
+      parent_gl_functions::gl__DeleteVertexArrays(1,&vao_id);
+      return;
+    }
+   {size_t ntcs = num*2;
+    size_t ngsto = nxyzs+nnms+ntcs;
+    std::vector<float> gsto_data;
+    gsto_data.resize(ngsto);
+    float* _gsto_data = gsto_data.data();
+    ::memcpy(_gsto_data,a_xyzs,nxyzs*sizeof(float));
+    ::memcpy(_gsto_data+nxyzs,a_nms,nnms*sizeof(float));
+    ::memcpy(_gsto_data+nxyzs+nnms,a_tex_coords,ntcs*sizeof(float));
+
+    parent_gl_functions::gl__BindBuffer(GL_ARRAY_BUFFER,vbo_id);
+    parent_gl_functions::gl__BufferData(GL_ARRAY_BUFFER,gsto_data.size()*sizeof(float),_gsto_data,GL_STATIC_DRAW);
+    parent_gl_functions::gl__BindBuffer(GL_ARRAY_BUFFER,0);
+    ////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////
+    parent_gl_functions::gl__BindVertexArray(0);}
+
+    ////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////
+    parent_gl_functions::gl__BindVertexArray(vao_id);
+    parent_gl_functions::gl__BindBuffer(GL_ARRAY_BUFFER,vbo_id);
+   {char* pos_xyzs = NULL;
+    char* pos_nms = NULL;pos_nms += nxyzs*sizeof(float);
+    char* pos_tcs = NULL;pos_tcs += (nxyzs+nnms)*sizeof(float);
+    parent_gl_functions::gl__VertexAttribPointer(m_mgr.g_one_pos_location(),3,GL_FLOAT,GL_FALSE,0,pos_xyzs);
+    parent_gl_functions::gl__VertexAttribPointer(m_mgr.g_one_normal_location(),3,GL_FLOAT,GL_FALSE,0,pos_nms);
+    parent_gl_functions::gl__VertexAttribPointer(m_mgr.g_one_tex_location(),2,GL_FLOAT,GL_FALSE,0,pos_tcs);
+    parent_gl_functions::gl__BindBuffer(GL_ARRAY_BUFFER,0);
+    parent_gl_functions::gl__BindVertexArray(0);}
+
+    m_mgr.bind_gsto(a_tex);
+    parent_gl_functions::gl__BindVertexArray(vao_id);
+    parent_gl_functions::gl__Uniform1i(m_mgr.g_tex_on_location(),1);
+    parent_gl_functions::gl__Uniform1i(m_mgr.g_sampler_location(),0);
+    parent_gl_functions::gl__Uniform1i(m_mgr.g_pos_normal_location(),true);
+    parent_gl_functions::gl__EnableVertexAttribArray(m_mgr.g_one_pos_location());
+    parent_gl_functions::gl__EnableVertexAttribArray(m_mgr.g_one_normal_location());
+    parent_gl_functions::gl__EnableVertexAttribArray(m_mgr.g_one_tex_location());
+    parent_gl_functions::gl__DrawArrays(a_mode,0,(GLsizei)num);
+    parent_gl_functions::gl__DisableVertexAttribArray(m_mgr.g_one_pos_location());
+    parent_gl_functions::gl__DisableVertexAttribArray(m_mgr.g_one_normal_location());
+    parent_gl_functions::gl__DisableVertexAttribArray(m_mgr.g_one_tex_location());
+    parent_gl_functions::gl__Uniform1i(m_mgr.g_tex_on_location(),0);
+    parent_gl_functions::gl__Uniform1i(m_mgr.g_pos_normal_location(),false);
+    parent_gl_functions::gl__BindVertexArray(0);
+    parent_gl_functions::gl__BindTexture(GL_TEXTURE_2D,0);
+
+    ////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////
+    parent_gl_functions::gl__DeleteVertexArrays(1,&vao_id);
+    parent_gl_functions::gl__DeleteBuffers(1,&vbo_id);
+
+#else //not TOOLS_USE_GL_VERSION_3_2
+    parent_gl_functions::gl__Enable(GL_TEXTURE_2D);
 
     m_mgr.bind_gsto(a_tex);
 
-    ::glEnableClientState(GL_VERTEX_ARRAY);
-    ::glEnableClientState(GL_NORMAL_ARRAY);
-    ::glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-    ::glVertexPointer(3,GL_FLOAT,0,a_xyzs);
-    ::glNormalPointer(GL_FLOAT,0,a_nms);
-    ::glTexCoordPointer(2,GL_FLOAT,0,a_tex_coords);
-    ::glDrawArrays(a_mode,0,(GLsizei)num);
-    ::glDisableClientState(GL_NORMAL_ARRAY);
-    ::glDisableClientState(GL_VERTEX_ARRAY);
-    ::glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+    parent_gl_functions::gl__EnableClientState(GL_VERTEX_ARRAY);
+    parent_gl_functions::gl__EnableClientState(GL_NORMAL_ARRAY);
+    parent_gl_functions::gl__EnableClientState(GL_TEXTURE_COORD_ARRAY);
+    parent_gl_functions::gl__VertexPointer(3,GL_FLOAT,0,a_xyzs);
+    parent_gl_functions::gl__NormalPointer(GL_FLOAT,0,a_nms);
+    parent_gl_functions::gl__TexCoordPointer(2,GL_FLOAT,0,a_tex_coords);
+    parent_gl_functions::gl__DrawArrays(a_mode,0,(GLsizei)num);
+    parent_gl_functions::gl__DisableClientState(GL_NORMAL_ARRAY);
+    parent_gl_functions::gl__DisableClientState(GL_VERTEX_ARRAY);
+    parent_gl_functions::gl__DisableClientState(GL_TEXTURE_COORD_ARRAY);
 
-    ::glBindTexture(GL_TEXTURE_2D,0);
+    parent_gl_functions::gl__BindTexture(GL_TEXTURE_2D,0);
 
-    ::glDisable(GL_TEXTURE_2D);
+    parent_gl_functions::gl__Disable(GL_TEXTURE_2D);
+#endif //not TOOLS_USE_GL_VERSION_3_2
   }
 
   /////////////////////////////////////////////////////////////////
-  /// VBO /////////////////////////////////////////////////////////
+  /// gsto ////////////////////////////////////////////////////////
   /////////////////////////////////////////////////////////////////
 
   virtual void begin_gsto(gstoid a_id) {
     switch(m_mgr.get_gsto_mode()){
 
     case tools::sg::gsto_gl_vbo:{
-#ifdef TOOLX_HAS_GL_VBO
       m_mgr.bind_gsto(a_id);
-#endif
       }break;
 
     case tools::sg::gsto_gl_list:{
-#ifdef TOOLX_HAS_GL_LIST
+#ifndef TOOLS_USE_GL_VERSION_3_2
       m_gsto = a_id;
       m_created = false;
       m_gl_id = m_mgr.gsto_gl_list_id(a_id,m_created);
       if(m_gl_id && m_created) {
-        ::glNewList(m_gl_id,GL_COMPILE);
+        parent_gl_functions::gl__NewList(m_gl_id,GL_COMPILE);
       }
 #endif
       }break;
@@ -173,17 +367,15 @@ public:
     switch(m_mgr.get_gsto_mode()){
 
     case tools::sg::gsto_gl_vbo:{
-#ifdef TOOLX_HAS_GL_VBO
-      ::glBindBuffer(GL_ARRAY_BUFFER,0);
-#endif
+      m_mgr.unbind_gsto();
       }break;
 
     case tools::sg::gsto_gl_list:{
-#ifdef TOOLX_HAS_GL_LIST
+#ifndef TOOLS_USE_GL_VERSION_3_2
       if(m_gl_id && m_created) {
-        ::glEndList();
+        parent_gl_functions::gl__EndList();
       }
-      if(m_gl_id) ::glCallList(m_gl_id);
+      if(m_gl_id) parent_gl_functions::gl__CallList(m_gl_id);
       m_created = false;
       m_gl_id = 0;
       m_gsto = 0;
@@ -202,23 +394,24 @@ public:
     switch(m_mgr.get_gsto_mode()){
 
     case tools::sg::gsto_gl_vbo:{
-#ifdef TOOLX_HAS_GL_VBO
-      _draw_v(a_mode,a_elems,(char*)NULL+a_pos_xyzs);
+#ifdef TOOLS_USE_GL_VERSION_3_2
+      char* pos_xyzs = NULL;pos_xyzs += a_pos_xyzs;
+      _draw_shader_v(a_mode,a_elems,pos_xyzs);
 #endif
       }break;
 
     case tools::sg::gsto_gl_list:{
-#ifdef TOOLX_HAS_GL_LIST
+#ifndef TOOLS_USE_GL_VERSION_3_2
       float* buffer = m_mgr.gsto_data(m_gsto);
       if(!buffer) return;
-      void* pos_xyzs = (char*)buffer+a_pos_xyzs;
+      char* pos_xyzs = (char*)buffer;pos_xyzs += a_pos_xyzs;
       if(m_gl_id && m_created) {
-        ::glBegin(a_mode);
+        parent_gl_functions::gl__Begin(a_mode);
         float* pos = (float*)pos_xyzs;
         for(size_t index=0;index<a_elems;index++,pos+=3) {
-          ::glVertex3f(*(pos+0),*(pos+1),*(pos+2));
+          parent_gl_functions::gl__Vertex3f(*(pos+0),*(pos+1),*(pos+2));
         }
-        ::glEnd();
+        parent_gl_functions::gl__End();
       }
 #endif
       }break;
@@ -226,7 +419,7 @@ public:
     case tools::sg::gsto_memory:{
       float* buffer = m_mgr.gsto_data(m_gsto);
       if(!buffer) return;
-      void* pos_xyzs = (char*)buffer+a_pos_xyzs;
+      char* pos_xyzs = (char*)buffer;pos_xyzs += a_pos_xyzs;
       _draw_v(a_mode,a_elems,pos_xyzs);
       }break;
     }
@@ -237,26 +430,28 @@ public:
     switch(m_mgr.get_gsto_mode()){
 
     case tools::sg::gsto_gl_vbo:{
-#ifdef TOOLX_HAS_GL_VBO
-      _draw_vc(a_mode,a_elems,(char*)NULL+a_pos_xyzs,(char*)NULL+a_pos_rgbas);
+#ifdef TOOLS_USE_GL_VERSION_3_2
+      char* pos_xyzs = NULL;pos_xyzs += a_pos_xyzs;
+      char* pos_rgbas = NULL;pos_rgbas += a_pos_rgbas;
+      _draw_shader_vc(a_mode,a_elems,pos_xyzs,pos_rgbas);
 #endif
       }break;
 
     case tools::sg::gsto_gl_list:{
-#ifdef TOOLX_HAS_GL_LIST
+#ifndef TOOLS_USE_GL_VERSION_3_2
       float* buffer = m_mgr.gsto_data(m_gsto);
       if(!buffer) return;
-      void* pos_xyzs = (char*)buffer+a_pos_xyzs;
-      void* pos_rgbas = (char*)buffer+a_pos_rgbas;
+      char* pos_xyzs = (char*)buffer;pos_xyzs += a_pos_xyzs;
+      char* pos_rgbas = (char*)buffer;pos_rgbas += a_pos_rgbas;
       if(m_gl_id && m_created) {
-        ::glBegin(a_mode);
+        parent_gl_functions::gl__Begin(a_mode);
         float* pos = (float*)pos_xyzs;
         float* pco = (float*)pos_rgbas;
         for(size_t index=0;index<a_elems;index++,pos+=3,pco+=4) {
-          ::glColor4f (*(pco+0),*(pco+1),*(pco+2),*(pco+3));
-          ::glVertex3f(*(pos+0),*(pos+1),*(pos+2));
+          parent_gl_functions::gl__Color4f (*(pco+0),*(pco+1),*(pco+2),*(pco+3));
+          parent_gl_functions::gl__Vertex3f(*(pos+0),*(pos+1),*(pos+2));
         }
-        ::glEnd();
+        parent_gl_functions::gl__End();
       }
 #endif
       }break;
@@ -264,8 +459,8 @@ public:
     case tools::sg::gsto_memory:{
       float* buffer = m_mgr.gsto_data(m_gsto);
       if(!buffer) return;
-      void* pos_xyzs = (char*)buffer+a_pos_xyzs;
-      void* pos_rgbas = (char*)buffer+a_pos_rgbas;
+      char* pos_xyzs = (char*)buffer;pos_xyzs += a_pos_xyzs;
+      char* pos_rgbas = (char*)buffer;pos_rgbas += a_pos_rgbas;
       _draw_vc(a_mode,a_elems,pos_xyzs,pos_rgbas);
       }break;
     }
@@ -276,24 +471,25 @@ public:
     switch(m_mgr.get_gsto_mode()){
 
     case tools::sg::gsto_gl_vbo:{
-#ifdef TOOLX_HAS_GL_VBO
-      _draw_vn(a_mode,a_elems,(char*)NULL+a_pos_xyzs,(char*)NULL+a_pos_nms);
+#ifdef TOOLS_USE_GL_VERSION_3_2
+      char* pos_xyzs = NULL;pos_xyzs += a_pos_xyzs;
+      char* pos_nms = NULL;pos_nms += a_pos_nms;
+      _draw_shader_vn(a_mode,a_elems,pos_xyzs,pos_nms);
 #endif
       }break;
 
     case tools::sg::gsto_gl_list:{
-#ifdef TOOLX_HAS_GL_LIST
+#ifndef TOOLS_USE_GL_VERSION_3_2
       float* buffer = m_mgr.gsto_data(m_gsto);
       if(!buffer) return;
-      void* pos_xyzs = (char*)buffer+a_pos_xyzs;
-      //void* pos_nms = (char*)buffer+a_pos_nms;
+      char* pos_xyzs = (char*)buffer;pos_xyzs += a_pos_xyzs;
       if(m_gl_id && m_created) {
-        ::glBegin(a_mode);
+        parent_gl_functions::gl__Begin(a_mode);
         float* pos = (float*)pos_xyzs;
         for(size_t index=0;index<a_elems;index++,pos+=3) {
-          ::glVertex3f(*(pos+0),*(pos+1),*(pos+2));
+          parent_gl_functions::gl__Vertex3f(*(pos+0),*(pos+1),*(pos+2));
         }
-        ::glEnd();
+        parent_gl_functions::gl__End();
       }
 #endif
       }break;
@@ -301,8 +497,8 @@ public:
     case tools::sg::gsto_memory:{
       float* buffer = m_mgr.gsto_data(m_gsto);
       if(!buffer) return;
-      void* pos_xyzs = (char*)buffer+a_pos_xyzs;
-      void* pos_nms = (char*)buffer+a_pos_nms;
+      char* pos_xyzs = (char*)buffer;pos_xyzs += a_pos_xyzs;
+      char* pos_nms = (char*)buffer;pos_nms += a_pos_nms;
       _draw_vn(a_mode,a_elems,pos_xyzs,pos_nms);
       }break;
     }
@@ -313,30 +509,33 @@ public:
     switch(m_mgr.get_gsto_mode()){
 
     case tools::sg::gsto_gl_vbo:{
-#ifdef TOOLX_HAS_GL_VBO
-      _draw_vcn(a_mode,a_elems,(char*)NULL+a_pos_xyzs,(char*)NULL+a_pos_rgbas,(char*)NULL+a_pos_nms);
+#ifdef TOOLS_USE_GL_VERSION_3_2
+      char* pos_xyzs = NULL;pos_xyzs += a_pos_xyzs;
+      char* pos_rgbas = NULL;pos_rgbas += a_pos_rgbas;
+      char* pos_nms = NULL;pos_nms += a_pos_nms;
+      _draw_shader_vcn(a_mode,a_elems,pos_xyzs,pos_rgbas,pos_nms);
 #endif
       }break;
 
     case tools::sg::gsto_gl_list:{
-#ifdef TOOLX_HAS_GL_LIST
+#ifndef TOOLS_USE_GL_VERSION_3_2
       float* buffer = m_mgr.gsto_data(m_gsto);
       if(!buffer) return;
-      void* pos_xyzs = (char*)buffer+a_pos_xyzs;
-      void* pos_rgbas = (char*)buffer+a_pos_rgbas;
-      void* pos_nms = (char*)buffer+a_pos_nms;
+      char* pos_xyzs = (char*)buffer;pos_xyzs += a_pos_xyzs;
+      char* pos_rgbas = (char*)buffer;pos_rgbas += a_pos_rgbas;
+      char* pos_nms = (char*)buffer;pos_nms += a_pos_nms;
       if(m_gl_id && m_created) {
-        ::glBegin(a_mode);
+        parent_gl_functions::gl__Begin(a_mode);
         float* pos = (float*)pos_xyzs;
         float* pco = (float*)pos_rgbas;
         float* pnm = (float*)pos_nms;
         for(size_t index=0;index<a_elems;
             index++,pos+=3,pco+=4,pnm+=3) {
-          ::glVertex3f(*(pos+0),*(pos+1),*(pos+2));
-          ::glColor4f (*(pco+0),*(pco+1),*(pco+2),*(pco+3));
-          ::glNormal3f(*(pnm+0),*(pnm+1),*(pnm+2));
+          parent_gl_functions::gl__Vertex3f(*(pos+0),*(pos+1),*(pos+2));
+          parent_gl_functions::gl__Color4f (*(pco+0),*(pco+1),*(pco+2),*(pco+3));
+          parent_gl_functions::gl__Normal3f(*(pnm+0),*(pnm+1),*(pnm+2));
         }
-        ::glEnd();
+        parent_gl_functions::gl__End();
       }
 #endif
       }break;
@@ -344,9 +543,9 @@ public:
     case tools::sg::gsto_memory:{
       float* buffer = m_mgr.gsto_data(m_gsto);
       if(!buffer) return;
-      void* pos_xyzs = (char*)buffer+a_pos_xyzs;
-      void* pos_rgbas = (char*)buffer+a_pos_rgbas;
-      void* pos_nms = (char*)buffer+a_pos_nms;
+      char* pos_xyzs = (char*)buffer;pos_xyzs += a_pos_xyzs;
+      char* pos_rgbas = (char*)buffer;pos_rgbas += a_pos_rgbas;
+      char* pos_nms = (char*)buffer;pos_nms += a_pos_nms;
       _draw_vcn(a_mode,a_elems,pos_xyzs,pos_rgbas,pos_nms);
       }break;
     }
@@ -357,191 +556,247 @@ public:
   /////////////////////////////////////////////////////////////////
 
   virtual void clear_color(float a_r,float a_g,float a_b,float a_a){
-    ::glClearColor(a_r,a_g,a_b,a_a);
-    ::glClear(GL_COLOR_BUFFER_BIT);
+    parent_gl_functions::gl__ClearColor(a_r,a_g,a_b,a_a);
+    parent_gl_functions::gl__Clear(GL_COLOR_BUFFER_BIT);
   }
   virtual void color4f(float a_r,float a_g,float a_b,float a_a){
-    ::glColor4f(a_r,a_g,a_b,a_a);
+#ifdef TOOLS_USE_GL_VERSION_3_2
+    parent_gl_functions::gl__Uniform4f(m_mgr.g_color_location(),a_r,a_g,a_b,a_a);
+#else
+    parent_gl_functions::gl__Color4f(a_r,a_g,a_b,a_a);
+#endif
   }
-  virtual void line_width(float a_v){::glLineWidth(a_v);}
-  virtual void point_size(float a_v){::glPointSize(a_v);}
+  virtual void line_width(float a_v){
+#ifdef TOOLS_USE_GL_VERSION_3_2
+    (void)a_v;
+#else
+    parent_gl_functions::gl__LineWidth(a_v);
+#endif
+  }
+  virtual void point_size(float a_v){
+#ifdef TOOLS_USE_GL_VERSION_3_2
+    parent_gl_functions::gl__Uniform1f(m_mgr.g_point_size_location(),a_v);
+#else
+    parent_gl_functions::gl__PointSize(a_v);
+#endif
+  }
   virtual void set_polygon_offset(bool a_v) {
-    if(a_v) ::glEnable(GL_POLYGON_OFFSET_FILL);
-    else    ::glDisable(GL_POLYGON_OFFSET_FILL);
-    ::glPolygonOffset(1.,1.);
+    if(a_v) parent_gl_functions::gl__Enable(GL_POLYGON_OFFSET_FILL);
+    else    parent_gl_functions::gl__Disable(GL_POLYGON_OFFSET_FILL);
+    parent_gl_functions::gl__PolygonOffset(1.,1.);
   }
   virtual void normal(float a_x,float a_y,float a_z) {
-    ::glNormal3f(a_x,a_y,a_z);
+#ifdef TOOLS_USE_GL_VERSION_3_2
+    parent_gl_functions::gl__Uniform3f(m_mgr.g_normal_location(),a_x,a_y,a_z);
+#else
+    parent_gl_functions::gl__Normal3f(a_x,a_y,a_z);
+#endif
   }
 
   virtual void set_winding(tools::sg::winding_type a_v) {
     if(a_v==tools::sg::winding_ccw)
-      ::glFrontFace(GL_CCW);
+      parent_gl_functions::gl__FrontFace(GL_CCW);
     else
-      ::glFrontFace(GL_CW);
+      parent_gl_functions::gl__FrontFace(GL_CW);
   }
 
   virtual void set_shade_model(tools::sg::shade_type a_v) {
+#ifdef TOOLS_USE_GL_VERSION_3_2
+    (void)a_v;
+#else
     if(a_v==tools::sg::shade_smooth)
-      ::glShadeModel(GL_SMOOTH);
+      parent_gl_functions::gl__ShadeModel(GL_SMOOTH);
     else
-      ::glShadeModel(GL_FLAT);
+      parent_gl_functions::gl__ShadeModel(GL_FLAT);
+#endif
   }
 
   virtual void set_cull_face(bool a_on) {
-    if(a_on) ::glEnable(GL_CULL_FACE);
-    else     ::glDisable(GL_CULL_FACE);
+    if(a_on) parent_gl_functions::gl__Enable(GL_CULL_FACE);
+    else     parent_gl_functions::gl__Disable(GL_CULL_FACE);
   }
 
   virtual void set_point_smooth(bool a_on) {
-    if(a_on) ::glEnable(GL_POINT_SMOOTH);
-    else     ::glDisable(GL_POINT_SMOOTH);
+#ifdef TOOLS_USE_GL_VERSION_3_2
+    (void)a_on;
+#else
+    if(a_on) parent_gl_functions::gl__Enable(GL_POINT_SMOOTH);
+    else     parent_gl_functions::gl__Disable(GL_POINT_SMOOTH);
+#endif
   }
 
   virtual void set_line_smooth(bool a_on) {
-    if(a_on) ::glEnable(GL_LINE_SMOOTH);
-    else     ::glDisable(GL_LINE_SMOOTH);
+#ifdef TOOLS_USE_GL_VERSION_3_2
+    (void)a_on;
+#else
+    if(a_on) parent_gl_functions::gl__Enable(GL_LINE_SMOOTH);
+    else     parent_gl_functions::gl__Disable(GL_LINE_SMOOTH);
+#endif
   }
 
   virtual void set_depth_test(bool a_on) {
-    if(a_on) ::glEnable(GL_DEPTH_TEST);
-    else     ::glDisable(GL_DEPTH_TEST);
+    if(a_on) parent_gl_functions::gl__Enable(GL_DEPTH_TEST);
+    else     parent_gl_functions::gl__Disable(GL_DEPTH_TEST);
   }
 
   virtual void load_proj_matrix(const tools::mat4f& a_mtx) {
-    ::glMatrixMode(GL_PROJECTION);
-    ::glLoadMatrixf(a_mtx.data());
+#ifdef TOOLS_USE_GL_VERSION_3_2
+    m_proj = a_mtx;
+   {tools::mat4f mtx(m_proj);
+    mtx.mul_mtx(m_model);
+    parent_gl_functions::gl__UniformMatrix4fv(m_mgr.g_model_proj_matrix_location(),1,GL_FALSE,mtx.data());}
+#else
+    parent_gl_functions::gl__MatrixMode(GL_PROJECTION);
+    parent_gl_functions::gl__LoadMatrixf(a_mtx.data());
+#endif
   }
 
   virtual void load_model_matrix(const tools::mat4f& a_mtx) {
-    ::glMatrixMode(GL_MODELVIEW);
-    ::glLoadMatrixf(a_mtx.data());
-/*
+#ifdef TOOLS_USE_GL_VERSION_3_2
+    m_model = a_mtx;
+   {tools::mat4f mtx(m_proj);
+    mtx.mul_mtx(m_model);
+    parent_gl_functions::gl__UniformMatrix4fv(m_mgr.g_model_proj_matrix_location(),1,GL_FALSE,mtx.data());}
+
     tools::mat4f tmp(a_mtx);
     tmp.no_translate();
     tools::mat4f normal_matrix;
     if(!tmp.invert(normal_matrix)) {
-      m_out << "toolx::sg::GL_action::render::load_model_matrix :"
+      m_out << "toolx::sg::GL_action_T::load_model_matrix :"
             << " can't invert model matrix."
             << std::endl;
     }
     normal_matrix.transpose();
 
-    tools::mat4f to_check(a_mtx);
-    to_check.no_translate();
-    float fepsilon = 1e-10;
-    if(!normal_matrix.equal_prec(to_check,fepsilon,tools::ffabs)) {
-      mat_dump(m_out,"problem with normal_matrix ",normal_matrix);
-      mat_dump(m_out,"expected",to_check);
-    }
-*/
+    parent_gl_functions::gl__UniformMatrix4fv(m_mgr.g_normal_matrix_location(),1,GL_FALSE,normal_matrix.data());
+#else
+    parent_gl_functions::gl__MatrixMode(GL_MODELVIEW);
+    parent_gl_functions::gl__LoadMatrixf(a_mtx.data());
+#endif
   }
 
-  virtual unsigned int max_lights() {return GL_MAX_LIGHTS;}
+  virtual unsigned int max_lights() {
+#ifdef TOOLS_USE_GL_VERSION_3_2
+    return 1000;
+#else
+    return GL_MAX_LIGHTS;
+#endif
+}
 
   virtual void enable_light(unsigned int a_light,
                             float a_dx,float a_dy,float a_dz,
                             float a_r,float a_g,float a_b,float a_a,
                             float a_ar,float a_ag,float a_ab,float a_aa){
-    ::glEnable(GL_LIGHTING);
+#ifdef TOOLS_USE_GL_VERSION_3_2
+    float dl = ::sqrtf(a_dx*a_dx+a_dy*a_dy+a_dz*a_dz);
+    if(!dl) {
+      m_out << "toolx::sg::GL_action_T::enable_light :"
+            << " null light direction."
+            << std::endl;
+      return;
+    }
+    parent_gl_functions::gl__Uniform1i(m_mgr.g_light_on_location(),1);
+    parent_gl_functions::gl__Uniform3f(m_mgr.g_light_direction_location(),a_dx/dl,a_dy/dl,a_dz/dl);
+    parent_gl_functions::gl__Uniform4f(m_mgr.g_light_color_location(),a_r,a_g,a_b,a_a);
+    parent_gl_functions::gl__Uniform4f(m_mgr.g_light_ambient_location(),a_ar,a_ag,a_ab,a_aa);
+
+    (void)a_light;
+#else //not TOOLS_USE_GL_VERSION_3_2
+    parent_gl_functions::gl__Enable(GL_LIGHTING);
     GLenum light = GL_LIGHT0+a_light;
-    //::printf("debug : GL_MAX_LIGHTS %d\n",GL_MAX_LIGHTS);
 
     float params[4];
     params[0] = -a_dx;
     params[1] = -a_dy;
     params[2] = -a_dz;
     params[3] = 0; //0 tells that it is a directional light.
-    ::glLightfv(light,GL_POSITION,params);
+    parent_gl_functions::gl__Lightfv(light,GL_POSITION,params);
 
-    //params[0] = a_dir[0];
-    //params[1] = a_dir[1];
-    //params[2] = a_dir[2];
-    //::glLightfv(light,GL_SPOT_DIRECTION,params);
 
     params[0] = a_r;
     params[1] = a_g;
     params[2] = a_b;
     params[3] = a_a;
-    ::glLightfv(light,GL_DIFFUSE,params);
-    ::glLightfv(light,GL_SPECULAR,params); //coin/SoDirectionalLight does that.
+    parent_gl_functions::gl__Lightfv(light,GL_DIFFUSE,params);
+    parent_gl_functions::gl__Lightfv(light,GL_SPECULAR,params); //coin/SoDirectionalLight does that.
 
     params[0] = a_ar;
     params[1] = a_ag;
     params[2] = a_ab;
     params[3] = a_aa;
-    ::glLightfv(light,GL_AMBIENT,params); //coin/SoDirectionalLight does that.
+    parent_gl_functions::gl__Lightfv(light,GL_AMBIENT,params); //coin/SoDirectionalLight does that.
 
     // coin/SoDirectionalLight does the below :
-    ::glLightf(light, GL_SPOT_EXPONENT, 0.0);
-    ::glLightf(light, GL_SPOT_CUTOFF, 180.0);
-    ::glLightf(light, GL_CONSTANT_ATTENUATION, 1);
-    ::glLightf(light, GL_LINEAR_ATTENUATION, 0);
-    ::glLightf(light, GL_QUADRATIC_ATTENUATION, 0);
+    parent_gl_functions::gl__Lightf(light, GL_SPOT_EXPONENT, 0.0);
+    parent_gl_functions::gl__Lightf(light, GL_SPOT_CUTOFF, 180.0);
+    parent_gl_functions::gl__Lightf(light, GL_CONSTANT_ATTENUATION, 1);
+    parent_gl_functions::gl__Lightf(light, GL_LINEAR_ATTENUATION, 0);
+    parent_gl_functions::gl__Lightf(light, GL_QUADRATIC_ATTENUATION, 0);
 
-    //::printf("debug : GL_MAX_LIGHTS %d\n",GL_MAX_LIGHTS);
-
-    ::glEnable(light);
+    parent_gl_functions::gl__Enable(light);
+#endif //not TOOLS_USE_GL_VERSION_3_2
   }
 
   virtual void set_lighting(bool a_on) {
-    if(a_on) ::glEnable(GL_LIGHTING);
-    else     ::glDisable(GL_LIGHTING);
+#ifdef TOOLS_USE_GL_VERSION_3_2
+    parent_gl_functions::gl__Uniform1i(m_mgr.g_light_on_location(),a_on);
+#else
+    if(a_on) parent_gl_functions::gl__Enable(GL_LIGHTING);
+    else     parent_gl_functions::gl__Disable(GL_LIGHTING);
+#endif
   }
   virtual void set_blend(bool a_on) {
-    if(a_on) ::glEnable(GL_BLEND);
-    else     ::glDisable(GL_BLEND);
+    if(a_on) parent_gl_functions::gl__Enable(GL_BLEND);
+    else     parent_gl_functions::gl__Disable(GL_BLEND);
   }
 
   virtual void restore_state(unsigned int a_ret_num_light) {
     const tools::sg::state& _state = state();
-    ::glMatrixMode(GL_PROJECTION);
-    ::glLoadMatrixf(_state.m_proj.data());
+#ifdef TOOLS_USE_GL_VERSION_3_2
+    GL_action_T::load_model_matrix(_state.m_proj);
+    GL_action_T::load_model_matrix(_state.m_model);
 
-    ::glMatrixMode(GL_MODELVIEW);
-    ::glLoadMatrixf(_state.m_model.data());
+    set_lighting(_state.m_GL_LIGHTING);
+    set_blend(_state.m_GL_BLEND);
 
-    if(_state.m_GL_LIGHTING) ::glEnable(GL_LIGHTING);
-    else                     ::glDisable(GL_LIGHTING);
+    set_depth_test(_state.m_GL_DEPTH_TEST);
+    set_cull_face(_state.m_GL_CULL_FACE);
+    set_polygon_offset(_state.m_GL_POLYGON_OFFSET_FILL);
 
-    if(_state.m_GL_DEPTH_TEST) ::glEnable(GL_DEPTH_TEST);
-    else                       ::glDisable(GL_DEPTH_TEST);
+    set_winding(_state.m_winding);
 
-    if(_state.m_GL_CULL_FACE) ::glEnable(GL_CULL_FACE);
-    else                      ::glDisable(GL_CULL_FACE);
+    color4f(_state.m_color.r(),_state.m_color.g(),_state.m_color.b(),_state.m_color.a());
 
-    if(_state.m_GL_POINT_SMOOTH) ::glEnable(GL_POINT_SMOOTH);
-    else                         ::glDisable(GL_POINT_SMOOTH);
+    normal(_state.m_normal.x(),_state.m_normal.y(),_state.m_normal.z());
 
-    if(_state.m_GL_LINE_SMOOTH) ::glEnable(GL_LINE_SMOOTH);
-    else                        ::glDisable(GL_LINE_SMOOTH);
+    line_width(_state.m_line_width);
+    point_size(_state.m_point_size);
 
-    if(_state.m_GL_POLYGON_OFFSET_FILL) ::glEnable(GL_POLYGON_OFFSET_FILL);
-    else                                ::glDisable(GL_POLYGON_OFFSET_FILL);
+    (void)a_ret_num_light;
+#else //not TOOLS_USE_GL_VERSION_3_2
+    parent_gl_functions::gl__MatrixMode(GL_PROJECTION);
+    parent_gl_functions::gl__LoadMatrixf(_state.m_proj.data());
 
-    if(_state.m_GL_TEXTURE_2D) ::glEnable(GL_TEXTURE_2D);
-    else                       ::glDisable(GL_TEXTURE_2D);
+    parent_gl_functions::gl__MatrixMode(GL_MODELVIEW);
+    parent_gl_functions::gl__LoadMatrixf(_state.m_model.data());
 
-    if(_state.m_GL_BLEND) ::glEnable(GL_BLEND);
-    else                  ::glDisable(GL_BLEND);
+    if(_state.m_GL_LIGHTING) parent_gl_functions::gl__Enable(GL_LIGHTING);
+    else                     parent_gl_functions::gl__Disable(GL_LIGHTING);
 
-    if(_state.m_winding==tools::sg::winding_ccw) {
-      ::glFrontFace(GL_CCW);
-    } else {
-      ::glFrontFace(GL_CW);
-    }
+    if(_state.m_GL_POINT_SMOOTH) parent_gl_functions::gl__Enable(GL_POINT_SMOOTH);
+    else                         parent_gl_functions::gl__Disable(GL_POINT_SMOOTH);
 
     if(_state.m_shade_model==tools::sg::shade_smooth)
-      ::glShadeModel(GL_SMOOTH);
+      parent_gl_functions::gl__ShadeModel(GL_SMOOTH);
     else
-      ::glShadeModel(GL_FLAT);
+      parent_gl_functions::gl__ShadeModel(GL_FLAT);
 
-    ::glColor4f(_state.m_color.r(),
+    parent_gl_functions::gl__Color4f(_state.m_color.r(),
                 _state.m_color.g(),
                 _state.m_color.b(),
                 _state.m_color.a());
 
-    ::glNormal3f(_state.m_normal.x(),
+    parent_gl_functions::gl__Normal3f(_state.m_normal.x(),
                  _state.m_normal.y(),
                  _state.m_normal.z());
 
@@ -549,114 +804,475 @@ public:
     // The restored state has m_light.
     // We have to glDisable lights with index in [m_light,ret_num_light-1]
     for(unsigned int index=_state.m_light;index<a_ret_num_light;index++) {
-      ::glDisable(GL_LIGHT0+index);
+      parent_gl_functions::gl__Disable(GL_LIGHT0+index);
     }
 
-    ::glLineWidth(_state.m_line_width);
+    if(_state.m_GL_DEPTH_TEST) parent_gl_functions::gl__Enable(GL_DEPTH_TEST);
+    else                       parent_gl_functions::gl__Disable(GL_DEPTH_TEST);
 
-    ::glPointSize(_state.m_point_size);
+    if(_state.m_GL_CULL_FACE) parent_gl_functions::gl__Enable(GL_CULL_FACE);
+    else                      parent_gl_functions::gl__Disable(GL_CULL_FACE);
 
-#if TARGET_OS_IPHONE
-// GL-ES
-#elif defined(ANDROID)
-// GL-ES
-#else
-    ::glDisable(GL_POLYGON_STIPPLE); //CoinGL : reading a .wrl having Material::transparency may enable GL_POLYGON_STIPPLE.
-#endif
+    if(_state.m_GL_LINE_SMOOTH) parent_gl_functions::gl__Enable(GL_LINE_SMOOTH);
+    else                        parent_gl_functions::gl__Disable(GL_LINE_SMOOTH);
+
+    if(_state.m_GL_POLYGON_OFFSET_FILL) parent_gl_functions::gl__Enable(GL_POLYGON_OFFSET_FILL);
+    else                                parent_gl_functions::gl__Disable(GL_POLYGON_OFFSET_FILL);
+
+    if(_state.m_GL_TEXTURE_2D) parent_gl_functions::gl__Enable(GL_TEXTURE_2D);
+    else                       parent_gl_functions::gl__Disable(GL_TEXTURE_2D);
+
+    if(_state.m_GL_BLEND) parent_gl_functions::gl__Enable(GL_BLEND);
+    else                  parent_gl_functions::gl__Disable(GL_BLEND);
+
+    if(_state.m_winding==tools::sg::winding_ccw) {
+      parent_gl_functions::gl__FrontFace(GL_CCW);
+    } else {
+      parent_gl_functions::gl__FrontFace(GL_CW);
+    }
+
+    parent_gl_functions::gl__LineWidth(_state.m_line_width);
+
+    parent_gl_functions::gl__PointSize(_state.m_point_size);
+    parent_gl_functions::gl__Disable(GL_POLYGON_STIPPLE);
+
+#endif //not TOOLS_USE_GL_VERSION_3_2
   }
 
   virtual tools::sg::render_manager& render_manager() {return m_mgr;}
 public:
-  GL_action(GL_manager& a_mgr,std::ostream& a_out,unsigned int a_ww,unsigned int a_wh)
+  GL_action_T(GL_manager_T<GL_FUNCTIONS>& a_mgr,std::ostream& a_out,unsigned int a_ww,unsigned int a_wh)
   :parent(a_out,a_ww,a_wh)
   ,m_mgr(a_mgr)
   ,m_gsto(0)
-#ifdef TOOLX_HAS_GL_LIST
+#ifndef TOOLS_USE_GL_VERSION_3_2
   ,m_created(false)
   ,m_gl_id(0)
 #endif
-  {}
-  virtual ~GL_action(){}
+  {
+    if (!parent_gl_functions::initialize()) {
+      m_out << "toolx::sg::GL_action_T::GL_action_T: warning: parent_gl_functions::initialize() failed." << std::endl;
+    }
+#ifdef TOOLS_USE_GL_VERSION_3_2
+    m_model.set_identity();
+    m_proj.set_identity();
+#endif
+  }
+  virtual ~GL_action_T(){}
 public:
-  GL_action(const GL_action& a_from)
+  GL_action_T(const GL_action_T& a_from)
   :parent(a_from)
+  ,parent_gl_functions(a_from)
   ,m_mgr(a_from.m_mgr)
   ,m_gsto(0)
-#ifdef TOOLX_HAS_GL_LIST
+#ifndef TOOLS_USE_GL_VERSION_3_2
   ,m_created(false)
   ,m_gl_id(0)
 #endif
-  {}
-  GL_action& operator=(const GL_action& a_from){
+  {
+    if (!parent_gl_functions::initialize()) {
+      m_out << "toolx::sg::GL_action_T::GL_action_T: warning: parent_gl_functions::initialize() failed." << std::endl;
+    }
+  }
+  GL_action_T& operator=(const GL_action_T& a_from){
     render_action::operator=(a_from);
     m_gsto = 0;
-#ifdef TOOLX_HAS_GL_LIST
+#ifndef TOOLS_USE_GL_VERSION_3_2
     m_created = false;
     m_gl_id = 0;
 #endif
     return *this;
   }
 protected:
-  void _draw_v(tools::gl::mode_t a_mode,size_t a_elems,const void* a_pos_xyzs){
-    ::glEnableClientState(GL_VERTEX_ARRAY);
-    ::glVertexPointer(3,GL_FLOAT,0,a_pos_xyzs);
-    ::glDrawArrays(a_mode,0,(GLsizei)a_elems);
-    ::glDisableClientState(GL_VERTEX_ARRAY);
+#ifdef TOOLS_USE_GL_VERSION_3_2
+  void _draw_shader_v(tools::gl::mode_t a_mode,size_t a_elems,const void* a_pos_xyzs){
+    if(!a_elems) return;
+
+    parent_gl_functions::gl__VertexAttribPointer(m_mgr.g_one_pos_location(),3,GL_FLOAT,GL_FALSE,0,a_pos_xyzs);
+
+    parent_gl_functions::gl__EnableVertexAttribArray(m_mgr.g_one_pos_location());
+    parent_gl_functions::gl__DrawArrays(a_mode,0,(GLsizei)a_elems);
+    parent_gl_functions::gl__DisableVertexAttribArray(m_mgr.g_one_pos_location());
   }
+#endif
+
+  void _draw_v(tools::gl::mode_t a_mode,size_t a_elems,const void* a_pos_xyzs){
+    if(!a_elems) return;
+#ifdef TOOLS_USE_GL_VERSION_3_2
+
+    GLuint vao_id = 0;
+    parent_gl_functions::gl__GenVertexArrays(1,&vao_id);
+    if(!vao_id) {
+      m_out << "toolx::sg::GL_action_T::_draw_v : glGenVertexArrays failed ()." << std::endl;
+      return;
+    }
+
+    parent_gl_functions::gl__BindVertexArray(vao_id);
+    ////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////
+    unsigned int vbo_id = 0;
+    parent_gl_functions::gl__GenBuffers(1,&vbo_id);
+    if(!vbo_id) {
+      m_out << "toolx::sg::GL_action_T::_draw_v : glGenBuffers failed ()." << std::endl;
+      parent_gl_functions::gl__DeleteVertexArrays(1,&vao_id);
+      return;
+    }
+    std::vector<float> gsto_data;
+    size_t ngsto = a_elems*3; //a_elems points * 3 coords
+    gsto_data.resize(ngsto);
+    float* _gsto_data = gsto_data.data();
+    ::memcpy(_gsto_data,a_pos_xyzs,ngsto*sizeof(float));
+
+    parent_gl_functions::gl__BindBuffer(GL_ARRAY_BUFFER,vbo_id);
+    parent_gl_functions::gl__BufferData(GL_ARRAY_BUFFER,gsto_data.size()*sizeof(float),_gsto_data,GL_STATIC_DRAW);
+    parent_gl_functions::gl__BindBuffer(GL_ARRAY_BUFFER,0);
+    ////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////
+    parent_gl_functions::gl__BindVertexArray(0);
+
+    ////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////
+    parent_gl_functions::gl__BindVertexArray(vao_id);
+    parent_gl_functions::gl__BindBuffer(GL_ARRAY_BUFFER,vbo_id);
+    parent_gl_functions::gl__VertexAttribPointer(m_mgr.g_one_pos_location(),3,GL_FLOAT,GL_FALSE,0,NULL);
+    parent_gl_functions::gl__BindBuffer(GL_ARRAY_BUFFER,0);
+    parent_gl_functions::gl__BindVertexArray(0);
+
+    parent_gl_functions::gl__BindVertexArray(vao_id);
+    parent_gl_functions::gl__EnableVertexAttribArray(m_mgr.g_one_pos_location());
+    parent_gl_functions::gl__DrawArrays(a_mode,0,(GLsizei)a_elems);
+    parent_gl_functions::gl__DisableVertexAttribArray(m_mgr.g_one_pos_location());
+    parent_gl_functions::gl__BindVertexArray(0);
+
+    ////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////
+    parent_gl_functions::gl__DeleteBuffers(1,&vbo_id);
+    parent_gl_functions::gl__DeleteVertexArrays(1,&vao_id);
+
+#else //not TOOLS_USE_GL_VERSION_3_2
+    parent_gl_functions::gl__EnableClientState(GL_VERTEX_ARRAY);
+    parent_gl_functions::gl__VertexPointer(3,GL_FLOAT,0,a_pos_xyzs);
+    parent_gl_functions::gl__DrawArrays(a_mode,0,(GLsizei)a_elems);
+    parent_gl_functions::gl__DisableClientState(GL_VERTEX_ARRAY);
+#endif //not TOOLS_USE_GL_VERSION_3_2
+  }
+
+#ifdef TOOLS_USE_GL_VERSION_3_2
+  void _draw_shader_vc(tools::gl::mode_t a_mode,size_t a_elems,const void* a_pos_xyzs,const void* a_pos_rgbas){
+    if(!a_elems) return;
+
+    parent_gl_functions::gl__VertexAttribPointer(m_mgr.g_one_pos_location(),3,GL_FLOAT,GL_FALSE,0,a_pos_xyzs);
+    parent_gl_functions::gl__VertexAttribPointer(m_mgr.g_one_color_location(),4,GL_FLOAT,GL_FALSE,0,a_pos_rgbas);
+    parent_gl_functions::gl__DrawArrays(a_mode,0,(GLsizei)a_elems);
+
+    parent_gl_functions::gl__Uniform1i(m_mgr.g_pos_color_location(),true);
+    parent_gl_functions::gl__EnableVertexAttribArray(m_mgr.g_one_pos_location());
+    parent_gl_functions::gl__EnableVertexAttribArray(m_mgr.g_one_color_location());
+    parent_gl_functions::gl__DrawArrays(a_mode,0,(GLsizei)a_elems);
+    parent_gl_functions::gl__DisableVertexAttribArray(m_mgr.g_one_pos_location());
+    parent_gl_functions::gl__DisableVertexAttribArray(m_mgr.g_one_color_location());
+    parent_gl_functions::gl__Uniform1i(m_mgr.g_pos_color_location(),false);
+  }
+#endif
 
   void _draw_vc(tools::gl::mode_t a_mode,size_t a_elems,const void* a_pos_xyzs,const void* a_pos_rgbas){
+    if(!a_elems) return;
 
-    ::glEnableClientState(GL_VERTEX_ARRAY);
-    ::glEnableClientState(GL_COLOR_ARRAY);
+#ifdef TOOLS_USE_GL_VERSION_3_2
 
-    ::glVertexPointer(3,GL_FLOAT,0,a_pos_xyzs);
-    ::glColorPointer(4,GL_FLOAT,0,a_pos_rgbas);
+    GLuint vao_id = 0;
+    parent_gl_functions::gl__GenVertexArrays(1,&vao_id);
+    if(!vao_id) {
+      m_out << "toolx::sg::GL_action_T::_draw_vc : glGenVertexArrays failed ()." << std::endl;
+      return;
+    }
 
-    ::glDrawArrays(a_mode,0,(GLsizei)a_elems);
+    parent_gl_functions::gl__BindVertexArray(vao_id);
+    ////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////
+    unsigned int vbo_id = 0;
+    parent_gl_functions::gl__GenBuffers(1,&vbo_id);
+    if(!vbo_id) {
+      m_out << "toolx::sg::GL_action_T::_draw_vc : glGenBuffers failed ()." << std::endl;
+      parent_gl_functions::gl__DeleteVertexArrays(1,&vao_id);
+      return;
+    }
+    std::vector<float> gsto_data;
+    size_t nxyzs = a_elems*3; //a_elems points * 3 coords
+    size_t nrgbas = a_elems*4;
+    size_t ngsto = nxyzs+nrgbas;
+    gsto_data.resize(ngsto);
+    float* _gsto_data = gsto_data.data();
+    ::memcpy(_gsto_data,a_pos_xyzs,nxyzs*sizeof(float));
+    ::memcpy(_gsto_data+nxyzs,a_pos_rgbas,nrgbas*sizeof(float));
 
-    ::glDisableClientState(GL_COLOR_ARRAY);
-    ::glDisableClientState(GL_VERTEX_ARRAY);
+    parent_gl_functions::gl__BindBuffer(GL_ARRAY_BUFFER,vbo_id);
+    parent_gl_functions::gl__BufferData(GL_ARRAY_BUFFER,gsto_data.size()*sizeof(float),_gsto_data,GL_STATIC_DRAW);
+    parent_gl_functions::gl__BindBuffer(GL_ARRAY_BUFFER,0);
+    ////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////
+    parent_gl_functions::gl__BindVertexArray(0);
+
+    ////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////
+    parent_gl_functions::gl__BindVertexArray(vao_id);
+    parent_gl_functions::gl__BindBuffer(GL_ARRAY_BUFFER,vbo_id);
+    char* pos_xyzs = NULL;
+    char* pos_rgbas = NULL;pos_rgbas += nxyzs*sizeof(float);
+    parent_gl_functions::gl__VertexAttribPointer(m_mgr.g_one_pos_location(),3,GL_FLOAT,GL_FALSE,0,pos_xyzs);
+    parent_gl_functions::gl__VertexAttribPointer(m_mgr.g_one_color_location(),4,GL_FLOAT,GL_FALSE,0,pos_rgbas);
+    parent_gl_functions::gl__DrawArrays(a_mode,0,(GLsizei)a_elems);
+    parent_gl_functions::gl__BindBuffer(GL_ARRAY_BUFFER,0);
+    parent_gl_functions::gl__BindVertexArray(0);
+
+    parent_gl_functions::gl__BindVertexArray(vao_id);
+    parent_gl_functions::gl__Uniform1i(m_mgr.g_pos_color_location(),true);
+    parent_gl_functions::gl__EnableVertexAttribArray(m_mgr.g_one_pos_location());
+    parent_gl_functions::gl__EnableVertexAttribArray(m_mgr.g_one_color_location());
+    parent_gl_functions::gl__DrawArrays(a_mode,0,(GLsizei)a_elems);
+    parent_gl_functions::gl__DisableVertexAttribArray(m_mgr.g_one_pos_location());
+    parent_gl_functions::gl__DisableVertexAttribArray(m_mgr.g_one_color_location());
+    parent_gl_functions::gl__Uniform1i(m_mgr.g_pos_color_location(),false);
+    parent_gl_functions::gl__BindVertexArray(0);
+
+    ////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////
+    parent_gl_functions::gl__DeleteBuffers(1,&vbo_id);
+    parent_gl_functions::gl__DeleteVertexArrays(1,&vao_id);
+
+#else //not TOOLS_USE_GL_VERSION_3_2
+    parent_gl_functions::gl__EnableClientState(GL_VERTEX_ARRAY);
+    parent_gl_functions::gl__EnableClientState(GL_COLOR_ARRAY);
+
+    parent_gl_functions::gl__VertexPointer(3,GL_FLOAT,0,a_pos_xyzs);
+    parent_gl_functions::gl__ColorPointer(4,GL_FLOAT,0,a_pos_rgbas);
+
+    parent_gl_functions::gl__DrawArrays(a_mode,0,(GLsizei)a_elems);
+
+    parent_gl_functions::gl__DisableClientState(GL_COLOR_ARRAY);
+    parent_gl_functions::gl__DisableClientState(GL_VERTEX_ARRAY);
+#endif //not TOOLS_USE_GL_VERSION_3_2
   }
+
+#ifdef TOOLS_USE_GL_VERSION_3_2
+  void _draw_shader_vn(tools::gl::mode_t a_mode,size_t a_elems,const void* a_pos_xyzs,const void* a_pos_nms){
+    if(!a_elems) return;
+
+    parent_gl_functions::gl__VertexAttribPointer(m_mgr.g_one_pos_location(),3,GL_FLOAT,GL_FALSE,0,a_pos_xyzs);
+    parent_gl_functions::gl__VertexAttribPointer(m_mgr.g_one_normal_location(),3,GL_FLOAT,GL_FALSE,0,a_pos_nms);
+
+    parent_gl_functions::gl__Uniform1i(m_mgr.g_pos_normal_location(),true);
+    parent_gl_functions::gl__EnableVertexAttribArray(m_mgr.g_one_pos_location());
+    parent_gl_functions::gl__EnableVertexAttribArray(m_mgr.g_one_normal_location());
+    parent_gl_functions::gl__DrawArrays(a_mode,0,(GLsizei)a_elems);
+    parent_gl_functions::gl__DisableVertexAttribArray(m_mgr.g_one_pos_location());
+    parent_gl_functions::gl__DisableVertexAttribArray(m_mgr.g_one_normal_location());
+    parent_gl_functions::gl__Uniform1i(m_mgr.g_pos_normal_location(),false);
+  }
+#endif
 
   void _draw_vn(tools::gl::mode_t a_mode,size_t a_elems,const void* a_pos_xyzs,const void* a_pos_nms){
-    ::glEnableClientState(GL_VERTEX_ARRAY);
-    ::glEnableClientState(GL_NORMAL_ARRAY);
+    if(!a_elems) return;
 
-    ::glVertexPointer(3,GL_FLOAT,0,a_pos_xyzs);
-    ::glNormalPointer(GL_FLOAT,0,a_pos_nms);
+#ifdef TOOLS_USE_GL_VERSION_3_2
 
-    ::glDrawArrays(a_mode,0,(GLsizei)a_elems);
+    GLuint vao_id = 0;
+    parent_gl_functions::gl__GenVertexArrays(1,&vao_id);
+    if(!vao_id) {
+      m_out << "toolx::sg::GL_action_T::_draw_vn : glGenVertexArrays failed ()." << std::endl;
+      return;
+    }
 
-    ::glDisableClientState(GL_NORMAL_ARRAY);
-    ::glDisableClientState(GL_VERTEX_ARRAY);
+    parent_gl_functions::gl__BindVertexArray(vao_id);
+    ////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////
+    unsigned int vbo_id = 0;
+    parent_gl_functions::gl__GenBuffers(1,&vbo_id);
+    if(!vbo_id) {
+      m_out << "toolx::sg::GL_action_T::_draw_vn : glGenBuffers failed ()." << std::endl;
+      parent_gl_functions::gl__DeleteVertexArrays(1,&vao_id);
+      return;
+    }
+    size_t nxyzs = a_elems*3; //a_elems points * 3 coords
+   {std::vector<float> gsto_data;
+    size_t nnms = nxyzs;
+    size_t ngsto = nxyzs+nnms;
+    gsto_data.resize(ngsto);
+    float* _gsto_data = gsto_data.data();
+    ::memcpy(_gsto_data,a_pos_xyzs,nxyzs*sizeof(float));
+    ::memcpy(_gsto_data+nxyzs,a_pos_nms,nnms*sizeof(float));
+
+    parent_gl_functions::gl__BindBuffer(GL_ARRAY_BUFFER,vbo_id);
+    parent_gl_functions::gl__BufferData(GL_ARRAY_BUFFER,gsto_data.size()*sizeof(float),_gsto_data,GL_STATIC_DRAW);
+    parent_gl_functions::gl__BindBuffer(GL_ARRAY_BUFFER,0);
+    ////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////
+    parent_gl_functions::gl__BindVertexArray(0);}
+
+    ////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////
+   {char* pos_xyzs = NULL;
+    char* pos_nms = NULL;pos_nms += nxyzs*sizeof(float);
+    parent_gl_functions::gl__BindVertexArray(vao_id);
+    parent_gl_functions::gl__BindBuffer(GL_ARRAY_BUFFER,vbo_id);
+    parent_gl_functions::gl__VertexAttribPointer(m_mgr.g_one_pos_location(),3,GL_FLOAT,GL_FALSE,0,pos_xyzs);
+    parent_gl_functions::gl__VertexAttribPointer(m_mgr.g_one_normal_location(),3,GL_FLOAT,GL_FALSE,0,pos_nms);
+    parent_gl_functions::gl__BindBuffer(GL_ARRAY_BUFFER,0);
+    parent_gl_functions::gl__BindVertexArray(0);}
+
+    parent_gl_functions::gl__BindVertexArray(vao_id);
+    parent_gl_functions::gl__Uniform1i(m_mgr.g_pos_normal_location(),true);
+    parent_gl_functions::gl__EnableVertexAttribArray(m_mgr.g_one_pos_location());
+    parent_gl_functions::gl__EnableVertexAttribArray(m_mgr.g_one_normal_location());
+    parent_gl_functions::gl__DrawArrays(a_mode,0,(GLsizei)a_elems);
+    parent_gl_functions::gl__DisableVertexAttribArray(m_mgr.g_one_pos_location());
+    parent_gl_functions::gl__DisableVertexAttribArray(m_mgr.g_one_normal_location());
+    parent_gl_functions::gl__Uniform1i(m_mgr.g_pos_normal_location(),false);
+    parent_gl_functions::gl__BindVertexArray(0);
+
+    parent_gl_functions::gl__DeleteBuffers(1,&vbo_id);
+    parent_gl_functions::gl__DeleteVertexArrays(1,&vao_id);
+
+#else //not TOOLS_USE_GL_VERSION_3_2
+    parent_gl_functions::gl__EnableClientState(GL_VERTEX_ARRAY);
+    parent_gl_functions::gl__EnableClientState(GL_NORMAL_ARRAY);
+
+    parent_gl_functions::gl__VertexPointer(3,GL_FLOAT,0,a_pos_xyzs);
+    parent_gl_functions::gl__NormalPointer(GL_FLOAT,0,a_pos_nms);
+
+    parent_gl_functions::gl__DrawArrays(a_mode,0,(GLsizei)a_elems);
+
+    parent_gl_functions::gl__DisableClientState(GL_NORMAL_ARRAY);
+    parent_gl_functions::gl__DisableClientState(GL_VERTEX_ARRAY);
+#endif //not TOOLS_USE_GL_VERSION_3_2
   }
 
+#ifdef TOOLS_USE_GL_VERSION_3_2
+  void _draw_shader_vcn(tools::gl::mode_t a_mode,size_t a_elems,const void* a_pos_xyzs,const void* a_pos_rgbas,const void* a_pos_nms){
+    if(!a_elems) return;
+
+    parent_gl_functions::gl__VertexAttribPointer(m_mgr.g_one_pos_location(),3,GL_FLOAT,GL_FALSE,0,a_pos_xyzs);
+    parent_gl_functions::gl__VertexAttribPointer(m_mgr.g_one_normal_location(),3,GL_FLOAT,GL_FALSE,0,a_pos_nms);
+    parent_gl_functions::gl__VertexAttribPointer(m_mgr.g_one_color_location(),4,GL_FLOAT,GL_FALSE,0,a_pos_rgbas);
+
+    parent_gl_functions::gl__Uniform1i(m_mgr.g_pos_color_location(),true);
+    parent_gl_functions::gl__Uniform1i(m_mgr.g_pos_normal_location(),true);
+    parent_gl_functions::gl__EnableVertexAttribArray(m_mgr.g_one_pos_location());
+    parent_gl_functions::gl__EnableVertexAttribArray(m_mgr.g_one_normal_location());
+    parent_gl_functions::gl__EnableVertexAttribArray(m_mgr.g_one_color_location());
+    parent_gl_functions::gl__DrawArrays(a_mode,0,(GLsizei)a_elems);
+    parent_gl_functions::gl__DisableVertexAttribArray(m_mgr.g_one_pos_location());
+    parent_gl_functions::gl__DisableVertexAttribArray(m_mgr.g_one_normal_location());
+    parent_gl_functions::gl__DisableVertexAttribArray(m_mgr.g_one_color_location());
+    parent_gl_functions::gl__Uniform1i(m_mgr.g_pos_normal_location(),false);
+    parent_gl_functions::gl__Uniform1i(m_mgr.g_pos_color_location(),false);
+  }
+#endif
+
   void _draw_vcn(tools::gl::mode_t a_mode,size_t a_elems,const void* a_pos_xyzs,const void* a_pos_rgbas,const void* a_pos_nms){
-    ::glEnableClientState(GL_VERTEX_ARRAY);
-    ::glEnableClientState(GL_COLOR_ARRAY);
-    ::glEnableClientState(GL_NORMAL_ARRAY);
+    if(!a_elems) return;
 
-    ::glVertexPointer(3,GL_FLOAT,0,a_pos_xyzs);
-    ::glColorPointer(4,GL_FLOAT,0,a_pos_rgbas);
-    ::glNormalPointer(GL_FLOAT,0,a_pos_nms);
+#ifdef TOOLS_USE_GL_VERSION_3_2
 
-    ::glDrawArrays(a_mode,0,(GLsizei)a_elems);
+    GLuint vao_id = 0;
+    parent_gl_functions::gl__GenVertexArrays(1,&vao_id);
+    if(!vao_id) {
+      m_out << "toolx::sg::GL_action_T::_draw_vcn : glGenVertexArrays failed ()." << std::endl;
+      return;
+    }
 
-    ::glDisableClientState(GL_COLOR_ARRAY);
-    ::glDisableClientState(GL_NORMAL_ARRAY);
-    ::glDisableClientState(GL_VERTEX_ARRAY);
+    size_t nxyzs = a_elems*3; //a_elems points * 3 coords
+
+    parent_gl_functions::gl__BindVertexArray(vao_id);
+    ////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////
+    unsigned int vbo_id = 0;
+    parent_gl_functions::gl__GenBuffers(1,&vbo_id);
+    if(!vbo_id) {
+      m_out << "toolx::sg::GL_action_T::_draw_vcn : glGenBuffers failed ()." << std::endl;
+      parent_gl_functions::gl__DeleteVertexArrays(1,&vao_id);
+      return;
+    }
+   {std::vector<float> gsto_data;
+    size_t nnms = nxyzs;
+    size_t nrgbas = a_elems*4;
+    size_t ngsto = nxyzs+nnms+nrgbas;
+    gsto_data.resize(ngsto);
+    float* _gsto_data = gsto_data.data();
+    ::memcpy(_gsto_data,a_pos_xyzs,nxyzs*sizeof(float));
+    ::memcpy(_gsto_data+nxyzs,a_pos_nms,nnms*sizeof(float));
+    ::memcpy(_gsto_data+nxyzs+nnms,a_pos_rgbas,nrgbas*sizeof(float));
+
+    parent_gl_functions::gl__BindBuffer(GL_ARRAY_BUFFER,vbo_id);
+    parent_gl_functions::gl__BufferData(GL_ARRAY_BUFFER,gsto_data.size()*sizeof(float),_gsto_data,GL_STATIC_DRAW);
+    parent_gl_functions::gl__BindBuffer(GL_ARRAY_BUFFER,0);}
+    ////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////
+    parent_gl_functions::gl__BindVertexArray(0);
+
+    ////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////
+   {parent_gl_functions::gl__BindVertexArray(vao_id);
+    parent_gl_functions::gl__BindBuffer(GL_ARRAY_BUFFER,vbo_id);
+    char* pos_xyzs = NULL;
+    char* pos_nms = NULL;pos_nms += nxyzs*sizeof(float);
+    char* pos_rgbas = NULL;pos_rgbas += 2*nxyzs*sizeof(float);
+    parent_gl_functions::gl__VertexAttribPointer(m_mgr.g_one_pos_location(),3,GL_FLOAT,GL_FALSE,0,pos_xyzs);
+    parent_gl_functions::gl__VertexAttribPointer(m_mgr.g_one_normal_location(),3,GL_FLOAT,GL_FALSE,0,pos_nms);
+    parent_gl_functions::gl__VertexAttribPointer(m_mgr.g_one_color_location(),4,GL_FLOAT,GL_FALSE,0,pos_rgbas);
+    parent_gl_functions::gl__BindBuffer(GL_ARRAY_BUFFER,0);
+    parent_gl_functions::gl__BindVertexArray(0);}
+
+    parent_gl_functions::gl__BindVertexArray(vao_id);
+    parent_gl_functions::gl__Uniform1i(m_mgr.g_pos_color_location(),true);
+    parent_gl_functions::gl__Uniform1i(m_mgr.g_pos_normal_location(),true);
+    parent_gl_functions::gl__EnableVertexAttribArray(m_mgr.g_one_pos_location());
+    parent_gl_functions::gl__EnableVertexAttribArray(m_mgr.g_one_normal_location());
+    parent_gl_functions::gl__EnableVertexAttribArray(m_mgr.g_one_color_location());
+    parent_gl_functions::gl__DrawArrays(a_mode,0,(GLsizei)a_elems);
+    parent_gl_functions::gl__DisableVertexAttribArray(m_mgr.g_one_pos_location());
+    parent_gl_functions::gl__DisableVertexAttribArray(m_mgr.g_one_normal_location());
+    parent_gl_functions::gl__DisableVertexAttribArray(m_mgr.g_one_color_location());
+    parent_gl_functions::gl__Uniform1i(m_mgr.g_pos_normal_location(),false);
+    parent_gl_functions::gl__Uniform1i(m_mgr.g_pos_color_location(),false);
+    parent_gl_functions::gl__BindVertexArray(0);
+
+    ////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////
+
+    parent_gl_functions::gl__DeleteBuffers(1,&vbo_id);
+    parent_gl_functions::gl__DeleteVertexArrays(1,&vao_id);
+
+#else //not TOOLS_USE_GL_VERSION_3_2
+    parent_gl_functions::gl__EnableClientState(GL_VERTEX_ARRAY);
+    parent_gl_functions::gl__EnableClientState(GL_COLOR_ARRAY);
+    parent_gl_functions::gl__EnableClientState(GL_NORMAL_ARRAY);
+
+    parent_gl_functions::gl__VertexPointer(3,GL_FLOAT,0,a_pos_xyzs);
+    parent_gl_functions::gl__ColorPointer(4,GL_FLOAT,0,a_pos_rgbas);
+    parent_gl_functions::gl__NormalPointer(GL_FLOAT,0,a_pos_nms);
+
+    parent_gl_functions::gl__DrawArrays(a_mode,0,(GLsizei)a_elems);
+
+    parent_gl_functions::gl__DisableClientState(GL_COLOR_ARRAY);
+    parent_gl_functions::gl__DisableClientState(GL_NORMAL_ARRAY);
+    parent_gl_functions::gl__DisableClientState(GL_VERTEX_ARRAY);
+#endif //not TOOLS_USE_GL_VERSION_3_2
   }
 
 protected:
-  GL_manager& m_mgr;
+  GL_manager_T<GL_FUNCTIONS>& m_mgr;
   gstoid m_gsto;
-#ifdef TOOLX_HAS_GL_LIST
+#ifndef TOOLS_USE_GL_VERSION_3_2
   bool m_created;
   gstoid m_gl_id;
+#endif
+#ifdef TOOLS_USE_GL_VERSION_3_2
+  tools::mat4f m_model;
+  tools::mat4f m_proj;
 #endif
 };
 
 }}
-
 
 #endif

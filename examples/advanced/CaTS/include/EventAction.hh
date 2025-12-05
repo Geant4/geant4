@@ -23,18 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// CaTS (Calorimetry and Tracking Simulation)
 //
-
-// ********************************************************************
+// Authors: Hans Wenzel and Soon Yung Jun
+//          (Fermi National Accelerator Laboratory)
 //
-//  CaTS (Calorimetry and Tracking Simulation)
-//
-//  Authors : Hans Wenzel
-//            Soon Yung Jun
-//            (Fermi National Accelerator Laboratory)
-//
-// History
-//   October 18th, 2021 : first implementation
+// History: October 18th, 2021 : first implementation
 //
 // ********************************************************************
 //
@@ -43,21 +37,14 @@
 
 #pragma once
 
-#include <string>
-#include <vector>
 #include "G4UserEventAction.hh"
+
 class G4Event;
 
 class EventAction : public G4UserEventAction
 {
  public:
-  EventAction();
+  EventAction() {}
   ~EventAction() = default;
-  void BeginOfEventAction(const G4Event* anEvent) final;
   void EndOfEventAction(const G4Event* anEvent) final;
-
- private:
-  std::vector<std::string>& split(const std::string& s, char delim,
-                                  std::vector<std::string>& elems);
-  std::vector<std::string> split(const std::string& s, char delim);
 };

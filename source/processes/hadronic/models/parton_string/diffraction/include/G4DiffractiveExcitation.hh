@@ -57,7 +57,8 @@ class G4DiffractiveExcitation {
     virtual G4bool ExciteParticipants( G4VSplitableHadron* aPartner, 
                                        G4VSplitableHadron* bPartner,
                                        G4FTFParameters* theParameters,
-                                       G4ElasticHNScattering* theElastic ) const;
+                                       G4ElasticHNScattering* theElastic,
+				       G4bool& isDiffractive ) const;
 
     virtual void CreateStrings( G4VSplitableHadron* aHadron, 
                                 G4bool isProjectile,

@@ -31,14 +31,15 @@
 #ifndef G4VChannelingFastSimCrystalData_h
 #define G4VChannelingFastSimCrystalData_h 1
 
-#include "G4ios.hh"
 #include "globals.hh"
+#include "G4ios.hh"
 #include "G4ThreeVector.hh"
 #include "Randomize.hh"
 #include "G4LogicalVolume.hh"
 #include "G4Material.hh"
 #include "G4VSolid.hh"
 #include <unordered_map>
+#include "G4PhysicsLinearVector.hh"
 
 #include "G4ChannelingFastSimInterpolation.hh"
 
@@ -111,13 +112,26 @@ public:
 
     ///get crystal curvature
     ///for crystalline undulator the curvature is a function, otherwise it's a constant
-    G4double GetCurv(G4double z){return fCU ? -fCUK2*GetCUx(z) : fCurv;}
+    G4double GetCurv(G4double z)
+        {return fCU ? //select between a crystalline undulator (CU) and a bent crystal
+                (   fImportCrystalGeometry ? //select between a realistic and an ideal CU
+                    fVecCUCurv[fCUID].Value(z) :
+                    -fCUK2*GetCUx(z)) :
+                fCurv;}
 
     ///get crystalline undulator wave function
-    G4double GetCUx(G4double z){return fCUAmplitude*std::cos(fCUK*z+fCUPhase);}
+    G4double GetCUx(G4double z)
+        {return fImportCrystalGeometry ? //select between a realistic and an ideal CU
+                fVecCUx[fCUID].Value(z) :
+                fCUAmplitude*std::cos(fCUK*z+fCUPhase);}
+
     ///get crystalline undulator wave 1st derivative function
-    G4double GetCUtetax(G4double z){
-        return fCU ? -fCUAmplitudeK*std::sin(fCUK*z+fCUPhase) : 0;}
+    G4double GetCUtetax(G4double z)
+        {return fCU ? //select between a crystalline undulator (CU) and a bent crystal
+                (   fImportCrystalGeometry ? //select between a realistic and an ideal CU
+                    fVecCUtetax[fCUID].Value(z) :
+                    -fCUAmplitudeK*std::sin(fCUK*z+fCUPhase)) :
+                0.;}
 
     ///find and upload crystal lattice input files, calculate all the basic values
     ///(to do only once)
@@ -146,6 +160,10 @@ public:
                                            G4double period,
                                            G4double phase,
                                            const G4LogicalVolume *crystallogic);
+
+    ///set importing geometry of a crystalline undulator from file for specific volume
+    void SetCrystallineUndulatorParameters(const G4LogicalVolume *crystallogic,
+                                           const G4String &filename = "CUgeometry.dat");
 
     ///set crystalline undulator parameters (internal function of the model)
     ///for convenience we put amplitude, period and phase in a G4ThreeVector
@@ -296,8 +314,30 @@ protected:
   //Variable to control printout
   G4int fVerbosity = 1;
 
-
 private:
+
+    ///variables for realistic crystalline undulator
+    // flag of custom crystal geometry uploaded from a file
+    G4bool fImportCrystalGeometry = false;
+
+    //crystalline undulator wave function data (realistic crystalline undulator)
+    std::vector <G4PhysicsLinearVector> fVecCUx;
+    //crystalline undulator 1st derivative wave function data (realistic crystalline undulator)
+    std::vector <G4PhysicsLinearVector> fVecCUtetax;
+    //crystalline undulator curvature (realistic crystalline undulator)
+    std::vector <G4PhysicsLinearVector> fVecCUCurv;
+
+    std::unordered_map<G4int, G4ThreeVector> fMapCUAmplitudePeriodPhase;//the map of
+        //AmplitudePeriodPhase
+        //for different logical volumes
+
+    std::unordered_map<G4int, G4bool> fMapImportCrystalGeometry;//the map of
+        //fImportCrystalGeometry flag
+        //for different logical volumes
+
+    std::unordered_map<G4int, G4int> fMapCUID;//the map of the crystalline undulator ID
+
+    G4int fCUID = 0; //current logical volume ID for the crystalline undulator
 
     //exponential integral
     G4double expint(G4double x);    
@@ -310,9 +350,6 @@ private:
     std::unordered_map<G4int, G4double> fMapMiscutAngle;//the map fMiscutAngle
                                                         //for different logical volumes
 
-    std::unordered_map<G4int, G4ThreeVector> fMapCUAmplitudePeriodPhase;//the map of
-                                                        //AmplitudePeriodPhase
-                                                        //for different logical volumes
 
     G4double fChannelingStep=0;// simulation step under the channeling conditions =
                              //channeling oscillation length/fNsteps

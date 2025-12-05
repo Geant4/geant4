@@ -24,8 +24,8 @@
 //
 // G4ModifiedMidpoint implementation
 //
-// Author: Dmitry Sorokin, Google Summer of Code 2016
-// Supervision: John Apostolakis, CERN
+// Author: Dmitry Sorokin (CERN, Google Summer of Code 2016), 07.10.2016
+// Supervision: John Apostolakis (CERN)
 // --------------------------------------------------------------------
 
 #include "G4ModifiedMidpoint.hh"

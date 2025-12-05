@@ -25,20 +25,11 @@ public:
   TOOLS_SCLASS(tools::sg::style_colormap)
 public:
   style_colormap():parent(){
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
   }
   virtual ~style_colormap(){
-#ifdef TOOLS_MEM
-    mem::decrement(s_class().c_str());
-#endif
   }
 public:
   style_colormap(const style_colormap& a_from):parent(a_from){
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
   }
   style_colormap& operator=(const style_colormap& a_from){
     parent::operator=(a_from);
@@ -55,7 +46,7 @@ public:
     return true;
   }
   bool get_color(const std::string& a_s,colorf& a_col) const {
-    tools_mforcit(unsigned int,style_color,*this,it) {
+    for(auto it = (*this).cbegin(); it != (*this).cend(); ++it) {
       if((*it).second.first==a_s) {
         a_col = (*it).second.second;
         return true;
@@ -385,7 +376,6 @@ protected:
       } else {
         new_TColor(colorn,a_rgb[3*n]/255.,a_rgb[3*n+1]/255.,a_rgb[3*n+2]/255.,a_name);
       }
-      //color->SetTitle(color->AsHexString());
     }
   }
 
@@ -403,7 +393,6 @@ protected:
       } else {
         new_TColor(colorn,a_rgb[3*n]/255.,a_rgb[3*n+1]/255.,a_rgb[3*n+2]/255.,a_name);
       }
-      //color->SetTitle(color->AsHexString());
     }
   }
 
@@ -528,7 +517,7 @@ public:
 }}
 
 
-#include "../words"
+#include "../tokenize"
 
 namespace tools {
 namespace sg {

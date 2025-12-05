@@ -126,7 +126,7 @@ namespace G4INCL {
                 particleKineticEnergies.push_back((*p)->getKineticEnergy());
               }
               ProjectileRemnant * const aPR = n->getProjectileRemnant();
-              if(aPR && aPR->getA()>0) {
+              if(aPR && (aPR->getA()>0 || aPR->getA()<0)) {
                 particleMomenta.push_back(aPR->getMomentum());
                 particleKineticEnergies.push_back(aPR->getKineticEnergy());
                 outgoingParticles.push_back(aPR);
@@ -218,7 +218,7 @@ namespace G4INCL {
                 particleCMMomenta.push_back((*p)->getMomentum());
               }
               ProjectileRemnant * const aPR = n->getProjectileRemnant();
-              if(aPR && aPR->getA()>0) {
+              if(aPR && aPR->getA()!=0) {
                 aPR->boost(thePTBoostVector);
                 particleCMMomenta.push_back(aPR->getMomentum());
                 outgoingParticles.push_back(aPR);
@@ -375,10 +375,16 @@ namespace G4INCL {
       /// \brief Initialise the "cascade" for pbar on H2
       void preCascade_pbarH2(ParticleSpecies const &projectileSpecies, const G4double kineticEnergy);
 
-      /// \brief Finalise the "cascade" and clean up for pbar on H1
+      /// \brief Initialise the "cascade" for nbar on H1
+      void preCascade_nbarH1(ParticleSpecies const &projectileSpecies, const G4double kineticEnergy);
+
+      /// \brief Initialise the "cascade" for nbar on H2
+      void preCascade_nbarH2(ParticleSpecies const &projectileSpecies, const G4double kineticEnergy);
+
+      /// \brief Finalise the "cascade" and clean up for pbar/nbar on H1
       void postCascade_pbarH1(ParticleList const &outgoingParticles);
 
-      /// \brief Finalise the "cascade" and clean up for pbar on H2
+      /// \brief Finalise the "cascade" and clean up for pbar/nbar on H2
       void postCascade_pbarH2(ParticleList const &outgoingParticles, ParticleList const &H2Particles);
   };
 }

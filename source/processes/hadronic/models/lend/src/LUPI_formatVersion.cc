@@ -113,6 +113,7 @@ bool FormatVersion::supported( ) const {
     if( m_format == GNDS_formatVersion_1_10Chars ) return( true );
     if( m_format == GNDS_formatVersion_2_0Chars ) return( true );
     if( m_format == GNDS_formatVersion_2_0_LLNL_4Chars ) return( true );
+    if( m_format == GNDS_formatVersion_2_1Chars ) return( true );
 
     return( false );
 }

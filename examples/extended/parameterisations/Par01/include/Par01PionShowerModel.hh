@@ -23,12 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file Par01/include/Par01PionShowerModel.hh
+/// \file Par01PionShowerModel.hh
 /// \brief Definition of the Par01PionShowerModel class
-//
-//
-//
-//
+
 //----------------------------------------------
 // Parameterisation for pi+/pi- producing hits.
 //----------------------------------------------

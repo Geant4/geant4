@@ -38,9 +38,14 @@
 //----------------------------------------------------------------------------
 //
 #include "G4FTFPProtonBuilder.hh"
+#include "G4GeneratorPrecompoundInterface.hh"
+#include "G4FTFModel.hh"
+#include "G4LundStringFragmentation.hh"
+#include "G4ExcitedStringDecay.hh"
+#include "G4QuasiElasticChannel.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4ParticleDefinition.hh"
-#include "G4ParticleTable.hh"
+#include "G4Proton.hh"
 #include "G4ProcessManager.hh"
 #include "G4BGGNucleonInelasticXS.hh"
 #include "G4HadronicParameters.hh"
@@ -76,11 +81,6 @@ Build(G4HadronInelasticProcess * aP)
   theModel->SetMaxEnergy(theMax);
   aP->RegisterMe(theModel);
     
-    aP->AddDataSet(new G4BGGNucleonInelasticXS(G4Proton::Proton()));
-}
-
-G4FTFPProtonBuilder::
-~G4FTFPProtonBuilder() 
-{
+  aP->AddDataSet(new G4BGGNucleonInelasticXS(G4Proton::Proton()));
 }
 

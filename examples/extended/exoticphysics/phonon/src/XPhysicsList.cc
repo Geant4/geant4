@@ -23,10 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file exoticphysics/phonon/src/XPhysicsList.cc
+/// \file XPhysicsList.cc
 /// \brief Implementation of the XPhysicsList class
-//
-//
 
 #include "XPhysicsList.hh"
 

@@ -113,9 +113,9 @@ void Suite::parse( Construction::Settings const &a_construction, HAPI::Node cons
  * @return                      [in]    The index of the node with keyValue *a_keyValue* in *this*.
  ***********************************************************************************************************/
 
-int Suite::operator[]( std::string const &a_keyValue ) const {
+std::size_t Suite::operator[]( std::string const &a_keyValue ) const {
 
-    std::map<std::string, int>::const_iterator iter = m_map.find( a_keyValue );
+    auto iter = m_map.find( a_keyValue );
     if( iter == m_map.end( ) ) {
         throw Exception( "form '" + a_keyValue + "' not in suite " + toXLink( ) + "." );
     }
@@ -131,7 +131,7 @@ int Suite::operator[]( std::string const &a_keyValue ) const {
 
 void Suite::add( Form *a_form ) {
 
-    int i1 = 0;
+    std::size_t i1 = 0;
 
     for( Suite::iterator iter = m_forms.begin( ); iter != m_forms.end( ); ++iter, ++i1 ) {
         if( (*iter)->keyValue( ) == a_form->keyValue( ) ) {
@@ -140,7 +140,7 @@ void Suite::add( Form *a_form ) {
             return;
         }
     }
-    m_map[a_form->keyValue( )] = (int) m_forms.size( );
+    m_map[a_form->keyValue( )] = m_forms.size( );
     m_forms.push_back( a_form );
     a_form->setAncestor( this );
 }
@@ -371,7 +371,7 @@ Form *Suite::findInstanceOfTypeInLineage( Styles::Suite const &a_styles, std::st
  *                                                  for the TNSL data for that boundary.
  ***********************************************************************************************************/
 
-void Suite::modifiedMultiGroupElasticForTNSL( std::map<std::string,std::size_t> a_maximumTNSL_MultiGroupIndex ) {
+void Suite::modifiedMultiGroupElasticForTNSL( std::map<std::string,std::size_t> const &a_maximumTNSL_MultiGroupIndex ) {
 
     for( auto iter = a_maximumTNSL_MultiGroupIndex.begin( ); iter != a_maximumTNSL_MultiGroupIndex.end( ); ++iter ) {
         auto formIter = find( iter->first, true );

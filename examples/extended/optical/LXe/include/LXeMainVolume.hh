@@ -23,10 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file optical/LXe/include/LXeMainVolume.hh
+/// \file LXeMainVolume.hh
 /// \brief Definition of the LXeMainVolume class
-//
+
 #ifndef LXeMainVolume_h
 #define LXeMainVolume_h 1
 

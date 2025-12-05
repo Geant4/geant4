@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file chem6.cc
+/// \brief Main program of the dna/chem6 example
+
 // This example is provided by the Geant4-DNA collaboration
 // chem6 example is derived from chem4 and chem5 examples
 //
@@ -37,8 +40,6 @@
 //
 // Authors: W. G. Shin and S. Incerti (CENBG, France)
 //
-/// \file chem6.cc
-/// \brief Chem6 example
 
 #include "ActionInitialization.hh"
 #include "DetectorConstruction.hh"
@@ -66,18 +67,18 @@ long seed = 0;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-int main(int argc, char** argv)
+int main(const G4int argc, char** argv)
 {
   out.open("Species.txt", std::ios::app);
 
-  G4UIExecutive* ui = 0;
+  const G4UIExecutive* ui = nullptr;
   if (argc == 1) {
     ui = new G4UIExecutive(argc, argv);
   }
 
   G4Random::setTheEngine(new CLHEP::RanecuEngine);
 
-  auto* runManager = G4RunManagerFactory::CreateRunManager();
+  const auto runManager = G4RunManagerFactory::CreateRunManager();
 
   // Set mandatory initialization classes
   runManager->SetUserInitialization(new PhysicsList());
@@ -89,8 +90,8 @@ int main(int argc, char** argv)
 
   if (argc > 1)  // batch mode
   {
-    G4String command = "/control/execute ";
-    G4String fileName = argv[1];
+    const G4String command = "/control/execute ";
+    const G4String fileName = argv[1];
     UI->ApplyCommand(command + fileName);
   }
 

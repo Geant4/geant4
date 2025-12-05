@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file Run.hh
+/// \brief Definition of the Run class
+
 #ifndef RUN_HH
 #define RUN_HH
 

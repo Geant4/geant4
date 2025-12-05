@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file Par04ParallelFullWorld.hh
+/// \brief Definition of the Par04ParallelFullWorld class
+
 #ifndef PAR04PARALLELFULLWORLD_HH
 #define PAR04PARALLELFULLWORLD_HH
 

@@ -25,6 +25,7 @@
 //
 // class G4BlockingList Implementation
 //
+// Author: Paul Kent (CERN), 24.07.1996
 // --------------------------------------------------------------------
 
 #include "G4BlockingList.hh"

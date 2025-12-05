@@ -24,9 +24,7 @@
 // ********************************************************************
 //
 /// \file SAXSRunActionMessenger.cc
-/// \brief Definition of the SAXSRunActionMessenger class
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// \brief Implementation of the SAXSRunActionMessenger class
 
 #include "SAXSRunActionMessenger.hh"
 

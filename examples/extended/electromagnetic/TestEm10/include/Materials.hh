@@ -23,11 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file electromagnetic/TestEm10/include/Materials.hh
+/// \file Materials.hh
 /// \brief Definition of the Materials class
-//
-//
+
 // -------------------------------------------------------------
 //      GEANT 4 class
 //

@@ -114,11 +114,12 @@ public:
                                       const G4double tmax,
                                       const G4double length,
                                       const G4double meanLoss) override;
-  void CorrectionsAlongStep(const G4MaterialCutsCouple*,
-                                    const G4DynamicParticle*,
-                                    const G4double& length,
-                                    G4double& eloss) override;
-  
+  void CorrectionsAlongStep(const G4Material*,
+			    const G4ParticleDefinition*,
+			    const G4double kinEnergy,
+			    const G4double cutEnergy,
+			    const G4double& length,
+			    G4double& eloss) override;
 
   G4double Dispersion(const G4Material*, const G4DynamicParticle*,
            const G4double, const G4double, const G4double) override {return 0.;};

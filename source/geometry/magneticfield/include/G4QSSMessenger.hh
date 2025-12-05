@@ -27,10 +27,10 @@
 //
 // Messenger for QSS Integrator driver
 
-// Author: Leandro Gomez Vidal (Univ. Buenos Aires) - October 2021
+// Author: Leandro Gomez Vidal (Univ. Buenos Aires), October 2021
 // --------------------------------------------------------------------
-#ifndef GEANT4_G4QSSMessenger_H
-#define GEANT4_G4QSSMessenger_H 1
+#ifndef G4QSSMessenger_HH
+#define G4QSSMessenger_HH
 
 #include "G4UIcmdWithABool.hh"
 #include "G4UIcmdWithADouble.hh"
@@ -41,48 +41,75 @@
 #include "G4UIdirectory.hh"
 #include "G4UImessenger.hh"
 
+#include "G4QSSParameters.hh"
+
 class G4QSSMessenger : public G4UImessenger
 {
-   public:
-
-     G4QSSMessenger();
-    ~G4QSSMessenger() override;
-
-     void SetNewValue(G4UIcommand* command, G4String newValues) override;
-
-     /* Hacky - much easier to access G4QSSMessenger from G4QSSDriver than the other way around
-      * Multithreading seems to cause weird stuff with Driver/Stepper instances, maybe making
-      * some thread-local copies or something, outside of construction? */
-
-     static G4QSSMessenger* instance();
-
-     enum StepperSelection
-     {
-       None = 0,
-       TemplatedDoPri,
-       OldRK45,
-       G4QSS2
-     };
-     void selectStepper(const std::string&);
-     StepperSelection selectedStepper();
-
   public:
 
-    G4double dQMin = 0.00001;
-    G4double dQRel = 0.001;
-    G4double trialProposedStepModifier = 1.0;
-    G4int maxSubsteps = 5000;
-    G4int QssOrder = 2;
+    /**
+     * Constructor and Destructor.
+     */
+    G4QSSMessenger();
+    ~G4QSSMessenger() override;
 
+    /**
+     * Applies command to the associated object.
+     */
+    void SetNewValue(G4UIcommand* command, G4String newValues) override;
+
+    /* Hacky - much easier to access G4QSSMessenger from G4QSSDriver than the other way around
+     * Multithreading seems to cause weird stuff with Driver/Stepper instances, maybe making
+     * some thread-local copies or something, outside of construction? */
+
+    static G4QSSMessenger* instance();
+
+    /**
+     * Accessors.
+     */
+    inline G4int GetQssOrder() { return G4QSSParameters::Instance()->GetQssOrder(); }
+    inline G4double Get_dQRel() { return G4QSSParameters::Instance()->Get_dQRel(); }
+    inline G4double Get_dQMin() { return G4QSSParameters::Instance()->Get_dQMin(); }
+    inline G4int GetMaxSubsteps() { return G4QSSParameters::Instance()->GetMaxSubsteps(); }   
+
+    enum StepperSelection
+    {
+      None = 1,
+      G4QSS2 = 2,
+      G4QSS3 = 3,
+      NumMethods,
+    };
+
+    /**
+     * Stepper selection, G4QSS2 or G4QSS3.
+     */
+    void selectStepper(const std::string&);
+    StepperSelection selectedStepper();
+
+    /**
+     * Sets QSS order. To be suppressed in favour of the method
+     * it calls in G4QSSParameters.
+     */
+    G4bool SetQssOrder(G4int order);
+   
   private:
 
-    StepperSelection _selectedStepper;
-    G4UIdirectory* qssCmdDir;
+    /**
+     * Internal methods -- could be suppressed in future.
+     */
+    G4bool Set_dQMin( G4double dvalue );
+    G4bool Set_dQRel( G4double value );
+    G4bool SetMaxSubsteps( G4int number );
+   
+  private:
+
+    StepperSelection _selectedStepper= StepperSelection::None;
+
+    G4UIdirectory*             qssCmdDir;
     G4UIcmdWithADoubleAndUnit* dQMinCmd;
-    G4UIcmdWithADouble* dQRelCmd;
-    G4UIcmdWithAString* stepperSelectorCmd;
-    G4UIcmdWithADouble* trialProposedStepModifierCmd;
-    G4UIcmdWithAnInteger* maxSubstepsCmd;
+    G4UIcmdWithADouble*        dQRelCmd;
+    G4UIcmdWithAString*        stepperSelectorCmd;
+    G4UIcmdWithAnInteger*      maxSubstepsCmd;
 };
 
-#endif  // GEANT4_G4QSSMessenger_H
+#endif

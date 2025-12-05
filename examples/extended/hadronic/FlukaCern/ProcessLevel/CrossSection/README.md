@@ -1,6 +1,8 @@
+\page ExampleCrossSection Example CrossSection
+
 # Description
 
-This example allows the study of G4 cross-sections, 
+This FlukaCern example allows the study of G4 cross-sections,
 and in addition, of the `FLUKA` hadron-nucleus reaction cross sections.
 
 The user can printout any particle-material XS.    

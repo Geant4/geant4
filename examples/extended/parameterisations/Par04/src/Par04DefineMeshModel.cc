@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file Par04DefineMeshModel.cc
+/// \brief Implementation of the Par04DefineMeshModel class
+
 #include "Par04DefineMeshModel.hh"
 
 #include "Par04EventInformation.hh"  // for Par04EventInformation

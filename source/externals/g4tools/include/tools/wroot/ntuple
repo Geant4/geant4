@@ -11,7 +11,6 @@
 #include "tree"
 #include "icol"
 
-#include "../vfind"
 #include "../vmanip"
 #include "../ntuple_booking"
 #include "../sout"
@@ -21,16 +20,10 @@
 // for mpi :
 #include "mpi_create_basket"
 
-#ifdef TOOLS_MEM
-#include "../mem"
-#endif
-
 namespace tools {
 namespace wroot {
 
 class ntuple : public tree {
-public:
-//typedef wroot::icol icol; //for backward compatibility.
 public:
 
 #include "columns.icc"
@@ -476,8 +469,8 @@ public:
               if(!a_impi.unpack(_len)) return false;\
               a__type _mx;\
               if(!a_impi.unpack(_mx)) return false;\
-              _mleaf_->set_length(mx(_len,_mleaf_->length()));\
-              _mleaf_->set_max(mx(_mx,_mleaf_->get_max()));\
+              _mleaf_->set_length(max_of(_len,_mleaf_->length()));\
+              _mleaf_->set_max(max_of(_mx,_mleaf_->get_max()));\
               set_done = true;\
             }}
 
@@ -488,8 +481,8 @@ public:
               if(!a_impi.unpack(_len)) return false;\
               a__type _mx;\
               if(!a_impi.unpack(_mx)) return false;\
-              _mleaf_->set_length(mx(_len,_mleaf_->length()));\
-              _mleaf_->set_max(mx(_mx,_mleaf_->get_max()));\
+              _mleaf_->set_length(max_of(_len,_mleaf_->length()));\
+              _mleaf_->set_max(max_of(_mx,_mleaf_->get_max()));\
               set_done = true;\
             }}
 
@@ -500,8 +493,8 @@ public:
               if(!a_impi.unpack(_len)) return false;\
               int _mx;\
               if(!a_impi.unpack(_mx)) return false;\
-              _mleaf_->set_length(mx(_len,_mleaf_->length()));\
-              _mleaf_->set_max(mx(_mx,_mleaf_->get_max()));\
+              _mleaf_->set_length(max_of(_len,_mleaf_->length()));\
+              _mleaf_->set_max(max_of(_mx,_mleaf_->get_max()));\
               set_done = true;\
             }}
 

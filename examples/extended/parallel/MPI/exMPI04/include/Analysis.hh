@@ -23,9 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// @file Analysis.hh
-/// @brief Define histograms
+/// \file Analysis.hh
+/// \brief Definition of the Analysis class
+///
+/// Define histograms
 
 #ifndef ANALYSIS_MANAGER_H
 #define ANALYSIS_MANAGER_H

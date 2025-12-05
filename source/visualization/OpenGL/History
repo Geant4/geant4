@@ -5,6 +5,38 @@ which **must** added in reverse chronological order (newest at the top).
 It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
+## 2025-10-31 Andrea Barresi (opengl-V11-03-09)
+- G4OpenGLQtViewer
+  - Improved context menu behavior for picking
+  - Added condition to avoid picking with rigth mouse button
+
+## 2025-10-01 John Allison (opengl-V11-03-08)
+- Implement policy for dotsSize and dotsSmooth.
+- G4OpenGLSceneHandler.cc:
+  - BeginPrimitives() and BeginPrimitives2D():
+    - Set OpenGL states to default values:
+      - glClearColor (0.0, 0.0, 0.0, 0.0);
+      - glClearDepth (1.0);
+      - glDisable (GL_LINE_SMOOTH);
+      - glDisable (GL_POLYGON_SMOOTH);
+      - glDisable (GL_POINT_SMOOTH);
+  - AddPrimitive(G4Polymarker):
+    - For dots and circles, glEnable (GL_POINT_SMOOTH);
+- G4OpenGLStoredViewer.cc and G4OpenGLStoredQtViewer.cc:
+  - CompareForKernelVisit():
+    - Include dotsSize and dotsSmooth for decision on kernel visit.
+- G4OpenGLViewer.cc:
+  - InitializeGLView():
+    - Add glDisable (GL_POINT_SMOOTH).
+
+## 2025-06-18 Andrea Barresi (opengl-V11-03-07)
+- G4OpenGLQtViewer
+  - Implemented new virtual methods of G4VViewer: GetWindowSize and GetRenderAreaSize
+  - Modified wheel_rotate function to call ZoomFromMouseWheel of G4VViewer
+  - Updated the moveScene method to work correctly in perspective mode with dolly zoom.
+-G4OpenGLWin32Viewer:
+  - Implemented new virtual methods of G4VViewer: GetWindowSize and GetRenderAreaSize
+  - Modified SetZoom function to call ZoomFromMouseWheel of G4VViewer
 
 ## 2025-05-23 Andrea Barresi (opengl-V11-03-06)
 - G4OpenGLWin32Viewer:

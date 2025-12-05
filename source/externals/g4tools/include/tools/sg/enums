@@ -178,7 +178,6 @@ enum gsto_mode {
 enum layout_policy {
   layout_text_under_image = 0,
   layout_text_at_left_of_image = 1
-  //layout_text_at_right_of_image = 2
 };
 
 enum auto_lut_policy {
@@ -191,7 +190,6 @@ enum draw_type {
   draw_points = 0,
   draw_lines,
   draw_filled
-//  draw_invisible
 };
 
 enum shade_type { //shade_model is a node.

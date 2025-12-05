@@ -25,10 +25,6 @@
 //
 /// \file GammaNuclearPhysicsLEND.cc
 /// \brief Implementation of the GammaNuclearPhysicsLEND class
-//
-//
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "GammaNuclearPhysicsLEND.hh"
 

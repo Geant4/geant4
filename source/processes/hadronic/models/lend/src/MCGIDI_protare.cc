@@ -30,7 +30,7 @@ namespace MCGIDI {
 
 LUPI_HOST Protare *protareFromGIDIProtare( LUPI::StatusMessageReporting &a_smr, GIDI::Protare const &a_protare, PoPI::Database const &a_pops, Transporting::MC &a_settings, 
                 GIDI::Transporting::Particles const &a_particles, DomainHash const &a_domainHash, GIDI::Styles::TemperatureInfos const &a_temperatureInfos, 
-                std::set<int> const &a_reactionsToExclude, int a_reactionsToExcludeOffset, bool a_allowFixedGrid ) {
+                GIDI::ExcludeReactionsSet const &a_reactionsToExclude, std::size_t a_reactionsToExcludeOffset, bool a_allowFixedGrid ) {
 
     Protare *protare( nullptr );
 
@@ -543,7 +543,7 @@ LUPI_HOST_DEVICE ProtareSingle *Protare::protare( std::size_t a_index ) {
  * @return                              Pointer to the requested protare or nullptr if invalid *a_index*..
  ***********************************************************************************************************/
 
-LUPI_HOST_DEVICE ProtareSingle const *Protare::protareWithReaction( int a_index ) const {
+LUPI_HOST_DEVICE ProtareSingle const *Protare::protareWithReaction( std::size_t a_index ) const {
 
     ProtareSingle const *protare1 = nullptr;
 
@@ -688,7 +688,7 @@ LUPI_HOST_DEVICE std::size_t Protare::numberOfReactions( ) const {
  * @return                          The reaction at index *a_index*.
  ***********************************************************************************************************/
 
-LUPI_HOST_DEVICE Reaction const *Protare::reaction( int a_index ) const {
+LUPI_HOST_DEVICE Reaction const *Protare::reaction( std::size_t a_index ) const {
 
     Reaction const *reaction1 = nullptr;
 
@@ -740,7 +740,7 @@ LUPI_HOST_DEVICE std::size_t Protare::numberOfOrphanProducts( ) const {
  * @return                          The orphanProduct at index *a_index*.
  ***********************************************************************************************************/
 
-LUPI_HOST_DEVICE Reaction const *Protare::orphanProduct( int a_index ) const {
+LUPI_HOST_DEVICE Reaction const *Protare::orphanProduct( std::size_t a_index ) const {
 
     Reaction const *orphanProduct1 = nullptr;
 
@@ -917,7 +917,7 @@ LUPI_HOST_DEVICE double Protare::URR_domainMax( ) const {
  * @return                          *true* if the reaction has URR robability tables and *false* otherwise.
  ***********************************************************************************************************/
 
-LUPI_HOST_DEVICE bool Protare::reactionHasURR_probabilityTables( int a_index ) const {
+LUPI_HOST_DEVICE bool Protare::reactionHasURR_probabilityTables( std::size_t a_index ) const {
 
     bool reactionHasURR_probabilityTables1 = false;
 
@@ -977,7 +977,7 @@ LUPI_HOST_DEVICE double Protare::threshold( std::size_t a_index ) const {
  * @return                              The total cross section.
  ***********************************************************************************************************/
 
-LUPI_HOST_DEVICE double Protare::crossSection( URR_protareInfos const &a_URR_protareInfos, int a_hashIndex, double a_temperature, double a_energy, bool a_sampling ) const {
+LUPI_HOST_DEVICE double Protare::crossSection( URR_protareInfos const &a_URR_protareInfos, std::size_t a_hashIndex, double a_temperature, double a_energy, bool a_sampling ) const {
 
     double crossSection1 = 0.0;
 
@@ -1005,7 +1005,8 @@ LUPI_HOST_DEVICE double Protare::crossSection( URR_protareInfos const &a_URR_pro
  * @param   a_crossSectionVector        [in/out]    The energy dependent, total cross section to add cross section data to.
  ***********************************************************************************************************/
 
-LUPI_HOST_DEVICE void Protare::crossSectionVector( double a_temperature, double a_userFactor, int a_numberAllocated, double *a_crossSectionVector ) const {
+LUPI_HOST_DEVICE void Protare::crossSectionVector( double a_temperature, double a_userFactor, std::size_t a_numberAllocated, 
+                double *a_crossSectionVector ) const {
 
     switch( protareType( ) ) {
     case ProtareType::single: 
@@ -1034,7 +1035,7 @@ LUPI_HOST_DEVICE void Protare::crossSectionVector( double a_temperature, double 
  * @return                              The total cross section.
  ***********************************************************************************************************/
 
-LUPI_HOST_DEVICE double Protare::reactionCrossSection( int a_reactionIndex, URR_protareInfos const &a_URR_protareInfos, int a_hashIndex,
+LUPI_HOST_DEVICE double Protare::reactionCrossSection( std::size_t a_reactionIndex, URR_protareInfos const &a_URR_protareInfos, std::size_t a_hashIndex,
                 double a_temperature, double a_energy, bool a_sampling ) const {
 
     double reactionCrossSection1 = 0.0;
@@ -1068,7 +1069,7 @@ LUPI_HOST_DEVICE double Protare::reactionCrossSection( int a_reactionIndex, URR_
  * @return                              The total cross section.
  ***********************************************************************************************************/
 
-LUPI_HOST_DEVICE double Protare::reactionCrossSection( int a_reactionIndex, URR_protareInfos const &a_URR_protareInfos, double a_temperature, double a_energy ) const {
+LUPI_HOST_DEVICE double Protare::reactionCrossSection( std::size_t a_reactionIndex, URR_protareInfos const &a_URR_protareInfos, double a_temperature, double a_energy ) const {
 
     double reactionCrossSection1 = 0.0;
 
@@ -1097,7 +1098,7 @@ LUPI_HOST_DEVICE double Protare::reactionCrossSection( int a_reactionIndex, URR_
  * @return                          The total deposition energy.
  ***********************************************************************************************************/
 
-LUPI_HOST_DEVICE double Protare::depositionEnergy( int a_hashIndex, double a_temperature, double a_energy ) const {
+LUPI_HOST_DEVICE double Protare::depositionEnergy( std::size_t a_hashIndex, double a_temperature, double a_energy ) const {
 
     double depositionEnergy1 = 0.0;
 
@@ -1126,7 +1127,7 @@ LUPI_HOST_DEVICE double Protare::depositionEnergy( int a_hashIndex, double a_tem
  * @return                          The total deposition momentum.
  ***********************************************************************************************************/
 
-LUPI_HOST_DEVICE double Protare::depositionMomentum( int a_hashIndex, double a_temperature, double a_energy ) const {
+LUPI_HOST_DEVICE double Protare::depositionMomentum( std::size_t a_hashIndex, double a_temperature, double a_energy ) const {
 
     double depositionMomentum1 = 0.0;
 
@@ -1155,7 +1156,7 @@ LUPI_HOST_DEVICE double Protare::depositionMomentum( int a_hashIndex, double a_t
  * @return                          The total production energy.
  ***********************************************************************************************************/
 
-LUPI_HOST_DEVICE double Protare::productionEnergy( int a_hashIndex, double a_temperature, double a_energy ) const {
+LUPI_HOST_DEVICE double Protare::productionEnergy( std::size_t a_hashIndex, double a_temperature, double a_energy ) const {
 
     double productionEnergy1 = 0.0;
 
@@ -1185,7 +1186,7 @@ LUPI_HOST_DEVICE double Protare::productionEnergy( int a_hashIndex, double a_tem
  * @return                              A vector of the length of the number of multi-group groups.
  ***********************************************************************************************************/
 
-LUPI_HOST_DEVICE double Protare::gain( int a_hashIndex, double a_temperature, double a_energy, int a_particleIndex ) const {
+LUPI_HOST_DEVICE double Protare::gain( std::size_t a_hashIndex, double a_temperature, double a_energy, int a_particleIndex ) const {
 
     double gain1 = 0.0;
 
@@ -1215,7 +1216,7 @@ LUPI_HOST_DEVICE double Protare::gain( int a_hashIndex, double a_temperature, do
  * @return                              A vector of the length of the number of multi-group groups.
  ***********************************************************************************************************/
 
-LUPI_HOST_DEVICE double Protare::gainViaIntid( int a_hashIndex, double a_temperature, double a_energy, int a_particleIntid ) const {
+LUPI_HOST_DEVICE double Protare::gainViaIntid( std::size_t a_hashIndex, double a_temperature, double a_energy, int a_particleIntid ) const {
 
     double gain1 = 0.0;
 
@@ -1274,6 +1275,7 @@ LUPI_HOST_DEVICE ProtareSingle::ProtareSingle( ) :
         m_hasURR_probabilityTables( false ),
         m_URR_domainMin( -1.0 ),
         m_URR_domainMax( -1.0 ),
+        m_upscatterModelASupported( false ),
         m_projectileMultiGroupBoundaries( 0 ),
         m_projectileMultiGroupBoundariesCollapsed( 0 ),
         m_reactions( 0 ),
@@ -1296,14 +1298,18 @@ LUPI_HOST_DEVICE ProtareSingle::ProtareSingle( ) :
 
 LUPI_HOST ProtareSingle::ProtareSingle( LUPI::StatusMessageReporting &a_smr, GIDI::ProtareSingle const &a_protare, PoPI::Database const &a_pops, 
                 Transporting::MC &a_settings, GIDI::Transporting::Particles const &a_particles, DomainHash const &a_domainHash, 
-                GIDI::Styles::TemperatureInfos const &a_temperatureInfos, std::set<int> const &a_reactionsToExclude, int a_reactionsToExcludeOffset, 
-                bool a_allowFixedGrid ) :
+                GIDI::Styles::TemperatureInfos const &a_temperatureInfos, GIDI::ExcludeReactionsSet const &a_reactionsToExclude, 
+                std::size_t a_reactionsToExcludeOffset, bool a_allowFixedGrid ) :
         Protare( ProtareType::single, a_protare, a_settings, a_pops ),
         m_interaction( a_protare.interaction( ).c_str( ) ),
         m_URR_index( -1 ),
         m_hasURR_probabilityTables( false ),
         m_URR_domainMin( -1.0 ),
         m_URR_domainMax( -1.0 ),
+        m_domainHash( a_domainHash ),
+        m_upscatterModelASupported( ( projectileIntid( ) != PoPI::Intids::photon ) &&
+                                    ( projectileIntid( ) != PoPI::Intids::electron ) &&
+                                    !isTNSL_ProtareSingle( ) ),
         m_projectileMultiGroupBoundaries( 0 ),
         m_projectileMultiGroupBoundariesCollapsed( 0 ),
         m_reactions( 0 ),
@@ -1400,7 +1406,7 @@ LUPI_HOST ProtareSingle::ProtareSingle( LUPI::StatusMessageReporting &a_smr, GID
     if( a_settings.nuclearPlusCoulombInterferenceOnly( ) ) nuclearPlusCoulombInterferenceReaction = a_protare.nuclearPlusCoulombInterferenceOnlyReaction( );
 
     for( std::size_t reactionIndex = 0; reactionIndex < a_protare.reactions( ).size( ); ++reactionIndex ) {
-        if( a_reactionsToExclude.find( static_cast<int>( reactionIndex + a_reactionsToExcludeOffset ) ) != a_reactionsToExclude.end( ) ) continue;
+        if( a_reactionsToExclude.find( reactionIndex + a_reactionsToExcludeOffset ) != a_reactionsToExclude.end( ) ) continue;
 
         GIDI::Reaction const *GIDI_reaction = a_protare.reaction( reactionIndex );
 
@@ -1440,7 +1446,7 @@ LUPI_HOST ProtareSingle::ProtareSingle( LUPI::StatusMessageReporting &a_smr, GID
         setupInfo.m_initialStateIndex = -1;
         Reaction *reaction = new Reaction( **GIDI_reaction, setupInfo, a_settings, particles, a_temperatureInfos );
         setupInfo.m_initialStateIndices[(*GIDI_reaction)->label( )] = setupInfo.m_initialStateIndex;
-        reaction->updateProtareSingleInfo( this, static_cast<int>( m_reactions.size( ) ) );
+        reaction->updateProtareSingleInfo( this, m_reactions.size( ) );
         m_reactions.push_back( reaction );
     }
 
@@ -1461,7 +1467,7 @@ LUPI_HOST ProtareSingle::ProtareSingle( LUPI::StatusMessageReporting &a_smr, GID
     if( a_settings.sampleNonTransportingParticles( ) || particles.hasParticle( PoPI::IDs::photon ) ) {
         setupInfo.m_reactionType = Transporting::Reaction::Type::OrphanProducts;
         m_orphanProducts.reserve( a_protare.orphanProducts( ).size( ) );
-        std::vector< std::vector<int> > associatedOrphanProductIndices( m_reactions.size( ) );
+        std::vector< std::vector<std::size_t> > associatedOrphanProductIndices( m_reactions.size( ) );
 
         for( std::size_t orphanProductIndex = 0; orphanProductIndex < a_protare.orphanProducts( ).size( ); ++orphanProductIndex ) {
             GIDI::Reaction const *GIDI_reaction = a_protare.orphanProduct( orphanProductIndex );
@@ -1470,7 +1476,7 @@ LUPI_HOST ProtareSingle::ProtareSingle( LUPI::StatusMessageReporting &a_smr, GID
 
             setupInfo.m_reaction = GIDI_reaction;
             Reaction *orphanProductReaction = new Reaction( *GIDI_reaction, setupInfo, a_settings, particles, a_temperatureInfos );
-            orphanProductReaction->updateProtareSingleInfo( this, static_cast<int>( m_orphanProducts.size( ) ) );
+            orphanProductReaction->updateProtareSingleInfo( this, m_orphanProducts.size( ) );
             m_orphanProducts.push_back( orphanProductReaction );
 
             GIDI::Functions::Reference1d const *reference( GIDI_reaction->crossSection( ).get<GIDI::Functions::Reference1d>( 0 ) );
@@ -1498,7 +1504,7 @@ LUPI_HOST ProtareSingle::ProtareSingle( LUPI::StatusMessageReporting &a_smr, GID
                     std::string label( m_reactions[reactionIndex]->label( ).c_str( ) );
 
                     if( label == GIDI_reaction2->label( ) ) {
-                        associatedOrphanProductIndices[reactionIndex].push_back( static_cast<int>( m_orphanProducts.size( ) ) - 1 );
+                        associatedOrphanProductIndices[reactionIndex].push_back( m_orphanProducts.size( ) - 1 );
                         break;
                     }
                 }
@@ -1511,7 +1517,7 @@ LUPI_HOST ProtareSingle::ProtareSingle( LUPI::StatusMessageReporting &a_smr, GID
             if( size > 0 ) {
                 std::vector<Product *> associatedOrphanProducts;
                 for( std::size_t index1 = 0; index1 < size; ++index1 ) {
-                    int associatedOrphanProductIndex = associatedOrphanProductIndices[reactionIndex][index1];
+                    std::size_t associatedOrphanProductIndex = associatedOrphanProductIndices[reactionIndex][index1];
                     m_orphanProducts[associatedOrphanProductIndex]->addOrphanProductToProductList( associatedOrphanProducts );
                 }
                 reaction->setOrphanProductData( associatedOrphanProductIndices[reactionIndex], associatedOrphanProducts );
@@ -1527,6 +1533,7 @@ LUPI_HOST ProtareSingle::ProtareSingle( LUPI::StatusMessageReporting &a_smr, GID
         GIDI_orphanProducts.push_back( GIDI_reaction );
     }
 
+    bool removeContinuousEnergyData = false;
     if( m_continuousEnergy ) {
         m_heatedCrossSections.update( a_smr, setupInfo, a_settings, particles, a_domainHash, a_temperatureInfos, GIDI_reactions, GIDI_orphanProducts,
                 m_fixedGrid, zeroReactions );
@@ -1536,23 +1543,70 @@ LUPI_HOST ProtareSingle::ProtareSingle( LUPI::StatusMessageReporting &a_smr, GID
     else {
         m_heatedMultigroupCrossSections.update( a_smr, a_protare, setupInfo, a_settings, particles, a_temperatureInfos, GIDI_reactions, 
                 GIDI_orphanProducts, zeroReactions, a_reactionsToExclude );
+
+        if( ( a_settings.upscatterModelAGroupBoundaries().size( ) > 0 ) ||
+                ( a_settings.upscatterModel( ) == Sampling::Upscatter::Model::DBRC ) ) { // Load pointwise data to recompute Model A cross sections on user-defined grid or for DBRC.
+            removeContinuousEnergyData = true;
+            m_heatedCrossSections.update( a_smr, setupInfo, a_settings, particles, a_domainHash, a_temperatureInfos, GIDI_reactions, GIDI_orphanProducts,
+                    m_fixedGrid, zeroReactions );
+        }
     }
 
-    if( ( PoPI::Intids::photon != projectileIntid( ) ) && ( PoPI::Intids::electron != projectileIntid( ) ) && ( a_settings.upscatterModel( ) == Sampling::Upscatter::Model::A ) ) {
-        GIDI::Styles::Base const *style = a_protare.styles( ).get<GIDI::Styles::Base>( a_settings.upscatterModelALabel( ) );
+    if( m_upscatterModelASupported && ( a_settings.upscatterModel( ) == Sampling::Upscatter::Model::A ) ) {
+        std::vector<double> const &upscatterModelAGroupBoundaries = a_settings.upscatterModelAGroupBoundaries( );
+        if( upscatterModelAGroupBoundaries.size( ) == 0 ) {
+            GIDI::Styles::Base const *style = a_protare.styles( ).get<GIDI::Styles::Base>( a_temperatureInfos[0].heatedMultiGroup( ) );
 
-        if( style->moniker( ) == GIDI_SnElasticUpScatterStyleChars ) style = a_protare.styles( ).get<GIDI::Styles::Base>( style->derivedStyle( ) );
-        if( style->moniker( ) != GIDI_heatedMultiGroupStyleChars ) throw GIDI::Exception( "Label does not yield a heatedMultiGroup style." );
+            if( style->moniker( ) == GIDI_SnElasticUpScatterStyleChars ) style = a_protare.styles( ).get<GIDI::Styles::Base>( style->derivedStyle( ) );
+            if( style->moniker( ) != GIDI_heatedMultiGroupStyleChars ) throw GIDI::Exception( "Label does not yield a heatedMultiGroup style." );
 
-        GIDI::Styles::HeatedMultiGroup const &heatedMultiGroup = *static_cast<GIDI::Styles::HeatedMultiGroup const *>( style );
-        std::vector<double> const &boundaries = heatedMultiGroup.groupBoundaries( a_protare.projectile( ).ID( ) );
+            GIDI::Styles::HeatedMultiGroup const &heatedMultiGroup = *static_cast<GIDI::Styles::HeatedMultiGroup const *>( style );
+            std::vector<double> const &boundaries = heatedMultiGroup.groupBoundaries( a_protare.projectile( ).ID( ) );
 
-        m_upscatterModelAGroupVelocities.resize( boundaries.size( ) );
-        for( std::size_t i1 = 0; i1 < boundaries.size( ); ++i1 ) m_upscatterModelAGroupVelocities[i1] = MCGIDI_particleBeta( projectileMass( ), boundaries[i1] );
+            m_upscatterModelAGroupEnergies.resize( boundaries.size( ) );
+            m_upscatterModelAGroupVelocities.resize( boundaries.size( ) );
+            for( std::size_t i1 = 0; i1 < boundaries.size( ); ++i1 ) {
+                m_upscatterModelAGroupEnergies[i1] = boundaries[i1];
+                m_upscatterModelAGroupVelocities[i1] = MCGIDI_particleBeta( projectileMass( ), boundaries[i1] );
+            }
+
+            GIDI::ExcludeReactionsSet reactionsToExclude;
+            auto upscatterModelACrossSectionForm = a_protare.multiGroupCrossSection( a_smr, multiGroupSettings, a_temperatureInfos[0], 
+                    reactionsToExclude, a_temperatureInfos[0].heatedMultiGroup( ) );
+            m_upscatterModelACrossSection.resize( upscatterModelACrossSectionForm.size( ) );
+            for( std::size_t i1 = 0; i1 < upscatterModelACrossSectionForm.size( ); ++i1 ) 
+                m_upscatterModelACrossSection[i1] = upscatterModelACrossSectionForm[i1]; }
+        else {
+            
+            m_upscatterModelAGroupEnergies.reserve( upscatterModelAGroupBoundaries.size( ) );
+            m_upscatterModelAGroupVelocities.reserve( upscatterModelAGroupBoundaries.size( ) );
+            for( auto iter = upscatterModelAGroupBoundaries.begin( ); iter != upscatterModelAGroupBoundaries.end( ); ++iter ) {
+                m_upscatterModelAGroupEnergies.push_back( *iter );
+                m_upscatterModelAGroupVelocities.push_back( MCGIDI_particleBeta( projectileMass( ), *iter ) );
+            }
+
+            GIDI::Transporting::MultiGroup boundaries( "Model A", upscatterModelAGroupBoundaries );
+
+            GIDI::Functions::XYs1d crossSectionXYs1d = m_heatedCrossSections.crossSectionAsGIDI_XYs1d( 0.0 );
+
+            GIDI::Transporting::Flux flux( "Model A", 0.0 );
+            std::vector<double> energies, fluxes;
+            energies.push_back( upscatterModelAGroupBoundaries[0] );
+            energies.push_back( upscatterModelAGroupBoundaries.back( ) );
+            fluxes.push_back( 1.0 );
+            fluxes.push_back( 1.0 );
+            flux.addFluxOrder( GIDI::Transporting::Flux_order( 0, energies, fluxes ) );
+
+            GIDI::Vector crossSectionVector = multiGroupXYs1d( boundaries, crossSectionXYs1d, flux );
+            m_upscatterModelACrossSection.resize( crossSectionVector.size( ) );
+            for( std::size_t index = 0; index < crossSectionVector.size( ); ++index )
+                    m_upscatterModelACrossSection[index] = crossSectionVector[index];
+        }
+        if( !m_continuousEnergy ) m_multiGroupHash = MultiGroupHash( m_projectileMultiGroupBoundariesCollapsed );
     }
 
-    if( m_continuousEnergy && ( PoPI::Intids::neutron  == projectileIntid( ) ) && ( a_settings.upscatterModel( ) == Sampling::Upscatter::Model::DBRC ) ) {
-        int reactionIndex = 0;
+    if( ( PoPI::Intids::neutron  == projectileIntid( ) ) && ( a_settings.upscatterModel( ) == Sampling::Upscatter::Model::DBRC ) ) {
+        std::size_t reactionIndex = 0;
         for( auto reactionIter = m_reactions.begin( ); reactionIter != m_reactions.end( ); ++reactionIter, ++reactionIndex ) {
             if( (*reactionIter)->ENDF_MT( ) == 2 ) {
                 Reaction *reaction = *reactionIter;
@@ -1564,8 +1618,8 @@ LUPI_HOST ProtareSingle::ProtareSingle( LUPI::StatusMessageReporting &a_smr, GID
                 Vector<double> const &energies = heatedCrossSectionContinuousEnergy->energies( );
                 Vector<MCGIDI_FLOAT> const &crossSectionsFloat = heatedReactionCrossSectionContinuousEnergy->crossSections( );
                 Vector<double> crossSections( crossSectionsFloat.size( ) );
-                int index = 0;
-                for( auto iter = crossSectionsFloat.begin( ); iter != crossSectionsFloat.end( ); ++iter )
+                std::size_t index = 0;
+                for( auto iter = crossSectionsFloat.begin( ); iter != crossSectionsFloat.end( ); ++iter, ++index )
                     crossSections[index] = *iter;
 
                 Sampling::Upscatter::ModelDBRC_data *modelDBRC_data = 
@@ -1574,6 +1628,9 @@ LUPI_HOST ProtareSingle::ProtareSingle( LUPI::StatusMessageReporting &a_smr, GID
                 break;
             }
         }
+    }
+    if( removeContinuousEnergyData ) {
+        m_heatedCrossSections.clear( );
     }
 }
 
@@ -1654,9 +1711,8 @@ LUPI_HOST_DEVICE ProtareSingle *ProtareSingle::protare( std::size_t a_index ) {
  * @return                              Pointer to the requested protare or nullptr if invalid *a_index*..
  ***********************************************************************************************************/
  
-LUPI_HOST_DEVICE ProtareSingle const *ProtareSingle::protareWithReaction( int a_index ) const {
+LUPI_HOST_DEVICE ProtareSingle const *ProtareSingle::protareWithReaction( std::size_t a_index ) const {
  
-    if( a_index < 0 ) return( nullptr );
     if( static_cast<std::size_t>( a_index ) < numberOfReactions( ) ) return( this );
     return( nullptr );
 }
@@ -1759,7 +1815,7 @@ LUPI_HOST_DEVICE bool ProtareSingle::inURR( double a_energy ) const {
  * @param a_sampling            [in]    Used for multi-group look up. If *true*, use augmented cross sections.
  ***********************************************************************************************************/
 
-LUPI_HOST_DEVICE double ProtareSingle::crossSection( URR_protareInfos const &a_URR_protareInfos, int a_hashIndex, double a_temperature, double a_energy, bool a_sampling ) const {
+LUPI_HOST_DEVICE double ProtareSingle::crossSection( URR_protareInfos const &a_URR_protareInfos, std::size_t a_hashIndex, double a_temperature, double a_energy, bool a_sampling ) const {
 
     if( m_continuousEnergy ) return( m_heatedCrossSections.crossSection( a_URR_protareInfos, m_URR_index, a_hashIndex, a_temperature, a_energy ) );
 
@@ -1775,7 +1831,8 @@ LUPI_HOST_DEVICE double ProtareSingle::crossSection( URR_protareInfos const &a_U
  * @param   a_crossSectionVector        [in/out]   The energy dependent, total cross section to add cross section data to.
  ***********************************************************************************************************/
  
-LUPI_HOST_DEVICE void ProtareSingle::crossSectionVector( double a_temperature, double a_userFactor, int a_numberAllocated, double *a_crossSectionVector ) const {
+LUPI_HOST_DEVICE void ProtareSingle::crossSectionVector( double a_temperature, double a_userFactor, std::size_t a_numberAllocated, 
+                double *a_crossSectionVector ) const {
 
     if( m_continuousEnergy ) {
         if( !m_fixedGrid ) LUPI_THROW( "ProtareSingle::crossSectionVector: continuous energy cannot be supported." );
@@ -1797,7 +1854,7 @@ LUPI_HOST_DEVICE void ProtareSingle::crossSectionVector( double a_temperature, d
  * @param a_sampling            [in]    Used for multi-group look up. If *true*, use augmented cross sections.
  ***********************************************************************************************************/
 
-LUPI_HOST_DEVICE double ProtareSingle::reactionCrossSection( int a_reactionIndex, URR_protareInfos const &a_URR_protareInfos, int a_hashIndex, 
+LUPI_HOST_DEVICE double ProtareSingle::reactionCrossSection( std::size_t a_reactionIndex, URR_protareInfos const &a_URR_protareInfos, std::size_t a_hashIndex, 
                 double a_temperature, double a_energy, bool a_sampling ) const {
 
     if( m_continuousEnergy ) return( m_heatedCrossSections.reactionCrossSection( a_reactionIndex, a_URR_protareInfos, m_URR_index, a_hashIndex, 
@@ -1815,7 +1872,7 @@ LUPI_HOST_DEVICE double ProtareSingle::reactionCrossSection( int a_reactionIndex
  * @param a_energy              [in]    The energy of the projectile.
  ***********************************************************************************************************/
 
-LUPI_HOST_DEVICE double ProtareSingle::reactionCrossSection( int a_reactionIndex, URR_protareInfos const &a_URR_protareInfos, double a_temperature, double a_energy ) const {
+LUPI_HOST_DEVICE double ProtareSingle::reactionCrossSection( std::size_t a_reactionIndex, URR_protareInfos const &a_URR_protareInfos, double a_temperature, double a_energy ) const {
 
     if( m_continuousEnergy ) return( m_heatedCrossSections.reactionCrossSection( a_reactionIndex, a_URR_protareInfos, m_URR_index, a_temperature, a_energy ) );
 
@@ -1831,7 +1888,7 @@ LUPI_HOST_DEVICE double ProtareSingle::reactionCrossSection( int a_reactionIndex
  * @param a_energy              [in]    The energy of the projectile.
  ***********************************************************************************************************/
 
-LUPI_HOST_DEVICE double ProtareSingle::depositionEnergy( int a_hashIndex, double a_temperature, double a_energy ) const {
+LUPI_HOST_DEVICE double ProtareSingle::depositionEnergy( std::size_t a_hashIndex, double a_temperature, double a_energy ) const {
 
     if( m_continuousEnergy ) return( m_heatedCrossSections.depositionEnergy( a_hashIndex, a_temperature, a_energy ) );
 
@@ -1847,7 +1904,7 @@ LUPI_HOST_DEVICE double ProtareSingle::depositionEnergy( int a_hashIndex, double
  * @param a_energy              [in]    The energy of the projectile.
  ***********************************************************************************************************/
 
-LUPI_HOST_DEVICE double ProtareSingle::depositionMomentum( int a_hashIndex, double a_temperature, double a_energy ) const {
+LUPI_HOST_DEVICE double ProtareSingle::depositionMomentum( std::size_t a_hashIndex, double a_temperature, double a_energy ) const {
 
     if( m_continuousEnergy ) return( m_heatedCrossSections.depositionMomentum( a_hashIndex, a_temperature, a_energy ) );
 
@@ -1863,7 +1920,7 @@ LUPI_HOST_DEVICE double ProtareSingle::depositionMomentum( int a_hashIndex, doub
  * @param a_energy              [in]    The energy of the projectile.
  ***********************************************************************************************************/
 
-LUPI_HOST_DEVICE double ProtareSingle::productionEnergy( int a_hashIndex, double a_temperature, double a_energy ) const {
+LUPI_HOST_DEVICE double ProtareSingle::productionEnergy( std::size_t a_hashIndex, double a_temperature, double a_energy ) const {
 
     if( m_continuousEnergy ) return( m_heatedCrossSections.productionEnergy( a_hashIndex, a_temperature, a_energy ) );
 
@@ -1880,7 +1937,7 @@ LUPI_HOST_DEVICE double ProtareSingle::productionEnergy( int a_hashIndex, double
  * @param a_particleIndex       [in]    The index of the particle whose gain is to be returned.
  ***********************************************************************************************************/
 
-LUPI_HOST_DEVICE double ProtareSingle::gain( int a_hashIndex, double a_temperature, double a_energy, int a_particleIndex ) const {
+LUPI_HOST_DEVICE double ProtareSingle::gain( std::size_t a_hashIndex, double a_temperature, double a_energy, int a_particleIndex ) const {
 
     if( m_continuousEnergy ) return( m_heatedCrossSections.gain( a_hashIndex, a_temperature, a_energy, a_particleIndex ) );
 
@@ -1897,7 +1954,7 @@ LUPI_HOST_DEVICE double ProtareSingle::gain( int a_hashIndex, double a_temperatu
  * @param a_particleIntid       [in]    The intid of the particle whose gain is to be returned.
  ***********************************************************************************************************/
 
-LUPI_HOST_DEVICE double ProtareSingle::gainViaIntid( int a_hashIndex, double a_temperature, double a_energy, int a_particleIntid ) const {
+LUPI_HOST_DEVICE double ProtareSingle::gainViaIntid( std::size_t a_hashIndex, double a_temperature, double a_energy, int a_particleIntid ) const {
 
     if( m_continuousEnergy ) return( m_heatedCrossSections.gainViaIntid( a_hashIndex, a_temperature, a_energy, a_particleIntid ) );
 
@@ -1922,9 +1979,14 @@ LUPI_HOST_DEVICE void ProtareSingle::serialize2( LUPI::DataBuffer &a_buffer, LUP
     DATA_MEMBER_CAST( m_hasURR_probabilityTables, a_buffer, a_mode, bool );
     DATA_MEMBER_DOUBLE( m_URR_domainMin, a_buffer, a_mode );
     DATA_MEMBER_DOUBLE( m_URR_domainMax, a_buffer, a_mode );
+    m_domainHash.serialize( a_buffer, a_mode );
     DATA_MEMBER_VECTOR_DOUBLE( m_projectileMultiGroupBoundaries, a_buffer, a_mode );
     DATA_MEMBER_VECTOR_DOUBLE( m_projectileMultiGroupBoundariesCollapsed, a_buffer, a_mode );
+    DATA_MEMBER_CAST( m_upscatterModelASupported, a_buffer, a_mode, bool );
+    DATA_MEMBER_VECTOR_DOUBLE( m_upscatterModelAGroupEnergies, a_buffer, a_mode );
     DATA_MEMBER_VECTOR_DOUBLE( m_upscatterModelAGroupVelocities, a_buffer, a_mode );
+    DATA_MEMBER_VECTOR_DOUBLE( m_upscatterModelACrossSection, a_buffer, a_mode );
+    m_multiGroupHash.serialize( a_buffer, a_mode );
 
     vectorSize = m_nuclideGammaBranchStateInfos.size( );
     int vectorSizeInt = (int) vectorSize;
@@ -1999,7 +2061,7 @@ LUPI_HOST_DEVICE void ProtareSingle::serialize2( LUPI::DataBuffer &a_buffer, LUP
     }
     for( std::size_t vectorIndex = 0; vectorIndex < vectorSize; ++vectorIndex ) {
         m_reactions[vectorIndex]->serialize( *workingBuffer, a_mode );
-        m_reactions[vectorIndex]->updateProtareSingleInfo( this, static_cast<int>( vectorIndex ) );
+        m_reactions[vectorIndex]->updateProtareSingleInfo( this, vectorIndex );
     }
 
     vectorSize = m_orphanProducts.size( );
@@ -2027,7 +2089,7 @@ LUPI_HOST_DEVICE void ProtareSingle::serialize2( LUPI::DataBuffer &a_buffer, LUP
 
     for( std::size_t vectorIndex = 0; vectorIndex < vectorSize; ++vectorIndex ) {
         m_orphanProducts[vectorIndex]->serialize( *workingBuffer, a_mode );
-        m_orphanProducts[vectorIndex]->updateProtareSingleInfo( this, static_cast<int>( vectorIndex ) );
+        m_orphanProducts[vectorIndex]->updateProtareSingleInfo( this, vectorIndex );
     }
 
     if( a_mode == LUPI::DataBuffer::Mode::Unpack ) {

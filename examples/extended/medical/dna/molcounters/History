@@ -1,8 +1,13 @@
 # Example counter History
 
 See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
-which **must** added in reverse chronological order (newest at the top). It must **not**
-be used as a substitute for writing good git commit messages!
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
+
+-------------------------------------------------------------------------------
+
+## 2025-11-10 G Cosmo (molcounters-V11-03-01)
+- Fixed coding conventions for tabs and long lines in source.
 
 ## 2025-05-05 Hoang Tran (molcounters-V11-03-00)
 - Added all counter examples in CMakeLists.txt

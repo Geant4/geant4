@@ -22,9 +22,6 @@ public:
   ,m_compress(a_compress) //used at write.
   ,m_group(-1)
   {
-#ifdef TOOLS_MEM
-    tools::mem::increment(s_class().c_str());
-#endif
     if(m_write) {
       if(a_name.empty()) {
         a_out << "toolx::hdf5::store::store : string a_name is empty." << std::endl;
@@ -115,15 +112,11 @@ public:
         }
        {std::vector<std::string> names;
         tools_vforcit(pages*,m_pagess,it) names.push_back((*it)->name());
-     //{m_out << "debug : write : names :" << std::endl;
-     // tools_vforcit(std::string,names,it) m_out << *it << std::endl;}
         if(!write_array_string(m_group,s_names(),names)) {
           m_out << "toolx::hdf5::store::~store : write_array_string(names) failed." << std::endl;
         }}
        {std::vector<std::string> TFORMs;
         tools_vforcit(pages*,m_pagess,it) TFORMs.push_back((*it)->form());
-     //{m_out << "debug : write : TFORMs :" << std::endl;
-     // tools_vforcit(std::string,TFORMs,it) m_out << *it << std::endl;}
         if(!write_array_string(m_group,s_forms(),TFORMs)) {
           m_out << "toolx::hdf5::store::~store : write_array_string(tforms) failed." << std::endl;
         }}
@@ -134,9 +127,6 @@ public:
     } else {
       ::H5Gclose(m_group);
     }
-#ifdef TOOLS_MEM
-    tools::mem::decrement(s_class().c_str());
-#endif
   }
 protected:
   store(const store& a_from)
@@ -145,14 +135,10 @@ protected:
   ,m_compress(a_from.m_compress)
   ,m_group(-1)
   {
-#ifdef TOOLS_MEM
-    tools::mem::increment(s_class().c_str());
-#endif
   }
   store& operator=(const store&){return *this;}
 public:
   std::ostream& out() const {return m_out;}
-  //bool fill(tools::uint32 &a_n){a_n = 0;return true;}
 
   bool entries(tools::uint64& a_entries) const {
     if(m_pagess.empty()) {a_entries = 0;return true;}
@@ -169,7 +155,6 @@ public:
   }
 
   pages* create_pages(const std::string& a_name,const std::string& a_form) {
-    //::printf("debug : create_pages %s %s\n",a_name.c_str(),a_form.c_str());
     pages* _pages = new pages(m_out,m_group,a_name,a_form,m_write,m_compress);
     if(!_pages->is_valid()) {
       m_out << "toolx::hdf5::store::create_column : can't create pages." << std::endl;
@@ -179,15 +164,6 @@ public:
     m_pagess.push_back(_pages);
     return _pages;
   }
-  /*
-  pages* find_column(unsigned int a_index) {
-    if(a_index>=m_pagess.size()) {
-      m_out << "toolx::hdf5::store::find_column : out of range index." << std::endl;
-      return 0;
-    }
-    return m_pagess[a_index];
-  }
-  const std::vector<pages*>& columns() const {return m_pagess;}*/
 
   hid_t group() const {return m_group;}
   unsigned int compress_level() const {return m_compress;}

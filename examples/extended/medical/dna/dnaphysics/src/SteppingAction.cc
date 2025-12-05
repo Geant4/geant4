@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file SteppingAction.cc
+/// \brief Implementation of the SteppingAction class
+
 // This example is provided by the Geant4-DNA collaboration
 // Any report or published results obtained using the Geant4-DNA software
 // shall cite the following Geant4-DNA collaboration publications:
@@ -33,8 +36,6 @@
 //
 // The Geant4-DNA web site is available at http://geant4-dna.org
 //
-/// \file SteppingAction.cc
-/// \brief Implementation of the SteppingAction class
 
 #include "SteppingAction.hh"
 #include "SteppingMessenger.hh"
@@ -77,7 +78,8 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
   if (!step->GetPostStepPoint()->GetProcessDefinedStep()) return;
 
   // ***** FOR FIRST STEP RECORD ONLY   
-  if (step->GetTrack()->GetCurrentStepNumber()>=1 && fKill) step->GetTrack()->SetTrackStatus(fKillTrackAndSecondaries);
+  if (step->GetTrack()->GetCurrentStepNumber()>=1 && fKill)
+    step->GetTrack()->SetTrackStatus(fKillTrackAndSecondaries);
   //
   
   //
@@ -89,7 +91,8 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
 
   // The following method avoids the usage of string comparison
 
-  G4ParticleDefinition* partDef = step->GetTrack()->GetDynamicParticle()->GetDefinition();
+  G4ParticleDefinition* partDef =
+    step->GetTrack()->GetDynamicParticle()->GetDefinition();
 
   if (partDef == G4Gamma::GammaDefinition()) flagParticle = 0;
 
@@ -144,7 +147,8 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
   G4StepPoint* postStep = step->GetPostStepPoint();
   G4int procID = postStep->GetProcessDefinedStep()->GetProcessSubType();
 
-  const G4String& processName = postStep->GetProcessDefinedStep()->GetProcessName();
+  const G4String& processName =
+    postStep->GetProcessDefinedStep()->GetProcessName();
 
   // For gammas
   if (flagParticle == 0) {
@@ -347,7 +351,7 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
     analysisManager->FillNtupleDColumn(5, step->GetTotalEnergyDeposit() / eV);
 
     analysisManager->FillNtupleDColumn(
-      6, std::sqrt((x - xp) * (x - xp) + (y - yp) * (y - yp) + (z - zp) * (z - zp)));
+      6, std::sqrt((x - xp)*(x - xp) + (y - yp)*(y - yp) + (z - zp)*(z - zp)));
 
     analysisManager->FillNtupleDColumn(
       7, (preStep->GetKineticEnergy() - postStep->GetKineticEnergy()) / eV);

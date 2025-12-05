@@ -30,18 +30,26 @@
 // A type providing reference counting mechanism for a G4TouchableHistory
 // object.
 // The basic rule for the use of this type is that this handle must always
-// be exchanged by reference never dinamically allocated (i.e. never
+// be exchanged by reference and never be dinamically allocated (i.e. never
 // instantiated using 'new').
 //
 // For more details see G4ReferenceCountedHandle.
 
-// Author: Radovan Chytracek (Radovan.Chytracek@cern.ch), March 2001
+// Author: Radovan Chytracek (CERN), 22.10.2001
 // ----------------------------------------------------------------------
 #ifndef G4TOUCHABLEHISTORYHANDLE_HH
-#define G4TOUCHABLEHISTORYHANDLE_HH 1
+#define G4TOUCHABLEHISTORYHANDLE_HH
 
 #include "G4TouchableHandle.hh"
 
+/**
+ * @brief G4TouchableHistoryHandle is a type providing reference counting
+ * mechanism for a G4TouchableHistory object.
+ * The basic rule for the use of this type is that this handle must always
+ * be exchanged by reference and never be dinamically allocated (i.e. never
+ * instantiated using 'new').
+ */
+
 using G4TouchableHistoryHandle = G4TouchableHandle;
 
-#endif // G4TOUCHABLEHISTORYHANDLE_HH
+#endif

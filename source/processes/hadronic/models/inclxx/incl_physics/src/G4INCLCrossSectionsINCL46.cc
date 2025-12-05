@@ -402,12 +402,26 @@ namespace G4INCL {
     }
 
 	
-	   G4double CrossSectionsINCL46::etaNToPiPiN(Particle const * const, Particle const * const) {
+	  G4double CrossSectionsINCL46::etaNToPiPiN(Particle const * const, Particle const * const) {
 		//
 		//     Eta-Nucleon producing Two Pions cross sections
 		//
 		      return 0.;
 	   }
+  
+    G4double CrossSectionsINCL46::etaNToLK(Particle const * const, Particle const * const) {
+    //
+    //     Eta-Nucleon producing K Lambda cross sections
+    //
+        return 0.;
+    }
+  
+    G4double CrossSectionsINCL46::etaNToSK(Particle const * const, Particle const * const) {
+    //
+    //     Eta-Nucleon producing K Sigma cross sections
+    //
+        return 0.;
+    }
 	
     G4double CrossSectionsINCL46::omegaNToPiN(Particle const * const, Particle const * const) {
 		//
@@ -420,6 +434,20 @@ namespace G4INCL {
 		//
 		//     Omega-Nucleon producing Two Pions cross sections
 		//
+        return 0.;
+    }
+  
+    G4double CrossSectionsINCL46::omegaNToLK(Particle const * const, Particle const * const) {
+    //
+    //     Omega-Nucleon producing K Lambda cross sections
+    //
+        return 0.;
+    }
+  
+    G4double CrossSectionsINCL46::omegaNToSK(Particle const * const, Particle const * const) {
+    //
+    //     Omega-Nucleon producing K Sigma cross sections
+    //
         return 0.;
     }
 	

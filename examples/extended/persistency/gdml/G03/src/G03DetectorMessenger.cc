@@ -23,11 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file persistency/gdml/G03/src/G03DetectorMessenger.cc
+/// \file G03DetectorMessenger.cc
 /// \brief Implementation of the G03DetectorMessenger class
-//
-//
-//
+
 // Class G03DetectorMessenger implementation
 //
 // ----------------------------------------------------------------------------

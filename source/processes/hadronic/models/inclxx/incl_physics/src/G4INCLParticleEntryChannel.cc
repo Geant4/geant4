@@ -39,6 +39,9 @@
 #include "G4INCLRootFinder.hh"
 #include "G4INCLIntersection.hh"
 #include <algorithm>
+#include "G4INCLKinematicsUtils.hh"
+#include "G4INCLPbarAtrestEntryChannel.hh"
+#include "G4INCLNbarAtrestEntryChannel.hh"
 
 namespace G4INCL {
 
@@ -82,7 +85,7 @@ namespace G4INCL {
      */
     G4double theCorrection;
     if(isNN) {
-// assert(theParticle->isNucleonorLambda()); // Possible hypernucleus projectile of inverse kinematic
+// assert(theParticle->isNucleonorLambda() || theParticle->isAntiNucleon()); // Possible hypernucleus projectile of inverse kinematic
       ProjectileRemnant * const projectileRemnant = theNucleus->getProjectileRemnant();
 // assert(projectileRemnant);
 
@@ -116,20 +119,49 @@ namespace G4INCL {
 
       // Fix the correction in such a way that the quasi-projectile excitation
       // energy is given by A. Boudard's INCL4.2-HI model (model 3. above).
-      const G4double theProjectileExcitationEnergy =
-        (projectileRemnant->getA()-theParticle->getA()>1) ?
-        (projectileRemnant->computeExcitationEnergyExcept(theParticle->getID())) :
-        0.;
+      G4double theProjectileExcitationEnergy = 0;
+      G4double theProjectileEffectiveMass =0;
+      if (theParticle->isNucleonorLambda()){
+        theProjectileExcitationEnergy = (projectileRemnant->getA()-theParticle->getA()>1) ? (projectileRemnant->computeExcitationEnergyExcept(theParticle->getID())) : 0.;
+        theProjectileEffectiveMass =
+          ParticleTable::getTableMass(projectileRemnant->getA() - theParticle->getA(), projectileRemnant->getZ() - theParticle->getZ(), projectileRemnant->getS() - theParticle->getS())
+          + theProjectileExcitationEnergy;
+      }
+      else if (theParticle->isAntiNucleon()){
+        theProjectileExcitationEnergy = (projectileRemnant->getA() -theParticle->getA()<-1) ? (projectileRemnant->computeExcitationEnergyExcept(theParticle->getID())) : 0;
+        theProjectileEffectiveMass =
+          ParticleTable::getTableMass(-(projectileRemnant->getA() - theParticle->getA()), -(projectileRemnant->getZ() - theParticle->getZ()), projectileRemnant->getS() - theParticle->getS())
+          + theProjectileExcitationEnergy;
+      }
       // Set the projectile excitation energy to zero (cold quasi-projectile,
       // model 4. above).
       // const G4double theProjectileExcitationEnergy = 0.;
       // The part that follows is common to model 3. and 4.
-      const G4double theProjectileEffectiveMass =
-        ParticleTable::getTableMass(projectileRemnant->getA() - theParticle->getA(), projectileRemnant->getZ() - theParticle->getZ(), projectileRemnant->getS() - theParticle->getS())
-        + theProjectileExcitationEnergy;
       const ThreeVector &theProjectileMomentum = projectileRemnant->getMomentum() - theParticle->getMomentum();
       const G4double theProjectileEnergy = std::sqrt(theProjectileMomentum.mag2() + theProjectileEffectiveMass*theProjectileEffectiveMass);
       const G4double theProjectileCorrection = theProjectileEnergy - (projectileRemnant->getEnergy() - theParticle->getEnergy());
+      /*if(theParticle->isAntiNucleon()){
+        bool Pvictim=0; //Proton or Neutron is the Victim ?
+        if(((theNucleus->getZ() - theParticle->getZ())- theNucleus->getZ()) == 1)
+          Pvictim = 1;
+        else
+          Pvictim = 0;
+        double theCorrection1 = theParticle->getEmissionPbarQvalueCorrection(theNucleus->getA(), theNucleus->getZ(), Pvictim);
+        double theCorrection2 = theParticle->getEmissionPbarQvalueCorrection(theNucleus->getA(), theNucleus->getZ(), !Pvictim);
+        theCorrection = theParticle->getEmissionPbarQvalueCorrection(theNucleus->getA() - theParticle->getA(), theNucleus->getZ() - theParticle->getZ(),Pvictim) 
+           + theParticle->getTableMass() - theParticle->getINCLMass() + theProjectileCorrection;
+        if(Pvictim == 1 && theParticle->getType() == antiNeutron)
+          theCorrection += theCorrection2 - theCorrection1;
+        else if(Pvictim == 0 && theParticle->getType()==antiProton)
+          theCorrection +=  theCorrection2 - theCorrection1;
+      theCorrection = theParticle->getEmissionQValueCorrection(
+          theNucleus->getA() + theParticle->getA(),
+          theNucleus->getZ() + theParticle->getZ(),
+          theNucleus->getS() + theParticle->getS())
+        + theParticle->getTableMass() - theParticle->getINCLMass()
+        + theProjectileCorrection << std::endl;
+      }*/
+      //else
       theCorrection = theParticle->getEmissionQValueCorrection(
           theNucleus->getA() + theParticle->getA(),
           theNucleus->getZ() + theParticle->getZ(),
@@ -145,14 +177,24 @@ namespace G4INCL {
       const G4int ZCN = theNucleus->getZ() + theParticle->getZ();
       const G4int SCN = theNucleus->getS() + theParticle->getS();
       // Correction to the Q-value of the entering particle
-      if(theParticle->isKaon()) theCorrection = theParticle->getEmissionQValueCorrection(ACN,ZCN,theNucleus->getS());
-      else theCorrection = theParticle->getEmissionQValueCorrection(ACN,ZCN,SCN);
+      theCorrection = theParticle->getEmissionQValueCorrection(ACN,ZCN,SCN);
       INCL_DEBUG("The following Particle enters with correction " << theCorrection << '\n'
           << theParticle->print() << '\n');
     }
 
     const G4double energyBefore = theParticle->getEnergy() - theCorrection;
-    G4bool success = particleEnters(theCorrection);
+    G4bool success;
+    if(isNN && theParticle->isAntiNucleon() && (theParticle->getEnergy() - theCorrection <=theParticle->getINCLMass()) ){
+      success =true;
+      G4double energyInside = theParticle->getEnergy() + theNucleus->getPotential()->computePotentialEnergy(theParticle) - theCorrection;
+      theParticle->setEnergy(energyInside);
+      theParticle->setPotentialEnergy(theNucleus->getPotential()->computePotentialEnergy(theParticle));
+      theParticle->setMomentum(theParticle->getMomentum()); 
+      theParticle->adjustMomentumFromEnergy();
+    }
+    else{
+      success = particleEnters(theCorrection);     
+    }    
     fs->addEnteringParticle(theParticle);
 
     if(!success) {

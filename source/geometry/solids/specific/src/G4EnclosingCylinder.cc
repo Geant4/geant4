@@ -26,7 +26,7 @@
 // Implementation of G4EnclosingCylinder, a utility class
 // for a quick check of geometry.
 //
-// Author: David C. Williams (davidw@scipp.ucsc.edu)
+// Author: David C. Williams (UCSC), 1998 - Created
 // --------------------------------------------------------------------
 
 #include "G4EnclosingCylinder.hh"
@@ -94,21 +94,21 @@ G4EnclosingCylinder::G4EnclosingCylinder( __void__& )
 //
 G4bool G4EnclosingCylinder::MustBeOutside( const G4ThreeVector& p ) const
 {
-  if (p.perp() > radius) return true;
-  if (p.z() < zLo) return true;
-  if (p.z() > zHi) return true;
+  if (p.perp() > radius) { return true; }
+  if (p.z() < zLo) { return true; }
+  if (p.z() > zHi) { return true; }
 
   if (phiIsOpen)
   {
     if (concave)
     {
-      if ( ((p.x()-dx1)*ry1 - (p.y()-dy1)*rx1) < 0) return false;
-      if ( ((p.x()-dx2)*ry2 - (p.y()-dy2)*rx2) > 0) return false;
+      if ( ((p.x()-dx1)*ry1 - (p.y()-dy1)*rx1) < 0) { return false; }
+      if ( ((p.x()-dx2)*ry2 - (p.y()-dy2)*rx2) > 0) { return false; }
     }
     else
     {
-      if ( ((p.x()-dx1)*ry1 - (p.y()-dy1)*rx1) > 0) return true;
-      if ( ((p.x()-dx2)*ry2 - (p.y()-dy2)*rx2) < 0) return true;
+      if ( ((p.x()-dx1)*ry1 - (p.y()-dy1)*rx1) > 0) { return true; }
+      if ( ((p.x()-dx2)*ry2 - (p.y()-dy2)*rx2) < 0) { return true; }
     }
   }
   
@@ -124,15 +124,15 @@ G4bool G4EnclosingCylinder::MustBeOutside( const G4ThreeVector& p ) const
 G4bool G4EnclosingCylinder::ShouldMiss( const G4ThreeVector& p,
                                         const G4ThreeVector& v ) const
 {
-  if (!MustBeOutside(p)) return false;
+  if (!MustBeOutside(p)) { return false; }
   
   G4double cross = p.x()*v.y() - p.y()*v.x();
-  if (cross > radius) return true;
+  if (cross > radius) { return true; }
   
   if (p.perp() > radius)
   {
     G4double dot = p.x()*v.x() + p.y()*v.y();
-    if (dot > 0) return true;
+    if (dot > 0) { return true; }
   }
 
   return false;

@@ -23,11 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file Par01/src/Par01DetectorConstruction.cc
+/// \file Par01DetectorConstruction.cc
 /// \brief Implementation of the Par01DetectorConstruction class
-//
-//
-//
+
 #include "Par01DetectorConstruction.hh"
 
 #include "Par01CalorimeterSD.hh"

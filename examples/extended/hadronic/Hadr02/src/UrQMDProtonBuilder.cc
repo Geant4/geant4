@@ -23,10 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file hadronic/Hadr02/src/UrQMDProtonBuilder.cc
+/// \file UrQMDProtonBuilder.cc
 /// \brief Implementation of the UrQMDProtonBuilder class
-//
-//
+
 //---------------------------------------------------------------------------
 //
 

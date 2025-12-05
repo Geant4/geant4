@@ -23,9 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 /// \file dnadamage1.cc
-/// \brief Implementation of the dnadamage1 example
+/// \brief Main program of the dna/dnadamage1 example
+
 #include "ActionInitialization.hh"
 #include "DetectorConstruction.hh"
 #include "ParallelWorld.hh"
@@ -57,7 +57,7 @@ int main(int argc, char** argv)
 
   PhysicsList* pPhysList = new PhysicsList;
   pRunManager->SetUserInitialization(pPhysList);
-  pRunManager->SetUserInitialization(new ActionInitialization(pDetector));
+  pRunManager->SetUserInitialization(new ActionInitialization());
 
   std::unique_ptr<G4VisManager> pVisuManager(new G4VisExecutive);
   pVisuManager->Initialize();

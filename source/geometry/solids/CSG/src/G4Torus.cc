@@ -52,6 +52,12 @@
 
 #include "G4VGraphicsScene.hh"
 #include "G4Polyhedron.hh"
+#include "G4AutoLock.hh"
+
+namespace
+{
+  G4Mutex torusMutex = G4MUTEX_INITIALIZER;
+}
 
 using namespace CLHEP;
 
@@ -174,18 +180,6 @@ G4Torus::G4Torus( __void__& a )
   : G4CSGSolid(a)
 {
 }
-
-//////////////////////////////////////////////////////////////////////
-//
-// Destructor
-
-G4Torus::~G4Torus() = default;
-
-//////////////////////////////////////////////////////////////////////////
-//
-// Copy constructor
-
-G4Torus::G4Torus(const G4Torus&) = default;
 
 //////////////////////////////////////////////////////////////////////////
 //
@@ -485,28 +479,28 @@ G4bool G4Torus::CalculateExtent( const EAxis pAxis,
 
   // define vectors for bounding envelope
   G4ThreeVectorList pols[NDISK+1];
-  for (auto & pol : pols) pol.resize(4);
+  for (auto & pol : pols) { pol.resize(4); }
 
   std::vector<const G4ThreeVectorList *> polygons;
   polygons.resize(NDISK+1);
-  for (G4int k=0; k<NDISK+1; ++k) polygons[k] = &pols[k];
+  for (G4int k=0; k<NDISK+1; ++k) { polygons[k] = &pols[k]; }
 
   // set internal and external reference circles
   G4TwoVector rzmin[NDISK];
   G4TwoVector rzmax[NDISK];
 
-  if ((rtor-rmin*sinHalfDisk)/cosHalf > (rtor+rmin*sinHalfDisk)) rmin = 0;
+  if ((rtor-rmin*sinHalfDisk)/cosHalf > (rtor+rmin*sinHalfDisk)) { rmin = 0; }
   rmax /= cosHalfDisk;
   G4double sinCurDisk = sinHalfDisk;
   G4double cosCurDisk = cosHalfDisk;
   for (G4int k=0; k<NDISK; ++k)
   {
     G4double rmincur = rtor + rmin*cosCurDisk;
-    if (cosCurDisk < 0 && rmin > 0) rmincur /= cosHalf;
+    if (cosCurDisk < 0 && rmin > 0) { rmincur /= cosHalf; }
     rzmin[k].set(rmincur,rmin*sinCurDisk);
 
     G4double rmaxcur = rtor + rmax*cosCurDisk;
-    if (cosCurDisk > 0) rmaxcur /= cosHalf;
+    if (cosCurDisk > 0) { rmaxcur /= cosHalf; }
     rzmax[k].set(rmaxcur,rmax*sinCurDisk);
 
     G4double sinTmpDisk = sinCurDisk;
@@ -558,10 +552,13 @@ G4bool G4Torus::CalculateExtent( const EAxis pAxis,
     // set bounding envelope for current slice and adjust extent
     G4double emin,emax;
     G4BoundingEnvelope benv(bmin,bmax,polygons);
-    if (!benv.CalculateExtent(pAxis,pVoxelLimit,pTransform,emin,emax)) continue;
-    if (emin < pMin) pMin = emin;
-    if (emax > pMax) pMax = emax;
-    if (eminlim > pMin && emaxlim < pMax) break; // max possible extent
+    if (!benv.CalculateExtent(pAxis,pVoxelLimit,pTransform,emin,emax))
+    {
+      continue;
+    }
+    if (emin < pMin) { pMin = emin; }
+    if (emax > pMax) { pMax = emax; }
+    if (eminlim > pMin && emaxlim < pMax) { break; } // max possible extent
   }
   return (pMin < pMax);
 }
@@ -581,8 +578,7 @@ EInside G4Torus::Inside( const G4ThreeVector& p ) const
   r   = std::hypot(p.x(),p.y());
   pt2 = p.z()*p.z() + (r-fRtor)*(r-fRtor);
 
-  if (fRmin != 0.0) tolRMin = fRmin + fRminTolerance ;
-  else       tolRMin = 0 ;
+  (fRmin != 0.0) ? (tolRMin = fRmin + fRminTolerance) : (tolRMin = 0);
 
   tolRMax = fRmax - fRmaxTolerance;
 
@@ -701,7 +697,7 @@ G4ThreeVector G4Torus::SurfaceNormal( const G4ThreeVector& p ) const
   pt  = std::hypot(p.z(),rho-fRtor);
 
   G4double  distRMax = std::fabs(pt - fRmax);
-  if(fRmin != 0.0) distRMin = std::fabs(pt - fRmin);
+  if(fRmin != 0.0) { distRMin = std::fabs(pt - fRmin); }
 
   if( rho > delta && pt != 0.0 )
   {
@@ -861,7 +857,7 @@ G4ThreeVector G4Torus::ApproxSurfaceNormal( const G4ThreeVector& p ) const
 
     if (distSPhi < distEPhi) // Find new minimum
     {
-      if (distSPhi<distMin) side = kNSPhi ;
+      if (distSPhi<distMin) { side = kNSPhi ; }
     }
     else
     {
@@ -934,9 +930,9 @@ G4double G4Torus::DistanceToIn( const G4ThreeVector& p,
   G4double distX = std::abs(p.x()) - boxDx;
   G4double distY = std::abs(p.y()) - boxDy;
   G4double distZ = std::abs(p.z()) - boxDz;
-  if (distX >= -halfCarTolerance && p.x()*v.x() >= 0) return kInfinity;
-  if (distY >= -halfCarTolerance && p.y()*v.y() >= 0) return kInfinity;
-  if (distZ >= -halfCarTolerance && p.z()*v.z() >= 0) return kInfinity;
+  if (distX >= -halfCarTolerance && p.x()*v.x() >= 0) { return kInfinity; }
+  if (distY >= -halfCarTolerance && p.y()*v.y() >= 0) { return kInfinity; }
+  if (distZ >= -halfCarTolerance && p.z()*v.z() >= 0) { return kInfinity; }
 
   // Calculate safety distance to bounding box
   // If point is too far, move it closer and calculate distance
@@ -1616,12 +1612,46 @@ G4ThreeVector G4Torus::GetPointOnSurface() const
     ds = fRtor + r*std::cos(v);
     for (auto i = 0; i < 10; ++i)
     {
-      if ((fRtor + r)*G4QuickRand() < ds) break;
+      if ((fRtor + r)*G4QuickRand() < ds) { break; }
       v = twopi*G4QuickRand();
       ds = fRtor + r*std::cos(v);
     }
   }
   return { ds*std::cos(phi), ds*std::sin(phi), r*std::sin(v) };
+}
+
+////////////////////////////////////////////////////////////////////////////
+//
+// GetCubicVolume
+
+G4double G4Torus::GetCubicVolume()
+{
+  if (fCubicVolume == 0)
+  {
+    G4AutoLock l(&torusMutex);
+    fCubicVolume = fDPhi*CLHEP::pi*fRtor*(fRmax*fRmax-fRmin*fRmin);
+    l.unlock();
+  }
+  return fCubicVolume;
+}
+
+////////////////////////////////////////////////////////////////////////////
+//
+// GetSurfaceArea
+
+G4double G4Torus::GetSurfaceArea()
+{
+  if (fSurfaceArea == 0)
+  { 
+    G4AutoLock l(&torusMutex);
+    fSurfaceArea = fDPhi*CLHEP::twopi*fRtor*(fRmax+fRmin);
+    if(fDPhi < CLHEP::twopi)
+    {
+      fSurfaceArea = fSurfaceArea + CLHEP::twopi*(fRmax*fRmax-fRmin*fRmin);
+    } 
+    l.unlock();
+  }
+  return fSurfaceArea;
 }
 
 ///////////////////////////////////////////////////////////////////////

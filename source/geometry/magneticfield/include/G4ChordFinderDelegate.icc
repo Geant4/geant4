@@ -25,10 +25,8 @@
 //
 // G4ChordFinderDelegate inline methods implementation
 //
-// Created: D.Sorokin
+// Author: Dmitry Sorokin (CERN, Google Summer of Code 2017), 12.09.2018
 // --------------------------------------------------------------------
-
-#include <iomanip>
 
 template <class Driver>
 G4ChordFinderDelegate<Driver>::~G4ChordFinderDelegate()

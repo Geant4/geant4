@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 /// \file SteppingAction.cc
 /// \brief Implementation of the SteppingAction class
 
@@ -104,18 +103,42 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
         if(volumeName=="Crystal")
         {
             iTuple = 0;
+            //remember values for output at the detector ONLY FOR PRIMARIES
+            if(particleID == 1)
+            {
+                eventID_in = eventID;
+                angle_x_in = angle_x;
+                angle_y_in = angle_y;
+            }
         }
         else if(volumeName=="Detector")
         {
-            if(particleName=="gamma")
+            if(eventID_in == eventID) //FOR THE EVENTS WHERE PRIMARIES PASS THE CRYSTAL
             {
-               iTuple = 2;
+                if(particleName=="gamma")
+                {
+                    iTuple = 2;
+                }
+                else if(particleID == 1) //primaries
+                {
+                    iTuple = 1;
+                }
+                else  //secondaries
+                {
+                    iTuple = 3;
+                }
             }
             else
             {
-               iTuple = 1;
+                iTuple = 4;
             }
         }
+
+        //ALL "detector_primaries" ENTER THE CRYSTAL; "detector_photons", "detector_secondaries"
+        //are their daughters.
+
+        //CAUTION: if a primary did not cross the crystal,
+        //this primary and its daughters are written ONLY in missed_crystal
 
         //saving result to root
         G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
@@ -129,6 +152,16 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
         analysisManager->FillNtupleSColumn(iTuple,7,particleName);
         analysisManager->FillNtupleIColumn(iTuple,8,particleID);
         analysisManager->FillNtupleIColumn(iTuple,9,parentID);
+
+        //ONLY FOR PRIMARIES PASSED THROUGH THE CRYSTAL
+        if(iTuple == 1)
+        {
+            analysisManager->FillNtupleDColumn(iTuple,10,angle_x_in);
+            analysisManager->FillNtupleDColumn(iTuple,11,angle_x-angle_x_in);
+            analysisManager->FillNtupleDColumn(iTuple,12,angle_y_in);
+            analysisManager->FillNtupleDColumn(iTuple,13,angle_y-angle_y_in);
+        }
+
         analysisManager->AddNtupleRow(iTuple);
     }
 }

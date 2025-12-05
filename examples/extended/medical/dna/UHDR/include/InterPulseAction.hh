@@ -23,9 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// author: Le Tuan Anh
 /// \file InterPulseAction.hh
 /// \brief Definition of the InterPulseAction class
+
+// author: Le Tuan Anh
 
 #ifndef InterPulseAction_h
 #define InterPulseAction_h 1

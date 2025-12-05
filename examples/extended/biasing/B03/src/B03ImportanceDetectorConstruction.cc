@@ -23,11 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file biasing/B03/src/B03ImportanceDetectorConstruction.cc
+/// \file B03ImportanceDetectorConstruction.cc
 /// \brief Implementation of the B03ImportanceDetectorConstruction class
-//
-//
-//
 
 #include "B03ImportanceDetectorConstruction.hh"
 

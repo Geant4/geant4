@@ -69,19 +69,20 @@ public:
   virtual ~G4VXRayModel();
 
   // return minimal beta for Cerenkov in these volumes
+  // the method may be used for other X-Ray models
   G4double Initialise(std::vector<const G4LogicalVolume*>*);
-  virtual G4double InitialiseModel() = 0;
+  virtual void InitialiseModel();
 
   // check applicability and propose step limit, which may be DBL_MAX
   // if these methods return "false", then sampling of X-rays not possible 
-  G4bool StepLimit(const G4LogicalVolume*, const G4Track&,
+  G4bool StepLimit(std::size_t idx, const G4Track&,
 		   G4double preStepBeta, G4double& limit);
-  virtual G4bool StepLimitForVolume(G4double& limit) = 0;
+  virtual G4bool StepLimitForVolume(G4double& limit);
   
   // sampling is called if StepLimit(..) returns "true"
   // produced X-rays are inside vector out
   // each photon has time, position, and other parameters  within the step
-  virtual void SampleXRays(std::vector<G4Track*>& out, const G4Step&) = 0;
+  virtual void SampleXRays(std::vector<G4Track*>& out, const G4Step&);
 
   // for automatic documentation
   virtual void ModelDescription(std::ostream& outFile) const;
@@ -108,7 +109,8 @@ protected:
   G4double pMaxBetaChange{0.1};
   
   G4int pMaxPhotons{100};
-  G4int pNumPhotons{0};
+  std::size_t pIndex{0};
+  std::size_t nVolumes{0};
 
   G4int pTypeInt{0};
   G4int pVerbose{1};

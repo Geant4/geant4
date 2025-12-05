@@ -23,15 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-
-/// \file G4FieldParametersMessenger.cc
-/// \brief Implementation of the G4FieldParametersMessenger class
-///
-/// This code was initially developed in Geant4 VMC package
-/// (https://github.com/vmc-project)
-/// and adapted to Geant4.
-///
-/// \author I. Hrivnacova; IJCLab, Orsay
+// Implementation of the G4FieldParametersMessenger class
+//
+// Author: Ivana Hrivnacova (IJClab, Orsay), 2024.
+// --------------------------------------------------------------------
 
 #include "G4FieldParametersMessenger.hh"
 #include "G4FieldParameters.hh"
@@ -51,7 +46,8 @@ G4FieldParametersMessenger::G4FieldParametersMessenger(
   // Standard constructor
 
   G4String directoryName = "/field/";
-  if (fieldParameters->GetVolumeName() != "") {
+  if (!fieldParameters->GetVolumeName().empty())
+  {
     directoryName.append(fieldParameters->GetVolumeName());
     directoryName.append("/");
     fDirectory = new G4UIdirectory(directoryName);
@@ -65,8 +61,9 @@ G4FieldParametersMessenger::G4FieldParametersMessenger(
   fFieldTypeCmd->SetGuidance(guidance);
   fFieldTypeCmd->SetParameterName("FieldType", false);
   G4String candidates;
-  for (G4int i = kMagnetic; i <= kGravity; i++) {
-    G4FieldType ft = (G4FieldType)i;
+  for (G4int i = kMagnetic; i <= kGravity; ++i)
+  {
+    auto  ft = (G4FieldType)i;
     candidates += G4FieldParameters::FieldTypeName(ft);
     candidates += " ";
   }
@@ -81,8 +78,9 @@ G4FieldParametersMessenger::G4FieldParametersMessenger(
   fEquationTypeCmd->SetGuidance(guidance);
   fEquationTypeCmd->SetParameterName("EquationType", false);
   candidates = "";
-  for (G4int i = kEqMagnetic; i <= kEqEMfieldWithEDM; i++) {
-    G4EquationType et = (G4EquationType)i;
+  for (G4int i = kEqMagnetic; i <= kEqEMfieldWithEDM; ++i)
+  {
+    auto et = (G4EquationType)i;
     candidates += G4FieldParameters::EquationTypeName(et);
     candidates += " ";
   }
@@ -99,9 +97,10 @@ G4FieldParametersMessenger::G4FieldParametersMessenger(
   fStepperTypeCmd->SetGuidance(guidance);
   fStepperTypeCmd->SetParameterName("StepperType", false);
   candidates = "";
-  for (G4int i = kCashKarpRKF45; i <= kRK547FEq3; i++) {    
-    G4StepperType st = (G4StepperType)i;
-    if (st == kUserStepper) continue;
+  for (G4int i = kCashKarpRKF45; i <= kRK547FEq3; ++i)
+  {    
+    auto st = (G4StepperType)i;
+    if (st == kUserStepper) { continue; }
     candidates += G4FieldParameters::StepperTypeName(st);
     candidates += " ";
   }
@@ -218,10 +217,13 @@ void G4FieldParametersMessenger::SetNewValue(
 {
   // Apply command to the associated object.
 
-  if (command == fFieldTypeCmd) {
-    for (G4int i = kMagnetic; i <= kGravity; i++) {
-      G4FieldType ft = (G4FieldType)i;
-      if (newValues == G4FieldParameters::FieldTypeName(ft)) {
+  if (command == fFieldTypeCmd)
+  {
+    for (G4int i = kMagnetic; i <= kGravity; ++i)
+    {
+      auto ft = (G4FieldType)i;
+      if (newValues == G4FieldParameters::FieldTypeName(ft))
+      {
         fFieldParameters->SetFieldType(ft);
         break;
       }
@@ -229,10 +231,13 @@ void G4FieldParametersMessenger::SetNewValue(
     return;
   }
   
-  if (command == fEquationTypeCmd) {
-    for (G4int i = kEqMagnetic; i <= kEqEMfieldWithEDM; i++) {
-      G4EquationType et = (G4EquationType)i;
-      if (newValues == G4FieldParameters::EquationTypeName(et)) {
+  if (command == fEquationTypeCmd)
+  {
+    for (G4int i = kEqMagnetic; i <= kEqEMfieldWithEDM; ++i)
+    {
+      auto et = (G4EquationType)i;
+      if (newValues == G4FieldParameters::EquationTypeName(et))
+      {
         fFieldParameters->SetEquationType(et);
         break;
       }
@@ -240,10 +245,13 @@ void G4FieldParametersMessenger::SetNewValue(
     return;
   }
 
-  if (command == fStepperTypeCmd) {
-    for (G4int i = kCashKarpRKF45; i <= kRK547FEq3; i++) {
-      G4StepperType st = (G4StepperType)i;
-      if (newValues == G4FieldParameters::StepperTypeName(st)) {
+  if (command == fStepperTypeCmd)
+  {
+    for (G4int i = kCashKarpRKF45; i <= kRK547FEq3; ++i)
+    {
+      auto st = (G4StepperType)i;
+      if (newValues == G4FieldParameters::StepperTypeName(st))
+      {
         fFieldParameters->SetStepperType(st);
         break;
       }
@@ -251,49 +259,57 @@ void G4FieldParametersMessenger::SetNewValue(
     return;
   }
 
-  if (command == fSetMinimumStepCmd) {
+  if (command == fSetMinimumStepCmd)
+  {
     fFieldParameters->SetMinimumStep(
       fSetMinimumStepCmd->GetNewDoubleValue(newValues));
     return;
   }
 
-  if (command == fSetDeltaChordCmd) {
+  if (command == fSetDeltaChordCmd)
+  {
     fFieldParameters->SetDeltaChord(
       fSetDeltaChordCmd->GetNewDoubleValue(newValues));
     return;
   }
 
-  if (command == fSetDeltaOneStepCmd) {
+  if (command == fSetDeltaOneStepCmd)
+  {
     fFieldParameters->SetDeltaOneStep(
       fSetDeltaOneStepCmd->GetNewDoubleValue(newValues));
     return;
   }
 
-  if (command == fSetDeltaIntersectionCmd) {
+  if (command == fSetDeltaIntersectionCmd)
+  {
     fFieldParameters->SetDeltaIntersection(
       fSetDeltaIntersectionCmd->GetNewDoubleValue(newValues));
     return;
   }
 
-  if (command == fSetMinimumEpsilonStepCmd) {
+  if (command == fSetMinimumEpsilonStepCmd)
+  {
     fFieldParameters->SetMinimumEpsilonStep(
       fSetMinimumEpsilonStepCmd->GetNewDoubleValue(newValues));
     return;
   }
 
-  if (command == fSetMaximumEpsilonStepCmd) {
+  if (command == fSetMaximumEpsilonStepCmd)
+  {
     fFieldParameters->SetMaximumEpsilonStep(
       fSetMaximumEpsilonStepCmd->GetNewDoubleValue(newValues));
     return;
   }
 
-  if (command == fSetConstDistanceCmd) {
+  if (command == fSetConstDistanceCmd)
+  {
     fFieldParameters->SetConstDistance(
       fSetConstDistanceCmd->GetNewDoubleValue(newValues));
     return;
   }
 
-  if (command == fPrintParametersCmd) {
+  if (command == fPrintParametersCmd)
+  {
     fFieldParameters->PrintParameters();
     return;
   }

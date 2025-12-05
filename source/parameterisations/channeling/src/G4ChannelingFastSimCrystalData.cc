@@ -27,15 +27,6 @@
 // Co-author:   Gianfranco Paternò (modifications & testing)
 
 #include "G4ChannelingFastSimCrystalData.hh"
-#include "G4SystemOfUnits.hh"
-#include "G4PhysicalConstants.hh"
-
-G4ChannelingFastSimCrystalData::G4ChannelingFastSimCrystalData()
-{
-
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4ChannelingFastSimCrystalData::SetMaterialProperties(
                                      const G4Material *crystal,
@@ -119,21 +110,21 @@ void G4ChannelingFastSimCrystalData::SetMaterialProperties(
     for(G4int i=0; i<fNelements; i++)
     {
       vfilein >> var;
-      fN0.push_back(var/cm3);
+      fN0.push_back(var/CLHEP::cm3);
     }
 
     //read amplitude of thermal oscillations
     for(G4int i=0; i<fNelements; i++)
     {
       vfilein >> var;
-      fU1.push_back(var*cm);
+      fU1.push_back(var*CLHEP::cm);
     }
 
         if (iModel==1)
     {
       //  read channel dimensions
       vfilein >> fDx;
-      fDx*=cm;
+      fDx*=CLHEP::cm;
       //  read interpolation step size
       vfilein >> fNpointsx;
 
@@ -144,22 +135,22 @@ void G4ChannelingFastSimCrystalData::SetMaterialProperties(
     {
       //  read channel dimensions
       vfilein >> fDx >> fDy;
-      fDx*=cm;
-      fDy*=cm;
+      fDx*=CLHEP::cm;
+      fDy*=CLHEP::cm;
       //  read the number of nodes of interpolation
       vfilein >> fNpointsx >> fNpointsy;
     }
 
     //read the height of the potential well, necessary only for step length calculation
     vfilein >> fVmax;
-    fVmax*=eV;
+    fVmax*=CLHEP::eV;
     fVmax2=2.*fVmax;
 
     //read the on-zero minimal potential inside the crystal,
     //necessary for angle recalculation for entrance/exit through
     //the crystal lateral surface
     vfilein >> fVMinCrystal;
-    fVMinCrystal*=eV;
+    fVMinCrystal*=CLHEP::eV;
 
     // to create the class of interpolation for any function
     fElectricFieldX =
@@ -186,7 +177,7 @@ void G4ChannelingFastSimCrystalData::SetMaterialProperties(
         //reading the coefficients of cubic spline
         vfilein >> ai >> bi >> ci >> di;
         //setting spline coefficients for electric field
-        unitIF=eV/cm;
+        unitIF=CLHEP::eV/CLHEP::cm;
         fElectricFieldX->SetCoefficients1D(ai*unitIF, bi*unitIF,
                                            ci*unitIF, di*unitIF, i);
 
@@ -200,14 +191,14 @@ void G4ChannelingFastSimCrystalData::SetMaterialProperties(
         //reading the coefficients of cubic spline
         vfilein >> ai >> bi >> ci >> di;
         //setting spline coefficients for electron density
-        unitIF=1./cm3;
+        unitIF=1./CLHEP::cm3;
         fElectronDensity->SetCoefficients1D(ai*unitIF, bi*unitIF,
                                             ci*unitIF, di*unitIF, i);
 
         //reading the coefficients of cubic spline
         vfilein >> ai >> bi >> ci >> di;
         //setting spline coefficients for minimal ionization energy
-        unitIF=eV;
+        unitIF=CLHEP::eV;
         fMinIonizationEnergy->SetCoefficients1D(ai*unitIF, bi*unitIF,
                                                 ci*unitIF, di*unitIF, i);
 
@@ -233,7 +224,7 @@ void G4ChannelingFastSimCrystalData::SetMaterialProperties(
           {
             //reading the coefficients of cubic spline
             vfilein >> ai3D >> bi3D >> ci3D;
-            unitIF=eV;
+            unitIF=CLHEP::eV;
             //setting spline coefficients for minimal ionization energy
             fMinIonizationEnergy->SetCoefficients2D(ai3D*unitIF, bi3D*unitIF, ci3D*unitIF,
                                                     i, j, k);
@@ -241,14 +232,14 @@ void G4ChannelingFastSimCrystalData::SetMaterialProperties(
             //reading the coefficients of cubic spline
             vfilein >> ai3D >> bi3D >> ci3D;
             //setting spline coefficients for horizontal electric field
-            unitIF=eV/cm;
+            unitIF=CLHEP::eV/CLHEP::cm;
             fElectricFieldX->SetCoefficients2D(ai3D*unitIF, bi3D*unitIF, ci3D*unitIF,
                                                i, j, k);
 
             //reading the coefficients of cubic spline
             vfilein >> ai3D >> bi3D >> ci3D;
             //setting spline coefficients for vertical electric field
-            unitIF=eV/cm;
+            unitIF=CLHEP::eV/CLHEP::cm;
             fElectricFieldY->SetCoefficients2D(ai3D*unitIF, bi3D*unitIF, ci3D*unitIF,
                                                i, j, k);
 
@@ -262,7 +253,7 @@ void G4ChannelingFastSimCrystalData::SetMaterialProperties(
             //reading the coefficients of cubic spline
             vfilein >> ai3D >> bi3D >> ci3D;
             //setting spline coefficients for electron density
-            unitIF=1./cm3;
+            unitIF=1./CLHEP::cm3;
             fElectronDensity->SetCoefficients2D(ai3D*unitIF, bi3D*unitIF, ci3D*unitIF,
                                                 i, j, k);
 
@@ -291,7 +282,7 @@ void G4ChannelingFastSimCrystalData::SetMaterialProperties(
     for(G4int i=0; i<fNelements; i++)
     {
       fRF.push_back((std::pow(9*CLHEP::pi*CLHEP::pi/128/fZ1[i],1/3.))
-                    *0.5291772109217*angstrom);//Thomas-Fermi screening radius
+                    *0.5291772109217*CLHEP::angstrom);//Thomas-Fermi screening radius
 
       fTetamax0.push_back(CLHEP::hbarc/(fR0*std::pow(fAN[i],1./3.)));
       fTeta10.push_back(CLHEP::hbarc/fRF[i]);

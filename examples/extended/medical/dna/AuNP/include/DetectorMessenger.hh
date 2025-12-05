@@ -23,47 +23,39 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file medical/dna/range/include/DetectorMessenger.hh
+/// \file DetectorMessenger.hh
 /// \brief Definition of the DetectorMessenger class
-//
-// $Id: DetectorMessenger.hh 78723 2014-01-20 10:32:17Z gcosmo $
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef DetectorMessenger_h
 #define DetectorMessenger_h 1
 
 #include "G4UImessenger.hh"
 #include "globals.hh"
+#include <memory>
+#include "G4UIdirectory.hh"
+#include "G4UIcmdWithAString.hh"
+#include "G4UIcmdWithAnInteger.hh"
+#include "G4UIcmdWithADoubleAndUnit.hh"
 
 class DetectorConstruction;
-class G4UIdirectory;
-class G4UIcmdWithAString;
-class G4UIcmdWithAnInteger;
-class G4UIcmdWithADoubleAndUnit;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class DetectorMessenger : public G4UImessenger
-{
-  public:
-    DetectorMessenger(DetectorConstruction*);
-    ~DetectorMessenger();
-
-    virtual void SetNewValue(G4UIcommand*, G4String);
-
-  private:
-    DetectorConstruction* fDetector;
-
-    G4UIdirectory* fTestemDir;
-    G4UIdirectory* fDetDir;
-    G4UIcmdWithAString* fNPMaterCmd;
-    G4UIcmdWithAnInteger* fNReplicaRCmd;
-    G4UIcmdWithAnInteger* fNReplicaAzmCmd;
-    G4UIcmdWithADoubleAndUnit* fAbsRadiusCmd;
-    G4UIcmdWithADoubleAndUnit* fNPRadiusCmd;
-    G4UIcmdWithADoubleAndUnit* fTrackingCutCmd;
+class DetectorMessenger final : public G4UImessenger {
+public:
+  explicit DetectorMessenger(DetectorConstruction *);
+  ~DetectorMessenger() override;
+  void SetNewValue(G4UIcommand *, G4String) override;
+private:
+  DetectorConstruction *fDetector = nullptr;
+  std::unique_ptr<G4UIdirectory> fTestemDir;
+  std::unique_ptr<G4UIdirectory> fDetDir;
+  std::unique_ptr<G4UIcmdWithAString> fNPMaterCmd;
+  std::unique_ptr<G4UIcmdWithAnInteger> fNReplicaRCmd;
+  std::unique_ptr<G4UIcmdWithAnInteger> fNReplicaAzmCmd;
+  std::unique_ptr<G4UIcmdWithADoubleAndUnit> fAbsRadiusCmd;
+  std::unique_ptr<G4UIcmdWithADoubleAndUnit> fNPRadiusCmd;
+  std::unique_ptr<G4UIcmdWithADoubleAndUnit> fTrackingCutCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

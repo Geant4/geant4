@@ -30,7 +30,7 @@
 // Voxelizer for tessellated surfaces and solids positioning in 3D space,
 // used in G4TessellatedSolid and G4MultiUnion.
 
-// 19.10.12 Marek Gayer, created
+// Author: Marek Gayer (CERN), 19.10.2012 - Created
 // --------------------------------------------------------------------
 #ifndef G4VOXELIZER_HH
 #define G4VOXELIZER_HH
@@ -59,33 +59,64 @@ struct G4VoxelInfo
   G4int next;
 };
 
+/**
+ * @brief G4Voxelizer is a tool for generating the optimisation structure
+ * of tessellated surfaces and solids positioned in 3D space; it is used in
+ * G4TessellatedSolid and G4MultiUnion.
+ */
+
 class G4Voxelizer
 {
   public:
 
-    template <typename T> 
-    static inline G4int BinarySearch(const std::vector<T>& vec, T value);
+    /**
+     * Constructor and default Destructor.
+     */
+    G4Voxelizer();
+    ~G4Voxelizer() = default;
 
+    /**
+     * Builds the voxelisation structure for solids positioned in space.
+     *  @param[in] solids The list of solids.
+     *  @param[in] transforms The associated transformation in space.
+     */
     void Voxelize(std::vector<G4VSolid*>& solids,
                   std::vector<G4Transform3D>& transforms);
+
+    /**
+     * Builds the voxelisation structure for facets forming a shape.
+     *  @param[in] facets The list of facets.
+     */
     void Voxelize(std::vector<G4VFacet*>& facets);
 
+    /**
+     * Displays the dX, dY, dZ, pX, pY and pZ for each node.
+     */
     void DisplayVoxelLimits() const;
+
+    /**
+     * Prints the positions of the boundaries of the slices on the three axes.
+     */
     void DisplayBoundaries();
+
+    /**
+     * Prints which solids are present in the slices previously elaborated.
+     */
     void DisplayListNodes() const;
 
-    G4Voxelizer();
-   ~G4Voxelizer();
-
+    /**
+     * Displays the nodes located in a voxel characterised by its three indexes.
+     */
     void GetCandidatesVoxel(std::vector<G4int>& voxels);
-      // Method displaying the nodes located in a voxel characterized
-      // by its three indexes.
 
+    /**
+     * Methods returning in a vector container the nodes located in a voxel
+     * characterised by its three indexes.
+     *  @returns The total candidates number.
+     */
     G4int GetCandidatesVoxelArray(const G4ThreeVector& point,
                                         std::vector<G4int>& list,
                                         G4SurfBits* crossed = nullptr) const;
-      // Method returning in a vector container the nodes located in a voxel
-      // characterized by its three indexes.
     G4int GetCandidatesVoxelArray(const std::vector<G4int>& voxels,
                                   const G4SurfBits bitmasks[],
                                         std::vector<G4int>& list,
@@ -94,71 +125,161 @@ class G4Voxelizer
                                         std::vector<G4int>& list,
                                         G4SurfBits* crossed = nullptr)const;
 
+    /**
+     * Returns the pointer to the array containing the characteristics
+     * of each box.
+     */
     inline const std::vector<G4VoxelBox>& GetBoxes() const;
-      // Method returning the pointer to the array containing the
-      // characteristics of each box.
 
+    /**
+     * Returns the boundary vector, given an 'index'.
+     */
     inline const std::vector<G4double>& GetBoundary(G4int index) const;
 
+    /**
+     * Utility method for checking/updating current voxel given in input.
+     */
     G4bool UpdateCurrentVoxel(const G4ThreeVector& point,
                               const G4ThreeVector& direction,
                                     std::vector<G4int>& curVoxel) const;
 
+    /**
+     * Updates current voxel based on provided 'point'.
+     */
     inline void GetVoxel(std::vector<G4int>& curVoxel,
                          const G4ThreeVector& point) const;
 
+    /**
+     * Returns memory size of a slice.
+     */
     inline G4int GetBitsPerSlice () const;
 
+    /**
+     * Returns true if 'point' is contained within boundaries.
+     */
     G4bool Contains(const G4ThreeVector& point) const;
 
+    /**
+     * Returns the distance to next boundary, given 'point' and 'direction'
+     * and updates current voxel 'curVoxel', using the index corresponding
+     * to the closest voxel boundary on the ray.
+     */
     G4double DistanceToNext(const G4ThreeVector& point,
                             const G4ThreeVector& direction,
                                   std::vector<G4int>& curVoxel) const;
 
+    /**
+     * Returns the distance to first bounding box, given 'point' and 'direction'.
+     */
     G4double DistanceToFirst(const G4ThreeVector& point,
                              const G4ThreeVector& direction) const;
 
+    /**
+     * Returns the minimum distance of 'point' to the bounding box.
+     */
     G4double DistanceToBoundingBox(const G4ThreeVector& point) const;
 
+    /**
+     * Utility for estimating the isotropic safety from a point 'p' outside
+     * the current solid to any of its surfaces. The algorithm may be accurate
+     * or should provide a fast underestimate, based on safety point 'f'.
+     */
+    G4double MinDistanceToBox (const G4ThreeVector& p,
+                               const G4ThreeVector& f) const;
+
+    /**
+     * Accessors for voxels and points.
+     */
     inline G4int GetVoxelsIndex(G4int x, G4int y, G4int z) const;
     inline G4int GetVoxelsIndex(const std::vector<G4int>& voxels) const;
     inline G4bool GetPointVoxel(const G4ThreeVector& p,
                                 std::vector<G4int>& voxels) const;
     inline G4int GetPointIndex(const G4ThreeVector& p) const;
 
+    /**
+     * Returns the empty bits container.
+     */
     inline const G4SurfBits& Empty() const;
+
+    /**
+     * Returns true if empty bit in container, given an 'index'.
+     */
     inline G4bool IsEmpty(G4int index) const;
 
+    /**
+     * Setters/getter for the maximum number of voxels.
+     */
     void SetMaxVoxels(G4int max);
     void SetMaxVoxels(const G4ThreeVector& reductionRatio);
-
     inline G4int GetMaxVoxels(G4ThreeVector& ratioOfReduction);
 
+    /**
+     * Logger returning the size of total allocated memory.
+     */
     G4int AllocatedMemory();
 
+    /**
+     * Utility accessors/functions for voxels.
+     */
     inline long long GetCountOfVoxels() const;
-
     inline long long CountVoxels(std::vector<G4double> boundaries[]) const;
-
     inline const std::vector<G4int>&
                  GetCandidates(std::vector<G4int>& curVoxel) const;
-
     inline G4int GetVoxelBoxesSize() const;
-
-    inline const G4VoxelBox &GetVoxelBox(G4int i) const;
-
+    inline const G4VoxelBox& GetVoxelBox(G4int i) const;
     inline const std::vector<G4int>& GetVoxelBoxCandidates(G4int i) const;
-
     inline G4int GetTotalCandidates() const;
-
-    static G4double MinDistanceToBox (const G4ThreeVector& aPoint,
-                                      const G4ThreeVector& f);
-
     static void SetDefaultVoxelsCount(G4int count);
-
     static G4int GetDefaultVoxelsCount();
 
   private:
+
+    /**
+     * Binary search function for retrieving a value in a vector.
+     */
+    template <typename T> 
+    inline G4int BinarySearch(const std::vector<T>& vec, T value) const;
+
+    /**
+     * Utilities.
+     */
+    G4String GetCandidatesAsString(const G4SurfBits& bits) const;
+    void CreateSortedBoundary(std::vector<G4double>& boundaryRaw, G4int axis);
+    void DisplayBoundaries(std::vector<G4double>& fBoundaries);
+    void FindComponentsFastest(unsigned int mask,
+                               std::vector<G4int>& list, G4int i) const;
+    inline G4ThreeVector GetGlobalPoint(const G4Transform3D& trans,
+                                        const G4ThreeVector& lpoint) const;
+    void TransformLimits(G4ThreeVector& min, G4ThreeVector& max,
+                         const G4Transform3D& transformation) const;
+
+    /**
+     * Build utilities.
+     */
+    void BuildEmpty ();
+    void BuildBoundaries();
+    void BuildReduceVoxels(std::vector<G4double> fBoundaries[],
+                           G4ThreeVector reductionRatio);
+    void BuildReduceVoxels2(std::vector<G4double> fBoundaries[],
+                            G4ThreeVector reductionRatio);
+    void BuildVoxelLimits(std::vector<G4VSolid*>& solids,
+                          std::vector<G4Transform3D>& transforms);
+    void BuildVoxelLimits(std::vector<G4VFacet*>& facets);
+    void CreateMiniVoxels(std::vector<G4double> fBoundaries[],
+                          G4SurfBits bitmasks[]);
+    void BuildBitmasks(std::vector<G4double> fBoundaries[],
+                       G4SurfBits bitmasks[], G4bool countsOnly = false);
+    void BuildBoundingBox();
+    void BuildBoundingBox(G4ThreeVector& amin, G4ThreeVector& amax,
+                          G4double tolerance = 0.0);
+    void SetReductionRatio(G4int maxVoxels, G4ThreeVector& reductionRatio);
+
+
+  private:
+
+   /**
+    * @brief G4VoxelComparator is utility class used for comparing voxels.
+    */
 
     class G4VoxelComparator
     {
@@ -177,47 +298,7 @@ class G4Voxelizer
       }
     };
 
-    void BuildEmpty ();
-
-    G4String GetCandidatesAsString(const G4SurfBits& bits) const;
-
-    void CreateSortedBoundary(std::vector<G4double>& boundaryRaw, G4int axis);
-
-    void BuildBoundaries();
-
-    void BuildReduceVoxels(std::vector<G4double> fBoundaries[],
-                           G4ThreeVector reductionRatio);
-    void BuildReduceVoxels2(std::vector<G4double> fBoundaries[],
-                            G4ThreeVector reductionRatio);
-
-    void BuildVoxelLimits(std::vector<G4VSolid*>& solids,
-                          std::vector<G4Transform3D>& transforms);
-    void BuildVoxelLimits(std::vector<G4VFacet*>& facets);
-
-    void DisplayBoundaries(std::vector<G4double>& fBoundaries);
-
-    void BuildBitmasks(std::vector<G4double> fBoundaries[],
-                       G4SurfBits bitmasks[], G4bool countsOnly = false);
-
-    void BuildBoundingBox();
-    void BuildBoundingBox(G4ThreeVector& amin, G4ThreeVector& amax,
-                          G4double tolerance = 0.0);
-
-    void SetReductionRatio(G4int maxVoxels, G4ThreeVector& reductionRatio);
-
-    void CreateMiniVoxels(std::vector<G4double> fBoundaries[],
-                          G4SurfBits bitmasks[]);
-    static void FindComponentsFastest(unsigned int mask,
-                                      std::vector<G4int>& list, G4int i);
-
-    inline G4ThreeVector GetGlobalPoint(const G4Transform3D& trans,
-                                        const G4ThreeVector& lpoint) const;
-    void TransformLimits(G4ThreeVector& min, G4ThreeVector& max,
-                         const G4Transform3D& transformation) const;
-
-  private:
-
-    static G4ThreadLocal G4int fDefaultVoxelsCount;
+    static G4int fDefaultVoxelsCount;
 
     std::vector<G4VoxelBox> fVoxelBoxes;
     std::vector<std::vector<G4int> > fVoxelBoxesCandidates;

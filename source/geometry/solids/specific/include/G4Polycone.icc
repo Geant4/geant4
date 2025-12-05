@@ -90,8 +90,10 @@ inline
 void G4Polycone::SetOriginalParameters(G4PolyconeHistorical* pars)
 {
   if (pars == nullptr)
+  {
     G4Exception("G4Polycone::SetOriginalParameters()", "GeomSolids0002",
                 FatalException, "NULL pointer to parameters!");
+  }
   *original_parameters = *pars;
   fCubicVolume = 0.;
   fRebuildPolyhedron = true;

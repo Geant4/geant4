@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file ActionInitialization.cc
+/// \brief Implementation of the ActionInitialization class
+
 // This example is provided by the Geant4-DNA collaboration
 // chem6 example is derived from chem4 and chem5 examples
 //
@@ -37,51 +40,35 @@
 //
 // Authors: W. G. Shin and S. Incerti (CENBG, France)
 //
-/// \file ActionInitialization.cc
-/// \brief Implementation of the ActionInitialization class
 
 #include "ActionInitialization.hh"
 
 #include "PrimaryGeneratorAction.hh"
 #include "RunAction.hh"
 #include "StackingAction.hh"
-#include "TimeStepAction.hh"
-
-#include "G4DNAChemistryManager.hh"
 #include "G4H2O.hh"
 #include "G4MoleculeCounter.hh"
-#include "G4Scheduler.hh"
 #include "G4MoleculeReactionCounter.hh"
 #include "EventAction.hh"
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
-
-ActionInitialization::ActionInitialization() : G4VUserActionInitialization() {}
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-ActionInitialization::~ActionInitialization() {}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
-
-void ActionInitialization::BuildForMaster() const
-{
+void ActionInitialization::BuildForMaster() const {
   SetUserAction(new RunAction());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-void ActionInitialization::Build() const
-{
+void ActionInitialization::Build() const {
   SetUserAction(new PrimaryGeneratorAction());
   SetUserAction(new RunAction());
   SetUserAction(new EventAction());
   SetUserAction(new StackingAction());
-  G4Scheduler::Instance()->SetUserAction(new G4UserTimeStepAction);
   BuildMoleculeCounters();
 }
 
-void ActionInitialization::BuildMoleculeCounters() const
-{
+void ActionInitialization::BuildMoleculeCounters() {
   G4MoleculeCounterManager::Instance()->SetResetCountersBeforeEvent(true);
   G4MoleculeCounterManager::Instance()->SetResetCountersBeforeRun(true);
   G4MoleculeCounterManager::Instance()->SetAccumulateCounterIntoMaster(false);

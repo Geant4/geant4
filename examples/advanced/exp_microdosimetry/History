@@ -5,6 +5,10 @@ which **must** added in reverse chronological order (newest at the top).
 It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
+## 2025-11-03 G. Milluzzo (exp_microdosimetry-V11-03-00)
+- Added the mini tissue equivalent proportional counter (mini TEPC) in Detector Construction
+- Added a new macro implementing a parallel monoenergetic 100 MeV proton beam
+
 ## 2024-10-28 G. Milluzzo (exp_microdosimetry-V11-02-00)
 - Added the SiC microdosimeter geometry in DetectorConstruction
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file radiobiology/include/LETAccumulable.hh
+/// \file LETAccumulable.hh
 /// \brief Definition of the RadioBio::LETAccumulable class
 
 #ifndef RadiobiologyLETACCUMULABLE_HH

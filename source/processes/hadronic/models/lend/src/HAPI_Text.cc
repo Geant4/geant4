@@ -26,7 +26,7 @@ Text::Text() :
  * @param a_text text string
  * @return
  */
-Text::Text( std::string const a_text ) :
+Text::Text( std::string const &a_text ) :
         m_text( a_text ) {
 
 }

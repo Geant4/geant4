@@ -23,11 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file optical/wls/src/WLSDetectorMessenger.cc
+/// \file WLSDetectorMessenger.cc
 /// \brief Implementation of the WLSDetectorMessenger class
-//
-//
+
 #include "WLSDetectorMessenger.hh"
 
 #include "G4UIcmdWithABool.hh"

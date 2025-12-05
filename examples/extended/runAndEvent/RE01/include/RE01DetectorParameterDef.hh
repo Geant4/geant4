@@ -23,10 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file runAndEvent/RE01/include/RE01DetectorParameterDef.hh
+/// \file RE01DetectorParameterDef.hh
 /// \brief Definition of the RE01DetectorParameterDef class
-//
-//
 
 G4double fExpHall_x;
 G4double fExpHall_y;

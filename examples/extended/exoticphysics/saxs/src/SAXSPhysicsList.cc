@@ -25,8 +25,6 @@
 //
 /// \file SAXSPhysicsList.cc
 /// \brief Implementation of the SAXSPhysicsList class
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "SAXSPhysicsList.hh"
 

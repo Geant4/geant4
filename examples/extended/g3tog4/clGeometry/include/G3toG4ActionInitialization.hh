@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 /// \file G3toG4ActionInitialization.hh
 /// \brief Definition of the G3toG4ActionInitialization class
 

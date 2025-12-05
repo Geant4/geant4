@@ -23,11 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file persistency/gdml/G03/include/G03PrimaryGeneratorAction.hh
+/// \file G03PrimaryGeneratorAction.hh
 /// \brief Definition of the G03PrimaryGeneratorAction class
-//
-//
-//
+
 // Class G03PrimaryGeneratorAction
 //
 // Simple primary-generator action class.

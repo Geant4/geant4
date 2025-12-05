@@ -23,14 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file field/field01/include/F01DetectorMessenger.hh
+/// \file F01DetectorMessenger.hh
 /// \brief Definition of the F01DetectorMessenger class
-//
-//
-//
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef F01DetectorMessenger_h
 #define F01DetectorMessenger_h 1

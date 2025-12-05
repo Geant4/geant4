@@ -64,18 +64,19 @@ LUPI_HOST_DEVICE ProtareTNSL::ProtareTNSL( ) :
 
 LUPI_HOST ProtareTNSL::ProtareTNSL( LUPI::StatusMessageReporting &a_smr, GIDI::ProtareTNSL const &a_protare, PoPI::Database const &a_pops, Transporting::MC &a_settings, 
                 GIDI::Transporting::Particles const &a_particles, DomainHash const &a_domainHash, GIDI::Styles::TemperatureInfos const &a_temperatureInfos,
-                std::set<int> const &a_reactionsToExclude, int a_reactionsToExcludeOffset, LUPI_maybeUnused bool a_allowFixedGrid ) :
+                GIDI::ExcludeReactionsSet const &a_reactionsToExclude, std::size_t a_reactionsToExcludeOffset, LUPI_maybeUnused bool a_allowFixedGrid ) :
         Protare( ProtareType::TNSL, a_protare, a_settings, a_pops ),
         m_protareWithElastic( static_cast<ProtareSingle *>( protareFromGIDIProtare( a_smr, *a_protare.protare( ), a_pops, a_settings, a_particles, 
             a_domainHash, a_temperatureInfos, a_reactionsToExclude, a_reactionsToExcludeOffset, false ) ) ),
         m_TNSL( static_cast<ProtareSingle *>( protareFromGIDIProtare( a_smr, *a_protare.TNSL( ), a_pops, a_settings, a_particles, a_domainHash, 
-            TNSL_temperatureInfos( *a_protare.TNSL( ), a_settings ), a_reactionsToExclude, a_reactionsToExcludeOffset + static_cast<int>( m_protareWithElastic->numberOfReactions( ) ), false ) ) ),
+            TNSL_temperatureInfos( *a_protare.TNSL( ), a_settings ), a_reactionsToExclude, a_reactionsToExcludeOffset + m_protareWithElastic->numberOfReactions( ), false ) ) ),
         m_protareWithoutElastic( nullptr )  {
 
-    std::set<int> reactionsToExclude( a_reactionsToExclude );
+    GIDI::ExcludeReactionsSet reactionsToExclude( a_reactionsToExclude );
 
     reactionsToExclude.insert( 0 );
     m_protareWithoutElastic = static_cast<ProtareSingle *>( protareFromGIDIProtare( a_smr, *a_protare.protare( ), a_pops, a_settings, a_particles, a_domainHash, a_temperatureInfos, reactionsToExclude ) );
+    m_protareWithoutElastic->setUpscatterModelASupported( false );
 
     m_numberOfTNSLReactions = m_TNSL->numberOfReactions( );
     m_TNSL_maximumEnergy = m_TNSL->maximumEnergy( );
@@ -170,13 +171,10 @@ LUPI_HOST_DEVICE ProtareSingle *ProtareTNSL::protare( std::size_t a_index ) {
  * @return                              Pointer to the requested protare or nullptr if invalid *a_index*..
  ***********************************************************************************************************/
 
-LUPI_HOST_DEVICE ProtareSingle const *ProtareTNSL::protareWithReaction( int a_index ) const {
+LUPI_HOST_DEVICE ProtareSingle const *ProtareTNSL::protareWithReaction( std::size_t a_index ) const {
 
-    int index = a_index - m_numberOfTNSLReactions;
-
-    if( a_index < 0 ) return( nullptr );
-    if( index < 0 ) return( m_TNSL );
-    return( m_protareWithElastic->protareWithReaction( index ) );
+    if( a_index < m_numberOfTNSLReactions ) return( m_TNSL );
+    return( m_protareWithElastic->protareWithReaction( a_index - m_numberOfTNSLReactions ) );
 }
 
 /* *********************************************************************************************************//**
@@ -207,12 +205,10 @@ LUPI_HOST_DEVICE Vector<double> ProtareTNSL::temperatures( std::size_t a_index )
  * @return                          The reaction at index *a_index*.
  ***********************************************************************************************************/
 
-LUPI_HOST_DEVICE Reaction const *ProtareTNSL::reaction( int a_index ) const {
+LUPI_HOST_DEVICE Reaction const *ProtareTNSL::reaction( std::size_t a_index ) const {
 
-    int index = a_index - m_numberOfTNSLReactions;
-
-    if( index < 0 ) return( m_TNSL->reaction( a_index ) );
-    return( m_protareWithElastic->reaction( index ) );
+    if( a_index < m_numberOfTNSLReactions ) return( m_TNSL->reaction( a_index ) );
+    return( m_protareWithElastic->reaction( a_index - m_numberOfTNSLReactions ) );
 }
 
 /* *********************************************************************************************************//**
@@ -223,12 +219,10 @@ LUPI_HOST_DEVICE Reaction const *ProtareTNSL::reaction( int a_index ) const {
  * @return                          *true* if the reaction has URR robability tables and false otherwise.
  ***********************************************************************************************************/
 
-LUPI_HOST_DEVICE bool ProtareTNSL::reactionHasURR_probabilityTables( int a_index ) const {
+LUPI_HOST_DEVICE bool ProtareTNSL::reactionHasURR_probabilityTables( std::size_t a_index ) const {
 
-    int index = a_index - m_numberOfTNSLReactions;
-
-    if( index < 0 ) return( false );
-    return( m_protareWithElastic->reactionHasURR_probabilityTables( index ) );
+    if( a_index < m_numberOfTNSLReactions ) return( false );
+    return( m_protareWithElastic->reactionHasURR_probabilityTables( a_index - m_numberOfTNSLReactions ) );
 }
 
 /* *********************************************************************************************************//**
@@ -242,10 +236,8 @@ LUPI_HOST_DEVICE bool ProtareTNSL::reactionHasURR_probabilityTables( int a_index
 
 LUPI_HOST_DEVICE double ProtareTNSL::threshold( std::size_t a_index ) const {
 
-    int index = a_index - m_numberOfTNSLReactions;
-
-    if( index < 0 ) return( m_TNSL->threshold( a_index ) );
-    return( m_protareWithElastic->threshold( index ) );
+    if( a_index < m_numberOfTNSLReactions ) return( m_TNSL->threshold( a_index ) );
+    return( m_protareWithElastic->threshold( a_index - m_numberOfTNSLReactions ) );
 }
 
 /* *********************************************************************************************************//**
@@ -261,7 +253,7 @@ LUPI_HOST_DEVICE double ProtareTNSL::threshold( std::size_t a_index ) const {
  * @return                              The total cross section.
  ***********************************************************************************************************/
 
-LUPI_HOST_DEVICE double ProtareTNSL::crossSection( URR_protareInfos const &a_URR_protareInfos, int a_hashIndex, double a_temperature, double a_energy, bool a_sampling ) const {
+LUPI_HOST_DEVICE double ProtareTNSL::crossSection( URR_protareInfos const &a_URR_protareInfos, std::size_t a_hashIndex, double a_temperature, double a_energy, bool a_sampling ) const {
 
     double crossSection1 = 0.0;
 
@@ -284,7 +276,8 @@ LUPI_HOST_DEVICE double ProtareTNSL::crossSection( URR_protareInfos const &a_URR
  * @param   a_crossSectionVector        [in/out]    The energy dependent, total cross section to add cross section data to.
  ***********************************************************************************************************/
 
-LUPI_HOST_DEVICE void ProtareTNSL::crossSectionVector( double a_temperature, double a_userFactor, int a_numberAllocated, double *a_crossSectionVector ) const {
+LUPI_HOST_DEVICE void ProtareTNSL::crossSectionVector( double a_temperature, double a_userFactor, std::size_t a_numberAllocated, 
+                double *a_crossSectionVector ) const {
 
     if( a_temperature <= m_TNSL_maximumTemperature ) {
         m_TNSL->crossSectionVector( a_temperature, a_userFactor, a_numberAllocated, a_crossSectionVector );
@@ -308,19 +301,19 @@ LUPI_HOST_DEVICE void ProtareTNSL::crossSectionVector( double a_temperature, dou
  * @return                              The total cross section.
  ***********************************************************************************************************/
 
-LUPI_HOST_DEVICE double ProtareTNSL::reactionCrossSection( int a_reactionIndex, URR_protareInfos const &a_URR_protareInfos, int a_hashIndex, double a_temperature, double a_energy, bool a_sampling ) const {
+LUPI_HOST_DEVICE double ProtareTNSL::reactionCrossSection( std::size_t a_reactionIndex, URR_protareInfos const &a_URR_protareInfos, std::size_t a_hashIndex, double a_temperature, double a_energy, bool a_sampling ) const {
 
-    int index = a_reactionIndex - m_numberOfTNSLReactions;
+    std::size_t index = a_reactionIndex - m_numberOfTNSLReactions;
     double crossSection1 = 0.0;
 
     if( ( a_energy < m_TNSL_maximumEnergy ) && ( a_temperature <= m_TNSL_maximumTemperature ) ) {
-        if( index < 0 ) {
+        if( a_reactionIndex < m_numberOfTNSLReactions ) {
             crossSection1 = m_TNSL->reactionCrossSection( a_reactionIndex, a_URR_protareInfos, a_hashIndex, a_temperature, a_energy, a_sampling ); }
         else {
-            if( index > 0 ) crossSection1 = m_protareWithElastic->reactionCrossSection( index, a_URR_protareInfos, a_hashIndex, a_temperature, a_energy, a_sampling );
+            if( a_reactionIndex > m_numberOfTNSLReactions ) crossSection1 = m_protareWithElastic->reactionCrossSection( index, a_URR_protareInfos, a_hashIndex, a_temperature, a_energy, a_sampling );
         } }
     else {
-        if( index >= 0 ) crossSection1 = m_protareWithElastic->reactionCrossSection( index, a_URR_protareInfos, a_hashIndex, a_temperature, a_energy, a_sampling );
+        if( a_reactionIndex >= m_numberOfTNSLReactions ) crossSection1 = m_protareWithElastic->reactionCrossSection( index, a_URR_protareInfos, a_hashIndex, a_temperature, a_energy, a_sampling );
     }
 
     return( crossSection1 );
@@ -337,19 +330,19 @@ LUPI_HOST_DEVICE double ProtareTNSL::reactionCrossSection( int a_reactionIndex, 
  * @return                              The total cross section.
  ***********************************************************************************************************/
 
-LUPI_HOST_DEVICE double ProtareTNSL::reactionCrossSection( int a_reactionIndex, URR_protareInfos const &a_URR_protareInfos, double a_temperature, double a_energy ) const {
+LUPI_HOST_DEVICE double ProtareTNSL::reactionCrossSection( std::size_t a_reactionIndex, URR_protareInfos const &a_URR_protareInfos, double a_temperature, double a_energy ) const {
 
-    int index = a_reactionIndex - m_numberOfTNSLReactions;
+    std::size_t index = a_reactionIndex - m_numberOfTNSLReactions;
     double crossSection1 = 0.0;
 
     if( ( a_energy < m_TNSL_maximumEnergy ) && ( a_temperature <= m_TNSL_maximumTemperature ) ) {
-        if( index < 0 ) {
+        if( a_reactionIndex < m_numberOfTNSLReactions ) {
             crossSection1 = m_TNSL->reactionCrossSection( a_reactionIndex, a_URR_protareInfos, a_temperature, a_energy ); }
         else {
-            if( index > 0 ) crossSection1 = m_protareWithElastic->reactionCrossSection( index, a_URR_protareInfos, a_temperature, a_energy );
+            if( a_reactionIndex > m_numberOfTNSLReactions ) crossSection1 = m_protareWithElastic->reactionCrossSection( index, a_URR_protareInfos, a_temperature, a_energy );
         } }
     else {
-        if( index >= 0 ) crossSection1 = m_protareWithElastic->reactionCrossSection( index, a_URR_protareInfos, a_temperature, a_energy );
+        if( a_reactionIndex >= m_numberOfTNSLReactions ) crossSection1 = m_protareWithElastic->reactionCrossSection( index, a_URR_protareInfos, a_temperature, a_energy );
     }
 
     return( crossSection1 );
@@ -365,7 +358,7 @@ LUPI_HOST_DEVICE double ProtareTNSL::reactionCrossSection( int a_reactionIndex, 
  * @return                          The total deposition energy.
  ***********************************************************************************************************/
 
-LUPI_HOST_DEVICE double ProtareTNSL::depositionEnergy( int a_hashIndex, double a_temperature, double a_energy ) const {
+LUPI_HOST_DEVICE double ProtareTNSL::depositionEnergy( std::size_t a_hashIndex, double a_temperature, double a_energy ) const {
 
     double deposition_energy = 0.0;
 
@@ -389,7 +382,7 @@ LUPI_HOST_DEVICE double ProtareTNSL::depositionEnergy( int a_hashIndex, double a
  * @return                          The total deposition momentum.
  ***********************************************************************************************************/
 
-LUPI_HOST_DEVICE double ProtareTNSL::depositionMomentum( int a_hashIndex, double a_temperature, double a_energy ) const {
+LUPI_HOST_DEVICE double ProtareTNSL::depositionMomentum( std::size_t a_hashIndex, double a_temperature, double a_energy ) const {
 
     double deposition_momentum = 0.0;
 
@@ -413,7 +406,7 @@ LUPI_HOST_DEVICE double ProtareTNSL::depositionMomentum( int a_hashIndex, double
  * @return                          The total production energy.
  ***********************************************************************************************************/
 
-LUPI_HOST_DEVICE double ProtareTNSL::productionEnergy( int a_hashIndex, double a_temperature, double a_energy ) const {
+LUPI_HOST_DEVICE double ProtareTNSL::productionEnergy( std::size_t a_hashIndex, double a_temperature, double a_energy ) const {
 
     double production_energy = 0.0;
 
@@ -438,7 +431,7 @@ LUPI_HOST_DEVICE double ProtareTNSL::productionEnergy( int a_hashIndex, double a
  * @return                      [in]    A vector of the length of the number of multi-group groups.
  ***********************************************************************************************************/
 
-LUPI_HOST_DEVICE double ProtareTNSL::gain( int a_hashIndex, double a_temperature, double a_energy, int a_particleIndex ) const {
+LUPI_HOST_DEVICE double ProtareTNSL::gain( std::size_t a_hashIndex, double a_temperature, double a_energy, int a_particleIndex ) const {
 
     double gain1 = 0.0;
 
@@ -463,7 +456,7 @@ LUPI_HOST_DEVICE double ProtareTNSL::gain( int a_hashIndex, double a_temperature
  * @return                      [in]    A vector of the length of the number of multi-group groups.
  ***********************************************************************************************************/
 
-LUPI_HOST_DEVICE double ProtareTNSL::gainViaIntid( int a_hashIndex, double a_temperature, double a_energy, int a_particleIntid ) const {
+LUPI_HOST_DEVICE double ProtareTNSL::gainViaIntid( std::size_t a_hashIndex, double a_temperature, double a_energy, int a_particleIntid ) const {
 
     double gain1 = 0.0;
 
@@ -513,8 +506,11 @@ LUPI_HOST_DEVICE void ProtareTNSL::serialize2( LUPI::DataBuffer &a_buffer, LUPI:
             a_buffer.incrementPlacement( sizeof( ProtareSingle ) );
             a_buffer.incrementPlacement( sizeof( ProtareSingle ) );
     }
+    m_protareWithElastic->serializeCommon( a_buffer, a_mode );
     m_protareWithElastic->serialize2( a_buffer, a_mode );
+    m_TNSL->serializeCommon( a_buffer, a_mode );
     m_TNSL->serialize2( a_buffer, a_mode );
+    m_protareWithoutElastic->serializeCommon( a_buffer, a_mode );
     m_protareWithoutElastic->serialize2( a_buffer, a_mode );
 }
 

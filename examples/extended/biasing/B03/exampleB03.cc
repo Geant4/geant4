@@ -23,12 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file biasing/B03/exampleB03.cc
+/// \file exampleB03.cc
 /// \brief Main program of the biasing/B03 example
-//
-//
-//
-//
+
 // --------------------------------------------------------------
 //      GEANT 4 - exampleB03
 //

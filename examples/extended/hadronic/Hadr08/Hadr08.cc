@@ -25,11 +25,6 @@
 //
 /// \file Hadr08.cc
 /// \brief Main program of the hadronic/Hadr08 example
-//
-//
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "ActionInitialization.hh"
 #include "DetectorConstruction.hh"

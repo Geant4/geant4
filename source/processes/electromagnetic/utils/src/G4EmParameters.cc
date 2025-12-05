@@ -591,16 +591,12 @@ G4bool G4EmParameters::IsPrintLocked() const
 
 G4EmSaturation* G4EmParameters::GetEmSaturation()
 {
-  if(nullptr == emSaturation) { 
-#ifdef G4MULTITHREADED
-    G4MUTEXLOCK(&emParametersMutex);
-    if(nullptr == emSaturation) { 
-#endif
+  if (nullptr == emSaturation) {
+    G4AutoLock l(&emParametersMutex);
+    if (nullptr == emSaturation) { 
       emSaturation = new G4EmSaturation(1);
-#ifdef G4MULTITHREADED
     }
-    G4MUTEXUNLOCK(&emParametersMutex);
-#endif
+    l.unlock();
   }
   birks = true;
   return emSaturation;
@@ -967,6 +963,28 @@ void G4EmParameters::SetScreeningFactor(G4double val)
 G4double G4EmParameters::ScreeningFactor() const
 {
   return factorScreen;
+}
+
+void G4EmParameters::SetMaxDNAElectronEnergy(G4double val)
+{
+  if (IsLocked()) { return; }
+  fCParameters->SetMaxDNAElectronEnergy(val);
+}
+
+G4double G4EmParameters::MaxDNAElectronEnergy() const
+{
+  return fCParameters->MaxDNAElectronEnergy();
+}
+
+void G4EmParameters::SetMaxDNAIonEnergy(G4double val)
+{
+  if (IsLocked()) { return; }
+  fCParameters->SetMaxDNAIonEnergy(val);
+}
+
+G4double G4EmParameters::MaxDNAIonEnergy() const
+{
+  return fCParameters->MaxDNAIonEnergy();
 }
 
 void G4EmParameters::SetStepFunction(G4double v1, G4double v2)
@@ -1482,7 +1500,7 @@ void G4EmParameters::StreamInfo(std::ostream& os) const
     }
     os << "\n";
   }
-  os << "Use built-in Birks satuaration                     " << birks << "\n";
+  os << "Use built-in Birks saturation                      " << birks << "\n";
   os << "Build CSDA range enabled                           " <<buildCSDARange << "\n";
   os << "Use cut as a final range enabled                   " <<cutAsFinalRange << "\n";
   os << "Enable angular generator interface                 " 
@@ -1545,6 +1563,10 @@ void G4EmParameters::StreamInfo(std::ostream& os) const
   if(fDNA) {
   os << "======                 DNA Physics Parameters                  ========" << "\n";
   os << "=======================================================================" << "\n";
+  os << "Max DNA electron energy                            "
+     << fCParameters->MaxDNAElectronEnergy()/CLHEP::MeV << " MeV\n";    
+  os << "Max DNA ion energy                                 "
+     << fCParameters->MaxDNAIonEnergy()/CLHEP::MeV << " MeV\n";    
   os << "Use fast sampling in DNA models                    " 
      << fCParameters->DNAFast() << "\n";
   os << "Use Stationary option in DNA models                " 

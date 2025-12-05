@@ -23,9 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// class G4VNestedParameterisation implementation
+// G4VNestedParameterisation implementation
 //
-// 24.02.05, J.Apostolakis - First created version.
+// Author: John Apostolakis (CERN), 24.02.2005 - First created version
 // --------------------------------------------------------------------
 
 #include "G4VNestedParameterisation.hh" 

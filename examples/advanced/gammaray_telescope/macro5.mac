@@ -27,10 +27,6 @@
 #/payload/setNbOfTKRLayers 15
 #/payload/update
 
-# Use this open statement to create a .heprep file suitable for
-# viewing in HepRApp:
-/vis/open HepRepFile
-#
 ## Open a viewer
 #/vis/open
 ## This opens the default viewer - see examples/basic/B1/vis.mac for a

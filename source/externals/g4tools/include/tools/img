@@ -4,10 +4,6 @@
 #ifndef tools_img
 #define tools_img
 
-#ifdef TOOLS_MEM
-#include "mem"
-#endif
-
 #include <string> //memcpy
 #include <cstring> //memcpy
 #include "mnmx"
@@ -27,24 +23,15 @@ public:
   ,m_buffer(0)
   ,m_owner(false)
   {
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
   }
   img(unsigned int a_w,unsigned int a_h,unsigned int a_n,T* a_buffer,bool a_owner)
   :m_w(a_w),m_h(a_h),m_n(a_n)
   ,m_buffer(a_buffer)
   ,m_owner(a_owner)
   {
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
   }
   virtual ~img() {
     if(m_owner) delete [] m_buffer;
-#ifdef TOOLS_MEM
-    mem::decrement(s_class().c_str());
-#endif
   }
 public:
   img(const img& a_from)
@@ -52,9 +39,6 @@ public:
   ,m_buffer(0)
   ,m_owner(a_from.m_owner)
   {
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
     if(m_owner) {
       unsigned int sz = m_w*m_h*m_n;
       if(!sz) return;
@@ -94,28 +78,6 @@ public:
   bool operator==(const img& a_from) const {return equal(a_from);}
   bool operator!=(const img& a_from) const {return !operator==(a_from);}
 public:
-  void transfer(img& a_from) {
-    if(m_owner) delete [] m_buffer;
-    m_w = a_from.m_w;
-    m_h = a_from.m_h;
-    m_n = a_from.m_n;
-    m_buffer = a_from.m_buffer;
-    m_owner = a_from.m_owner;
-    // empty a_from :
-    a_from.m_w = 0;
-    a_from.m_h = 0;
-    a_from.m_buffer = 0;
-    a_from.m_owner = false;
-  }
-
-  void clear() {
-    if(m_owner) delete [] m_buffer;
-    m_w = 0;
-    m_h = 0;
-    m_n = 0;
-    m_buffer = 0;
-    m_owner = false;
-  }
   void set(unsigned int a_w,unsigned int a_h,unsigned int a_n,T* a_buffer,bool a_owner) {
     if(m_owner) delete [] m_buffer;
     m_w = a_w;
@@ -141,45 +103,6 @@ public:
       return false;
     }
     ::memcpy(m_buffer,a_buffer,sz*sizeof(T));
-    m_owner = true;
-    return true;
-  }
-  bool copy(const img& a_from){
-    if(m_owner) delete [] m_buffer;
-    m_buffer = 0;
-    m_w = a_from.m_w;
-    m_h = a_from.m_h;
-    m_n = a_from.m_n;
-    unsigned int sz = m_w*m_h*m_n;
-    if(!sz) {
-      m_w = 0;m_h = 0;m_n = 0;m_owner = false;
-      return false;
-    }
-    m_buffer = new T[sz];
-    if(!m_buffer) {
-      m_w = 0;m_h = 0;m_n = 0;m_owner = false;
-      return false;
-    }
-    ::memcpy(m_buffer,a_from.m_buffer,sz*sizeof(T));
-    m_owner = true;
-    return true;
-  }
-  bool allocate(unsigned int a_w,unsigned int a_h,unsigned int a_n){
-    if(m_owner) delete [] m_buffer;
-    m_buffer = 0;
-    unsigned int sz = a_w*a_h*a_n;
-    if(!sz) {
-      m_w = 0;m_h = 0;m_n = 0;m_owner = false;
-      return false;
-    }
-    m_w = a_w;
-    m_h = a_h;
-    m_n = a_n;
-    m_buffer = new T[sz];
-    if(!m_buffer) {
-      m_w = 0;m_h = 0;m_n = 0;m_owner = false;
-      return false;
-    }
     m_owner = true;
     return true;
   }
@@ -214,7 +137,6 @@ public:
   unsigned int width() const {return m_w;}
   unsigned int height() const {return m_h;}
   unsigned int bytes_per_pixel() const {return m_n;}
-  unsigned int bpp() const {return m_n;}
   const T* buffer() const {return m_buffer;}
   T* buffer() {return m_buffer;}
   bool owner() const {return m_owner;}
@@ -230,117 +152,6 @@ public:
     for(unsigned int ipix=0;ipix<m_n;ipix++) {
       a_pixel[ipix] = *(pos+ipix);
     }
-    return true;
-  }
-
-  bool expand(unsigned int a_factor,img<T>& a_res,bool a_res_force_owner = true) const {
-    if(a_factor==1) {
-      if(a_res_force_owner) {
-        a_res.copy(m_w,m_h,m_n,m_buffer);
-      } else {
-        a_res.set(m_w,m_h,m_n,m_buffer,false);
-      }
-      return true;
-    }
-
-    unsigned int nw = m_w*a_factor;
-    unsigned int nh = m_h*a_factor;
-    unsigned int sz = nh*nw*m_n;
-    if(!sz) {
-      a_res.make_empty();
-      return false;
-    }
-
-    T* nb = new T[sz];
-    if(!nb) {
-      a_res.make_empty();
-      return false;
-    }
-
-    for(unsigned int j=0;j<m_h;j++) {
-      for(unsigned int i=0;i<m_w;i++) {
-        //position in the original image.
-        T* pos = m_buffer + j * (m_w * m_n) + i*m_n;
-
-        for(unsigned int fr=0;fr<a_factor;fr++) {
-          for(unsigned int fc=0;fc<a_factor;fc++) {
-            //position in the new image.
-            T* npos = nb + (j*a_factor+fr) * (nw * m_n) + (i*a_factor+fc)*m_n;
-            for(unsigned int ipix=0;ipix<m_n;ipix++) {
-              *(npos+ipix) = *(pos+ipix);
-            }
-          }
-        }
-
-      }
-    }
-
-    a_res.set(nw,nh,m_n,nb,true);
-    return true;
-  }
-
-  bool contract_raw(unsigned int a_w,unsigned int a_h,img<T>& a_res,bool a_force_res_owner = true) const {
-    if((a_w==m_w)&&(a_h==m_h)) {
-      if(a_force_res_owner) {
-        a_res.copy(m_w,m_h,m_n,m_buffer);
-      } else {
-        a_res.set(m_w,m_h,m_n,m_buffer,false);
-      }
-      return true;
-    }
-
-    unsigned int sz = a_h*a_w*m_n;
-    if(!sz) {
-      a_res.make_empty();
-      return false;
-    }
-
-    T* rb = new T[sz];
-    if(!rb) {
-      a_res.make_empty();
-      return false;
-    }
-
-    double* pixels = new double[m_n]; //for mean value.
-    if(!pixels) {
-      delete [] rb;
-      a_res.make_empty();
-      return false;
-    }
-
-    unsigned int wfac = double(m_w)/double(a_w);
-    unsigned int hfac = double(m_h)/double(a_h);
-    if(!wfac) wfac = 1;
-    if(!hfac) hfac = 1;
-
-    unsigned int wfac_hfac = wfac*hfac;
-
-    T* hpos;T* pos;
-    for(unsigned int j=0;j<a_h;j++) {
-      for(unsigned int i=0;i<a_w;i++) {
-
-        // take mean value of wfac*hfac pixels :
-       {for(unsigned int ipix=0;ipix<m_n;ipix++) pixels[ipix] = 0;}
-
-        for(unsigned int fr=0;fr<hfac;fr++) {
-          hpos = m_buffer + (j*hfac+fr)*(m_w*m_n);
-          for(unsigned int fc=0;fc<wfac;fc++) {
-            pos = hpos + (i*wfac+fc)*m_n;
-            for(unsigned int ipix=0;ipix<m_n;ipix++) {
-              pixels[ipix] += double(*pos)/double(wfac_hfac);pos++;
-            }
-          }
-        }
-
-        //position in the result image.
-        T* rpos = rb + j * (a_w * m_n) + i*m_n;
-       {for(unsigned int ipix=0;ipix<m_n;ipix++) {*rpos = T(pixels[ipix]);rpos++;}}
-      }
-    }
-
-    delete [] pixels;
-
-    a_res.set(a_w,a_h,m_n,rb,true);
     return true;
   }
 
@@ -383,8 +194,6 @@ public:
 
     double wfac_hfac = wfac*hfac;
 
-    //::printf("debug : %d %d, %d %d\n",a_h,a_w,hfac,wfac);
-
     T* hpos;T* pos;T* hrpos;T* rpos;T* hhpos;T* _pos;double* ppos;
     unsigned int i,j,fr,fc,ipix,i0;
     unsigned int astride = a_w * m_n;
@@ -408,7 +217,6 @@ public:
             ppos = pixels;
             for(ipix=0;ipix<m_n;ipix++,pos++,ppos++) {
               *ppos += double(*pos)/wfac_hfac;
-//              *ppos += double(*pos); //NOTE : doing the wfac_hfac division in the below loop is slower !
             }
           }
         }
@@ -418,7 +226,6 @@ public:
         ppos = pixels;
         for(ipix=0;ipix<m_n;ipix++,rpos++,ppos++) {
           *rpos = T(*ppos);
-//          *rpos = T((*ppos)/wfac_hfac); //slower !
           *ppos = 0;
         }
       }
@@ -435,36 +242,6 @@ public:
     unsigned int nw = m_w/a_factor;
     unsigned int nh = m_h/a_factor;
     return contract(nw,nh,a_res,a_force_res_owner);
-  }
-
-  template <class TTO>
-  bool convert(img<TTO>& a_res) const {
-    a_res.make_empty();
-
-    unsigned int sz = m_w*m_h*m_n;
-    if(!sz) return false;
-
-    TTO* _buffer = new TTO[sz];
-    if(!_buffer) return false;
-
-    unsigned int i,j,ipix,imn;
-    unsigned int mwn = m_w*m_n;
-    T* _pos;T* pos;
-    TTO* _rpos;TTO* rpos;
-
-    for(j=0;j<m_h;j++) {
-      _pos = m_buffer + j*mwn;
-      _rpos = _buffer + j*mwn;
-      for(i=0;i<m_w;i++) {
-        imn = i*m_n;
-        pos = _pos + imn;
-        rpos = _rpos + imn;
-        for(ipix=0;ipix<m_n;ipix++,pos++,rpos++) *rpos = *pos;
-      }
-    }
-
-    a_res.set(m_w,m_h,m_n,_buffer,true);
-    return true;
   }
 
   bool get_part(unsigned int a_sx,unsigned int a_sy,unsigned int a_sw,unsigned int a_sh,img<T>& a_res) const {
@@ -495,24 +272,7 @@ public:
     unsigned int stride = m_w * m_n;
     T* pos = m_buffer+a_sy*stride+a_sx*m_n;
 
-    //T* mx = m_buffer+size();
-    //T* rmx = rb+sz*sizeof(T);
-
     for(unsigned int j=0;j<rh;j++,rpos+=rstride,pos+=stride) {//j=0 -> bottom.
-/*
-      if((pos+rstride*sizeof(T))>mx) {
-        ::printf("debug : get_part : buffer overflow\n");
-        delete [] rb;
-        a_res.make_empty();
-        return false;
-      }
-      if((rpos+rstride*sizeof(T))>rmx) {
-        ::printf("debug : get_part : result buffer overflow\n");
-        delete [] rb;
-        a_res.make_empty();
-        return false;
-      }
-*/
       ::memcpy(rpos,pos,rstride*sizeof(T));
     }
 
@@ -636,9 +396,6 @@ public:
       unsigned int pw = tw/fac;
       unsigned int ph = th/fac;
       if((pw<=a_GL_MAX_TEXTURE_SIZE)&&(ph<=a_GL_MAX_TEXTURE_SIZE)) {
-        //unsigned int sx = (tw-pw)/2;
-        //unsigned int sy = (th-ph)/2;
-        //if(!get_part(sx,sy,pw,ph,a_res)) {
         if(!contract(fac,a_res)) {
           a_res.make_empty();
           return false;
@@ -684,60 +441,6 @@ public:
     return true;
   }
 
-  bool yswap(img<T>& a_res) const {
-    a_res.make_empty();
-
-    a_res.m_buffer = new T[size()];
-    if(!a_res.m_buffer) return false;
-    a_res.m_owner = true;
-    a_res.m_w = m_w;
-    a_res.m_h = m_h;
-    a_res.m_n = m_n;
-
-    unsigned int stride = m_w * m_n;
-
-    for(unsigned int j=0;j<m_h;j++) {
-      T* pos = m_buffer + j * stride;
-      T* rpos = a_res.m_buffer + (m_h-j-1) * stride;
-      ::memcpy(rpos,pos,stride*sizeof(T));
-    }
-
-    return true;
-  }
-
-  bool rgba2rgb(img<T>& a_res) const {
-    if(m_n!=4) return false;
-
-    unsigned int a_n = 3;
-
-    a_res.make_empty();
-    unsigned int sz = m_w*m_h*a_n;
-    if(!sz) return false;
-
-    a_res.m_buffer = new T[sz];
-    if(!a_res.m_buffer) return false;
-    a_res.m_owner = true;
-    a_res.m_w = m_w;
-    a_res.m_h = m_h;
-    a_res.m_n = a_n;
-
-    for(unsigned int j=0;j<m_h;j++) {
-      for(unsigned int i=0;i<m_w;i++) {
-        //position in the original image.
-        T* pos = m_buffer + j * (m_w * m_n) + i*m_n;
-
-        T* rpos = a_res.m_buffer + j * (m_w * a_n) + i*a_n;
-
-        for(unsigned int ipix=0;ipix<a_n;ipix++) {
-          *(rpos+ipix) = *(pos+ipix);
-        }
-
-      }
-    }
-
-    return true;
-  }
-
   bool rgb2rgba(img<T>& a_res,const T& a_pixel) const {
     if(m_n!=3) return false;
 
@@ -772,114 +475,6 @@ public:
     return true;
   }
 
-  bool rgba2bgra() {
-    if(m_n!=4) return false;
-    for(unsigned int j=0;j<m_h;j++) {
-      for(unsigned int i=0;i<m_w;i++) {
-        T* pos = m_buffer + j * (m_w * m_n) + i*m_n;
-        T r = *(pos+0);
-        T g = *(pos+1);
-        T b = *(pos+2);
-        T a = *(pos+3);
-        *(pos+0) = b;
-        *(pos+1) = g;
-        *(pos+2) = r;
-        *(pos+3) = a;
-      }
-    }
-    return true;
-  }
-
-public:
-  static bool concatenate(const std::vector< img<T> >& a_imgs,
-                          unsigned int a_cols,unsigned int a_rows,
-                          unsigned int a_bw,unsigned int a_bh,
-                          T a_bc, //border grey level.
-                          img<T>& a_res){
-    // We assume that a_imgs.size() is a_cols*a_rows and that all images have same (w,h,bpp).
-
-    unsigned int num = a_cols*a_rows;
-    if(!num) {a_res.make_empty();return false;}
-
-    unsigned int aw = a_imgs[0].m_w;
-    unsigned int ah = a_imgs[0].m_h;
-    unsigned int an = a_imgs[0].m_n;
-
-    for(unsigned int index=1;index<num;index++) {
-      if(a_imgs[index].m_n!=an) {
-        a_res.make_empty();
-        return false;
-      }
-      if(a_imgs[index].m_w!=aw) {
-        a_res.make_empty();
-        return false;
-      }
-      if(a_imgs[index].m_h!=ah) {
-        a_res.make_empty();
-        return false;
-      }
-    }
-
-    unsigned int wbw = aw + 2*a_bw;
-    unsigned int hbh = ah + 2*a_bh;
-
-    unsigned int rw = wbw * a_cols;
-    unsigned int rh = hbh * a_rows;
-    unsigned int rn = an;
-
-    //printf("debug : %d %d\n",rw,rh);
-
-    // on big concatenated image the below may fail :
-    unsigned int rsz = rh*rw*rn;
-    T* rb = new T[rsz];
-    if(!rb) {
-      a_res.make_empty();
-      return false;
-    }
-
-    bool has_border = a_bw||a_bh?true:false;
-    if(has_border) {
-      ::memset(rb,a_bc,rsz*sizeof(T));
-    }
-
-    //optimize :
-    //unsigned int wbwn = wbw*an;
-    unsigned int awn = aw*an;
-    unsigned int rwn = rw*an;
-    unsigned int i,j,r;
-    //unsigned int c;
-    T* pos;T* ptile;T* _pos;
-
-    //copy tiles :
-    unsigned int index = 0;
-    for(j=0;j<a_rows;j++) {
-      for(i=0;i<a_cols;i++) {
-        // index = a_cols*j+i
-        const T* tile = a_imgs[index].buffer();
-
-        //if(has_border) {
-        //  for(unsigned int r=0;r<hbh;r++) {
-        //    T* pos = rb + (j*hbh+r)*rwn + i*wbwn;
-        //    ::memset(pos,a_bc,wbwn*sizeof(T));
-        //  }
-        //}
-
-        _pos = rb + (j*hbh+a_bh)*rwn + (i*wbw+a_bw)*rn;
-       {for(r=0;r<ah;r++) {
-//          pos = _pos + r*rwn;
-//          ptile = tile + r*awn;
-//          for(c=0;c<awn;c++,pos++,ptile++) *pos = *ptile;
-          ::memcpy(_pos+r*rwn,tile+r*awn,awn*sizeof(T)); //optimize. (bof, we do not gain a lot).
-        }}
-
-        index++;
-      }
-    }
-
-    a_res.set(rw,rh,rn,rb,true);
-    return true;
-  }
-
 protected:
   unsigned int m_w;
   unsigned int m_h;
@@ -890,20 +485,9 @@ protected:
 private: static void check_instantiation() {img<float> dummy;}
 };
 
-
-typedef img<unsigned char> img_byte;
-
 // NOTE : img_byte is ready for OpenGL glTexImage2D UNSIGNED_BYTE RGB.
 //        For glTexImage2D, first row in m_buffer is bottom of image.
-
-inline void tex_expand_size(unsigned int a_w,unsigned int& a_h,
-                            unsigned int& a_ew,unsigned int& a_eh){
-  // find closest power of two upper than a_w, a_h :
-  a_ew = 2;
-  while(true) {if(a_ew>=a_w) break;a_ew *=2;}
-  a_eh = 2;
-  while(true) {if(a_eh>=a_h) break;a_eh *=2;}
-}
+typedef img<unsigned char> img_byte;
 
 }
 

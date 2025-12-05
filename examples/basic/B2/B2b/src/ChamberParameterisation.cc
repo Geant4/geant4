@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file B2/B2b/src/ChamberParameterisation.cc
+/// \file ChamberParameterisation.cc
 /// \brief Implementation of the B2b::ChamberParameterisation class
 
 #include "ChamberParameterisation.hh"

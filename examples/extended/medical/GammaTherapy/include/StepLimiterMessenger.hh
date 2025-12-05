@@ -23,12 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file medical/GammaTherapy/include/StepLimiterMessenger.hh
+/// \file StepLimiterMessenger.hh
 /// \brief Definition of the StepLimiterMessenger class
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef StepLimiterMessenger_h
 #define StepLimiterMessenger_h 1

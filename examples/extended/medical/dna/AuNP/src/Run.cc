@@ -23,63 +23,51 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file medical/dna/range/src/Run.cc
+/// \file Run.cc
 /// \brief Implementation of the Run class
-//
-// $Id: Run.cc 71376 2013-06-14 07:44:50Z maire $
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "Run.hh"
 
 #include "DetectorConstruction.hh"
 #include "HistoManager.hh"
 #include "PrimaryGeneratorAction.hh"
-
 #include "G4Material.hh"
 #include "G4MultiFunctionalDetector.hh"
 #include "G4SDManager.hh"
-#include "G4SystemOfUnits.hh"
-#include "G4UnitsTable.hh"
-#include "G4VPrimitiveScorer.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Run::Run(const DetectorConstruction* /*detector*/)
-  : G4Run(), fParticle(0), fEkin(0.), fEdeposit(0.), fCollName(), fRunMap(0)
-
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-Run::~Run() {}
-void Run::RecordEvent(const G4Event* /*aEvent*/)
-{
-  numberOfEvent++;  // This is an original line.
+void Run::RecordEvent(const G4Event * /*aEvent*/) {
+  numberOfEvent++; // This is an original line.
 }
-G4THitsMap<G4double>* Run::GetHitsMap(const G4String& detName, const G4String& colName)
-{
-  G4String fullName = detName + "/" + colName;
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4THitsMap<G4double> *Run::GetHitsMap(const G4String &detName, const G4String &colName) const {
+  const G4String fullName = detName + "/" + colName;
   return GetHitsMap(fullName);
 }
-G4THitsMap<G4double>* Run::GetHitsMap(const G4String& fullName)
-{
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4THitsMap<G4double> *Run::GetHitsMap(const G4String &fullName) const {
   if (fCollName == fullName) {
     return fRunMap;
   }
-  return NULL;
+  return nullptr;
 }
-void Run::DumpAllScorer()
-{
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void Run::DumpAllScorer() const {
   // - Number of HitsMap in this RUN.
   // - GetHitsMap and dump values.
 
-  G4THitsMap<G4double>* RunMap = GetHitsMap();
+  G4THitsMap<G4double> *RunMap = GetHitsMap();
   if (RunMap) {
     G4cout << " PrimitiveScorer RUN " << RunMap->GetSDname() << "," << RunMap->GetName() << G4endl;
     G4cout << " Number of entries " << RunMap->entries() << G4endl;
-    std::map<G4int, G4double*>::iterator itr = RunMap->GetMap()->begin();
+    std::map<G4int, G4double *>::iterator itr = RunMap->GetMap()->begin();
     for (; itr != RunMap->GetMap()->end(); itr++) {
       G4cout << "  copy no.: " << itr->first << "  Run Value : " << *(itr->second) << G4endl;
     }
@@ -88,17 +76,15 @@ void Run::DumpAllScorer()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Run::SetPrimary(G4ParticleDefinition* particle, G4double energy)
-{
+void Run::SetPrimary(G4ParticleDefinition *particle, G4double energy) {
   fParticle = particle;
   fEkin = energy;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Run::Merge(const G4Run* run)
-{
-  const Run* localRun = static_cast<const Run*>(run);
+void Run::Merge(const G4Run *run) {
+  const auto localRun = static_cast<const Run *>(run);
 
   fParticle = localRun->fParticle;
   fEkin = localRun->fEkin;
@@ -108,11 +94,10 @@ void Run::Merge(const G4Run* run)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Run::EndOfRun()
-{
-  std::ios::fmtflags mode = G4cout.flags();
+void Run::EndOfRun() {
+  const std::ios::fmtflags mode = G4cout.flags();
   G4cout.setf(std::ios::fixed, std::ios::floatfield);
-  G4int prec = G4cout.precision(2);
+  const G4int prec = G4cout.precision(2);
 
   G4cout.setf(mode, std::ios::floatfield);
   G4cout.precision(prec);

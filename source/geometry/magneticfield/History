@@ -6,6 +6,65 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2025-11-03 Vladimir Ivanchenko (field-V11-03-09)
+- G4TClassicalRK4 - fixed typo identified by CMS
+
+## 2025-10-21 Gabriele Cosmo (field-V11-03-08)
+- Reorganised and enriched comments in headers to follow Doxygen style.
+- Moved inline implementations to .icc file for G4ChargeState and for
+  G4FieldParameters.
+- Removed not implemented methods in G4ChordFinder, G4DoLoMcPriRK34 and
+  G4FieldSetup.
+
+## 2025-09-09 Gabriele Cosmo (field-V11-03-07)
+- Applied clang-tidy fixes: basic, modernize-use-default-member-init,
+  readability-redundant-member-init, modernize-use-emplace,
+  readability-container-size-empty, readability-implicit-bool-conversion,
+  performance-unnecessary-value-param, readability-else-after-return,
+  modernize-return-braced-init-list.
+- Minor code cleanup and formatting.
+
+## 2025-09-08 Gabriele Cosmo (field-V11-03-06)
+- Disabled use of QSS as default stepper in G4ChordFinder.
+
+## 2025-08-19 John Apostolakis (field-V11-03-05)
+- Fixed big bug in method compare_time_and_update, from conversion of macro
+- Enabled use of QSS3 (now a choice in G4ChordFinder).
+- Addressed Coverity issues (memory leak, initialisation) in G4QSStepper
+  and G4QSSubstepStruct.
+- G4QSSMessenger: added QSS3 as option, made data private, added access methods
+- G4QSStepper: cleanup of constructors, made qssOrder const data member.
+- testQssDriver.cc : corrected and improved this unit test, a critical check.
+
+## 2025-08-11 Ivana Hrivnacova (field-V11-03-04)
+- Added default implementation to pure virtual functions introduced in the
+  previous tag for backward compatibility:
+       G4MagIntegratorStepper.hh:
+          virtual G4StepperType StepperType() const { return kUserStepper; }
+       G4Field.hh
+          virtual G4FieldType GetFieldType() const { return kUserFieldType; }
+
+## 2025-06-23 Ivana Hrivnacova (field-V11-03-03)
+- Consistent use of the parameters introduced in G4FieldParameters
+  in field classes:
+  - Extracted default parameters values as constexpr in new namespace 'G4FieldDefaults',
+    so that they can be used in other classes as default parameters in functions
+    declarations
+    - Replaced defalut values in 'G4FieldManager' and 'G4ChordFinder' with 
+    'G4FieldDefaults' constants
+  - Added functions for accessing the field, stepper and equation types
+    using the enum types defined in 'G4FieldParameters':
+       G4MagIntegratorStepper.hh:
+          virtual G4StepperType StepperType() const = 0;
+       G4Field.hh
+          virtual G4FieldType GetFieldType() const = 0;
+       G4EquationOfMotion.hh:
+          virtual G4EquationType GetEquationType() const { return kUserEquation; }
+    and their implementation in all derived classes defined in the magneticfield category  
+  - Updated enums 'G4EquationType' and  'G4StepperType' with missing constants
+    with a comment that these equations/templated steppers are not built by G4FieldBuilder
+  - Renamed 'const G4String& G4DormandPrince745::StepperType() const;' in 'StepperTypeName'
+
 ## 2025-06-13 Gabriele Cosmo (field-V11-03-02)
 - Fixed compilation warning in G4QSStepper and minor code formatting.
 
@@ -123,7 +182,6 @@ It must **not** be used as a substitute for writing good git commit messages!
 - Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
 
 ## 2022-11-05 Divyansh Tiwari, John Apostolakis (field-V11-00-02)
-
 - Introduced G4BorisScheme and G4BorisDriver, a 2nd order symplectic
   integration method, created as part of GSoC 2022.
 
@@ -242,7 +300,6 @@ March 13, 2020 J.Apostolakis                     - field-V10-06-03
      ComputeNewStepSize does NOT (yet) respect maximum reduction factor (0.1).
   ( Done to enable comparisons with new G4IntegrationDriver<> implementation.)
 - G4OldMagIntDriver maintains all old behaviour of G4MagInt_Driver.
-
 
 January 22, 2020 G.Cosmo                         - field-V10-06-02
 ------------------------

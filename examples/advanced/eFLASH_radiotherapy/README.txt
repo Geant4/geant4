@@ -106,5 +106,25 @@ If user is not interested on the retrieval of the energy spectrum can easily com
 EM Standard option 4 is activated. The user can change the physics list in the physics list class. A production cut for gammas e+ and e- can be applied provided the specification of the Region name defined 
 in the FlashDetectorConstruction Class (Default region is the water phantom). 
 
+=====================MINIBEAM PRODUCTION CONFIGURATION=====================
 
+A new geometrical configuration has been added to give the possibility to simulate the production of eletron minibeams using passive tungsten collimators just attached at the end of the final applicator. This configuration reproduce the realistical experimental characterization reported in J. Pensavalle at al., Front. Phys. 11:1269495.
+Two different geometrical configuratuons of the minibeam collimators are implemented within the class FlashMinibeamTemplate.cc, corresponding to a GRID (x and y square holes) and PLANAR (y stripes) gemoetry. The user can change the material, the side of the hole size, the center-to-center distance (betweent to consecutive holes) and the total field size (of the minibeam pattern) modifying the FlashMinibeamTemplate.cc class.
+The code implements as default the classical uniform beam with the 100 mm diameter applicator.
+To activate the minibeam collimators:
+
+in FlashDetectorConstruction.cc set:
+ G4bool Template_constr = true;
+
+in FlashApplicator.cc: uncomment:
+
+SetOuterRadius(25*mm);
+SetApplicatorLength(173.5*mm);
+
+ fInitial_pos=-74.70005*cm;
+
+in FlashPrimaryGenerator action.cc set:
+G4double defaultX0 =-74.70005*cm;
+
+The macro file minibeam.mac is also provided to score the 2D map dose on the water phantom. The default scorer is 0.2x15x15 mm, with 1x200x200 bins
 

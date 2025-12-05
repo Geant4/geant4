@@ -128,7 +128,7 @@ XYs1d::XYs1d( Construction::Settings const &a_construction, HAPI::Node const &a_
     nf_Buffer<double> vals;
     parseValuesOfDoubles( a_construction, values, a_setupInfo, vals );
 
-    int primarySize = vals.size() / 2, secondarySize = 0;
+    int primarySize = static_cast<int>( vals.size() / 2 ), secondarySize = 0;
     double *dvals = new double[vals.size()];                  // Not sure we really need a copy here.
     for( size_t idx = 0; idx < vals.size(); idx++ ) dvals[idx] = vals[idx];
     m_ptwXY = ptwXY_create( NULL, interpolation( ), interpolationString( ).c_str( ), 12, 1e-3, primarySize, secondarySize, primarySize, dvals, 0 );
@@ -360,11 +360,11 @@ XYs1d &XYs1d::operator*=( XYs1d const &a_rhs ) {
 
 std::vector<double> XYs1d::xs( ) const {
 
-    int64_t n1 = size( );
+    auto n1 = size( );
     std::vector<double> _xs( n1, 0. );
 
-    for( int64_t i1 = 0; i1 < n1; ++i1 ) {
-        ptwXYPoint const *point = ptwXY_getPointAtIndex_Unsafely( m_ptwXY, i1 );
+    for( std::size_t i1 = 0; i1 < n1; ++i1 ) {
+        ptwXYPoint const *point = ptwXY_getPointAtIndex_Unsafely( m_ptwXY, static_cast<int64_t>( i1 ) );
 
         _xs[i1] = point->x;
     }
@@ -379,11 +379,11 @@ std::vector<double> XYs1d::xs( ) const {
 
 std::vector<double> XYs1d::ys( ) const {
 
-    int64_t n1 = size( );
+    auto n1 = size( );
     std::vector<double> _ys( n1, 0. );
 
-    for( int64_t i1 = 0; i1 < n1; ++i1 ) {
-        ptwXYPoint const *point = ptwXY_getPointAtIndex_Unsafely( m_ptwXY, i1 );
+    for( std::size_t i1 = 0; i1 < n1; ++i1 ) {
+        ptwXYPoint const *point = ptwXY_getPointAtIndex_Unsafely( m_ptwXY, static_cast<int64_t>( i1 ) );
 
         _ys[i1] = point->y;
     }
@@ -400,7 +400,7 @@ std::vector<double> XYs1d::ys( ) const {
 
 std::vector<double> XYs1d::ysMappedToXs( std::vector<double> const &a_xs, std::size_t *a_offset ) const {
 
-    int64_t n1 = size( ), i2, n2 = a_xs.size( );
+    std::size_t n1 = size( ), i2, n2 = a_xs.size( );
     std::vector<double> _ys;
 
     *a_offset = 0;
@@ -411,8 +411,8 @@ std::vector<double> XYs1d::ysMappedToXs( std::vector<double> const &a_xs, std::s
     *a_offset = i2;
     if( i2 == n2 ) return( _ys );
 
-    for( int64_t i1 = 1; i1 < n1; ++i1 ) {
-        ptwXYPoint const *point2 = ptwXY_getPointAtIndex_Unsafely( m_ptwXY, i1 );
+    for( std::size_t i1 = 1; i1 < n1; ++i1 ) {
+        ptwXYPoint const *point2 = ptwXY_getPointAtIndex_Unsafely( m_ptwXY, static_cast<int64_t>( i1 ) );
 
         while( i2 < n2 ) {
             double x = a_xs[i2], y;
@@ -483,13 +483,13 @@ XYs1d XYs1d::domainSliceMax( double a_domainMax ) const {
 
 double XYs1d::evaluate( double a_x1 ) const {
 
-    std::size_t length = ptwXY_length( nullptr, m_ptwXY );
+    std::size_t length = static_cast<std::size_t>( ptwXY_length( nullptr, m_ptwXY ) );
     if( length == 0 ) throw Exception( "XYs1d::evaluate: XYs1d has no datum." );
 
     ptwXYPoint *point = ptwXY_getPointAtIndex_Unsafely( m_ptwXY, 0 );
     if( point->x >= a_x1 ) return( point->y );
 
-    point = ptwXY_getPointAtIndex_Unsafely( m_ptwXY, length - 1 );
+    point = ptwXY_getPointAtIndex_Unsafely( m_ptwXY, static_cast<int64_t>( length - 1 ) );
     if( point->x <= a_x1 ) return( point->y );
 
     double y;
@@ -508,15 +508,15 @@ double XYs1d::evaluate( double a_x1 ) const {
  * @param a_scaleFactor     [in]    A factor applied to each evaluation before it is added to *a_results*.
  ***********************************************************************************************************/
 
-void XYs1d::mapToXsAndAdd( int a_offset, std::vector<double> const &a_Xs, std::vector<double> &a_results, double a_scaleFactor ) const {
+void XYs1d::mapToXsAndAdd( std::size_t a_offset, std::vector<double> const &a_Xs, std::vector<double> &a_results, double a_scaleFactor ) const {
     
     if( a_Xs.size( ) != a_results.size( ) ) throw Exception( "XYs1d::mapToXsAndAdd: a_Xs.size( ) != a_results.size( )" );
-    if( a_offset < 0 ) throw Exception( "XYs1d::mapToXsAndAdd: a_offset < 0." );
 
     LUPI::StatusMessageReporting smr;
     int64_t length = static_cast<int64_t>( a_Xs.size( ) );
 
-    nfu_status status = ptwXY_mapToXsAndAdd( smr.smr( ), m_ptwXY, a_offset, length, a_Xs.data( ), a_results.data( ), a_scaleFactor );
+    nfu_status status = ptwXY_mapToXsAndAdd( smr.smr( ), m_ptwXY, static_cast<int64_t>( a_offset ), length, 
+            a_Xs.data( ), a_results.data( ), a_scaleFactor );
     if( ( status != nfu_Okay ) && ( status != nfu_tooFewPoints ) )
         throw Exception( smr.constructMessage( "XYs1d::mapToXsAndAdd", -1, true ) );
 }
@@ -605,8 +605,9 @@ Xs_pdf_cdf1d XYs1d::toXs_pdf_cdf1d( ) {
     ptwXPoints *ptwX_cdf = ptwXY_runningIntegral( smr.smr( ), m_ptwXY );
     if( ptwX_cdf == nullptr ) throw Exception( smr.constructMessage( "XYs1d::toXs_pdf_cdf1d", -1, true ) );
 
-    std::vector<double> cdf1( ptwX_cdf->length );
-    for( int64_t index = 0; index < ptwX_cdf->length; ++index ) cdf1[index] = ptwX_cdf->points[index];
+    std::size_t length = static_cast<std::size_t>( ptwX_cdf->length );
+    std::vector<double> cdf1( length );
+    for( std::size_t index = 0; index < length; ++index ) cdf1[index] = ptwX_cdf->points[index];
     ptwX_free( ptwX_cdf );
 
     return( Xs_pdf_cdf1d( GIDI::Axes( ), ptwXY_interpolationLinLin, xs1, pdf1, cdf1 ) );

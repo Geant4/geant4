@@ -23,9 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file persistency/P03/include/ExTGTrackerSD.hh
+/// \file ExTGTrackerSD.hh
 /// \brief Definition of the ExTGTrackerSD class
-//
 
 #ifndef ExTGTrackerSD_h
 #define ExTGTrackerSD_h 1

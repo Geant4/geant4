@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file F01RunAction.hh
+/// \brief Definition of the F01RunAction class
+
 #ifndef F01RunAction_h
 #define F01RunAction_h
 

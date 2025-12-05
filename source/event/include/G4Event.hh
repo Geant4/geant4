@@ -282,17 +282,21 @@ class G4Event
   private:
     G4Event* motherEvent = nullptr;
     G4int subEventType = -1;
+    const G4SubEvent* fSubEvent = nullptr;
 
   public:
-    void FlagAsSubEvent(G4Event* me, G4int ty)
+    void FlagAsSubEvent(G4Event* me, G4int ty, const G4SubEvent* se)
     {
       motherEvent = me;
       subEventType = ty;
+      fSubEvent = se;
     }
     inline G4Event* GetMotherEvent() const
     { return motherEvent; }
     inline G4int GetSubEventType() const
     { return subEventType; }
+    inline const G4SubEvent* GetSubEvent() const
+    { return fSubEvent; }
 
   private:
     mutable G4bool scoresRecorded = false;
@@ -302,6 +306,7 @@ class G4Event
     G4bool ScoresAlreadyRecorded() const { return scoresRecorded; }
     void EventCompleted() const { eventCompleted = true; }
     G4bool IsEventCompleted() const { return eventCompleted; }
+
 };
 
 extern G4EVENT_DLL G4Allocator<G4Event>*& anEventAllocator();

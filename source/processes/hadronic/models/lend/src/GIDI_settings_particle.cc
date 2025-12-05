@@ -298,9 +298,10 @@ void Particle::process( Transportable const &a_transportable, double a_epsilon )
             + "' from multi-group '" + a_transportable.group( ).label( ) + "' of size " + std::to_string( groupBoundaries.size( ) ) 
             + " to multi-group '" + m_multiGroup.label( ) + "' of size " + std::to_string( m_multiGroup.boundaries( ).size( ) ) );
 
-    if( m_multiGroup.size( ) == 0 ) {
-        if( m_mode != Transporting::Mode::MonteCarloContinuousEnergy ) throw Exception( "Multi-group boundaries not set for particle '" + m_pid + "'." ); }
-    else {
+    if( m_mode != Transporting::Mode::MonteCarloContinuousEnergy ) {
+        if( m_multiGroup.size( ) == 0 ) {
+            m_multiGroup = MultiGroup( a_transportable.group( ).label( ), groupBoundaries );
+        }
         if( m_fineMultiGroup.size( ) > 0 ) {
             if( m_fineMultiGroup.size( ) != groupBoundaries.size( ) )
                 throw Exception( "For particle '" + m_pid + "', redefining particle's fine multi-group of different size not allowed." );
@@ -311,7 +312,7 @@ void Particle::process( Transportable const &a_transportable, double a_epsilon )
             return;                                 // Processing already done.
         }
 
-        int i1 = 0, n1 = (int) groupBoundaries.size( );
+        std::size_t i1 = 0, n1 = groupBoundaries.size( );
 
         while( i1 < n1 ) {
             if( fabs( m_multiGroup[0] - groupBoundaries[i1] ) <= a_epsilon * groupBoundaries[i1] ) break;
@@ -320,7 +321,7 @@ void Particle::process( Transportable const &a_transportable, double a_epsilon )
         if( i1 == n1 ) throw Exception( "Groups not compatible: " + errInfo + "." );
         m_collapseIndices.push_back( i1 );
      
-        for( int i2 = 1; i2 < (int) m_multiGroup.size( ); ++i2 ) {
+        for( std::size_t i2 = 1; i2 < m_multiGroup.size( ); ++i2 ) {
             while( i1 < n1 ) {
                 if( fabs( m_multiGroup[i2] - groupBoundaries[i1] ) <= a_epsilon * groupBoundaries[i1] ) break;
                 ++i1;
@@ -329,9 +330,17 @@ void Particle::process( Transportable const &a_transportable, double a_epsilon )
             m_collapseIndices.push_back( i1 );
         }
 
-        for( std::size_t i2 = 0; i2 < m_fluxes.size( ); ++i2 ) {
-            ProcessedFlux __processedFlux( m_fluxes[i2].process( groupBoundaries ) );
-            m_processedFluxes.push_back( __processedFlux );
+        if( m_fluxes.size( ) == 0 ) {
+            std::vector<double> fluxes;
+            for( std::size_t index = 0; index < groupBoundaries.size( ) - 1; ++index ) {
+                fluxes.push_back( groupBoundaries[index+1] - groupBoundaries[index] );
+            }
+            m_processedFluxes.push_back( ProcessedFlux( 0.0, fluxes ) ); }
+        else {
+            for( std::size_t i2 = 0; i2 < m_fluxes.size( ); ++i2 ) {
+                ProcessedFlux __processedFlux( m_fluxes[i2].process( groupBoundaries ) );
+                m_processedFluxes.push_back( __processedFlux );
+            }
         }
 
         m_fineMultiGroup = a_transportable.group( );
@@ -361,7 +370,7 @@ void Particle::print( std::string const &a_indent ) const {
     m_multiGroup.print( indent2 );
 
     std::cout << indent2;
-    for( std::vector<int>::const_iterator iter = m_collapseIndices.begin( ); iter != m_collapseIndices.end( ); ++iter ) std::cout << " " << *iter;
+    for( auto iter = m_collapseIndices.begin( ); iter != m_collapseIndices.end( ); ++iter ) std::cout << " " << *iter;
     std::cout << std::endl;
 
 }

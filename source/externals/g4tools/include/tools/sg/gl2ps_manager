@@ -49,15 +49,9 @@ public:
   virtual size_t gstos_size() const {return 0;}
 public:
   gl2ps_manager():m_gen_id(0){
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
   }
   virtual ~gl2ps_manager(){
     m_gstos.clear();
-#ifdef TOOLS_MEM
-    mem::decrement(s_class().c_str());
-#endif
   }
 public:
   gl2ps_manager(const gl2ps_manager& a_from)
@@ -65,9 +59,6 @@ public:
   ,m_gen_id(0)
   ,m_gstos()
   {
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
   }
   gl2ps_manager& operator=(const gl2ps_manager& a_from){
     if(&a_from==this) return *this;

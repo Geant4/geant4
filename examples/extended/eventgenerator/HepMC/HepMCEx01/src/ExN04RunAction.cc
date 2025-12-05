@@ -23,10 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file eventgenerator/HepMC/HepMCEx01/src/ExN04RunAction.cc
+/// \file ExN04RunAction.cc
 /// \brief Implementation of the ExN04RunAction class
-//
-//
 
 #include "ExN04RunAction.hh"
 

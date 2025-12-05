@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file Par04RunAction.hh
+/// \brief Definition of the Par04RunAction class
+
 #ifndef PAR04RUNACTION_HH
 #define PAR04RUNACTION_HH
 

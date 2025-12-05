@@ -23,12 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm10/src/DetectorHarris73.cc
+/// \file DetectorHarris73.cc
 /// \brief Implementation of the DetectorHarris73 class
-//
-//
-//
-//
 
 #include "DetectorHarris73.hh"
 

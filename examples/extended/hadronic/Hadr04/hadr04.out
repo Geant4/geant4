@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-03-ref-06    (30-June-2025)
+ Geant4 version Name: geant4-11-04-ref-00    (5-December-2025)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -134,7 +134,7 @@ Index : 0     used in the geometry : Yes
 
 Start closing geometry.
 --------------------------------------------------------------------------------
-G4GeometryManager::ReportVoxelStats -- Voxel Statistics
+G4VoxelisationHelper::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   0 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
@@ -159,7 +159,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=5.090000s Real=5.146329s Sys=0.000000s
+  User=4.860000s Real=4.970107s Sys=0.000000s
 
  The run is 1000 neutron of 2 MeV through 50 cm  of Water_ts (density: 1 g/cm3 )
 
@@ -175,7 +175,7 @@ Run Summary
             O16:   11705  Emean =  10.265 keV	( 0.21706 meV --> 443.34 keV)
             O17:       9  Emean =   200.2 eV 	( 30.108 meV --> 1.7996 keV)
             O18:      32  Emean =   9.556 keV	( 4.3733 meV --> 246.36 keV)
-       deuteron:    1000  Emean =  885.39 eV 	( 5.3439 eV  --> 1.3423 keV)
+       deuteron:    1000  Emean =  885.39 eV 	( 5.3438 eV  --> 1.3423 keV)
           gamma:   11746  Emean =   189.3 keV	( 10.006 eV  --> 2.2225 MeV)
          proton:   13944  Emean =  134.87 keV	( 3.6993 meV --> 1.9957 MeV)
 
@@ -185,9 +185,9 @@ Run Summary
 ----------------------------------------
 G4 kernel has come to Quit state.
 Deleting G4Run (id:0) 
-UserDetectorConstruction deleted 0x5efe50
-UserPhysicsList deleted 0x8969d0
-UserActionInitialization deleted 0xa05ad0
+UserDetectorConstruction deleted 0xbdef10
+UserPhysicsList deleted 0xe86ce0
+UserActionInitialization deleted 0xff5de0
 UserWorkerInitialization deleted 0
 UserWorkerThreadInitialization deleted 0
 UserRunAction deleted.

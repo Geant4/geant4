@@ -11,7 +11,7 @@
 
 namespace GIDI {
 
-static Vector collapseVector( Vector const &a_vector, std::vector<int> const &a_collapseIndices, 
+static Vector collapseVector( Vector const &a_vector, std::vector<std::size_t> const &a_collapseIndices, 
         std::vector<double> const &a_weight, bool a_normalize );
 static void multiGroupSetup( Transporting::MultiGroup const &a_boundaries, ptwXPoints **a_boundaries_xs,
                 Transporting::Flux const &a_flux, ptwXYPoints **a_fluxes_xys, ptwXPoints **a_multiGroupFlux );
@@ -32,7 +32,7 @@ Vector collapse( Vector const &a_vector, Transporting::Settings const &a_setting
     Transporting::Particle const *projectile( a_particles.particle( a_settings.projectileID( ) ) );
     Transporting::ProcessedFlux const *flux( projectile->nearestProcessedFluxToTemperature( a_temperature ) );
     std::vector<double> const &multiGroupFlux( flux->multiGroupFlux( ) );
-    std::vector<int> const &collapseIndices( projectile->collapseIndices( ) );
+    std::vector<std::size_t> const &collapseIndices( projectile->collapseIndices( ) );
 
     return( collapseVector( a_vector, collapseIndices, multiGroupFlux, true ) );
 }
@@ -47,7 +47,7 @@ Vector collapse( Vector const &a_vector, Transporting::Settings const &a_setting
  * @return                                  Returns the collapsed Vector.
  ***********************************************************************************************************/
 
-static Vector collapseVector( Vector const &a_vector, std::vector<int> const &a_collapseIndices, 
+static Vector collapseVector( Vector const &a_vector, std::vector<std::size_t> const &a_collapseIndices, 
         std::vector<double> const &a_weight, bool a_normalize ) {
 
     std::size_t n1( a_collapseIndices.size( ) - 1 );
@@ -91,12 +91,12 @@ Matrix collapse( Matrix const &a_matrix, Transporting::Settings const &a_setting
     Transporting::Particle const *projectile( a_particles.particle( a_settings.projectileID( ) ) );
     Transporting::ProcessedFlux const *flux( projectile->nearestProcessedFluxToTemperature( a_temperature ) );
     std::vector<double> const &multiGroupFlux( flux->multiGroupFlux( ) );
-    std::vector<int> const &projectileCollapseIndices( projectile->collapseIndices( ) );
+    std::vector<std::size_t> const &projectileCollapseIndices( projectile->collapseIndices( ) );
 
     Transporting::Particle const *product( a_particles.particle( a_productID ) );
     std::size_t n2 = product->numberOfGroups( );
 
-    std::vector<int> productCollapseIndices( product->collapseIndices( ) );
+    std::vector<std::size_t> productCollapseIndices( product->collapseIndices( ) );
     productCollapseIndices[0] = 0;
     productCollapseIndices[n2] = a_matrix[0].size( );
 
@@ -214,14 +214,15 @@ MultiGroupCalulationInformation::~MultiGroupCalulationInformation( ) {
 Vector multiGroupXYs1d( Transporting::MultiGroup const &a_boundaries, Functions::XYs1d const &a_function, Transporting::Flux const &a_flux ) {
 
     std::vector<double> const &boundaries = a_boundaries.boundaries( );
-    ptwXPoints *boundaries_xs = ptwX_create( nullptr, boundaries.size( ), boundaries.size( ), &(boundaries[0]) );
+    int64_t boundariesSize = static_cast<int64_t>( boundaries.size( ) );
+    ptwXPoints *boundaries_xs = ptwX_create( nullptr, boundariesSize, boundariesSize, &(boundaries[0]) );
     if( boundaries_xs == nullptr ) throw Exception( "GIDI::multiGroup: ptwX_create failed." );
 
     Transporting::Flux_order const &flux_order_0 = a_flux[0];
     double const *energies = flux_order_0.energies( );
     double const *fluxes = flux_order_0.fluxes( );
     ptwXYPoints *fluxes_xys = ptwXY_createFrom_Xs_Ys( nullptr, ptwXY_interpolationLinLin, ptwXY_interpolationToString( ptwXY_interpolationLinLin ), 
-        12, 1e-3, flux_order_0.size( ), 10, flux_order_0.size( ), energies, fluxes, 0 );
+        12, 1e-3, static_cast<int64_t>( flux_order_0.size( ) ), 10, static_cast<int64_t>( flux_order_0.size( ) ), energies, fluxes, 0 );
     if( fluxes_xys == nullptr ) {
         ptwX_free( boundaries_xs );
         throw Exception( "GIDI::multiGroup: ptwXY_createFrom_Xs_Ys failed." );
@@ -246,7 +247,7 @@ Vector multiGroupXYs1d( Transporting::MultiGroup const &a_boundaries, Functions:
     ptwXY_free( ptwXY );
     if( groups == nullptr ) throw Exception( "GIDI::multiGroup: ptwXY_groupTwoFunctions failed." );
 
-    Vector vector( ptwX_length( nullptr, groups ), ptwX_getPointAtIndex( nullptr, groups, 0 ) );
+    Vector vector( static_cast<std::size_t>( ptwX_length( nullptr, groups ) ), ptwX_getPointAtIndex( nullptr, groups, 0 ) );
     ptwX_free( groups );
 
     return( vector );
@@ -306,7 +307,7 @@ Vector *multiGroupTwoXYs1ds( MultiGroupCalulationInformation const &a_multiGroup
         throw Exception( errorMessage );
     }
 
-    Vector *vector = new Vector( ptwX_length( smr, groups ), ptwX_getPointAtIndex( smr, groups, 0 ) );
+    Vector *vector = new Vector( static_cast<std::size_t>( ptwX_length( smr, groups ) ), ptwX_getPointAtIndex( smr, groups, 0 ) );
     ptwX_free( groups );
 
     return( vector );
@@ -327,14 +328,15 @@ static void multiGroupSetup( Transporting::MultiGroup const &a_boundaries, ptwXP
                 Transporting::Flux const &a_flux, ptwXYPoints **a_fluxes_xys, ptwXPoints **a_multiGroupFlux ) {
 
     std::vector<double> const &boundaries = a_boundaries.boundaries( );
-    *a_boundaries_xs = ptwX_create( nullptr, boundaries.size( ), boundaries.size( ), &(boundaries[0]) );
+    int64_t boundariesSize = static_cast<int64_t>( boundaries.size( ) );
+    *a_boundaries_xs = ptwX_create( nullptr, boundariesSize, boundariesSize, &(boundaries[0]) );
     if( *a_boundaries_xs == nullptr ) throw Exception( "GIDI::multiGroup: ptwX_create failed." );
 
     Transporting::Flux_order const &flux_order_0 = a_flux[0];
     double const *energies = flux_order_0.energies( );
     double const *fluxes = flux_order_0.fluxes( );
     *a_fluxes_xys = ptwXY_createFrom_Xs_Ys( nullptr, ptwXY_interpolationLinLin, ptwXY_interpolationToString( ptwXY_interpolationLinLin ),
-        12, 1e-3, flux_order_0.size( ), 10, flux_order_0.size( ), energies, fluxes, 0 );
+        12, 1e-3, static_cast<int64_t>( flux_order_0.size( ) ), 10, static_cast<int64_t>( flux_order_0.size( ) ), energies, fluxes, 0 );
     if( *a_fluxes_xys == nullptr ) {
         *a_boundaries_xs = ptwX_free( *a_boundaries_xs );
         throw Exception( "GIDI::multiGroup: ptwXY_createFrom_Xs_Ys failed." );

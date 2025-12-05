@@ -1,0 +1,83 @@
+#FOR SIMPLICITY THIS MACRO USES MODEL DEFAULTS;
+#TO MODIFY PLEASE REFER run.mac
+#AND ADD THE CORRESPONDING OPTIONS TO THIS MACRO
+
+#THE CURRENT PARAMETERS GIVE THE SAME OUTPUT AS run.mac
+#(Experiment at Mainz Mikrotron MAMI)
+# A. Mazzolari et al. Phys. Rev. Lett. 112, 135503 (2014).
+# L. Bandiera et al. Phys. Rev. Lett. 115, 025504 (2015).
+# A. Sytov et al. Journal of the Korean Physical Society 83, 132–139 (2023)
+
+/random/setSeeds 19577794 424238336
+#setting number of cores
+/run/numberOfThreads 2
+
+#crystal geometry
+#change it as you want
+/crystal/setCrystalSize 20. 20. 0.0305 mm
+/crystal/setCrystalBendingAngle 0.905 mrad #default is 0
+/crystal/setCrystalAngleX 0 mrad  #default is 0
+/crystal/setCrystalAngleY 0 mrad  #default is 0
+
+#crystal lattice parameters
+#change it according to the data available in G4CHANNELINGDATA
+/crystal/setCrystalMaterial G4_Si  # check G4CHANNELINGDATA dataset;
+                                   #G4_Ge and G4_Diamond are also available
+/crystal/setCrystalLattice  (111)  # check G4CHANNELINGDATA dataset;
+                                   # planes (110) and (100) as well as
+                                   # axes <100>, <110> and <111> are also available
+
+#detector parameters
+#change it as you want
+/crystal/setDetectorSize 10 10 0.03 cm
+/crystal/setFrontPositionZ 5973 mm
+
+#G4ChannelingFastSimModel parameters
+#change it as you want
+/crystal/setChannelingModel true #switch on/off G4ChannelingFastSimModel
+/crystal/setRadiationModel true  #switch on/off G4BaierKatkov
+                                 #(G4ChannelingFastSimModel must be switched on)
+
+#the following can be changed or commented:
+#G4BaierKatkov parameters
+#(see also comments in ConstructSDandField in DetectorConstruction):
+/crystal/setMinPhotonEnergy 1 MeV # G4BaierKatkov default
+
+#the following can be changed or commented:
+#For scoring purposes only: the maximal energy in the output spectrum from the Baier-Katkov method.
+#Note it does not modifies the simulations.
+#Note: the minimal energy in the spectrum = the minimal energy defined above.
+/crystal/MaxBKPhotonEnergyInSpectrum 1 GeV # G4BaierKatkov default; must be > setMinPhotonEnergy
+/crystal/NBinsInSpectrum 40 # note these bins are not equidistant.
+#Virtual collimator sets the selection of photon angles to be written in the output spectrum
+/crystal/setVirtualCollimatorHalfSize 2.3183 mrad #setting the angular radius of virtual collimator
+
+/run/initialize
+
+#settings
+/control/verbose 0
+/run/verbose 0
+/tracking/verbose 0
+
+#beam
+/gps/particle e- #e+ also work fine
+
+#coordinate distribution (radial Gauss)
+/gps/pos/centre 0. 0. -1. cm
+/gps/pos/type Beam
+/gps/pos/sigma_x 0.07 mm
+/gps/pos/sigma_y 0.2 mm
+
+#angular distribution (radial Gauss)
+/gps/ang/type beam2d
+/gps/ang/rot1 1  0  0
+/gps/ang/rot2 0 -1  0
+/gps/ang/sigma_x 30.E-6 rad
+/gps/ang/sigma_y 70.E-6 rad
+
+#energy distribution (constant)
+/gps/ene/mono 0.855 GeV
+
+#statistics
+/run/printProgress 1000
+/run/beamOn 10000

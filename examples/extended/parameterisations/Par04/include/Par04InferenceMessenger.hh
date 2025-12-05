@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file Par04InferenceMessenger.hh
+/// \brief Definition of the Par04InferenceMessenger class
+
 #ifdef USE_INFERENCE
 #  ifndef PAR04INFERENCEMESSENGER_H
 #    define PAR04INFERENCEMESSENGER_H

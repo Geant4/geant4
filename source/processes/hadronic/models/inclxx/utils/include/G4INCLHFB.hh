@@ -45,9 +45,9 @@
 #include "G4INCLParticleType.hh"
 
 namespace G4INCL {
-
-    const G4int TableZSize = 120;
-    const G4int TableASize = 290;
+ 
+    const G4int TableZSize = 128;
+    const G4int TableASize = 300;
 
   namespace HFB {
 #ifdef INCLXX_IN_GEANT4_MODE

@@ -45,7 +45,7 @@ target_link_libraries(exp_microdosimetry ${Geant4_LIBRARIES})
 # relies on these scripts being in the current working directory.
 #
 set(exp_microdosimetry_SCRIPTS
-   vis.mac physics.mac primary.mac run.mac geometry.mac output.mac  MergeFiles LoadPlotNtuple.C ProcessMicro.C 1_plot_distributions.py 2_calculate_means_rbe.py weight_function.csv
+   vis.mac physics.mac primary.mac run.mac geometry.mac output.mac protonBeam.mac  MergeFiles LoadPlotNtuple.C ProcessMicro.C 1_plot_distributions.py 2_calculate_means_rbe.py weight_function.csv
   )
 
 foreach(_script ${exp_microdosimetry_SCRIPTS})

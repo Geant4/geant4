@@ -208,6 +208,28 @@ class G4EventManager
     G4String randomNumberStatusToG4Event;
 
     G4StateManager* stateManager = nullptr;
+
+  //---------------------------------------------------------------
+  // Following methods and data members are used only by the G4EventManager
+  // used in the worker thread in Sub-event parallel mode
+
+  public:
+    inline G4Event* RetrieveCompletedSubEvent()
+    {
+      G4Event* evt = nullptr;
+      if(!completedEvents.empty())
+      {
+        evt = completedEvents.back();
+        completedEvents.pop_back();
+      }
+      return evt;
+    }
+    inline G4int GetNumberOfRemainingSubEvents()
+    { return (G4int)processingEvents.size(); }
+
+  private:
+    std::vector<G4Event*> completedEvents;
+    std::vector<G4Event*> processingEvents;
 };
 
 #endif

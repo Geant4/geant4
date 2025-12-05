@@ -23,8 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// class G4VPhysicalVolume inline implementation
+// G4VPhysicalVolume inline implementations
 //
+// Author: Paul Kent (CERN), 24.07.1995 - First non-stub version
 // --------------------------------------------------------------------
 
 inline

@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-03-ref-06    (30-June-2025)
+ Geant4 version Name: geant4-11-04-ref-00    (5-December-2025)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -116,7 +116,7 @@ Step#       X          Y          Z         KineE         dEStep    StepLeng   T
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.000878s Sys=0.000000s
+  User=0.000000s Real=0.002324s Sys=0.000000s
 
  ======================== run summary ======================
  The run was 1 Co60 of 0 eV 
@@ -190,7 +190,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=0.470000s Real=0.469320s Sys=0.000000s
+  User=0.440000s Real=0.446223s Sys=0.000000s
 
  ======================== run summary ======================
  The run was 100000 Co60 of 0 eV 
@@ -264,7 +264,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=1.040000s Real=1.048726s Sys=0.000000s
+  User=1.040000s Real=1.038794s Sys=0.000000s
 
  ======================== run summary ======================
  The run was 100000 Co60 of 0 eV 
@@ -275,7 +275,7 @@ Run Summary
              Co60:  100000  Emean =      0 eV 	( 0 eV  --> 0 eV )	mean life = 7.61 y  
              Ni60:  100000  Emean =  15.91 eV 	( 15.91 eV  --> 41.74 eV )	stable
    Ni60[1332.514]:   99999  Emean =  12.34 eV 	( 1.227 eV  --> 30.74 eV )
-   Ni60[2158.632]:      16  Emean =   1.27 eV 	( 1.079 eV  --> 4.13 eV )
+   Ni60[2158.632]:      16  Emean =   1.27 eV 	( 1.079 eV  --> 4.128 eV )
    Ni60[2505.753]:   99884  Emean =   1.47 eV 	( 2.394 meV --> 3.687 eV )
         anti_nu_e:  100000  Emean =  217.8 keV	( 3.332 keV --> 1.483 MeV)	stable
                e-:  100030  Emean =  97.45 keV	( 524.8 meV --> 1.36 MeV)	stable
@@ -346,7 +346,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=0.810000s Real=0.836070s Sys=0.020000s
+  User=0.780000s Real=0.804824s Sys=0.030000s
 
  ======================== run summary ======================
  The run was 100000 Ca47 of 0 eV 

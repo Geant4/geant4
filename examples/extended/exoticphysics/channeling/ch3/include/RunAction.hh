@@ -25,8 +25,6 @@
 //
 /// \file RunAction.hh
 /// \brief Definition of the RunAction class
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef RunAction_h
 #define RunAction_h 1

@@ -30,7 +30,7 @@
 // Serves to reverse the magnetic field when propagation is backwards
 // for error propagation.
 
-// Created: P.Arce, September 2004.
+// Author: Pedro Arce (CIEMAT), September 2004.
 // --------------------------------------------------------------------
 #ifndef G4ERRORMAG_USUALEQRHS_HH
 #define G4ERRORMAG_USUALEQRHS_HH
@@ -38,17 +38,36 @@
 #include "G4Mag_UsualEqRhs.hh"
 #include "G4MagneticField.hh"
 
+/**
+ * @brief G4ErrorMag_UsualEqRhs serves to reverse the magnetic field when
+ * propagation is backwards. It is used for error propagation.
+ */
+
 class G4ErrorMag_UsualEqRhs : public G4Mag_UsualEqRhs
 {
-   public:
+  public:
 
-     G4ErrorMag_UsualEqRhs( G4MagneticField* MagField );
-    ~G4ErrorMag_UsualEqRhs() override;
+    /**
+     * Constructor for G4ErrorMag_UsualEqRhs.
+     *  @param[in] MagField Pointer to the magnetic field.
+     */
+    G4ErrorMag_UsualEqRhs( G4MagneticField* MagField );
 
-     void EvaluateRhsGivenB( const G4double y[],
-                             const G4double B[3],
-                                   G4double dydx[] ) const override;
-       // Reverses dedx if propagation is backwards
+    /**
+     * Default Destructor.
+     */
+    ~G4ErrorMag_UsualEqRhs() override = default;
+
+    /**
+     * Calculates the value of the derivative, given the value of the
+     * magnetic field. Reverses dedx if propagation is backwards.
+     *  @param[in] y Coefficients array.
+     *  @param[in] B Field value.
+     *  @param[out] dydx Derivatives array.
+     */
+    void EvaluateRhsGivenB( const G4double y[],
+                            const G4double B[3],
+                                  G4double dydx[] ) const override;
 };
 
 #endif

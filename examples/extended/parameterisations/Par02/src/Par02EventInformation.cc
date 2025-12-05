@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 /// \file Par02EventInformation.cc
 /// \brief Implementation of the Par02EventInformation class
 

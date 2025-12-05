@@ -25,9 +25,6 @@
 //
 /// \file NeutronHPphysics.hh
 /// \brief Definition of the NeutronHPphysics class
-//
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef NeutronHPphysics_h
 #define NeutronHPphysics_h 1

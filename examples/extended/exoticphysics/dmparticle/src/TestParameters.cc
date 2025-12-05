@@ -23,10 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file exoticphysics/dmparticle/src/TestParameters.cc
+/// \file TestParameters.cc
 /// \brief Implementation of the TestParameters class
-//
-//
+
 //---------------------------------------------------------------------------
 //
 // ClassName:   TestParameters

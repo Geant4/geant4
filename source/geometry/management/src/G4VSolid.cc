@@ -25,8 +25,10 @@
 //
 // G4VSolid implementation for solid base class
 //
-// 10.10.18 E.Tcherniaev, more robust EstimateSurfaceArea() based on distance
-// 30.06.95 P.Kent, Created.
+// Author: Paul Kent (CERN), 30.06.1995 - Initial version
+//         John Allison (Manchester Univ.), 27.03.1996 - Added methods for vis
+//         Paul Kent (CERN), 26.07.1996 - Added replication mechanism
+//         Evgueni Tcherniaev (CERN), 10.10.2018 - EstimateSurfaceArea() rewrite
 // --------------------------------------------------------------------
 
 #include "G4VSolid.hh"
@@ -67,7 +69,6 @@ G4VSolid::G4VSolid(const G4String& name)
 //////////////////////////////////////////////////////////////////////////
 //
 // Copy constructor
-//
 
 G4VSolid::G4VSolid(const G4VSolid& rhs)
   : kCarTolerance(rhs.kCarTolerance), fshapeName(rhs.fshapeName)
@@ -81,7 +82,7 @@ G4VSolid::G4VSolid(const G4VSolid& rhs)
 //
 // Fake default constructor - sets only member data and allocates memory
 //                            for usage restricted to object persistency.
-//
+
 G4VSolid::G4VSolid( __void__& )
   : fshapeName("")
 {
@@ -117,8 +118,6 @@ G4VSolid& G4VSolid::operator = (const G4VSolid& rhs)
 
    return *this;
 }
-
-
 
 //////////////////////////////////////////////////////////////////////////
 //
@@ -166,30 +165,42 @@ G4ThreeVector G4VSolid::GetPointOnSurface() const
 // of the solid. For non-Boolean solids the return value is one.
 
 G4int G4VSolid::GetNumOfConstituents() const
-{ return 1; }
+{
+  return 1;
+}
 
 //////////////////////////////////////////////////////////////////////////
 //
 // Returns true if the solid has only planar faces, false otherwise.
 
 G4bool G4VSolid::IsFaceted() const
-{ return false; }
+{
+  return false;
+}
 
 //////////////////////////////////////////////////////////////////////////
 //
 // Dummy implementations ...
 
 const G4VSolid* G4VSolid::GetConstituentSolid(G4int) const
-{ return nullptr; }
+{
+  return nullptr;
+}
 
 G4VSolid* G4VSolid::GetConstituentSolid(G4int)
-{ return nullptr; }
+{
+  return nullptr;
+}
 
 const G4DisplacedSolid* G4VSolid::GetDisplacedSolidPtr() const
-{ return nullptr; }
+{
+  return nullptr;
+}
 
 G4DisplacedSolid* G4VSolid::GetDisplacedSolidPtr()
-{ return nullptr; }
+{
+  return nullptr;
+}
 
 ////////////////////////////////////////////////////////////////
 //

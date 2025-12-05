@@ -23,10 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file medical/DICOM/include/DicomPhantomParameterisationColour.hh
+/// \file DicomPhantomParameterisationColour.hh
 /// \brief Definition of the DicomPhantomParameterisationColour class
-//
 
 #ifndef DicomPhantomParameterisationColour_HH
 #define DicomPhantomParameterisationColour_HH

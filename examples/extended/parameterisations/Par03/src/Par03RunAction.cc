@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file Par03RunAction.cc
+/// \brief Implementation of the Par03RunAction class
+
 #include "Par03RunAction.hh"
 
 #include "Par03DetectorConstruction.hh"

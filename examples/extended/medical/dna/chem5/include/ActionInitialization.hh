@@ -22,7 +22,10 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-///
+//
+/// \file ActionInitialization.hh
+/// \brief Definition of the ActionInitialization class
+
 // This example is provided by the Geant4-DNA collaboration
 // Any report or published results obtained using the Geant4-DNA software
 // shall cite the following Geant4-DNA collaboration publication:
@@ -31,8 +34,6 @@
 // Phys. Med. Biol. 63(10) (2018) 105014-12pp
 // The Geant4-DNA web site is available at http://geant4-dna.org
 //
-/// \file ActionInitialization.hh
-/// \brief Definition of the ActionInitialization class
 
 #ifndef CHEM5_ActionInitialization_h
 #define CHEM5_ActionInitialization_h 1

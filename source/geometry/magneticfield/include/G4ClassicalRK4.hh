@@ -30,54 +30,70 @@
 // Integrate the equations of the motion of a particle in a magnetic field
 // using the classical 4th Runge-Kutta method.
 
-// Created: J.Apostolakis, V.Grichine - 30.01.1997
+// Authors: J.Apostolakis, V.Grichine (CERN), 30.01.1997
 // -------------------------------------------------------------------
 #ifndef G4CLASSICALRK4_HH
 #define G4CLASSICALRK4_HH
 
 #include "G4MagErrorStepper.hh"
 
+/**
+ * @brief G4ClassicalRK4 integrates the equations of the motion of a particle
+ * in a magnetic field using the classical 4th Runge-Kutta method.
+ */
+
 class G4ClassicalRK4 : public G4MagErrorStepper 
 {
   public:
 
+    /**
+     * Constructor for G4ClassicalRK4.
+     *  @param[in] EquationMotion Pointer to the provided equation of motion.
+     *  @param[in] numberOfVariables The number of integration variables.
+     */
     G4ClassicalRK4(G4EquationOfMotion* EquationMotion,
                    G4int numberOfVariables = 6) ;
 
+    /**
+     * Destructor.
+     */
     ~G4ClassicalRK4() override ;
 
+    /**
+     * Copy constructor and assignment operator not allowed.
+     */
     G4ClassicalRK4(const G4ClassicalRK4&) = delete;
     G4ClassicalRK4& operator=(const G4ClassicalRK4&) = delete;
-      // Copy constructor and assignment operator not allowed.
 
     // A stepper that does not know about errors.
     // It is used by the MagErrorStepper stepper.
    
+    /**
+     * Given values for the variables y[0,..,n-1] and their derivatives
+     * dydx[0,...,n-1] known at x, uses the classical 4th Runge-Kutta
+     * method to advance the solution over an interval h and returns the
+     * incremented variables as yout[0,...,n-1]. The user supplies the
+     * function RightHandSide(x,y,dydx), which returns derivatives dydx at x.
+     * The source is routine rk4 from NRC p.712-713.
+     *  @param[in] yIn Starting values array of integration variables.
+     *  @param[in] dydx Derivatives array.
+     *  @param[in] h The given step size.
+     *  @param[out] yOut Integration output.
+     */
     void DumbStepper( const G4double yIn[],
                       const G4double dydx[],
                             G4double h,
                             G4double yOut[] ) override ;
-      // Given values for the variables y[0,..,n-1] and their derivatives
-      // dydx[0,...,n-1] known at x, use the classical 4th Runge-Kutta
-      // method to advance the solution over an interval h and return the
-      // incremented variables as yout[0,...,n-1], which not be a distinct
-      // array from y. The user supplies the routine RightHandSide(x,y,dydx),
-      // which returns derivatives dydx at x. The source is routine rk4 from
-      // NRC p. 712-713 .
 
+    /**
+     * Returns the order, 4, of integration.
+     */
     G4int IntegratorOrder() const override { return 4; }
 
-  private:
-
-    void StepWithEst( const G4double  yIn[],
-                      const G4double  dydx[],
-                            G4double  h,
-                            G4double  yOut[],
-                            G4double& alpha2,
-                            G4double& beta2,
-                      const G4double B1[],
-                            G4double B2[] );
-      // No longer used. Obsolete.
+    /**
+     * Returns the stepper type-ID, "kClassicalRK4".
+     */
+    G4StepperType StepperType() const override { return kClassicalRK4; }
 
   private:
 

@@ -23,12 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file parallel/ThreadsafeScorers/include/G4TAtomicHitsCollection.hh
+/// \file G4TAtomicHitsCollection.hh
 /// \brief Definition of the G4TAtomicHitsCollection class
-//
-//
-//
-//
+///
 /// This is an implementation of G4THitsCollection<T> where the underlying
 ///     type is G4atomic<T>, not just T. A static assert is provided to
 ///     ensure that T is fundamental. This class should be used in lieu
@@ -55,15 +52,15 @@
 #include <deque>
 #include <type_traits>
 
-// class description:
-//
-//  This is a template class of hits collection and parametrized by
-// The concrete class of G4VHit. This is a uniform collection for
-// a particular concrete hit class objects.
-//  An intermediate layer class G4HitsCollection appeared in this
-// header file is used just for G4Allocator, because G4Allocator
-// cannot be instansiated with a template class. Thus G4HitsCollection
-// class MUST NOT be directly used by the user.
+/// class description:
+///
+///  This is a template class of hits collection and parametrized by
+/// The concrete class of G4VHit. This is a uniform collection for
+/// a particular concrete hit class objects.
+///  An intermediate layer class G4HitsCollection appeared in this
+/// header file is used just for G4Allocator, because G4Allocator
+/// cannot be instansiated with a template class. Thus G4HitsCollection
+/// class MUST NOT be directly used by the user.
 
 /*class G4HitsCollection : public G4VHitsCollection
 {

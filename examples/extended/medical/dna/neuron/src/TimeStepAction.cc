@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file TimeStepAction.cc
+/// \brief Implementation of the TimeStepAction class
+
 // This example is provided by the Geant4-DNA collaboration
 // Any report or published results obtained using the Geant4-DNA software
 // shall cite the following Geant4-DNA collaboration publication:
@@ -36,8 +39,6 @@
 // November 2016
 // -------------------------------------------------------------------
 //
-/// \file TimeStepAction.hh
-/// \brief Implementation of the TimeStepAction class
 
 #include "TimeStepAction.hh"
 

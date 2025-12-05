@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 /// \file OpNoviceSteppingAction.hh
 /// \brief Definition of the OpNoviceSteppingAction class
 

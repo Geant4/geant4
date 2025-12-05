@@ -31,8 +31,8 @@
 // the geometrical hierarchy. Principally a utility class for use by the
 // G4Navigator.
 
-// 25.07.96 - P.Kent Initial version. Services derived from
-//                   requirements of G4Navigator.
+// Author: Paul Kent (CERN), 25.07.1996 - Initial version.
+//                   Services derived from requirements of G4Navigator.
 // ----------------------------------------------------------------------
 #ifndef G4NAVIGATIONHISTORY_HH
 #define G4NAVIGATIONHISTORY_HH
@@ -49,103 +49,157 @@
 #include "G4NavigationHistoryPool.hh"
 #include "G4Allocator.hh"
 
+/**
+ * @brief G4NavigationHistory is a class responsible for the maintenance
+ * of the history of the path taken through the geometrical hierarchy.
+ */
+
 class G4NavigationHistory
 {
+  public:
 
- public:  // with description
+    /**
+     * Streaming operator.
+     */
+    friend std::ostream&
+    operator << (std::ostream& os, const G4NavigationHistory& h);
 
-  friend std::ostream&
-  operator << (std::ostream& os, const G4NavigationHistory& h);
+    /**
+     * Constructor. Sizes history lists & resets histories.
+     */
+    G4NavigationHistory();
 
-  G4NavigationHistory();
-    // Constructor: sizes history lists & resets histories.
+    /**
+     * Default Destructor.
+     */
+    ~G4NavigationHistory();
 
-  ~G4NavigationHistory();
-    // Destructor.
+    /**
+     * Copy contructor and assigment operator.
+     */
+    G4NavigationHistory(const G4NavigationHistory& h);
+    inline G4NavigationHistory& operator=(const G4NavigationHistory& h);
 
-  G4NavigationHistory(const G4NavigationHistory& h);
-    // Copy constructor.
+    /**
+     * Resets history. It does clear most entries. Level 0 is preserved.
+     */
+    inline void Reset();
 
-  inline G4NavigationHistory& operator=(const G4NavigationHistory& h);
-    // Assignment operator.
+    /**
+     * Clears entries, zeroing transforms, matrices & negating replica history.
+     */
+    inline void Clear();
 
-  inline void Reset();
-    // Resets history. It now does clear most entries.
-    // Level 0 is preserved.
+    /**
+     * Setups the initial entry in stack: copies through volume transform 
+     * and rotarion matrix. The volume 'pVol' is assumed to be unrotated.
+     */
+    inline void SetFirstEntry(G4VPhysicalVolume* pVol);
 
-  inline void Clear();
-    // Clears entries, zeroing transforms, matrices & negating
-    // replica history.
+    /**
+     * Returns the topmost transformation.
+     */
+    inline const G4AffineTransform& GetTopTransform() const; 
 
-  inline void SetFirstEntry(G4VPhysicalVolume* pVol);
-    // Setup initial entry in stack: copies through volume transform & matrix.
-    // The volume is assumed to be unrotated.
+    /**
+     * Returns a pointer to the topmost transformation.
+     */
+    inline const G4AffineTransform* GetPtrTopTransform() const;
 
-  inline const G4AffineTransform& GetTopTransform() const; 
-    // Returns topmost transform.
+    /**
+     * Returns the topmost replica number record.
+     */
+    inline G4int GetTopReplicaNo() const;
 
-  inline const G4AffineTransform* GetPtrTopTransform() const;
-    // Returns pointer to topmost transform.
+    /**
+     * Returns the topmost volume type.
+     */
+    inline EVolume GetTopVolumeType() const;
 
-  inline G4int GetTopReplicaNo() const;
-    // Returns topmost replica no record.
+    /**
+     * Returns the topmost physical volume pointer.
+     */
+    inline G4VPhysicalVolume* GetTopVolume() const;
 
-  inline EVolume GetTopVolumeType() const;
-    // Returns topmost volume type.
+    /**
+     * Returns the current history depth.
+     */
+    inline std::size_t GetDepth() const;
 
-  inline G4VPhysicalVolume* GetTopVolume() const;
-    // Returns topmost physical volume pointer.
+    /**
+     * Returns the current maximum size of the history. The maximum depth
+     * is set to 16, meaning history entries [0..15] inclusive.
+     */
+    inline std::size_t GetMaxDepth() const;
 
-  inline std::size_t GetDepth() const;
-    // Returns current history depth.
+    /**
+     * Returns the specified transformation.
+     *  @param[in] n The history level.
+     */
+    inline const G4AffineTransform& GetTransform(G4int n) const;
 
-  inline std::size_t GetMaxDepth() const;
-    // Returns current maximum size of history.
-    // Note: MaxDepth of 16 mean history entries [0..15] inclusive.
+    /**
+     * Returns the specified replica number record.
+     *  @param[in] n The history level.
+     */
+    inline G4int GetReplicaNo(G4int n) const;
 
-  inline const G4AffineTransform& GetTransform(G4int n) const;
-    // Returns specified transformation.
+    /**
+     * Returns the specified volume type.
+     *  @param[in] n The history level.
+     */
+    inline EVolume GetVolumeType(G4int n) const;
 
-  inline G4int GetReplicaNo(G4int n) const;
-    // Returns specified replica no record.
+    /**
+     * Returns the specified physical volume pointer.
+     *  @param[in] n The history level.
+     */
+    inline G4VPhysicalVolume* GetVolume(G4int n) const;
 
-  inline EVolume GetVolumeType(G4int n) const;
-    // Returns specified volume type.
+    /**
+     * Changes the navigation level to that of the new mother.
+     *  @param[in] pNewMother Pointer to the mother physical volume
+     *  @param[in] vType The volume type.
+     *  @param[in] nReplica The replica number.
+     */
+    inline void NewLevel(G4VPhysicalVolume* pNewMother,
+                         EVolume vType = kNormal,
+                         G4int nReplica = -1);
 
-  inline G4VPhysicalVolume* GetVolume(G4int n) const;
-    // Returns specified physical volume pointer.
+    /**
+     * Backs up one level in history: from mother to grandmother.
+     * It does not erase the history record of the current mother.
+     */
+    inline void BackLevel();
 
-  inline void NewLevel(G4VPhysicalVolume* pNewMother,
-                       EVolume vType = kNormal,
-                       G4int nReplica = -1);
-    // Changes navigation level to that of the new mother.
+    /**
+     * Backs up the specified number of levels in history.
+     *  @param[in] n The history level.
+     */
+    inline void BackLevel(G4int n);
 
-  inline void BackLevel();
-    // Back up one level in history: from mother to grandmother.
-    // It does not erase history record of current mother.
+    /**
+     * New/delete override for "G4Allocator".
+     */
+    inline void *operator new(std::size_t);
+    inline void operator delete(void *aHistory);
 
-  inline void BackLevel(G4int n);
-    // Back up specified number of levels in history.
+  private:
 
-  inline void *operator new(std::size_t);
-    // Override "new" for "G4Allocator".
-  inline void operator delete(void *aHistory);
-    // Override "delete" for "G4Allocator".
+    /**
+     * Enlarges the history if required: increases the size by kHistoryStride.
+     * Note that additional history entries are 'dirty' (non zero) apart
+     * from the volume history.
+     */
+    inline void EnlargeHistory();
 
- private:
+  private:
 
-  inline void EnlargeHistory();
-    // Enlarge history if required: increase size by kHistoryStride.
-    // Note that additional history entries are `dirty' (non zero) apart
-    // from the volume history.
+    /** Pointer to the vector of navigation levels. */
+    std::vector<G4NavigationLevel>* fNavHistory;
 
- private:
-
-  std::vector<G4NavigationLevel>* fNavHistory;
-    // Pointer to the vector of navigation levels.
-
-  std::size_t fStackDepth{0};
-    // Depth of stack: effectively depth in geometrical tree.
+    /** Depth of the stack: effectively depth in the geometrical tree. */
+    std::size_t fStackDepth{0};
 };
 
 #include "G4NavigationHistory.icc"

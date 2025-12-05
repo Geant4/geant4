@@ -178,9 +178,14 @@ G4double G4DNAIndependentReactionTimeStepper::CalculateStep(const G4Track& track
           continue;
         }
         fSampledMinTimeStep = tempMinET;
-        if (tempMinET < fUserMinTimeStep) {
-          fSampledMinTimeStep = fUserMinTimeStep;
-        }
+        // Fixed the IRT_syn model (Stepper) to ensure it does not use minTimeStep (default = 1 ps)
+        // when DNA reactions do not yet share
+        // the same minTimeStep(The MinTimeStep is used to optimize the chemistry).
+        // TODO: full test
+
+        //if (tempMinET < fUserMinTimeStep) {
+        //  fSampledMinTimeStep = fUserMinTimeStep;
+        //}
       }
       CheckAndRecordResults(fSampledMinTimeStep, utils);
     }

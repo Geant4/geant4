@@ -23,7 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
+/// \file G4LDMBremModel.hh
+/// \brief Definition of the G4LDMBremModel class
+
 // -------------------------------------------------------------------
 //
 // 21.03.17 V. Grichine based on G4hBremsstrahlungModel

@@ -194,9 +194,6 @@ public:
     m_vp_mtx.mul_translate(float(m_ww)/2,float(m_wh)/2,0);
     m_vp_mtx.mul_scale(float(m_ww)/2,float(m_wh)/2,1);
 
-    //m_zb.change_size(a_ww,a_wh);
-//    m_zb.clear_color_buffer(0);
-//    m_zb.clear_depth_buffer();
     m_proj.set_identity();
     m_model.set_identity();
     m_normal_matrix.set_identity();
@@ -379,11 +376,6 @@ protected:
     a_z /= a_w;
     return true;
   }
-//  bool project_normal(float& a_x,float& a_y,float& a_z) {
-//    m_normal_matrix.mul_dir_3f(a_x,a_y,a_z);
-//  //m_proj.mul_dir_3f(a_x,a_y,a_z); //?
-//    return true;
-//  }
 
   static void set_vtx(tools_GL2PSvertex* a_vs,unsigned int a_index,
                       float a_x,float a_y,float a_z,
@@ -509,7 +501,6 @@ protected:
       m_this.set_vtx(vertices,0, a_bx,a_by,a_bz, a_br,a_bg,a_bb,a_ba);
       m_this.set_vtx(vertices,1, a_ex,a_ey,a_ez, a_er,a_eg,a_eb,a_ea);
 
-      //tools_gl2psAddPolyPrimitive(m_this.m_gl2ps_context,_GL2PS_LINE(),2,vertices,0,pattern,factor,lwidth,0);
       ::tools_gl2psAddPolyPrimitive(m_this.m_gl2ps_context,_GL2PS_LINE(),2,vertices,offset,ofactor,ounits,pattern,factor,lwidth,linecap,linejoin,boundary);
 
       return true;
@@ -553,20 +544,17 @@ protected:
     }
 
     virtual bool project_normal(float& /*a_x*/,float& /*a_y*/,float& /*a_z*/) {
-      //return m_this.project_normal(a_x,a_y,a_z);
       return true;
     }
     virtual bool add_point_normal(float a_x,float a_y,float a_z,float a_w,
                                   float /*a_nx*/,float /*a_ny*/,float /*a_nz*/) {
       add_point(a_x,a_y,a_z,a_w);
-    //m_this.m_points.add_normal(a_nx,a_ny,a_nz);
       return true;
     }
     virtual bool add_point_normal(float a_x,float a_y,float a_z,float a_w,
                                   float /*a_nx*/,float /*a_ny*/,float /*a_nz*/,
                                   float a_r,float a_g,float a_b,float a_a) {
       add_point(a_x,a_y,a_z,a_w,a_r,a_g,a_b,a_a);
-    //m_this.m_points.add_normal(a_nx,a_ny,a_nz);
       return true;
     }
     virtual bool add_line_normal(float a_bx,float a_by,float a_bz,float a_bw,
@@ -574,8 +562,6 @@ protected:
                                  float a_ex,float a_ey,float a_ez,float a_ew,
                                  float /*a_enx*/,float /*a_eny*/,float /*a_enz*/) {
       add_line(a_bx,a_by,a_bz,a_bw, a_ex,a_ey,a_ez,a_ew);
-    //m_this.m_lines.add_normal(a_bnx,a_bny,a_bnz);
-    //m_this.m_lines.add_normal(a_enx,a_eny,a_enz);
       return true;
     }
     virtual bool add_line_normal(float a_bx,float a_by,float a_bz,float a_bw,
@@ -585,8 +571,6 @@ protected:
                                  float /*a_enx*/,float /*a_eny*/,float /*a_enz*/,
                                  float a_er,float a_eg,float a_eb,float a_ea){
       add_line(a_bx,a_by,a_bz,a_bw, a_br,a_bg,a_bb,a_ba, a_ex,a_ey,a_ez,a_ew, a_er,a_eg,a_eb,a_ea);
-    //m_this.m_lines.add_normal(a_bnx,a_bny,a_bnz);
-    //m_this.m_lines.add_normal(a_enx,a_eny,a_enz);
       return true;
     }
     virtual bool add_triangle_normal(
@@ -802,7 +786,7 @@ inline bool gl2ps_s2sort(const std::string& a_sort,int& a_gl2ps_sort) {
 
 }}
 
-#include "../words"
+#include "../tokenize"
 #include "../forit"
 #include "../touplow"
 #include "../sout"

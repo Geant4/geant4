@@ -23,13 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file exoticphysics/monopole/include/G4MonopoleTransportation.hh
+/// \file G4MonopoleTransportation.hh
 /// \brief Definition of the G4MonopoleTransportation class
-//
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//
+
 // ------------------------------------------------------------
 //        GEANT 4  include file implementation
 // ------------------------------------------------------------

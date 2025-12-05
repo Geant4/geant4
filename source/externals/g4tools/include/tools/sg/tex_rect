@@ -6,8 +6,6 @@
 
 // node to render an RGB tools::img_byte with ::glTexImage2D.
 
-//#define TOOLS_SG_TEX_RECT_DEBUG
-
 #include "node"
 #include "render_action"
 #include "pick_action"
@@ -17,7 +15,6 @@
 #include "gstos"
 #include "base_tex"
 
-#include "../pointer"
 #include "../num2s"
 
 namespace tools {
@@ -58,36 +55,18 @@ private:
   }
 public:
   virtual void render(render_action& a_action) {
-#ifdef TOOLS_SG_TEX_RECT_DEBUG
-    a_action.out() << "tools::tex_rect::render : begin : 001 : " << std::endl;
-#endif
-
     //NOTE : we draw border (show_border is true) and background even if
     //       gen_texture() failed.
 
     if(touched()) {
-#ifdef TOOLS_SG_TEX_RECT_DEBUG
-      a_action.out() << "tools::tex_rect::render : touched." << std::endl;
-#endif
       update_sg(a_action.out());
       reset_touched();
     }
     if(m_img.is_empty()) {
-#ifdef TOOLS_SG_TEX_RECT_DEBUG
-      a_action.out() << "tools::tex_rect::render : m_img is empty." << std::endl;
-#endif
       return;
     }
 
-#ifdef TOOLS_SG_TEX_RECT_DEBUG
-    a_action.out() << "tools::tex_rect::render : have a m_img. get_tex_id ..." << std::endl;
-#endif
-
     unsigned int _id = get_tex_id(a_action.out(),a_action.render_manager(),m_img,nearest.value());
-
-#ifdef TOOLS_SG_TEX_RECT_DEBUG
-    a_action.out() << "tools::tex_rect::render : get_tex_id : " << _id << "." << std::endl;
-#endif
 
     const state& state = a_action.state();
 
@@ -97,9 +76,6 @@ public:
     f12 xyzs;
 
     if(show_border.value()) {
-#ifdef TOOLS_SG_TEX_RECT_DEBUG
-      a_action.out() << "tools::tex_rect::render : show_border." << std::endl;
-#endif
       f12 nms;
       _front(xyzs,nms,0.01f);
 
@@ -115,10 +91,6 @@ public:
       a_action.line_width(state.m_line_width);
     }
 
-#ifdef TOOLS_SG_TEX_RECT_DEBUG
-    a_action.out() << "tools::tex_rect::render : draw back face." << std::endl;
-#endif
-
     //draw a back face pointing toward negative z :
    {a_action.color4f(back_color.value());
     f18 tris,nms;
@@ -127,9 +99,6 @@ public:
     a_action.color4f(state.m_color);}
 
     if(_id) {
-#ifdef TOOLS_SG_TEX_RECT_DEBUG
-      a_action.out() << "tools::tex_rect::render : draw_vertex_normal_array_texture." << std::endl;
-#endif
       f12 nms;
       _front(xyzs,nms);
       float tcs[8];

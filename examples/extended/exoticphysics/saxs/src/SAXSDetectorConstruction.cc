@@ -25,8 +25,6 @@
 //
 /// \file SAXSDetectorConstruction.cc
 /// \brief Implementation of the SAXSDetectorConstruction class
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "SAXSDetectorConstruction.hh"
 

@@ -73,6 +73,11 @@ public:
   
   void win_render() {
     m_session.to_render(this);
+    m_session.sync();
+  }
+
+  void emit_win_render() {
+    m_session.to_render(this);
   }
 
   bool window_size(unsigned int& a_w,unsigned int& a_h) {

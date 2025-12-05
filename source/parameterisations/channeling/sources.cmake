@@ -24,11 +24,11 @@ geant4_add_module(G4channeling
      G4heprandom
      G4materials
      G4parameterisation
-     G4track
      G4partman
      G4procman
    PRIVATE
      G4bosons
      G4navigation
+     G4track
      G4leptons
      G4emutils)

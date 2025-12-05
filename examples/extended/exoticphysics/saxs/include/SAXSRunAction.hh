@@ -25,8 +25,6 @@
 //
 /// \file SAXSRunAction.hh
 /// \brief Definition of the SAXSRunAction class
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef SAXSRunAction_h
 #define SAXSRunAction_h 1

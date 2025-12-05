@@ -36,6 +36,7 @@
 // -------------------------------------------------------------------
 
 #include "G4DNAElectronSolvation.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Electron.hh"
 #include "G4DNAWaterExcitationStructure.hh"
 #include "G4LowEnergyEmProcessSubType.hh"

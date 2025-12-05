@@ -23,12 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file hadronic/Hadr00/src/EventAction.cc
+/// \file EventAction.cc
 /// \brief Implementation of the EventAction class
-//
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//
+
 // EventAction
 //
 // Created: 21.06.2008 V.Ivanchenko

@@ -23,11 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file persistency/P01/include/ExP01SteppingVerbose.hh
+/// \file ExP01SteppingVerbose.hh
 /// \brief Definition of the ExP01SteppingVerbose class
-//
-//
-//
+
 //   This class manages the verbose outputs in G4SteppingManager.
 //   It inherits from G4SteppingVerbose.
 //   It shows how to extract informations during the tracking of a particle.

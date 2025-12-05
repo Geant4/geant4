@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file scavenger/include/ScoreSpecies.hh
+/// \file ScoreSpecies.hh
 /// \brief Definition of the scavenger::ScoreSpecies class
 
 #ifndef SCAVENGER_ScoreSpecies_h

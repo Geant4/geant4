@@ -35,21 +35,32 @@
 // Author: Michael Dressel (CERN), 2003
 // ----------------------------------------------------------------------
 #ifndef G4VWEIGHTWINDOWALGORITHM_HH
-#define G4VWEIGHTWINDOWALGORITHM_HH 1
+#define G4VWEIGHTWINDOWALGORITHM_HH
 
 #include "G4Nsplit_Weight.hh"
 
+/**
+ * @brief G4VWeightWindowAlgorithm is an interface class for a weight window
+ * algorithm. It calculates the number of tracks and their weight according to
+ * the inital track weight and the lower energy bound in the energy-space cell.
+ */
+
 class G4VWeightWindowAlgorithm
 {
-  public:  // with description
+  public:
 
-    G4VWeightWindowAlgorithm();
-    virtual ~G4VWeightWindowAlgorithm();
+    /**
+     * Default Constructor and Destructor.
+     */
+    G4VWeightWindowAlgorithm() = default;
+    virtual ~G4VWeightWindowAlgorithm() = default;
 
+    /**
+     * Calculates the number of tracks and their weight according
+     * to the initial track weight and the lower energy bound.
+     */
     virtual G4Nsplit_Weight Calculate(G4double init_w,
                                       G4double lowerWeightBound) const = 0;
-      // calculate number of tracks and their weight according
-      // to the initial track weight and the lower energy bound
 };
 
 #endif

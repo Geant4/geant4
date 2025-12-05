@@ -23,10 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file exoticphysics/phonon/src/XDetectorConstruction.cc
+/// \file XDetectorConstruction.cc
 /// \brief Implementation of the XDetectorConstruction class
-//
-//
+
 // 20141006  For MT compatibility, move SD handling to ConstructSDandField()
 
 #include "XDetectorConstruction.hh"

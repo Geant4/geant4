@@ -25,8 +25,8 @@
 //
 // G4EllipticalTube implementation
 //
-// Author: David C. Williams (davidw@scipp.ucsc.edu)
-// Revision: Evgueni Tcherniaev (evgueni.tcherniaev@cern.ch), 23.12.2019
+// Author: David C. Williams (UCSC), 29.03.2000 - First implementation
+//         Evgueni Tcherniaev (CERN), 23.12.2019 - Revised
 // --------------------------------------------------------------------
 
 #include "G4EllipticalTube.hh"
@@ -47,6 +47,7 @@
 namespace
 {
   G4Mutex polyhedronMutex = G4MUTEX_INITIALIZER;
+  G4Mutex eltubeMutex = G4MUTEX_INITIALIZER;
 }
 
 using namespace CLHEP;
@@ -264,7 +265,7 @@ EInside G4EllipticalTube::Inside( const G4ThreeVector& p ) const
   G4double distZ = std::abs(p.z()) - fDz;
   G4double dist = std::max(distR, distZ);
 
-  if (dist > halfTolerance) return kOutside;
+  if (dist > halfTolerance) { return kOutside; }
   return (dist > -halfTolerance) ? kSurface : kInside;
 }
 
@@ -296,28 +297,32 @@ G4ThreeVector G4EllipticalTube::SurfaceNormal( const G4ThreeVector& p ) const
   }
 
   // return normal
-  if (nsurf == 1) return norm;
-  else if (nsurf > 1) return norm.unit(); // edge
-  else
+  if (nsurf == 1)
   {
-    // Point is not on the surface
-    //
-#ifdef G4SPECDEBUG
-    std::ostringstream message;
-    G4long oldprc = message.precision(16);
-    message << "Point p is not on surface (!?) of solid: "
-            << GetName() << G4endl;
-    message << "Position:\n";
-    message << "   p.x() = " << p.x()/mm << " mm\n";
-    message << "   p.y() = " << p.y()/mm << " mm\n";
-    message << "   p.z() = " << p.z()/mm << " mm";
-    G4cout.precision(oldprc);
-    G4Exception("G4EllipticalTube::SurfaceNormal(p)", "GeomSolids1002",
-                JustWarning, message );
-    DumpInfo();
-#endif
-    return ApproxSurfaceNormal(p);
+    return norm;
   }
+  if (nsurf > 1)
+  {
+    return norm.unit(); // edge
+  }
+
+  // Point is not on the surface
+  //
+#ifdef G4SPECDEBUG
+  std::ostringstream message;
+  G4long oldprc = message.precision(16);
+  message << "Point p is not on surface (!?) of solid: "
+          << GetName() << G4endl;
+  message << "Position:\n";
+  message << "   p.x() = " << p.x()/mm << " mm\n";
+  message << "   p.y() = " << p.y()/mm << " mm\n";
+  message << "   p.z() = " << p.z()/mm << " mm";
+  G4cout.precision(oldprc);
+  G4Exception("G4EllipticalTube::SurfaceNormal(p)", "GeomSolids1002",
+              JustWarning, message );
+  DumpInfo();
+#endif
+  return ApproxSurfaceNormal(p);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -334,9 +339,10 @@ G4EllipticalTube::ApproxSurfaceNormal( const G4ThreeVector& p ) const
   G4double distR = fQ1 * (x * x + y * y) - fQ2;
   G4double distZ = std::abs(p.z()) - fDz;
   if (distR > distZ && (x * x + y * y) > 0)
+  {
     return G4ThreeVector(p.x() * fDDy, p.y() * fDDx, 0.).unit();
-  else
-    return {0, 0, (p.z() < 0 ? -1. : 1.)};
+  }
+  return {0, 0, (p.z() < 0 ? -1. : 1.)};
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -356,9 +362,9 @@ G4double G4EllipticalTube::DistanceToIn( const G4ThreeVector& p,
   G4double safey = std::abs(pcur.y()) - fDy;
   G4double safez = std::abs(pcur.z()) - fDz;
 
-  if (safez >= -halfTolerance && pcur.z() * v.z() >= 0.) return kInfinity;
-  if (safey >= -halfTolerance && pcur.y() * v.y() >= 0.) return kInfinity;
-  if (safex >= -halfTolerance && pcur.x() * v.x() >= 0.) return kInfinity;
+  if (safez >= -halfTolerance && pcur.z() * v.z() >= 0.) { return kInfinity; }
+  if (safey >= -halfTolerance && pcur.y() * v.y() >= 0.) { return kInfinity; }
+  if (safex >= -halfTolerance && pcur.x() * v.x() >= 0.) { return kInfinity; }
 
   // Relocate point, if required
   //
@@ -392,7 +398,7 @@ G4double G4EllipticalTube::DistanceToIn( const G4ThreeVector& p,
   //
   G4double distR  = fQ1 * rr - fQ2;
   G4bool parallelToZ = (A < DBL_EPSILON || std::abs(vz) >= 1.);
-  if (distR >= -halfTolerance && (B >= 0. || parallelToZ)) return kInfinity;
+  if (distR >= -halfTolerance && (B >= 0. || parallelToZ)) { return kInfinity; }
 
   // Find intersection with Z planes
   //
@@ -405,8 +411,11 @@ G4double G4EllipticalTube::DistanceToIn( const G4ThreeVector& p,
   //   1) trajectory parallel to Z axis (A = 0, B = 0, C - any, D = 0)
   //   2) touch (D = 0) or no intersection (D < 0) with lateral surface
   //
-  if (parallelToZ) return (tzmin<halfTolerance) ? offset : tzmin + offset; // 1)
-  if (D <= A * A * fScratch) return kInfinity; // 2)
+  if (parallelToZ)
+  {
+    return (tzmin<halfTolerance) ? offset : tzmin + offset;  // 1)
+  }
+  if (D <= A * A * fScratch) { return kInfinity; } // 2)
 
   // Find roots of quadratic equation
   G4double tmp = -B - std::copysign(std::sqrt(D), B);
@@ -419,7 +428,8 @@ G4double G4EllipticalTube::DistanceToIn( const G4ThreeVector& p,
   G4double tin  = std::max(tzmin, trmin);
   G4double tout = std::min(tzmax, trmax);
 
-  if (tout <= tin + halfTolerance) return kInfinity; // touch or no hit
+  if (tout <= tin + halfTolerance) { return kInfinity; } // touch or no hit
+
   return (tin<halfTolerance) ? offset : tin + offset;
 }
 
@@ -567,9 +577,13 @@ G4double G4EllipticalTube::DistanceToOut( const G4ThreeVector& p,
     *validNorm = true;
     G4ThreeVector pnew = p + tmax * v;
     if (tmax == tzmax)
+    {
       n->set(0, 0, (pnew.z() < 0) ? -1. : 1.);
+    }
     else
+    {
       *n = G4ThreeVector(pnew.x() * fDDy, pnew.y() * fDDx, 0.).unit();
+    }
   }
   return tmax;
 }
@@ -631,19 +645,6 @@ G4VSolid* G4EllipticalTube::Clone() const
 
 //////////////////////////////////////////////////////////////////////////
 //
-// Return volume
-
-G4double G4EllipticalTube::GetCubicVolume()
-{
-  if (fCubicVolume == 0.)
-  {
-    fCubicVolume = twopi * fDx * fDy * fDz;
-  }
-  return fCubicVolume;
-}
-
-//////////////////////////////////////////////////////////////////////////
-//
 // Return cached surface area
 
 G4double G4EllipticalTube::GetCachedSurfaceArea() const
@@ -664,13 +665,30 @@ G4double G4EllipticalTube::GetCachedSurfaceArea() const
 
 //////////////////////////////////////////////////////////////////////////
 //
+// Return volume
+
+G4double G4EllipticalTube::GetCubicVolume()
+{
+  if (fCubicVolume == 0)
+  {
+    G4AutoLock l(&eltubeMutex);
+    fCubicVolume = twopi * fDx * fDy * fDz;
+    l.unlock();
+  }
+  return fCubicVolume;
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
 // Return surface area
 
 G4double G4EllipticalTube::GetSurfaceArea()
 {
-  if(fSurfaceArea == 0.)
+  if(fSurfaceArea == 0)
   {
+    G4AutoLock l(&eltubeMutex);
     fSurfaceArea = GetCachedSurfaceArea();
+    l.unlock();
   }
   return fSurfaceArea;
 }
@@ -725,7 +743,7 @@ G4ThreeVector G4EllipticalTube::GetPointOnSurface() const
       x = std::cos(phi);
       y = std::sin(phi);
       G4double ss = sqr(fDy * x) + sqr(fDx * y);
-      if (sqr(s_max*G4QuickRand()) <= ss) break;
+      if (sqr(s_max*G4QuickRand()) <= ss) { break; }
     }
     z = (2. * G4QuickRand() - 1.) * fDz;
   }

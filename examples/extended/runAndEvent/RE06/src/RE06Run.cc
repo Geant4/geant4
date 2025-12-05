@@ -23,10 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file RE06/src/RE06Run.cc
+/// \file RE06Run.cc
 /// \brief Implementation of the RE06Run class
-//
-//
 
 #include "RE06Run.hh"
 

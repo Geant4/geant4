@@ -6,6 +6,14 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2025-08-25 Vladimir Ivanchenko (hadr-man-V11-03-02)
+- G4HadronicProcess - removed misleading exception - fixed problem #2675
+
+## 2025-08-14 Alberto Ribon (hadr-man-V11-03-01)
+- G4VHighEnergyGenerator : introduced boolean methods to know whether the
+  high-energy hadronic inelelastic interaction is quasi-elastic or diffractive.
+  Note that this can be used for both FTF and QGS hadronic string models.
+
 ## 2025-05-03 Vladimir Ivanchenko (hadr-man-V11-03-00)
 - G4HadronicProcess - removed warning for the case when K0 and antiK0 are
     transformed into KS or KL.

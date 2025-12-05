@@ -102,7 +102,9 @@ G4bool G4OpenGLStoredViewer::CompareForKernelVisit(G4ViewParameters& lastVP) {
        fVP.IsSpecialMeshRendering())                              ||
       (lastVP.GetSpecialMeshRenderingOption() !=
        fVP.GetSpecialMeshRenderingOption())                       ||
-      (lastVP.GetTransparencyByDepth() != fVP.GetTransparencyByDepth())
+      (lastVP.GetTransparencyByDepth() != fVP.GetTransparencyByDepth()) ||
+      (lastVP.IsDotsSmooth()        != fVP.IsDotsSmooth())        ||
+      (lastVP.GetDotsSize()         != fVP.GetDotsSize())
       )
   return true;
   

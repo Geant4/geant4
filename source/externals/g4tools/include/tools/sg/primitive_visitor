@@ -6,8 +6,6 @@
 
 #include "../glprims"
 
-#include "../vdata"
-
 // for texture :
 #include "../lina/vec2f"
 #include "../lina/vec3f"
@@ -1964,81 +1962,56 @@ public:
 
 public:
   bool add_primitive(gl::mode_t a_mode,const std::vector<float>& a_xyzs,bool a_stop = false){
-    const float* _xyzs = vec_data<float>(a_xyzs);
+    const float* _xyzs = a_xyzs.data();
     return add_primitive(a_mode,a_xyzs.size(),_xyzs,a_stop);
   }
   bool add_primitive_xy(gl::mode_t a_mode,const std::vector<float>& a_xys,bool a_stop = false,bool a_triangle_revert = false){
-    const float* _xys = vec_data<float>(a_xys);
+    const float* _xys = a_xys.data();
     return add_primitive_xy(a_mode,a_xys.size(),_xys,a_stop,a_triangle_revert);
   }
   bool add_line_strip(const std::vector<float>& a_xyzs,bool a_stop = false){
-    const float* _xyzs = vec_data<float>(a_xyzs);
+    const float* _xyzs = a_xyzs.data();
     return add_line_strip(a_xyzs.size(),_xyzs,a_stop);
   }
   bool add_line_loop(const std::vector<float>& a_xyzs,bool a_stop = false){
-    const float* _xyzs = vec_data<float>(a_xyzs);
+    const float* _xyzs = a_xyzs.data();
     return add_line_loop(a_xyzs.size(),_xyzs,a_stop);
   }
   bool add_lines(const std::vector<float>& a_xyzs,bool a_stop = false){
-    const float* _xyzs = vec_data<float>(a_xyzs);
+    const float* _xyzs = a_xyzs.data();
     return add_lines(a_xyzs.size(),_xyzs,a_stop);
   }
   bool add_points(const std::vector<float>& a_xyzs,bool a_stop = false){
-    const float* _xyzs = vec_data<float>(a_xyzs);
+    const float* _xyzs = a_xyzs.data();
     return add_points(a_xyzs.size(),_xyzs,a_stop);
   }
 
   bool add_triangle_strip(const std::vector<float>& a_xyzs,bool a_stop = false){
-    const float* _xyzs = vec_data<float>(a_xyzs);
+    const float* _xyzs = a_xyzs.data();
     return add_triangle_strip(a_xyzs.size(),_xyzs,a_stop);
   }
 
   bool add_points_xy(const std::vector<float>& a_xys,bool a_stop = false){
-    const float* _xys = vec_data<float>(a_xys);
+    const float* _xys = a_xys.data();
     return add_points_xy(a_xys.size(),_xys,a_stop);
   }
   bool add_lines_xy(const std::vector<float>& a_xys,bool a_stop = false){
-    const float* _xys = vec_data<float>(a_xys);
+    const float* _xys = a_xys.data();
     return add_lines_xy(a_xys.size(),_xys,a_stop);
   }
   bool add_triangle_strip_xy(const std::vector<float>& a_xys,bool a_stop = false){
-    const float* _xys = vec_data<float>(a_xys);
+    const float* _xys = a_xys.data();
     return add_triangle_strip_xy(a_xys.size(),_xys,a_stop);
   }
 
 
 public:
-  //for sg::[tex_]sphere::visit() template :
-//  bool add_triangle_fan_normal(size_t a_floatn,const float* a_xyzs,const float* a_nms) {
-//    return add_triangle_fan_normal(a_floatn,a_xyzs,a_nms,false);
-//  }
-//  bool add_triangle_fan_normal_rgba(size_t a_floatn,const float* a_xyzs,const float* a_nms,const float* a_rgbas) {
-//    return add_triangle_fan_normal_rgba(a_floatn,a_xyzs,a_nms,a_rgbas,false);
-//  }
-/*
-  bool add_triangles_texture(size_t a_floatn,const float* a_xyzs,unsigned int,const float*){
-    return add_triangles(a_floatn,a_xyzs);
-  }
-  bool add_triangle_fan_texture(size_t a_floatn,const float* a_xyzs,unsigned int,const float*){
-    return add_triangle_fan(a_floatn,a_xyzs);
-  }
-  bool add_triangle_strip_texture(size_t a_floatn,const float* a_xyzs,unsigned int,const float*){
-    return add_triangle_strip(a_floatn,a_xyzs,false);
-  }
-*/
   bool add_triangle_fan_texture_normal(size_t a_floatn,const float* a_xyzs,const float* a_nms,unsigned int,const float*){
     return add_triangle_fan_normal(a_floatn,a_xyzs,a_nms,false);
   }
   bool add_triangle_strip_texture_normal(size_t a_floatn,const float* a_xyzs,const float* a_nms,unsigned int,const float*){
     return add_triangle_strip_normal(a_floatn,a_xyzs,a_nms,false);
   }
-
-//  bool add_triangle_strip_normal(size_t a_floatn,const float* a_xyzs,const float* a_nms) {
-//    return add_triangle_strip_normal(a_floatn,a_xyzs,a_nms,false);
-//  }
-//  bool add_triangle_strip_normal_rgba(size_t a_floatn,const float* a_xyzs,const float* a_nms,const float* a_rgbas) {
-//    return add_triangle_strip_normal_rgba(a_floatn,a_xyzs,a_nms,a_rgbas,false);
-//  }
 
   bool add_triangle_strip_as_triangles(size_t a_floatn,const float* a_xyzs,const float* a_nms) { //used in sg::sphere, icosahedron_sphere.
     return add_triangle_strip_normal(a_floatn,a_xyzs,a_nms,false); //already do a per triangle treatement.
@@ -2049,7 +2022,7 @@ public:
 
     unsigned int imw = a_img.width();
     unsigned int imh = a_img.height();
-    unsigned int imn = a_img.bpp();
+    unsigned int imn = a_img.bytes_per_pixel();
     if((imn!=3)&&(imn!=4)) {
       a_out << "tools::sg::primitive_visitor::add_texture :"
             << " not a 3 or 4 bytes per pixel image."
@@ -2064,12 +2037,8 @@ public:
       return;
     }
 
-  //::printf("debug : zb_action : tcs : %g %g, %g %g, %g %g, %g %g\n",
-  //   a_tcs[0],a_tcs[1],a_tcs[2],a_tcs[3],a_tcs[4],a_tcs[5],a_tcs[6],a_tcs[7]);
-
     vec3f p1(a_xyzs[0],a_xyzs[ 1],a_xyzs[ 2]);
     vec3f p2(a_xyzs[3],a_xyzs[ 4],a_xyzs[ 5]);
-  //vec3f p3(a_xyzs[6],a_xyzs[ 7],a_xyzs[ 8]);
     vec3f p4(a_xyzs[9],a_xyzs[10],a_xyzs[11]);
 
     vec3f dx = p2-p1;

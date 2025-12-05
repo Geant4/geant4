@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-03-ref-06    (30-June-2025)
+ Geant4 version Name: geant4-11-04-ref-00    (5-December-2025)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -74,6 +74,12 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
          --->  Isotope:  Ni64   Z = 28   N =  64   A =  63.93 g/mole   abundance:  0.926 %
           ElmMassFraction:   8.00 %  ElmAbundance   7.54 % 
 
+
+ hInelastic QGSP_BIC_HP  Thresholds: 
+    0) between BIC and BERT for p, n over the interval 1 to 1.5 GeV. 
+    1) between BERT  and FTF/P over the interval 3 to 6 GeV. 
+    2) between FTF/P and QGS/P over the interval 12 to 25 GeV. 
+  -- quasiElastic: 1 for QGS  and 0 for FTF
 @@@ G4ParticleHPInelasticData instantiated for particle neutron data directory variable is G4NEUTRONHPDATA pointing to /cvmfs/geant4.cern.ch/share/data/G4NDL4.7.1
 #
 # Set a very high time threshold to allow all decays to happen
@@ -212,11 +218,22 @@ Threshold for very long decay time at rest        1e+60 y
         Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
      Cr_sctns:        deuteronParticleXS: 0 eV  ---> 100 TeV
 -----------------------------------------------------------------------
+                           Hadronic Processes for e+
+  Process: positronNuclear
+        Model:   G4ElectroVDNuclearModel: 0 eV  ---> 1 PeV
+     Cr_sctns:          ElectroNuclearXS: 0 eV  ---> 100 TeV
+-----------------------------------------------------------------------
+                           Hadronic Processes for e-
+  Process: electronNuclear
+        Model:   G4ElectroVDNuclearModel: 0 eV  ---> 1 PeV
+     Cr_sctns:          ElectroNuclearXS: 0 eV  ---> 100 TeV
+-----------------------------------------------------------------------
                            Hadronic Processes for gamma
   Process: photonNuclear
         Model:               GammaNPreco: 0 eV  ---> 200 MeV
-        Model:            BertiniCascade: 199 MeV ---> 10 GeV
-     Cr_sctns:            PhotoNuclearXS: 0 eV  ---> 100 TeV
+        Model:            BertiniCascade: 199 MeV ---> 6 GeV
+        Model:           TheoFSGenerator: 3 GeV ---> 100 TeV
+     Cr_sctns:            GammaNuclearXS: 0 eV  ---> 100 TeV
 -----------------------------------------------------------------------
                            Hadronic Processes for kaon+
   Process: hadElastic
@@ -248,27 +265,34 @@ Threshold for very long decay time at rest        1e+60 y
         Model:            BertiniCascade: 0 eV  ---> 6 GeV
      Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
 -----------------------------------------------------------------------
+                           Hadronic Processes for mu+
+  Process: muonNuclear
+        Model:      G4MuonVDNuclearModel: 0 eV  ---> 1 PeV
+     Cr_sctns:     KokoulinMuonNuclearXS: 0 eV  ---> 100 TeV
+-----------------------------------------------------------------------
+                           Hadronic Processes for mu-
+  Process: muonNuclear
+        Model:      G4MuonVDNuclearModel: 0 eV  ---> 1 PeV
+     Cr_sctns:     KokoulinMuonNuclearXS: 0 eV  ---> 100 TeV
+-----------------------------------------------------------------------
                            Hadronic Processes for neutron
   Process: hadElastic
-        Model:             hElasticCHIPS: 19.5 MeV ---> 100 TeV
-        Model:          NeutronHPElastic: 0 eV  ---> 20 MeV
-     Cr_sctns:        NeutronHPElasticXS: 0 eV  ---> 20 MeV
+        Model:             hElasticCHIPS: 0 eV  ---> 100 TeV
      Cr_sctns:        G4NeutronElasticXS: 0 eV  ---> 100 TeV
   Process: neutronInelastic
         Model:                      QGSP: 12 GeV ---> 100 TeV
         Model:                      FTFP: 3 GeV ---> 25 GeV
-        Model:            Binary Cascade: 19.9 MeV ---> 6 GeV
+        Model:            BertiniCascade: 1 GeV ---> 6 GeV
+        Model:            Binary Cascade: 19.9 MeV ---> 1.5 GeV
         Model:        NeutronHPInelastic: 0 eV  ---> 20 MeV
      Cr_sctns:      NeutronHPInelasticXS: 0 eV  ---> 20 MeV
      Cr_sctns:      G4NeutronInelasticXS: 0 eV  ---> 100 TeV
-  Process: nCapture
-        Model:             nRadCaptureHP: 0 eV  ---> 20 MeV
-        Model:               nRadCapture: 19.9 MeV ---> 100 TeV
+  Process: nCaptureHP
+        Model:             nRadCaptureHP: 0 eV  ---> 100 TeV
      Cr_sctns:        NeutronHPCaptureXS: 0 eV  ---> 100 TeV
      Cr_sctns:        G4NeutronCaptureXS: 0 eV  ---> 100 TeV
-  Process: nFission
+  Process: nFissionHP
         Model:          NeutronHPFission: 0 eV  ---> 20 MeV
-        Model:                G4LFission: 19.9 MeV ---> 100 TeV
      Cr_sctns:        NeutronHPFissionXS: 0 eV  ---> 20 MeV
      Cr_sctns:                    ZeroXS: 0 eV  ---> 100 TeV
 -----------------------------------------------------------------------
@@ -299,7 +323,8 @@ Threshold for very long decay time at rest        1e+60 y
   Process: protonInelastic
         Model:                      QGSP: 12 GeV ---> 100 TeV
         Model:                      FTFP: 3 GeV ---> 25 GeV
-        Model:            Binary Cascade: 0 eV  ---> 6 GeV
+        Model:            BertiniCascade: 1 GeV ---> 6 GeV
+        Model:            Binary Cascade: 0 eV  ---> 1.5 GeV
      Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
 -----------------------------------------------------------------------
                            Hadronic Processes for sigma-
@@ -326,8 +351,8 @@ Threshold for very long decay time at rest        1e+60 y
 Type of pre-compound model                          0
 Type of pre-compound inverse x-section              1
 Pre-compound model active                           1
-Pre-compound excitation low energy                  100 keV
-Pre-compound excitation high energy                 30 MeV
+Pre-compound excitation low energy                  0.1 MeV 
+Pre-compound excitation high energy                 15 MeV 
 Angular generator for pre-compound model            1
 Use NeverGoBack option for pre-compound model       0
 Use SoftCutOff option for pre-compound model        0
@@ -341,9 +366,8 @@ Type of de-excitation inverse x-section             3
 Type of de-excitation factory                       Evaporation+GEM
 Number of de-excitation channels                    68
 Type of Fermi BreakUp model                         ModelVI
-Min excitation energy                               10 eV 
-Min energy per nucleon for multifragmentation       200 GeV
-Limit excitation energy for Fermi BreakUp           20 MeV
+Min excitation energy                               0.01 keV 
+Min energy per nucleon for multifragmentation       2e+05 MeV
 Level density (1/MeV)                               0.075
 Use simple level density model                      1
 Use discrete excitation energy of the residual      0
@@ -399,71 +423,67 @@ Index : 2     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=1.300000s Real=1.361637s Sys=0.010000s
+  User=1.310000s Real=1.345461s Sys=0.010000s
 
  The run is 10000 Am241 of 0 eV  within BeO (D =  3 cm  L = 6 cm )
 
  Process calls frequency :
-            NoProcess=  10004      RadioactiveDecay= 231472                  Rayl=   2433
-       Transportation= 167537        alphaInelastic=      4               annihil=      1
-                compt=  21042                  conv=      1                 eIoni= 191862
-              ionIoni= 345768                   msc=  12026                  phot=  12868
-
+            NoProcess=  10001      RadioactiveDecay= 231544                  Rayl=   2322
+       Transportation= 167606        alphaInelastic=      3                 compt=  21162
+                eIoni= 192603               ionIoni= 281994                   msc=  27230
+     neutronInelastic=      1                  phot=  12898 
 
  List of generated particles (with meanLife != 0) :
-          Ac225:    9998  Emean =  161.12 meV	( 0 eV  --> 1.0855 eV )	mean life = 14.312 d  
-  Ac225[40.100]:    6811  Emean =  357.95 meV	( 0 eV  --> 927.28 meV)	mean life = 1.0387 ns 
-          At217:    9994  Emean =  116.36 keV	( 105.89 keV --> 117.04 keV)	mean life = 47.032 ms 
-            Be9:       1  Emean =  771.81 keV	( 771.81 keV --> 771.81 keV)	stable
-          Bi209:   10000  Emean =  1.1945 eV 	( 7.5961 meV --> 2.629 eV )	mean life = 2.9018e+19 y  
-          Bi213:    9995  Emean =  132.93 keV	( 501.63 meV --> 132.95 keV)	mean life = 1.0962 h  
-            C12:       3  Emean =  1.6556 MeV	( 383.99 keV --> 2.5852 MeV)	stable
-          Fr221:    9999  Emean =  78.321 keV	( 3.2305 meV --> 105.65 keV)	mean life = 7.0692 min
-  Fr221[36.640]:    2544  Emean =   104.4 keV	( 148.69 meV --> 105 keV)	mean life = 2.164 ns 
-          Np237:   10000  Emean =  485.42 eV 	( 2.5029 meV --> 93.678 keV)	mean life = 3.0953e+06 y  
-  Np237[59.541]:    9948  Emean =  92.562 keV	( 89.979 keV --> 92.688 keV)	mean life = 96.949 ns 
-          Pa233:   10000  Emean =  28.908 keV	( 7.5088 meV --> 83.755 keV)	mean life = 38.917 d  
-  Pa233[86.481]:    6474  Emean =  81.938 keV	( 77.433 keV --> 82.293 keV)	mean life = 52.658 ns 
-          Pb209:   10000  Emean =  156.98 keV	( 6.309 eV  --> 160.58 keV)	mean life = 4.6657 h  
-  Pb209[2149.430]:     224  Emean =  6.9145 eV 	( 332.8 meV --> 12.492 eV )	mean life = 5.7131 ns 
-          Pb213:       1  Emean =  122.98 keV	( 122.98 keV --> 122.98 keV)	mean life = 14.715 min
-          Po213:    9776  Emean =  77.714 eV 	( 0 eV  --> 145.62 keV)	mean life = 5.3466 us 
-          Po217:       1  Emean =  106.72 keV	( 106.72 keV --> 106.72 keV)	mean life = 2.2073 s  
-          Ra221:       5  Emean =  344.75 meV	( 70.402 meV --> 724.89 meV)	mean life = 40.395 s  
-          Ra225:   10000  Emean =  971.94 eV 	( 1.5425 meV --> 103.7 keV)	mean life = 21.496 d  
-  Ra225[25.410]:    7990  Emean =  60.325 keV	( 0.7276 meV --> 342.68 keV)	mean life = 1.2696 ns 
-  Ra225[31.560]:     552  Emean =  87.862 keV	( 12.024 keV --> 321.82 keV)	mean life = 3.0297 ns 
-  Ra225[42.770]:    3890  Emean =  88.526 keV	( 5.9074 keV --> 332.83 keV)	mean life = 4.3281 ns 
-          Rn217:       5  Emean =  74.828 keV	( 55.035 meV --> 124.71 keV)	mean life = 779.06 us 
-  Rn217[149.140]:       2  Emean =  122.01 keV	( 122.01 keV --> 122.01 keV)	mean life = 2.164 ns 
-  Rn217[93.000]:       1  Emean =  99.913 meV	( 99.913 meV --> 99.913 meV)	mean life = 5.7708 ns 
-          Rn221:       2  Emean =  90.719 keV	( 90.719 keV --> 90.719 keV)	mean life = 36.067 min
-          Th229:    9804  Emean =  84.245 keV	( 78.453 keV --> 84.36 keV)	mean life = 11376 y  
-          Tl205:   10000  Emean =  59.401 keV	( 108.67 meV --> 60.11 keV)	stable
-  Tl205[203.700]:     118  Emean =  56.206 keV	( 56.206 keV --> 56.206 keV)	mean life = 2.1063 ns 
-          Tl209:     224  Emean =  111.94 keV	( 106.18 keV --> 112.61 keV)	mean life = 3.1191 min
-           U233:   10000  Emean =  400.76 meV	( 3.7544 meV --> 1.9126 eV )	mean life = 2.2982e+05 y  
-          alpha:   90001  Emean =  5.6098 MeV	( 2.749 MeV --> 8.3754 MeV)	stable
-      anti_nu_e:   40000  Emean =  404.58 keV	( 1 eV  --> 1.7885 MeV)	stable
-             e+:       1  Emean =  51.456 keV	( 51.456 keV --> 51.456 keV)	stable
-             e-:  151039  Emean =  86.379 keV	( 13.032 eV  --> 1.5354 MeV)	stable
-          gamma:   24124  Emean =  196.47 keV	( 11.095 keV --> 1.5671 MeV)	stable
-        neutron:       3  Emean =  6.8527 MeV	( 5.8794 MeV --> 8.2587 MeV)	mean life = 14.67 min
+          Ac225:    9999  Emean =  160.06 meV	( 0 eV  --> 1.0677 eV )	mean life = 14.312 d  
+  Ac225[40.100]:    6888  Emean =  357.47 meV	( 0 eV  --> 921.17 meV)	mean life = 1.0387 ns 
+          At217:    9989  Emean =  116.36 keV	( 105.02 keV --> 117.04 keV)	mean life = 47.032 ms 
+          Bi209:    9999  Emean =  1.1932 eV 	( 4.9185 meV --> 2.6485 eV )	mean life = 2.9018e+19 y  
+          Bi213:    9988  Emean =  132.94 keV	( 119.24 keV --> 132.95 keV)	mean life = 1.0962 h  
+            C12:       2  Emean =  1.2575 MeV	( 698.36 keV --> 1.8166 MeV)	stable
+          Fr221:    9999  Emean =  77.983 keV	( 3.2596 meV --> 105.65 keV)	mean life = 7.0692 min
+  Fr221[36.640]:    2577  Emean =  104.41 keV	( 94.18 keV --> 105 keV)	mean life = 2.164 ns 
+          Np237:   10000  Emean =  671.43 eV 	( 2.5029 meV --> 93.678 keV)	mean life = 3.0953e+06 y  
+  Np237[59.541]:    9928  Emean =  92.563 keV	( 89.991 keV --> 92.688 keV)	mean life = 96.949 ns 
+          Pa233:   10000  Emean =  28.651 keV	( 7.5088 meV --> 83.755 keV)	mean life = 38.917 d  
+  Pa233[86.481]:    6505  Emean =  81.938 keV	( 77.143 keV --> 82.293 keV)	mean life = 52.658 ns 
+          Pb209:    9999  Emean =  156.91 keV	( 6.309 eV  --> 160.58 keV)	mean life = 4.6657 h  
+  Pb209[2149.430]:     228  Emean =  6.7207 eV 	( 217.09 meV --> 13.097 eV )	mean life = 5.7131 ns 
+          Po213:    9770  Emean =  167.17 eV 	( 15.221 meV --> 145.62 keV)	mean life = 5.3466 us 
+          Ra221:      10  Emean =  347.58 meV	( 93.19 meV --> 722.62 meV)	mean life = 40.395 s  
+          Ra225:   10000  Emean =  788.58 eV 	( 1.5425 meV --> 280.77 keV)	mean life = 21.496 d  
+  Ra225[25.410]:    8054  Emean =  59.601 keV	( 0.7276 meV --> 340.58 keV)	mean life = 1.2696 ns 
+  Ra225[31.560]:     515  Emean =  88.141 keV	( 79.624 keV --> 316.22 keV)	mean life = 3.0297 ns 
+  Ra225[42.770]:    3971  Emean =    88.5 keV	( 8.0036 meV --> 335.23 keV)	mean life = 4.3281 ns 
+          Rn217:      11  Emean =  11.338 keV	( 75.146 meV --> 124.71 keV)	mean life = 779.06 us 
+  Rn217[149.140]:       4  Emean =  122.01 keV	( 122.01 keV --> 122.01 keV)	mean life = 2.164 ns 
+  Rn217[174.290]:       3  Emean =  121.55 keV	( 121.55 keV --> 121.55 keV)	mean life = 2.164 ns 
+  Rn217[88.890]:       1  Emean =   123.1 keV	( 123.1 keV --> 123.1 keV)	mean life = 2.164 ns 
+  Rn217[93.000]:       2  Emean =  61.513 keV	( 146.63 meV --> 123.03 keV)	mean life = 5.7708 ns 
+          Th229:    9795  Emean =  84.246 keV	( 80.637 keV --> 84.36 keV)	mean life = 11376 y  
+          Tl205:    9999  Emean =  59.305 keV	( 108.67 meV --> 60.11 keV)	stable
+  Tl205[203.700]:     134  Emean =  56.206 keV	( 56.206 keV --> 56.206 keV)	mean life = 2.1063 ns 
+          Tl209:     229  Emean =  112.18 keV	( 106.15 keV --> 112.61 keV)	mean life = 3.1191 min
+           U233:   10000  Emean =  402.14 meV	( 3.7544 meV --> 1.9298 eV )	mean life = 2.2982e+05 y  
+          alpha:   89996  Emean =  5.6097 MeV	( 2.8774 MeV --> 8.3754 MeV)	stable
+      anti_nu_e:   39997  Emean =  403.83 keV	( 1 eV  --> 1.802 MeV)	stable
+             e-:  151422  Emean =  86.325 keV	( 6.0483 eV  --> 1.8181 MeV)	stable
+          gamma:   24163  Emean =  196.96 keV	( 11.091 keV --> 4.4211 MeV)	stable
+        neutron:       4  Emean =  3.7018 MeV	( 112.99 keV --> 6.8055 MeV)	mean life = 14.67 min
 
- Mean energy deposit per event = 52.72 MeV  rms = 478.29 keV
- Mean energy flow per event    = 1.9374 MeV  rms = 499.31 keV
+ Mean energy deposit per event = 52.718 MeV  rms = 549.91 keV
+ Mean energy flow per event    = 1.9326 MeV  rms = 493.64 keV
 
  List of particles emerging from the container :
-      anti_nu_e:   40000  Emean =  404.58 keV	( 1 eV  --> 1.7885 MeV) 	Eflow/event = 1.6183 MeV
-             e-:      11  Emean =  134.68 keV	( 62.123 keV --> 299.5 keV) 	Eflow/event = 148.15 eV 
-          gamma:   11255  Emean =  281.53 keV	( 40.294 keV --> 1.5671 MeV) 	Eflow/event = 316.86 keV
-        neutron:       3  Emean =  6.8527 MeV	( 5.8794 MeV --> 8.2587 MeV) 	Eflow/event = 2.0558 keV
+      anti_nu_e:   39997  Emean =  403.83 keV	( 1 eV  --> 1.802 MeV) 	Eflow/event = 1.6152 MeV
+             e-:       7  Emean =  232.58 keV	( 82.738 keV --> 427.82 keV) 	Eflow/event = 162.8 eV 
+          gamma:   11265  Emean =   280.9 keV	( 40.1 keV --> 2.603 MeV) 	Eflow/event = 316.44 keV
+        neutron:       3  Emean =  2.6673 MeV	( 112.99 keV --> 6.7262 MeV) 	Eflow/event = 800.19 eV 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 2091745054, 1410749618
+ Current couple of seeds = 931694754, 1855244997
 ----------------------------------------
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 11 of which, static: 0
-Dynamic pools deleted: 11 / Total memory freed: 0.029 MB
+Dynamic pools deleted: 11 / Total memory freed: 0.032 MB
 ============================================================

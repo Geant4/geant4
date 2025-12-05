@@ -23,9 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file GB01/include/GB01BOptrChangeCrossSection.hh
+/// \file GB01BOptrChangeCrossSection.hh
 /// \brief Definition of the GB01BOptrChangeCrossSection class
-//
+
 //---------------------------------------------------------------
 //
 // GB01BOptrChangeCrossSection

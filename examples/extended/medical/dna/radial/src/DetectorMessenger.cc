@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file DetectorMessenger.cc
+/// \brief Implementation of the DetectorMessenger class
+
 // This example is provided by the Geant4-DNA collaboration
 // Any report or published results obtained using the Geant4-DNA software
 // shall cite the following Geant4-DNA collaboration publications:
@@ -34,8 +37,6 @@
 //
 // The Geant4-DNA web site is available at http://geant4-dna.org
 //
-/// \file DetectorMessenger.cc
-/// \brief Implementation of the DetectorMessenger class
 
 #include "DetectorMessenger.hh"
 #include "DetectorConstruction.hh"
@@ -78,26 +79,33 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction* det, PhysicsList* pl)
   fWorldRadiusCmd->SetUnitCategory("Length");
   fWorldRadiusCmd->AvailableForStates(G4State_PreInit);
 
-  fWorldLengthCmd = new G4UIcmdWithADoubleAndUnit("/radial/setWorldLength",this);
-  fWorldLengthCmd->SetGuidance("Set size of the World");
-  fWorldLengthCmd->SetParameterName("Size",false);
-  fWorldLengthCmd->SetRange("Size>0.");
-  fWorldLengthCmd->SetUnitCategory("Length");
-  fWorldLengthCmd->AvailableForStates(G4State_PreInit);
+  fWorldOffsetLengthCmd = new G4UIcmdWithADoubleAndUnit("/radial/setWorldOffsetLength",this);
+  fWorldOffsetLengthCmd->SetGuidance("Set offset in length for the World");
+  fWorldOffsetLengthCmd->SetParameterName("Size",false);
+  fWorldOffsetLengthCmd->SetRange("Size>=0.");
+  fWorldOffsetLengthCmd->SetUnitCategory("Length");
+  fWorldOffsetLengthCmd->AvailableForStates(G4State_PreInit);
 
-  fThicknessCylindersCmd = new G4UIcmdWithADoubleAndUnit("/radial/setThicknessCylinders",this);
-  fThicknessCylindersCmd->SetGuidance("Set thickness of cylinders");
-  fThicknessCylindersCmd->SetParameterName("Size",false);
-  fThicknessCylindersCmd->SetRange("Size>0.");
-  fThicknessCylindersCmd->SetUnitCategory("Length");
-  fThicknessCylindersCmd->AvailableForStates(G4State_PreInit);
+  fCylinderLengthCmd = new G4UIcmdWithADoubleAndUnit("/radial/setCylinderLength",this);
+  fCylinderLengthCmd->SetGuidance("Set length cylinders");
+  fCylinderLengthCmd->SetParameterName("Size",false);
+  fCylinderLengthCmd->SetRange("Size>0.");
+  fCylinderLengthCmd->SetUnitCategory("Length");
+  fCylinderLengthCmd->AvailableForStates(G4State_PreInit);
 
-  fMinRadiusCylindersCmd = new G4UIcmdWithADoubleAndUnit("/radial/setMinRadiusCylinders",this);
-  fMinRadiusCylindersCmd->SetGuidance("Set minimum radius of the cylinders");
-  fMinRadiusCylindersCmd->SetParameterName("Size",false);
-  fMinRadiusCylindersCmd->SetRange("Size>0.");
-  fMinRadiusCylindersCmd->SetUnitCategory("Length");
-  fMinRadiusCylindersCmd->AvailableForStates(G4State_PreInit);
+  fCylinderThicknessCmd = new G4UIcmdWithADoubleAndUnit("/radial/setCylinderThickness",this);
+  fCylinderThicknessCmd->SetGuidance("Set thickness of cylinders");
+  fCylinderThicknessCmd->SetParameterName("Size",false);
+  fCylinderThicknessCmd->SetRange("Size>0.");
+  fCylinderThicknessCmd->SetUnitCategory("Length");
+  fCylinderThicknessCmd->AvailableForStates(G4State_PreInit);
+
+  fCylinderMinRadiusCmd = new G4UIcmdWithADoubleAndUnit("/radial/setCylinderMinRadius",this);
+  fCylinderMinRadiusCmd->SetGuidance("Set minimum radius of the cylinders");
+  fCylinderMinRadiusCmd->SetParameterName("Size",false);
+  fCylinderMinRadiusCmd->SetRange("Size>0.");
+  fCylinderMinRadiusCmd->SetUnitCategory("Length");
+  fCylinderMinRadiusCmd->AvailableForStates(G4State_PreInit);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -110,9 +118,10 @@ DetectorMessenger::~DetectorMessenger()
   delete fPhysCmd;
   delete fTrackingCutCmd;
   delete fWorldRadiusCmd;
-  delete fWorldLengthCmd;
-  delete fThicknessCylindersCmd;
-  delete fMinRadiusCylindersCmd;
+  delete fWorldOffsetLengthCmd;
+  delete fCylinderLengthCmd;
+  delete fCylinderThicknessCmd;
+  delete fCylinderMinRadiusCmd;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -129,12 +138,15 @@ void DetectorMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
   if (command == fWorldRadiusCmd)
     fDetector->SetWorldRadius(fWorldRadiusCmd->GetNewDoubleValue(newValue));
 
-  if (command == fWorldLengthCmd)
-    fDetector->SetWorldLength(fWorldLengthCmd->GetNewDoubleValue(newValue));
+  if (command == fCylinderLengthCmd)
+    fDetector->SetCylinderLength(fCylinderLengthCmd->GetNewDoubleValue(newValue));
 
-  if (command == fThicknessCylindersCmd)
-    fDetector->SetThicknessCylinders(fThicknessCylindersCmd->GetNewDoubleValue(newValue));
+  if (command == fWorldOffsetLengthCmd)
+    fDetector->SetWorldOffsetLength(fWorldOffsetLengthCmd->GetNewDoubleValue(newValue));
 
-  if (command == fMinRadiusCylindersCmd)
-    fDetector->SetMinRadiusCylinders(fMinRadiusCylindersCmd->GetNewDoubleValue(newValue));
+  if (command == fCylinderThicknessCmd)
+    fDetector->SetCylinderThickness(fCylinderThicknessCmd->GetNewDoubleValue(newValue));
+
+  if (command == fCylinderMinRadiusCmd)
+    fDetector->SetCylinderMinRadius(fCylinderMinRadiusCmd->GetNewDoubleValue(newValue));
 }

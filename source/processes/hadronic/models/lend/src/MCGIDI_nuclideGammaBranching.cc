@@ -145,7 +145,7 @@ LUPI_HOST_DEVICE void NuclideGammaBranchStateInfo::serialize( LUPI::DataBuffer &
     DATA_MEMBER_DOUBLE( m_nuclearLevelEnergyWidth, a_buffer, a_mode );
     DATA_MEMBER_DOUBLE( m_multiplicity, a_buffer, a_mode );
     DATA_MEMBER_DOUBLE( m_averageGammaEnergy, a_buffer, a_mode );
-    DATA_MEMBER_VECTOR_INT( m_branchIndices, a_buffer, a_mode );
+    DATA_MEMBER_VECTOR_SIZE_T( m_branchIndices, a_buffer, a_mode );
 }
 
 /* *********************************************************************************************************//**

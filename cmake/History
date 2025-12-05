@@ -6,6 +6,57 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+# 2025-11-17 Ben Morgan (cmake-V11-03-17)
+- Bump PhotonEvaporation dataset definition to v6.1.2
+  - Provides fixes for Bugzilla 2685 (z75.a187).
+  - See request in Issue #266.
+
+# 2025-11-10 Ben Morgan (cmake-V11-03-16)
+- Bump PhotonEvaporation dataset definition to v6.1.1
+  - Provides fixes for Bugzilla 2682 (z94.a239), 2577 (z5.a11),
+    2170 (z91.a234).
+  - See request in Issue #265.
+
+## 2025-11-07 John Allison (cmake-V11-03-15)
+- Remove all references to HepRep:
+  - cmake/Templates/Geant4Config.cmake.in
+  - cmake/Templates/geant4-config.in
+
+## 2025-11-03 John Allison (cmake-V11-03-14)
+- Remove all references to Qt3D:
+  - cmake/Templates/Geant4Config.cmake.in
+  - cmake/Templates/geant4-config.in
+  - cmake/Modules/G4InterfaceOptions.cmake
+  - cmake/Modules/G4ConfigurePkgConfigHelpers.cmake
+
+## 2024-10-29 Ben Morgan (cmake-V11-03-13)
+- Bump G4PARTICLEXS dataset definition to 4.2
+  - See request in Issue #263 
+
+## 2025-10-24 Ben Morgan (cmake-V11-03-12)
+- Bump G4CHANELLING dataset definition to 2.0
+  - See request in Issue #262
+
+## 2025-10-20 Ben Morgan (cmake-V11-03-11)
+- Remove obsolete G4ClangFormat module
+  - Use of clang-format will be through IDEs or pre-commit rather than build
+    system going forward.
+
+## 2025-10-18 Ben Morgan (cmake-V11-03-10)
+- Bump G4EMLOW dataset to version 8.8 (Issue #261)
+
+## 2025-10-02 Ben Morgan (cmake-V11-03-09)
+- Bump G4INCL dataset to version 1.3 (Issue #259)
+
+## 2025-08-28 Ben Morgan (cmake-V11-03-08)
+- Support creation of categories that are just an interface to other categories.
+  - Needed to support splitting of libraries whilst retaining old target names
+    for backward link/build compatibility.
+
+## 2025-08-04 Ben Morgan (cmake-V11-03-07)
+- Add option to add shorten-64-to-32 warning to command line macOS build
+  flags to match Xcode.
+
 ## 2025-06-10 Ben Morgan (cmake-V11-03-06)
 - Include external categories (G4zlib etc) in link resolution for unit test
   executables

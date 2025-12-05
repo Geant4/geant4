@@ -31,7 +31,7 @@
 // classes: G4LogicalVolume, G4Region, G4VPhysicalVolume, G4PolyconeSide
 // G4PolyhedraSide, G4PVReplica. 
 
-// Author: X.Dong - Initial version from automatic MT conversion, 01.25.09.
+// Author: Xin Dong (Northeastern Univ.), 01.25.2009 - Initial version
 // ------------------------------------------------------------------------
 #ifndef G4GEOMSPLITTER_HH
 #define G4GEOMSPLITTER_HH
@@ -40,26 +40,40 @@
 #include "geomwdefs.hh"
 #include "G4AutoLock.hh"
 
-template <class T>  // T is the private data from the object to be split
+/**
+ * @brief G4GeomSplitter is an utility class for splitting of R/W data
+ * for thread-safety from geometry classes.
+ * T is the private data from the object to be split
+ */
+
+template <class T>
 class G4GeomSplitter
 {
   public:
 
+    /**
+     * Constructor.
+     */
     G4GeomSplitter()
       :  sharedOffset(nullptr)
     {
       G4MUTEXINIT(mutex);
     }
 
+    /**
+     * Reallocates data for a given 'size'.
+     */
     T* Reallocate(G4int size)
     {
        totalspace = size;
        return (T *) std::realloc(offset, totalspace * sizeof(T));
     }
 
+    /**
+     * Invoked by the master or work thread to create a new subinstance
+     * whenever a new split class instance is created.
+     */
     G4int CreateSubInstance()
-      // Invoked by the master or work thread to create a new subinstance
-      // whenever a new split class instance is created.
     {
       G4AutoLock l(&mutex);
       ++totalobj;
@@ -76,15 +90,20 @@ class G4GeomSplitter
       return (totalobj - 1);
     }
 
+    /**
+     * Utility to copy data from master in memory.
+     */
     void CopyMasterContents()
     {
       G4AutoLock l(&mutex);
       std::memcpy(offset, sharedOffset, totalspace * sizeof(T));
     }
   
+    /**
+     * Invoked by each worker thread to copy all the subinstance array
+     * from the master thread.
+     */
     void SlaveCopySubInstanceArray()
-      // Invoked by each worker thread to copy all the subinstance array
-      // from the master thread.
     {
       G4AutoLock l(&mutex);
       if (offset != nullptr)  { return; }
@@ -98,10 +117,12 @@ class G4GeomSplitter
       CopyMasterContents();
     }
 
+    /**
+     * Invoked by each worker thread to create the subinstance array and
+     * initialize each subinstance using a particular method defined by
+     * the subclass.
+     */
     void SlaveInitializeSubInstance()
-      // Invoked by each worker thread to create the subinstance array and
-      // initialize each subinstance using a particular method defined by
-      // the subclass.
     {
       G4AutoLock l(&mutex);
       if (offset != nullptr)  { return; }
@@ -119,11 +140,13 @@ class G4GeomSplitter
       }
     }
 
+    /**
+     * Invoked by each worker thread at start of a run (2nd or later)
+     * to copy again all the subinstance array from the master thread.
+     * To cope with user's changes in Geometry - e.g. change of material
+     * in a volume.
+     */
     void SlaveReCopySubInstanceArray()
-      // Invoked by each worker thread at start of a run (2nd or later)
-      // to copy again all the subinstance array from the master thread.
-      // To cope with user's changes in Geometry - e.g. change of material
-      // in a volume
     {
       if (offset == nullptr)
       {
@@ -135,8 +158,10 @@ class G4GeomSplitter
       CopyMasterContents();
     }
   
+    /**
+     * Invoked by all threads to free the subinstance array.
+     */
     void FreeSlave()
-      // Invoked by all threads to free the subinstance array.
     {
       if (offset == nullptr)  { return; }
       std::free( offset );
@@ -145,10 +170,15 @@ class G4GeomSplitter
 
     // Extension - to allow sharing of workspaces
   
+    /**
+     * Returns a pointer to the split data.
+     */
     T* GetOffset() { return offset; }
   
+    /**
+     * Uses recycled work area - which was created previously.
+     */
     void UseWorkArea( T* newOffset )
-      // Use recycled work area - which was created previously
     {
       if( (offset!=nullptr) && (offset!=newOffset) )
       {
@@ -156,12 +186,14 @@ class G4GeomSplitter
                      "TwoWorkspaces", FatalException,
                      "Thread already has workspace - cannot use another.");
       }
-      offset= newOffset;
+      offset = newOffset;
     }
 
+    /**
+     * Detaches the current thread from this location.
+     * The object which calls this method is responsible for it.
+     */
     T* FreeWorkArea()
-      // Detach this thread from this Location.
-      // The object which calls this method is responsible for it.
     {
       T* offsetRet = offset;
       offset = nullptr;

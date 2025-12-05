@@ -23,12 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file persistency/gdml/G02/geotest.cc
-/// \brief Main program of the persistency/gdml/G02 example
-//
-//
-//
-//
+/// \file geotest.cc
+/// \brief Main program of the gdml/G02 example
+
 // --------------------------------------------------------------
 //      GEANT 4 - geotest
 //

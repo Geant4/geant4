@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file DicomFilePlan.hh
+/// \brief Definition of the DicomFilePlan class
+
 // ROTATIONS: http://dicom.nema.org/medical/dicom/2014c/output/chtml/part03/sect_C.31.3.html
 // http://arxiv.org/pdf/1406.0014.pdf
 

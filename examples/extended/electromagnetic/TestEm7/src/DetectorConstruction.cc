@@ -23,12 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm7/src/DetectorConstruction.cc
+/// \file DetectorConstruction.cc
 /// \brief Implementation of the DetectorConstruction class
-//
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "DetectorConstruction.hh"
 
@@ -267,7 +263,7 @@ void DetectorConstruction::SetWorldMaterial(const G4String& materialChoice)
   if (pttoMaterial && pttoMaterial != fWorldMaterial) {
     fWorldMaterial = pttoMaterial;
     if (fLWorld) {
-      fLWorld->SetMaterial(fAbsorMaterial);
+      fLWorld->SetMaterial(fWorldMaterial);
       G4RunManager::GetRunManager()->PhysicsHasBeenModified();
     }
   }

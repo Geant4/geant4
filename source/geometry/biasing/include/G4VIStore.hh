@@ -31,33 +31,54 @@
 // It defines how a importance value together with a "cell" 
 // (a G4VPhysicalVolume and a replica number) has to be added
 // to the "importance store" and how a importance value can be derived 
-// from the "importance store". 
-// 
+// from the "importance store".
 
 // Author: Michael Dressel (CERN), 2002
 // ----------------------------------------------------------------------
 #ifndef G4VISTORE_HH
-#define G4VISTORE_HH 1
+#define G4VISTORE_HH
 
 #include "globals.hh"
 
 class G4GeometryCell;
 class G4VPhysicalVolume;
 
+/**
+ * @brief G4VIStore is an interface of an "importance store" used by importance
+ * sampling. It defines how an importance value together with a "cell" 
+ * (a G4VPhysicalVolume and a replica number) has to be added to the
+ * "importance store" and how a importance value can be derived from the
+ * "importance store". 
+ */
+
 class  G4VIStore
 {
-  public:  // with description
+  public:
 
-    G4VIStore();
-    virtual ~G4VIStore();
+    /**
+     * Default Constructor and Destructor.
+     */
+    G4VIStore() = default;
+    virtual ~G4VIStore() = default;
 
+    /**
+     * Returns the importance value of a "cell" from the store addressed
+     * by 'gCell'.
+     *  @param[in] gCell The cell of reference.
+     *  @returns The associated importance weight.
+     */
     virtual G4double GetImportance(const G4GeometryCell& gCell) const = 0;
-      // derive a importance value of a "cell" addressed by a G4GeometryCell
-      // from the store
 
+    /**
+     * Returns true if 'gCell' is in the store, else false.
+     *  @param[in] gCell The cell of reference.
+     *  @returns true if present in the store, false otherwise.
+     */
     virtual G4bool IsKnown(const G4GeometryCell& gCell) const = 0;
-      // returns true if the gCell is in the store, else false 
 
+    /**
+     * Returns a reference to the world volume of the "importance" geometry.
+     */
     virtual const G4VPhysicalVolume& GetWorldVolume() const = 0;
 };
 

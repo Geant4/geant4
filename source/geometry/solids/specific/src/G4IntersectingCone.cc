@@ -26,7 +26,7 @@
 // Implementation of G4IntersectingCone, a utility class which calculates
 // the intersection of an arbitrary line with a fixed cone
 //
-// Author: David C. Williams (davidw@scipp.ucsc.edu)
+// Author: David C. Williams (UCSC), 1998
 // --------------------------------------------------------------------
 
 #include "G4IntersectingCone.hh"
@@ -71,10 +71,6 @@ G4IntersectingCone::G4IntersectingCone( __void__& )
 {
 }
 
-// Destructor
-//
-G4IntersectingCone::~G4IntersectingCone() = default;
-
 // HitOn
 //
 // Check r or z extent, as appropriate, to see if the point is possibly
@@ -89,11 +85,11 @@ G4bool G4IntersectingCone::HitOn( const G4double r,
   //
   if (type1)
   {
-    if (z < zLo || z > zHi) return false;
+    if (z < zLo || z > zHi) { return false; }
   }
   else
   {
-    if (r < rLo || r > rHi) return false;
+    if (r < rLo || r > rHi) { return false; }
   }
 
   return true;
@@ -112,10 +108,7 @@ G4int G4IntersectingCone::LineHitsCone( const G4ThreeVector& p,
   {
     return LineHitsCone1( p, v, s1, s2 );
   }
-  else
-  {
-    return LineHitsCone2( p, v, s1, s2 );
-  }
+  return LineHitsCone2( p, v, s1, s2 );
 }
 
 // LineHitsCone1
@@ -240,10 +233,10 @@ G4int G4IntersectingCone::LineHitsCone1( const G4ThreeVector& p,
     sa = q/a;
     sb = c/q;
     if (sa < sb) { *s1 = sa; *s2 = sb; } else { *s1 = sb; *s2 = sa; }
-    if (A + B*(z0+(*s1)*tz) < 0)  { return 0; }
+    if (A + B*(z0+(*s1)*tz) < 0) { return 0; }
     return 2;
   }
-  else if (a < -1/kInfinity)
+  if (a < -1/kInfinity)
   {
     G4double sa, sb, q = -0.5*( b + (b < 0 ? -radical : +radical) );
     sa = q/a;
@@ -251,16 +244,12 @@ G4int G4IntersectingCone::LineHitsCone1( const G4ThreeVector& p,
     *s1 = (B*tz > 0)^(sa > sb) ? sb : sa;
     return 1;
   }
-  else if (std::fabs(b) < 1/kInfinity)
-  {
-    return 0;
-  }
-  else
-  {
-    *s1 = -c/b;
-    if (A + B*(z0+(*s1)*tz) < 0)  { return 0; }
-    return 1;
-  }
+
+  if (std::fabs(b) < 1/kInfinity) { return 0; }
+  
+  *s1 = -c/b;
+  if (A + B*(z0+(*s1)*tz) < 0) { return 0; }
+  return 1;
 }
 
 // LineHitsCone2
@@ -364,7 +353,7 @@ G4int G4IntersectingCone::LineHitsCone2( const G4ThreeVector& p,
     if ((z0 + (*s1)*tz  - A)/B < 0)  { return 0; }
     return 2;
   }
-  else if (a > 1/kInfinity)
+  if (a > 1/kInfinity)
   {
     G4double sa, sb, q = -0.5*( b + (b < 0 ? -radical : +radical) );
     sa = q/a;
@@ -372,14 +361,10 @@ G4int G4IntersectingCone::LineHitsCone2( const G4ThreeVector& p,
     *s1 = (tz*B > 0)^(sa > sb) ? sb : sa;
     return 1;
   }
-  else if (std::fabs(b) < 1/kInfinity)
-  {
-    return 0;
-  }
-  else
-  {
-    *s1 = -c/b;
-    if ((z0 + (*s1)*tz  - A)/B < 0)  { return 0; }
-    return 1;
-  }
+
+  if (std::fabs(b) < 1/kInfinity) { return 0; }
+  
+  *s1 = -c/b;
+  if ((z0 + (*s1)*tz  - A)/B < 0)  { return 0; }
+  return 1;
 }

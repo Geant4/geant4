@@ -36,7 +36,7 @@
 // Both these classes are implemented outside this file because they are
 // shared with G4Polycone.
 //
-// Author: David C. Williams (davidw@scipp.ucsc.edu)
+// Author: David C. Williams (UCSC), 1998
 // --------------------------------------------------------------------
 
 #include "G4Polyhedra.hh"
@@ -60,6 +60,7 @@
 namespace
 {
   G4Mutex surface_elementsMutex = G4MUTEX_INITIALIZER;
+  G4Mutex polyhedraMutex = G4MUTEX_INITIALIZER;
 }
 
 using namespace CLHEP;
@@ -239,7 +240,10 @@ void G4Polyhedra::Create( G4double phiStart,
 
   startPhi = phiStart;
   while( startPhi < 0 )    // Loop checking, 13.08.2015, G.Cosmo
+  {
     startPhi += twopi;
+  }
+
   //
   // Phi opening? Account for some possible roundoff, and interpret
   // nonsense value as representing no phi opening
@@ -299,33 +303,12 @@ void G4Polyhedra::Create( G4double phiStart,
   do    // Loop checking, 13.08.2015, G.Cosmo
   {
     next = corner+1;
-    if (next >= corners+numCorner) next = corners;
+    if (next >= corners+numCorner) { next = corners; }
     nextNext = next+1;
-    if (nextNext >= corners+numCorner) nextNext = corners;
+    if (nextNext >= corners+numCorner) { nextNext = corners; }
 
-    if (corner->r < 1/kInfinity && next->r < 1/kInfinity) continue;
-/*
-    // We must decide here if we can dare declare one of our faces
-    // as having a "valid" normal (i.e. allBehind = true). This
-    // is never possible if the face faces "inward" in r *unless*
-    // we have only one side
-    //
-    G4bool allBehind;
-    if ((corner->z > next->z) && (numSide > 1))
-    {
-      allBehind = false;
-    }
-    else
-    {
-      //
-      // Otherwise, it is only true if the line passing
-      // through the two points of the segment do not
-      // split the r/z cross section
-      //
-      allBehind = !rz->BisectedBy( corner->r, corner->z,
-                                   next->r, next->z, kCarTolerance );
-    }
-*/
+    if (corner->r < 1/kInfinity && next->r < 1/kInfinity) { continue; }
+
     *face++ = new G4PolyhedraSide( prev, corner, next, nextNext,
                  numSide, startPhi, endPhi-startPhi, phiIsOpen );
   } while( prev=corner, corner=next, corner > corners );
@@ -387,7 +370,7 @@ G4Polyhedra::G4Polyhedra( const G4Polyhedra& source )
 //
 G4Polyhedra &G4Polyhedra::operator=( const G4Polyhedra& source )
 {
-  if (this == &source) return *this;
+  if (this == &source) { return *this; }
 
   G4VCSGfaceted::operator=( source );
 
@@ -507,7 +490,7 @@ EInside G4Polyhedra::Inside( const G4ThreeVector& p ) const
   //
   // Quick test
   //
-  if (enclosingCylinder->MustBeOutside(p)) return kOutside;
+  if (enclosingCylinder->MustBeOutside(p)) { return kOutside; }
 
   //
   // Long answer
@@ -526,8 +509,7 @@ G4double G4Polyhedra::DistanceToIn( const G4ThreeVector& p,
   //
   // Quick test
   //
-  if (enclosingCylinder->ShouldMiss(p,v))
-    return kInfinity;
+  if (enclosingCylinder->ShouldMiss(p,v)) { return kInfinity; }
 
   //
   // Long answer
@@ -552,10 +534,10 @@ void G4Polyhedra::BoundingLimits(G4ThreeVector& pMin,
   for (G4int i=0; i<GetNumRZCorner(); ++i)
   {
     G4PolyhedraSideRZ corner = GetCorner(i);
-    if (corner.r < rmin) rmin = corner.r;
-    if (corner.r > rmax) rmax = corner.r;
-    if (corner.z < zmin) zmin = corner.z;
-    if (corner.z > zmax) zmax = corner.z;
+    if (corner.r < rmin) { rmin = corner.r; }
+    if (corner.r > rmax) { rmax = corner.r; }
+    if (corner.z < zmin) { zmin = corner.z; }
+    if (corner.z > zmax) { zmax = corner.z; }
   }
 
   G4double sphi    = GetStartPhi();
@@ -568,25 +550,25 @@ void G4Polyhedra::BoundingLimits(G4ThreeVector& pMin,
 
   G4double sinCur = GetSinStartPhi();
   G4double cosCur = GetCosStartPhi();
-  if (!IsOpen()) rmin = 0.;
+  if (!IsOpen()) { rmin = 0.; }
   G4double xmin = rmin*cosCur, xmax = xmin;
   G4double ymin = rmin*sinCur, ymax = ymin;
   for (G4int k=0; k<ksteps+1; ++k)
   {
     G4double x = rmax*cosCur;
-    if (x < xmin) xmin = x;
-    if (x > xmax) xmax = x;
+    if (x < xmin) { xmin = x; }
+    if (x > xmax) { xmax = x; }
     G4double y = rmax*sinCur;
-    if (y < ymin) ymin = y;
-    if (y > ymax) ymax = y;
+    if (y < ymin) { ymin = y; }
+    if (y > ymax) { ymax = y; }
     if (rmin > 0)
     {
       G4double xx = rmin*cosCur;
-      if (xx < xmin) xmin = xx;
-      if (xx > xmax) xmax = xx;
+      if (xx < xmin) { xmin = xx; }
+      if (xx > xmax) { xmax = xx; }
       G4double yy = rmin*sinCur;
-      if (yy < ymin) ymin = yy;
-      if (yy > ymax) ymax = yy;
+      if (yy < ymin) { ymin = yy; }
+      if (yy > ymax) { ymax = yy; }
     }
     G4double sinTmp = sinCur;
     sinCur = sinCur*cosStep + cosCur*sinStep;
@@ -650,7 +632,7 @@ G4bool G4Polyhedra::CalculateExtent(const EAxis pAxis,
   }
   G4GeomTools::RemoveRedundantVertices(contourRZ,iout,2*kCarTolerance);
   G4double area = G4GeomTools::PolygonArea(contourRZ);
-  if (area < 0.) std::reverse(contourRZ.begin(),contourRZ.end());
+  if (area < 0.) { std::reverse(contourRZ.begin(),contourRZ.end()); }
 
   // triangulate RZ countour
   if (!G4GeomTools::TriangulatePolygon(contourRZ,triangles))
@@ -716,13 +698,20 @@ G4bool G4Polyhedra::CalculateExtent(const EAxis pAxis,
     // set sub-envelope and adjust extent
     G4double emin,emax;
     G4BoundingEnvelope benv(polygons);
-    if (!benv.CalculateExtent(pAxis,pVoxelLimit,pTransform,emin,emax)) continue;
-    if (emin < pMin) pMin = emin;
-    if (emax > pMax) pMax = emax;
-    if (eminlim > pMin && emaxlim < pMax) break; // max possible extent
+    if (!benv.CalculateExtent(pAxis,pVoxelLimit,pTransform,emin,emax))
+    {
+      continue;
+    }
+    if (emin < pMin) { pMin = emin; }
+    if (emax > pMax) { pMax = emax; }
+    if (eminlim > pMin && emaxlim < pMax) { break; } // max possible extent
   }
   // free memory
-  for (G4int k=0; k<ksteps+1; ++k) { delete polygons[k]; polygons[k]=nullptr;}
+  for (G4int k=0; k<ksteps+1; ++k)
+  {
+    delete polygons[k];
+    polygons[k]=nullptr;
+  }
   return (pMin < pMax);
 }
 
@@ -812,8 +801,9 @@ std::ostream& G4Polyhedra::StreamInfo( std::ostream& os ) const
 
 G4double G4Polyhedra::GetCubicVolume()
 {
-  if (fCubicVolume == 0.)
+  if (fCubicVolume == 0)
   {
+    G4AutoLock l(&polyhedraMutex);
     G4double total = 0.;
     G4int nrz = GetNumRZCorner();
     G4PolyhedraSideRZ a = GetCorner(nrz - 1);
@@ -825,6 +815,7 @@ G4double G4Polyhedra::GetCubicVolume()
     }
     fCubicVolume = std::abs(total)*
       std::sin((GetEndPhi() - GetStartPhi())/GetNumSide())*GetNumSide()/6.;
+    l.unlock();
   }
   return fCubicVolume;
 }
@@ -835,8 +826,9 @@ G4double G4Polyhedra::GetCubicVolume()
 
 G4double G4Polyhedra::GetSurfaceArea()
 {
-  if (fSurfaceArea == 0.)
+  if (fSurfaceArea == 0)
   {
+    G4AutoLock l(&polyhedraMutex);
     G4double total = 0.;
     G4int nrz = GetNumRZCorner();
     if (IsOpen())
@@ -865,6 +857,7 @@ G4double G4Polyhedra::GetSurfaceArea()
       a = b;
     }
     fSurfaceArea = total;
+    l.unlock();
   }
   return fSurfaceArea;
 }
@@ -893,7 +886,7 @@ void G4Polyhedra::SetSurfaceElements() const
     selem.i0 = ia;
     selem.i1 = ib;
     ia = ib;
-    if (a.r == 0. && b.r == 0.) continue;
+    if (a.r == 0. && b.r == 0.) { continue; }
     G4ThreeVector p1(a.r, 0, a.z);
     G4ThreeVector p2(a.r*cosa, a.r*sina, a.z);
     G4ThreeVector p3(b.r*cosa, b.r*sina, b.z);
@@ -990,7 +983,7 @@ G4ThreeVector G4Polyhedra::GetPointOnSurface() const
     G4ThreeVector p0(a.r, 0, a.z);
     G4ThreeVector p1(b.r, 0, b.z);
     G4ThreeVector p2(b.r*cosa, b.r*sina, b.z);
-    if (i2 == -1) p1.set(a.r*cosa, a.r*sina, a.z);
+    if (i2 == -1) { p1.set(a.r*cosa, a.r*sina, a.z); }
     p0 += (p1 - p0)*u + (p2 - p0)*v;
     // find selected side and rotate point
     G4double scurr = (*it).area;
@@ -1004,7 +997,7 @@ G4ThreeVector G4Polyhedra::GetPointOnSurface() const
     }
     else
     {
-      if (iside == nside) --iside; // iside must be less then nside
+      if (iside == nside) { --iside; } // iside must be less then nside
       G4double phi = iside*dphi + GetStartPhi();
       G4double cosphi = std::cos(phi);
       G4double sinphi = std::sin(phi);
@@ -1037,7 +1030,9 @@ G4Polyhedron* G4Polyhedra::CreatePolyhedron() const
 {
   std::vector<G4TwoVector> rz(numCorner);
   for (G4int i = 0; i < numCorner; ++i)
+  {
     rz[i].set(corners[i].r, corners[i].z);
+  }
 
   // Check the validity of the delta phi
   G4double wrDelta = endPhi - startPhi;
@@ -1096,7 +1091,7 @@ void G4Polyhedra::SetOriginalParameters(G4ReduciblePolygon* rz)
     inextr=1+icurr;
     inextl=(icurl <= 0)? numPlanes-1 : icurl-1;
 
-    if((corners[inextr].z >= Zmax) & (corners[inextl].z >= Zmax))  { break; }
+    if((static_cast<int>(corners[inextr].z >= Zmax) & static_cast<int>(corners[inextl].z >= Zmax)) != 0)  { break; }
 
     G4double Zleft = corners[inextl].z;
     G4double Zright = corners[inextr].z;

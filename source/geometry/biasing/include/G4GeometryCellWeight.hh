@@ -34,12 +34,18 @@
 // Author: Michael Dressel (CERN), 2002
 // ----------------------------------------------------------------------
 #ifndef G4GEOMETRYCELLWEIGHT_HH
-#define G4GEOMETRYCELLWEIGHT_HH 1
+#define G4GEOMETRYCELLWEIGHT_HH
 
 #include <map>
 #include "globals.hh"
 #include "G4GeometryCell.hh"
 #include "G4GeometryCellComp.hh"
+
+/**
+ * @brief G4UpperEnergyToLowerWeightMap and G4GeometryCellWeight are maps
+ * used internally by the weight window technique sampling, mapping cells
+ * to maps of upper energy to lower weight bounds.
+ */
 
 using G4UpperEnergyToLowerWeightMap =
   std::map<G4double, G4double, std::less<G4double> >;

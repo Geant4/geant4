@@ -6,6 +6,12 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2025-08-19 Gabriele Cosmo (geomnav-V11-03-02)
+- Applied clang-tidy fixes: modernize-use-default-member-init,
+  readability-redundant-member-init, modernize-use-emplace,
+  readability-implicit-bool-conversion, readability-braces-around-statements,
+  modernize-return-braced-init-list.
+
 ## 2025-05-15 Gabriele Cosmo (geomnav-V11-03-01)
 - Reorganised and enriched comments in headers to follow Doxygen style.
 - Removed declared but not implemented methods in G4VoxelNavigation,

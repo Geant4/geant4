@@ -23,10 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file visualization/perspective/include/PerspectiveVisActionMessenger.hh
+/// \file PerspectiveVisActionMessenger.hh
 /// \brief Definition of the PerspectiveVisActionMessenger class
-//
-//
 
 #ifndef PERSPECTIVEVISACTIONMESSENGER_HH
 #define PERSPECTIVEVISACTIONMESSENGER_HH

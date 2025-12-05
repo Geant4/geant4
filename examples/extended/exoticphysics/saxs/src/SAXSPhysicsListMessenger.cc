@@ -24,9 +24,7 @@
 // ********************************************************************
 //
 /// \file SAXSPhysicsListMessenger.cc
-/// \brief Definition of the SAXSPhysicsListMessenger class
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// \brief Implementation of the SAXSPhysicsListMessenger class
 
 #include "SAXSPhysicsListMessenger.hh"
 

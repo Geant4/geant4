@@ -31,12 +31,13 @@
 // and also has a method that returns an Approximate point on the curve 
 // near to a (chord) point.
 
-// Author: J.Apostolakis - Design and implementation - 25.02.1997
+// Author: John Apostolakis (CERN), 25.02.1997 - Design and implementation
 // -------------------------------------------------------------------
 #ifndef G4CHORDFINDER_HH
 #define G4CHORDFINDER_HH
 
 #include "G4VIntegrationDriver.hh"
+#include "G4FieldParameters.hh"
 #include "G4MagIntegratorStepper.hh"
 
 #include <memory>
@@ -48,116 +49,166 @@ class G4CachedMagneticField;
 class G4HelixHeum;
 class G4QSStepper;
 
+/**
+ * @brief G4ChordFinder is a class that provides Runge-Kutta integration of
+ * motion ODE and also has a method that returns an approximate point on the
+ * curve near to a (chord) point.
+ */
+
 class G4ChordFinder
 {
-   public:  // with description
+  public:
 
-      explicit G4ChordFinder( G4VIntegrationDriver* pIntegrationDriver );
-        // The most flexible constructor, which allows the user to specify
-        // any type of field, equation, stepper and integration driver.
+    enum kIntegrationType {kDefaultDriverType=0, kFSALStepperType=1, 
+                           kTemplatedStepperType, kRegularStepperType,
+                           kBfieldDriverType, kQss2DriverType, kQss3DriverType};
 
-      enum kIntegrationType { kDefaultDriverType=0, kFSALStepperType=1, 
-         kTemplatedStepperType, kRegularStepperType, kBfieldDriverType, kQss2DriverType, kQss3DriverType };
+    /**
+     * The most flexible constructor, which allows the user to specify
+     * any type of field, equation, stepper and integration driver.
+     *  @param[in] pIntegrationDriver Pointer to the integrator driver to use.
+     */
+    explicit G4ChordFinder( G4VIntegrationDriver* pIntegrationDriver );
 
-      G4ChordFinder( G4MagneticField* itsMagField,
-                     G4double         stepMinimum = 1.0e-2, // * mm 
-                     G4MagIntegratorStepper* pItsStepper = nullptr,
-                     // G4bool           useHigherEfficiencyStepper = true,
-                     G4int            stepperDriverChoice = kTemplatedStepperType );
-        // A constructor that creates defaults for all "children" classes.
-        //
-        // The type of equation of motion is fixed.
-        // A default type of stepper (Dormand Prince since release 10.4) is used,
-        // and the corresponding integration driver.
-        // Except if 'useFSAL' is set (true), which provides a FSAL stepper
-        // and its corresponding specialised (templated) driver.
+    /**
+     * Constructor that creates defaults for all "children" classes.
+     * The type of equation of motion is fixed.
+     * A default type of stepper (Dormand Prince since release 10.4) is used,
+     * and the corresponding integration driver.
+     *  @param[in] itsMagField Pointer to the magnetic field.
+     *  @param[in] stepMinimum Pointer to the magnetic field.
+     *  @param[in] pItsStepper Optional pointer to the stepper algorithm.
+     *  @param[in] stepperDriverChoice Type of stepper driver.
+     */
+    G4ChordFinder( G4MagneticField* itsMagField,
+                   G4double stepMinimum = G4FieldDefaults::kMinimumStep,
+                   G4MagIntegratorStepper* pItsStepper = nullptr,
+                   G4int stepperDriverChoice = kTemplatedStepperType );
 
-    virtual ~G4ChordFinder();
+    /**
+     * Destructor.
+     */
+    ~G4ChordFinder();
 
-      G4ChordFinder(const G4ChordFinder&) = delete;
-      G4ChordFinder& operator=(const G4ChordFinder&) = delete;
-        // Copy constructor and assignment operator not allowed.
+    /**
+     * Copy constructor and assignment operator not allowed.
+     */
+    G4ChordFinder(const G4ChordFinder&) = delete;
+    G4ChordFinder& operator=(const G4ChordFinder&) = delete;
 
-      inline G4double AdvanceChordLimited( G4FieldTrack& yCurrent,
-                                           G4double stepInitial,
-                                           G4double epsStep_Relative,
-                                     const G4ThreeVector& latestSafetyOrigin,
-                                           G4double lasestSafetyRadius);
-        // Uses ODE solver's driver to find the endpoint that satisfies 
-        // the chord criterion: that d_chord < delta_chord
-        // -> Returns Length of Step taken.
+    /**
+     * Computes the step to take, based on chord limits.
+     * Uses ODE solver's driver to find the endpoint that satisfies 
+     * the chord criterion that: d_chord < delta_chord.
+     *  @param[in,out] yCurrent The current track in field.
+     *  @param[in] stepInitial Proposed initial step length.
+     *  @param[in] epsStep_Relative Requested accuracy.
+     *  @param[in] latestSafetyOrigin Last safety origin point. Unused.
+     *  @param[in] lasestSafetyRadius Last safety distance. Unused.
+     *  @returns The length of step taken.
+     */
+    inline G4double AdvanceChordLimited( G4FieldTrack& yCurrent,
+                                         G4double stepInitial,
+                                         G4double epsStep_Relative,
+                                   const G4ThreeVector& latestSafetyOrigin,
+                                         G4double lasestSafetyRadius );
      
-      G4FieldTrack ApproxCurvePointS( const G4FieldTrack&  curveAPointVelocity,
-                                      const G4FieldTrack&  curveBPointVelocity,
-                                      const G4FieldTrack&  ApproxCurveV,
-                                      const G4ThreeVector& currentEPoint,
-                                      const G4ThreeVector& currentFPoint,
-                                      const G4ThreeVector& PointG,
-                                            G4bool first,  G4double epsStep);
+    /**
+     * Uses the Brent algorithm when possible, to determine the closest point
+     * on the curve. Given a starting curve point A (CurveA_PointVelocity),
+     * curve point B (CurveB_PointVelocity), a point E which is (generally)
+     * not on the curve and  a point F which is on the curve (first
+     * approximation), find new point S on the curve closer to point E. 
+     * While advancing towards S utilise 'eps_step' as a measure of the
+     * relative accuracy of each Step.
+     *  @returns The end point on the curve closer to the given point E.
+     */
+    G4FieldTrack ApproxCurvePointS( const G4FieldTrack&  curveAPointVelocity,
+                                    const G4FieldTrack&  curveBPointVelocity,
+                                    const G4FieldTrack&  ApproxCurveV,
+                                    const G4ThreeVector& currentEPoint,
+                                    const G4ThreeVector& currentFPoint,
+                                    const G4ThreeVector& PointG,
+                                          G4bool first,  G4double epsStep );
  
-      G4FieldTrack ApproxCurvePointV( const G4FieldTrack&  curveAPointVelocity,
-                                      const G4FieldTrack&  curveBPointVelocity,
-                                      const G4ThreeVector& currentEPoint,
-                                            G4double       epsStep);
+    /**
+     * If r=|AE|/|AB|, and s=true path lenght (AB)
+     * returns the point that is r*s along the curve.
+     */
+    G4FieldTrack ApproxCurvePointV( const G4FieldTrack&  curveAPointVelocity,
+                                    const G4FieldTrack&  curveBPointVelocity,
+                                    const G4ThreeVector& currentEPoint,
+                                          G4double       epsStep);
 
-      inline G4double InvParabolic( const G4double xa, const G4double ya,
-                                    const G4double xb, const G4double yb,
-                                    const G4double xc, const G4double yc );
+    /**
+     * Calculates the inverse parabolic through the three points (x,y) and
+     * returns the value x that, for the inverse parabolic, corresponds to y=0.
+     */
+    inline G4double InvParabolic( const G4double xa, const G4double ya,
+                                  const G4double xb, const G4double yb,
+                                  const G4double xc, const G4double yc );
 
-      inline G4double  GetDeltaChord() const;
-      inline void      SetDeltaChord(G4double newval);
+    /**
+     * Accessors and modifiers.
+     */
+    inline G4double GetDeltaChord() const;
+    inline void SetDeltaChord(G4double newval);
+    inline void SetIntegrationDriver(G4VIntegrationDriver* IntegrationDriver);
+    inline G4VIntegrationDriver* GetIntegrationDriver();
 
-      inline void SetIntegrationDriver(G4VIntegrationDriver* IntegrationDriver);
-      inline G4VIntegrationDriver* GetIntegrationDriver();
-        // Access and set Driver.
+    /**
+     * Clears the internal state (last step estimate).
+     */
+    inline void ResetStepEstimate();
 
-      inline void ResetStepEstimate();
-        // Clear internal state (last step estimate)
+    /**
+     * Sets the verbosity.
+     *  @returns The old verbosity value.
+     */
+    inline G4int SetVerbose( G4int newvalue=1 ); 
 
-      inline G4int SetVerbose( G4int newvalue=1); 
-        // Set verbosity and return old value
+    /**
+     * Dispatch interface method for computing step.
+     */
+    inline void OnComputeStep(const G4FieldTrack* track);
 
-      void OnComputeStep(const G4FieldTrack* track);
+    /**
+     * Writes out to stream the parameters/state of the driver.
+     */
+    friend std::ostream& operator<<( std::ostream& os, const G4ChordFinder& cf);
 
-      friend std::ostream&
-             operator<<( std::ostream& os, const G4ChordFinder& cf);
+    /**
+     * Sets verbosity for constructor.
+     */
+    static void SetVerboseConstruction(G4bool v = true);
 
-      static void SetVerboseConstruction(G4bool v=true) { gVerboseCtor=v;}
-        // Verbosity for contructor
-   protected:   // .........................................................
+  private:  // ............................................................
 
-      void     PrintDchordTrial(G4int    noTrials, 
-                                G4double stepTrial, 
-                                G4double oldStepTrial, 
-                                G4double dChordStep);
+    static G4bool gVerboseCtor;  // Verbosity for contructor
 
-      static G4bool gVerboseCtor;  // Verbosity for contructor
+    //  Constants
+    //  ---------------------
+    const G4double fDefaultDeltaChord = G4FieldDefaults::kDeltaChord;
 
-   private:  // ............................................................
+    //  PARAMETERS 
+    //  ---------------------
+    G4double  fDeltaChord;               //  Maximum miss distance 
 
-      //  Constants
-      //  ---------------------
-      const G4double fDefaultDeltaChord;  // SET in G4ChordFinder.cc = 0.25 mm
+    G4int fStatsVerbose = 0;  // if > 0, print Statistics in destructor
 
-      //  PARAMETERS 
-      //  ---------------------
-      G4double  fDeltaChord;               //  Maximum miss distance 
-
-      G4int fStatsVerbose = 0;  // if > 0, print Statistics in destructor
-
-      //  DEPENDENT Objects
-      //  ---------------------
-      G4VIntegrationDriver*      fIntgrDriver = nullptr;
-      G4MagIntegratorStepper*    fRegularStepperOwned = nullptr;
-      G4MagIntegratorStepper*    fNewFSALStepperOwned = nullptr;
-      std::unique_ptr<G4HelixHeum> fLongStepper;
-      G4CachedMagneticField*     fCachedField = nullptr;
-      G4QSStepper*               fQssStepperOwned = nullptr;
-      G4EquationOfMotion*        fEquation = nullptr;  
+    //  DEPENDENT Objects
+    //  ---------------------
+    G4VIntegrationDriver*      fIntgrDriver = nullptr;
+    G4MagIntegratorStepper*    fRegularStepperOwned = nullptr;
+    G4MagIntegratorStepper*    fNewFSALStepperOwned = nullptr;
+    std::unique_ptr<G4HelixHeum> fLongStepper;
+    G4CachedMagneticField*     fCachedField = nullptr;
+    G4QSStepper*               fQssStepperOwned = nullptr;
+    G4EquationOfMotion*        fEquation = nullptr;  
 };
 
 // Inline function implementation:
 
 #include "G4ChordFinder.icc"
 
-#endif  // G4CHORDFINDER_HH
+#endif

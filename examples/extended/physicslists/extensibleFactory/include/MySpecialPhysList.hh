@@ -23,8 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
+/// \file MySpecialPhysList.hh
+/// \brief Definition of the MySpecialPhysList class
+
 //---------------------------------------------------------------------------
 //
 // ClassName:  MySpecialPhysList

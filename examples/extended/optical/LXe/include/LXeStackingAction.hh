@@ -23,11 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file optical/LXe/include/LXeStackingAction.hh
+/// \file LXeStackingAction.hh
 /// \brief Definition of the LXeStackingAction class
-//
-//
+
 #ifndef LXeStackingAction_h
 #define LXeStackingAction_h 1
 

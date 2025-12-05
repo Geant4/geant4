@@ -25,7 +25,7 @@
 //
 // G4EqEMFieldWithSpin implementation
 //
-// Created: Chris Gong & Peter Gumplinger, 30.08.2007
+// Authors: Chris Gong & Peter Gumplinger (TRIUMF), 30.08.2007
 // -------------------------------------------------------------------
 
 #include "G4EqEMFieldWithSpin.hh"
@@ -39,8 +39,6 @@ G4EqEMFieldWithSpin::G4EqEMFieldWithSpin(G4ElectroMagneticField *emField )
   : G4EquationOfMotion( emField ) 
 {
 }
-
-G4EqEMFieldWithSpin::~G4EqEMFieldWithSpin() = default; 
 
 void  
 G4EqEMFieldWithSpin::SetChargeMomentumMass(G4ChargeState particleCharge,

@@ -23,11 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file biasing/B01/include/B01Run.hh
+/// \file B01Run.hh
 /// \brief Definition of the B01Run class
-//
-//
-//
+
 //---------------------------------------------------------------------
 // (Purpose)
 //    Example implementation for multi-functional-detector and

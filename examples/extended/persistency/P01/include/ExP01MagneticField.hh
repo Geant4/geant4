@@ -23,12 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file persistency/P01/include/ExP01MagneticField.hh
+/// \file ExP01MagneticField.hh
 /// \brief Definition of the ExP01MagneticField class
-//
-//
-//
-//
+
 //    A class for control of the Magnetic Field of the detector.
 //  The field is assumed to be uniform.
 //

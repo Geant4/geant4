@@ -153,8 +153,7 @@ G4VisCommandViewerCentreOn::G4VisCommandViewerCentreOn () {
    "\nFor example, \"/Shap/\" matches \"Shape1\" and \"Shape2\".");
   fpCommandCentreAndZoomInOn->SetGuidance
   ("It may help to see a textual representation of the geometry hierarchy of"
-   "\nthe worlds. Try \"/vis/drawTree [worlds]\" or one of the driver/browser"
-   "\ncombinations that have the required functionality, e.g., HepRepFile.");
+   "\nthe worlds. Try \"/vis/drawTree [worlds]\"");
   fpCommandCentreAndZoomInOn->SetGuidance
    ("If there are more than one matching physical volumes they will all be"
     "\nincluded. If this is not what you want, and what you want is to centre on a"
@@ -2178,6 +2177,7 @@ void G4VisCommandViewerSelect::SetNewValue (G4UIcommand*, G4String newValue) {
 
   // Update GUI scene tree (make sure it's in sync)
   viewer->UpdateGUISceneTree();
+  viewer->UpdateGUIControlWidgets();
 }
 
 ////////////// /vis/viewer/update ///////////////////////////////////////

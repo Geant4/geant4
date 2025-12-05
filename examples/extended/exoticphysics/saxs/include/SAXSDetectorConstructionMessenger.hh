@@ -24,9 +24,7 @@
 // ********************************************************************
 //
 /// \file SAXSDetectorConstructionMessenger.hh
-/// \brief Implementation of the SAXSDetectorConstructionMessenger class
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// \brief Definition of the SAXSDetectorConstructionMessenger class
 
 #ifndef SAXSDetectorConstructionMessenger_h
 #define SAXSDetectorConstructionMessenger_h 1

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 /// \file Par02ActionInitialization.cc
 /// \brief Implementation of the Par02ActionInitialization class
 

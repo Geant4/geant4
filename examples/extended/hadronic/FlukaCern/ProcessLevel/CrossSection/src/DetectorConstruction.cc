@@ -23,8 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-///  \file DetectorConstruction.cc
-///  \brief Example of empty world volume.
+/// \file DetectorConstruction.cc
+/// \brief Implementation of the DetectorConstruction class
+
 //
 //  Author: G.Hugo, 06 January 2023
 //

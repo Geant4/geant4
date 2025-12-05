@@ -5,6 +5,18 @@ which **must** added in reverse chronological order (newest at the top). It must
 be used as a substitute for writing good git commit messages!
 
 
+## 2025-11-06 Ivana Hrivnacova (exbasic-V11-03-01)
+- Updated examples macros and READMEs for removal of HepRep[File] 
+  vis drivers (thanks to John Allison) 
+
+## 2025-07-22 I. Hrivnacova (exbasic-V11-03-00)
+- Migration of basic examples README files to Markdown:
+  - Replaced .README.txt with README.md:
+    - removed \file declarations and descriptions
+    - replaced \section with ## and removed its id
+    - replaced \verbatim and \ensverbation with '```'
+  - Removed plain text README
+
 ## 2024-09-18 I. Hrivnacova (exbasic-V11-02-04)
 - Added information about gui.mac and icons.mac
   in the USER INTERFACES section in README

@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file PrimaryGeneratorAction.hh
+/// \brief Definition of the PrimaryGeneratorAction class
+
 // This example is provided by the Geant4-DNA collaboration
 // Any report or published results obtained using the Geant4-DNA software
 // shall cite the following Geant4-DNA collaboration publication:
@@ -33,8 +36,6 @@
 // Authors: J. Naoki D. Kondo (UCSF, US)
 //          J. Ramos-Mendez and B. Faddegon (UCSF, US)
 //
-/// \file PrimaryGeneratorAction.hh
-/// \brief Definition of the PrimaryGeneratorAction class
 
 #ifndef DNADAMAGE2_PrimaryGeneratorAction_h
 #define DNADAMAGE2_PrimaryGeneratorAction_h 1

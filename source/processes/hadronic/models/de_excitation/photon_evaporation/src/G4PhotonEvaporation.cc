@@ -119,6 +119,9 @@ G4PhotonEvaporation::EmittedFragment(G4Fragment* nucleus)
 {
   if(!isInitialised) { Initialise(); }
   fSampleTime = !fRDM;
+  if (fRDM) {
+    nucleus->SetNumberOfElectrons(nucleus->GetZ_asInt());
+  }
 
   // potentially external code may set initial polarization
   // but only for radioactive decay nuclear polarization is considered

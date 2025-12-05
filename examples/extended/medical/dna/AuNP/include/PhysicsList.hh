@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file PhysicsList.hh
+/// \brief Definition of the PhysicsList class
+
 // This example is provided by the Geant4-DNA collaboration
 // Any report or published results obtained using the Geant4-DNA software
 // shall cite the following Geant4-DNA collaboration publication:
@@ -33,54 +36,35 @@
 #ifndef PhysicsList_h
 #define PhysicsList_h 1
 
-#include "G4ParticleTypes.hh"
 #include "G4ProcessManager.hh"
 #include "G4VModularPhysicsList.hh"
-#include "G4VUserPhysicsList.hh"
+#include <memory>
 
-// class G4EmDNAChemistry;
 class DetectorConstruction;
 class PhysicsListMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-class PhysicsList : public G4VModularPhysicsList
-{
-  public:
-    PhysicsList();
-    virtual ~PhysicsList();
-
-    void SetGammaCut(G4double);
-    void SetElectronCut(G4double);
-    void SetPositronCut(G4double);
-    void SetProtonCut(G4double);
-
-    void SetPhysics4NP(const G4String& name);
-
-    void RegisterConstructor(const G4String& name);
-
-  protected:
-    void ConstructBosons();
-    void ConstructLeptons();
-    void ConstructBarions();
-
-    void ConstructGeneral();
-    void ConstructEM();
-
-    void ConstructParticle();
-    void ConstructProcess();
-
-    void SetCuts();
-
-  private:
-    const DetectorConstruction* fpDetector;
-    PhysicsListMessenger* fPhysMessenger;
-    G4double fcutForGamma;
-    G4double fcutForElectron;
-    G4double fcutForPositron;
-    G4double fcutForProton;
-    G4String fphysname;
-
-    // G4EmDNAChemistry* fpChemList;
+class PhysicsList final : public G4VModularPhysicsList {
+public:
+  PhysicsList();
+  ~PhysicsList() override = default;
+  void SetPhysics4NP(const G4String &name);
+  static void ConstructBosons();
+  static void ConstructLeptons();
+  static void ConstructBarions();
+  static void ConstructGeneral() {};
+  void ConstructEM();
+  void ConstructParticle() override;
+  void ConstructProcess() override;
+  void SetCuts() override;
+private:
+  std::unique_ptr<G4VPhysicsConstructor> fEmDNAChemistryList;
+  const DetectorConstruction *fpDetector = nullptr;
+  std::unique_ptr<PhysicsListMessenger> fPhysMessenger;
+  G4double fcutForGamma = 0.1 * CLHEP::nanometer;
+  G4double fcutForElectron = 0.1 * CLHEP::nanometer;
+  G4double fcutForPositron = 0.1 * CLHEP::nanometer;
+  G4String fphysname;
 };
 #endif

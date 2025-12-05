@@ -6,8 +6,6 @@
 
 #include "node"
 
-//#define TOOLS_SG_NODEREF_DEBUG
-
 namespace tools {
 namespace sg {
 
@@ -16,14 +14,7 @@ public:
   TOOLS_NODE(noderef,tools::sg::noderef,node)
 public:
   virtual void render(render_action& a_action) {
-#ifdef TOOLS_SG_NODEREF_DEBUG
-    std::ostream& out = a_action.out();
-    out << "debug : tools::sg::noderef::render : " << m_node.s_cls() << " begin : " << std::endl;
     m_node.render(a_action);
-    out << "debug : tools::sg::noderef::render : " << m_node.s_cls() << " end," << std::endl;
-#else
-    m_node.render(a_action);
-#endif
   }
   virtual void pick(pick_action& a_action) {m_node.pick(a_action);}
   virtual void bbox(bbox_action& a_action) {m_node.bbox(a_action);}

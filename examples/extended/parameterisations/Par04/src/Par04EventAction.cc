@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file Par04EventAction.cc
+/// \brief Implementation of the Par04EventAction class
+
 #include "Par04EventAction.hh"
 
 #include "Par04DetectorConstruction.hh"  // for Par04DetectorConstruction

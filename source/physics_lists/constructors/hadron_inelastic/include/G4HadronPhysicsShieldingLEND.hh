@@ -52,7 +52,7 @@ class G4HadronPhysicsShieldingLEND : public G4HadronPhysicsShielding
                                           G4double minFTFPEnergy, 
                                           G4double maxBertiniEnergy);
 
-    virtual ~G4HadronPhysicsShieldingLEND();
+    ~G4HadronPhysicsShieldingLEND() override = default;
 
     // copy constructor and hide assignment operator
     G4HadronPhysicsShieldingLEND(G4HadronPhysicsShieldingLEND &) = delete;

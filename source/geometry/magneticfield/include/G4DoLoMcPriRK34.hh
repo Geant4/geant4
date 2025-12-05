@@ -27,71 +27,110 @@
 //
 // Class description:
 //
-//  Dormand-Lockyer-McGorrigan-Prince-6-3-4 non-FSAL method
-//  ( 6 stage, 3rd & 4th order embedded RK method )
+// Dormand-Lockyer-McGorrigan-Prince-6-3-4 non-FSAL method
+// ( 6 stage, 3rd & 4th order embedded RK method )
 
-// Created: Somnath Banerjee, Google Summer of Code 2015, 7 July 2015
-// Supervision: John Apostolakis, CERN
+// Author: Somnath Banerjee (CERN, Google Summer of Code 2015), 07.07.2015
+// Supervision: John Apostolakis (CERN)
 // --------------------------------------------------------------------
 #ifndef DOLO_MCPRI_RK34_HH
 #define DOLO_MCPRI_RK34_HH
 
 #include "G4MagIntegratorStepper.hh"
 
+/**
+ * @brief G4DoLoMcPriRK34 implements the Dormand-Lockyer-McGorrigan-Prince-6-3-4
+ * non-FSAL method ( 6 stage, 3rd & 4th order embedded Runge-Kutta method ).
+ */
+
 class G4DoLoMcPriRK34 : public G4MagIntegratorStepper
 {
   public:
 
+    /**
+     * Constructor for G4DoLoMcPriRK34.
+     *  @param[in] EqRhs Pointer to the provided equation of motion.
+     *  @param[in] numberOfVariables The number of integration variables.
+     *  @param[in] primary Flag for initialisation of the auxiliary stepper.
+     */
     G4DoLoMcPriRK34( G4EquationOfMotion* EqRhs,
                      G4int numberOfVariables = 6,
                      G4bool primary = true );
-      // Constructor using Equation
 
+    /**
+     * Destructor.
+     */
     ~G4DoLoMcPriRK34() override;
 
+    /**
+     * Copy constructor and assignment operator not allowed.
+     */
     G4DoLoMcPriRK34(const G4DoLoMcPriRK34&) = delete;
     G4DoLoMcPriRK34& operator=(const G4DoLoMcPriRK34&) = delete; 
-      // Copy constructor and assignment operator not allowed
 
+    /**
+     * The stepper for the Runge Kutta integration.
+     * The stepsize is fixed, with the step size given by 'h'.
+     * Integrates ODE starting values y[0 to 6].
+     * Outputs yout[] and its estimated error yerr[].
+     *  @param[in] y Starting values array of integration variables.
+     *  @param[in] dydx Derivatives array.
+     *  @param[in] h The given step size.
+     *  @param[out] yout Integration output.
+     *  @param[out] yerr The estimated error.
+     */
     void Stepper( const G4double y[],
                   const G4double dydx[],
                         G4double h,
                         G4double yout[],
                         G4double yerr[] ) override ;
     
-    void SetupInterpolation();
-    void SetupInterpolate( const G4double yInput[],
-                           const G4double dydx[],
-                           const G4double Step );
-      // For Preparing the interpolation and calculating the extra stages
-    
+    /**
+     * Interface method for interpolation setup. Does nothing here.
+     */
+    inline void SetupInterpolation() {}
+
+    /**
+     * Calculates the output at the tau fraction of Step.
+     *  @param[in] yInput Starting values array of integration variables.
+     *  @param[in] dydx Derivatives array.
+     *  @param[in] Step The given step size.
+     *  @param[out] yOut Interpolation output.
+     *  @param[out] tau Fraction of step.
+     */
     void Interpolate( const G4double yInput[],
                       const G4double dydx[],
                       const G4double Step,
                             G4double yOut[],
                             G4double tau );
-      // For calculating the output at the tau fraction of Step
-
     void Interpolate( G4double tau,
                       G4double yOut[]);
     
-    void interpolate(const G4double yInput[],
-                     const G4double dydx[],
-                           G4double yOut[],
-                           G4double Step,
-                           G4double tau ) ;
-
+    /**
+     * Returns the distance from chord line.
+     */
     G4double DistChord() const override;
-    G4int IntegratorOrder() const override { return 3; }
+
+    /**
+     * Returns the order, 3, of integration.
+     */
+    inline G4int IntegratorOrder() const override { return 3; }
+
+
+    /**
+     * Returns the stepper type-ID, "kDoLoMcPriRK34".
+     */
+    inline G4StepperType StepperType() const override { return kDoLoMcPriRK34; }
     
   private :
     
     G4double *ak2, *ak3, *ak4, *ak5, *ak6, *yTemp, *yIn;
     
     G4double fLastStepLength = -1.0;
+
+    /** For DistChord calculations. */
     G4double *fLastInitialVector, *fLastFinalVector,
              *fLastDyDx, *fMidVector, *fMidError;
-      // for DistChord calculations
     
     G4DoLoMcPriRK34* fAuxStepper = nullptr;
 };

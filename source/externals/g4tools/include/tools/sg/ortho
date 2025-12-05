@@ -39,24 +39,15 @@ public:
   :parent()
   ,height(2)
   {
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
     add_fields();
   }
   virtual ~ortho(){
-#ifdef TOOLS_MEM
-    mem::decrement(s_class().c_str());
-#endif
   }
 public:
   ortho(const ortho& a_from)
   :parent(a_from)
   ,height(a_from.height)
   {
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
     add_fields();
   }
   ortho& operator=(const ortho& a_from){
@@ -82,7 +73,6 @@ protected:
   virtual void get_lrbt(unsigned int a_ww,unsigned int a_wh,
                         float& a_l,float& a_r,float& a_b,float& a_t) {
     float aspect = float(a_ww)/float(a_wh);
-    //landscape : float aspect = float(a_action.wh())/float(a_action.ww());
     float hh = height.value()*0.5f;
     a_l = -aspect*hh;
     a_r = aspect*hh;

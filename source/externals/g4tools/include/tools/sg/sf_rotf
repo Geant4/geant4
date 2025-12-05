@@ -28,20 +28,13 @@ public:
     if(!a_buffer.read_vec(n,v)) return false;
     if(n!=vec.size()) {
       delete [] v;
-#ifdef TOOLS_MEM
-      mem::decrement(s_new().c_str());
-#endif
       return false;
     }
     for(uint32 index=0;index<n;index++) vec[index] = v[index];
     delete [] v;
-#ifdef TOOLS_MEM
-    mem::decrement(s_new().c_str());
-#endif
     return true;
   }
   virtual bool dump(std::ostream&) {
-    //a_out << parent::m_value << std::endl;
     return true;
   }
   virtual bool s_value(std::string& a_s) const {a_s.clear();return false;}

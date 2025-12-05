@@ -25,10 +25,6 @@
 //
 /// \file PhysListEmStandard.cc
 /// \brief Implementation of the PhysListEmStandard class
-//
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "PhysListEmStandard.hh"
 

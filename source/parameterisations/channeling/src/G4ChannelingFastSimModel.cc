@@ -35,11 +35,6 @@
 //
 #include "G4ChannelingFastSimModel.hh"
 
-#include "Randomize.hh"
-
-#include "G4TransportationManager.hh"
-#include "G4SystemOfUnits.hh"
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4ChannelingFastSimModel::G4ChannelingFastSimModel(const G4String& modelName,
@@ -54,12 +49,6 @@ G4ChannelingFastSimModel::G4ChannelingFastSimModel(const G4String& modelName)
 : G4VFastSimulationModel(modelName)
 {
 
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4ChannelingFastSimModel::~G4ChannelingFastSimModel()
-{
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -445,12 +434,12 @@ void G4ChannelingFastSimModel::DoIt(const G4FastTrack& fastTrack,
                eDeposited += elossAccum;
                elossAccum=0;
                ekinetic = etotal-mass;
-               if(ekinetic<1*keV)
+               if(ekinetic<1*CLHEP::keV)
                {
                    G4cout << "Warning in G4ChannelingFastSimModel: " <<
-                   ekinetic << "<" << 1*keV << " !" << G4endl;
-                   eDeposited-=(1*keV-ekinetic);
-                   ekinetic = 1*keV;
+                   ekinetic << "<" << 1*CLHEP::keV << " !" << G4endl;
+                   eDeposited-=(1*CLHEP::keV-ekinetic);
+                   ekinetic = 1*CLHEP::keV;
                    G4cout << "Setting deposited energy=" <<
                    eDeposited << " & ekinetic=" << ekinetic << G4endl;
                    etotal = mass+ekinetic;
@@ -503,12 +492,12 @@ void G4ChannelingFastSimModel::DoIt(const G4FastTrack& fastTrack,
   etotal -= elossAccum;
   eDeposited += elossAccum;
   ekinetic = etotal-mass;
-  if(ekinetic<1*keV)
+  if(ekinetic<1*CLHEP::keV)
   {
       G4cout << "Warning in G4ChannelingFastSimModel: " <<
-      ekinetic << "<" << 1*keV << " !" << G4endl;
-      eDeposited-=(1*keV-ekinetic);
-      ekinetic = 1*keV;
+      ekinetic << "<" << 1*CLHEP::keV << " !" << G4endl;
+      eDeposited-=(1*CLHEP::keV-ekinetic);
+      ekinetic = 1*CLHEP::keV;
       G4cout << "Setting deposited energy=" <<
       eDeposited << " & ekinetic=" << ekinetic << G4endl;
   }
@@ -538,18 +527,6 @@ void G4ChannelingFastSimModel::Input(const G4Material *crystal,
    fCrystalData = new G4ChannelingFastSimCrystalData();
    //setting all the crystal material and lattice data
    fCrystalData->SetMaterialProperties(crystal,lattice,filePath);
-
-   //setting default low energy cuts for kinetic energy
-   SetLowKineticEnergyLimit(1*GeV,"proton");
-   SetLowKineticEnergyLimit(1*GeV,"anti_proton");
-   SetLowKineticEnergyLimit(200*MeV,"e-");
-   SetLowKineticEnergyLimit(200*MeV,"e+");
-
-   //set the model high limit of the angle expressed in [Lindhard angle] units
-   SetLindhardAngleNumberHighLimit(100.,"proton");
-   SetLindhardAngleNumberHighLimit(100.,"anti_proton");
-   SetLindhardAngleNumberHighLimit(100.,"e-");
-   SetLindhardAngleNumberHighLimit(100.,"e+");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

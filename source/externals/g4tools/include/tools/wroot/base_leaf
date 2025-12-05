@@ -4,10 +4,6 @@
 #ifndef tools_wroot_base_leaf
 #define tools_wroot_base_leaf
 
-#ifdef TOOLS_MEM
-#include "../mem"
-#endif
-
 #include "named"
 
 #include "cids"
@@ -18,13 +14,6 @@ namespace wroot {
 
 class base_leaf : public virtual ibo {
   static unsigned int kNullTag() {return 0;}
-#ifdef TOOLS_MEM
-public:
-  static const std::string& s_class() {
-    static const std::string s_v("tools::wroot::base_leaf");
-    return s_v;
-  }
-#endif
 public:
   static cid id_class() {return base_leaf_cid();}
   virtual void* cast(cid a_class) const {
@@ -34,10 +23,6 @@ public:
   virtual cid id_cls() const {return id_class();}
 public: //ibo
   virtual bool stream(buffer& a_buffer) const {
-    //::printf("debug : base_leaf::stream %s\n",m_name.c_str());
-    //::printf("debug :   m_length %d\n",m_length);
-    //::printf("debug :   m_is_range %d\n",m_is_range);
-    //::printf("debug :   m_leaf_count %lu\n",m_leaf_count);
     unsigned int c;
     if(!a_buffer.write_version(2,c)) return false;
     if(!Named_stream(a_buffer,m_name,m_title)) return false;
@@ -71,14 +56,8 @@ public:
   ,m_leaf_count(0)
   ,m_is_range(false)
   {
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
   }
   virtual ~base_leaf(){
-#ifdef TOOLS_MEM
-    mem::decrement(s_class().c_str());
-#endif
   }
 protected:
   base_leaf(const base_leaf& a_from)
@@ -92,7 +71,6 @@ protected:
   base_leaf& operator=(const base_leaf&){return *this;}
 public:
   const std::string& name() const {return m_name;}
-  //const std::string& title() const {return m_title;}
   void set_title(const std::string& a_value) {m_title = a_value;}
   uint32 length() const {return m_length;}
   void set_length(uint32 a_value) {m_length = a_value;}

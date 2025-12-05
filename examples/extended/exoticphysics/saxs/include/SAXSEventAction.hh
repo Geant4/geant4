@@ -24,9 +24,7 @@
 // ********************************************************************
 //
 /// \file SAXSEventAction.hh
-/// \brief Implementation of the SAXSEventAction class
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// \brief Definition of the SAXSEventAction class
 
 #ifndef SAXSEventAction_h
 #define SAXSEventAction_h 1

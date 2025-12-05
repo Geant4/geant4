@@ -66,7 +66,6 @@ vis_cflags="-DG4UI_USE_TCSH"
 vis_libs="-lG4Tree \
 -lG4FR \
 -lG4GMocren \
--lG4visHepRep \
 -lG4RayTracer \
 -lG4VRML \
 -lG4ToolsSG \
@@ -126,7 +125,8 @@ libs="-lG4interfaces \
 -lG4event \
 -lG4tracking \
 -lG4parmodels \
--lG4processes \
+-lG4processes_hadronic \
+-lG4processes_core
 -lG4digits_hits \
 -lG4track \
 -lG4particles \
@@ -219,15 +219,6 @@ if test "x${have_qt}" = "xyes" ; then
   vis_cflags="${vis_cflags} \
   -DG4UI_USE_QT -DG4VIS_USE_OPENGLQT -DG4VIS_USE_TOOLSSG_QT_GLES @G4_QT_CFLAGS@"
   geant4_uses_opengl="yes"
-fi
-
-# - QT3D
-have_qt3d="@G4_BUILTWITH_QT3D@"
-feature_list="${feature_list} qt3d[${have_qt3d}]"
-
-if test "x${have_qt3d}" = "xyes" ; then
-  vis_libs="-lG4visQt3D ${vis_libs}"
-  vis_cflags="${vis_cflags} -DG4UI_USE_QT3D"
 fi
 
 # - Motif
@@ -676,9 +667,6 @@ while test $# -gt 0 ; do
           ;;
         qt)
           echo ${have_qt}
-          ;;
-        qt3d)
-          echo ${have_qt3d}
           ;;
         vtk)
           echo ${have_vtk}

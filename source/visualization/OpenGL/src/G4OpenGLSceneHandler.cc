@@ -302,6 +302,12 @@ void G4OpenGLSceneHandler::PreAddSolid
 void G4OpenGLSceneHandler::BeginPrimitives
 (const G4Transform3D& objectTransformation)
 {
+  glClearColor (0.0, 0.0, 0.0, 0.0);
+  glClearDepth (1.0);
+  glDisable (GL_LINE_SMOOTH);
+  glDisable (GL_POLYGON_SMOOTH);
+  glDisable (GL_POINT_SMOOTH);
+  
   G4VSceneHandler::BeginPrimitives (objectTransformation);
 }
 
@@ -313,6 +319,12 @@ void G4OpenGLSceneHandler::EndPrimitives ()
 void G4OpenGLSceneHandler::BeginPrimitives2D
 (const G4Transform3D& objectTransformation)
 {
+  glClearColor (0.0, 0.0, 0.0, 0.0);
+  glClearDepth (1.0);
+  glDisable (GL_LINE_SMOOTH);
+  glDisable (GL_POLYGON_SMOOTH);
+  glDisable (GL_POINT_SMOOTH);
+
   G4VSceneHandler::BeginPrimitives2D (objectTransformation);
 }
 
@@ -432,8 +444,7 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polymarker& polymarker)
     switch (polymarker.GetMarkerType()) {
     default:
     case G4Polymarker::dots:
-        size = 1.;
-	[[fallthrough]];  // Fall through to circles
+        [[fallthrough]];  // Fall through to circles
     case G4Polymarker::circles:
       nSides = GetNoOfSides(fpVisAttribs);
       startPhi = 0.;
@@ -467,14 +478,17 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polymarker& polymarker)
 
     pGLViewer->ChangePointSize(size);
 
-    //Antialiasing only for circles
     switch (polymarker.GetMarkerType()) {
-    default:
-    case G4Polymarker::dots:
-    case G4Polymarker::circles:
-      glEnable (GL_POINT_SMOOTH); break;
-    case G4Polymarker::squares:
-      glDisable (GL_POINT_SMOOTH); break;
+      default:
+      case G4Polymarker::dots:
+        [[fallthrough]];  // Fall through to circles
+      case G4Polymarker::circles:
+        if (fpViewer->GetViewParameters().IsDotsSmooth()) {
+          glEnable (GL_POINT_SMOOTH);
+        }
+        break;
+      case G4Polymarker::squares:
+        break;
     }
     glBegin (GL_POINTS);
     for (size_t iPoint = 0; iPoint < polymarker.size (); iPoint++) {

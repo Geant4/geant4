@@ -23,13 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file medical/dna/range/include/Run.hh
+/// \file Run.hh
 /// \brief Definition of the Run class
-//
-// $Id: Run.hh 71375 2013-06-14 07:39:33Z maire $
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef Run_h
 #define Run_h 1
@@ -40,42 +35,30 @@
 #include "G4Run.hh"
 #include "G4THitsMap.hh"
 
-#include <vector>
-
 class DetectorConstruction;
 class G4ParticleDefinition;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class Run : public G4Run
-{
-  public:
-    Run(const DetectorConstruction* /*detector*/);
-    ~Run();
-
-  public:
-    void SetPrimary(G4ParticleDefinition* particle, G4double energy);
-
-    G4double GetEdep() const { return fEdeposit; };
-
-    virtual void RecordEvent(const G4Event*);
-    G4THitsMap<G4double>* GetHitsMap() { return fRunMap; }
-    G4THitsMap<G4double>* GetHitsMap(const G4String& detName, const G4String& colName);
-    G4THitsMap<G4double>* GetHitsMap(const G4String& fullName);
-    void DumpAllScorer();
-
-    virtual void Merge(const G4Run*);
-    void EndOfRun();
-
-  private:
-    // const DetectorConstruction*  fDetector;
-    G4ParticleDefinition* fParticle;
-    G4double fEkin;
-    G4double fEdeposit;
-
-    G4String fCollName;
-    // G4int fCollID;
-    G4THitsMap<G4double>* fRunMap;
+class Run final : public G4Run {
+public:
+  Run() = default;
+  ~Run() override = default;
+  void SetPrimary(G4ParticleDefinition *particle, G4double energy);
+  G4double GetEdep() const { return fEdeposit; };
+  void RecordEvent(const G4Event *) override;
+  G4THitsMap<G4double> *GetHitsMap() const { return fRunMap; }
+  G4THitsMap<G4double> *GetHitsMap(const G4String &detName, const G4String &colName) const;
+  G4THitsMap<G4double> *GetHitsMap(const G4String &fullName) const;
+  void DumpAllScorer() const;
+  void Merge(const G4Run *) override;
+  static void EndOfRun();
+private:
+  G4ParticleDefinition *fParticle = nullptr;
+  G4double fEkin = 0.;
+  G4double fEdeposit = 0.;
+  G4String fCollName = "";
+  G4THitsMap<G4double> *fRunMap = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

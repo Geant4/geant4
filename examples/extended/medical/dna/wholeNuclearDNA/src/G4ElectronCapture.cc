@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file G4ElectronCapture.cc
+/// \brief Implementation of the G4ElectronCapture class
+
 //---------------------------------------------------------------------------
 //
 // ClassName:   G4ElectronCapture
@@ -43,8 +46,6 @@
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //
-/// \file G4ElectronCapture.cc
-/// \brief Implementation of the G4ElectronCapture class
 
 #include "G4ElectronCapture.hh"
 

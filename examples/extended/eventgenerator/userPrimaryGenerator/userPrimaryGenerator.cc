@@ -23,13 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file eventgenerator/userPrimaryGenerator/userPrimaryGenerator.cc
+/// \file userPrimaryGenerator.cc
 /// \brief Main program of the eventgenerator/userPrimaryGenerator example
-//
-//
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "DetectorConstruction.hh"
 #include "PhysicsList.hh"

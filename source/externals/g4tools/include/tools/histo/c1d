@@ -82,8 +82,8 @@ public:
       return m_histo->fill(aX,aW);
     } else {
       if(m_xs.size()) {
-        m_lower_x = mn<double>(aX,m_lower_x);
-        m_upper_x = mx<double>(aX,m_upper_x);
+        m_lower_x = min_of<double>(aX,m_lower_x);
+        m_upper_x = max_of<double>(aX,m_upper_x);
       } else {
         m_lower_x = aX;
         m_upper_x = aX;

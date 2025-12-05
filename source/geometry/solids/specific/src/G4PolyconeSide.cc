@@ -26,7 +26,7 @@
 // Implementation of G4PolyconeSide, the face representing
 // one conical side of a polycone
 //
-// Author: David C. Williams (davidw@scipp.ucsc.edu)
+// Author: David C. Williams (UCSC), 1998
 // --------------------------------------------------------------------
 
 #include "G4PolyconeSide.hh"
@@ -94,9 +94,13 @@ G4PolyconeSide::G4PolyconeSide( const G4PolyconeSideRZ* prevRZ,
     // Set phi values to our conventions
     //
     while (deltaPhi < 0.0)    // Loop checking, 13.08.2015, G.Cosmo
-     deltaPhi += twopi;
+    {
+      deltaPhi += twopi;
+    }
     while (startPhi < 0.0)    // Loop checking, 13.08.2015, G.Cosmo
-     startPhi += twopi;
+    {
+      startPhi += twopi;
+    }
     
     //
     // Calculate corner coordinates
@@ -183,7 +187,7 @@ G4PolyconeSide::G4PolyconeSide( __void__& )
 G4PolyconeSide::~G4PolyconeSide()
 {
   delete cone;
-  if (phiIsOpen)  { delete [] corners; }
+  if (phiIsOpen) { delete [] corners; }
 }
 
 // Copy constructor
@@ -199,10 +203,10 @@ G4PolyconeSide::G4PolyconeSide( const G4PolyconeSide& source )
 //
 G4PolyconeSide& G4PolyconeSide::operator=( const G4PolyconeSide& source )
 {
-  if (this == &source)  { return *this; }
+  if (this == &source) { return *this; }
 
   delete cone;
-  if (phiIsOpen)  { delete [] corners; }
+  if (phiIsOpen) { delete [] corners; }
   
   CopyStuff( source );
   
@@ -275,7 +279,7 @@ G4bool G4PolyconeSide::Intersect( const G4ThreeVector& p,
   // Check for two possible intersections
   //
   G4int nside = cone->LineHitsCone( p, v, &s1, &s2 );
-  if (nside == 0) return false;
+  if (nside == 0) { return false; }
     
   //
   // Check the first side first, since it is (supposed to be) closest
@@ -302,7 +306,7 @@ G4bool G4PolyconeSide::Intersect( const G4ThreeVector& p,
       // ask if the normal is correct near p.
       //
       G4double pr = p.perp();
-      if (pr < DBL_MIN) pr = DBL_MIN;
+      if (pr < DBL_MIN) { pr = DBL_MIN; }
       G4ThreeVector pNormal( rNorm*p.x()/pr, rNorm*p.y()/pr, zNorm );
       if (normSign*v.dot(pNormal) > 0)
       {
@@ -324,8 +328,10 @@ G4bool G4PolyconeSide::Intersect( const G4ThreeVector& p,
           }
         }
       }
-      else 
+      else
+      { 
         distFromSurface = s1;
+      }
       
       //
       // Accept positive distances
@@ -338,7 +344,8 @@ G4bool G4PolyconeSide::Intersect( const G4ThreeVector& p,
     }
   }  
   
-  if (nside==1) return false;
+  if (nside==1) { return false;
+}
   
   //
   // Well, try the second hit
@@ -353,7 +360,7 @@ G4bool G4PolyconeSide::Intersect( const G4ThreeVector& p,
     if (normSign*v.dot(normal) > 0)
     {
       G4double pr = p.perp();
-      if (pr < DBL_MIN) pr = DBL_MIN;
+      if (pr < DBL_MIN) { pr = DBL_MIN; }
       G4ThreeVector pNormal( rNorm*p.x()/pr, rNorm*p.y()/pr, zNorm );
       if (normSign*v.dot(pNormal) > 0)
       {
@@ -368,8 +375,10 @@ G4bool G4PolyconeSide::Intersect( const G4ThreeVector& p,
           }
         }
       }
-      else 
+      else
+      { 
         distFromSurface = s2;
+      }
       
       if (s2 > 0)
       {
@@ -401,10 +410,11 @@ G4double G4PolyconeSide::Distance( const G4ThreeVector& p, G4bool outgoing )
     //
     // Good answer
     //
-    if (distOut2 > 0) 
+    if (distOut2 > 0)
+    { 
       return std::sqrt( distFrom*distFrom + distOut2 );
-    else 
-      return std::fabs(distFrom);
+    }
+    return std::fabs(distFrom);
   }
   
   //
@@ -413,11 +423,11 @@ G4double G4PolyconeSide::Distance( const G4ThreeVector& p, G4bool outgoing )
   distFrom = normSign*DistanceAway( p,  true, distOut2 );
   if (distFrom > -0.5*kCarTolerance)
   {
-
-    if (distOut2 > 0) 
+    if (distOut2 > 0)
+    { 
       return std::sqrt( distFrom*distFrom + distOut2 );
-    else
-      return std::fabs(distFrom);
+    }
+    return std::fabs(distFrom);
   }
   
   return kInfinity;
@@ -441,11 +451,15 @@ EInside G4PolyconeSide::Inside( const G4ThreeVector& p,
   //
   if ( (std::fabs(edgeRZnorm) < tolerance)
     && (distOut2< tolerance*tolerance) )
+  {
     return kSurface;
-  else if (edgeRZnorm < 0)
+  }
+  if (edgeRZnorm < 0)
+  {
     return kInside;
-  else
-    return kOutside;
+  }
+  
+  return kOutside;
 }
 
 // Normal
@@ -453,7 +467,7 @@ EInside G4PolyconeSide::Inside( const G4ThreeVector& p,
 G4ThreeVector G4PolyconeSide::Normal( const G4ThreeVector& p,
                                             G4double* bestDistance )
 {
-  if (p == G4ThreeVector(0.,0.,0.))  { return p; }
+  if (p == G4ThreeVector(0.,0.,0.)) { return p; }
 
   G4double dFrom, dOut2;
   
@@ -485,7 +499,9 @@ G4double G4PolyconeSide::Extent( const G4ThreeVector axis )
   {
     G4double phi = GetPhi(axis);
     while( phi < startPhi )    // Loop checking, 13.08.2015, G.Cosmo
+    {
       phi += twopi;
+    }
     
     if (phi > deltaPhi+startPhi)
     {
@@ -505,9 +521,9 @@ G4double G4PolyconeSide::Extent( const G4ThreeVector axis )
                cd = axis.dot(c),
                dd = axis.dot(d);
       
-      if (bd > ad) ad = bd;
-      if (cd > ad) ad = cd;
-      if (dd > ad) ad = dd;
+      if (bd > ad) { ad = bd; }
+      if (cd > ad) { ad = cd; }
+      if (dd > ad) { ad = dd; }
       
       return ad;
     }
@@ -521,7 +537,7 @@ G4double G4PolyconeSide::Extent( const G4ThreeVector axis )
   G4double a = aPerp*r[0] + axis.z()*z[0];
   G4double b = aPerp*r[1] + axis.z()*z[1];
   
-  if (b > a) a = b;
+  if (b > a) { a = b; }
   
   return a;
 }
@@ -550,10 +566,14 @@ void G4PolyconeSide::CalculateExtent( const EAxis axis,
   // defined in meshdefs.hh
   //
   G4int numPhi = (G4int)(deltaPhi/kMeshAngleDefault) + 1;
-  if (numPhi < kMinMeshSections) 
+  if (numPhi < kMinMeshSections)
+  { 
     numPhi = kMinMeshSections;
+  }
   else if (numPhi > kMaxMeshSections)
+  {
     numPhi = kMaxMeshSections;
+  }
     
   G4double sigPhi = deltaPhi/numPhi;
   
@@ -603,7 +623,7 @@ void G4PolyconeSide::CalculateExtent( const EAxis axis,
         //
         // Transition was convex: build transition piece
         //
-        if (r[0] > DBL_MIN) r2 = r[0]*rFudge;
+        if (r[0] > DBL_MIN) { r2 = r[0]*rFudge; }
       }
       else
       {
@@ -646,7 +666,7 @@ void G4PolyconeSide::CalculateExtent( const EAxis axis,
         //
         // Transition was convex: build transition piece
         //
-        if (r[0] > DBL_MIN) r2 = r[0];
+        if (r[0] > DBL_MIN) { r2 = r[0]; }
       }
       else
       {
@@ -682,8 +702,8 @@ void G4PolyconeSide::CalculateExtent( const EAxis axis,
     z0 = z[0];
     z1 = z[1];
     
-    if (prevZS > DBL_MIN) r0 *= rFudge;
-    if (nextZS > DBL_MIN) r1 *= rFudge;
+    if (prevZS > DBL_MIN) { r0 *= rFudge; }
+    if (nextZS > DBL_MIN) { r1 *= rFudge; }
   }
   
   //
@@ -708,7 +728,7 @@ void G4PolyconeSide::CalculateExtent( const EAxis axis,
   do    // Loop checking, 13.08.2015, G.Cosmo
   {
     phi += sigPhi;
-    if (numPhi == 1) phi = startPhi+deltaPhi;  // Try to avoid roundoff
+    if (numPhi == 1) { phi = startPhi+deltaPhi; } // Try to avoid roundoff
     cosPhi = std::cos(phi), 
     sinPhi = std::sin(phi);
     
@@ -896,7 +916,7 @@ G4double G4PolyconeSide::DistanceAway( const G4ThreeVector& p,
   //
   // Change sign of r if opposite says we should
   //
-  if (opposite) rx = -rx;
+  if (opposite) { rx = -rx; }
   
   //
   // Calculate return value
@@ -912,7 +932,9 @@ G4double G4PolyconeSide::DistanceAway( const G4ThreeVector& p,
   {
     distOutside2 = q*q;
     if (edgeRZnorm != nullptr)
+    {
       *edgeRZnorm = deltaR*rNormEdge[0] + deltaZ*zNormEdge[0];
+    }
   }
   else if (q > length)
   {
@@ -927,7 +949,7 @@ G4double G4PolyconeSide::DistanceAway( const G4ThreeVector& p,
   else
   {
     distOutside2 = 0.;
-    if (edgeRZnorm != nullptr) *edgeRZnorm = answer;
+    if (edgeRZnorm != nullptr) { *edgeRZnorm = answer; }
   }
 
   if (phiIsOpen)
@@ -937,7 +959,9 @@ G4double G4PolyconeSide::DistanceAway( const G4ThreeVector& p,
     //
     G4double phi = GetPhi(p);
     while( phi < startPhi )    // Loop checking, 13.08.2015, G.Cosmo
+    {
       phi += twopi;
+    }
     
     if (phi > startPhi+deltaPhi)
     {
@@ -946,10 +970,12 @@ G4double G4PolyconeSide::DistanceAway( const G4ThreeVector& p,
       //
       G4double d1 = phi-startPhi-deltaPhi;
       while( phi > startPhi )    // Loop checking, 13.08.2015, G.Cosmo
+      {
         phi -= twopi;
+      }
       G4double d2 = startPhi-phi;
       
-      if (d2 < d1) d1 = d2;
+      if (d2 < d1) { d1 = d2; }
       
       //
       // Add result to our distance
@@ -985,7 +1011,7 @@ G4double G4PolyconeSide::DistanceAway( const G4ThreeVector& p,
   // Change sign of r if we should
   //
   G4int part = 1;
-  if (rx < 0) part = -1;
+  if (rx < 0) { part = -1; }
   
   //
   // Calculate return value
@@ -1018,7 +1044,7 @@ G4double G4PolyconeSide::DistanceAway( const G4ThreeVector& p,
   else
   {
     distOutside2 = 0.;
-    if (edgeRZnorm != nullptr) *edgeRZnorm = answer;
+    if (edgeRZnorm != nullptr) { *edgeRZnorm = answer; }
   }
 
   if (phiIsOpen)
@@ -1028,7 +1054,9 @@ G4double G4PolyconeSide::DistanceAway( const G4ThreeVector& p,
     //
     G4double phi = GetPhi(p);
     while( phi < startPhi )    // Loop checking, 13.08.2015, G.Cosmo
+    {
       phi += twopi;
+    }
     
     if (phi > startPhi+deltaPhi)
     {
@@ -1037,10 +1065,12 @@ G4double G4PolyconeSide::DistanceAway( const G4ThreeVector& p,
       //
       G4double d1 = phi-startPhi-deltaPhi;
       while( phi > startPhi )    // Loop checking, 13.08.2015, G.Cosmo
+      {
         phi -= twopi;
+      }
       G4double d2 = startPhi-phi;
       
-      if (d2 < d1) d1 = d2;
+      if (d2 < d1) { d1 = d2; }
       
       //
       // Add result to our distance
@@ -1072,7 +1102,7 @@ G4bool G4PolyconeSide::PointOnCone( const G4ThreeVector& hit,
   //
   // Check radial/z extent, as appropriate
   //
-  if (!cone->HitOn( rx, hit.z() )) return false;
+  if (!cone->HitOn( rx, hit.z() )) { return false; }
   
   if (phiIsOpen)
   {
@@ -1084,9 +1114,11 @@ G4bool G4PolyconeSide::PointOnCone( const G4ThreeVector& hit,
     //
     G4double phi = GetPhi(hit);
     while( phi < startPhi-phiTolerant )   // Loop checking, 13.08.2015, G.Cosmo
+    {
       phi += twopi;
+    }
     
-    if (phi > startPhi+deltaPhi+phiTolerant) return false;
+    if (phi > startPhi+deltaPhi+phiTolerant) { return false; }
     
     if (phi > startPhi+deltaPhi-phiTolerant)
     {
@@ -1098,7 +1130,7 @@ G4bool G4PolyconeSide::PointOnCone( const G4ThreeVector& hit,
               qb = qx - corners[3];
       G4ThreeVector qacb = qa.cross(qb);
       
-      if (normSign*qacb.dot(v) < 0) return false;
+      if (normSign*qacb.dot(v) < 0) { return false; }
     }
     else if (phi < phiTolerant)
     {
@@ -1107,17 +1139,21 @@ G4bool G4PolyconeSide::PointOnCone( const G4ThreeVector& hit,
               qb = qx - corners[0];
       G4ThreeVector qacb = qa.cross(qb);
       
-      if (normSign*qacb.dot(v) < 0) return false;
+      if (normSign*qacb.dot(v) < 0) { return false; }
     }
   }
   
   //
   // We have a good hit! Calculate normal
   //
-  if (rx < DBL_MIN) 
+  if (rx < DBL_MIN)
+  { 
     normal = G4ThreeVector( 0, 0, zNorm < 0 ? -1 : 1 );
+  }
   else
+  {
     normal = G4ThreeVector( rNorm*hit.x()/rx, rNorm*hit.y()/rx, zNorm );
+  }
   return true;
 }
 

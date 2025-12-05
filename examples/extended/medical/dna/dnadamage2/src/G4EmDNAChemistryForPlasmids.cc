@@ -23,15 +23,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
+/// \file G4EmDNAChemistryForPlasmids.cc
+/// \brief Implementation of the G4EmDNAChemistryForPlasmids class
+///
+/// Implementation of the Chemistry parameters with DNA reactions
+
 // G4EmDNAChemistryForPlasmids.cc
 //
 //  Created on: Feb 10, 2021
 //      Authors: J. Naoki D. Kondo
 //               W. G. Shin, J. Ramos-Mendez and B. Faddegon
 //
-/// \file G4EmDNAChemistryForPlasmids.cc
-/// \brief Implementation of the Chemistry parameters with DNA reactions
 
 #include "G4EmDNAChemistryForPlasmids.hh"
 

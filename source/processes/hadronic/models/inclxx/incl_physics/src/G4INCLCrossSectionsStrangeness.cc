@@ -45,6 +45,7 @@
 #include "G4INCLCrossSectionsStrangeness.hh"
 #include "G4INCLKinematicsUtils.hh"
 #include "G4INCLParticleTable.hh"
+#include "G4INCLRandom.hh"
 // #include <cassert>
 
 namespace G4INCL {
@@ -91,7 +92,7 @@ namespace G4INCL {
             return CrossSectionsMultiPions::piNTot(p1,p2);
         } else if((p1->isNucleon() && p2->isEta()) ||
                   (p1->isEta() && p2->isNucleon())) {
-            inelastic = CrossSectionsMultiPionsAndResonances::etaNToPiN(p1,p2) + CrossSectionsMultiPionsAndResonances::etaNToPiPiN(p1,p2);
+            inelastic = CrossSectionsMultiPionsAndResonances::etaNToPiN(p1,p2) + CrossSectionsMultiPionsAndResonances::etaNToPiPiN(p1,p2) + etaNToLK(p1,p2) + etaNToSK(p1,p2);
         } else if((p1->isNucleon() && p2->isOmega()) ||
                   (p1->isOmega() && p2->isNucleon())) {
             inelastic = CrossSectionsMultiPionsAndResonances::omegaNInelastic(p1,p2);
@@ -1999,6 +2000,182 @@ namespace G4INCL {
             sigma = 4.75 * 26.8*std::pow(pLab-0.85,4.9)/std::pow(pLab,6.34);
         else
             sigma = 4.25 * 26.8*std::pow(pLab-0.85,4.9)/std::pow(pLab,6.34);
+        
+        return sigma;
+    }
+ 
+ 
+    G4double CrossSectionsStrangeness::etaNToLK(Particle const * const particle1, Particle const * const particle2) {
+        //
+        //     Eta-Nucleon producing K Lambda cross sections
+        //
+//        assert((particle1->isNucleon() && particle2->isEta()) || (particle1->isEta() && particle2->isNucleon()));
+                                
+        G4double sigma=0.;  
+
+        const Particle *eta;
+        const Particle *nucleon;
+        
+        if (particle1->isEta()) {
+            eta = particle1;
+            nucleon = particle2;
+        }
+        else {
+            eta = particle2;
+            nucleon = particle1;
+        }
+        const G4double pLab = KinematicsUtils::momentumInLab(eta, nucleon); // MeV
+        
+        if (pLab < 550.)
+            return 0.;
+        else if (pLab < 700. )
+            sigma = 1.3288E-7*std::pow(pLab,3.) - 2.6243E-4*std::pow(pLab,2.) + 1.7140E-1*pLab - 3.6408E+1;
+        else if (pLab < 1400. )
+            sigma = -3.7606E-17*std::pow(pLab,6.) + 2.5954E-13*std::pow(pLab,5.) - 7.4491E-10*std::pow(pLab,4.) + 1.1391E-6*std::pow(pLab,3.) - 9.8028E-4*std::pow(pLab,2.) + 4.5100E-1*pLab - 8.5862E+1;
+        else
+            sigma = 0.9460023; // value at pLab=1400 MeV (fit of XS from Kamano - private communication based on PRC88(2013)035209)
+
+        return sigma;
+    }
+
+
+    G4double CrossSectionsStrangeness::omegaNToLK(Particle const * const particle1, Particle const * const particle2) {
+        //
+        //     Omega-Nucleon producing K Lambda cross sections
+        //
+//        assert((particle1->isNucleon() && particle2->isOmega()) || (particle1->isOmega() && particle2->isNucleon()));
+        
+        G4double ECM=KinematicsUtils::totalEnergyInCM(particle1, particle2);
+        
+        G4double massPiZero=ParticleTable::getINCLMass(PiZero);
+        
+        G4double massomega;
+        G4double massnucleon;
+        G4double pCM_omega;
+        G4double pCM_pion;
+        G4double pLab_pion;
+        
+        G4double sigma=0.;  
+     
+        if (particle1->isOmega()) {
+            massomega=particle1->getMass();
+            massnucleon=particle2->getMass();
+        }
+        else {
+            massomega=particle2->getMass();
+            massnucleon=particle1->getMass();
+        }
+        pCM_omega=KinematicsUtils::momentumInCM(ECM, massomega, massnucleon);        
+        pCM_pion=KinematicsUtils::momentumInCM(ECM, massPiZero, massnucleon);        
+        pLab_pion=KinematicsUtils::momentumInLab(ECM*ECM, massPiZero, massnucleon);
+
+        const ThreeVector mom_pion(0.0, 0.0, pLab_pion);
+        const ThreeVector pos(0.0, 0.0, 0.0);
+        Particle *pion = new Particle(PiZero, mom_pion, pos); 
+
+        if (particle1->isNucleon()) sigma = NpiToLK(pion, particle1) * (pCM_pion/pCM_omega);  
+        if (particle2->isNucleon()) sigma = NpiToLK(pion, particle2) * (pCM_pion/pCM_omega);  
+
+        //if (sigma > omegaNInelastic(particle1, particle2) || (pLab_omega < 200.)) {
+        if (sigma > omegaNInelastic(particle1, particle2)) {
+            //sigma = omegaNInelastic(particle1, particle2);
+            sigma = 0.;
+         }  
+  
+        return sigma;
+    }
+
+
+    G4double CrossSectionsStrangeness::etaNToSK(Particle const * const particle1, Particle const * const particle2) {
+        //
+        //     Eta-Nucleon producing K Sigma cross sections
+        //
+//        assert((particle1->isNucleon() && particle2->isEta()) || (particle1->isEta() && particle2->isNucleon()));
+                
+        G4double sigma=0.;  
+
+        const Particle *eta;
+        const Particle *nucleon;
+        
+        if (particle1->isEta()) {
+            eta = particle1;
+            nucleon = particle2;
+        }
+        else {
+            eta = particle2;
+            nucleon = particle1;
+        }
+        const G4double pLab = KinematicsUtils::momentumInLab(eta, nucleon); // MeV
+        
+        if (pLab < 730.)
+            return 0.;
+        else if (pLab < 1400. )
+            sigma = -7.9949212022E-18*std::pow(pLab,6.) + 4.8776384248E-14*std::pow(pLab,5.) - 1.2005766956E-10*std::pow(pLab,4.) + 1.5072180697E-7*std::pow(pLab,3.) - 9.9473179699E-5*std::pow(pLab,2.) + 3.1111481306E-2*pLab - 3.0616598048;
+        else
+            sigma = 0.02713; // value at pLab=1400 MeV (fit of XS from Kamano - private communication based on PRC88(2013)035209)
+
+        sigma=3.*sigma; // Sigma K = (Sigma_0 + K+) + (Sigma_+ + K0) = 3 * (Sigma_0 + K+)
+
+        return sigma;
+    }
+
+
+    G4double CrossSectionsStrangeness::omegaNToSK(Particle const * const particle1, Particle const * const particle2) {
+        //
+        //     Omega-Nucleon producing K Sigma cross sections
+        //
+//        assert((particle1->isNucleon() && particle2->isOmega()) || (particle1->isOmega() && particle2->isNucleon()));
+        
+        G4double ECM=KinematicsUtils::totalEnergyInCM(particle1, particle2);
+        
+        G4double massPiZero=ParticleTable::getINCLMass(PiZero);
+        
+        G4double massomega;
+        G4double massnucleon;
+        G4double pCM_omega;
+        G4double pCM_pion;
+        G4double pLab_pion;
+        
+        G4double sigma=0.;  
+     
+        if (particle1->isOmega()) {
+            massomega=particle1->getMass();
+            massnucleon=particle2->getMass();
+        }
+        else {
+            massomega=particle2->getMass();
+            massnucleon=particle1->getMass();
+        }
+        pCM_omega=KinematicsUtils::momentumInCM(ECM, massomega, massnucleon);        
+        pCM_pion=KinematicsUtils::momentumInCM(ECM, massPiZero, massnucleon);        
+        pLab_pion=KinematicsUtils::momentumInLab(ECM*ECM, massPiZero, massnucleon);
+
+        const ThreeVector mom_pion(0.0, 0.0, pLab_pion);
+        const ThreeVector pos(0.0, 0.0, 0.0);
+        Particle *pion = new Particle(PiZero, mom_pion, pos); 
+
+        if (particle1->isNucleon()) sigma = 2* NpiToSK(pion, particle1) * (pCM_pion/pCM_omega);  // "2*" due to "Sigma_0/+ + K+/0" (omega p) AND "Sigma_0/- K0/+" (omega n)
+        if (particle2->isNucleon()) sigma = 2* NpiToSK(pion, particle2) * (pCM_pion/pCM_omega);  
+
+        //if (sigma > omegaNInelastic(particle1, particle2) || (pLab_omega < 200.)) {
+        if (sigma > omegaNInelastic(particle1, particle2)) {
+            //sigma = omegaNInelastic(particle1, particle2);
+            sigma = 0.;
+         }  
+  
+        return sigma;
+    }
+    
+  
+    G4double CrossSectionsStrangeness::omegaNToPiPiN(Particle const * const particle1, Particle const * const particle2) {
+        //
+        //     Omega-Nucleon producing 2 Pions cross sections
+        //
+//        assert((particle1->isNucleon() && particle2->isOmega()) || (particle1->isOmega() && particle2->isNucleon()));
+        
+        G4double sigma=0.;        
+        
+        sigma = omegaNInelastic(particle1,particle2) - omegaNToPiN(particle1,particle2) - omegaNToLK(particle1,particle2) - omegaNToSK(particle1,particle2);
         
         return sigma;
     }

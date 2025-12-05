@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file BoundedBrownianAction.cc
+/// \brief Implementation of the BoundedBrownianAction class
 
 #include "BoundedBrownianAction.hh"
 

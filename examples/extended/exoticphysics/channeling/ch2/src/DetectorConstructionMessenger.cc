@@ -24,11 +24,7 @@
 // ********************************************************************
 //
 /// \file DetectorConstructionMessenger.cc
-/// \brief Implementation of the DetectorConstruction messenger class
-//
-//
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// \brief Implementation of the DetectorConstructionMessenger class
 
 #include "DetectorConstructionMessenger.hh"
 #include "DetectorConstruction.hh"
@@ -141,6 +137,14 @@ fDetector(det)
     fPotentialPathCmd->SetParameterName("channelingDataPath",false);
     fPotentialPathCmd->SetDefaultValue("");
 
+    fCrystalInternalGeometryPathCmd =
+        new G4UIcmdWithAString("/crystal/setCrystalInternalGeometryPath",this);
+    fCrystalInternalGeometryPathCmd->
+             SetGuidance("Set the path where to find the available data "
+                         "for the crystal internal geometry");
+    fCrystalInternalGeometryPathCmd->SetParameterName("CrystalInternalGeometryPath",false);
+    fCrystalInternalGeometryPathCmd->SetDefaultValue("");
+
     fChannelingModelCmd = new G4UIcmdWithABool("/crystal/setChannelingModel", this);
     fChannelingModelCmd->SetGuidance("Activate/deactivate G4ChannelingFastSimModel");
     fChannelingModelCmd->SetParameterName("ChannelingModel",true);
@@ -151,6 +155,14 @@ fDetector(det)
     fRadModelCmd->SetParameterName("ActivateRadiationModel",true);
     fRadModelCmd->SetDefaultValue(false);
 
+    fVirtualCollimatorHalfSize =
+        new G4UIcmdWithADoubleAndUnit("/crystal/setVirtualCollimatorHalfSize",this);
+    fVirtualCollimatorHalfSize->SetGuidance("Set virtual collimator angular half size");
+    fVirtualCollimatorHalfSize->SetUnitCategory("Angle");
+    fVirtualCollimatorHalfSize->SetRange("VirtualCollimatorHalfSize > 0");
+    fVirtualCollimatorHalfSize->SetParameterName("VirtualCollimatorHalfSize",false);
+    fVirtualCollimatorHalfSize->AvailableForStates(G4State_PreInit,G4State_Idle);
+
     fMinPhotonEnergyCmd =
             new G4UIcmdWithADoubleAndUnit("/crystal/setMinPhotonEnergy",this);
     fMinPhotonEnergyCmd->
@@ -160,7 +172,29 @@ fDetector(det)
     fMinPhotonEnergyCmd->SetUnitCategory("Energy");
     fMinPhotonEnergyCmd->SetRange("MinPhotonEnergy > 0");
     fMinPhotonEnergyCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
+    fMaxPhotonEnergySpectrumCmd =
+        new G4UIcmdWithADoubleAndUnit("/crystal/MaxBKPhotonEnergyInSpectrum",this);
+    fMaxPhotonEnergySpectrumCmd->
+        SetGuidance("Set the high energy threshold for the spectrum of"
+                    "Baier-Katkov pseudophotons to be scored "
+                    "(only scoring, does not influence simulations)");
+    fMaxPhotonEnergySpectrumCmd->SetParameterName("MaxBKPhotonEnergyInSpectrum",false);
+    fMaxPhotonEnergySpectrumCmd->SetUnitCategory("Energy");
+    fMaxPhotonEnergySpectrumCmd->SetRange("MaxBKPhotonEnergyInSpectrum > 0");
+    fMaxPhotonEnergySpectrumCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
     
+    fNBinsSpectrumCmd =
+        new G4UIcmdWithAnInteger("/crystal/NBinsInSpectrum",this);
+    fNBinsSpectrumCmd->
+        SetGuidance("Set the number of bins written in the spectrum of"
+                    "Baier-Katkov pseudophotons to be scored "
+                    "(only scoring, does not influence simulations)."
+                    "Note: the bins are not equidistant.");
+    fNBinsSpectrumCmd->SetParameterName("NBinsInSpectrum",false);
+    fNBinsSpectrumCmd->SetRange("NBinsInSpectrum>1");
+    fNBinsSpectrumCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
     fSamplingPhotonsNumberCmd =
             new G4UIcmdWithAnInteger("/crystal/setSamplingPhotonsNumber",this);
     fSamplingPhotonsNumberCmd->
@@ -401,8 +435,12 @@ DetectorConstructionMessenger::~DetectorConstructionMessenger()
     delete fDetectorFrontPosZCmd;
 
     delete fPotentialPathCmd;
+    delete fCrystalInternalGeometryPathCmd;
     
+    delete fVirtualCollimatorHalfSize;
     delete fMinPhotonEnergyCmd;
+    delete fMaxPhotonEnergySpectrumCmd;
+    delete fNBinsSpectrumCmd;
     delete fSamplingPhotonsNumberCmd;
     delete fNSmallTrajectoryStepsCmd;
     delete fRadiationAngleFactorCmd;
@@ -471,10 +509,21 @@ void DetectorConstructionMessenger::SetNewValue(G4UIcommand* command, G4String n
 
     if (command == fPotentialPathCmd)
         {fDetector->SetPotentialPath(newValue);}
-                
+    if (command == fCrystalInternalGeometryPathCmd)
+        {fDetector->SetCrystalInternalGeometryPath(newValue);}
+
+    if (command == fVirtualCollimatorHalfSize)
+    {fDetector->SetVirtualCollimatorHalfSize(
+            fVirtualCollimatorHalfSize->GetNewDoubleValue(newValue));}
     if (command == fMinPhotonEnergyCmd)
         {fDetector->SetMinPhotonEnergy(
                     fMinPhotonEnergyCmd->GetNewDoubleValue(newValue));}
+    if (command == fMaxPhotonEnergySpectrumCmd)
+        {fDetector->SetMaxBKPhotonEnergyInSpectrum(
+                    fMaxPhotonEnergySpectrumCmd->GetNewDoubleValue(newValue));}
+    if (command == fNBinsSpectrumCmd)
+        {fDetector->SetNBinsSpectrum(
+                    fNBinsSpectrumCmd->GetNewIntValue(newValue));}
     if (command == fSamplingPhotonsNumberCmd)
         {fDetector->SetSamplingPhotonsNumber(
                     fSamplingPhotonsNumberCmd->GetNewIntValue(newValue));}

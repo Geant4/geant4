@@ -56,23 +56,6 @@ inline bool strip(std::string& a_string,what a_type = both,char a_char = ' '){
   return false; //nothing done.
 }
 
-#ifdef TOOLS_DEPRECATED
-inline std::string strp(const std::string& a_string,what a_type = both,char a_char = ' '){
-  std::string _s(a_string);
-  strip(_s,a_type,a_char);
-  return _s;
-}
-#endif //TOOLS_DEPRECATED
-
-inline bool strip(std::vector<std::string>& a_strings,what a_type = both,char a_char = ' ') {
-  bool some_done = false;
-  std::vector<std::string>::iterator it;
-  for(it=a_strings.begin();it!=a_strings.end();++it) {
-    if(strip(*it,a_type,a_char)) some_done = true;
-  }
-  return some_done;
-}
-
 }
 
 #endif

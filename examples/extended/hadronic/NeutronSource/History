@@ -4,6 +4,22 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
+## 2025-11-14 Michel Maire (NeutronSource-V11-03-04)
+- PhysicsList.cc: use local RadioactiveDecayPhysics instead of G4RadioaciveDecayPhysics
+
+## 2025-11-05 Michel Maire (NeutronSource-V11-03-03)
+- PhysicsList.cc: use G4EmStandardPhysics_option3 instead of opt4
+                  add G4EmExtraPhysics as an alternative to GammaNuclearPhysics
+		  use G4HadronElasticPhysicsXS instead of HP
+
+## 2025-10-29 Michel Maire (NeutronSource-V11-03-02)
+- GammaNuclearPhysics.cc: use G4GammaNuclearXS dataset
+
+## 2025-08-04 Vladimir Ivanchenko (NeutronSource-V11-03-01)
+- PhysicsList - removed temporary access to neutron capture model based
+    on model name; removed unnecesary commented lines, used EM Opt4
+    configuration for HP physics
+
 ## 2025-05-20 Michel Maire (NeutronSource-V11-03-00)
 - NeutronSource.cc - SetUseNRESP71Model(true)
 

@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file DicomFilePlan.cc
+/// \brief Implementation of the DicomFilePlan class
+
 #include "DicomFilePlan.hh"
 
 #include "DicomBeam.hh"

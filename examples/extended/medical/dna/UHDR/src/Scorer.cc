@@ -22,6 +22,9 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
+//
+/// \file Scorer.cc
+/// \brief Implementation of the Scorer class
 
 #include "Scorer.hh"
 
@@ -99,14 +102,16 @@ template<>
 void Scorer<Dose>::Initialize(G4HCofThisEvent* HCE)
 {
   clear();
-  fpEvtMap = new G4THitsMap<G4double>(GetMultiFunctionalDetector()->GetName(), GetName());
+  fpEvtMap = new G4THitsMap<G4double>(GetMultiFunctionalDetector()->GetName(),
+                                      GetName());
   if (fHCID < 0) {
     fHCID = GetCollectionID(0);
   }
   HCE->AddHitsCollection(fHCID, (G4VHitsCollection*)fpEvtMap);
 
   fPulseActionInfo =
-    dynamic_cast<const InterPulseAction*>(G4RunManager::GetRunManager()->GetUserTrackingAction());
+    dynamic_cast<const InterPulseAction*>(G4RunManager::GetRunManager()
+                                          ->GetUserTrackingAction());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -149,18 +154,20 @@ G4bool Scorer<Dose>::ProcessHits(G4Step* aStep, G4TouchableHistory*)
     }
     G4double DoseInGray = fpScorer->fCumulatedDose;
     if (DoseInGray > fpScorer->fDosesCutOff / gray) {
-      G4cout << "_____________________________________________________________________________"
+      G4cout << "______________________________________________________________"
              << G4endl;
       auto name = currentEvent->GetConstCurrentEvent()
                     ->GetPrimaryVertex()
                     ->GetPrimary()
                     ->GetParticleDefinition()
                     ->GetParticleName();
-      auto energy =
-        currentEvent->GetConstCurrentEvent()->GetPrimaryVertex()->GetPrimary()->GetKineticEnergy();
+      auto energy = currentEvent->GetConstCurrentEvent()
+                    ->GetPrimaryVertex()->GetPrimary()->GetKineticEnergy();
 
-      G4cout << "Beam line            : " << "(" << name << ", " << energy << " MeV)" << G4endl;
-      G4cout << "Cut-off dose         : " << fpScorer->fDosesCutOff / gray << " Gy" << G4endl;
+      G4cout << "Beam line            : " << "(" << name << ", " << energy
+             << " MeV)" << G4endl;
+      G4cout << "Cut-off dose         : " << fpScorer->fDosesCutOff / gray
+             << " Gy" << G4endl;
       G4cout << "Stop at actual dose  : " << DoseInGray << " Gy" << G4endl;
       if (fPulseActionInfo != nullptr) {
         auto numberOfPulse = fPulseActionInfo->GetNumberOfPulse();
@@ -174,9 +181,11 @@ G4bool Scorer<Dose>::ProcessHits(G4Step* aStep, G4TouchableHistory*)
       const auto particleGun = generatorAction->GetSPGun();
       auto NumberOfParticlesGeneratedinOneEvent = particleGun->GetNumberOfParticles();
 
-      G4cout << "Beam duration        : " << fpScorer->fPulseMax / second << " s" << G4endl;
+      G4cout << "Beam duration        : " << fpScorer->fPulseMax / second
+             << " s" << G4endl;
       if(fpScorer->fPulseMax != 0){
-        G4cout << "Actual dose rate     : " << DoseInGray / (fpScorer->fPulseMax / second) << " Gy/s"
+        G4cout << "Actual dose rate     : "
+               << DoseInGray / (fpScorer->fPulseMax / second) << " Gy/s"
                << G4endl;
       }else{
         G4cout << "Actual dose rate     : " << "infinite"
@@ -196,17 +205,21 @@ G4bool Scorer<Dose>::ProcessHits(G4Step* aStep, G4TouchableHistory*)
         if (fH2O == it.first) continue;
         if (fOHm == it.first) continue;
         if (it.first == fH3Op) {
-          G4cout << "pH                   : " << -std::log10(it.second * (mole * liter)) << G4endl;
+          G4cout << "pH                   : "
+                 << -std::log10(it.second * (mole * liter)) << G4endl;
           continue;
         }
-        G4cout << it.first->GetName() << "                : " << it.second * (mole * liter) << " M "
+        G4cout << it.first->GetName() << "                : "
+               << it.second * (mole * liter) << " M "
                << G4endl;
       }
 
-      G4cout << "Total deposit energy : " << fpScorer->fCumulatedDose * eToGray << " eV" << G4endl;
+      G4cout << "Total deposit energy : "
+             << fpScorer->fCumulatedDose * eToGray << " eV" << G4endl;
       G4double DoseAbort;
       if (fpScorer->fDosesToAbort == 0) {
-        DoseAbort = fpScorer->fDosesCutOff / gray + 0.5 * fpScorer->fDosesCutOff / gray;
+        DoseAbort = fpScorer->fDosesCutOff / gray
+                  + 0.5 * fpScorer->fDosesCutOff / gray;
       }
       else {
         DoseAbort = fpScorer->fDosesToAbort / gray;
@@ -218,7 +231,7 @@ G4bool Scorer<Dose>::ProcessHits(G4Step* aStep, G4TouchableHistory*)
                << " MeV) at actual dose: " << DoseInGray << " Gy" << G4endl;
         G4RunManager::GetRunManager()->AbortEvent();
       }
-      G4cout << "_____________________________________________________________________________"
+      G4cout << "______________________________________________________________"
              << G4endl;
       auto myTrack = ((G4Track*)track);
       myTrack->SetTrackStatus(fStopAndKill);
@@ -275,7 +288,8 @@ void Gvalues::SetNewValue(G4UIcommand* command, G4String newValue)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-void Gvalues::WriteInfo(G4VAnalysisManager* analysisManager, const std::string& out)
+void Gvalues::
+WriteInfo(G4VAnalysisManager* analysisManager, const std::string& out)
 {
   G4int NtupleID = analysisManager->CreateNtuple("info", "Simulation");
   analysisManager->CreateNtupleDColumn(NtupleID, "Dose");
@@ -328,7 +342,8 @@ void Gvalues::WriteGvalues(G4VAnalysisManager* analysisManager)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
-void Gvalues::WriteWithAnalysisManager(G4VAnalysisManager* analysisManager, const std::string& out)
+void Gvalues::
+WriteWithAnalysisManager(G4VAnalysisManager* analysisManager, const std::string& out)
 {
   WriteInfo(analysisManager, out);
   WriteGvalues(analysisManager);
@@ -431,11 +446,12 @@ void Scorer<Gvalues>::SaveScavengerChange()
           G4Exception("", "N<0", FatalException, errMsg);
         }
 
-        Gvalues::SpeciesInfo& molInfo = fpScorer->fSpeciesInfoPerTime[time_mol][it];
+        Gvalues::SpeciesInfo& molInfo =
+          fpScorer->fSpeciesInfoPerTime[time_mol][it];
         molInfo.fNumber += n_mol;
         if (V > 0) {
           auto concentration = n_mol / (Avogadro * V /*mm3 to L*/);
-          // auto percentage = 10 * 100 * (iniC[it]-concentration) * (mole * liter) / 0.0013; //in %
+          // auto percentage = 10*100*(iniC[it]-concentration)*(mole*liter)/0.0013; //in %
           // air/10 Gy
           auto inuM = (iniC[it] - concentration) * (mole * liter) * 1e6;  // in uM
 
@@ -456,14 +472,15 @@ template<>
 void Scorer<Gvalues>::SaveMoleculeCounter()
 {
   if (fpEventScheduler == nullptr) {
-    G4Exception("fpEventScheduler == nullptr", "Scorer<Gvalues>::SaveMoleculeCounter()",
+    G4Exception("fpEventScheduler == nullptr",
+                "Scorer<Gvalues>::SaveMoleculeCounter()",
                 FatalException, "fpEventScheduler == nullptr");
   }
   else {
     auto counterMap = fpEventScheduler->GetCounterMap();
     if (counterMap.empty()) {
-      G4Exception("No counter", "Scorer<Gvalues>::SaveMoleculeCounter()", JustWarning,
-                  "CounterMap is not used");
+      G4Exception("No counter", "Scorer<Gvalues>::SaveMoleculeCounter()",
+                  JustWarning, "CounterMap is not used");
       return;
     }
     for (const auto& map_mol : counterMap) {
@@ -477,13 +494,15 @@ void Scorer<Gvalues>::SaveMoleculeCounter()
 
         if (n_mol < 0) {
           G4ExceptionDescription errMsg;
-          errMsg << "N molecules not valid < 0 " << " molecule : " << it_mol.first->GetName()
+          errMsg << "N molecules not valid < 0 " << " molecule : "
+                 << it_mol.first->GetName()
                  << " N : " << n_mol << G4endl;
           G4Exception("", "N<0", FatalException, errMsg);
         }
 
         if (fpScorer->fEdep > 0) {
-          Gvalues::SpeciesInfo& molInfo = fpScorer->fSpeciesInfoPerTime[time_mol][molecule];
+          Gvalues::SpeciesInfo& molInfo =
+            fpScorer->fSpeciesInfoPerTime[time_mol][molecule];
           molInfo.fNumber += n_mol;
           G4double gValue = (n_mol / (fpScorer->fEdep / eV)) * 100.;
           // G4double gValue = n_mol;
@@ -551,7 +570,8 @@ void Scorer<Gvalues>::AbsorbResultsFromWorkerScorer(G4VPrimitiveScorer* workerSc
     auto end_map2 = map2.end();
 
     for (; it_map2 != end_map2; ++it_map2) {
-      Gvalues::SpeciesInfo& molInfo = fpScorer->fSpeciesInfoPerTime[it_map1->first][it_map2->first];
+      Gvalues::SpeciesInfo& molInfo =
+        fpScorer->fSpeciesInfoPerTime[it_map1->first][it_map2->first];
       molInfo.fNumber += it_map2->second.fNumber;
       molInfo.fG += it_map2->second.fG;
       molInfo.fG2 += it_map2->second.fG2;

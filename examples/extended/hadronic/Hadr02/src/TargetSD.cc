@@ -23,10 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file hadronic/Hadr02/src/TargetSD.cc
+/// \file TargetSD.cc
 /// \brief Implementation of the TargetSD class
-//
-//
+
 /////////////////////////////////////////////////////////////////////////
 //
 // TargetSD

@@ -23,7 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
+/// \file ActionInitialization.cc
+/// \brief Implementation of the ActionInitialization class
+
 #include "ActionInitialization.hh"
 
 #include "DetectorConstruction.hh"
@@ -41,13 +43,10 @@
 #include "G4SystemOfUnits.hh"
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-ActionInitialization::ActionInitialization(DetectorConstruction* pDetector)
-  : G4VUserActionInitialization(), fpDetector(pDetector)
+ActionInitialization::ActionInitialization()
+  : G4VUserActionInitialization()
 {}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-ActionInitialization::~ActionInitialization() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -60,7 +59,7 @@ void ActionInitialization::Build() const
   SetUserAction(new PrimaryGeneratorAction);
   RunAction* pRunAction = new RunAction();
   SetUserAction(pRunAction);
-  SteppingAction* pSteppingAction = new SteppingAction(fpDetector);
+  SteppingAction* pSteppingAction = new SteppingAction();
   SetUserAction(pSteppingAction);
   SetUserAction(new StackingAction());
   if (G4DNAChemistryManager::IsActivated()) {
@@ -70,6 +69,14 @@ void ActionInitialization::Build() const
     G4Scheduler::Instance()->SetVerbose(1);
     ITTrackingInteractivity* itInteractivity = new ITTrackingInteractivity();
     G4Scheduler::Instance()->SetInteractivity(itInteractivity);
-    G4DNAChemistryManager::Instance()->SetGun(((DetectorConstruction*)fpDetector)->GetGun());
+    auto pDetector = static_cast<const DetectorConstruction*>
+                    (G4RunManager::GetRunManager()->GetUserDetectorConstruction());
+    if (pDetector) {
+      G4DNAChemistryManager::Instance()->SetGun(pDetector->GetGun());
+    } else {
+      G4ExceptionDescription msg;
+      msg << "DetectorConstruction instance must be created beforehand!";
+      G4Exception("ActionInitialization::Build()", "ActionInit01", FatalException,msg);
+    }
   }
 }

@@ -6,11 +6,12 @@
                       ---------------------
 
 
-The exp_microdosimetry example, originally named "Radioprotection", is currently developed and mantained by Susanna Guatelli (Centre For Medical Radiation Physics (CMRP), University of Wollongong, NSW, Australia) and Francesco Romano (INFN - Sezione di Catania, Catania, Italy)
+The exp_microdosimetry example, originally named "Radioprotection", is currently developed and mantained by Susanna Guatelli (Centre For Medical Radiation Physics (CMRP), University of Wollongong, NSW, Australia) Giuliana Milluzzo and Francesco Romano (INFN - Sezione di Catania, Catania, Italy)
 
 ------------------------------------------------------------------------
 
 Contact: susanna@uow.edu.au
+	 giuliana.milluzzo@ct.infn.it
 	 francesco.romano@ct.infn.it
          geant4-advanced-examples@cern.ch
         
@@ -19,13 +20,13 @@ Contact: susanna@uow.edu.au
 List of external collaborators: 
 J. Magini and G. Parisi - University of Surrey, United Kingdom
 J. Davis and D. Bolst - University of Wollongong, NSW, Australia
-G. Milluzzo- INFN-Sezione di Catania, Catania, Italy
+V. Conte, A. Bianchi, A. Selva- INFN-Laboratori Nazionali di Legnaro, Italy
 
 -----------------------------------------------------------------
 ----> Introduction.                                                     
                                                                        
 The exp_microdosimetry example models different detectors for microdosimetry in space applications. The example lets the user
-choose between the models of a simplified diamond (1), a micro-diamond (2), a simplified silicon (3), a silicon microdosimeter (4), a two-stage diamond detector (5) and a SiC microdosimeter (6):
+choose between the models of a simplified diamond (1), a micro-diamond (2), a simplified silicon (3), a silicon microdosimeter (4), a two-stage diamond detector (5)  a SiC microdosimeter (6) and a mini TEPC:
 
 1) A semplified diamond microdosimeter is based on the detector developed by Prof. Anatoly Rosenfeld and his team at the Centre For Medical Radiation Physics, CMRP, University of Wollongong, NSW, Australia. The design of the device is documented in J. Davis, et al., "Characterisation of a novel diamond-based microdosimeter prototype 
 for radioprotection applications in space environments",IEEE Transactions on Nuclear Science, 
@@ -38,6 +39,8 @@ Vol. 59, pp. 3110-3116, 2012.
 5) The diamond telescope is based on the detector developed by University of Rome "Tor Vergata". Its design and characterisation are documented in Cesaroni et al., "", Nucl. Instrum. Methods. Phys. Res. A, vol.947, 2019, DOI:https://doi.org/10.1016/j.nima.2019.162744 , and in C. Verona et al., "Characterisation of a monolithic ΔE-E diamond telescope detector using low energy ion microbeams", Radiation Measurements, vol. 159, 2022, DOI:https://doi.org/10.1016/j.radmeas.2022.106875 .
 6) A sempliefied version of a Silicon Carbide (SiC) based microdosimeter developed at INFN-CT, including the 370 um thick substrate. The default size are the following: 100x100x22 um. 
 
+7) The mini tissue equivalent proportional counter (mini TEPC) developed by the INFN Laboratori Nazionali di Legnaro (A. Bianchi et al., Radiation Physics and Chemistry 202 (2023) 110567)  is implemented in the code. In particular, TEPC are considered as the reference detectors employed in experimental microdosimetry according to ICRU, 1983. In the code a preliminary geometry of a mini TEPC with 0.5 mm radius, 1 mm height cylindrical propane sensitive volume at 408 mbar pressure is included. Validation of of the calculated microdosimetric spectra with the experimental data is in progress and will be completed soon. Therefore the implemented current geometry has to be considered as a demonstrative example of a typical mini TEPC used in microdosimetry.
+
 The type of detectors, its shape, and its position can be set via the included "geometry.mac" macro.
 This macro is called in both the vis.mac and run.mac macro files, and include the following options:
 - a macro command to choose the type of detector between the above (/geometrySetup/selectDetector "...")
@@ -47,18 +50,22 @@ This macro is called in both the vis.mac and run.mac macro files, and include th
 - a macro command for use with the water phantom to set the detector's width in water (/geometrySetup/detectorPosition/setDepth "...")
 The above only take effect only if the macro command /geometrySetup/applyChanges is applied. If the user forgets to run this last command a warning is issued at runtime.
 
-An isotropic field of Galactic Cosmic Rays (GCR) protons is incident on the device. 
-The energy deposition is calculated in the sensitive detectors. 
+A parallel 1 mm radius circular proton beam at 60 MeV (gaussian) is simulated as default of the simulation (protonBeam.mac).
+Moreover, an isotropic field of Galactic Cosmic Rays (GCR) protons is available to the users.
+
+NOTE: To maximise efficiency the field has been modelled with a limiting angle to reduce redundant events.
+
+This macro contains a proton field of Galactic Cosmic Rays (GCR)
+The energy deposition of each primary and secondary particles traversing the detectors is calculated within the defined sensitive volume. 
  
 In particular in this example it is shown how to:
-- model a realistic isotropic field of GCRs by means of the General Particle Source   
-- model a realistic detector in Geant4
+- model realistic experimental microdosimeters  in Geant4
 - customise the detector's geometry and its position at runtime via macros
 - retrieve the information of secondary particles originated in the SV
 - define the physics by means of a Geant4 Modular Physics List
 - characterise the response of a realistic detector
-- save results in an analysis ROOT or plaintext csv file using the Geant4 analysis component.             
-
+- save results in an analysis ROOT or or plaintext csv file using the Geant4 analysis component.             
+- model a realistic isotropic field of GCRs by means of the General Particle Source   
 The example can be executed in multithreading mode
 
 ------------------------------------------------------------------------
@@ -70,8 +77,8 @@ The diamond microdosimeter can be set either in vacuum (for space radioprotectio
 
 All SV structures are active.
 
-The primary radiation field is defined by means of the GeneralParticleSource in the file
-primary.mac
+The default radiation field is defined by means of the GeneralParticleSource in the file
+protonBeam.mac
                            
 -------------------------------------------------------------------------
 ----> 2.SET-UP 
@@ -106,11 +113,8 @@ Both scripts plot the microdosimetric spectrum resulting from the simulation, ca
 ----> 4. Primary radiation Field
 
 The radiation field is defined with the General Particle Source.
-Look at the macro primary.mac .
+Look at the macro protonBeam.mac .
 
-NOTE: To maximise efficiency the field has been modelled with a limiting angle to reduce redundant events.
-
-This macro contains a proton field of Galactic Cosmic Rays (GCR)
 If this example is used for medical applications (with a water phantom) the user is encouraged to replace this macro with one that might simulate a therapeutic beam of interest
                                                                        
 ------------------------------------------------------------------------

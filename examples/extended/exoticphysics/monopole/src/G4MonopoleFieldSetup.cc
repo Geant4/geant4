@@ -23,14 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file exoticphysics/monopole/src/G4MonopoleFieldSetup.cc
+/// \file G4MonopoleFieldSetup.cc
 /// \brief Implementation of the G4MonopoleFieldSetup class
-//
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//
-//
+
 // G4MonopoleFieldSetup is responsible for setting up a magnetic field
 // and the ability to use it with two different equation of motions,
 // one for monopoles and another for the rest of the particles.

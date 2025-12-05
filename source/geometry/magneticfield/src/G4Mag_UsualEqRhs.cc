@@ -25,7 +25,7 @@
 //
 // G4Mag_UsualEqRhs implementation
 //
-// Created: J.Apostolakis, CERN - 13.01.1997
+// Author: John Apostolakis (CERN), 13.01.1997
 // --------------------------------------------------------------------
 
 #include "G4Mag_UsualEqRhs.hh"
@@ -37,8 +37,6 @@ G4Mag_UsualEqRhs::G4Mag_UsualEqRhs( G4MagneticField* MagField )
   : G4Mag_EqRhs( MagField )
 {
 }
-
-G4Mag_UsualEqRhs::~G4Mag_UsualEqRhs() = default;
 
 void
 G4Mag_UsualEqRhs::EvaluateRhsGivenB( const G4double y[],

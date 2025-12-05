@@ -101,18 +101,6 @@ inline const char* upointer_format_x() {static const char s_v[] = "0x%lx";return
 
 #endif
 
-inline uint32 uint32_mx() { //4 294 967 295
-  uint32 n = 0;
-  for(unsigned int i=0;i<32;i++)  n += 1<<i;
-  return n;
-}
-inline uint64 uint64_mx() { //18 446 744 073 709 551 615
-  uint64 one = 1;
-  uint64 n = 0;
-  for(unsigned int i=0;i<64;i++)  n += one<<i;
-  return n;
-}
-
 typedef unsigned char byte;
 
 //for ./io :
@@ -121,32 +109,9 @@ typedef short int16;
 typedef unsigned short ushort;
 typedef unsigned short uint16;
 typedef uint32 ref;
-typedef char* cstr_t;
-typedef const char* const_cstr_t;
 
 class fits_bit {public:char m_c;}; //for exlib/cfitsio
 class csv_time {public:long m_l;}; //for rcsv_ntuple
-
-inline unsigned int size_char()   {return 1;}
-inline unsigned int size_short()  {return 2;}
-inline unsigned int size_int()    {return 4;}
-inline unsigned int size_int64()  {return 8;}
-inline unsigned int size_float()  {return 4;}
-inline unsigned int size_double() {return 8;}
-
-// used in arrout :
-inline const char* type_format(float)  {static const char s_v[] = "%g";return s_v;}
-inline const char* type_format(double) {static const char s_v[] = "%g";return s_v;}
-
-inline const char* type_format(char)   {static const char s_v[] = "%d";return s_v;}
-inline const char* type_format(short)  {static const char s_v[] = "%d";return s_v;}
-inline const char* type_format(int)    {static const char s_v[] = "%d";return s_v;}
-inline const char* type_format(int64)  {return int64_format();}
-
-inline const char* type_format(unsigned char)  {static const char s_v[] = "%u";return s_v;}
-inline const char* type_format(unsigned short) {static const char s_v[] = "%u";return s_v;}
-inline const char* type_format(unsigned int)   {static const char s_v[] = "%u";return s_v;}
-inline const char* type_format(uint64)         {return uint64_format();}
 
 typedef unsigned int key_code;
 

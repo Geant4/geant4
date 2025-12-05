@@ -22,8 +22,9 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// --------------------------------------------------------------
 //
+/// \file SensitiveDetectorHit.hh
+/// \brief Definition of the SensitiveDetectorHit class
 
 #ifndef SensitiveDetectorHit_h
 #define SensitiveDetectorHit_h 1

@@ -23,9 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file hadronic/Hadr01/include/HistoManager.hh
+/// \file HistoManager.hh
 /// \brief Definition of the HistoManager class
-//
+
 //---------------------------------------------------------------------------
 //
 // ClassName:   HistoManager

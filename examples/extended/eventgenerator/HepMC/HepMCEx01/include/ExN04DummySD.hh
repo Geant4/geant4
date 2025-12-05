@@ -23,10 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file eventgenerator/HepMC/HepMCEx01/include/ExN04DummySD.hh
+/// \file ExN04DummySD.hh
 /// \brief Definition of the ExN04DummySD class
-//
-//
 
 // Dummy sensitive used only to flag sensitivity
 // in cells of RO geometry.

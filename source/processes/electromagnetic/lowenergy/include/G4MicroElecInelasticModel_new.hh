@@ -94,6 +94,7 @@ class G4MicroElecInelasticModel_new : public G4VEmModel
 {
 
 public:
+
   explicit G4MicroElecInelasticModel_new(const G4ParticleDefinition* p = nullptr,
 				const G4String& nam = "MicroElecInelasticModel");
   ~G4MicroElecInelasticModel_new() override;

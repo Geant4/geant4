@@ -25,31 +25,31 @@
 //
 // G4ModifiedMidpoint inline methods implementation
 //
-// Author: Dmitry Sorokin, Google Summer of Code 2016
-// Supervision: John Apostolakis, CERN
+// Author: Dmitry Sorokin (CERN, Google Summer of Code 2016), 07.10.2016
+// Supervision: John Apostolakis (CERN)
 // --------------------------------------------------------------------
 
 inline void G4ModifiedMidpoint::SetSteps(G4int steps)
 {
-    fsteps = steps;
+  fsteps = steps;
 }
 
 inline G4int G4ModifiedMidpoint::GetSteps() const
 {
-    return fsteps;
+  return fsteps;
 }
 
 inline void G4ModifiedMidpoint::SetEquationOfMotion(G4EquationOfMotion* eq)
 {
-    fEquation = eq;
+  fEquation = eq;
 }
 
-inline G4EquationOfMotion* G4ModifiedMidpoint::GetEquationOfMotion()
+inline G4EquationOfMotion* G4ModifiedMidpoint::GetEquationOfMotion() const
 {
-    return fEquation;
+  return fEquation;
 }
 
 inline G4int G4ModifiedMidpoint::GetNumberOfVariables() const
 {
-    return fnvar;
+  return fnvar;
 }

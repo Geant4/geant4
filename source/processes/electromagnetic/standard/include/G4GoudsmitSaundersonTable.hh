@@ -54,6 +54,8 @@
 //            The new version is several times faster, more robust and accurate
 //            compared to the earlier version (G4GoudsmitSaundersonMscModel class
 //            that use these data has been also completely replaced)
+//            [1] A.F.Bielajew, NIMB, 111 (1996) 195-208
+//            [2] I.Kawrakow, A.F.Bielajew, NIMB 134(1998) 325-336
 // 28.04.2017 M. Novak: the GS angular distributions has been recomputed, the
 //            data size has been reduced from 16 MB down to 5 MB by using a new
 //            representation, the class has been modified significantly due to
@@ -62,10 +64,10 @@
 //            base GS angular distributions and some other factors (screening
 //            parameter, first and second moments) when Mott-correction is
 //            activated in the GS-MSC model.
+// 26.10.2025 M. Novak: added the related technical note as the proper reference.
 //
 // References:
-//   [1] A.F.Bielajew, NIMB, 111 (1996) 195-208
-//   [2] I.Kawrakow, A.F.Bielajew, NIMB 134(1998) 325-336
+//   M. Novak: https://arxiv.org/abs/2410.13361
 //
 // -----------------------------------------------------------------------------
 

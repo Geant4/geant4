@@ -23,12 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file exoticphysics/monopole/include/G4MonopolePhysicsMessenger.hh
+/// \file G4MonopolePhysicsMessenger.hh
 /// \brief Definition of the G4MonopolePhysicsMessenger class
-//
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef G4MonopolePhysicsMessenger_h
 #define G4MonopolePhysicsMessenger_h 1

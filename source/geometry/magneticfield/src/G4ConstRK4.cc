@@ -25,7 +25,7 @@
 //
 // G4ConstRK4 implementation
 //
-// Created: J.Apostolakis, T.Nikitina - 18.09.2008
+// Authors: J.Apostolakis, T.Nikitina (CERN), 18.09.2008
 // -------------------------------------------------------------------
 
 #include "G4ConstRK4.hh"

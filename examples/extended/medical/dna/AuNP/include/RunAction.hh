@@ -23,21 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file medical/dna/range/include/RunAction.hh
+/// \file RunAction.hh
 /// \brief Definition of the RunAction class
-//
-// $Id: RunAction.hh 78723 2014-01-20 10:32:17Z gcosmo $
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef RunAction_h
 #define RunAction_h 1
 
 #include "G4UserRunAction.hh"
 #include "globals.hh"
-
-#include <vector>
+#include <memory>
 
 class Run;
 class DetectorConstruction;
@@ -46,25 +40,16 @@ class HistoManager;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class RunAction : public G4UserRunAction
-{
-  public:
-    RunAction();
-    ~RunAction();
-
-  public:
-    virtual void BeginOfRunAction(const G4Run*);
-    virtual void EndOfRunAction(const G4Run*);
-    virtual G4Run* GenerateRun();
-
-  private:
-    const DetectorConstruction* fpDetector;
-    Run* fpRun;
-    HistoManager* fpHistoManager;
-
-    std::vector<G4String> fSDName;
-    G4int fNazm, fNz;
-    G4int CopyNo(G4int ix, G4int iy, G4int iz) { return iy * fNazm * fNz + ix * fNz + iz; }
+class RunAction final : public G4UserRunAction {
+public:
+  RunAction();
+  ~RunAction() override;
+  void BeginOfRunAction(const G4Run *) override;
+  void EndOfRunAction(const G4Run *) override;
+  G4Run *GenerateRun() override;
+private:
+  Run *fpRun = nullptr;
+  std::unique_ptr<HistoManager> fpHistoManager;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

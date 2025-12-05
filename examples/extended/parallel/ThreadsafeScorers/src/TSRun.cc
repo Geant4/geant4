@@ -23,18 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file parallel/ThreadsafeScorers/src/TSRun.cc
+/// \file TSRun.cc
 /// \brief Implementation of the TSRun class
-//
-//
-//
-//
+///
 /// TSRun contains five hits collections types:
-///     1) a thread-local hits map,
-///     2) a global atomic hits map
-///     3) a global "mutex" hits map
-///     4) a global G4StatAnalysis hits deque
-///     5) a global G4ConvergenceTester hits deque
+///   - 1) a thread-local hits map,
+///   - 2) a global atomic hits map
+///   - 3) a global "mutex" hits map
+///   - 4) a global G4StatAnalysis hits deque
+///   - 5) a global G4ConvergenceTester hits deque
 ///
 /// The thread-local hits map is the same as you will find in many other
 ///     examples.
@@ -42,11 +39,11 @@
 /// The atomics hits map is the purpose of this example. Code-wise, the
 ///     implementation looks extremely similar to the thread-local version with
 ///     3 primary exceptions:
-///     (1) construction - there should only be one instance so it should be a
-///         static member variable or a pointer/reference to a single instance
-///     (2) It does not need to, nor should be, summed in G4Run::Merge()
-///     (3) destruction -- it should only be cleared by the master thread since
-///         there is only one instance.
+///     - (1) construction - there should only be one instance so it should be a
+///           static member variable or a pointer/reference to a single instance
+///     - (2) It does not need to, nor should be, summed in G4Run::Merge()
+///     - (3) destruction -- it should only be cleared by the master thread since
+///           there is only one instance.
 ///
 /// The "mutex" hits map is also included as reference for checking the results
 ///     accumulated by the thread-local hits maps and atomic hits maps. The

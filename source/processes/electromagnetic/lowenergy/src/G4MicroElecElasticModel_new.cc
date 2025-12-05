@@ -118,7 +118,6 @@ G4MicroElecElasticModel_new::G4MicroElecElasticModel_new(const G4ParticleDefinit
   killElectron = false;
   acousticModelEnabled = false;
   currentMaterialName = "";  
-  isOkToBeInitialised = false;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -167,124 +166,116 @@ G4MicroElecElasticModel_new::~G4MicroElecElasticModel_new()
 
 void G4MicroElecElasticModel_new::Initialise(const G4ParticleDefinition* /*particle*/,
 					 const G4DataVector& /*cuts*/)
-{
-  if (isOkToBeInitialised == true && isInitialised == false) {
-      
+{	
     if (verboseLevel > -1)
       G4cout << "Calling G4MicroElecElasticModel_new::Initialise()" << G4endl;
     // Energy limits
     // Reading of data files
-    
+
     G4double scaleFactor = 1e-18 * cm * cm;
-    
-    G4ProductionCutsTable* theCoupleTable =
-      G4ProductionCutsTable::GetProductionCutsTable();
+
+    G4ProductionCutsTable* theCoupleTable = G4ProductionCutsTable::GetProductionCutsTable();
     G4int numOfCouples = (G4int)theCoupleTable->GetTableSize();
-    
+  
     for (G4int i = 0; i < numOfCouples; ++i) {
-      const G4Material* material =
-	theCoupleTable->GetMaterialCutsCouple(i)->GetMaterial();
-      
-      //theCoupleTable->GetMaterialCutsCouple(i)->;
-      
+      const G4Material* material = theCoupleTable->GetMaterialCutsCouple(i)->GetMaterial();
+
       G4cout << "MicroElasticModel, Material " << i + 1 << " / " << numOfCouples << " : " << material->GetName() << G4endl;
       if (material->GetName() == "Vacuum") continue;
-      
+
       G4String matName = material->GetName().substr(3, material->GetName().size());
       G4cout<< matName<< G4endl;
-      
+
       currentMaterialStructure = new G4MicroElecMaterialStructure(matName);
       lowEnergyLimitTable[matName]=currentMaterialStructure->GetElasticModelLowLimit();
       highEnergyLimitTable[matName]=currentMaterialStructure->GetElasticModelHighLimit();
       workFunctionTable[matName] = currentMaterialStructure->GetWorkFunction();
-      
+
       delete currentMaterialStructure;
-      
+
       G4cout << "Reading TCS file" << G4endl;       
       G4String fileElectron = "Elastic/elsepa_elastic_cross_e_" + matName;
       G4cout << "Elastic Total Cross file : " << fileElectron << G4endl;
-      
+
       G4ParticleDefinition* electronDef = G4Electron::ElectronDefinition();
       G4String electron = electronDef->GetParticleName();
-      
+
       // For total cross section      
       MapData* tableData = new MapData();
-      
+
       G4MicroElecCrossSectionDataSet_new* tableE = new G4MicroElecCrossSectionDataSet_new(new G4LogLogInterpolation, eV, scaleFactor);
       tableE->LoadData(fileElectron);
       tableData->insert(make_pair(electron, tableE));
       tableTCS[matName] = tableData; //Storage of TCS
-      
+
       // For final state
       const char* path = G4FindDataDir("G4LEDATA");
       if (!path)
-	{
-	  G4Exception("G4MicroElecElasticModel_new::Initialise","em0006",FatalException,"G4LEDATA environment variable not set.");
-	  return;
-	}
-      
+	  {
+	    G4Exception("G4MicroElecElasticModel_new::Initialise","em0006",FatalException,"G4LEDATA environment variable not set.");
+	    return;
+	  }
+
       //Reading DCS file
       std::ostringstream eFullFileName;
       eFullFileName << path << "/microelec/Elastic/elsepa_elastic_cumulated_diffcross_e_" + matName + ".dat";
       G4cout << "Elastic Cumulated Diff Cross : " << eFullFileName.str().c_str() << G4endl;
       std::ifstream eDiffCrossSection(eFullFileName.str().c_str());
-      
+
       if (!eDiffCrossSection)
-	G4Exception("G4MicroElecElasticModel_new::Initialise", "em0003", FatalException, "Missing data file: /microelec/sigmadiff_cumulated_elastic_e_Si.dat");
-     
+	    G4Exception("G4MicroElecElasticModel_new::Initialise", "em0003", FatalException, "Missing data file: /microelec/sigmadiff_cumulated_elastic_e_Si.dat");
+
       // October 21th, 2014 - Melanie Raine
       // Added clear for MT
       // Diff Cross Sections in cumulated mode      
       TriDimensionMap* eDiffCrossSectionData = new TriDimensionMap(); //Angles 
       std::vector<G4double>* eTdummyVec = new std::vector<G4double>; //Incident energy vector
       VecMap* eProbVec = new VecMap; //Probabilities
-      
+
       eTdummyVec->push_back(0.);
-      
+ 
       while (!eDiffCrossSection.eof())
-	{
-	  G4double tDummy; //incident energy
-	  G4double eProb; //Proba
-	  eDiffCrossSection >> tDummy >> eProb;
+	  {
+	    G4double tDummy; //incident energy
+	    G4double eProb; //Proba
+	    eDiffCrossSection >> tDummy >> eProb;
 	  
-	  // SI : mandatory eVecm initialization	  
-	  if (tDummy != eTdummyVec->back())
-	    {
-	      eTdummyVec->push_back(tDummy); //adding values for incident energy points
-	      (*eProbVec)[tDummy].push_back(0.); //adding probability for the first angle, equal to 0 		
+	    // SI : mandatory eVecm initialization	  
+	    if (tDummy != eTdummyVec->back())
+	      {
+	        eTdummyVec->push_back(tDummy); //adding values for incident energy points
+	        (*eProbVec)[tDummy].push_back(0.); //adding probability for the first angle, equal to 0 		
+	      }
+	  
+	    eDiffCrossSection >> (*eDiffCrossSectionData)[tDummy][eProb]; //adding Angle Value to map
+	  
+	    if (eProb != (*eProbVec)[tDummy].back()) {
+	      (*eProbVec)[tDummy].push_back(eProb); //Adding cumulated proba to map
 	    }
 	  
-	  eDiffCrossSection >> (*eDiffCrossSectionData)[tDummy][eProb]; //adding Angle Value to map
-	  
-	  if (eProb != (*eProbVec)[tDummy].back()) {
-	    (*eProbVec)[tDummy].push_back(eProb); //Adding cumulated proba to map
 	  }
-	  
-	}
-      
+
       //Filling maps for the material
       thetaDataStorage[matName] = eDiffCrossSectionData;
       eIncidentEnergyStorage[matName] = eTdummyVec;
       eProbaStorage[matName] = eProbVec;
-    }
-    // End final state
-    
-    if (verboseLevel > 2)
-      G4cout << "Loaded cross section files for MicroElec Elastic model" << G4endl;
-    
-    if (verboseLevel > 0)
-      {
-	G4cout << "MicroElec Elastic model is initialized " << G4endl
-	       << "Energy range: "
-	       << LowEnergyLimit() / eV << " eV - "
-	       << HighEnergyLimit() / MeV << " MeV"
-	       << G4endl; // system("pause"); linux doesn't like
       }
-    
-    if (isInitialised) { return; }
-    fParticleChangeForGamma = GetParticleChangeForGamma();
-    isInitialised = true;
-  }
+      // End final state
+ 
+      if (verboseLevel > 2)
+        G4cout << "Loaded cross section files for MicroElec Elastic model" << G4endl;
+
+      if (verboseLevel > 0) {
+	   G4cout << "MicroElec Elastic model is initialized " << G4endl
+	           << "Energy range: "
+	           << LowEnergyLimit() / eV << " eV - "
+	           << HighEnergyLimit() / MeV << " MeV"
+	           << G4endl; // system("pause"); linux doesn't like
+      }
+
+      if (isInitialised) { return; }
+      fParticleChangeForGamma = GetParticleChangeForGamma();
+      isInitialised = true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -298,10 +289,8 @@ G4double G4MicroElecElasticModel_new::CrossSectionPerVolume(const G4Material* ma
   if (verboseLevel > 3)
     G4cout << "Calling CrossSectionPerVolume() of G4MicroElecElasticModel" << G4endl;
   
-  isOkToBeInitialised = true;
   currentMaterialName = material->GetName().substr(3, material->GetName().size());
   const G4DataVector cuts;
-  Initialise(p, cuts);
   // Calculate total cross section for model
   MapEnergy::iterator lowEPos;
   lowEPos = lowEnergyLimitTable.find(currentMaterialName);
@@ -324,13 +313,10 @@ G4double G4MicroElecElasticModel_new::CrossSectionPerVolume(const G4Material* ma
     lowEnergyLimit = lowEPos->second;
     highEnergyLimit = highEPos->second;
     killBelowEnergy = killEPos->second;
-    
   }
-  
-  if (ekin < killBelowEnergy) {
 
-    return DBL_MAX; }
-  
+  if (ekin < killBelowEnergy) { return DBL_MAX; }
+
   G4double sigma=0;
   
   //Phonon for SiO2
@@ -345,11 +331,11 @@ G4double G4MicroElecElasticModel_new::CrossSectionPerVolume(const G4Material* ma
       Aac = 17 * Ebz, //A screening parameter
       Eac = 3.5 * 1.6e-19, //C deformation potential
       prefactor = 2.2;// Facteur pour modifier les MFP  
-    
+
     return AcousticCrossSectionPerVolume(ekin, kbz, rho, cs, Aac, Eac, prefactor);
   }
   
-else if (currentMaterialName == "ALUMINUM_OXIDE" && ekin < 20 * eV) {
+  else if (currentMaterialName == "ALUMINUM_OXIDE" && ekin < 20 * eV) {
 	 acousticModelEnabled = true;
 
 	 //Values for Al2O3
@@ -360,17 +346,17 @@ else if (currentMaterialName == "ALUMINUM_OXIDE" && ekin < 20 * eV) {
 		 Eac = 2.1622471654789847e-18, //C deformation potential
 		 prefactor = 1;
 	 return AcousticCrossSectionPerVolume(ekin, kbz, rho, cs, Aac, Eac, prefactor);
- }
+  }
   //Elastic
   else {
     acousticModelEnabled = false;
-    
+
     G4double density = material->GetTotNbOfAtomsPerVolume();
     const G4String& particleName = p->GetParticleName();    
-    
+
     TCSMap::iterator tablepos;
     tablepos = tableTCS.find(currentMaterialName);
-    
+
     if (tablepos != tableTCS.end())
       {
 	MapData* tableData = tablepos->second;
@@ -379,35 +365,32 @@ else if (currentMaterialName == "ALUMINUM_OXIDE" && ekin < 20 * eV) {
 	  { 
 	    std::map< G4String, G4MicroElecCrossSectionDataSet_new*, std::less<G4String> >::iterator pos;
 	    pos = tableData->find(particleName);
-	    
-	    if (pos != tableData->end())
-	      {
-		G4MicroElecCrossSectionDataSet_new* table = pos->second;
-		if (table != 0)
+		
+	    if (pos != tableData->end()){
+		  G4MicroElecCrossSectionDataSet_new* table = pos->second;
+		  if (table != 0)
 		  {
 		    sigma = table->FindValue(ekin);
 		  }
-	      }
+	    }
 	    else
 	      {
-		G4Exception("G4MicroElecElasticModel_new::ComputeCrossSectionPerVolume", "em0002", FatalException, "Model not applicable to particle type.");
+		  G4Exception("G4MicroElecElasticModel_new::ComputeCrossSectionPerVolume", "em0002", FatalException, "Model not applicable to particle type.");
 	      }
 	  }
 	else return 1 / DBL_MAX;
       }
-    else
-      {
+    else {
 	G4String str = "Material ";
 	str += currentMaterialName + " TCS table not found!";
 	G4Exception("G4MicroElecElasticModel_new::ComputeCrossSectionPerVolume", "em0002", FatalException, str);
-      }
+    }
     
-    if (verboseLevel > 3)
-      {
+    if (verboseLevel > 3) {
 	G4cout << "---> Kinetic energy(eV)=" << ekin / eV << G4endl;
 	G4cout << " - Cross section per Si atom (cm^2)=" << sigma / cm / cm << G4endl;
 	G4cout << " - Cross section per Si atom (cm^-1)=" << sigma*density / (1. / cm) << G4endl;
-      }
+    }
 
     // Hsing-YinChangaAndrewAlvaradoaTreyWeberaJaimeMarianab Monte Carlo modeling of low-energy electron-induced secondary electron emission yields in micro-architected boron nitride surfaces - ScienceDirect, (n.d.). https://www.sciencedirect.com/science/article/pii/S0168583X19304069 (accessed April 1, 2022).
     if (currentMaterialName == "BORON_NITRIDE") {
@@ -474,13 +457,12 @@ void G4MicroElecElasticModel_new::SampleSecondaries(std::vector<G4DynamicParticl
 						G4double,
 						G4double)
 {
-
   if (verboseLevel > 3)
     G4cout << "Calling SampleSecondaries() of G4MicroElecElasticModel" << G4endl;
   
   G4double electronEnergy0 = aDynamicElectron->GetKineticEnergy();
   
- if (electronEnergy0 < killBelowEnergy)
+   if (electronEnergy0 < killBelowEnergy)
    {
      fParticleChangeForGamma->SetProposedKineticEnergy(0.);
      fParticleChangeForGamma->ProposeTrackStatus(fStopAndKill);
@@ -488,34 +470,33 @@ void G4MicroElecElasticModel_new::SampleSecondaries(std::vector<G4DynamicParticl
      return;
    }
  
- if (electronEnergy0 < highEnergyLimit)
-   {
-     G4double cosTheta = 0;
-     if (acousticModelEnabled)
-       {
-	 cosTheta = 1 - 2 * G4UniformRand(); //Isotrope
-       }
-     else if (electronEnergy0 >= lowEnergyLimit)
-       {
+  if (electronEnergy0 < highEnergyLimit)
+  {
+    G4double cosTheta = 0;
+    if (acousticModelEnabled)
+    {
+	  cosTheta = 1 - 2 * G4UniformRand(); //Isotrope
+    }
+    else if (electronEnergy0 >= lowEnergyLimit)
+    {
 	 cosTheta = RandomizeCosTheta(electronEnergy0);
-       }
+    }
+    G4double phi = 2. * pi * G4UniformRand();
+ 
+    G4ThreeVector zVers = aDynamicElectron->GetMomentumDirection();
+    G4ThreeVector xVers = zVers.orthogonal();
+    G4ThreeVector yVers = zVers.cross(xVers);
+
+    G4double xDir = std::sqrt(1. - cosTheta*cosTheta);
+    G4double yDir = xDir;
+    xDir *= std::cos(phi);
+    yDir *= std::sin(phi);
+
+    G4ThreeVector zPrimeVers((xDir*xVers + yDir*yVers + cosTheta*zVers));
      
-     G4double phi = 2. * pi * G4UniformRand();
-     
-     G4ThreeVector zVers = aDynamicElectron->GetMomentumDirection();
-     G4ThreeVector xVers = zVers.orthogonal();
-     G4ThreeVector yVers = zVers.cross(xVers);
-     
-     G4double xDir = std::sqrt(1. - cosTheta*cosTheta);
-     G4double yDir = xDir;
-     xDir *= std::cos(phi);
-     yDir *= std::sin(phi);
-     
-     G4ThreeVector zPrimeVers((xDir*xVers + yDir*yVers + cosTheta*zVers));
-     
-     fParticleChangeForGamma->ProposeMomentumDirection(zPrimeVers.unit());
-     fParticleChangeForGamma->SetProposedKineticEnergy(electronEnergy0);
-   }
+    fParticleChangeForGamma->ProposeMomentumDirection(zPrimeVers.unit());
+    fParticleChangeForGamma->SetProposedKineticEnergy(electronEnergy0);
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -569,37 +550,36 @@ G4double G4MicroElecElasticModel_new::Theta
     iterator_proba = eProbaStorage.find(currentMaterialName);
     
     if (iterator_angle != thetaDataStorage.end() && iterator_energy != eIncidentEnergyStorage.end() && iterator_proba != eProbaStorage.end())
-      {
-	TriDimensionMap* eDiffCrossSectionData = iterator_angle->second; //Theta points
-	std::vector<G4double>* eTdummyVec = iterator_energy->second;
-	VecMap* eVecm = iterator_proba->second;
+    {
+	  TriDimensionMap* eDiffCrossSectionData = iterator_angle->second; //Theta points
+	  std::vector<G4double>* eTdummyVec = iterator_energy->second;
+	  VecMap* eVecm = iterator_proba->second;
 	
-	auto t2 = std::upper_bound(eTdummyVec->begin(), eTdummyVec->end(), k);
-	auto t1 = t2 - 1;	
-        auto e12 = std::upper_bound((*eVecm)[(*t1)].begin(), (*eVecm)[(*t1)].end(), integrDiff);
-	auto e11 = e12 - 1;	
-	auto e22 = std::upper_bound((*eVecm)[(*t2)].begin(), (*eVecm)[(*t2)].end(), integrDiff);
-	auto e21 = e22 - 1;
+	  auto t2 = std::upper_bound(eTdummyVec->begin(), eTdummyVec->end(), k);
+	  auto t1 = t2 - 1;	
+      auto e12 = std::upper_bound((*eVecm)[(*t1)].begin(), (*eVecm)[(*t1)].end(), integrDiff);
+	  auto e11 = e12 - 1;	
+	  auto e22 = std::upper_bound((*eVecm)[(*t2)].begin(), (*eVecm)[(*t2)].end(), integrDiff);
+	  auto e21 = e22 - 1;
 	
-	valueT1 = *t1;
-	valueT2 = *t2;
-	valueE21 = *e21;
-	valueE22 = *e22;
-	valueE12 = *e12;
-	valueE11 = *e11;
-	
-	xs11 = (*eDiffCrossSectionData)[valueT1][valueE11]; 
-	xs12 = (*eDiffCrossSectionData)[valueT1][valueE12];
-	xs21 = (*eDiffCrossSectionData)[valueT2][valueE21];
-	xs22 = (*eDiffCrossSectionData)[valueT2][valueE22];
-      }
+	  valueT1 = *t1;
+	  valueT2 = *t2;
+	  valueE21 = *e21;
+	  valueE22 = *e22;
+	  valueE12 = *e12;
+	  valueE11 = *e11;
+	  
+	  xs11 = (*eDiffCrossSectionData)[valueT1][valueE11]; 
+	  xs12 = (*eDiffCrossSectionData)[valueT1][valueE12];
+	  xs21 = (*eDiffCrossSectionData)[valueT2][valueE21];
+	  xs22 = (*eDiffCrossSectionData)[valueT2][valueE22];
+     }
     else
-      {
-	G4String str = "Material ";
-	str += currentMaterialName + " not found!";
-	G4Exception("G4MicroElecElasticModel_new::ComputeCrossSectionPerVolume", "em0002", FatalException, str);
-      }
-    
+    {
+	  G4String str = "Material ";
+	  str += currentMaterialName + " not found!";
+	  G4Exception("G4MicroElecElasticModel_new::ComputeCrossSectionPerVolume", "em0002", FatalException, str);
+    } 
   }
   
   if (xs11==0 || xs12==0 ||xs21==0 ||xs22==0) return (0.);

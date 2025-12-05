@@ -183,7 +183,7 @@ G4double G4DNACPA100ElasticModel::CrossSectionPerVolume(const G4Material* pMater
 
   if (ekin < fpModelData->GetHighELimit(materialID, p)) {
     if (ekin < fKillBelowEnergy) {
-      return DBL_MAX;
+      return 0.;
     }
 
     auto tableData = fpModelData->GetData();

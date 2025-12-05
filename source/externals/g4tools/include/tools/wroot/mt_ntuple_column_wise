@@ -21,8 +21,6 @@ protected:
   public:
     virtual bool add_basket(basket* a_basket) {  // we get ownership of a_basket.
       if(m_row_mode) {
-        //m_ntuple.m_out << "debug : add_basket in parallel branch name " << m_parallel_branch.name()
-        //                << ", num existing baskets " << m_parallel_branch.m_parallel_baskets.size() << "." << std::endl;
         m_parallel_branch.m_parallel_baskets.push_back(a_basket);
         if(ready_to_flush_baskets(m_cols)) {return flush_baskets(m_mutex,m_main_file,m_cols,m_main_branches);}
         return true;
@@ -149,7 +147,6 @@ public:
     }
   }
 
-#ifdef tools_wroot_mt_ntuple_column_wise   //g4tools backcomp :
   mt_ntuple_column_wise(std::ostream& a_out,bool a_byte_swap,uint32 a_compression,seek a_seek_directory,
                         std::vector<branch*>& a_main_branches,
                         const std::vector<uint32>& a_basket_sizes,
@@ -166,7 +163,6 @@ public:
       m_nev = 0;
     }
   }
-#endif
 
   virtual ~mt_ntuple_column_wise() {}
 protected:

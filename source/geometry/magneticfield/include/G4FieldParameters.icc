@@ -1,0 +1,167 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+// G4FieldParameters inline methods implementation 
+//
+// Author: Ivana Hrivnacova (IJCLab, Orsay), 2024.
+// -------------------------------------------------------------------
+
+// Set type of field
+inline void G4FieldParameters::SetFieldType(G4FieldType field)
+{
+  fField = field;
+}
+
+// Set the type of equation of motion of a particle in a field
+inline void G4FieldParameters::SetEquationType(G4EquationType equation)
+{
+  fEquation = equation;
+}
+
+// Set the type of integrator of particle's equation of motion
+inline void G4FieldParameters::SetStepperType(G4StepperType stepper)
+{
+  fStepper = stepper;
+}
+
+// Set minimum step in G4ChordFinder
+inline void G4FieldParameters::SetMinimumStep(G4double value)
+{
+  fMinimumStep = value;
+}
+
+// Set delta chord in G4ChordFinder
+inline void G4FieldParameters::SetDeltaChord(G4double value)
+{
+  fDeltaChord = value;
+}
+
+// Set delta one step in global field manager
+inline void G4FieldParameters::SetDeltaOneStep(G4double value)
+{
+  fDeltaOneStep = value;
+}
+
+// Set delta intersection in global field manager
+inline void G4FieldParameters::SetDeltaIntersection(G4double value)
+{
+  fDeltaIntersection = value;
+}
+
+// Set minimum epsilon step in global field manager
+inline void G4FieldParameters::SetMinimumEpsilonStep(G4double value)
+{
+  fMinimumEpsilonStep = value;
+}
+
+// Set maximum epsilon step in global field manager
+inline void G4FieldParameters::SetMaximumEpsilonStep(G4double value)
+{
+  fMaximumEpsilonStep = value;
+}
+
+// Set the distance within which the field is considered constant
+inline void G4FieldParameters::SetConstDistance(G4double value)
+{
+  fConstDistance = value;
+}
+
+// Return the name of associated volume, if local field
+inline const G4String& G4FieldParameters::GetVolumeName() const
+{
+  return fVolumeName;
+}
+
+// Return the type of field
+inline const G4FieldType& G4FieldParameters::GetFieldType() const
+{
+  return fField;
+}
+
+// Return the type of equation of motion of a particle in a field
+inline const G4EquationType& G4FieldParameters::GetEquationType() const
+{
+  return fEquation;
+}
+
+// Return the type of integrator of particle's equation of motion
+inline const G4StepperType& G4FieldParameters::GetStepperType() const
+{
+  return fStepper;
+}
+
+// Return the user defined equation of motion
+inline G4EquationOfMotion* G4FieldParameters::GetUserEquationOfMotion() const
+{
+  return fUserEquation;
+}
+
+// Return the user defined integrator of particle's equation of motion
+inline G4MagIntegratorStepper* G4FieldParameters::GetUserStepper() const
+{
+  return fUserStepper;
+}
+
+// Return minimum step in G4ChordFinder
+inline G4double G4FieldParameters::GetMinimumStep() const
+{
+  return fMinimumStep;
+}
+
+// Return delta chord in G4ChordFinder
+inline G4double G4FieldParameters::GetDeltaChord() const
+{
+  return fDeltaChord;
+}
+
+// Return delta one step in global field manager
+inline G4double G4FieldParameters::GetDeltaOneStep() const
+{
+  return fDeltaOneStep;
+}
+
+// Return delta intersection in global field manager
+inline G4double G4FieldParameters::GetDeltaIntersection() const
+{
+  return fDeltaIntersection;
+}
+
+// Return minimum epsilon step in global field manager
+inline G4double G4FieldParameters::GetMinimumEpsilonStep() const
+{
+  return fMinimumEpsilonStep;
+}
+
+// Return maximum epsilon step in global field manager
+inline G4double G4FieldParameters::GetMaximumEpsilonStep() const
+{
+  return fMaximumEpsilonStep;
+}
+
+// Return the distance within which the field is considered constant
+inline G4double G4FieldParameters::GetConstDistance() const
+{
+  return fConstDistance;
+}

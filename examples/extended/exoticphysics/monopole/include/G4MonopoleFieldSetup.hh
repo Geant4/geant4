@@ -23,14 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file exoticphysics/monopole/include/G4MonopoleFieldSetup.hh
+/// \file G4MonopoleFieldSetup.hh
 /// \brief Definition of the G4MonopoleFieldSetup class
-//
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-//
 // ------------------------------------------------------------
 //        GEANT 4  include file implementation
 // ------------------------------------------------------------

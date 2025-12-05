@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file microyz.cc
+/// \brief Main program of the dna/microyz example
+
 // This example is provided by the Geant4-DNA collaboration
 // Any report or published results obtained using the Geant4-DNA software
 // shall cite the following Geant4-DNA collaboration publications:
@@ -33,8 +36,6 @@
 //
 // Contact author: S. Incerti, CNRS, France (incerti@cenbg.in2p3.fr)
 //
-/// \file microyz.cc
-/// \brief Main program of the microyz example
 
 #include "ActionInitialization.hh"
 #include "DetectorConstruction.hh"

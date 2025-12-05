@@ -4,6 +4,10 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
+## 2025-10-27 A. Sytov (channelingExamples-V11-03-00)
+  -added the ch5 example; readme of channeling folder updated
+  -added the CMakeLists.txt for the channeling examples
+
 ## 2024-11-29 I. Hrivnacova (channelingExamples-V11-02-03)
 - Fixes Doxygen pages names & links
 

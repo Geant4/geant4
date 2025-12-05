@@ -23,9 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file hadronic/Hadr02/src/HIJING.cc
-/// \brief Implementation of the HIJING class methods
-//
+/// \file HIJING.cc
+/// \brief Implementation of the HIJING class
+
 //---------------------------------------------------------------------------
 //
 // ClassName:

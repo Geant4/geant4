@@ -25,7 +25,7 @@
 //
 /// \file GB05BOptrSplitAndKillByCrossSection.hh
 /// \brief Definition of the GB05BOptrSplitAndKillByCrossSection class
-//
+
 //---------------------------------------------------------------
 //
 // GB05BOptrSplitAndKillByCrossSection

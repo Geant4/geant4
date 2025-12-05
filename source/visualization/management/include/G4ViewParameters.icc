@@ -253,6 +253,18 @@ inline G4int G4ViewParameters::GetTransparencyByDepthOption () const {
   return fTransparencyByDepthOption;
 }
 
+inline G4bool G4ViewParameters::IsZoomToCursor () const {
+  return fZoomToCursor;
+}
+
+inline G4bool G4ViewParameters::IsDotsSmooth () const {
+  return fDotsSmooth;
+}
+
+inline G4double G4ViewParameters:: GetDotsSize () const {
+  return fDotsSize;
+}
+
 inline void
 G4ViewParameters::SetDrawingStyle (G4ViewParameters::DrawingStyle style) {
   fDrawingStyle = style;
@@ -461,4 +473,16 @@ inline void G4ViewParameters::SetTransparencyByDepth (G4double transparencyByDep
 
 inline void G4ViewParameters::SetTransparencyByDepthOption (G4int transparencyByDepthOption) {
   fTransparencyByDepthOption = transparencyByDepthOption;
+}
+
+inline void G4ViewParameters::SetZoomToCursor (G4bool zoomToCursor){
+  fZoomToCursor = zoomToCursor;
+}
+
+inline void G4ViewParameters::SetDotsSmooth (G4bool dotsSmooth){
+  fDotsSmooth = dotsSmooth;
+}
+
+inline void G4ViewParameters::SetDotsSize (G4double dotsSize){
+  fDotsSize = dotsSize;
 }

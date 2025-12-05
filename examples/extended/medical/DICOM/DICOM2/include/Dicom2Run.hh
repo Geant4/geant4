@@ -23,10 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 /// \file Dicom2Run.hh
 /// \brief Definition of the Dicom2Run class
-//
 
 #ifndef Dicom2Run_h
 #define Dicom2Run_h 1

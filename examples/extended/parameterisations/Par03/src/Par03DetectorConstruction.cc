@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file Par03DetectorConstruction.cc
+/// \brief Implementation of the Par03DetectorConstruction class
+
 #include "Par03DetectorConstruction.hh"
 
 #include "Par03DetectorMessenger.hh"

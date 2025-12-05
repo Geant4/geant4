@@ -41,7 +41,6 @@
 // Not needing external packages or libraries...
 #include "G4ASCIITree.hh"        // no_geant4_module_check
 #include "G4DAWNFILE.hh"         // no_geant4_module_check
-#include "G4HepRepFile.hh"       // no_geant4_module_check
 #include "G4RayTracer.hh"        // no_geant4_module_check
 #include "G4VRML2File.hh"        // no_geant4_module_check
 #include "G4GMocrenFile.hh"      // no_geant4_module_check
@@ -89,10 +88,6 @@
 #include "G4RayTracerQt.hh" // no_geant4_module_check
 #endif
 
-#ifdef G4VIS_USE_QT3D
-#include "G4Qt3D.hh" // no_geant4_module_check
-#endif
-
 #ifdef G4VIS_USE_TOOLSSG_X11_GLES
 #include "G4ToolsSGX11GLES.hh" // no_geant4_module_check
 #endif
@@ -128,10 +123,6 @@
 #ifdef G4VIS_USE_VTK
 #include "G4Vtk.hh" // no_geant4_module_check
 #include "G4VtkOffscreen.hh" // no_geant4_module_check
-#undef G4VIS_USE_TOOLSSG_X11_GLES
-#undef G4VIS_USE_TOOLSSG_XT_GLES
-#undef G4VIS_USE_TOOLSSG_QT_GLES
-#undef G4VIS_USE_TOOLSSG_WINDOWS_GLES
 #undef G4VIS_USE_OPENGLQT
 #undef G4VIS_USE_OPENGLXM
 #undef G4VIS_USE_OPENGLX
@@ -326,8 +317,6 @@ void G4VisExecutive::SetDefaultsByBuildFlags()
 #elif defined G4VIS_USE_TOOLSSG_QT_ZB || G4VIS_USE_TOOLSSG_X11_ZB ||\
               G4VIS_USE_TOOLSSG_XT_ZB || G4VIS_USE_TOOLSSG_WINDOWS_ZB
   fDefaultGraphicsSystemName = "TSG";
-#elif defined G4VIS_USE_QT3D
-  fDefaultGraphicsSystemName = "Qt3D";
 #else
   // Choose a graphics system not needing external packages or libraries
   fDefaultGraphicsSystemName = "TSG_OFFSCREEN";
@@ -342,7 +331,6 @@ void G4VisExecutive::RegisterGraphicsSystems () {
  // Graphics Systems not needing external packages or libraries...
   RegisterGraphicsSystem (new G4ASCIITree);
   RegisterGraphicsSystem (new G4DAWNFILE);
-  RegisterGraphicsSystem (new G4HepRepFile);
   RegisterGraphicsSystem (new G4RayTracer);
   RegisterGraphicsSystem (new G4VRML2File);
   RegisterGraphicsSystem (new G4GMocrenFile);
@@ -441,10 +429,6 @@ void G4VisExecutive::RegisterGraphicsSystems () {
   RegisterGraphicsSystem(new G4RayTracerQt);
 #endif
 
-#ifdef G4VIS_USE_QT3D
-  RegisterGraphicsSystem(new G4Qt3D);
-#endif
-
 #ifdef G4VIS_USE_TOOLSSG_X11_GLES
   G4VGraphicsSystem* tsg_x11_gles = new G4ToolsSGX11GLES;
   RegisterGraphicsSystem(tsg_x11_gles);
@@ -505,15 +489,27 @@ void G4VisExecutive::RegisterGraphicsSystems () {
 #ifdef G4VIS_USE_TOOLSSG_QT_GLES
   tsg_qt_gles->AddNickname("TSG");
   tsg_qt_gles->AddNickname("OGL");
+#ifdef G4VIS_USE_TOOLSSG_QT_ZB
+  tsg_qt_zb->AddNickname("TSGZB");
+#endif
 #elif defined(G4VIS_USE_TOOLSSG_XT_GLES)
   tsg_xt_gles->AddNickname("TSG");
   tsg_xt_gles->AddNickname("OGL");
+#ifdef G4VIS_USE_TOOLSSG_XT_ZB
+  tsg_xt_zb->AddNickname("TSGZB");
+#endif
 #elif defined(G4VIS_USE_TOOLSSG_X11_GLES)
   tsg_x11_gles->AddNickname("TSG");
   tsg_x11_gles->AddNickname("OGL");
+#ifdef G4VIS_USE_TOOLSSG_X11_ZB
+  tsg_x11_zb->AddNickname("TSGZB");
+#endif
 #elif defined(G4VIS_USE_TOOLSSG_WINDOWS_GLES)
   tsg_windows_gles->AddNickname("TSG");
   tsg_windows_gles->AddNickname("OGL");
+#ifdef G4VIS_USE_TOOLSSG_WINDOWS_ZB
+  tsg_windows_zb->AddNickname("TSGZB");
+#endif
 #else
 #ifdef G4VIS_USE_TOOLSSG_QT_ZB
   tsg_qt_zb->AddNickname("TSG");

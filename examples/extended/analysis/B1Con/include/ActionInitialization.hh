@@ -23,9 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 /// \file ActionInitialization.hh
-/// \brief Definition of the B1::ActionInitialization class
+/// \brief Definition of the B1Con::ActionInitialization class
 
 #ifndef B1ActionInitialization_h
 #define B1ActionInitialization_h 1

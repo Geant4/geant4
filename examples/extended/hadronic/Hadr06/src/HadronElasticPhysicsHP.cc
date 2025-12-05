@@ -24,12 +24,8 @@
 // ********************************************************************
 //
 /// \file HadronElasticPhysicsHP.cc
-/// \brief Definition of the HadronElasticPhysicsHP class
-//
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// \brief Implementation of the HadronElasticPhysicsHP class
 
-//
 // HP models for neutron < 20 MeV
 
 #include "HadronElasticPhysicsHP.hh"

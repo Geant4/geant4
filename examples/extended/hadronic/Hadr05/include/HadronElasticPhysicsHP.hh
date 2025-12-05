@@ -25,8 +25,6 @@
 //
 /// \file HadronElasticPhysicsHP.hh
 /// \brief Definition of the HadronElasticPhysicsHP class
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef HadronElasticPhysicsHP_h
 #define HadronElasticPhysicsHP_h 1

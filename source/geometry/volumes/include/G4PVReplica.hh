@@ -32,11 +32,11 @@
 // linear formula, and the elements completely fill the containing mother
 // volume.
 
-// Original author: Paul Kent (CERN), 29 July 1995 - First non-stub version
-// - G.Cosmo, A.Dotti (CERN), 13 January 2013 - Modified for MT thread-safety
+// Original author: Paul Kent (CERN), 29.07.1995 - First non-stub version
+// - G.Cosmo, A.Dotti (CERN), 13.01.2013 - Modified for MT thread-safety
 // ----------------------------------------------------------------------
 #ifndef G4PVREPLICA_HH
-#define G4PVREPLICA_HH 1
+#define G4PVREPLICA_HH
 
 #include "G4VPhysicalVolume.hh"
 #include "G4GeomSplitter.hh"
@@ -145,7 +145,7 @@ class G4PVReplica : public G4VPhysicalVolume
     /**
      * Default Destructor.
      */
-    ~G4PVReplica() override;
+    ~G4PVReplica() override = default;
 
     /**
      * Returns the volume type characterisation.

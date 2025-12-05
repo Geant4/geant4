@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file ChemFrickeReactionBuilder.hh
+/// \brief Definition of the ChemFrickeReactionBuilder class
 
 #ifndef CHEMFRICKEREACTIONBUILDER_HH
 #  define CHEMFRICKEREACTIONBUILDER_HH 1

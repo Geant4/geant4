@@ -23,11 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file biasing/B02/src/B02ActionInitialization.cc
+/// \file B02ActionInitialization.cc
 /// \brief Implementation of the B02ActionInitialization class
-//
-//
-//
 
 #include "B02ActionInitialization.hh"
 

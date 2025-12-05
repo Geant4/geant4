@@ -109,12 +109,6 @@ public:
 			 G4double tmin,
 			 G4double maxEnergy) override;
 
-  // add correction to energy loss and compute non-ionizing energy loss
-  void CorrectionsAlongStep(const G4MaterialCutsCouple*,
-			    const G4DynamicParticle*,
-			    const G4double& length,
-			    G4double& eloss) override;
-
   // hide assignment operator
   G4ICRU73QOModel & operator=(const  G4ICRU73QOModel &right) = delete;
   G4ICRU73QOModel(const  G4ICRU73QOModel&) = delete;

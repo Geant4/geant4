@@ -25,8 +25,16 @@
 //
 // G4SmartVoxelNode inline implementation
 //
+// Author: Paul Kent (CERN), 12.07.1995 - Initial version
+//         Gabriele Cosmo (CERN), 18.04.2001 - Migrated to STL vector
 // --------------------------------------------------------------------
 
+
+// --------------------------------------------------------------------
+inline G4SmartVoxelNode::G4SmartVoxelNode(G4int pSlice)
+  : fminEquivalent(pSlice), fmaxEquivalent(pSlice)
+{
+}
 
 // --------------------------------------------------------------------
 inline

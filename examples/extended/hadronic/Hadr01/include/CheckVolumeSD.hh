@@ -23,10 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file hadronic/Hadr01/include/CheckVolumeSD.hh
+/// \file CheckVolumeSD.hh
 /// \brief Definition of the CheckVolumeSD class
-//
-//
+
 /////////////////////////////////////////////////////////////////////////
 //
 // CheckVolumeSD

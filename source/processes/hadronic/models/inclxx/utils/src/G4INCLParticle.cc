@@ -69,6 +69,7 @@ namespace G4INCL {
     thePosition(ThreeVector(0.,0.,0.)),
     nCollisions(0),
     nDecays(0),
+    nSrcPair(0),
     thePotentialEnergy(0.0),
     rpCorrelated(false),
     uncorrelatedMomentum(0.),
@@ -81,6 +82,7 @@ namespace G4INCL {
     theHelicity(0.0),
     emissionTime(0.0),
     outOfWell(false),
+    theSrcPartner(false),
     theMass(0.)
   {
     ID = nextID;
@@ -96,7 +98,7 @@ namespace G4INCL {
     thePropagationMomentum(&theMomentum),
     theFrozenMomentum(theMomentum),
     thePosition(position),
-    nCollisions(0), nDecays(0),
+    nCollisions(0), nDecays(0), nSrcPair(0),
     thePotentialEnergy(0.),
     rpCorrelated(false),
     uncorrelatedMomentum(theMomentum.mag()),
@@ -107,7 +109,7 @@ namespace G4INCL {
     theParentResonanceID(0),
 #endif
     theHelicity(0.0),
-    emissionTime(0.0), outOfWell(false)
+    emissionTime(0.0), outOfWell(false), theSrcPartner(false)
   {
     theParticipantType = TargetSpectator;
     ID = nextID;
@@ -127,6 +129,7 @@ namespace G4INCL {
     theFrozenMomentum(theMomentum),
     thePosition(position),
     nCollisions(0), nDecays(0),
+    nSrcPair(0),
     thePotentialEnergy(0.),
     rpCorrelated(false),
     uncorrelatedMomentum(theMomentum.mag()),
@@ -137,7 +140,7 @@ namespace G4INCL {
     theParentResonanceID(0),
 #endif
     theHelicity(0.0),
-    emissionTime(0.0), outOfWell(false)
+    emissionTime(0.0), outOfWell(false), theSrcPartner(false)
   {
     theParticipantType = TargetSpectator;
     ID = nextID;

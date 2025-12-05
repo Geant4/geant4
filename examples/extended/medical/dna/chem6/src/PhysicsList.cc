@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file PhysicsList.cc
+/// \brief Implementation of the PhysicsList class
+
 // This example is provided by the Geant4-DNA collaboration
 // chem6 example is derived from chem4 and chem5 examples
 //
@@ -37,10 +40,9 @@
 //
 // Authors: W. G. Shin and S. Incerti (CENBG, France)
 //
-/// \file PhysicsList.cc
-/// \brief Implementation of the PhysicsList class
 
 #include "PhysicsList.hh"
+#include "PhysicsListMessenger.hh"
 
 #include "G4EmDNAChemistry.hh"
 #include "G4EmDNAChemistry_option1.hh"
@@ -57,17 +59,24 @@
 #include "G4EmDNAPhysics_option8.hh"
 #include "G4EmParameters.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4ProductionCutsTable.hh"
+#include <map>
+#include <functional>
+#include <string>
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PhysicsList::PhysicsList() : G4VModularPhysicsList()
-{
-  G4double currentDefaultCut = 0.001 * mm;
+PhysicsList::PhysicsList() : G4VModularPhysicsList() {
+  constexpr G4double currentDefaultCut = 0.001 * mm;
   G4ProductionCutsTable::GetProductionCutsTable()->SetEnergyRange(100 * eV, 1 * GeV);
   SetDefaultCutValue(currentDefaultCut);
   SetVerboseLevel(1);
 
-  RegisterConstructor("G4EmDNAPhysics_option2");
-  RegisterConstructor("G4EmDNAChemistry_option3");
+  fMessenger = std::make_unique<PhysicsListMessenger>(this);
+
+  fEmDNAPhysicsList = std::make_unique<G4EmDNAPhysics_option2>();
+  fEmDNAChemistryList = std::make_unique<G4EmDNAChemistry_option3>();
+  fChemDNAName = "G4EmDNAChemistry_option3";
+  fPhysDNAName = "G4EmDNAPhysics_option2";
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -76,8 +85,7 @@ PhysicsList::~PhysicsList() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void PhysicsList::ConstructParticle()
-{
+void PhysicsList::ConstructParticle() {
   if (fEmDNAPhysicsList != nullptr) {
     fEmDNAPhysicsList->ConstructParticle();
   }
@@ -88,8 +96,7 @@ void PhysicsList::ConstructParticle()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void PhysicsList::ConstructProcess()
-{
+void PhysicsList::ConstructProcess() {
   AddTransportation();
   if (fEmDNAPhysicsList != nullptr) {
     fEmDNAPhysicsList->ConstructProcess();
@@ -101,70 +108,70 @@ void PhysicsList::ConstructProcess()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void PhysicsList::RegisterConstructor(const G4String& name)
-{
-  if (name == fPhysDNAName) {
+void PhysicsList::RegisterConstructor(const G4String &name) {
+  // Factory maps to reduce long if-else chains and centralize constructor bindings
+  using PhysFactory = std::function<std::unique_ptr<G4VPhysicsConstructor>(G4int)>;
+  using ChemFactory = std::function<std::unique_ptr<G4VPhysicsConstructor>()>;
+
+  static const std::map<std::string, PhysFactory> physFactories = {
+    {"G4EmDNAPhysics", [](G4int v) { return std::make_unique<G4EmDNAPhysics>(v); }},
+    {"G4EmDNAPhysics_option1", [](G4int v) { return std::make_unique<G4EmDNAPhysics_option1>(v); }},
+    {"G4EmDNAPhysics_option2", [](G4int v) { return std::make_unique<G4EmDNAPhysics_option2>(v); }},
+    {"G4EmDNAPhysics_option3", [](G4int v) { return std::make_unique<G4EmDNAPhysics_option3>(v); }},
+    {"G4EmDNAPhysics_option4", [](G4int v) { return std::make_unique<G4EmDNAPhysics_option4>(v); }},
+    {"G4EmDNAPhysics_option5", [](G4int v) { return std::make_unique<G4EmDNAPhysics_option5>(v); }},
+    {"G4EmDNAPhysics_option6", [](G4int v) { return std::make_unique<G4EmDNAPhysics_option6>(v); }},
+    {"G4EmDNAPhysics_option7", [](G4int v) { return std::make_unique<G4EmDNAPhysics_option7>(v); }},
+    {"G4EmDNAPhysics_option8", [](G4int v) { return std::make_unique<G4EmDNAPhysics_option8>(v); }}
+  };
+
+  static const std::map<std::string, ChemFactory> chemFactories = {
+    {"G4EmDNAChemistry", [] { return std::make_unique<G4EmDNAChemistry>(); }},
+    {"G4EmDNAChemistry_option1", [] { return std::make_unique<G4EmDNAChemistry_option1>(); }},
+    {"G4EmDNAChemistry_option2", [] { return std::make_unique<G4EmDNAChemistry_option2>(); }},
+    {"G4EmDNAChemistry_option3", [] { return std::make_unique<G4EmDNAChemistry_option3>(); }}
+  };
+
+  // Try EM physics first
+  if (const auto it = physFactories.find(name); it != physFactories.end()) {
+    if (name == fPhysDNAName) {
+      if (verboseLevel > 0) {
+        G4cout << "PhysicsList: EM constructor '" << name << "' already active, no change" <<
+            G4endl;
+      }
+      return;
+    }
+    if (verboseLevel > 0) {
+      G4cout << "===== Register EM constructor ==== '" << name << "'" << G4endl;
+    }
+    fEmDNAPhysicsList = it->second(verboseLevel);
+    fPhysDNAName = name;
     return;
   }
-  if (verboseLevel > 0) {
-    G4cout << "===== Register constructor ==== " << name << G4endl;
+
+  // Then chemistry
+  if (const auto it = chemFactories.find(name); it != chemFactories.end()) {
+    if (name == fChemDNAName) {
+      if (verboseLevel > 0) {
+        G4cout << "PhysicsList: Chemistry constructor '" << name << "' already active, no change" <<
+            G4endl;
+      }
+      return;
+    }
+    if (verboseLevel > 0) {
+      G4cout << "===== Register Chemistry constructor ==== '" << name << "'" << G4endl;
+    }
+    fEmDNAChemistryList = it->second();
+    if (fEmDNAChemistryList) {
+      fEmDNAChemistryList->SetVerboseLevel(verboseLevel);
+    }
+    fChemDNAName = name;
+    return;
   }
-  if (name == "G4EmDNAPhysics") {
-    fEmDNAPhysicsList = std::make_unique<G4EmDNAPhysics>(verboseLevel);
-    fPhysDNAName = name;
-  }
-  else if (name == "G4EmDNAPhysics_option1") {
-    fEmDNAPhysicsList = std::make_unique<G4EmDNAPhysics_option1>(verboseLevel);
-    fPhysDNAName = name;
-  }
-  else if (name == "G4EmDNAPhysics_option2") {
-    fEmDNAPhysicsList = std::make_unique<G4EmDNAPhysics_option2>(verboseLevel);
-    fPhysDNAName = name;
-  }
-  else if (name == "G4EmDNAPhysics_option3") {
-    fEmDNAPhysicsList = std::make_unique<G4EmDNAPhysics_option3>(verboseLevel);
-    fPhysDNAName = name;
-  }
-  else if (name == "G4EmDNAPhysics_option4") {
-    fEmDNAPhysicsList = std::make_unique<G4EmDNAPhysics_option4>(verboseLevel);
-    fPhysDNAName = name;
-  }
-  else if (name == "G4EmDNAPhysics_option5") {
-    fEmDNAPhysicsList = std::make_unique<G4EmDNAPhysics_option5>(verboseLevel);
-    fPhysDNAName = name;
-  }
-  else if (name == "G4EmDNAPhysics_option6") {
-    fEmDNAPhysicsList = std::make_unique<G4EmDNAPhysics_option6>(verboseLevel);
-    fPhysDNAName = name;
-  }
-  else if (name == "G4EmDNAPhysics_option7") {
-    fEmDNAPhysicsList = std::make_unique<G4EmDNAPhysics_option7>(verboseLevel);
-    fPhysDNAName = name;
-  }
-  else if (name == "G4EmDNAPhysics_option8") {
-    fEmDNAPhysicsList = std::make_unique<G4EmDNAPhysics_option8>(verboseLevel);
-    fPhysDNAName = name;
-  }
-  else if (name == "G4EmDNAChemistry") {
-    fEmDNAChemistryList = std::make_unique<G4EmDNAChemistry>();
-    fEmDNAChemistryList->SetVerboseLevel(verboseLevel);
-  }
-  else if (name == "G4EmDNAChemistry_option1") {
-    fEmDNAChemistryList = std::make_unique<G4EmDNAChemistry_option1>();
-    fEmDNAChemistryList->SetVerboseLevel(verboseLevel);
-  }
-  else if (name == "G4EmDNAChemistry_option2") {
-    fEmDNAChemistryList = std::make_unique<G4EmDNAChemistry_option2>();
-    fEmDNAChemistryList->SetVerboseLevel(verboseLevel);
-  }
-  else if (name == "G4EmDNAChemistry_option3") {
-    fEmDNAChemistryList = std::make_unique<G4EmDNAChemistry_option3>();
-    fEmDNAChemistryList->SetVerboseLevel(verboseLevel);
-  }
-  else {
-    G4cout << "PhysicsList::RegisterConstructor: <" << name << ">"
-           << " fails - name is not defined" << G4endl;
-  }
+
+  // Unknown name
+  G4cout << "PhysicsList::RegisterConstructor: <" << name << "> fails - name is not defined" <<
+      G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

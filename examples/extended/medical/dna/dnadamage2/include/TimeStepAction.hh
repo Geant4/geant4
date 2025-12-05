@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file TimeStepAction.hh
+/// \brief Definition of the TimeStepAction class
+
 // This example is provided by the Geant4-DNA collaboration
 // dnadamage3 example is derived from the chem6 example
 // chem6 example authors: W. G. Shin and S. Incerti (CENBG, France)
@@ -40,8 +43,6 @@
 //          J. Ramos-Mendez and B. Faddegon (UCSF, US)
 //
 //
-/// \file TimeStepAction.hh
-/// \brief Definition of the TimeStepAction class
 
 #ifndef DNADAMAGE2_TimeStepAction_h
 #define DNADAMAGE2_TimeStepAction_h 1

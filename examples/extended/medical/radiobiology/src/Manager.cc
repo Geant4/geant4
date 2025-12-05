@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file radiobiology/src/Manager.cc
+/// \file Manager.cc
 /// \brief Implementation of the RadioBio::Manager class
 
 #include "Manager.hh"

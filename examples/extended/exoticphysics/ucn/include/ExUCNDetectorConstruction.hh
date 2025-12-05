@@ -23,13 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file exoticphysics/ucn/include/ExUCNDetectorConstruction.hh
+/// \file ExUCNDetectorConstruction.hh
 /// \brief Definition of the ExUCNDetectorConstruction class
-//
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef ExUCNDetectorConstruction_h
 #define ExUCNDetectorConstruction_h 1

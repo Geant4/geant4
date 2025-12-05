@@ -25,8 +25,8 @@
 //
 // G4QSStepper inline methods implementation
 //
-// Authors - version 1 : Lucio Santi, Rodrigo Castro (Univ. Buenos Aires) - 2018-2021
-//         - version 2 : Mattias Portnoy (Univ. Buenos Aires) - 2024
+// Authors: version 1 - Lucio Santi, Rodrigo Castro (Univ. Buenos Aires), 2018-2021
+//          version 2 - Mattias Portnoy (Univ. Buenos Aires), 2024
 // ----------------------------------------------------------------------------
 
 inline
@@ -65,14 +65,6 @@ constexpr G4int G4QSStepper::INDEX_TYPE(G4int i)
 // ----------------------------------------------------------------------------
 
 inline
-void G4QSStepper::set_qss_order(G4int order)
-{
-  qss_order=order;
-}
-
-// ----------------------------------------------------------------------------
-
-inline
 void G4QSStepper::momentum_to_velocity(const G4double* momentum, G4double* out)
 {
   out[0] = momentum[0] * fInv_mass_over_c;
@@ -83,7 +75,7 @@ void G4QSStepper::momentum_to_velocity(const G4double* momentum, G4double* out)
 // ----------------------------------------------------------------------------
 
 inline
-void G4QSStepper::compare_time_and_update(G4int index, G4int i)
+void G4QSStepper::compare_time_and_update(G4int& index, G4int i)
 {
   if (current_substep.sync_t[i] < current_substep.sync_t[index]) { index = i;} 
 }
@@ -142,6 +134,22 @@ void G4QSStepper::reset(const G4FieldTrack *track)
 {          
   fTrack_changed = true; //// Cannot rely on addresses --- OLD was track != fCurrent_track;
   fCurrent_track = track;
+  setRestMass(track->GetRestMass());
+}
+
+// ----------------------------------------------------------------------------
+
+inline
+void G4QSStepper::setRestMass(G4double restMass)
+{
+  if( restMass > 0.0 ){
+      fRestMass = restMass;
+  } else {
+      fRestMass = 1.0e-10 * CLHEP::electronvolt;
+#ifdef G4DEBUG_FIELD
+      G4cerr << "G4QSStepper::setRestMass(): WARNING: Rest Mass (track) = " << restMass << " Reset to:" << fRestMass / CLHEP::eV << " eV " << G4endl;
+#endif
+  }
 }
 
 // ----------------------------------------------------------------------------
@@ -369,11 +377,11 @@ void G4QSStepper::update_sync_time_one_coefficient(G4int index)
   }
   else
   {
-    G4double dq_leading_ratio = dq_vector[index]/fabs(leading_poly_cofficient);
+    G4double dq_leading_ratio = dq_vector[index]/std::fabs(leading_poly_cofficient);
     switch (qss_order)
     {
       case 2:
-        current_substep.sync_t[index] = current_substep.state_tx[index] + sqrt(dq_leading_ratio);
+        current_substep.sync_t[index] = current_substep.state_tx[index] + std::sqrt(dq_leading_ratio);
         break;
       case 3:
         current_substep.sync_t[index] = current_substep.state_tx[index] + cbrt(dq_leading_ratio);

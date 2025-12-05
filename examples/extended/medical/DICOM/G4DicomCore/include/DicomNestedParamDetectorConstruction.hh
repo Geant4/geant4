@@ -23,10 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file medical/DICOM/include/DicomNestedParamDetectorConstruction.hh
+/// \file DicomNestedParamDetectorConstruction.hh
 /// \brief Definition of the DicomNestedParamDetectorConstruction class
-//
 
 #ifndef DicomNestedParamDetectorConstruction_h
 #define DicomNestedParamDetectorConstruction_h 1

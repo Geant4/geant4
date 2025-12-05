@@ -51,6 +51,7 @@ public:
 
   void SetOuterRadius(G4double radius);
    void SetApplicatorLength(G4double length);
+  G4double fOuterRadiusFirstApplicatorFlash; ///// DA CAMBIARE
 
 private:
 void ConstructCollimator(G4VPhysicalVolume *);
@@ -75,6 +76,7 @@ void ConstructCollimator(G4VPhysicalVolume *);
   G4double fInitial_pos;
   
   G4double fInnerRadiusFirstApplicatorFlash;
+  // G4double fOuterRadiusFirstApplicatorFlash;
   G4VPhysicalVolume *fMotherPhys;
 
   G4Material* Fe;
@@ -113,7 +115,7 @@ void ConstructCollimator(G4VPhysicalVolume *);
   G4VisAttributes *skyBlue;
   G4VisAttributes *magenta;
 
-  G4double fOuterRadiusFirstApplicatorFlash;
+
   G4Tubs *fSolidFirstApplicatorFlash;
   G4VPhysicalVolume *fPhysiFirstApplicatorFlash;
   G4Material *fFirstApplicatorMaterialFlash;

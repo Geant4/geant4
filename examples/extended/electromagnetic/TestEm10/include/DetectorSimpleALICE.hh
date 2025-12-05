@@ -23,11 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm10/include/DetectorSimpleALICE.hh
+/// \file DetectorSimpleALICE.hh
 /// \brief Definition of the DetectorSimpleALICE class
-//
-//
-//
+
 // Simplified setup for ALICE XTR test beam (~2004).
 // Runs by : Test salice.mac
 

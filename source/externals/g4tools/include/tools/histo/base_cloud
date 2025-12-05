@@ -7,10 +7,6 @@
 #include <string>
 #include <vector>
 
-#ifdef TOOLS_MEM
-#include "../mem"
-#endif
-
 namespace tools {
 namespace histo {
 
@@ -24,14 +20,8 @@ protected:
   :m_limit(aLimit)
   ,m_Sw(0)
   {
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
   }
   virtual ~base_cloud(){
-#ifdef TOOLS_MEM
-    mem::decrement(s_class().c_str());
-#endif
   }
 public:
   base_cloud(const base_cloud& a_from)
@@ -40,9 +30,6 @@ public:
   ,m_Sw(a_from.m_Sw)
   ,m_ws(a_from.m_ws)
   {
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
   }
 
   base_cloud& operator=(const base_cloud& a_from){

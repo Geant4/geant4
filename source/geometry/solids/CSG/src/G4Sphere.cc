@@ -53,17 +53,26 @@
 
 #include "G4VGraphicsScene.hh"
 #include "G4VisExtent.hh"
+#include "G4AutoLock.hh"
+
+namespace
+{
+  G4Mutex sphereMutex = G4MUTEX_INITIALIZER;
+}
 
 using namespace CLHEP;
 
 // Private enums: Not for external use
-namespace {
-// used by distanceToOut
-enum ESide {kNull,kRMin,kRMax,kSPhi,kEPhi,kSTheta,kETheta};
+//
+namespace
+{
+  // used by distanceToOut
+  enum ESide {kNull,kRMin,kRMax,kSPhi,kEPhi,kSTheta,kETheta};
 
-// used by normal
-enum ENorm {kNRMin,kNRMax,kNSPhi,kNEPhi,kNSTheta,kNETheta};
+  // used by normal
+  enum ENorm {kNRMin,kNRMax,kNSPhi,kNEPhi,kNSTheta,kNETheta};
 }
+
 ////////////////////////////////////////////////////////////////////////
 //
 // constructor - check parameters, convert angles so 0<sphi+dpshi<=2_PI
@@ -110,18 +119,6 @@ G4Sphere::G4Sphere( __void__& a )
   : G4CSGSolid(a)
 {
 }
-
-/////////////////////////////////////////////////////////////////////
-//
-// Destructor
-
-G4Sphere::~G4Sphere() = default;
-
-//////////////////////////////////////////////////////////////////////////
-//
-// Copy constructor
-
-G4Sphere::G4Sphere(const G4Sphere&) = default;
 
 //////////////////////////////////////////////////////////////////////////
 //
@@ -200,8 +197,8 @@ void G4Sphere::BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const
     G4double etheta = stheta + GetDeltaThetaAngle();
     G4double rhomin = rmin*std::min(sinStart,sinEnd);
     G4double rhomax = rmax;
-    if (stheta > halfpi) rhomax = rmax*sinStart;
-    if (etheta < halfpi) rhomax = rmax*sinEnd;
+    if (stheta > halfpi) { rhomax = rmax*sinStart; }
+    if (etheta < halfpi) { rhomax = rmax*sinEnd; }
 
     G4TwoVector xymin,xymax;
     G4GeomTools::DiskExtent(rhomin,rhomax,
@@ -284,10 +281,8 @@ EInside G4Sphere::Inside( const G4ThreeVector& p ) const
     {
       return in = kSurface;
     }
-    else
-    {
-      return in = kInside;
-    }
+    
+    return in = kInside;
   }
 
   if ( (rad2 <= Rmax_minus*Rmax_minus) && (rad2 >= Rmin_plus*Rmin_plus) )
@@ -320,7 +315,7 @@ EInside G4Sphere::Inside( const G4ThreeVector& p ) const
     if ( (pPhi < fSPhi - halfAngTolerance)
       || (pPhi > ePhi + halfAngTolerance) )      { return in = kOutside; }
 
-    else if (in == kInside)  // else it's kSurface anyway already
+    if (in == kInside)  // else it's kSurface anyway already
     {
       if ( (pPhi < fSPhi + halfAngTolerance)
         || (pPhi > ePhi - halfAngTolerance) )    { in = kSurface; }
@@ -384,7 +379,7 @@ G4ThreeVector G4Sphere::SurfaceNormal( const G4ThreeVector& p ) const
   rho  = std::sqrt(rho2);
 
   G4double    distRMax = std::fabs(radius-fRmax);
-  if (fRmin != 0.0)  distRMin = std::fabs(radius-fRmin);
+  if (fRmin != 0.0) { distRMin = std::fabs(radius-fRmin); }
 
   if ( (rho != 0.0) && !fFullSphere )
   {
@@ -1799,11 +1794,9 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
         }
         return snxt = 0;
       }
-      else
-      {
-        snxt = -pDotV3d+std::sqrt(d2);    // second root since inside Rmax
-        side =  kRMax ;
-      }
+      
+      snxt = -pDotV3d+std::sqrt(d2);    // second root since inside Rmax
+      side =  kRMax ;
     }
 
     // Inner spherical shell intersection:
@@ -1823,17 +1816,15 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
           if(calcNorm)  { *validNorm = false; }  // Rmin surface is concave
           return snxt = 0 ;
         }
-        else
+        
+        if ( d2 >= 0. )
         {
-          if ( d2 >= 0. )
-          {
-            sd = -pDotV3d-std::sqrt(d2);
+          sd = -pDotV3d-std::sqrt(d2);
 
-            if ( sd >= 0. )     // Always intersect Rmin first
-            {
-              snxt = sd ;
-              side = kRMin ;
-            }
+          if ( sd >= 0. )     // Always intersect Rmin first
+          {
+            snxt = sd ;
+            side = kRMin ;
           }
         }
       }
@@ -1905,7 +1896,7 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
                 if( calcNorm )  { *validNorm = false; }
                 return snxt = 0.;
               }
-              else if( (fSTheta > halfpi) && (p.z() <= 0) )
+              if( (fSTheta > halfpi) && (p.z() <= 0) )
               {
                 if( calcNorm )
                 {
@@ -1918,7 +1909,10 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
                                         p.y()/rhoSecTheta,
                                         std::sin(fSTheta)  );
                   }
-                  else *n = G4ThreeVector(0.,0.,1.);
+                  else
+                  {
+                    *n = G4ThreeVector(0.,0.,1.);
+                  }
                 }
                 return snxt = 0.;
               }
@@ -1948,7 +1942,7 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
               }
               return snxt = 0.;
             }
-            else if( (fSTheta < halfpi) && (t2 < 0.) && (p.z() >=0.) ) // leave
+            if( (fSTheta < halfpi) && (t2 < 0.) && (p.z() >=0.) ) // leave
             {
               if( calcNorm )  { *validNorm = false; }
               return snxt = 0.;
@@ -2039,7 +2033,7 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
                 if( calcNorm )  { *validNorm = false; }
                 return snxt = 0.;
               }
-              else if ( (eTheta < halfpi) && (p.z() >= 0) )
+              if ( (eTheta < halfpi) && (p.z() >= 0) )
               {
                 if( calcNorm )
                 {
@@ -2076,17 +2070,19 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
                 *validNorm = true;
                 if (rho2 != 0.0)
                 {
-                    rhoSecTheta = std::sqrt(rho2*(1+tanETheta2));
-                    *n = G4ThreeVector( p.x()/rhoSecTheta,
-                                        p.y()/rhoSecTheta,
-                                        -sinETheta  );
+                   rhoSecTheta = std::sqrt(rho2*(1+tanETheta2));
+                   *n = G4ThreeVector( p.x()/rhoSecTheta,
+                                       p.y()/rhoSecTheta,
+                                       -sinETheta  );
                 }
-                else *n = G4ThreeVector(0.,0.,-1.);
+                else
+                {
+                   *n = G4ThreeVector(0.,0.,-1.);
+                }
               }
               return snxt = 0.;
             }
-            else if ( (eTheta > halfpi)
-                   && (t2 < 0.) && (p.z() <=0.) ) // leave
+            if ( (eTheta > halfpi) && (t2 < 0.) && (p.z() <=0.) ) // leave
             {
               if( calcNorm )  { *validNorm = false; }
               return snxt = 0.;
@@ -2336,7 +2332,10 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
                 sidephi = kEPhi ;
               }
             }
-            else sphi=kInfinity;
+            else
+            {
+              sphi=kInfinity;
+            }
           }
           else // leaving immediately by starting phi
           {
@@ -2744,11 +2743,13 @@ std::ostream& G4Sphere::StreamInfo( std::ostream& os ) const
 
 G4double G4Sphere::GetCubicVolume()
 {
-  if (fCubicVolume == 0.)
+  if (fCubicVolume == 0)
   {
+    G4AutoLock l(&sphereMutex);
     G4double RRR = fRmax*fRmax*fRmax;
     G4double rrr = fRmin*fRmin*fRmin;
     fCubicVolume = fDPhi*(cosSTheta - cosETheta)*(RRR - rrr)/3.;
+    l.unlock();
   }
   return fCubicVolume;
 }
@@ -2759,14 +2760,16 @@ G4double G4Sphere::GetCubicVolume()
 
 G4double G4Sphere::GetSurfaceArea()
 {
-  if (fSurfaceArea == 0.)
+  if (fSurfaceArea == 0)
   {
+    G4AutoLock l(&sphereMutex);
     G4double RR = fRmax*fRmax;
     G4double rr = fRmin*fRmin;
     fSurfaceArea = fDPhi*(RR + rr)*(cosSTheta - cosETheta);
-    if (!fFullPhiSphere)    fSurfaceArea += fDTheta*(RR - rr);
-    if (fSTheta > 0)        fSurfaceArea += 0.5*fDPhi*(RR - rr)*sinSTheta;
-    if (eTheta < CLHEP::pi) fSurfaceArea += 0.5*fDPhi*(RR - rr)*sinETheta;
+    if (!fFullPhiSphere) { fSurfaceArea += fDTheta*(RR - rr); }
+    if (fSTheta > 0) { fSurfaceArea += 0.5*fDPhi*(RR - rr)*sinSTheta; }
+    if (eTheta < CLHEP::pi) { fSurfaceArea += 0.5*fDPhi*(RR - rr)*sinETheta; }
+    l.unlock();
   }
   return fSurfaceArea;
 }
@@ -2802,7 +2805,7 @@ G4ThreeVector G4Sphere::GetPointOnSurface() const
     G4double phi = fDPhi*v + fSPhi;
     return { r*rho*std::cos(phi), r*rho*std::sin(phi), r*z };
   }
-  else if (select < aInner + aOuter + aPhi) // cut in phi
+  if (select < aInner + aOuter + aPhi) // cut in phi
   {
     G4double phi   = (select < aInner + aOuter + 0.5*aPhi) ? fSPhi : fSPhi + fDPhi;
     G4double r     = std::sqrt((RR - rr)*u + rr);
@@ -2811,15 +2814,15 @@ G4ThreeVector G4Sphere::GetPointOnSurface() const
     G4double rho   = std::sin(theta);
     return { r*rho*std::cos(phi), r*rho*std::sin(phi), r*z };
   }
-  else                                     // cut in theta
-  {
-    G4double theta = (select < aTotal - aETheta) ? fSTheta : fSTheta + fDTheta;
-    G4double r     = std::sqrt((RR - rr)*u + rr);
-    G4double phi   = fDPhi*v + fSPhi;
-    G4double z     = std::cos(theta);
-    G4double rho   = std::sin(theta);
-    return { r*rho*std::cos(phi), r*rho*std::sin(phi), r*z };
-  }
+
+  // cut in theta
+
+  G4double theta = (select < aTotal - aETheta) ? fSTheta : fSTheta + fDTheta;
+  G4double r     = std::sqrt((RR - rr)*u + rr);
+  G4double phi   = fDPhi*v + fSPhi;
+  G4double z     = std::cos(theta);
+  G4double rho   = std::sin(theta);
+  return { r*rho*std::cos(phi), r*rho*std::sin(phi), r*z };
 }
 
 /////////////////////////////////////////////////////////////////////////////

@@ -540,11 +540,6 @@ public:
 
 public: //for markers
   bool is_inside(float a_x,float a_y,float a_z,float a_w) {
-    //std::cout << "debug : tools::sg::pick_action::is_inside :"
-    //      << " x " << a_x
-    //      << " y " << a_y
-    //      << std::endl;
-
     // In principle we should receive (because of proj x model matrix
     // mult of world coord points) point in [-1,1]x[-1,1].
 
@@ -555,10 +550,6 @@ public: //for markers
     if(1<x) return false;
     if(y<-1) return false;
     if(1<y) return false;
-
-    //std::cout << "debug : tools::sg::pick_action::is_inside :"
-    //      << " inside !"
-    //      << std::endl;
 
     m_zs.push_back(a_z);
     m_ws.push_back(a_w);
@@ -665,15 +656,11 @@ protected:
 
     float xo = 0;
     float yo = 0;
-    //float zo = 0;
 
    {float cp2 = (x2-x1)*(y3-y1)-(y2-y1)*(x3-x1);  //(2-1).cross(3-1)
     if(cp2==0) return false;       // (1,2,3) aligned points.
     float cp1 = (x2-x1)*(yo-y1)-(y2-y1)*(xo-x1);
     if(cp1==0) { // O on (1,2). We can't pass here.
-      //m_out << "pick_action::intersect_triangle : case 0." << std::endl;
-      //m_zs.push_back(???);
-      //m_ws.push_back(???);
       return false;
     }
     if((cp1*cp2)<0) return false;} // O 3 not on same side than (1,2)
@@ -682,9 +669,6 @@ protected:
     if(cp2==0) return false;       // (1,2,3) aligned points.
     float cp1 = (x3-x2)*(yo-y2)-(y3-y2)*(xo-x2);
     if(cp1==0) { // O on (2,3). We can't pass here.
-      //m_out << "pick_action::intersect_triangle : case 1." << std::endl;
-      //m_zs.push_back(???);
-      //m_ws.push_back(???);
       return false;
     }
     if((cp1*cp2)<0) return false;} // O 1 not on same side than (2,3)
@@ -693,14 +677,9 @@ protected:
     if(cp2==0) return false;       // (1,2,3) aligned points.
     float cp1 = (x1-x3)*(yo-y3)-(y1-y3)*(xo-x3);
     if(cp1==0) { // O on (3,1). We can't pass here.
-      //m_out << "pick_action::intersect_triangle : case 2." << std::endl;
-      //m_zs.push_back(???);
-      //m_ws.push_back(???);
       return false;
     }
     if((cp1*cp2)<0) return false;} // O 2 not on same side than (3,1)
-
-    //std::cout << " (0,0) inside. " << std::endl;
 
     //get z of O=(0,0) on the triangle :
 
@@ -736,57 +715,9 @@ protected:
             << std::endl;
       return false;
     }}
-    //::printf("debug : w planey %g\n",p[2]);
-
-    //m_out << "pick_action::intersect_triangle :"
-    //      << " p " << p[0] << " " << p[1] << " " << p[2]
-    //      << std::endl;
 
     m_zs.push_back(pz[2]);
     m_ws.push_back(pw[2]);
-
-/*
-    // check by using interpolation :
-   {vec3f p1(x1,y1,a_1z);
-    vec3f p2(x2,y2,a_2z);
-    vec3f p3(x3,y3,a_3z);
-    line<vec3f> l1p(p1,pz);
-    line<vec3fy> l23(p2,p3);
-    vec3f q; //on 23 side.
-    float prec = 1e10-8;
-    if(!l1p.intersect(l23,q,prec)) {
-      m_out << "pick_action::intersect_triangle :"
-            << " line/line intersection failed."
-            << std::endl;
-      return false;
-    }
-    float dq2 = (q-p2).length();
-    float d32 = (p3-p2).length();
-    if(d32==0) {
-      m_out << "pick_action::intersect_triangle :"
-            << " zero d32."
-            << std::endl;
-      return false;
-    }
-    float dp1 = (pz-p1).length();
-    float dq1 = (q-p1).length();
-    if(dq1==0) {
-      m_out << "pick_action::intersect_triangle :"
-            << " zero dq1."
-            << std::endl;
-      return false;
-    }
-
-    float wq = a_2w + (a_3w-a_2w)*(dq2/d32);
-    float wp = a_1w + (wq-a_1w)*(dp1/dq1);
-
-    float zq = a_2z + (a_3z-a_2z)*(dq2/d32);
-    float zp = a_1z + (zq-a_1z)*(dp1/dq1);
-
-    ::printf("debug : pz[2] %g zp %g\n",pz[2],zp);
-    ::printf("debug : pw[2] %g wp %g\n",pw[2],wp);
-    }
-*/
 
     return true;
   }
@@ -839,7 +770,6 @@ protected:
     a_toggle = false;
 
     const unsigned int FILTER__NOZ = 0xf;   //4 left right bits set to 1.
-    //const unsigned int FILTER__Z = 0x3f;  //6 left right bits set to 1.
 
     bool accept = false;
     bool done = false;
@@ -877,7 +807,6 @@ protected:
           }
           if(bout & (1<<0)) { // by > 1
             float t = a_ey - a_by;
-            //CHECK_DIV(t,"ClipLineParallel")
             t = (1 - a_by)/t;
             a_bx += (a_ex - a_bx) * t;
             a_by  = 1;
@@ -885,7 +814,6 @@ protected:
             a_bw += (a_ew - a_bw) * t;
           } else if(bout & (1<<1)) { // by < -1
             float t = a_ey-a_by;
-            //CHECK_DIV(t,"ClipLineParallel")
             t = (-1 - a_by)/t;
             a_bx += (a_ex - a_bx) * t;
             a_by  = -1;
@@ -893,7 +821,6 @@ protected:
             a_bw += (a_ew - a_bw) * t;
           } else if(bout & (1<<2)) { // bx > 1
             float t = a_ex-a_bx;
-            //CHECK_DIV    (t,"ClipLineParallel")
             t = (1 - a_bx)/t;
             a_bx  = 1;
             a_by += (a_ey - a_by) * t;
@@ -901,33 +828,12 @@ protected:
             a_bw += (a_ew - a_bw) * t;
           } else if(bout & (1<<3)) { // bx < -1
             float t = a_ex-a_bx;
-            //CHECK_DIV    (t,"ClipLineParallel")
             t = (-1 - a_bx)/t;
             a_bx  = -1;
             a_by += (a_ey - a_by) * t;
             a_bz += (a_ez - a_bz) * t;
             a_bw += (a_ew - a_bw) * t;
           }
-          // z = -1.
-          // z =  0.
-          // G.Barrand : do not do z clipping
-       /* else if(a_doz && (bout & (1<<4)) ) { //bz < -1
-            float t = a_ez-a_bz;
-            //CHECK_DIV    (t,"ClipLineParallel")
-            t = (-1 - a_z)/t;
-            a_bx += (a_ex - a_bx) * t;
-            a_by += (a_ey - a_by) * t;
-            a_bz  = -1;
-            a_bw += (a_ew - a_bw) * t;
-          } else if(a_doz && (bout & (1<<5)) ) { //bz > 0
-            t = a_ez - a_bz;
-            //CHECK_DIV    (t,"ClipLineParallel")
-            t = (- a_bz)/t;
-            a_bx += (a_ex - a_bx) * t;
-            a_by += (a_ey - a_by) * t;
-            a_bz  = 0;
-            a_bw += (a_ew - a_bw) * t;
-          } */
         }
       }
     } while (!done);
@@ -940,9 +846,6 @@ protected:
     if(a_y<-1) out |= (1<<1);
     if(a_x> 1) out |= (1<<2);
     if(a_x<-1) out |= (1<<3);
-    //if(!a_doz) return out;
-    //if(a_z<-1) out |= (1<<4);
-    //if(a_z> 0) out |= (1<<5);
     return out;
   }
 

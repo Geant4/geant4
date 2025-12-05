@@ -23,11 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file optical/LXe/src/LXeEventAction.cc
+/// \file LXeEventAction.cc
 /// \brief Implementation of the LXeEventAction class
-//
-//
+
 #include "LXeEventAction.hh"
 
 #include "LXeDetectorConstruction.hh"

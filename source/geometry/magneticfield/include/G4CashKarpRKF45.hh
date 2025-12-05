@@ -34,56 +34,89 @@
 // It is used to integrate the equations of the motion of a particle 
 // in a magnetic field.
 
-// Authors: J.Apostolakis, V.Grichine - 30.01.1997
+// Authors: J.Apostolakis, V.Grichine (CERN), 30.01.1997
 // -------------------------------------------------------------------
 #ifndef G4CASHKARP_RKF45_HH
 #define G4CASHKARP_RKF45_HH
 
 #include "G4MagIntegratorStepper.hh"
 
+/**
+ * @brief G4CashKarpRKF45 implements the Cash-Karp Runge-Kutta-Fehlberg
+ * 4/5 method, an embedded fourth order method (giving fifth-order accuracy)
+ * for the solution of an ODE. Two different fourth order estimates are
+ * calculated; their difference gives an error estimate. 
+ * It is used to integrate the equations of the motion of a particle 
+ * in a magnetic field.
+ */
+
 class G4CashKarpRKF45 : public G4MagIntegratorStepper
 {
   public:
 
+    /**
+     * Constructor for G4CashKarpRKF45.
+     *  @param[in] EqRhs Pointer to the provided equation of motion.
+     *  @param[in] numberOfVariables The number of integration variables.
+     *  @param[in] primary Flag for initialisation of the auxiliary stepper.
+     */
     G4CashKarpRKF45( G4EquationOfMotion* EqRhs,
                      G4int numberOfVariables = 6,
-                     G4bool primary = true ) ;
-   ~G4CashKarpRKF45() override ;
+                     G4bool primary = true );
 
+    /**
+     * Destructor.
+     */
+    ~G4CashKarpRKF45() override;
+
+    /**
+     * Copy constructor and assignment operator not allowed.
+     */
     G4CashKarpRKF45(const G4CashKarpRKF45&) = delete;
     G4CashKarpRKF45& operator=(const G4CashKarpRKF45&) = delete;
-      // Deleted copy constructor and assignment operator.
-
+ 
+    /**
+     * The stepper for the Runge Kutta integration.
+     * The stepsize is fixed, with the step size given by 'h'.
+     * Integrates ODE starting values y[0 to 6].
+     * Outputs yout[] and its estimated error yerr[].
+     *  @param[in] y Starting values array of integration variables.
+     *  @param[in] dydx Derivatives array.
+     *  @param[in] h The given step size.
+     *  @param[out] yout Integration output.
+     *  @param[out] yerr The estimated error.
+     */
     void Stepper( const G4double y[],
                   const G4double dydx[],
                         G4double h,
                         G4double yout[],
-                        G4double yerr[] ) override ;
+                        G4double yerr[] ) override;
 
-    G4double  DistChord()   const override; 
-    G4int IntegratorOrder() const override { return 4; }
+    /**
+     * Returns the distance from chord line.
+     */
+    G4double DistChord() const override; 
+
+    /**
+     * Returns the order, 4, of integration.
+     */
+    inline G4int IntegratorOrder() const override { return 4; }
+
+    /**
+     * Returns the stepper type-ID, "kCashKarpRKF45".
+     */
+    inline G4StepperType StepperType() const override { return kCashKarpRKF45; }
 
   private:
 
-    void StepWithEst( const G4double yIn[],
-                      const G4double dydx[],
-                            G4double Step,
-                            G4double yOut[],
-                            G4double& alpha2,
-                            G4double& beta2,
-                      const G4double B1[],
-                            G4double B2[]    );  
-      // No longer used. Obsolete.
-
-  private:
-
-   G4double *ak2, *ak3, *ak4, *ak5, *ak6, *yTemp, *yIn; // *ak7
-      // scratch space
+    /** Scratch space. */
+    G4double *ak2, *ak3, *ak4, *ak5, *ak6, *yTemp, *yIn;
 
     G4double fLastStepLength = 0.0;
+
+    /** For DistChord calculations. */
     G4double *fLastInitialVector, *fLastFinalVector,
              *fLastDyDx, *fMidVector, *fMidError;
-      // for DistChord calculations
 
     G4CashKarpRKF45* fAuxStepper = nullptr;
 };

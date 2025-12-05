@@ -54,6 +54,7 @@
 #include <sstream>
 
 G4ElementData* G4NeutronElasticXS::data = nullptr;
+G4ElementData* G4NeutronElasticXS::dataR = nullptr;
 G4double G4NeutronElasticXS::coeff[] = {1.0};
 G4String G4NeutronElasticXS::gDataDirectory = "";
 
@@ -80,6 +81,8 @@ G4NeutronElasticXS::G4NeutronElasticXS()
   if (nullptr == data) { 
     data = new G4ElementData(MAXZEL);
     data->SetName("nElastic");
+    dataR = new G4ElementData(MAXZEL);
+    dataR->SetName("nRElastic");
     FindDirectoryPath();
   }
 }
@@ -128,14 +131,27 @@ G4double
 G4NeutronElasticXS::ElementCrossSection(G4double ekin, G4double loge, G4int ZZ)
 {
   G4int Z = std::min(ZZ, MAXZEL-1);
-  auto pv = GetPhysicsVector(Z);
-
-  G4double xs = (ekin <= pv->GetMaxEnergy()) ? pv->LogVectorValue(ekin, loge) 
-    : coeff[Z]*ggXsection->GetElasticElementCrossSection(neutron, ekin,
-                                                         Z, aeff[Z]);
+  G4double xs;
+  G4bool done{false};
+  
+  // data from the resonance region
+  if (fRfilesEnabled) {
+    auto pv = GetPhysicsVectorR(Z);
+    if (nullptr != pv && ekin < el_max_r_e[Z]) {
+      xs = pv->LogVectorValue(ekin, loge);
+      done = true;
+    }
+  }
+  // data above the resonance region
+  if (!done) { 
+    auto pv = GetPhysicsVector(Z);
+    xs = (ekin <= pv->GetMaxEnergy()) ? pv->LogVectorValue(ekin, loge)
+      : coeff[Z]*ggXsection->GetElasticElementCrossSection(neutron, ekin,
+							   Z, aeff[Z]);
+  }
 
 #ifdef G4VERBOSE
-  if(verboseLevel > 1) {
+  if (verboseLevel > 1) {
     G4cout  << "Z= " << Z << " Ekin(MeV)= " << ekin/CLHEP::MeV 
 	    << ",  nElmXSel(b)= " << xs/CLHEP::barn 
 	    << G4endl;
@@ -205,6 +221,9 @@ G4NeutronElasticXS::BuildPhysicsTable(const G4ParticleDefinition& p)
 		FatalException, ed, "");
     return; 
   }
+
+  fRfilesEnabled = G4HadronicParameters::Instance()->UseRFilesForXS();
+
   // initialise static tables only once
   std::call_once(applyOnce, [this]() { isInitializer = true; });
 
@@ -226,7 +245,7 @@ const G4String& G4NeutronElasticXS::FindDirectoryPath()
   // build the complete string identifying the file with the data set
   if (gDataDirectory.empty()) {
     std::ostringstream ost;
-    ost << G4HadronicParameters::Instance()->GetDirPARTICLEXS() << "/neutron/el";
+    ost << G4HadronicParameters::Instance()->GetDirPARTICLEXS() << "/neutron/";
     gDataDirectory = ost.str();
   }
   return gDataDirectory;
@@ -245,10 +264,18 @@ void G4NeutronElasticXS::Initialise(G4int Z)
 
   // upload element data
   std::ostringstream ost;
-  ost << FindDirectoryPath() << Z;
+  ost << FindDirectoryPath() << "el" << Z;
   G4PhysicsVector* v = RetrieveVector(ost, true);
   data->InitialiseForElement(Z, v);
 
+  G4PhysicsVector* vr = nullptr;
+  if (fRfilesEnabled) {
+    std::ostringstream ostr;
+    ostr << FindDirectoryPath() << "Rel" << Z;
+    vr = RetrieveVector(ostr, false);
+    dataR->InitialiseForElement(Z, vr);
+  }
+  
   // smooth transition 
   G4double sig1 = (*v)[v->GetVectorLength()-1];
   G4double ehigh = v->GetMaxEnergy();

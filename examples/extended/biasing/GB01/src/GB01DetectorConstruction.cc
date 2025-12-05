@@ -23,9 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file GB01/src/GB01DetectorConstruction.cc
+/// \file GB01DetectorConstruction.cc
 /// \brief Implementation of the GB01DetectorConstruction class
-//
+
 #include "GB01DetectorConstruction.hh"
 
 #include "GB01BOptrMultiParticleChangeCrossSection.hh"

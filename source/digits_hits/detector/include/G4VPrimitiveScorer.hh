@@ -42,9 +42,15 @@
 #include "G4VSDFilter.hh"
 #include "globals.hh"
 
+#include <functional>
+
 class G4Step;
 class G4HCofThisEvent;
 class G4TouchableHistory;
+
+// Define the signature for the weighting calculation
+// It should take: (const G4Step*) and return G4double
+using G4ScoreWeightCalculator = std::function<G4double(const G4Step*)>;
 
 class G4VPrimitiveScorer
 {
@@ -71,12 +77,22 @@ class G4VPrimitiveScorer
   const G4String& GetUnit() const { return unitName; }
   G4double GetUnitValue() const { return unitValue; }
 
+  inline void ScoreWeighted(G4bool flg = false) { scoreWeighted = flg; }
+  // Use specific weight for scoring
+
+  inline G4bool IsScoreWeighted() const { return scoreWeighted; }
+  // Get option for specific weight for scoring
+
   // Set/Get methods
   inline void SetMultiFunctionalDetector(G4MultiFunctionalDetector* d) { detector = d; }
   inline G4MultiFunctionalDetector* GetMultiFunctionalDetector() const { return detector; }
   inline const G4String& GetName() const { return primitiveName; }
   inline void SetFilter(G4VSDFilter* f) { filter = f; }
   inline G4VSDFilter* GetFilter() const { return filter; }
+  inline void SetScoreWeightCalculator(G4ScoreWeightCalculator calculator) {
+    fScoreWeightCalculator = calculator;
+  }
+
   inline void SetVerboseLevel(G4int vl) { verboseLevel = vl; }
   inline G4int GetVerboseLevel() const { return verboseLevel; }
 
@@ -114,6 +130,10 @@ class G4VPrimitiveScorer
   G4String unitName{"NoUnit"};
   G4double unitValue{1.0};
   G4int fNi{0}, fNj{0}, fNk{0};  // used for 3D scorers
+  G4bool scoreWeighted{false};
+  G4ScoreWeightCalculator fScoreWeightCalculator = [](const G4Step*) -> G4double {
+    return 1.0;
+  };
 
  private:
   inline G4bool HitPrimitive(G4Step* aStep, G4TouchableHistory* ROhis)

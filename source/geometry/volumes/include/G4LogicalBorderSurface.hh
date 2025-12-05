@@ -30,10 +30,10 @@
 // A Logical Surface class for surfaces defined by the boundary
 // of two physical volumes.
 
-// Author: John Apostolakis (CERN), 17 June 1997
+// Author: John Apostolakis (CERN), 17.06.1997
 // --------------------------------------------------------------------
 #ifndef G4LogicalBorderSurface_hh
-#define G4LogicalBorderSurface_hh 1
+#define G4LogicalBorderSurface_hh
 
 #include <map>
 
@@ -63,7 +63,7 @@ class G4LogicalBorderSurface : public G4LogicalSurface
                                   G4VPhysicalVolume* vol1, 
                                   G4VPhysicalVolume* vol2,
                                   G4SurfaceProperty* surfaceProperty );
-    ~G4LogicalBorderSurface() override;
+    ~G4LogicalBorderSurface() override = default;
 
     /**
      * Copy constructor and assignment operator are not allowed.
@@ -100,10 +100,14 @@ class G4LogicalBorderSurface : public G4LogicalSurface
 
   private:
 
-    G4VPhysicalVolume* Volume1;  // Physical Volume pointer on side 1
-    G4VPhysicalVolume* Volume2;  // Physical Volume pointer on side 2
+    /** Physical Volume pointer on side 1. */
+    G4VPhysicalVolume* Volume1;
 
-    std::size_t Index;           // Creation order index
+    /** Physical Volume pointer on side 2. */
+    G4VPhysicalVolume* Volume2;
+
+    /** Creation order index. */
+    std::size_t Index;
 
     /** The static Table of BorderSurfaces. */
     static G4LogicalBorderSurfaceTable* theBorderSurfaceTable;

@@ -25,8 +25,8 @@
 //
 // G4VIntegrationDriver implementation
 //
-// Author: Dmitry Sorokin, Google Summer of Code 2017
-// Supervision: John Apostolakis, CERN
+// Author: Dmitry Sorokin (CERN, Google Summer of Code 2017), 20.10.2017
+// Supervision: John Apostolakis (CERN)
 // --------------------------------------------------------------------
 
 #include "G4VIntegrationDriver.hh"
@@ -38,7 +38,6 @@ void G4VIntegrationDriver::RenewStepperAndAdjust(G4MagIntegratorStepper *)
        "This method exists only for the original G4MagIntegratorDriver class. "
        "Not defined for other classes derived from G4VIntegrationDriver");
 }
-
 
 std::ostream& operator<<( std::ostream& os, const G4VIntegrationDriver& id)
 {

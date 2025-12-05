@@ -23,9 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file eventgenerator/pythia/decayer6/pythia6_decayer.cc
-/// \brief Main program of the pythia6Decayer example
+/// \file pythia6_decayer.cc
+/// \brief Main program of the pythia/decayer6 example
 
 #include "DetectorConstruction.hh"
 #include "GunPrimaryGeneratorAction.hh"

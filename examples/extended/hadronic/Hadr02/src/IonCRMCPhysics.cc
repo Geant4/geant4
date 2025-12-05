@@ -23,10 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file hadronic/Hadr02/src/IonCRMCPhysics.cc
+/// \file IonCRMCPhysics.cc
 /// \brief Implementation of the IonCRMCPhysics class
-//
-//
+
 //---------------------------------------------------------------------------
 //
 // Class:     IonCRMCPhysics

@@ -41,8 +41,9 @@
 
 class G4DNAChemistryManager;
 class G4VAtomDeexcitation;
-class G4DNACrossSectionDataSet;
+class G4ExtendedPhysicsVector;
 class G4Pow;
+class G4EmCorrections;
 
 class G4DNARuddIonisationDynamicModel : public G4VEmModel, public G4VSIntegration
 {
@@ -119,18 +120,21 @@ private:
   // Water density table
   static const std::vector<G4double>* fpWaterDensity;
 
-  // data for protons
-  static G4DNACrossSectionDataSet* xsdata_hydrogen;
-  static G4DNACrossSectionDataSet* xsdata_helium;
-  static G4DNACrossSectionDataSet* xsdata_p;
+  // cross section data
+  static G4ExtendedPhysicsVector* xsdata_alpha;
+  static G4ExtendedPhysicsVector* xsdata_alphap;
+  static G4ExtendedPhysicsVector* xsdata_hydrogen;
+  static G4ExtendedPhysicsVector* xsdata_helium;
+  static G4ExtendedPhysicsVector* xsdata_p;
 
   // run time data
-  G4DNACrossSectionDataSet* xsdata{nullptr};
+  G4ExtendedPhysicsVector* xsdata{nullptr};
 
   const G4ParticleDefinition* fParticle{nullptr};
   const G4Track* fTrack{nullptr};
 
   G4DNAChemistryManager* fChemistry{nullptr};
+  G4EmCorrections* fEmCorrections;
   G4Pow* fGpow;
  
   //deexcitation manager to produce fluo photons and e-
@@ -148,7 +152,6 @@ private:
 
   G4double slaterEffectiveCharge[3] = {0.0};
   G4double sCoefficient[3] = {0.0};
-  G4double fTemp[5] = {0.0};
 
   G4double F1{0.0};
   G4double F2{0.0};
@@ -160,6 +163,7 @@ private:
 
   G4int fSelectedShell{0};
   G4int verbose{0};
+  std::size_t idx{0};
 
   G4bool isFirst{false};
   G4bool isInitialised{false};

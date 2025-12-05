@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file RunAction.hh
+/// \brief Definition of the RunAction class
+
 // This example is provided by the Geant4-DNA collaboration
 // chem6 example is derived from chem4 and chem5 examples
 //
@@ -36,11 +39,6 @@
 // The Geant4-DNA web site is available at http://geant4-dna.org
 //
 // Authors: W. G. Shin and S. Incerti (CENBG, France)
-//
-// $Id$
-//
-/// \file RunAction.hh
-/// \brief Definition of the RunAction class
 
 #ifndef CHEM6_RunAction_h
 #define CHEM6_RunAction_h 1
@@ -52,18 +50,20 @@ class G4Run;
 class DetectorConstruction;
 /// Run action class
 
-class RunAction : public G4UserRunAction
+class RunAction final : public G4UserRunAction
 {
   public:
-    RunAction();
+    RunAction() = default;
     // TIPs: please avoid constructors with arguments
     // all data can be retrieved from G4RunManager
     // or others: G4SDManager::FindSensitiveDetector
-    virtual ~RunAction();
+    ~RunAction() override = default;
 
-    virtual G4Run* GenerateRun();
-    virtual void BeginOfRunAction(const G4Run*);
-    virtual void EndOfRunAction(const G4Run*);
+    G4Run* GenerateRun() override;
+
+    void BeginOfRunAction(const G4Run*) override;
+
+    void EndOfRunAction(const G4Run*) override;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

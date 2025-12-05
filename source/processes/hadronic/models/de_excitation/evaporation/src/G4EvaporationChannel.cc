@@ -94,31 +94,19 @@ G4double G4EvaporationChannel::GetEmissionProbability(G4Fragment* fragment)
   if (mass <= evapMass + resMass) { return 0.0; } 
 
   ekinmax = 0.5*((mass-resMass)*(mass+resMass) + evapMass2)/mass - evapMass;
+  G4double ekinmin = 0.0;
 
   // for OPTxs=1 elim=0 for all fragments - x-section include the CoulombBarrier
-  G4double elim = 0.0;
-  if(theZ > 0) {
+  if (theZ > 0) {
     bCoulomb = theCoulombBarrier->GetCoulombBarrier(resA, resZ, 0.0);
-
-    // for OPTxs >0 penetration under the barrier is taken into account
-    elim = (0 < OPTxs) ? bCoulomb*0.5 : bCoulomb;
+    ekinmin = bCoulomb*0.5;
   }
-  /*
+  /*  
   G4cout << "G4EvaporationChannel::Initialize Z=" << theZ <<" A=" << theA 
   	 << " FragZ=" << fragZ << " FragA=" << fragA << G4endl;
   G4cout << "      Eex=" << exEnergy << " CB=" << bCoulomb
-         << " Elim=" << elim << " Efree=" << mass - resMass - evapMass 
-	 << G4endl;
-  */
-  // Coulomb barrier compound at rest
-  G4double resM = mass - evapMass - elim;
-  if (resM < resMass) { return 0.0; }
-  G4double ekinmin = 0.5*((mass-resM)*(mass+resM) + evapMass2)/mass - evapMass;
-
-  /*  
-  G4cout << "Emin= " <<ekinmin<<" Emax= "<<ekinmax
-	 << " mass= " << mass << " resM= " << resMass 
-	 << " evapM= " << evapMass << G4endl;
+         << " Efree=" << mass - resMass - evapMass << " emin=" << ekinmin
+	 << " emax=" << ekinmax << G4endl;
   */
   if(ekinmax <= ekinmin) { return 0.0; }
 

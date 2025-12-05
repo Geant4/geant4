@@ -100,7 +100,7 @@ G4double G4eIonisationSpectrum::Probability(G4int Z,
   G4double x1 = std::min(0.5,(t0 + bindingEnergy)/energy);
   G4double x2 = std::min(0.5,(tm + bindingEnergy)/energy);
 
-  if(verbose > 1 || (Z==4 && e>= 1.0 && e<= 0.0)) {
+  if (verbose > 1) {
     G4cout << "G4eIonisationSpectrum::Probability: Z= " << Z
            << "; shell= " << shell
            << "; E(keV)= " << e/keV
@@ -137,14 +137,11 @@ G4double G4eIonisationSpectrum::Probability(G4int Z,
 	     << Z << ". Please check and/or update it " << G4endl;
     }
 
-  if(e >= 1. && e <= 0. && Z == 4) p.push_back(0.0);
-
-
   G4double val = IntSpectrum(x1, x2, p);
   G4double x0  = (lowestE + bindingEnergy)/energy;
   G4double nor = IntSpectrum(x0, 0.5, p);
 
-  if(verbose > 1 || (Z==4 && e>= 1.0 && e<= 0.0)) {
+  if (verbose > 1) {
     G4cout << "tcut= " << tMin
            << "; tMax= " << tMax
            << "; x0= " << x0

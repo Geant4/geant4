@@ -66,6 +66,7 @@ AnalysisManager::~AnalysisManager()
 
 void AnalysisManager::Initialize()
 {
+  G4AnalysisManager::Instance()->SetNtupleMerging(true);// enable ntuple merging
   const G4Run* run = G4RunManager::GetRunManager()->GetCurrentRun();
   if (run->GetRunID() == 0) {
     G4cout << "AnalysisManager::Initialize() GetRunID : " << run->GetRunID() << G4endl;
@@ -173,8 +174,7 @@ void AnalysisManager::Initialize()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void AnalysisManager::Close()
-{
+void AnalysisManager::Close() const {
   fAnalysisManager->Write();
   fAnalysisManager->CloseFile();
 }
@@ -352,7 +352,14 @@ void AnalysisManager::ProcessDNAHitsVector(const std::vector<const DNAHit*>& dna
           break;
         }
 
-        gap = nextHit->GetBasePairIdx() - currentHit->GetBasePairIdx();
+        //added protection for over counting damage
+        if (nextHit->GetBasePairIdx() - currentHit->GetBasePairIdx() < 1) {
+          G4Exception("AnalaysisManager", "ERR_DAMAGE_OVERLAP", FatalException,
+                      "Two hits have same bp Idx !!");
+        }
+        //Hoang fixed the wrong gap: a gap (distance between 2 hits) can be 0
+        gap = nextHit->GetBasePairIdx() - currentHit->GetBasePairIdx() - 1;
+
         if (fFragmentGap > 0) {
           // case 1: continuous strand
           if (gap > fFragmentGap) {
@@ -378,7 +385,7 @@ void AnalysisManager::ProcessDNAHitsVector(const std::vector<const DNAHit*>& dna
           }
         }
         else {
-          G4Exception("MolecularAnalaysisManager", "ERR_FRAGMENT_VALUE", FatalException,
+          G4Exception("AnalaysisManager", "ERR_FRAGMENT_VALUE", FatalException,
                       "The value set in /analysisDNA/fragmentGap is bad");
         }
         currentHit = nextHit;
@@ -409,7 +416,7 @@ void AnalysisManager::ProcessDNAHitsVector(const std::vector<const DNAHit*>& dna
   sourcemap[undefined] = 0;
 
   for (auto& damageRecord : damageRecords) {
-    DamageClassification* classif = damageRecord->GetClassification(fDSBDistance);
+    auto classif = damageRecord->GetClassification(fDSBDistance);
     breakmap[classif->fComplexity]++;
     sourcemap[classif->fSource]++;
     fAnalysisManager->FillH1(fAnalysisManager->GetH1Id("fragments"), damageRecord->GetSize());
@@ -495,7 +502,7 @@ void AnalysisManager::ProcessDNAHitsVector(const std::vector<const DNAHit*>& dna
     fAnalysisManager->FillNtupleIColumn(4, 21, classif->fInducedBreaks);
     fAnalysisManager->FillNtupleIColumn(4, 22, damageRecord->GetChainIdx());
     fAnalysisManager->FillNtupleIColumn(4, 23, damageRecord->GetPlacementIdx());
-    fAnalysisManager->FillNtupleDColumn(4, 24, (G4double)damageRecord->GetStartBPIdx());
+    fAnalysisManager->FillNtupleDColumn(4, 24, static_cast<G4double>(damageRecord->GetStartBPIdx()));
     // fAnalysisManager->FillNtupleIColumn(4, 23, (*it)->GetStartBPIdx());//ORG
     fAnalysisManager->FillNtupleSColumn(4, 25, damageRecord->GetName());
     fAnalysisManager->AddNtupleRow(4);
@@ -551,8 +558,7 @@ void AnalysisManager::ProcessDNAHitsVector(const std::vector<const DNAHit*>& dna
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void AnalysisManager::ProcessChromosomeHitMap(const std::map<uint32_t, ChromosomeHit*>& chromosomes)
-{
+void AnalysisManager::ProcessChromosomeHitMap(const std::map<uint32_t, ChromosomeHit*>& chromosomes) const {
   for (auto chromosome : chromosomes) {
     fAnalysisManager->FillNtupleSColumn(1, 0, chromosome.second->GetName());
     fAnalysisManager->FillNtupleDColumn(1, 1, chromosome.second->GetChromosomeEdep() / keV);
@@ -564,8 +570,7 @@ void AnalysisManager::ProcessChromosomeHitMap(const std::map<uint32_t, Chromosom
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void AnalysisManager::ProcessPrimary(const G4ThreeVector& primstoppos, const G4double& tlcell,
-                                     const G4double& tlchro)
-{
+                                     const G4double& tlchro) const {
   const G4Event* event = G4EventManager::GetEventManager()->GetConstCurrentEvent();
   fAnalysisManager->FillNtupleSColumn(
     0, 0, event->GetPrimaryVertex()->GetPrimary()->GetParticleDefinition()->GetParticleName());
@@ -589,8 +594,7 @@ void AnalysisManager::ProcessPrimary(const G4ThreeVector& primstoppos, const G4d
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void AnalysisManager::ProcessCellEdep(const G4double& edep)
-{
+void AnalysisManager::ProcessCellEdep(const G4double& edep) const {
   fAnalysisManager->FillH1(fAnalysisManager->GetH1Id("e_cell_kev"), edep / keV);
 }
 
@@ -615,9 +619,9 @@ BinaryTree::~BinaryTree()
 // Makes own internal copy of hit
 void BinaryTree::Insert(const DNAHit* hit)
 {
-  auto newHit = new DNAHit(*hit);
+  const auto newHit = new DNAHit(*hit);
   if (fRoot == nullptr) {
-    Node* node = new Node;
+    const auto  node = new Node;
     node->fleft = nullptr;
     node->fright = nullptr;
     node->fparent = nullptr;
@@ -632,21 +636,21 @@ void BinaryTree::Insert(const DNAHit* hit)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-DNAHit* BinaryTree::Search(int64_t index)  // dousatsu
+DNAHit* BinaryTree::Search(const int64_t index) const
+// dousatsu
 {
   return Search_(index, fRoot);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void BinaryTree::Destroy_tree()
-{
+void BinaryTree::Destroy_tree() const {
   Destroy_tree_(fRoot);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void BinaryTree::Destroy_tree_(Node* node)
+void BinaryTree::Destroy_tree_(const Node* node)
 {
   if (node != nullptr) {
     Destroy_tree_(node->fleft);
@@ -679,7 +683,7 @@ void BinaryTree::Insert_(DNAHit* hit, Node* node)
       Insert_(hit, node->fleft);
     }
     else {
-      Node* daughter = new Node;
+      const auto  daughter = new Node;
       daughter->fparent = node;
       daughter->fleft = nullptr;
       daughter->fright = nullptr;
@@ -693,7 +697,7 @@ void BinaryTree::Insert_(DNAHit* hit, Node* node)
       Insert_(hit, node->fright);
     }
     else {
-      Node* daughter = new Node;
+      const auto  daughter = new Node;
       daughter->fparent = node;
       daughter->fleft = nullptr;
       daughter->fright = nullptr;
@@ -709,7 +713,7 @@ void BinaryTree::Insert_(DNAHit* hit, Node* node)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-DNAHit* BinaryTree::Search_(int64_t key, Node* node)  // dousatsu check
+DNAHit* BinaryTree::Search_(const int64_t key, const Node* node)  // dousatsu check
 {
   if (node != nullptr) {
     if (key < node->fkey) {
@@ -741,8 +745,7 @@ DNAHit* BinaryTree::First() const
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-DNAHit* BinaryTree::First_(Node* node) const
-{
+DNAHit* BinaryTree::First_(const Node* node) {
   if (node->fleft == nullptr) {
     return node->fdata;
   }
@@ -781,7 +784,7 @@ DNAHit* BinaryTree::Next(const DNAHit* hit) const
 // Looks more complicated than it is
 // The interface to these functions with integer keys rather than node
 // objects makes this look more complicated than standard algorithms
-DNAHit* BinaryTree::Next_(int64_t key, Node* node) const  // dousatsu
+DNAHit* BinaryTree::Next_(const int64_t key, const Node* node) // dousatsu
 {
   if (key < node->fkey) {
     if (node->fleft != nullptr) {
@@ -833,7 +836,7 @@ DamageRecord::DamageRecord(const G4String& name, int64_t startIndex, G4int place
 
 DamageRecord::~DamageRecord()
 {
-  for (auto& fDamageRecord : fDamageRecords) {
+  for (const auto& fDamageRecord : fDamageRecords) {
     delete fDamageRecord;
   }
 }
@@ -981,7 +984,7 @@ DamageClassification* DamageRecord::GetClassification(const G4double& dsbDistanc
   G4int baseDamage = 0;
   G4int strandDamage = 0;
   uint32_t truncator = std::pow(2, dsbDistance + 1) - 1;
-  for (G4int ii = 0; ii != (G4int)fDamageRecords.size(); ii++) {
+  for (G4int ii = 0; ii != static_cast<G4int>(fDamageRecords.size()); ii++) {
     lastTenDirectStrand1 = (lastTenDirectStrand1 << 1) & truncator;
     lastTenDirectStrand2 = (lastTenDirectStrand2 << 1) & truncator;
     lastTenIndirectStrand1 = (lastTenIndirectStrand1 << 1) & truncator;
@@ -1051,8 +1054,8 @@ DamageClassification* DamageRecord::GetClassification(const G4double& dsbDistanc
     G4bool strand2hit = fDamageRecords.at(ii)->fStrand2DirectDmg || s2IndirectBreak;
     G4bool bp1hit = fDamageRecords.at(ii)->fbp1DirectDmg || fDamageRecords.at(ii)->fBp1IndirectDmg;
     G4bool bp2hit = fDamageRecords.at(ii)->fbp2DirectDmg || fDamageRecords.at(ii)->fBp2IndirectDmg;
-    strandDamage += ((G4int)strand1hit + (G4int)strand2hit);
-    baseDamage += ((G4int)bp1hit + (G4int)bp2hit);
+    strandDamage += (static_cast<G4int>(strand1hit) + static_cast<G4int>(strand2hit));
+    baseDamage += (static_cast<G4int>(bp1hit) + static_cast<G4int>(bp2hit));
 
     // Update the damage type counters
     // strand 1
@@ -1138,7 +1141,8 @@ DamageClassification* DamageRecord::GetClassification(const G4double& dsbDistanc
   // G4String complexity = "None";
 
   complexityEnum complexity = NoneComplexity;
-  if (nDSB > 1) {
+  if (nDSB > 1 && strandDamage > 3) {//fixed by Batmunkh,
+    //the DSB++ should have at least 4 strand damages, according to https://moleculardna.org
     complexity = DSBplusplus;
   }
   else if (nDSBPlus != 0) {
@@ -1391,7 +1395,7 @@ void AnalysisManager::TestClassification()
   theRecord->AddTestDamage(-1, -1, -1, 0);
   theRecord->AddEmptyBPDamage(10);
   classification = theRecord->GetClassification();
-  G4cout << "Test SSBd / 2SSB" << G4endl;
+  G4cout << "Test SSBm / 2SSB" << G4endl;
   theRecord->PrintRecord("", 10);
   G4cout << "Classification: " << classification->fSource << "/" << classification->fComplexity
          << G4endl;
@@ -1600,7 +1604,7 @@ void AnalysisManager::TestClassification()
   theRecord->AddTestDamage(0, -1, -1, 0);
   theRecord->AddEmptyBPDamage(10);
   classification = theRecord->GetClassification();
-  G4cout << "Test DSBd/DSB" << G4endl;
+  G4cout << "Test DSBi/DSB" << G4endl;
   theRecord->PrintRecord("", 10);
   G4cout << "Classification: " << classification->fSource << "/" << classification->fComplexity
          << G4endl;
@@ -1633,7 +1637,7 @@ void AnalysisManager::TestClassification()
   theRecord->AddTestDamage(-1, -1, -1, 2);
   theRecord->AddEmptyBPDamage(10);
   classification = theRecord->GetClassification();
-  G4cout << "Test DSBd/DSB+" << G4endl;
+  G4cout << "Test DSBh/DSB+" << G4endl;
   theRecord->PrintRecord("", 10);
   G4cout << "Classification: " << classification->fSource << "/" << classification->fComplexity
          << G4endl;
@@ -1650,7 +1654,7 @@ void AnalysisManager::TestClassification()
   theRecord->AddTestDamage(2, -1, -1, -1);
   theRecord->AddEmptyBPDamage(10);
   classification = theRecord->GetClassification();
-  G4cout << "Test DSBd/DSB+" << G4endl;
+  G4cout << "Test DSBm/DSB+" << G4endl;
   theRecord->PrintRecord("", 10);
   G4cout << "Classification: " << classification->fSource << "/" << classification->fComplexity
          << G4endl;
@@ -1732,7 +1736,7 @@ void AnalysisManager::TestClassification()
   theRecord->AddTestDamage(2, -1, -1, -1);
   theRecord->AddEmptyBPDamage(10);
   classification = theRecord->GetClassification();
-  G4cout << "Test DSBd/DSB++" << G4endl;
+  G4cout << "Test DSBh/DSB++" << G4endl;
   theRecord->PrintRecord("", 10);
   G4cout << "Classification: " << classification->fSource << "/" << classification->fComplexity
          << G4endl;
@@ -2023,7 +2027,6 @@ void DamageRecord::AddStrandHit(const G4MoleculeDefinition* mol)
 
 void DamageRecord::AddBaseHit(const G4MoleculeDefinition* mol)
 {
-  // G4cout << "Hit by " << mol->GetParticleName() << G4endl;
   if (mol == fOH) {
     fOHBase++;
   }
@@ -2055,7 +2058,7 @@ G4ThreeVector DamageRecord::GetMeanPosition() const
     return G4ThreeVector(0., 0., 0.);
   }
   else {
-    G4double factor = 1.0 / fPositions.size();
+    const G4double factor = 1.0 / fPositions.size();
     return G4ThreeVector(x * factor, y * factor, z * factor);
   }
 }
@@ -2070,7 +2073,7 @@ G4double DamageRecord::GetMeanDistance() const
       d += ((*jt) - (*it)).mag();
     }
   }
-  G4int number = fPositions.size();
+  const G4int number = fPositions.size();
   return d / number;
 }
 
@@ -2079,7 +2082,7 @@ G4double DamageRecord::GetMeanDistance() const
 G4double DamageRecord::GetEnergy() const
 {
   G4double en = 0;
-  for (auto bp : fDamageRecords) {
+  for (const auto bp : fDamageRecords) {
     en = en + bp->fBp1Energy + bp->fBp2Energy + bp->fStrand1Energy + bp->fStrand2Energy;
   }
   return en;

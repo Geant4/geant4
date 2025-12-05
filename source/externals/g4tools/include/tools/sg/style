@@ -386,8 +386,6 @@ public:
     sp.multi_node_limit(multi_node_limit.value());
     sp.divisions(divisions.value());
     sp.rotation_steps(rotation_steps.value());
-  //sp.transparency(transparency.value());
-  //sp.back_transparency(back_transparency.value());
     sp.spacing(spacing.value());
     sp.angle(angle.value());
     sp.scale(scale.value());
@@ -405,9 +403,6 @@ public:
     sp.translation(translation.value());
     sp.coloring(coloring.value());
     sp.title(title.value());
-
-    //if(!sp.parse(a_s,style_parser::def_error_func))
-    //  return false;
 
     if(!sp.parse(a_out,a_cmaps,a_s)) {
       a_out << "tools::sg::style::from_string :"
@@ -442,8 +437,6 @@ public:
     multi_node_limit.value(sp.multi_node_limit());
     divisions.value(sp.divisions());
     rotation_steps.value(sp.rotation_steps());
-  //transparency.value(sp.transparency());
-  //back_transparency.value(sp.back_transparency());
     spacing.value(sp.spacing());
     angle.value(sp.angle());
     scale.value(sp.scale());

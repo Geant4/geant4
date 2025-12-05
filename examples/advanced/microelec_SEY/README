@@ -1,0 +1,94 @@
+-------------------------------------------------------------------
+-------------------------------------------------------------------
+
+     =========================================================
+ 		  Geant4 - Microelec-SEY example
+     =========================================================
+
+                                README file
+                          ----------------------
+
+                           CORRESPONDING AUTHORS 
+
+C. Inguimbert*, Q. Gibaru*, P. Caron*, M. Raine** D. Lambert**,  
+* ONERA, 2 avenue Edouard Belin - BP 74025 - 31055 TOULOUSE, France
+** CEA, DAM, DIF, F-91297 Arpajon, France
+email: melanie.raine@cea.fr  damien.lambert@cea.fr
+          christophe.Inguimbert@onera.fr Quentin.Gibaru@onera.fr, Pablo.Caron@onera.fr
+
+---->0. INTRODUCTION.                                                    
+                                                                       
+The  Microelec-SEY example simulates the passage of incident electrons [10eV, 10keV]
+in a stack of 6 layers that thicknesses and materail nature can be user defined
+The number of electrons re-emitted by the irradiated surface is counted by a spherical detector
+surounding the whole geometry and providing the SEY rate in a csv file as a function of the incident energy
+
+---->1. GEOMETRY SET-UP.
+ 
+The geoemtry is made of a surface layer + 4 other layers  + a substrate
+By default, the material is Si for all the layers, the World and the surrounding detector are made of vacuum
+The different layers are slabs. By default the substrate is a 1mm cube topped with 4 layers + the surface layers
+being slabs of same lateral dimensions and thicknesses of 100 nm.
+The ray of the spherical detector as well as the dimensions of the world are automatically defined 
+
+---->2. SET-UP 
+                                                                        
+Make sure that the G4EMLOW database version is correct (> or = 7.16)
+
+The variable G4ANALYSIS_USE must be set to 1.
+  
+The code should be compiled with cmake: 
+    $ mkdir Microelec-SEY-build
+    $ cd Microelec-SEY-build
+    $ cmake -DGeant4_DIR=/your_path/geant4-install/ $PATHTOMICROELECEXAMPLE/Microelec-SEY
+    $ make
+
+It works in MT mode.
+
+---->3. HOW TO RUN THE EXAMPLE                                         
+
+In interactive mode, run:
+
+./Microelec-SEY
+
+The macro Microelec-SEY.mac is executed by default. 
+
+To get visualization, make sure to uncomment the #/control/execute vis.mac or #/control/execute vis-win.mac
+ line in the macro.
+
+ By default, the new MicroElec models are used. 
+
+You can change the type of the target material in the macrocommand file
+(G4_Ag G4_Al G4_C G4_Cu G4_Ge G4_KAPTON G4_Ni G4_Si G4_SILICON_DIOXIDE G4_Ti G4_W), 
+by selecting the materal the user want to test
+
+
+
+---->4. PHYSICS
+
+This example shows:
+- how to use the G4MicroElecPhysics processes, 
+- how to affect them a name
+- how to combine them with Standard EM Physics.
+- and model the transport of electrons at low energy ([~eV, 10keV]
+
+A simple electron capture process is also provided in order to kill electrons 
+below a chosen energy threshold, set in the Physics list.
+
+---->5. SIMULATION OUTPUT AND RESULT ANALYZIS                                    
+
+The example is running by default for a set of incident energy defined in the .mac file and 
+in the ###Energy Loop### setup section. The number of electron is defined in the
+loop_ekin.mac file (3000 electrons/incident energy by default)
+
+
+The output results consists in a SEY_nt_data.csv file, containing for the set of simulations
+- 1 column : the incident energy (in eV)
+- 2 column : Total emission yield (TEY without unit =>  number of counted electrons/incident number of electrons  )
+- 3 column : Secondary emission yield (SEY without unit =>  number of counted secondary electrons/incident number of electrons  )
+- 4 column : Backscattered emission yield (BEY without unit =>  number of counted incident electrons/incident number of electrons  )
+- 5 column : Secondary emission yield of elecgtrons having an energy > 50 eV (SEY without unit =>  number of counted secondary electrons (E>50eV) /incident number of electrons  )
+
+---------------------------------------------------------------------------
+
+Should you have any enquiry, please do not hesitate to contact one the corresponding authors.

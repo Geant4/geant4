@@ -68,6 +68,7 @@
 #include "G4ElementVector.hh"
 #include "G4ParticleChangeForLoss.hh"
 #include "G4ModifiedTsai.hh"
+#include "G4LPMFunction.hh"
 #include "G4Exp.hh"
 #include "G4Log.hh"
 #include "G4Pow.hh"
@@ -112,9 +113,6 @@ const G4double G4eBremsstrahlungRelModel::gFinelLowZet[] = {
   0.0, 5.9173, 5.6125, 5.5377, 5.4728, 5.4174, 5.3688, 5.3236
 };
 
-// LPM supression functions evaluated at initialisation time
-G4eBremsstrahlungRelModel::LPMFuncs  G4eBremsstrahlungRelModel::gLPMFuncs;
-
 // special data structure per element i.e. per Z
 std::vector<G4eBremsstrahlungRelModel::ElementData*> G4eBremsstrahlungRelModel::gElementData;
 
@@ -149,12 +147,6 @@ G4eBremsstrahlungRelModel::~G4eBremsstrahlungRelModel()
     // clear ElementData container
     for (auto const & ptr : gElementData) { delete ptr; }
     gElementData.clear();
-    // clear LPMFunctions (if any)
-    if (gLPMFuncs.fIsInitialized) {
-      gLPMFuncs.fLPMFuncG.clear();
-      gLPMFuncs.fLPMFuncPhi.clear();
-      gLPMFuncs.fIsInitialized = false;
-    }
   }
 }
 
@@ -178,7 +170,6 @@ void G4eBremsstrahlungRelModel::Initialise(const G4ParticleDefinition* p,
       gElementData.resize(gMaxZet+1, nullptr);
     }
     InitialiseElementData();
-    InitLPMFunctions();
     l.unlock();
   }
 
@@ -187,8 +178,8 @@ void G4eBremsstrahlungRelModel::Initialise(const G4ParticleDefinition* p,
     InitialiseElementSelectors(p, cuts);
   }
   // initialisation in all threads
-  if (nullptr == fParticleChange) { 
-    fParticleChange = GetParticleChangeForLoss(); 
+  if (nullptr == fParticleChange) {
+    fParticleChange = GetParticleChangeForLoss();
   }
   if (GetTripletModel()) {
     GetTripletModel()->Initialise(p, cuts);
@@ -697,89 +688,9 @@ void G4eBremsstrahlungRelModel::ComputeLPMfunctions(G4double& funcXiS,
   } else if (varShat > varS1) {
     funcXiS = 1.0+G4Log(varShat)*elDat->fILVarS1;
   }
-  GetLPMFunctions(funcGS, funcPhiS, varShat);
-  //ComputeLPMGsPhis(funcGS, funcPhiS, varShat);
-  //
+  G4LPMFunction::GetLPMFunctions(funcGS, funcPhiS, varShat);
   //MAKE SURE SUPPRESSION IS SMALLER THAN 1: due to Migdal's approximation on xi
   if (funcXiS*funcPhiS > 1. || varShat > 0.57) {
     funcXiS=1./funcPhiS;
   }
 }
-
-void G4eBremsstrahlungRelModel::ComputeLPMGsPhis(G4double& funcGS,
-                                                 G4double& funcPhiS,
-                                                 const G4double varShat)
-{
-  if (varShat < 0.01) {
-    funcPhiS = 6.0*varShat*(1.0-CLHEP::pi*varShat);
-    funcGS   = 12.0*varShat-2.0*funcPhiS;
-  } else {
-    const G4double varShat2 = varShat*varShat;
-    const G4double varShat3 = varShat*varShat2;
-    const G4double varShat4 = varShat2*varShat2;
-    // use Stanev approximation: for \psi(s) and compute G(s)
-    if (varShat < 0.415827) {
-      funcPhiS = 1.0-G4Exp(-6.0*varShat*(1.0+varShat*(3.0-CLHEP::pi))
-                + varShat3/(0.623+0.796*varShat+0.658*varShat2));
-      // 1-\exp \left\{-4s-\frac{8s^2}{1+3.936s+4.97s^2-0.05s^3+7.5s^4} \right\}
-      const G4double funcPsiS = 1.0 - G4Exp(-4.0*varShat
-                               - 8.0*varShat2/(1.0+3.936*varShat+4.97*varShat2
-                               - 0.05*varShat3 + 7.5*varShat4));
-      // G(s) = 3 \psi(s) - 2 \phi(s)
-      funcGS = 3.0*funcPsiS - 2.0*funcPhiS;
-    } else if (varShat<1.55) {
-      funcPhiS = 1.0-G4Exp(-6.0*varShat*(1.0+varShat*(3.0-CLHEP::pi))
-                + varShat3/(0.623+0.796*varShat+0.658*varShat2));
-      const G4double dum0  = -0.160723          + 3.755030*varShat
-                             -1.798138*varShat2 + 0.672827*varShat3
-                             -0.120772*varShat4;
-      funcGS = std::tanh(dum0);
-    } else {
-      funcPhiS = 1.0-0.011905/varShat4;
-      if (varShat<1.9156) {
-        const G4double dum0 = -0.160723          + 3.755030*varShat
-                              -1.798138*varShat2 + 0.672827*varShat3
-                              -0.120772*varShat4;
-        funcGS = std::tanh(dum0);
-      } else {
-        funcGS   = 1.0-0.023065/varShat4;
-      }
-    }
-  }
-}
-
-// s goes up to 2 with ds = 0.01 to be the default bining
-void G4eBremsstrahlungRelModel::InitLPMFunctions()
-{
-  if (!gLPMFuncs.fIsInitialized) {
-    const G4int num = gLPMFuncs.fSLimit*gLPMFuncs.fISDelta+1;
-    gLPMFuncs.fLPMFuncG.resize(num);
-    gLPMFuncs.fLPMFuncPhi.resize(num);
-    for (G4int i = 0; i < num; ++i) {
-      const G4double sval=i/gLPMFuncs.fISDelta;
-      ComputeLPMGsPhis(gLPMFuncs.fLPMFuncG[i],gLPMFuncs.fLPMFuncPhi[i],sval);
-    }
-    gLPMFuncs.fIsInitialized = true;
-  }
-}
-
-void G4eBremsstrahlungRelModel::GetLPMFunctions(G4double& lpmGs,
-                                                G4double& lpmPhis,
-                                                const G4double sval)
-{
-  if (sval < gLPMFuncs.fSLimit) {
-    G4double     val = sval*gLPMFuncs.fISDelta;
-    const G4int ilow = (G4int)val;
-    val    -= ilow;
-    lpmGs   = (gLPMFuncs.fLPMFuncG[ilow+1]-gLPMFuncs.fLPMFuncG[ilow])*val
-              + gLPMFuncs.fLPMFuncG[ilow];
-    lpmPhis = (gLPMFuncs.fLPMFuncPhi[ilow+1]-gLPMFuncs.fLPMFuncPhi[ilow])*val
-              + gLPMFuncs.fLPMFuncPhi[ilow];
-  } else {
-    G4double ss = sval*sval;
-    ss *= ss;
-    lpmPhis = 1.0-0.01190476/ss;
-    lpmGs   = 1.0-0.0230655/ss;
-  }
-}
-

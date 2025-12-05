@@ -784,14 +784,14 @@ G4double G4LowPAIH2O::SampleFluctuations(const G4MaterialCutsCouple*,
 
 /////////////////////////////////////////////
 
-void G4LowPAIH2O::CorrectionsAlongStep( const G4MaterialCutsCouple*,
-                                        const G4DynamicParticle* dp,
-                                        const G4double& length,
-                                        G4double& eloss   )
+void G4LowPAIH2O::CorrectionsAlongStep(const G4Material*,
+				       const G4ParticleDefinition* pd,
+				       const G4double Tkin,
+				       const G4double,
+				       const G4double& length,
+				       G4double& eloss)
 {
-  G4double mfp(0.), sumW(0.); //, sumL(0.);
-  const G4double Tkin = dp->GetKineticEnergy();
-  const G4ParticleDefinition* pd = dp->GetDefinition();
+  G4double mfp(0.), sumW(0.);
   
   if     ( pd == theProton )    mfp = GetPrMFP(Tkin);
   else if( pd == theElectron )  mfp = GetElMFP(Tkin);

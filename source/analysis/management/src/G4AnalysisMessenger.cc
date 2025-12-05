@@ -43,7 +43,7 @@ G4AnalysisMessenger::G4AnalysisMessenger(G4VAnalysisManager* manager)
   : fManager(manager)
 {
   fAnalysisDir = std::make_unique<G4UIdirectory>("/analysis/");
-  fAnalysisDir->SetGuidance("analysis control");
+  fAnalysisDir->SetGuidance("Analysis control commands");
 
   fOpenFileCmd = CreateCommand<G4UIcmdWithAString>(
     "openFile", "Open analysis file", "FileName", true);

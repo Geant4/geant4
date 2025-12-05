@@ -10,7 +10,7 @@
 
 
 **************************************************************
- Geant4 version Name: geant4-11-03-ref-06    (30-June-2025)
+ Geant4 version Name: geant4-11-04-ref-00    (5-December-2025)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -116,7 +116,7 @@ Lowest muon/hadron kinetic energy                  1 keV
 Use ICRU90 data                                    0
 Fluctuations of dE/dx are enabled                  1
 Type of fluctuation model for leptons and hadrons  Universal
-Use built-in Birks satuaration                     0
+Use built-in Birks saturation                      0
 Build CSDA range enabled                           0
 Use cut as a final range enabled                   0
 Enable angular generator interface                 0
@@ -205,7 +205,7 @@ Index : 0     used in the geometry : Yes
 
 Start closing geometry.
 --------------------------------------------------------------------------------
-G4GeometryManager::ReportVoxelStats -- Voxel Statistics
+G4VoxelisationHelper::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   0 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
@@ -276,7 +276,7 @@ Step#       X          Y          Z         KineE         dEStep    StepLeng   T
  Run terminated.
 Run Summary
   Number of events processed : 5
-  User=0.000000s Real=0.000560s Sys=0.000000s
+  User=0.000000s Real=0.000497s Sys=0.000000s
 ### RunAction::EndOfRunAction
 
  Number of process calls --->	GammaToMuPair : 5
@@ -395,7 +395,7 @@ Step#       X          Y          Z         KineE         dEStep    StepLeng   T
  Run terminated.
 Run Summary
   Number of events processed : 5
-  User=0.000000s Real=0.000405s Sys=0.000000s
+  User=0.000000s Real=0.000291s Sys=0.000000s
 ### RunAction::EndOfRunAction
 
  Number of process calls --->	AnnihiToMuPair : 2	ee2hadr : 3
@@ -419,8 +419,8 @@ Run Summary
 #
 G4 kernel has come to Quit state.
 Deleting G4Run (id:1) 
-UserDetectorConstruction deleted 0x2440b50
-UserPhysicsList deleted 0x247a190
+UserDetectorConstruction deleted 0x159ce60
+UserPhysicsList deleted 0x15d64a0
 UserActionInitialization deleted 0
 UserWorkerInitialization deleted 0
 UserWorkerThreadInitialization deleted 0

@@ -5,6 +5,9 @@ which **must** added in reverse chronological order (newest at the top).
 It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
+## 2025-08-21 Dmitri Konstantinov (testem7-V11-03-00)
+- DetectorConstruction: fix SetWorldMaterial() to set World LV 
+  to fWorldMaterial (not absorber).
 
 ## 2024-04-06 Vladimir Ivanchenko (testem7-V11-02-01)
 - RunAction - added protection to histogram binning for very low step limit

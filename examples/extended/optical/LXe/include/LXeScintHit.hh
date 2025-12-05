@@ -23,11 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file optical/LXe/include/LXeScintHit.hh
+/// \file LXeScintHit.hh
 /// \brief Definition of the LXeScintHit class
-//
-//
+
 #ifndef LXeScintHit_h
 #define LXeScintHit_h 1
 

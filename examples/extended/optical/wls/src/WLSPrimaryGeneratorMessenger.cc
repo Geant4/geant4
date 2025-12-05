@@ -23,11 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file optical/wls/src/WLSPrimaryGeneratorMessenger.cc
+/// \file WLSPrimaryGeneratorMessenger.cc
 /// \brief Implementation of the WLSPrimaryGeneratorMessenger class
-//
-//
+
 #include "WLSPrimaryGeneratorMessenger.hh"
 
 #include "WLSPrimaryGeneratorAction.hh"

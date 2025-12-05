@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file visualization/userVisAction/userVisAction.cc
+/// \file userVisAction.cc
 /// \brief Main program of the visualization/userVisAction example
 
 #include "B1ActionInitialization.hh"

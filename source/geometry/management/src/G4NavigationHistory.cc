@@ -25,8 +25,7 @@
 // 
 // G4NavigationHistory Implementation
 //
-// Author: P.Kent, August 96
-//
+// Author: Paul Kent (CERN), 25.07.1996 - Initial version.
 // ----------------------------------------------------------------------
 
 #include "G4ios.hh"

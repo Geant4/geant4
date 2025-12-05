@@ -32,34 +32,75 @@
 // A simple approach for solving linear differential equations.
 // Take the current derivative and add it to the current position.
 
-// Author: W.Wander <wwc@mit.edu>, 12.09.1997
+// Author: W.Wander (MIT), 12.09.1997
 // -------------------------------------------------------------------
 #ifndef G4HELIXEXPLICITEULER_HH
 #define G4HELIXEXPLICITEULER_HH
 
 #include "G4MagHelicalStepper.hh"
 
+/**
+ * @brief G4HelixExplicitEuler implements an Explicit Euler stepper for
+ * magnetic field: x_1 = x_0 + helix(h), with helix(h) being a helix piece
+ * of length h. A simple approach for solving linear differential equations.
+ * Takes the current derivative and adds it to the current position.
+ */
+
 class G4HelixExplicitEuler : public G4MagHelicalStepper
 {
   public:
 
+    /**
+     * Constructor for G4HelixExplicitEuler.
+     *  @param[in] EqRhs Pointer to the provided equation of motion.
+     */
     G4HelixExplicitEuler(G4Mag_EqRhs* EqRhs);
-   ~G4HelixExplicitEuler() override;
 
+    /**
+     * Default Destructor.
+     */
+    ~G4HelixExplicitEuler() override = default;
+
+    /**
+     * The stepper function for the integration.
+     *  @param[in] y Starting values array of integration variables.
+     *  @param[in] na Not used.
+     *  @param[in] h The given step size.
+     *  @param[out] yout Integration output.
+     *  @param[out] yerr Integration error.
+     */
     void Stepper( const G4double y[],
-                  const G4double*,
+                  const G4double* na,
                         G4double h,
                         G4double yout[],
                         G4double yerr[]  ) override; 
 
+    /**
+     * The stepper function for the integration.
+     *  @param[in] y Starting values array of integration variables.
+     *  @param[in] Bfld Derivatives array.
+     *  @param[in] h The given step size.
+     *  @param[out] yout Integration output.
+     */
     void DumbStepper( const G4double y[],
-                            G4ThreeVector  Bfld,
-                            G4double       h,
-                            G4double       yout[]) override;
+                            G4ThreeVector Bfld,
+                            G4double h,
+                            G4double yout[]) override;
    
+    /**
+     * Returns the distance from chord line.
+     */
     G4double DistChord() const override;
 
+    /**
+     * Returns the order, 1, of integration.
+     */
     inline G4int IntegratorOrder() const override { return 1; }
+
+    /**
+     * Returns the stepper type-ID, "kHelixExplicitEuler".
+     */
+    inline G4StepperType StepperType() const override { return kHelixExplicitEuler; }
 };
 
 #endif

@@ -177,3 +177,9 @@ void G4PhysicsFreeVector::EnableLogBinSearch(const G4int n)
 }
 
 // --------------------------------------------------------------------
+void G4PhysicsFreeVector::PutValue(const std::size_t index,
+                                   const G4double e,
+                                   const G4double value)
+{
+  PutValues(index, e, value);
+}

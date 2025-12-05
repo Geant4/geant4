@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file radiobiology/include/DetectorMessenger.hh
+/// \file DetectorMessenger.hh
 /// \brief Definition of the RadioBio::DetectorMessenger class
 
 #ifndef RadiobiologyDetectorMessenger_h

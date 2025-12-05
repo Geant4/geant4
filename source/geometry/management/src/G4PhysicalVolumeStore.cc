@@ -25,7 +25,7 @@
 //
 // G4PhysicalVolumeStore implementation
 //
-// 25.07.95, P.Kent, G.Cosmo
+// Authors: Gabriele Cosmo & Paul Kent (CERN), 25.07.1995 - Initial version
 // --------------------------------------------------------------------
 
 #include "G4Types.hh"

@@ -88,7 +88,7 @@ int main(int argc, char** argv)
   Int_t nevent        = fevtbranch->GetEntries();
   G4cout << "Nr. of Events:  " << nevent << G4endl;
   std::string CollectionName = argv[3];
-  CollectionName             = CollectionName + "_Photondetector_HC";
+  CollectionName             = CollectionName + "_PhotonDetector_HC";
   for(Int_t i = 0; i < nevent; i++)
   {
     fevtbranch->GetEntry(i);

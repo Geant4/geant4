@@ -4,205 +4,319 @@
 #ifndef toolx_sg_GL_manager
 #define toolx_sg_GL_manager
 
-#include "gl"
-#include "../glbuf"
+#ifndef GL_VERSION_1_1
+  #error You have to include OpenGL header(s) before including this file.
+#endif
 
 #include <tools/sg/render_manager>
 #include <tools/mapmanip>
 #include <tools/carray>
+#include <tools/num2s>
+#ifdef TOOLS_USE_GL_VERSION_3_2
+#include <tools/lina/mat4f>
+#endif
+
+#include <sstream>
 
 #include <cmath> //::sqrt
 
-#ifdef TOOLS_MEM
-#include <tools/mem>
-#endif
 
 namespace toolx {
 namespace sg {
 
-class GL_manager : public virtual tools::sg::render_manager {
-  typedef tools::sg::render_manager parent;
+template <class GL_FUNCTIONS>
+class gsto_elem: protected GL_FUNCTIONS {
+  TOOLS_T_SCLASS(GL_FUNCTIONS,toolx::sg::gsto_elem)
+  using parent_gl_functions = GL_FUNCTIONS;
 public:
-  TOOLS_SCLASS(toolx::sg::GL_manager)
+  enum kind {
+    kind_texture,
+    kind_buffer,
+    kind_list,
+    kind_memory
+  };
+public:
+#ifdef TOOLS_USE_GL_VERSION_3_2
+  gsto_elem(kind a_kind,unsigned int a_gl_id,size_t a_size,const float* a_data,unsigned int a_vao_id = 0)
+  :m_gl_id(a_gl_id)
+  ,m_vao_id(a_vao_id)
+#else
+  gsto_elem(kind a_kind,unsigned int a_gl_id,size_t a_size,const float* a_data)
+  :m_gl_id(a_gl_id)
+#endif
+  ,m_kind(a_kind)
+  ,m_size(a_size)
+  ,m_data(0)
+  {
+    if(a_data) {
+      size_t num = m_size/sizeof(float);
+      m_data = new float[num];
+      ::memcpy(m_data,a_data,m_size);
+    }
+  }
+  virtual ~gsto_elem() {
+    if(m_kind==kind_texture) {
+      parent_gl_functions::gl__DeleteTextures(1,&m_gl_id);
+    } else if(m_kind==kind_buffer) {
+#ifdef TOOLS_USE_GL_VERSION_3_2
+      parent_gl_functions::gl__DeleteBuffers(1,&m_gl_id);
+      parent_gl_functions::gl__DeleteVertexArrays(1,&m_vao_id);
+#endif
+    } else if(m_kind==kind_list) {
+      if(m_gl_id) {
+#ifndef TOOLS_USE_GL_VERSION_3_2
+        parent_gl_functions::gl__DeleteLists(m_gl_id,1);
+#endif
+      }
+    }
+
+    if(m_data) {
+      delete [] m_data;
+    }
+  }
+private:
+  gsto_elem(const gsto_elem& a_from)
+  :parent_gl_functions(a_from)
+  ,m_gl_id(a_from.m_gl_id)
+#ifdef TOOLS_USE_GL_VERSION_3_2
+  ,m_vao_id(a_from.m_vao_id)
+#endif
+  ,m_kind(a_from.m_kind)
+  ,m_size(a_from.m_size)
+  ,m_data(0)
+  {
+    if(a_from.m_data) {
+      size_t num = m_size/sizeof(float);
+      m_data = new float[num];
+      ::memcpy(m_data,a_from.m_data,m_size);
+    }
+  }
+  gsto_elem& operator=(const gsto_elem& a_from){
+    if(&a_from==this) return *this;
+    m_gl_id = a_from.m_gl_id;
+#ifdef TOOLS_USE_GL_VERSION_3_2
+    m_vao_id = a_from.m_vao_id;
+#endif
+    m_kind = a_from.m_kind;
+    m_size = a_from.m_size;
+    if(m_data) {
+      delete [] m_data;
+      m_data = 0;
+    }
+    if(a_from.m_data) {
+      size_t num = m_size/sizeof(float);
+      m_data = new float[num];
+      ::memcpy(m_data,a_from.m_data,m_size);
+    }
+    return *this;
+  }
+public:
+  bool is_valid() /*const*/ {
+    if(!parent_gl_functions::initialize()) return false;
+    if(m_kind==kind_texture) {
+      return (parent_gl_functions::gl__IsTexture(m_gl_id)==GL_TRUE?true:false);
+    } else if(m_kind==kind_buffer) {
+#ifdef TOOLS_USE_GL_VERSION_3_2
+      return (parent_gl_functions::gl__IsBuffer(m_gl_id)==GL_TRUE?true:false); //If ok, then VAO is ok too.
+#endif
+    } else if(m_kind==kind_list) {
+#ifndef TOOLS_USE_GL_VERSION_3_2
+      return (parent_gl_functions::gl__IsList(m_gl_id)==GL_TRUE?true:false);
+#endif
+    } else if(m_kind==kind_memory) {
+      return true;
+    }
+    return false;
+  }
+  void bind() /*const*/ {
+    parent_gl_functions::initialize();
+    if(m_kind==kind_texture) {
+      parent_gl_functions::gl__BindTexture(GL_TEXTURE_2D,m_gl_id);
+    } else if(m_kind==kind_buffer) {
+#ifdef TOOLS_USE_GL_VERSION_3_2
+      parent_gl_functions::gl__BindVertexArray(m_vao_id);
+      parent_gl_functions::gl__BindBuffer(GL_ARRAY_BUFFER,m_gl_id);
+#endif
+    }
+  }
+public:
+  unsigned int m_gl_id;
+#ifdef TOOLS_USE_GL_VERSION_3_2
+  unsigned int m_vao_id;
+#endif
+  kind m_kind;
+  size_t m_size;
+  float* m_data;
+};
+
+template <class GL_FUNCTIONS>
+class GL_manager_T : public virtual tools::sg::render_manager, protected GL_FUNCTIONS {
+  typedef tools::sg::render_manager parent;
+  using parent_gl_functions = GL_FUNCTIONS;
+  typedef gsto_elem<GL_FUNCTIONS> gsto_t;
+  typedef typename  std::map<unsigned int, gsto_t*>::const_iterator gstos_it_t;
+public:
+  TOOLS_T_SCLASS(GL_FUNCTIONS,toolx::sg::GL_manager_T)
   virtual void* cast(const std::string& a_class) const {
-    if(void* p = tools::cmp_cast<GL_manager>(this,a_class)) {return p;}
+    if(void* p = tools::cmp_cast<GL_manager_T>(this,a_class)) {return p;}
     else return 0;
   }
 public:
   virtual bool begin_render(int a_x,int a_y,unsigned int a_ww,unsigned int a_wh,
                             float a_r,float a_g,float a_b,float a_a,bool a_clear = true) {
-    gl_clear_errors();
 
-#if TARGET_OS_IPHONE
-#elif defined(ANDROID)
-#elif _WIN32
-#elif __APPLE__ // Cocoa
-    // to avoid a 0x506 error message :
-#ifdef TOOLX_HAS_GL_VBO
-#if GL_ARB_framebuffer_object
-    if(::glCheckFramebufferStatus(GL_FRAMEBUFFER)!=GL_FRAMEBUFFER_COMPLETE) {
-      //m_out << "toolx::sg::GL_manager::begin_render :"
-      //      << " frame buffer not complete."
-      //      << std::endl;
+    if (!parent_gl_functions::initialize()) {
+      m_out << "toolx::sg::GL_manager_T::begin_render: parent_gl_functions::initialize() failed." << std::endl;
       return false;
     }
-#endif //GL_ARB_framebuffer_object
-#endif //TOOLX_HAS_GL_VBO
-#else
+
+    if(m_gl_version.empty()) {
+     {m_gl_version.clear();
+      const char* _sv = (const char*)parent_gl_functions::gl__GetString(GL_VERSION);
+      if(_sv) m_gl_version = _sv;}
+#ifdef TOOLS_USE_GL_VERSION_3_2
+     {m_gl_shading_language_version.clear();
+      const char* _sv = (const char*)parent_gl_functions::gl__GetString(GL_SHADING_LANGUAGE_VERSION);
+      if(_sv) m_gl_shading_language_version = _sv;}
+#endif
+     {m_gl_vendor.clear();
+      const char* _sv = (const char*)parent_gl_functions::gl__GetString(GL_VENDOR);
+      if(_sv) m_gl_vendor = _sv;}
+     {m_gl_renderer.clear();
+      const char* _sv = (const char*)parent_gl_functions::gl__GetString(GL_RENDERER);
+      if(_sv) m_gl_renderer = _sv;}
+     {m_gl_extensions.clear();
+      const char* _sv = (const char*)parent_gl_functions::gl__GetString(GL_EXTENSIONS);
+      if(_sv) m_gl_extensions = _sv;}
+      m_gl_max_texture_size = 0;
+      parent_gl_functions::gl__GetIntegerv(GL_MAX_TEXTURE_SIZE, &m_gl_max_texture_size);
+    }
+
+    clear_gl_errors();
+
+#ifdef TOOLS_USE_GL_VERSION_3_2
+
+    // to avoid a 0x506 error message :
+    if(parent_gl_functions::gl__CheckFramebufferStatus(GL_FRAMEBUFFER)!=GL_FRAMEBUFFER_COMPLETE) {
+      return false;
+    }
+
+    if(!create_shader_program()) {
+      dump_if_gl_errors(m_out,"toolx::sg::GL_manager_T::create_shader_program :");
+      m_out << "toolx::sg::GL_manager_T::begin_render : create_shader_program() failed." << std::endl;
+      return false;
+    }
+    use_shader_program();
+
+    // WARNING : the values set here must match the default values in sg::state.
+
+    //WARNING : the below glEnable/glDisable corresponds
+    //          to defaults in tools::sg::state.
+    parent_gl_functions::gl__Enable(GL_DEPTH_TEST);
+    parent_gl_functions::gl__FrontFace(GL_CCW);
+    parent_gl_functions::gl__Enable(GL_CULL_FACE);
+    parent_gl_functions::gl__Disable(GL_POLYGON_OFFSET_FILL);
+
+    parent_gl_functions::gl__DepthFunc(GL_LESS);
+    parent_gl_functions::gl__DepthMask(GL_TRUE);
+
+    parent_gl_functions::gl__Disable(GL_BLEND); //must be in sync with tools::sg::state.m_GL_BLEND and sg::blend node default.
+    parent_gl_functions::gl__BlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+
+    parent_gl_functions::gl__LineWidth(1.0f);
+    parent_gl_functions::gl__Uniform1f(g_point_size_location(),1.0f);
+
+    parent_gl_functions::gl__Viewport(a_x,a_y,a_ww,a_wh);
+
+    if(a_clear) {
+      parent_gl_functions::gl__ClearColor(a_r,a_g,a_b,a_a);
+      parent_gl_functions::gl__Clear(GL_COLOR_BUFFER_BIT);
+      parent_gl_functions::gl__Clear(GL_DEPTH_BUFFER_BIT);
+    }
+
+    tools::mat4f ID4;ID4.set_identity();
+    parent_gl_functions::gl__UniformMatrix4fv(g_model_proj_matrix_location(),1,GL_FALSE,ID4.data());
+    parent_gl_functions::gl__UniformMatrix4fv(g_normal_matrix_location(),1,GL_FALSE,ID4.data());
+
+#else //not TOOLS_USE_GL_VERSION_3_2
+
+#ifdef __APPLE__
+#ifdef __COREFOUNDATION__  //Cocoa.h included: we build a Cocoa application.
+    // to avoid a 0x506 error message :
+    if(parent_gl_functions::gl__CheckFramebufferStatus(GL_FRAMEBUFFER)!=GL_FRAMEBUFFER_COMPLETE) { //It is a GL_VERSION_3_0 function.
+      return false;
+    }
+#endif
 #endif
 
     // WARNING : the values set here must match the default values in sg::state.
 
-    // Antialiasing :
-#if TARGET_OS_IPHONE
-#elif defined(ANDROID)
-    ::glEnable(GL_MULTISAMPLE);
-#elif _WIN32
-#elif __APPLE__
-    ::glEnable(GL_MULTISAMPLE); //Cocoa
-#else
-#endif
 
-    /* NOTE : not GL-ES :
-    //   ::glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
-    // The upper is cruely lacking with povama solid+light.
-    //   ::glEnable(GL_LINE_STIPPLE);
+    parent_gl_functions::gl__Disable(GL_POLYGON_STIPPLE); //CoinGL : reading a .wrl having Material::transparency may enable GL_POLYGON_STIPPLE.
 
-    ::glDisable(GL_POLYGON_SMOOTH);
-    ::glAccum(GL_LOAD,1.0f);
-    ::glAccum(GL_RETURN,1.0f);
-    ::glReadBuffer(GL_FRONT);
+    parent_gl_functions::gl__Enable(GL_NORMALIZE);
+    parent_gl_functions::gl__ShadeModel(GL_FLAT);
+    parent_gl_functions::gl__Enable(GL_COLOR_MATERIAL);
 
-    NOTE : GL_POLYGON_SMOOTH is here on Cocoa/AGL, Windows/WGL but it
-           does nothing.
-    */
 
-#if TARGET_OS_IPHONE
-// GL-ES
-#elif defined(ANDROID)
-// GL-ES
-#else
-    ::glDisable(GL_POLYGON_STIPPLE); //CoinGL : reading a .wrl having Material::transparency may enable GL_POLYGON_STIPPLE.
-#endif
-
-/*
-    ::printf("debug : is enabled %d\n",::glIsEnabled(GL_COLOR_MATERIAL));
-   {GLfloat v[4];
-    ::glGetMaterialfv(GL_FRONT,GL_AMBIENT,v);
-    ::printf("debug : ambient : %g %g %g %g\n",v[0],v[1],v[2],v[3]);}
-   {GLfloat v[4];
-    ::glGetMaterialfv(GL_FRONT,GL_DIFFUSE,v);
-    ::printf("debug : diffuse : %g %g %g %g\n",v[0],v[1],v[2],v[3]);}
-   {GLfloat v[4];
-    ::glGetMaterialfv(GL_FRONT,GL_SPECULAR,v);
-    ::printf("debug : specular : %g %g %g %g\n",v[0],v[1],v[2],v[3]);}
-   {GLfloat v[4];
-    ::glGetMaterialfv(GL_FRONT,GL_EMISSION,v);
-    ::printf("debug : emission : %g %g %g %g\n",v[0],v[1],v[2],v[3]);}
-   {GLfloat shine;
-    ::glGetMaterialfv(GL_FRONT,GL_SHININESS,&shine);
-    ::printf("debug : shine : %g\n",shine);}
-debug : is enabled 0
-debug : ambient : 0.2 0.2 0.2 1
-debug : diffuse : 0.8 0.8 0.8 1
-debug : specular : 0 0 0 1
-debug : emission : 0 0 0 1
-debug : shine : 0
-*/
-
-    ::glEnable(GL_NORMALIZE);
-    ::glShadeModel(GL_FLAT);
-    //::glShadeModel(GL_SMOOTH);
-    // GL-ES : ::glMaterialfv does not work. We then use :
-    //         ::glEnable(GL_COLOR_MATERIAL) and ::glColor.
-    //::glColorMaterial(GL_FRONT, GL_DIFFUSE);  //?
-    ::glEnable(GL_COLOR_MATERIAL);
-
-/*
-debug : is enabled 1
-debug : ambient : 1 1 1 1
-debug : diffuse : 1 1 1 1
-debug : specular : 0 0 0 1
-debug : emission : 0 0 0 1
-debug : shine : 0
-*/
-
-    // to handle transparency (same as SoGLRenderAction::SCREEN_DOOR ?) :
-    //::glEnable(GL_BLEND);
-    // NOTE : with Cocoa+AppleGL on macOS-10.14 (Mojave), it appears that points are blended ! (Even if alpha color is 1).
-    //        Seen with some simulated catalog of galaxies done for LSST/DC2.
-    //        To master this, we disable GL_BLEND by default. Then people wanting some transparency have to
-    //        use the tools::sg::blend node in their scene graph.
-    ::glDisable(GL_BLEND); //must be in sync with tools::sg::state.m_GL_BLEND and sg::blend node default.
-    ::glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+    parent_gl_functions::gl__Disable(GL_BLEND); //must be in sync with tools::sg::state.m_GL_BLEND and sg::blend node default.
+    parent_gl_functions::gl__BlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
 
     //WARNING : the below glEnable/glDisable corresponds
     //          to defaults in tools::sg::state.
-    ::glEnable(GL_DEPTH_TEST);
-    ::glDisable(GL_LIGHTING);
-    ::glFrontFace(GL_CCW);
-    ::glEnable(GL_CULL_FACE);
-    ::glDisable(GL_POLYGON_OFFSET_FILL);
-    ::glDisable(GL_TEXTURE_2D);
+    parent_gl_functions::gl__Enable(GL_DEPTH_TEST);
+    parent_gl_functions::gl__Disable(GL_LIGHTING);
+    parent_gl_functions::gl__FrontFace(GL_CCW);
+    parent_gl_functions::gl__Enable(GL_CULL_FACE);
+    parent_gl_functions::gl__Disable(GL_POLYGON_OFFSET_FILL);
+    parent_gl_functions::gl__Disable(GL_TEXTURE_2D);
 
-    ::glDisable(GL_POINT_SMOOTH);
-    ::glPointSize(1);
-    ::glDisable(GL_LINE_SMOOTH); //NOTE : it does not work on all platforms !
-    ::glLineWidth(1);
+    parent_gl_functions::gl__DepthFunc(GL_LESS);
+    parent_gl_functions::gl__DepthMask(GL_TRUE);
 
-    ::glViewport(a_x,a_y,a_ww,a_wh);
+    parent_gl_functions::gl__Disable(GL_POINT_SMOOTH);
+    parent_gl_functions::gl__PointSize(1);
 
-   // NOTE : iOS : glScissor logic does not work properly with Apple multisampling.
-   //        But it appears that it is not needed for VR split views.
-   //        Here a combination glViewport+[correct camera lrbt] does the clipping job (???).
-   //        (But the clear color should be the same for both views).
-   //::glEnable(GL_SCISSOR_TEST);
-   //::glScissor(a_x,a_y,a_ww,a_wh);
+    parent_gl_functions::gl__Disable(GL_LINE_SMOOTH); //NOTE : it does not work on all platforms !
+    parent_gl_functions::gl__LineWidth(1);
 
-    //NOTE : a=0 coworks with the below logic to handle transparent background.
+    parent_gl_functions::gl__Viewport(a_x,a_y,a_ww,a_wh);
+
     if(a_clear) {
-      ::glClearColor(a_r,a_g,a_b,0);
-      ::glClear(GL_COLOR_BUFFER_BIT);
-      ::glClear(GL_DEPTH_BUFFER_BIT);
+      parent_gl_functions::gl__ClearColor(a_r,a_g,a_b,0);
+      parent_gl_functions::gl__Clear(GL_COLOR_BUFFER_BIT);
+      parent_gl_functions::gl__Clear(GL_DEPTH_BUFFER_BIT);
     }
 
-    //WARNING : Android, iPhone : only one glPushMatrix ok !
-    ::glMatrixMode(GL_PROJECTION);
-    ::glLoadIdentity();
+    parent_gl_functions::gl__MatrixMode(GL_PROJECTION);
+    parent_gl_functions::gl__LoadIdentity();
 
-    //WARNING : we take the convention that the current mode is MODELVIEW
-    ::glMatrixMode(GL_MODELVIEW);
-    ::glLoadIdentity();
+    parent_gl_functions::gl__MatrixMode(GL_MODELVIEW);
+    parent_gl_functions::gl__LoadIdentity();
 
-    //m_clear_color.set_a(0.2);
 
-    // to handle a transparent background :
-    //NOTE : not tested on Android and iOS.
-    // dst color :
-    //    cr * alpha + cr * (1-alpha) = cr
-    //    cg * alpha + cg * (1-alpha) = cg
-    //    cb * alpha + cb * (1-alpha) = cb
-    //    alpha*alpha + 0 * (1-alpha) = ca => alpha = sqrt(ca)
-
-   {::glColor4f(a_r,a_g,a_b,::sqrt(a_a));
+   {parent_gl_functions::gl__Color4f(a_r,a_g,a_b,::sqrt(a_a));
     float xyzs[12];
     xyzs[0] = -1;xyzs[ 1] = -1;xyzs[ 2] = 0;
     xyzs[3] =  1;xyzs[ 4] = -1;xyzs[ 5] = 0;
     xyzs[6] =  1;xyzs[ 7] =  1;xyzs[ 8] = 0;
     xyzs[9] = -1;xyzs[10] =  1;xyzs[11] = 0;
-    ::glDisable(GL_DEPTH_TEST);
-    ::glEnableClientState(GL_VERTEX_ARRAY);
-    ::glVertexPointer(3,GL_FLOAT,0,xyzs);
-    ::glDrawArrays(GL_TRIANGLE_FAN,0,4);
-    ::glDisableClientState(GL_VERTEX_ARRAY);
-    ::glEnable(GL_DEPTH_TEST);}
+    parent_gl_functions::gl__Disable(GL_DEPTH_TEST);
+    parent_gl_functions::gl__EnableClientState(GL_VERTEX_ARRAY);
+    parent_gl_functions::gl__VertexPointer(3,GL_FLOAT,0,xyzs);
+    parent_gl_functions::gl__DrawArrays(GL_TRIANGLE_FAN,0,4);
+    parent_gl_functions::gl__DisableClientState(GL_VERTEX_ARRAY);
+    parent_gl_functions::gl__Enable(GL_DEPTH_TEST);}
 
+#endif //not TOOLS_USE_GL_VERSION_3_2
     return true;
   }
 
   virtual void end_render() {
-    ::glFinish();
-    gl_dump_if_errors(m_out,"toolx::sg::GL_manager::end_render :");
+#ifdef TOOLS_USE_GL_VERSION_3_2
+    reset_shader_locations();
+#endif
+    dump_if_gl_errors(m_out,"toolx::sg::GL_manager_T::end_render :");
   }
 
   ////////////////////////////////////////////////
@@ -210,70 +324,104 @@ debug : shine : 0
   ////////////////////////////////////////////////
   virtual unsigned int create_texture(const tools::img_byte& a_img,bool a_NEAREST) {
 
-    unsigned int gl_id;
-    ::glGenTextures(1,&gl_id);
-    if(!gl_id) return 0;
+    tools::img_byte* _img = 0;
+    bool _img_delete = false;
 
-#ifdef TOOLS_MEM
-    tools::mem::increment(tools::s_tex().c_str());
-#endif
-    unsigned int gsto_size = a_img.size();
-    ::glBindTexture(GL_TEXTURE_2D,gl_id);
-    bool status = true;
-   {int sz;
-    ::glGetIntegerv(GL_MAX_TEXTURE_SIZE,&sz);
-  // MacBookPro : it returns 8192.
-  // Android : it returns 2048.
-  // iPad1 : it returns 2048.
-  // iPod : it returns ?
-  //::printf("debug : GL_MAX_TEXTURE_SIZE : %d\n",sz);
-    tools::img_byte res;
-    if(!sz) {
-      m_out << "toolx::sg::gl::tex_img : warning : GL_MAX_TEXTURE_SIZE is zero." << std::endl;
-      status = gl_tex_img(m_out,a_img);
-    } else {
-    if(a_img.check_gl_limit(sz,res)) {
-      if(res.is_empty()) { //a_img does not exceed.
-        status = gl_tex_img(m_out,a_img);
-      } else {
-        m_out << "toolx::sg::gl::tex_img : warning : img size > GL_MAX_TEXTURE_SIZE (" << sz << ")." << std::endl;
-        status = gl_tex_img(m_out,res);
-        gsto_size = res.size();
+    if(a_img.bytes_per_pixel()==1) { //exa eiffel-tower.png
+      _img = new tools::img_byte;
+      _img_delete = true;
+      if(!a_img.bw2x(3,*_img)) {
+        m_out << "toolx::sg::GL_manager_T::create_texture :"
+              << " a_imgr.bw2x() failed."
+              << std::endl;
+        delete _img;
+        return 0;
       }
+    } else if(a_img.bytes_per_pixel()==3) {
+      _img = const_cast<tools::img_byte*>(&a_img);
+    } else if(a_img.bytes_per_pixel()==4) { //exa windusrf.png, text_freetype/font_pixmap.
+      _img = const_cast<tools::img_byte*>(&a_img);
     } else {
-      m_out << "toolx::sg::gl::tex_img :"
-            << " warning : img size > GL_MAX_TEXTURE_SIZE (" << sz << ") but can't reduce."
+      //should not happen.
+      m_out << "toolx::sg::GL_manager_T::create_texture :"
+            << " image with bytes_per_pixel " << a_img.bytes_per_pixel() << " not (yet) supported."
             << std::endl;
-      status = false;
-    }}}
-
-    if(a_NEAREST) {
-      ::glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST); //good to see astro images pixels.
-      ::glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST); //idem.
-    } else {
-      ::glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
-      ::glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+      return 0;
     }
-    ::glBindTexture(GL_TEXTURE_2D,0);
-
-    if(!status) {
-      gl_dump_if_errors(m_out,"toolx::sg::GL_manager::create_texture (1) :");
-      ::glDeleteTextures(1,&gl_id);
-#ifdef TOOLS_MEM
-      tools::mem::decrement(tools::s_tex().c_str());
-#endif
-      gl_id = 0;
-      gl_clear_errors();
+    if(_img->is_empty()) {
+      m_out << "toolx::sg::GL_manager_T::create_texture : img_byte is empty." << std::endl;
+      if(_img_delete) delete _img;
       return 0;
     }
 
-    if(gl_dump_if_errors(m_out,"toolx::sg::GL_manager::create_texture (2) :")) {
-      ::glDeleteTextures(1,&gl_id);
-#ifdef TOOLS_MEM
-      tools::mem::decrement(tools::s_tex().c_str());
-#endif
+   {int sz;
+    parent_gl_functions::gl__GetIntegerv(GL_MAX_TEXTURE_SIZE,&sz);
+    if(!sz) {
+      m_out << "toolx::sg::GL_manager_T::create_texture : warning : GL_MAX_TEXTURE_SIZE is zero." << std::endl;
+    } else {
+      tools::img_byte* res = new tools::img_byte;
+      if(_img->check_gl_limit(sz,*res)) {
+        if(res->is_empty()) { //_img does not exceed.
+          delete res;
+        } else {
+          m_out << "toolx::sg::GL_manager_T::create_texture:"
+	        << " warning : img size (" << _img->size() << ") > GL_MAX_TEXTURE_SIZE (" << sz << "), we use a reduced one." << std::endl;
+          if(_img_delete) delete _img;
+	  _img = res;
+          _img_delete = true;
+        }
+      } else {
+        m_out << "toolx::sg::GL_manager_T::create_texture :"
+              << " warning : img size (" << _img->size() << ") > GL_MAX_TEXTURE_SIZE (" << sz << ") but can't reduce it."
+              << std::endl;
+        delete res;
+        if(_img_delete) delete _img;
+	return false;
+      }
+    }}
+    if(_img->is_empty()) {
+      m_out << "toolx::sg::GL_manager_T::create_texture : img_byte is empty." << std::endl;
+      if(_img_delete) delete _img;
+      return 0;
+    }
+
+    unsigned int gl_id;
+    parent_gl_functions::gl__GenTextures(1,&gl_id);
+    if(!gl_id) {
+      m_out << "toolx::sg::GL_manager_T::create_texture : glGenTextures failed ()." << std::endl;
+      if(_img_delete) delete _img;
+      return 0;
+    }
+
+    unsigned int gsto_size = _img->size();
+    if(_img->bytes_per_pixel()==3) {
+      parent_gl_functions::gl__BindTexture(GL_TEXTURE_2D,gl_id);
+      parent_gl_functions::gl__TexImage2D(GL_TEXTURE_2D,0,GL_RGB,_img->width(),_img->height(),0,GL_RGB,GL_UNSIGNED_BYTE,_img->buffer());
+      if(_img_delete) delete _img;
+    } else if(_img->bytes_per_pixel()==4) {
+      parent_gl_functions::gl__BindTexture(GL_TEXTURE_2D,gl_id);
+      parent_gl_functions::gl__TexImage2D(GL_TEXTURE_2D,0,GL_RGBA,_img->width(),_img->height(),0,GL_RGBA,GL_UNSIGNED_BYTE,_img->buffer());
+      if(_img_delete) delete _img;
+    } else {
+      m_out << "toolx::sg::GL_manager_T::create_texture : img.bytes_per_pixel() " << _img->bytes_per_pixel() << " not handled." << std::endl;
+      if(_img_delete) delete _img;
+      parent_gl_functions::gl__DeleteTextures(1,&gl_id);
       gl_id = 0;
-      gl_clear_errors();
+      return false;
+    }
+    if(a_NEAREST) {
+      parent_gl_functions::gl__TexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST); //good to see astro images pixels.
+      parent_gl_functions::gl__TexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST); //idem.
+    } else {
+      parent_gl_functions::gl__TexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
+      parent_gl_functions::gl__TexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+    }
+    parent_gl_functions::gl__BindTexture(GL_TEXTURE_2D,0);
+
+    if(dump_if_gl_errors(m_out,"toolx::sg::GL_manager_T::create_texture :")) {
+      parent_gl_functions::gl__DeleteTextures(1,&gl_id);
+      gl_id = 0;
+      clear_gl_errors();
       return 0;
     }
 
@@ -283,51 +431,58 @@ debug : shine : 0
   }
 
   ////////////////////////////////////////////////
-  /// VBO ////////////////////////////////////////
+  /// gsto ///////////////////////////////////////
   ////////////////////////////////////////////////
   virtual unsigned int create_gsto_from_data(size_t a_floatn,const float* a_data) {
     if(!a_floatn) return 0;
     switch(m_gsto_mode) {
     case tools::sg::gsto_gl_vbo:{
-#ifdef TOOLX_HAS_GL_VBO
-      unsigned int gl_id = 0;
-      ::glGenBuffers(1,&gl_id);
-      if(!gl_id) {
-        if(!m_warned) {
-          m_warned = true;
-          m_out << "toolx::sg::GL_manager::create_gsto_from_data : glGenBuffers failed ()." << std::endl;
-        }
+#ifdef TOOLS_USE_GL_VERSION_3_2
+      GLuint vao_id = 0;
+      parent_gl_functions::gl__GenVertexArrays(1,&vao_id);
+      if(!vao_id) {
+        m_out << "toolx::sg::GL_manager_T::create_gsto_from_data : glGenVertexArray failed ()." << std::endl;
         return 0;
       }
-#ifdef TOOLS_MEM
-      tools::mem::increment(tools::s_gsto().c_str());
-#endif
 
-      ::glBindBuffer(GL_ARRAY_BUFFER,gl_id);
-      ::glBufferData(GL_ARRAY_BUFFER,
-                     a_floatn*sizeof(float),a_data,
-                     GL_STATIC_DRAW);
-      ::glBindBuffer(GL_ARRAY_BUFFER,0);
+      parent_gl_functions::gl__BindVertexArray(vao_id);
+      ////////////////////////////////////////////////////////////////////
+      ////////////////////////////////////////////////////////////////////
+      GLuint gl_id = 0;
+      parent_gl_functions::gl__GenBuffers(1,&gl_id);
+      if(!gl_id) {
+        parent_gl_functions::gl__DeleteVertexArrays(1,&vao_id);
+        m_out << "toolx::sg::GL_manager_T::create_gsto_from_data : glGenBuffers failed ()." << std::endl;
+        return 0;
+      }
+      parent_gl_functions::gl__BindBuffer(GL_ARRAY_BUFFER,gl_id);
+      parent_gl_functions::gl__BufferData(GL_ARRAY_BUFFER,a_floatn*sizeof(float),a_data,GL_STATIC_DRAW);
+      parent_gl_functions::gl__BindBuffer(GL_ARRAY_BUFFER,0);
+      ////////////////////////////////////////////////////////////////////
+      ////////////////////////////////////////////////////////////////////
+      parent_gl_functions::gl__BindVertexArray(0);
 
-      if(gl_dump_if_errors(m_out,"toolx::sg::GL_manager::create_gsto_from_data :")) {
-        ::glDeleteBuffers(1,&gl_id);
-#ifdef TOOLS_MEM
-        tools::mem::decrement(tools::s_gsto().c_str());
-#endif
-        gl_id = 0;
-        gl_clear_errors();
+      if(dump_if_gl_errors(m_out,"toolx::sg::GL_manager_T::create_gsto_from_data :")) {
+        m_out << "toolx::sg::GL_manager_T::create_gsto_from_data :"
+	      << " a_floatn = " << a_floatn << ", a_data = " << a_data
+	      << ", vao_id " << vao_id << ", gl_id " << gl_id
+	      << std::endl;
+        parent_gl_functions::gl__DeleteBuffers(1,&gl_id);
+        parent_gl_functions::gl__DeleteVertexArrays(1,&vao_id);
+        clear_gl_errors();
         return 0;
       }
 
       unsigned int _id = m_gen_id;m_gen_id++;
-      m_gstos[_id] = new gsto_t(gsto_t::kind_buffer,gl_id,a_floatn*sizeof(float),0);
+      m_gstos[_id] = new gsto_t(gsto_t::kind_buffer,gl_id,a_floatn*sizeof(float),0,vao_id);
       return _id;
-#else //!TOOLX_HAS_GL_VBO
-      m_out << "toolx::sg::GL_manager::create_gsto_from_data :"
-            << " gsto mode is gl_vbo but class not compiled with TOOLX_HAS_GL_VBO."
+
+#else
+      m_out << "toolx::sg::GL_manager_T::create_gsto_from_data :"
+            << " gsto mode is gl_vbo but class not compiled with TOOLS_USE_GL_VERSION_3_2."
             << std::endl;
       return 0;
-#endif //TOOLX_HAS_GL_VBO
+#endif
       }break;
     case tools::sg::gsto_gl_list:{
       unsigned int gl_id = 0;
@@ -346,7 +501,7 @@ debug : shine : 0
   }
 
   virtual bool is_gsto_id_valid(unsigned int a_id) const {
-    std::map<unsigned int,gsto_t*>::const_iterator it = m_gstos.find(a_id);
+    gstos_it_t it = m_gstos.find(a_id);
     if(it==m_gstos.end()) return false;
     return (*it).second->is_valid();
   }
@@ -360,25 +515,22 @@ debug : shine : 0
   ////////////////////////////////////////////////////////
 
   float* gsto_data(unsigned int a_id) const {
-    std::map<unsigned int,gsto_t*>::const_iterator it = m_gstos.find(a_id);
+    gstos_it_t it = m_gstos.find(a_id);
     if(it==m_gstos.end()) return 0;
     return (*it).second->m_data;
   }
 
-  unsigned int gsto_gl_list_id(unsigned int a_id,bool& a_created) const {
-    std::map<unsigned int,gsto_t*>::const_iterator it = m_gstos.find(a_id);
+  unsigned int gsto_gl_list_id(unsigned int a_id,bool& a_created) {
+    gstos_it_t it = m_gstos.find(a_id);
     if(it==m_gstos.end()) {a_created = false;return 0;}
     if((*it).second->m_kind!=gsto_t::kind_list) {a_created = false;return 0;}
     if((*it).second->m_gl_id) {
       a_created = false;
       return (*it).second->m_gl_id;
     } else {
-#ifdef TOOLX_HAS_GL_LIST
-      unsigned int _id = ::glGenLists(1);
+#ifndef TOOLS_USE_GL_VERSION_3_2
+      unsigned int _id = parent_gl_functions::gl__GenLists(1);
       if(!_id) {a_created = false;return 0;}
-#ifdef TOOLS_MEM
-      tools::mem::increment(tools::s_gsto().c_str());
-#endif
       a_created = true;
       (*it).second->m_gl_id = _id;
       return _id;
@@ -399,14 +551,14 @@ debug : shine : 0
     tools::safe_clear<unsigned int,gsto_t>(m_gstos);
     switch(a_v) {
     case tools::sg::gsto_gl_vbo:{
-#ifdef TOOLX_HAS_GL_VBO
+#ifdef TOOLS_USE_GL_VERSION_3_2
       m_gsto_mode = a_v;
 #else
       m_gsto_mode = tools::sg::gsto_memory;
 #endif
       }break;
     case tools::sg::gsto_gl_list:{
-#ifdef TOOLX_HAS_GL_LIST
+#ifndef TOOLS_USE_GL_VERSION_3_2
       m_gsto_mode = a_v;
 #else
       m_gsto_mode = tools::sg::gsto_memory;
@@ -420,10 +572,10 @@ debug : shine : 0
 
   virtual void available_gsto_modes(std::vector<std::string>& a_vs) {
     a_vs.clear();
-#ifdef TOOLX_HAS_GL_VBO
+#ifdef TOOLS_USE_GL_VERSION_3_2
     a_vs.push_back(tools::sg::s_gsto_gl_vbo());
 #endif
-#ifdef TOOLX_HAS_GL_LIST
+#ifndef TOOLS_USE_GL_VERSION_3_2
     a_vs.push_back(tools::sg::s_gsto_gl_list());
 #endif
     a_vs.push_back(tools::sg::s_gsto_memory());
@@ -431,17 +583,16 @@ debug : shine : 0
 
   virtual void available_not_memory_gsto_mode(std::string& a_v) const {
     a_v.clear();
-#ifdef TOOLX_HAS_GL_VBO
+#ifdef TOOLS_USE_GL_VERSION_3_2
     a_v = tools::sg::s_gsto_gl_vbo();
-#endif
-#ifdef TOOLX_HAS_GL_LIST
-    if(a_v.empty()) a_v = tools::sg::s_gsto_gl_list();
+#else
+    a_v = tools::sg::s_gsto_gl_list();
 #endif
   }
 
   virtual size_t used_texture_memory() const {
     size_t sz = 0;
-    std::map<unsigned int,gsto_t*>::const_iterator it;
+    gstos_it_t it;
     for(it=m_gstos.begin();it!=m_gstos.end();++it) {
       if((*it).second->m_kind==gsto_t::kind_texture) sz += (*it).second->m_size;
     }
@@ -450,49 +601,57 @@ debug : shine : 0
 
   virtual size_t gstos_size() const {
     size_t sz = 0;
-    std::map<unsigned int,gsto_t*>::const_iterator it;
+    gstos_it_t it;
     for(it=m_gstos.begin();it!=m_gstos.end();++it) sz += (*it).second->m_size;
     return sz;
   }
 
 public:
-  GL_manager(std::ostream& a_out)
+  GL_manager_T(std::ostream& a_out)
   :m_out(a_out)
   ,m_gen_id(1)
-#ifdef TOOLX_HAS_GL_VBO
-  ,m_gsto_mode(tools::sg::gsto_gl_vbo) //priority to GL VBOs.
-#elif TOOLX_HAS_GL_LIST
-  ,m_gsto_mode(tools::sg::gsto_gl_list)
-#else
   ,m_gsto_mode(tools::sg::gsto_memory)
+#ifdef TOOLS_USE_GL_VERSION_3_2
+  ,m_fragment_shader(0)
+  ,m_vertex_shader(0)
+  ,m_shader_program(0)
 #endif
-  ,m_warned(false)
+  ,m_gl_max_texture_size(0)
   {}
-  virtual ~GL_manager(){
+  virtual ~GL_manager_T(){
+#ifdef TOOLS_USE_GL_VERSION_3_2
+    delete_shader_program();
+#endif
     tools::safe_clear<unsigned int,gsto_t>(m_gstos);
   }
 public:
-  GL_manager(const GL_manager& a_from)
+  GL_manager_T(const GL_manager_T& a_from)
   :parent(a_from)
+  ,parent_gl_functions(a_from)
   ,m_out(a_from.m_out)
   ,m_gen_id(a_from.m_gen_id)
   ,m_gsto_mode(a_from.m_gsto_mode)
-  ,m_warned(false)
+  ,m_gl_max_texture_size(0)
   {}
-  GL_manager& operator=(const GL_manager& a_from){
+  GL_manager_T& operator=(const GL_manager_T& a_from){
     if(&a_from==this) return *this;
     m_gen_id = a_from.m_gen_id;
     m_gsto_mode = a_from.m_gsto_mode;
     tools::safe_clear<unsigned int,gsto_t>(m_gstos);
-    m_warned = false;
     return *this;
   }
 
 public:
   void bind_gsto(unsigned int a_id) {
-    std::map<unsigned int,gsto_t*>::const_iterator it = m_gstos.find(a_id);
+    gstos_it_t it = m_gstos.find(a_id);
     if(it==m_gstos.end()) return;
     (*it).second->bind();
+  }
+  void unbind_gsto() {
+#ifdef TOOLS_USE_GL_VERSION_3_2
+    parent_gl_functions::gl__BindBuffer(GL_ARRAY_BUFFER,0);
+    parent_gl_functions::gl__BindVertexArray(0);
+#endif
   }
 
   void delete_gstos() {
@@ -501,193 +660,468 @@ public:
 
 public:
 
-  static unsigned char* get_rgbas(unsigned int a_w,unsigned int a_h) {
-    //WARNING : it does OpenGL. Under Android it should be executed
-    //          in the OpenGL thread.
-    //NOTE : Android, iOS : RGB produces a black image.
+  unsigned char* get_rgbas(unsigned int a_w,unsigned int a_h) {
     unsigned char* rgbas = new unsigned char[4 * a_w * a_h];
     if(!rgbas) return 0;
-    ::glPixelStorei(GL_PACK_ALIGNMENT,1); //needed with Cocoa.
-    ::glReadPixels(0,0,a_w,a_h,GL_RGBA,GL_UNSIGNED_BYTE,rgbas);
- /*{size_t number = 4 * a_w * a_h;
-    size_t count_not_255 = 0;
-    for(size_t item=3;item<number;item+=4) {
-      unsigned char a = rgbas[item];
-      if(a!=255) {
-        ::printf("%lu : %d\n",item,a);
-        count_not_255++;
-	rgbas[item] = 255;
-      }
-    }
-    ::printf("not_255 : %lu\n",count_not_255);}*/
+    parent_gl_functions::gl__PixelStorei(GL_PACK_ALIGNMENT,1); //needed with Cocoa.
+    parent_gl_functions::gl__ReadPixels(0,0,a_w,a_h,GL_RGBA,GL_UNSIGNED_BYTE,rgbas);
     return rgbas;
   }
 
-#if defined(TARGET_OS_IPHONE) || defined(ANDROID)
-  static unsigned char* get_rgbs(unsigned int a_w,unsigned int a_h) {
-    unsigned char* rgbas = get_rgbas(a_w,a_h);
-    if(!rgbas) return 0;
-    unsigned char* rgbs = tools::_4s_to_3s<unsigned char,unsigned int>(rgbas,a_w,a_h);
-    delete [] rgbas;
-    return rgbs;
-  }
-#else
-  static unsigned char* get_rgbs(unsigned int a_w,unsigned int a_h) {
-    //WARNING : it does OpenGL. Under Android it should be executed
-    //          in the OpenGL thread.
-    //NOTE : Android, iOS : RGB produces a black image.
+  unsigned char* get_rgbs(unsigned int a_w,unsigned int a_h) {
     unsigned char* rgbs = new unsigned char[3 * a_w * a_h];
     if(!rgbs) return 0;
-    ::glPixelStorei(GL_PACK_ALIGNMENT,1); //needed with Cocoa.
-    ::glReadPixels(0,0,a_w,a_h,GL_RGB,GL_UNSIGNED_BYTE,rgbs);
+    parent_gl_functions::gl__PixelStorei(GL_PACK_ALIGNMENT,1); //needed with Cocoa.
+    parent_gl_functions::gl__ReadPixels(0,0,a_w,a_h,GL_RGB,GL_UNSIGNED_BYTE,rgbs);
     return rgbs;
   }
-#endif
+#ifdef TOOLS_USE_GL_VERSION_3_2
+  bool create_shader_program() {
+    if(m_shader_program) return true; //done
+
+    unsigned int gl_glsl_major_version = 0;
+    unsigned int gl_glsl_minor_version = 0;
+    if(!get_version_numbers(m_out,m_gl_shading_language_version,gl_glsl_major_version,gl_glsl_minor_version)) {
+      m_out << "toolx::sg::GL_manager_T::create_shader_program :"
+            << " can't get version numnbers for GL_SHADING_LANGUAGE_VERSION."
+            << std::endl;
+      return false;
+    }
+    unsigned int glsl_shader_processor_version = gl_glsl_major_version*100+gl_glsl_minor_version;
+    if(glsl_shader_processor_version<150) {
+      m_out << "toolx::sg::GL_manager_T::create_shader_program :"
+            << " glsl_shader_processor_version is " << glsl_shader_processor_version
+	    << ", but only the ones greater or equal to 150 are supported."
+            << std::endl;
+      return false;
+    }
+
+   {unsigned int gl_major_version = 0;
+    unsigned int gl_minor_version = 0;
+    if(!get_version_numbers(m_out,m_gl_version,gl_major_version,gl_minor_version)) {
+      m_out << "toolx::sg::GL_manager_T::create_shader_program :"
+            << " can't get version numbers for GL_VERSION."
+            << std::endl;
+      gl_major_version = 0;
+      gl_minor_version = 0;
+    }
+    m_out << "toolx::sg::GL_manager_T::create_shader_program: infos:" << std::endl
+          << " GL_VERSION " << gl_major_version << "." << gl_minor_version << std::endl
+          << " GL_SHADING_LANGUAGE_VERSION " << gl_glsl_major_version << "." << gl_glsl_minor_version << std::endl
+          << " shader processor version " << glsl_shader_processor_version
+	  << std::endl;}
+
+    ////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////
+    static const GLchar* str_fs_150 = "\
+#version 150\n\
+  uniform sampler2D sampler;\n\
+  in vec4 frag_color;\n\
+  in float frag_tex_on;\n\
+\n\
+  in vec2 frag_tex_coords;\n\
+  out vec4 _gl_FragColor;\n\
+  void main(void) {\n\
+    if(frag_tex_on==1.0) {\n\
+      _gl_FragColor = frag_color*texture(sampler,vec2(frag_tex_coords.s,frag_tex_coords.t));\n\
+    } else {\n\
+      _gl_FragColor = frag_color;\n\
+    }\n\
+  }\n\
+";
+
+    m_fragment_shader = parent_gl_functions::gl__CreateShader(GL_FRAGMENT_SHADER);
+    if(!m_fragment_shader) {
+       m_out << "toolx::sg::GL_manager_T::create_shader_program :"
+             << " glCreateShader(GL_FRAGMENT_SHADER) failed."
+             << std::endl;
+       return false;
+    }
+    char* str_fs = (char*)str_fs_150;
+    parent_gl_functions::gl__ShaderSource(m_fragment_shader,1,&str_fs,NULL);
+    parent_gl_functions::gl__CompileShader(m_fragment_shader);
+   {GLint status;
+    parent_gl_functions::gl__GetShaderiv(m_fragment_shader,GL_COMPILE_STATUS,&status);
+    if(status==GL_FALSE) {
+       m_out << "toolx::sg::GL_manager_T::create_shader_program :"
+             << " compilation of the fragment shader failed."
+             << std::endl;
+
+      {GLsizei log_size;
+       char shader_log[4096];
+       parent_gl_functions::gl__GetShaderInfoLog(m_fragment_shader,1024,&log_size,shader_log);
+       m_out << "toolx::sg::GL_manager_T::create_shader_program: fragment shader_log size " << log_size << std::endl;
+       m_out << std::string(shader_log) << std::endl;}
+
+       parent_gl_functions::gl__DeleteShader(m_fragment_shader);
+       m_fragment_shader = 0;
+       return false;
+    }}
+
+    ////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////
+    static const GLchar* str_vs_150 = "\
+#version 150\n\
+  in vec3 one_pos;\n\
+  in vec3 one_normal;\n\
+  in vec4 one_color;\n\
+  in vec2 one_tex;\n\
+  uniform mat4 model_proj_matrix;\n\
+  uniform mat4 normal_matrix;\n\
+  uniform vec4 color;\n\
+  uniform bool pos_color;\n\
+  uniform vec3 normal;\n\
+  uniform bool pos_normal;\n\
+  uniform bool tex_on;\n\
+  uniform bool light_on;\n\
+  uniform vec3 light_direction;\n\
+  uniform vec4 light_color;\n\
+  uniform vec4 light_ambient;\n\
+  uniform float point_size;\n\
+\n\
+  out float frag_tex_on;\n\
+  out vec4 frag_color;\n\
+  out vec2 frag_tex_coords;\n\
+\n\
+  void main(void) {\n\
+    frag_tex_on = 0.0;\n\
+    if(tex_on) frag_tex_on = 1.0;\n\
+    frag_tex_coords = one_tex;\n\
+    if(tex_on) {\n\
+      frag_color = color;\n\
+    } else {\n\
+      frag_color = color;\n\
+      if(pos_color) frag_color = one_color;\n\
+    }\n\
+  /*frag_color = clamp(frag_color,0,1);*/\n\
+\n\
+    if(light_on) {\n\
+      vec3 _normal = normal;\n\
+      if(pos_normal) _normal = one_normal;\n\
+      vec3 frag_normal = vec3(normalize(normal_matrix*vec4(_normal,0)));\n\
+      /* at this point, light_direction should be normalized.*/\n\
+      vec4 ambient_color = light_ambient;\n\
+    /*ambient_color = clamp(ambient_color,0,1);*/\n\
+      float cooking = 1.4; /*to have same intensity as GL-1.1.*/\n\
+      float _dot = dot(frag_normal,light_direction);\n\
+      if(_dot<0.0) {\n\
+        _dot *= -1.0;\n\
+        vec4 diffuse_color = light_color*_dot*cooking;\n\
+      /*diffuse_color = clamp(diffuse_color,0,1);*/\n\
+        vec4 _color = (ambient_color+diffuse_color)*frag_color;\n\
+        frag_color = vec4(_color.rgb,frag_color.a);\n\
+      } else {\n\
+        frag_color = ambient_color*frag_color*cooking;\n\
+      }\n\
+    }\n\
+    gl_PointSize = point_size;\n\
+    gl_Position = model_proj_matrix * vec4(one_pos,1);\n\
+  }\n\
+";
+
+    m_vertex_shader = parent_gl_functions::gl__CreateShader(GL_VERTEX_SHADER);
+    if(!m_vertex_shader) {
+       m_out << "toolx::sg::GL_manager_T::create_shader_program :"
+             << " glCreateShader(GL_VERTEX_SHADER) failed."
+             << std::endl;
+       parent_gl_functions::gl__DeleteShader(m_fragment_shader);
+       m_fragment_shader = 0;
+       return false;
+    }
+    char* str_vs = (char*)str_vs_150;
+    parent_gl_functions::gl__ShaderSource(m_vertex_shader,1,&str_vs,NULL);
+    parent_gl_functions::gl__CompileShader(m_vertex_shader);
+   {GLint status;
+    parent_gl_functions::gl__GetShaderiv(m_vertex_shader,GL_COMPILE_STATUS,&status);
+    if(status==GL_FALSE) {
+       m_out << "toolx::sg::GL_manager_T::create_shader_program :"
+             << " compilation of the vertex shader failed."
+             << std::endl;
+
+      {GLsizei log_size;
+       char shader_log[4096];
+       parent_gl_functions::gl__GetShaderInfoLog(m_fragment_shader,1024,&log_size,shader_log);
+       m_out << "toolx::sg::GL_manager_T::create_shader_program: vertex shader_log size " << log_size << std::endl;
+       m_out << std::string(shader_log) << std::endl;}
+
+       parent_gl_functions::gl__DeleteShader(m_vertex_shader);
+       parent_gl_functions::gl__DeleteShader(m_fragment_shader);
+       m_vertex_shader = 0;
+       m_fragment_shader = 0;
+       return false;
+    }}
+
+    m_shader_program = parent_gl_functions::gl__CreateProgram();
+    parent_gl_functions::gl__AttachShader(m_shader_program,m_fragment_shader);
+    parent_gl_functions::gl__AttachShader(m_shader_program,m_vertex_shader);
+    parent_gl_functions::gl__LinkProgram(m_shader_program);
+   {GLint status;
+    parent_gl_functions::gl__GetProgramiv(m_shader_program,GL_LINK_STATUS,&status);
+    if(status==GL_FALSE) {
+       m_out << "toolx::sg::GL_manager_T::create_shader_program :"
+             << " link program failed."
+             << std::endl;
+       parent_gl_functions::gl__DetachShader(m_shader_program,m_fragment_shader);
+       parent_gl_functions::gl__DetachShader(m_shader_program,m_vertex_shader);
+       parent_gl_functions::gl__DeleteProgram(m_shader_program);
+       parent_gl_functions::gl__DeleteShader(m_vertex_shader);
+       parent_gl_functions::gl__DeleteShader(m_fragment_shader);
+       m_vertex_shader = 0;
+       m_fragment_shader = 0;
+       m_shader_program = 0;
+       return false;
+    }}
+    return true;
+  }
+  void delete_shader_program() {
+    if(!m_shader_program) return;
+    parent_gl_functions::gl__DetachShader(m_shader_program,m_fragment_shader);
+    parent_gl_functions::gl__DetachShader(m_shader_program,m_vertex_shader);
+    parent_gl_functions::gl__DeleteProgram(m_shader_program);
+    parent_gl_functions::gl__DeleteShader(m_vertex_shader);
+    parent_gl_functions::gl__DeleteShader(m_fragment_shader);
+     m_vertex_shader = 0;
+     m_fragment_shader = 0;
+     m_shader_program = 0;
+  }
+
+#define GET_UNIFORM_LOCATION(a__var,a__name)\
+  m_##a__var = parent_gl_functions::gl__GetUniformLocation(m_shader_program,a__name);\
+  if(m_##a__var==(-1)) {\
+    m_out << "toolx::sg::GL_manager_T::use_shader_program : glGetUniformLocation(" << a__name << ") failed." << std::endl;\
+  }
+
+#define GET_ATTRIB_LOCATION(a__var,a__name)\
+  m_##a__var = parent_gl_functions::gl__GetAttribLocation(m_shader_program,a__name);\
+  if(m_##a__var==(-1)) {\
+    m_out << "toolx::sg::GL_manager_T::use_shader_program : glGetAttribLocation(" << a__name << ") failed." << std::endl;\
+  }
+
+  GLint g_sampler_location() {return m_g_sampler;}
+  GLint g_tex_on_location() {return m_g_tex_on;}
+  GLint g_point_size_location() {return m_g_point_size;}
+
+  GLint g_one_pos_location() {return m_g_one_pos;}
+  GLint g_one_normal_location() {return m_g_one_normal;}
+  GLint g_one_color_location() {return m_g_one_color;}
+  GLint g_one_tex_location() {return m_g_one_tex;}
+
+  GLint g_model_proj_matrix_location() {return m_g_model_proj_matrix;}
+  GLint g_normal_matrix_location() {return m_g_normal_matrix;}
+  GLint g_color_location() {return m_g_color;}
+  GLint g_pos_color_location() {return m_g_pos_color;}
+  GLint g_normal_location() {return m_g_normal;}
+  GLint g_pos_normal_location() {return m_g_pos_normal;}
+
+  GLint g_light_on_location() {return m_g_light_on;}
+  GLint g_light_direction_location() {return m_g_light_direction;}
+  GLint g_light_color_location() {return m_g_light_color;}
+  GLint g_light_ambient_location() {return m_g_light_ambient;}
+
+  void use_shader_program() {
+    if(!m_shader_program) return;
+
+    parent_gl_functions::gl__UseProgram(m_shader_program);
+
+    // used by renderer :
+    GET_UNIFORM_LOCATION(g_sampler,"sampler")
+    GET_UNIFORM_LOCATION(g_tex_on,"tex_on")
+    GET_UNIFORM_LOCATION(g_point_size,"point_size")
+
+    GET_ATTRIB_LOCATION(g_one_pos,"one_pos")
+    GET_ATTRIB_LOCATION(g_one_normal,"one_normal")
+    GET_ATTRIB_LOCATION(g_one_color,"one_color")
+    GET_ATTRIB_LOCATION(g_one_tex,"one_tex")
+
+    GET_UNIFORM_LOCATION(g_model_proj_matrix,"model_proj_matrix")
+    GET_UNIFORM_LOCATION(g_normal_matrix,"normal_matrix")
+    GET_UNIFORM_LOCATION(g_color,"color")
+    GET_UNIFORM_LOCATION(g_pos_color,"pos_color")
+    GET_UNIFORM_LOCATION(g_normal,"normal")
+    GET_UNIFORM_LOCATION(g_pos_normal,"pos_normal")
+
+    GET_UNIFORM_LOCATION(g_light_on,"light_on")
+    GET_UNIFORM_LOCATION(g_light_direction,"light_direction")
+    GET_UNIFORM_LOCATION(g_light_color,"light_color")
+    GET_UNIFORM_LOCATION(g_light_ambient,"light_ambient")
+
+    parent_gl_functions::gl__Uniform1i(m_g_tex_on,0);
+    parent_gl_functions::gl__Uniform1f(m_g_point_size,1);
+
+    parent_gl_functions::gl__Uniform4f(m_g_color,1,1,1,1);
+    parent_gl_functions::gl__Uniform1i(m_g_pos_color,false);
+
+    parent_gl_functions::gl__Uniform3f(m_g_normal,0,0,1);
+    parent_gl_functions::gl__Uniform1i(m_g_pos_normal,false);
+
+    parent_gl_functions::gl__Uniform1i(m_g_light_on,0);
+    parent_gl_functions::gl__Uniform4f(m_g_light_color,1,1,1,0);
+    parent_gl_functions::gl__Uniform3f(m_g_light_direction,0,0,-1);
+
+  }
+  void reset_shader_locations() {
+    m_g_sampler = -1;
+    m_g_tex_on = -1;
+    m_g_point_size = -1;
+
+    m_g_one_pos = -1;
+    m_g_one_normal = -1;
+    m_g_one_color = -1;
+    m_g_one_tex = -1;
+
+    m_g_model_proj_matrix = -1;
+    m_g_normal_matrix = -1;
+    m_g_color = -1;
+    m_g_pos_color = -1;
+    m_g_normal = -1;
+    m_g_pos_normal = -1;
+
+    m_g_light_on = -1;
+    m_g_light_direction = -1;
+    m_g_light_color = -1;
+    m_g_light_ambient = -1;
+  }
+#undef GET_ATTRIB_LOCATION
+#undef GET_UNIFORM_LOCATION
+
+#endif //TOOLS_USE_GL_VERSION_3_2
+
+protected:
+  /*static*/ void clear_gl_errors() {
+    GLenum glerror = parent_gl_functions::gl__GetError();
+    while(glerror!=GL_NO_ERROR) {
+      glerror = parent_gl_functions::gl__GetError();
+    }
+  }
+
+  /*static*/ bool dump_if_gl_errors(std::ostream& a_out,const std::string& a_head) {
+    bool retval = false;
+    GLenum glerror = parent_gl_functions::gl__GetError();
+    if(glerror!=GL_NO_ERROR) {
+      a_out << a_head
+            << " we have gl errors :"
+            << std::endl;
+      retval = true;
+    }
+    while(glerror!=GL_NO_ERROR) {
+      //#define GL_NO_ERROR                       0
+      //#define GL_INVALID_ENUM                   0x0500
+      //#define GL_INVALID_VALUE                  0x0501
+      //#define GL_INVALID_OPERATION              0x0502
+      //#define GL_STACK_OVERFLOW                 0x0503
+      //#define GL_STACK_UNDERFLOW                0x0504
+      //#define GL_OUT_OF_MEMORY                  0x0505
+
+      //#define GL_INVALID_FRAMEBUFFER_OPERATION  0x0506
+
+      std::ostringstream oss;
+      oss << "0x" << std::hex << glerror;
+      a_out << oss.str() << std::endl;
+
+      glerror = parent_gl_functions::gl__GetError();
+    }
+    return retval;
+  }
+
+  static bool s2vers(const std::string& a_string,std::vector<unsigned int>& a_versions) {
+    // a_string is of the form "<number>[.<number>.<number>] <comment>, extract <numbers>.
+    // Examples : "1.0.2" "2.1 ATI-4.8.101"
+    a_versions.clear();
+    if(a_string.empty()) return false;
+    char* pos = (char*)a_string.c_str();
+    while((*pos!='\0')&&(*pos!=' ')) {
+      char* s;
+      long v = ::strtol(pos,&s,10);
+      if(s==pos) {
+        a_versions.clear();
+        return false;
+      }
+      if(v<0) {
+        a_versions.clear();
+        return false;
+      }
+      a_versions.push_back((unsigned int)v);
+      pos = s; //Could be at end.
+      if(*pos=='\0') break;
+      if(*pos==' ') break;
+      if(*pos!='.') {
+        a_versions.clear();
+        return false;
+      }
+      // Next char is '.', skip it:
+      pos++;
+    }
+    return true;
+  }
+
+  /*static*/ bool get_version_numbers(std::ostream& a_out,const std::string& a_version,unsigned int& a_major,unsigned int& a_minor) {
+    a_major = 0;
+    a_minor = 0;
+    std::vector<unsigned int> verss;
+    if(!s2vers(a_version,verss)) {
+      a_out << "toolx::sg::GL_manager_T::get_version_numbers :"
+            << " toolx::sg::GL_manager_T::s2vers() failed on \"" << a_version << "\"."
+            << std::endl;
+      return false;
+    }
+    if(verss.size()==1) {
+      a_major = verss[0];
+      a_minor = 0;
+    } else if(verss.size()>=2) {
+      a_major = verss[0];
+      a_minor = verss[1];
+    } else {
+      a_out << "toolx::sg::GL_manager_T::get_version_numbers :"
+            << " can't extract major/minor version number from \"" << a_version << "\"."
+            << std::endl;
+      return false;
+    }
+    return true;
+  }
 
 protected:
   std::ostream& m_out;
-
-  class gsto_t {
-    TOOLS_SCLASS(GL_manager::gsto_t)
-  public:
-    enum kind {
-      kind_texture,
-      kind_buffer,
-      kind_list,
-      kind_memory
-    };
-  public:
-    gsto_t(kind a_kind,int a_gl_id,size_t a_size,const float* a_data)
-    :m_gl_id(a_gl_id)
-    ,m_kind(a_kind)
-    ,m_size(a_size)
-    ,m_data(0)
-    {
-#ifdef TOOLS_MEM
-      tools::mem::increment(s_class().c_str());
-#endif
-      if(a_data) {
-        size_t num = m_size/sizeof(float);
-        m_data = new float[num];
-#ifdef TOOLS_MEM
-        tools::mem::increment(tools::s_new().c_str());
-#endif
-        ::memcpy(m_data,a_data,m_size);
-      }
-    }
-    virtual ~gsto_t() {
-      if(m_kind==kind_texture) {
-        ::glDeleteTextures(1,&m_gl_id);
-#ifdef TOOLS_MEM
-        tools::mem::decrement(tools::s_tex().c_str());
-#endif
-      } else if(m_kind==kind_buffer) {
-#ifdef TOOLX_HAS_GL_VBO
-        ::glDeleteBuffers(1,&m_gl_id);
-#ifdef TOOLS_MEM
-        tools::mem::decrement(tools::s_gsto().c_str());
-#endif
-#endif
-      } else if(m_kind==kind_list) {
-        if(m_gl_id) {
-#ifdef TOOLX_HAS_GL_LIST
-          ::glDeleteLists(m_gl_id,1);
-#ifdef TOOLS_MEM
-          tools::mem::decrement(tools::s_gsto().c_str());
-#endif
-#endif
-        }
-      }
-
-      if(m_data) {
-        delete [] m_data;
-#ifdef TOOLS_MEM
-        tools::mem::decrement(tools::s_new().c_str());
-#endif
-      }
-#ifdef TOOLS_MEM
-      tools::mem::decrement(s_class().c_str());
-#endif
-    }
-  private:
-    gsto_t(const gsto_t& a_from)
-    :m_gl_id(a_from.m_gl_id)
-    ,m_kind(a_from.m_kind)
-    ,m_size(a_from.m_size)
-    ,m_data(0)
-    {
-#ifdef TOOLS_MEM
-      tools::mem::increment(s_class().c_str());
-#endif
-      if(a_from.m_data) {
-        size_t num = m_size/sizeof(float);
-        m_data = new float[num];
-#ifdef TOOLS_MEM
-        tools::mem::increment(tools::s_new().c_str());
-#endif
-        ::memcpy(m_data,a_from.m_data,m_size);
-      }
-    }
-    gsto_t& operator=(const gsto_t& a_from){
-      if(&a_from==this) return *this;
-      m_gl_id = a_from.m_gl_id;
-      m_kind = a_from.m_kind;
-      m_size = a_from.m_size;
-      if(m_data) {
-        delete [] m_data;
-#ifdef TOOLS_MEM
-        tools::mem::decrement(tools::s_new().c_str());
-#endif
-        m_data = 0;
-      }
-      if(a_from.m_data) {
-        size_t num = m_size/sizeof(float);
-        m_data = new float[num];
-#ifdef TOOLS_MEM
-        tools::mem::increment(tools::s_new().c_str());
-#endif
-        ::memcpy(m_data,a_from.m_data,m_size);
-      }
-      return *this;
-    }
-  public:
-    bool is_valid() const {
-      if(m_kind==kind_texture) {
-        return (::glIsTexture(m_gl_id)==GL_TRUE?true:false);
-      } else if(m_kind==kind_buffer) {
-#ifdef TOOLX_HAS_GL_VBO
-        return (::glIsBuffer(m_gl_id)==GL_TRUE?true:false);
-#endif
-      } else if(m_kind==kind_list) {
-#ifdef TOOLX_HAS_GL_LIST
-        return (::glIsList(m_gl_id)==GL_TRUE?true:false);
-#endif
-      } else if(m_kind==kind_memory) {
-        return true;
-      }
-      return false;
-    }
-    void bind() const {
-      if(m_kind==kind_texture) {
-        ::glBindTexture(GL_TEXTURE_2D,m_gl_id);
-      } else if(m_kind==kind_buffer) {
-#ifdef TOOLX_HAS_GL_VBO
-        ::glBindBuffer(GL_ARRAY_BUFFER,m_gl_id);
-#endif
-      }
-    }
-  public:
-    unsigned int m_gl_id;
-    kind m_kind;
-    size_t m_size;
-    float* m_data;
-  };
 
   std::map<unsigned int,gsto_t*> m_gstos;
 
   unsigned int m_gen_id;
   tools::sg::gsto_mode m_gsto_mode;
-  bool m_warned;
+
+#ifdef TOOLS_USE_GL_VERSION_3_2
+  GLuint m_fragment_shader;
+  GLuint m_vertex_shader;
+  GLuint m_shader_program;
+  //locations:
+  GLint m_g_sampler;
+  GLint m_g_tex_on;
+  GLint m_g_point_size;
+
+  GLint m_g_one_pos;
+  GLint m_g_one_normal;
+  GLint m_g_one_color;
+  GLint m_g_one_tex;
+
+  GLint m_g_model_proj_matrix;
+  GLint m_g_normal_matrix;
+  GLint m_g_color;
+  GLint m_g_pos_color;
+  GLint m_g_normal;
+  GLint m_g_pos_normal;
+
+  GLint m_g_light_on;
+  GLint m_g_light_direction;
+  GLint m_g_light_color;
+  GLint m_g_light_ambient;
+#endif //TOOLS_USE_GL_VERSION_3_2
+
+  std::string m_gl_version;
+#ifdef TOOLS_USE_GL_VERSION_3_2
+  std::string m_gl_shading_language_version;
+#endif
+  std::string m_gl_vendor;
+  std::string m_gl_renderer;
+  std::string m_gl_extensions;
+  GLint m_gl_max_texture_size;
 };
 
 }}

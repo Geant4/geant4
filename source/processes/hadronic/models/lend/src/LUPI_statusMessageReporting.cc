@@ -78,7 +78,7 @@ std::string StatusMessageReporting::constructMessage( std::string a_prefix, int 
  * @param a_clear           [in]    If *true*, calls the **clear()** method after the message is constructed.
  ***********************************************************************************************************/
 
-std::string StatusMessageReporting::constructFullMessage( std::string a_prefix, int a_reports, bool a_clear ) {
+std::string StatusMessageReporting::constructFullMessage( std::string const &a_prefix, int a_reports, bool a_clear ) {
 
     std::string message( a_prefix );
     statusMessageReport const *report;

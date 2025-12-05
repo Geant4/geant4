@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file CanvasInTab.hh
+/// \brief Definition of the CanvasInTab class
+
 #include <TGFrame.h>
 #include <TQObject.h>
 

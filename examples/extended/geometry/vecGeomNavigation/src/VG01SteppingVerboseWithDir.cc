@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// s
 /// \file VG01SteppingVerboseWithDir.cc
 /// \brief Implementation of the VG01SteppingVerboseWithDir class
 

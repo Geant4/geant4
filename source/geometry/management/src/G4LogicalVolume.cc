@@ -23,14 +23,18 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 // 
-// class G4LogicalVolume implementation
+// G4LogicalVolume implementation
 //
-// 15.01.13 G.Cosmo, A.Dotti: Modified for thread-safety for MT
-// 01.03.05 G.Santin: Added flag for optional propagation of GetMass()
-// 17.05.02 G.Cosmo: Added flag for optional optimisation
-// 12.02.99 S.Giani: Default initialization of voxelization quality
-// 04.08.97 P.M.DeFreitas: Added methods for parameterised simulation 
 // 11.07.95 P.Kent: Initial version
+// 04.08.97 P.M.DeFreitas: Added methods for parameterised simulation 
+// 09.11.98 M.Verderi, J.Apostolakis: Added BiasWeight member and accessors
+// 12.02.99 S.Giani: Added user defined optimisation quality
+// 18.04.01 G.Cosmo: Migrated to STL vector
+// 17.05.02 G.Cosmo: Added IsToOptimise() method and related flag
+// 24.09.02 G.Cosmo: Added flags and accessors for region cuts handling
+// 12.11.04 G.Cosmo: Added GetMass() method for computing mass of the tree
+// 01.03.05 G.Santin: Added flag for optional propagation of GetMass()
+// 15.01.13 G.Cosmo, A.Dotti: Modified for thread-safety for MT
 // --------------------------------------------------------------------
 
 #include "G4LogicalVolume.hh"
@@ -515,8 +519,7 @@ G4LogicalVolume::IsAncestor(const G4VPhysicalVolume* aVolume) const
     for (const auto & daughter : fDaughters)
     {
       isDaughter = daughter->GetLogicalVolume()->IsAncestor(aVolume);
-      if (isDaughter) {  break;
-}
+      if (isDaughter) { break; }
     }
   }
   return isDaughter;
@@ -678,8 +681,7 @@ G4bool G4LogicalVolume::ChangeDaughtersType(EVolume aType)
 //
 void G4LogicalVolume::SetVisAttributes (const G4VisAttributes& VA)
 {
-  if (G4Threading::IsWorkerThread()) { return;
-}
+  if (G4Threading::IsWorkerThread()) { return; }
   fVisAttributes = std::make_shared<const G4VisAttributes>(VA);
 }
 
@@ -689,7 +691,6 @@ void G4LogicalVolume::SetVisAttributes (const G4VisAttributes& VA)
 //
 void G4LogicalVolume::SetVisAttributes (const G4VisAttributes* pVA)
 {
-  if (G4Threading::IsWorkerThread()) { return;
-}
+  if (G4Threading::IsWorkerThread()) { return; }
   fVisAttributes = std::shared_ptr<const G4VisAttributes>(pVA,[](const G4VisAttributes*){});
 }

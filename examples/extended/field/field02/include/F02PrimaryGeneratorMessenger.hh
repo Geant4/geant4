@@ -23,14 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file field/field02/include/F02PrimaryGeneratorMessenger.hh
+/// \file F02PrimaryGeneratorMessenger.hh
 /// \brief Definition of the F02PrimaryGeneratorMessenger class
-//
-//
-//
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef F02PrimaryGeneratorMessenger_h
 #define F02PrimaryGeneratorMessenger_h 1

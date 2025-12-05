@@ -23,10 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file field/field04/src/F04SimpleSolenoid.cc
+/// \file F04SimpleSolenoid.cc
 /// \brief Implementation of the F04SimpleSolenoid class
-//
 
 #include "F04SimpleSolenoid.hh"
 

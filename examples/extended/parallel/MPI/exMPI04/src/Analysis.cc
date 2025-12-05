@@ -23,9 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// @file Analysis.cc
-/// @brief Define histograms and ntuples
+/// \file Analysis.cc
+/// \brief Implementation of the Analysis class
+///
+/// Define histograms and ntuples
 
 #include "Analysis.hh"
 

@@ -25,7 +25,6 @@
 //
 /// \file MoviesDetectorConstruction.cc
 /// \brief Implementation of the MoviesDetectorConstruction class
-//
 
 #include "MoviesDetectorConstruction.hh"
 

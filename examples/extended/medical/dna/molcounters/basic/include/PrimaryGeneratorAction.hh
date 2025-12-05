@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file PrimaryGeneratorAction.hh
+/// \brief Definition of the PrimaryGeneratorAction class
+
 // The `molcounters` example(s) are provided as part of Geant4-DNA
 // and any report or published result obtained using it shall cite
 // the respective Geant4-DNA collaboration publications.

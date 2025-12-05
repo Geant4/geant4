@@ -38,8 +38,8 @@
 
 // Authors: R.Chytracek, J.Apostolakis, G.Cosmo (CERN), November 2000
 // ----------------------------------------------------------------------
-#ifndef G4_ASSEMBLYVOLUME_HH
-#define G4_ASSEMBLYVOLUME_HH 1
+#ifndef G4ASSEMBLYVOLUME_HH
+#define G4ASSEMBLYVOLUME_HH
 
 #include <vector>
 

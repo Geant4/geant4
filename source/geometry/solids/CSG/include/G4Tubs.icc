@@ -232,29 +232,6 @@ void G4Tubs::SetDeltaPhiAngle (G4double newDPhi)
 }
 
 inline
-G4double G4Tubs::GetCubicVolume()
-{
-  if(fCubicVolume != 0.) {;}
-  else   { fCubicVolume = fDPhi*fDz*(fRMax*fRMax-fRMin*fRMin); }
-  return fCubicVolume;
-}
-
-inline
-G4double G4Tubs::GetSurfaceArea()
-{
-  if(fSurfaceArea != 0.) {;}
-  else
-  {
-    fSurfaceArea = fDPhi*(fRMin+fRMax)*(2*fDz+fRMax-fRMin);
-    if (!fPhiFullTube)
-    {
-      fSurfaceArea = fSurfaceArea + 4*fDz*(fRMax-fRMin);
-    }
-  }
-  return fSurfaceArea;
-}
-
-inline
 G4double G4Tubs::FastInverseRxy( const G4ThreeVector& pos,
                                        G4double invRad,
                                        G4double tolerance ) const

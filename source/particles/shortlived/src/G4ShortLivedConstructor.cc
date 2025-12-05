@@ -33,6 +33,8 @@
 //    - Added charm and bottom diquarks          09  Oct. 2019 V.Uzhinsky
 //    - Update mass and width for excited mesons
 //      and excited baryons following PDG 2023   05  Nov. 2023 S.Okada
+//    - Update mass and width for excited mesons
+//      and excited baryons following PDG 2025   04  Nov. 2025 S.Okada
 
 #include "G4ShortLivedConstructor.hh"
 
@@ -627,11 +629,11 @@ void G4ShortLivedConstructor::ConstructBaryons()
   //  delta(1232)++
   // clang-format off
   particle = new G4ExcitedBaryons(
-	    "delta++",       1.232*GeV,     117.0*MeV,    +2.0*eplus,
-                    3,              +1,             0,
-                    3,              +3,             0,
-             "baryon",               0,            +1,          2224,
-		false,             0.0,          nullptr);
+      "delta++",       1.232*GeV,     117.0*MeV,    +2.0*eplus,
+              3,              +1,             0,
+              3,              +3,             0,
+       "baryon",               0,            +1,          2224,
+          false,             0.0,          nullptr);
   // clang-format on
 
   // set sub type
@@ -648,11 +650,11 @@ void G4ShortLivedConstructor::ConstructBaryons()
   //  delta(1232)+
   // clang-format off
   particle = new G4ExcitedBaryons(
-	     "delta+",       1.232*GeV,     117.0*MeV,    +1.0*eplus,
-                    3,              +1,             0,
-                    3,              +1,             0,
-             "baryon",               0,            +1,          2214,
-		false,             0.0,          nullptr);
+       "delta+",       1.232*GeV,     117.0*MeV,    +1.0*eplus,
+              3,              +1,             0,
+              3,              +1,             0,
+       "baryon",               0,            +1,          2214,
+          false,             0.0,          nullptr);
   // clang-format on
 
   // set sub type
@@ -678,11 +680,11 @@ void G4ShortLivedConstructor::ConstructBaryons()
   //  delta(1232)0
   // clang-format off
   particle = new G4ExcitedBaryons(
-	     "delta0",       1.232*GeV,     117.0*MeV,    +0.0*eplus,
-                    3,              +1,             0,
-                    3,              -1,             0,
-             "baryon",               0,            +1,          2114,
-		false,             0.0,          nullptr);
+       "delta0",       1.232*GeV,     117.0*MeV,    +0.0*eplus,
+              3,              +1,             0,
+              3,              -1,             0,
+       "baryon",               0,            +1,          2114,
+          false,             0.0,          nullptr);
   // clang-format on
 
   // set sub type
@@ -706,11 +708,11 @@ void G4ShortLivedConstructor::ConstructBaryons()
   //  delta(1232)-
   // clang-format off
   particle = new G4ExcitedBaryons(
-	     "delta-",       1.232*GeV,     117.0*MeV,    -1.0*eplus,
-                    3,              +1,             0,
-                    3,              -3,             0,
-             "baryon",               0,            +1,          1114,
-		false,             0.0,          nullptr);
+       "delta-",       1.232*GeV,     117.0*MeV,    -1.0*eplus,
+              3,              +1,             0,
+              3,              -3,             0,
+       "baryon",               0,            +1,          1114,
+          false,             0.0,          nullptr);
   // clang-format on
 
   // set sub type
@@ -732,7 +734,7 @@ void G4ShortLivedConstructor::ConstructBaryons()
                     3,              +1,             0,
                     3,              -3,             0,
              "baryon",               0,            -1,         -2224,
-		false,             0.0,          nullptr);
+                false,             0.0,          nullptr);
   // clang-format on
 
   // set sub type
@@ -749,11 +751,11 @@ void G4ShortLivedConstructor::ConstructBaryons()
   //  anti_delta(1232)+
   // clang-format off
   particle = new G4ExcitedBaryons(
-	"anti_delta+",       1.232*GeV,     117.0*MeV,    -1.0*eplus,
-                    3,              +1,             0,
-                    3,              -1,             0,
-             "baryon",               0,            -1,         -2214,
-		false,             0.0,          nullptr);
+    "anti_delta+",       1.232*GeV,     117.0*MeV,    -1.0*eplus,
+                3,              +1,             0,
+                3,              -1,             0,
+         "baryon",               0,            -1,         -2214,
+            false,             0.0,          nullptr);
   // clang-format on
 
   // set sub type
@@ -773,11 +775,11 @@ void G4ShortLivedConstructor::ConstructBaryons()
   //  anti_delta(1232)0
   // clang-format off
   particle = new G4ExcitedBaryons(
-	"anti_delta0",       1.232*GeV,     117.0*MeV,    +0.0*eplus,
-                    3,              +1,             0,
-                    3,              +1,             0,
-             "baryon",               0,            -1,         -2114,
-		false,             0.0,          nullptr);
+    "anti_delta0",       1.232*GeV,     117.0*MeV,    +0.0*eplus,
+                3,              +1,             0,
+                3,              +1,             0,
+         "baryon",               0,            -1,         -2114,
+            false,             0.0,          nullptr);
   // clang-format on
 
   // set sub type
@@ -797,11 +799,11 @@ void G4ShortLivedConstructor::ConstructBaryons()
   //  anti_delta(1232)-
   // clang-format off
   particle = new G4ExcitedBaryons(
-	"anti_delta-",       1.232*GeV,     117.0*MeV,    +1.0*eplus,
-                    3,              +1,             0,
-                    3,              +3,             0,
-             "baryon",               0,            -1,         -1114,
-		false,             0.0,          nullptr);
+    "anti_delta-",       1.232*GeV,     117.0*MeV,    +1.0*eplus,
+                3,              +1,             0,
+                3,              +3,             0,
+         "baryon",               0,            -1,         -1114,
+            false,             0.0,          nullptr);
   // clang-format on
 
   // set sub type
@@ -833,11 +835,11 @@ void G4ShortLivedConstructor::ConstructMesons()
   // omega
   // clang-format off
   particle = new G4ExcitedMesons(
-	      "omega",      782.65*MeV,      8.68*MeV,    +0.0*eplus,
-                    2,              -1,            -1,
-                    0,              +0,            -1,
-              "meson",               0,             0,           223,
-		false,             0.0,          nullptr);
+      "omega",      782.65*MeV,      8.68*MeV,    +0.0*eplus,
+            2,              -1,            -1,
+            0,              +0,            -1,
+      "meson",               0,             0,           223,
+        false,             0.0,          nullptr);
   // clang-format on
 
   particle->SetAntiPDGEncoding(223);
@@ -868,10 +870,10 @@ void G4ShortLivedConstructor::ConstructMesons()
   // clang-format off
   particle = new G4ExcitedMesons(
 	        "phi",     1019.46*MeV,     4.249*MeV,    +0.0*eplus,
-                    2,              -1,            -1,
-                    0,              +0,            -1,
-              "meson",               0,             0,           333,
-		false,             0.0,          nullptr);
+              2,              -1,            -1,
+              0,              +0,            -1,
+        "meson",               0,             0,           333,
+		      false,             0.0,          nullptr);
   // clang-format on
 
   particle->SetAntiPDGEncoding(333);
@@ -898,11 +900,11 @@ void G4ShortLivedConstructor::ConstructMesons()
   // rho+
   // clang-format off
   particle = new G4ExcitedMesons(
-	       "rho+",       775.8*MeV,     149.1*MeV,    +1.0*eplus,
-                    2,              -1,            -1,
-                    2,              +2,            +1,
-              "meson",               0,             0,           213,
-		false,             0.0,          nullptr);
+         "rho+",     775.11*MeV,      149.1*MeV,    +1.0*eplus,
+              2,              -1,            -1,
+              2,              +2,            +1,
+        "meson",               0,             0,           213,
+          false,             0.0,          nullptr);
   // clang-format on
 
   // set sub type
@@ -919,11 +921,11 @@ void G4ShortLivedConstructor::ConstructMesons()
   // rho-
   // clang-format off
   particle = new G4ExcitedMesons(
-	       "rho-",       775.8*MeV,     149.1*MeV,    -1.0*eplus,
-                    2,              -1,            -1,
-                    2,              -2,            +1,
-              "meson",               0,             0,          -213,
-		false,             0.0,          nullptr);
+         "rho-",      775.11*MeV,     149.1*MeV,    -1.0*eplus,
+              2,              -1,            -1,
+              2,              -2,            +1,
+        "meson",               0,             0,          -213,
+          false,             0.0,          nullptr);
   // clang-format on
 
   // set sub type
@@ -940,11 +942,11 @@ void G4ShortLivedConstructor::ConstructMesons()
   // rho0
   // clang-format off
   particle = new G4ExcitedMesons(
-               "rho0",       775.26*MeV,    147.4*MeV,         0.0,
-                    2,              -1,            -1,
-                    2,               0,            +1,
-              "meson",               0,             0,         113,
-                false,          0.0*ns,          nullptr );
+         "rho0",       775.26*MeV,    147.4*MeV,         0.0,
+              2,              -1,            -1,
+              2,               0,            +1,
+        "meson",               0,             0,         113,
+          false,          0.0*ns,          nullptr );
   // clang-format on
   particle->SetAntiPDGEncoding(113);
   // set sub type
@@ -961,11 +963,11 @@ void G4ShortLivedConstructor::ConstructMesons()
   // a0(980)+
   // clang-format off
   particle = new G4ExcitedMesons(
-	   "a0(980)+",       980.0*MeV,      60.0*MeV,    +1.0*eplus,
-                    0,              +1,            +1,
-                    2,              +2,            -1,
-              "meson",               0,             0,       9000211,
-		false,             0.0,          nullptr);
+     "a0(980)+",       980.0*MeV,      60.0*MeV,    +1.0*eplus,
+              0,              +1,            +1,
+              2,              +2,            -1,
+        "meson",               0,             0,       9000211,
+		      false,             0.0,          nullptr);
   // clang-format on
   // set sub type
   particle->SetMultipletName("a0(980)");
@@ -981,11 +983,11 @@ void G4ShortLivedConstructor::ConstructMesons()
   // a0(980)-
   // clang-format off
   particle = new G4ExcitedMesons(
-	   "a0(980)-",       980.0*MeV,      60.0*MeV,    -1.0*eplus,
-                    0,              +1,            +1,
-                    2,              -2,            -1,
-              "meson",               0,             0,      -9000211,
-		false,             0.0,          nullptr);
+     "a0(980)-",       980.0*MeV,      60.0*MeV,    -1.0*eplus,
+              0,              +1,            +1,
+              2,              -2,            -1,
+        "meson",               0,             0,      -9000211,
+          false,             0.0,          nullptr);
   // clang-format on
 
   // set sub type
@@ -1002,11 +1004,11 @@ void G4ShortLivedConstructor::ConstructMesons()
   // a0(980)0
   // clang-format off
   particle = new G4ExcitedMesons(
-	   "a0(980)0",       980.0*MeV,      75.0*MeV,           0.0,
-                    0,              +1,            +1,
-                    2,               0,            -1,
-              "meson",               0,             0,       9000111,
-		false,             0.0,          nullptr);
+     "a0(980)0",       980.0*MeV,      75.0*MeV,           0.0,
+              0,              +1,            +1,
+              2,               0,            -1,
+        "meson",               0,             0,       9000111,
+          false,             0.0,          nullptr);
   // clang-format on
   particle->SetAntiPDGEncoding(9000111);
   // set sub type
@@ -1027,7 +1029,7 @@ void G4ShortLivedConstructor::ConstructMesons()
                     0,              +1,            +1,
                     0,               0,            +1,
               "meson",               0,             0,       9000221,
-		false,             0.0,          nullptr);
+                false,             0.0,          nullptr);
   // clang-format on
 
   particle->SetAntiPDGEncoding(9000221);
@@ -1049,7 +1051,7 @@ void G4ShortLivedConstructor::ConstructMesons()
                     0,              +1,            +1,
                     0,               0,            +1,
               "meson",               0,             0,       9010221,
-		false,             0.0,          nullptr);
+                false,             0.0,          nullptr);
   // clang-format on
 
   particle->SetAntiPDGEncoding(9010221);
@@ -1067,11 +1069,11 @@ void G4ShortLivedConstructor::ConstructMesons()
   // eta(1405)
   // clang-format off
   particle = new G4ExcitedMesons(
-          "eta(1405)",      1408.8*MeV,      50.1*MeV,           0.0,
+          "eta(1405)",     1408.68*MeV,      50.3*MeV,           0.0,
                     0,              -1,            +1,
                     0,               0,            +1,
               "meson",               0,             0,       9020221,
-		false,             0.0,          nullptr);
+                false,             0.0,          nullptr);
   // clang-format on
 
   particle->SetAntiPDGEncoding(9020221);
@@ -1093,7 +1095,7 @@ void G4ShortLivedConstructor::ConstructMesons()
                     0,              +1,            +1,
                     0,               0,            +1,
               "meson",               0,             0,       9030221,
-		false,             0.0,          nullptr);
+                false,             0.0,          nullptr);
   // clang-format on
 
   particle->SetAntiPDGEncoding(9030221);
@@ -1111,11 +1113,11 @@ void G4ShortLivedConstructor::ConstructMesons()
   // f0(1710)
   // clang-format off
   particle = new G4ExcitedMesons(
-           "f0(1710)",      1733.0*MeV,     150.0*MeV,           0.0,
+           "f0(1710)",     1732.91*MeV,     150.4*MeV,           0.0,
                     0,              +1,            +1,
                     0,               0,            +1,
               "meson",               0,             0,         10331,
-		false,             0.0,          nullptr);
+                false,             0.0,          nullptr);
   // clang-format on
 
   particle->SetAntiPDGEncoding(10331);
@@ -1146,11 +1148,11 @@ void G4ShortLivedConstructor::ConstructMesons()
   // k_star+
   // clang-format off
   particle = new G4ExcitedMesons(
-	    "k_star+",      891.67*MeV,      51.4*MeV,    +1.0*eplus,
-                    2,              -1,             0,
-                    1,              +1,             0,
-              "meson",               0,             0,           323,
-		false,             0.0,          nullptr);
+      "k_star+",      891.67*MeV,      51.4*MeV,    +1.0*eplus,
+              2,              -1,             0,
+              1,              +1,             0,
+        "meson",               0,             0,           323,
+          false,             0.0,          nullptr);
   // clang-format on
 
   // set sub type
@@ -1172,11 +1174,11 @@ void G4ShortLivedConstructor::ConstructMesons()
   // k_star0
   // clang-format off
   particle = new G4ExcitedMesons(
-	    "k_star0",      895.55*MeV,      47.3*MeV,     0.0*eplus,
-                    2,              -1,             0,
-                    1,              -1,             0,
-              "meson",               0,             0,           313,
-		false,             0.0,          nullptr);
+      "k_star0",      895.55*MeV,      47.3*MeV,     0.0*eplus,
+              2,              -1,             0,
+              1,              -1,             0,
+        "meson",               0,             0,           313,
+          false,             0.0,          nullptr);
   // clang-format on
 
   // set sub type
@@ -1198,11 +1200,11 @@ void G4ShortLivedConstructor::ConstructMesons()
   // k_star-
   // clang-format off
   particle = new G4ExcitedMesons(
-            "k_star-",       891.67*MeV,     51.4*MeV,    -1.0*eplus,
-                    2,              -1,             0,
-                    1,              +1,             0,
-              "meson",               0,             0,          -323,
-		false,             0.0,          nullptr);
+      "k_star-",       891.67*MeV,     51.4*MeV,    -1.0*eplus,
+              2,              -1,             0,
+              1,              +1,             0,
+        "meson",               0,             0,          -323,
+          false,             0.0,          nullptr);
   // clang-format on
 
   // set sub type
@@ -1228,7 +1230,7 @@ void G4ShortLivedConstructor::ConstructMesons()
                     2,              -1,             0,
                     1,              -1,             0,
               "meson",               0,             0,          -313,
-		false,             0.0,          nullptr);
+                false,             0.0,          nullptr);
   // clang-format on
 
   // set sub type

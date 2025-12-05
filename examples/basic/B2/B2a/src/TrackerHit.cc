@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file B2/B2a/src/TrackerHit.cc
+/// \file TrackerHit.cc
 /// \brief Implementation of the B2::TrackerHit class
 
 #include "TrackerHit.hh"

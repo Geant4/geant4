@@ -57,7 +57,6 @@
 #include "G4FTFPNeutronBuilder.hh"
 #include "G4QGSPNeutronBuilder.hh"
 #include "G4BertiniNeutronBuilder.hh"
-#include "G4NeutronPHPBuilder.hh"
 
 #include "G4HadronInelasticProcess.hh"
 #include "G4NeutronCaptureProcess.hh"
@@ -69,9 +68,7 @@
 #include "G4NeutronHPInelasticXS.hh"
 #include "G4NeutronHPInelasticVI.hh"
 #include "G4NeutronInelasticXS.hh"
-#include "G4ParticleHPInelastic.hh"
 #include "G4NeutronFissionVI.hh"
-#include "G4ProcessVector.hh"
 #include "G4ProcessManager.hh"
 #include "G4NuDEXNeutronCaptureModel.hh"
 
@@ -83,18 +80,16 @@
 G4_DECLARE_PHYSCONSTR_FACTORY(G4HadronPhysicsQGSP_BERT_HP);
 
 G4HadronPhysicsQGSP_BERT_HP::G4HadronPhysicsQGSP_BERT_HP(G4int verb)
-    :  G4HadronPhysicsQGSP_BERT_HP("hInelastic QGSP_BERT_HP")
+  : G4HadronPhysicsQGSP_BERT_HP("hInelastic QGSP_BERT_HP")
 {
   G4HadronicParameters::Instance()->SetVerboseLevel(verb);
 }
 
-G4HadronPhysicsQGSP_BERT_HP::G4HadronPhysicsQGSP_BERT_HP(const G4String& name, G4bool /*quasiElastic */ )
-    :  G4HadronPhysicsQGSP_BERT(name)
+G4HadronPhysicsQGSP_BERT_HP::G4HadronPhysicsQGSP_BERT_HP(const G4String& name, G4bool)
+  : G4HadronPhysicsQGSP_BERT(name)
 {
   minBERT_neutron = 19.9*MeV;
-  auto param = G4HadronicParameters::Instance();
-  // HP is inconsistent with the neutron general process
-  param->SetEnableNeutronGeneralProcess(false);
+  G4HadronicParameters::Instance();
 }
 
 void G4HadronPhysicsQGSP_BERT_HP::Neutron()
@@ -106,19 +101,19 @@ void G4HadronPhysicsQGSP_BERT_HP::Neutron()
   auto inel = new G4HadronInelasticProcess( "neutronInelastic", neutron );
   neutron->GetProcessManager()->AddDiscreteProcess(inel);
 
-  G4QGSPNeutronBuilder qgs(QuasiElasticQGS);
-  qgs.SetMinEnergy(minQGSP_neutron);
-  qgs.Build(inel);
+  G4QGSPNeutronBuilder qgs( QuasiElasticQGS );
+  qgs.SetMinEnergy( minQGSP_neutron );
+  qgs.Build( inel );
 
-  G4FTFPNeutronBuilder ftf(QuasiElasticFTF);
-  ftf.SetMinEnergy(minFTFP_neutron);
-  ftf.SetMaxEnergy(maxFTFP_neutron);
-  ftf.Build(inel);
+  G4FTFPNeutronBuilder ftf( QuasiElasticFTF );
+  ftf.SetMinEnergy( minFTFP_neutron );
+  ftf.SetMaxEnergy( maxFTFP_neutron );
+  ftf.Build( inel );
 
   G4BertiniNeutronBuilder bert;
-  bert.SetMinEnergy(minBERT_neutron);
-  bert.SetMaxEnergy(maxBERT_neutron);
-  bert.Build(inel);
+  bert.SetMinEnergy( minBERT_neutron );
+  bert.SetMaxEnergy( maxBERT_neutron );
+  bert.Build( inel );
 
   auto xsinel = new G4NeutronInelasticXS();
   inel->AddDataSet( xsinel );

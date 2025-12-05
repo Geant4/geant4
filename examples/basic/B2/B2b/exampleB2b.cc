@@ -23,9 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 /// \file exampleB2b.cc
-/// \brief Main program of the B2b example
+/// \brief Main program of the B2/B2b example
 
 #include "ActionInitialization.hh"
 #include "DetectorConstruction.hh"

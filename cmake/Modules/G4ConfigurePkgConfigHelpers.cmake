@@ -269,13 +269,6 @@ if(NOT GEANT4_BUILD_GRANULAR_LIBS)
     set(G4_BUILTWITH_QT "no")
   endif()
 
-  # - QT3D
-  if(GEANT4_USE_QT3D)
-    set(G4_BUILTWITH_QT3D "yes")
-  else()
-    set(G4_BUILTWITH_QT3D "no")
-  endif()
-
   # - Motif
   if(GEANT4_USE_XM)
     set(G4_BUILTWITH_MOTIF "yes")

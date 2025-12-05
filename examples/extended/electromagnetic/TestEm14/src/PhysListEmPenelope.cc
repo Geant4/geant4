@@ -25,10 +25,6 @@
 //
 /// \file PhysListEmPenelope.cc
 /// \brief Implementation of the PhysListEmPenelope class
-//
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "PhysListEmPenelope.hh"
 

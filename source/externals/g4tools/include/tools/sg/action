@@ -4,10 +4,6 @@
 #ifndef tools_sg_action
 #define tools_sg_action
 
-#ifdef TOOLS_MEM
-#include "../mem"
-#endif
-
 #include "../S_STRING"
 #include "../scast"
 
@@ -29,28 +25,17 @@ public:
   action(std::ostream& a_out)
   :m_out(a_out)
   {
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
   }
   virtual ~action(){
-#ifdef TOOLS_MEM
-    mem::decrement(s_class().c_str());
-#endif
   }
 protected:
   action(const action& a_from)
   :m_out(a_from.m_out)
   {
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
   }
   action& operator=(const action&){return *this;}
 public:
   std::ostream& out() const {return m_out;}
-  //void reset() {
-  //}
 protected:
   std::ostream& m_out;
 };
@@ -59,6 +44,10 @@ protected:
 
 #define TOOLS_ACTION(a__class,a__sclass,a__parent)\
   TOOLS_HEADER(a__class,a__sclass,a__parent)\
+  virtual tools::sg::action* copy() const {return new a__class(*this);}
+
+#define TOOLS_T_ACTION(a__T,a__class,a__sclass,a__parent)\
+  TOOLS_T_HEADER(a__T,a__class,a__sclass,a__parent)\
   virtual tools::sg::action* copy() const {return new a__class(*this);}
 
 #define TOOLS_ACTION_NO_COPY(a__class,a__sclass,a__parent)\

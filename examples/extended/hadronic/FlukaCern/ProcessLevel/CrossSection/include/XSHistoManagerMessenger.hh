@@ -23,20 +23,24 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-///  \file XSHistoManagerMessenger.hh
-///  \brief UI commands for XS study.
+/// \file XSHistoManagerMessenger.hh
+/// \brief Definition of the XSHistoManagerMessenger class
+///
+/// UI commands for XS study.
+
 //
 //  Author: G.Hugo, 06 January 2023
 //
 // ***************************************************************************
 //
-//      XSHistoManagerMessenger
-//
+/// \class XSHistoManagerMessenger
+///
 ///  UI commands for XS study.
 //
 //  NB: Note that it is not necessary to have POINTERS to the UI commands.
 //
 // ***************************************************************************
+
 
 #ifndef HISTO_MANAGER_MESSENGER_HH
 #define HISTO_MANAGER_MESSENGER_HH

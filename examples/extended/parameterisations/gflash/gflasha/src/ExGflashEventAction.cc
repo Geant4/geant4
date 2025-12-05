@@ -23,10 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 /// \file ExGflashEventAction.cc
 /// \brief Implementation of the ExGflashEventAction class
-//
 
 #include "ExGflashEventAction.hh"
 

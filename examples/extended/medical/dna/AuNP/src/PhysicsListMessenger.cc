@@ -23,13 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file medical/dna/AuNP/src/PhysicsListMessenger.cc
+/// \file PhysicsListMessenger.cc
 /// \brief Implementation of the PhysicsListMessenger class
-//
-// $Id: PhysicsListMessenger.cc 82461 2014-06-23 10:44:06Z gcosmo $
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "PhysicsListMessenger.hh"
 
@@ -41,13 +36,12 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PhysicsListMessenger::PhysicsListMessenger(PhysicsList* pPhys)
-  : G4UImessenger(), fPhysicsList(pPhys), fPhysDir(0), fListCmd(0)
-{
-  fPhysDir = new G4UIdirectory("/AuNP/phys/");
+PhysicsListMessenger::PhysicsListMessenger(PhysicsList *pPhys)
+  : G4UImessenger(), fPhysicsList(pPhys) {
+  fPhysDir = std::make_unique<G4UIdirectory>("/AuNP/phys/");
   fPhysDir->SetGuidance("physics list commands");
 
-  fListCmd = new G4UIcmdWithAString("/AuNP/phys/Physics4NP", this);
+  fListCmd = std::make_unique<G4UIcmdWithAString>("/AuNP/phys/Physics4NP", this);
   fListCmd->SetGuidance("Add physics list. for Nanoparticle");
   fListCmd->SetParameterName("choice", false);
   fListCmd->AvailableForStates(G4State_PreInit);
@@ -56,17 +50,12 @@ PhysicsListMessenger::PhysicsListMessenger(PhysicsList* pPhys)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PhysicsListMessenger::~PhysicsListMessenger()
-{
-  delete fListCmd;
-  delete fPhysDir;
-}
+PhysicsListMessenger::~PhysicsListMessenger() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void PhysicsListMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
-{
-  if (command == fListCmd) {
+void PhysicsListMessenger::SetNewValue(G4UIcommand *command, const G4String newValue) {
+  if (command == fListCmd.get()) {
     fPhysicsList->SetPhysics4NP(newValue);
   }
 }

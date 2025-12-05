@@ -25,7 +25,7 @@
 //
 // G4MagHelicalStepper inline methods implementation
 //
-// Created: J.Apostolakis, CERN - 05.11.1998
+// Author: John Apostolakis (CERN), 05.11.1998
 // --------------------------------------------------------------------
 
 inline void

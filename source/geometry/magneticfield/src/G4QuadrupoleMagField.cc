@@ -25,8 +25,7 @@
 //
 // G4QuadrupoleMagField implementation
 //
-// 03.02.1997, V.Grichine - Created
-// 11.05.2012, B.Riese  - Allow displaced origin and rotation
+// Author: Vladimir Grichine (CERN), 03.02.1997 - Created
 // -------------------------------------------------------------------
 
 #include "G4QuadrupoleMagField.hh"
@@ -60,10 +59,6 @@ G4Field* G4QuadrupoleMagField::Clone() const
 {
    return new G4QuadrupoleMagField(fGradient, fOrigin, fpMatrix);
 }
-
-// -------------------------------------------------------------------
-
-G4QuadrupoleMagField::~G4QuadrupoleMagField() = default;
 
 // -------------------------------------------------------------------
 

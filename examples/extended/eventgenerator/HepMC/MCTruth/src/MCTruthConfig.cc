@@ -23,12 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file eventgenerator/HepMC/MCTruth/src/MCTruthConfig.cc
+/// \file MCTruthConfig.cc
 /// \brief Implementation of the MCTruthConfig class
-//
-//
-//
-//
+
 // --------------------------------------------------------------
 //      GEANT 4 - MCTruthConfig class
 // --------------------------------------------------------------

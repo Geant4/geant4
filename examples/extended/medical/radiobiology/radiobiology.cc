@@ -23,7 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
+/// \file radiobiology.cc
+/// \brief Main program of the medical/radiobiology example
+
 // D Chiappara, GAP Cirrone, G Petringa
 //
 // ** RADIOBIO  example **

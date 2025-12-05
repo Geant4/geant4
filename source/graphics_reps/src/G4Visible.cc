@@ -40,9 +40,14 @@ G4Visible::G4Visible ():
 
 G4Visible::G4Visible (const G4Visible& visible){
   fAllocatedVisAttributes = visible.fAllocatedVisAttributes;
-  if (fAllocatedVisAttributes)
-    fpVisAttributes = new G4VisAttributes(*visible.fpVisAttributes);
-  else fpVisAttributes = visible.fpVisAttributes;
+  if (fAllocatedVisAttributes) {
+    if (visible.fpVisAttributes) {
+      fpVisAttributes = new G4VisAttributes(*visible.fpVisAttributes);
+    } else {
+      fAllocatedVisAttributes = false;
+      fpVisAttributes = nullptr;
+    }
+  } else fpVisAttributes = visible.fpVisAttributes;
 }
 
 G4Visible::G4Visible (G4Visible&& visible){
@@ -67,7 +72,12 @@ G4Visible& G4Visible::operator= (const G4Visible& rhs) {
   fAllocatedVisAttributes = rhs.fAllocatedVisAttributes;
   if (fAllocatedVisAttributes) {
     delete fpVisAttributes;
-    fpVisAttributes = new G4VisAttributes(*rhs.fpVisAttributes);
+    if (rhs.fpVisAttributes) {
+      fpVisAttributes = new G4VisAttributes(*rhs.fpVisAttributes);
+    } else {
+      fAllocatedVisAttributes = false;
+      fpVisAttributes = nullptr;
+    }
   }
   else fpVisAttributes = rhs.fpVisAttributes;
   return *this;

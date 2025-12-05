@@ -23,11 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file optical/LXe/include/LXeRunAction.hh
+/// \file LXeRunAction.hh
 /// \brief Definition of the LXeRunAction class
-//
-//
+
 #include "G4UserRunAction.hh"
 
 #ifndef LXeRunAction_h

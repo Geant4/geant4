@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file DicomBeamDevicePos.cc
+/// \brief Implementation of the DicomBeamDevicePos class
+
 #include "DicomBeamDevicePos.hh"
 
 #include "dcmtk/dcmrt/seq/drtrbs8.h"  // DRTReferencedBeamSequenceInRTFractionSchemeModule

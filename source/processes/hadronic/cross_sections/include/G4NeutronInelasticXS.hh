@@ -112,6 +112,8 @@ private:
 
   inline const G4PhysicsVector* GetPhysicsVector(G4int Z);
 
+  inline const G4PhysicsVector* GetPhysicsVectorR(G4int Z);
+
   G4PhysicsVector* RetrieveVector(std::ostringstream& in, G4bool warn);
   
   G4VComponentCrossSection* ggXsection = nullptr;
@@ -120,14 +122,15 @@ private:
 
   std::vector<G4double> temp;
 
-  G4double elimit;
   G4double lowElimit;
   G4double loglowElimit;
 
   G4bool isInitializer{false};
+  G4bool fRfilesEnabled{false};
 
   static const G4int MAXZINEL = 93;
   static G4ElementData* data;
+  static G4ElementData* dataR;
   static G4double coeff[MAXZINEL];
   static G4double lowcoeff[MAXZINEL];
   static G4String gDataDirectory;
@@ -140,6 +143,17 @@ const G4PhysicsVector* G4NeutronInelasticXS::GetPhysicsVector(G4int Z)
   if (pv == nullptr) { 
     InitialiseOnFly(Z);
     pv = data->GetElementData(Z);
+  }
+  return pv;
+}
+
+inline
+const G4PhysicsVector* G4NeutronInelasticXS::GetPhysicsVectorR(G4int Z)
+{
+  const G4PhysicsVector* pv = dataR->GetElementData(Z);
+  if (pv == nullptr) { 
+    InitialiseOnFly(Z);
+    pv = dataR->GetElementData(Z);
   }
   return pv;
 }

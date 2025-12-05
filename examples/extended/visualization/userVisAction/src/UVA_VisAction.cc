@@ -23,10 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file visualization/userVisAction/src/UVA_VisAction.cc
+/// \file UVA_VisAction.cc
 /// \brief Implementation of the UVA_VisAction class
-//
-//
 
 #include "UVA_VisAction.hh"
 

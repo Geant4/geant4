@@ -12,10 +12,6 @@ inline void b2s(bool a_value,std::string& a_s){
   a_s = a_value?"true":"false";
 }
 
-inline void bas(bool a_value,std::string& a_s){
-  a_s += (a_value?"true":"false");
-}
-
 }
 
 #include <vector>

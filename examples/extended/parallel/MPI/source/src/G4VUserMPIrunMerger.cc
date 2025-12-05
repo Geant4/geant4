@@ -22,7 +22,9 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
+/// @file G4VUserMPIrunMerger.cc
+/// @brief A base class for user run merger
+
 #include "G4VUserMPIrunMerger.hh"
 
 #include "G4MPImanager.hh"

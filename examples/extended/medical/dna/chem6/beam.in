@@ -1,4 +1,7 @@
 #/run/numberOfThreads 2
+
+/chem/phys/registerPhysics G4EmDNAPhysics_option2
+
 /process/dna/e-SolvationSubType Meesungnoen2002
 #/process/dna/e-SolvationSubType Ritchie1994
 #/process/dna/e-SolvationSubType Terrisol1990
@@ -55,6 +58,8 @@
 #/scorer/species/addTimeToRecord 1 us
 
 /scorer/species/nOfTimeBins 50
+
+#/scorer/species/fileName Gvalue
 
 /tracking/verbose 0
 /scheduler/verbose 0

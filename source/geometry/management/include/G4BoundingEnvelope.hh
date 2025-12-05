@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// class G4BoundingEnvelope
+// G4BoundingEnvelope
 //
 // Class description:
 //
@@ -37,7 +37,7 @@
 // Calculation of extent uses G4Transform3D, thus takes into account
 // scaling and reflection, if any.
 
-// 2016.05.25,  E.Tcherniaev - initial version
+// Author: Evgueni Tcherniaev (CERN), 25.05.2016 - Initial version
 // --------------------------------------------------------------------
 #ifndef G4BOUNDINGENVELOPE_HH
 #define G4BOUNDINGENVELOPE_HH
@@ -55,93 +55,148 @@ using G4ThreeVectorList = std::vector<G4ThreeVector>;
 using G4Polygon3D = std::vector<G4Point3D>;
 using G4Segment3D = std::pair<G4Point3D,G4Point3D>;
 
+/**
+ * @brief G4BoundingEnvelope is a helper class to facilitate calculation of
+ * the extent of a solid within the limits defined by a G4VoxelLimits object.
+ * Calculation of the extent takes into account scaling and reflection, if any.
+ */
+
 class G4BoundingEnvelope
 {
   public:
 
+    /**
+     * Constructor from an axis aligned bounding box (AABB).
+     *  @param[in] pMin Lower boundary point.
+     *  @param[in] pMax Higher boundary point.
+     */
     G4BoundingEnvelope(const G4ThreeVector& pMin,
                        const G4ThreeVector& pMax);
-      // Constructor from an axis aligned bounding box (AABB)
 
+    /**
+     * Constructor from a sequence of convex polygons, the polygons should have
+     * equal numbers of vertices except first and last polygons which may
+     * consist of a single vertex.
+     *  @param[in] polygons The list of polygons.
+     */
     G4BoundingEnvelope(const std::vector<const G4ThreeVectorList*>& polygons);
-      // Constructor from a sequence of convex polygons, the polygons
-      // should have equal numbers of vertices except first and last
-      // polygons which may consist of a single vertex
 
+    /**
+     * Constructor from AABB and a sequence of polygons.
+     *  @param[in] pMin Lower boundary point.
+     *  @param[in] pMax Higher boundary point.
+     *  @param[in] polygons The list of polygons.
+     */
     G4BoundingEnvelope(const G4ThreeVector& pMin,
                        const G4ThreeVector& pMax,
                        const std::vector<const G4ThreeVectorList*>& polygons);
-      // Constructor from AABB and a sequence of polygons
 
+    /**
+     * Default Destructor.
+     */
     ~G4BoundingEnvelope() = default;
-      // Destructor
 
+    /**
+     * Analyses the position of the bounding box relative to the voxel.
+     * It returns "true" in the case where the value of the extent can be
+     * figured out directly from the dimensions of the bounding box, or
+     * it is clear that the bounding box and the voxel do not intersect.
+     * The reply "false" means that further calculations are needed.
+     *  @param[in] pAxis The axis along which compute the extent.
+     *  @param[in] pVoxelLimits The limiting space dictated by voxels.
+     *  @param[in] pTransform3D Internal transformation applied to the envelope.
+     *  @param[out] pMin The minimum extent value.
+     *  @param[out] pMax The maximum extent value.
+     *  @returns True if the envelope is intersected by the extent region.
+     */
     G4bool BoundingBoxVsVoxelLimits(const EAxis pAxis,
                                     const G4VoxelLimits& pVoxelLimits,
                                     const G4Transform3D& pTransform3D,
                                     G4double& pMin, G4double& pMax) const;
-      // Analyse the position of the bounding box relative to the voxel.
-      // It returns "true" in the case where the value of the extent can be
-      // figured out directly from the dimensions of the bounding box, or
-      // it is clear that the bounding box and the voxel do not intersect.
-      // The reply "false" means that further calculations are needed.
 
+    /**
+     * Calculates the minimum and maximum extent of the bounding envelope,
+     * when under the specified transform, and within the specified limits.
+     *  @param[in] pAxis The axis along which compute the extent.
+     *  @param[in] pVoxelLimits The limiting space dictated by voxels.
+     *  @param[in] pTransform3D Internal transformation applied to the envelope.
+     *  @param[out] pMin The minimum extent value.
+     *  @param[out] pMax The maximum extent value.
+     *  @returns True if the envelope is intersected by the extent region.
+     */
     G4bool CalculateExtent(const EAxis pAxis,
                            const G4VoxelLimits& pVoxelLimits,
                            const G4Transform3D& pTransform3D,
                            G4double& pMin, G4double& pMax) const;
-      // Calculate extent of the bounding envelope
 
   private:
 
+    /**
+     * Checks the correctness of the AABB (axis aligned bounding box).
+     */
     void CheckBoundingBox();
-      // Check correctness of the AABB (axis aligned bounding box)
 
+    /**
+     * Checks the correctness of the sequence of convex polygonal bases.
+     */
     void CheckBoundingPolygons();
-      // Check correctness of the sequence of convex polygonal bases
 
+    /**
+     * Finds the max scale factor of the transformation.
+     */
     G4double FindScaleFactor(const G4Transform3D& pTransform3D) const;
-      // Find max scale factor of the transformation
 
+    /**
+     * Creates a list of transformed polygons.
+     */
     void TransformVertices(const G4Transform3D& pTransform3D,
                                  std::vector<G4Point3D>& pVertices,
                                  std::vector<std::pair<G4int,G4int>>& pBases) const;
-      // Create list of transformed polygons
 
+    /**
+     * Finds the bounding box of a prism.
+     */
     void GetPrismAABB(const G4Polygon3D& pBaseA,
                       const G4Polygon3D& pBaseB,
                             G4Segment3D& pAABB) const;
-      // Find bounding box of a prism
 
+    /**
+     * Creates a list of edges of a prism.
+     */
     void CreateListOfEdges(const G4Polygon3D& baseA,
                            const G4Polygon3D& baseB,
                                  std::vector<G4Segment3D>& pEdges) const;
-      // Create list of edges of a prism
 
+    /**
+     * Creates a list of planes bounding a prism.
+     */
     void CreateListOfPlanes(const G4Polygon3D& baseA,
                             const G4Polygon3D& baseB,
                                   std::vector<G4Plane3D>& pPlanes) const;
-      // Create list of planes bounding a prism
 
+    /**
+     * Clips a set of edges by G4VoxelLimits.
+     */
     G4bool ClipEdgesByVoxel(const std::vector<G4Segment3D>& pEdges,
                             const G4VoxelLimits& pLimits,
                                   G4Segment3D& pExtent) const;
-      // Clip set of edges by G4VoxelLimits
 
+    /**
+     * Clips G4VoxelLimits by set of planes bounding a prism.
+     */
     void ClipVoxelByPlanes(G4int pBits,
                            const G4VoxelLimits& pLimits,
                            const std::vector<G4Plane3D>& pPlanes,
                            const G4Segment3D& pAABB,
                                  G4Segment3D& pExtent) const;
-      // Clip G4VoxelLimits by set of planes bounding a prism
 
   private:
 
+    /** Original bounding box. */
     G4ThreeVector fMin, fMax;
-      // original bounding box
 
+    /** Reference to the original sequence of polygonal bases. */
     const std::vector<const G4ThreeVectorList*>* fPolygons = nullptr;
-      // ref to original sequence of polygonal bases
 };
 
-#endif // G4BOUNDINGENVELOPE_HH
+#endif

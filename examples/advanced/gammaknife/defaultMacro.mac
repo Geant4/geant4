@@ -20,6 +20,7 @@
 /score/mesh/boxSize 22.5 22.5 22.5 mm
 /score/mesh/rotate/rotateX 360 deg          # Note: Hack to enable rotation (as of 10.3)
 /score/mesh/nBin 45 45 45
+/score/mesh/translate/xyz 0. 0. 0. cm # position boxmesh at the location of "patient"
 /score/quantity/energyDeposit eDep
 /score/close
 /score/list
@@ -33,6 +34,7 @@
 
 # Open a viewer
 /vis/open
+/vis/drawVolume
 # This opens the default viewer - see examples/basic/B1/vis.mac for a
 # more comprehensive overview of options. Also the documentation.
 

@@ -84,10 +84,6 @@ public:
     m_columns.push_back(column_binding(a_name,0,0));
   }
 
-  //void add_column(const std::string& a_name,cid a_id,void* a_user_var) {
-  //  m_columns.push_back(column_binding(a_name,a_id,a_user_var));
-  //}
-
   const std::vector<column_binding>& columns() const {return m_columns;}
 
   bool find_user_obj(const std::string& a_name,cid& a_cid,void*& a_obj) const {

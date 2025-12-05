@@ -39,17 +39,17 @@
 /**
  * Read ABLA data from files.
  */
-class G4AblaDataFile : public G4AblaVirtualData {
+class G4AblaDataFile : public G4AblaVirtualData
+{
+  public:
+    G4AblaDataFile();
+    virtual ~G4AblaDataFile() = default;
 
-public:
-  G4AblaDataFile();
-  virtual ~G4AblaDataFile() = default;
+    /**
+     * Read all data from files.
+     */
+    G4bool readData();
 
-  /**
-   * Read all data from files.
-   */
-  G4bool readData();
-
-private:
-  G4int verboseLevel;
+  private:
+    G4int verboseLevel;
 };

@@ -139,7 +139,11 @@ class G4OpticalParameters
   G4bool GetCerenkovTrackSecondariesFirst() const;
   void   SetCerenkovStackPhotons(G4bool);
   G4bool GetCerenkovStackPhotons() const;
-
+  void   SetCerenkovOffloadPhotons(G4bool);
+  G4bool GetCerenkovOffloadPhotons() const;
+  void   EnableCerenkovGeneral(G4bool);
+  G4bool CerenkovGeneral() const;
+  
   // Scintillation
   void   SetScintByParticleType(G4bool);
   G4bool GetScintByParticleType() const;
@@ -153,6 +157,8 @@ class G4OpticalParameters
   G4bool GetScintStackPhotons() const;
   void   SetScintVerboseLevel(G4int);
   G4int  GetScintVerboseLevel() const;
+  void   SetScintOffloadPhotons(G4bool);
+  G4bool GetScintOffloadPhotons() const;
 
   // WLS
   void     SetWLSTimeProfile(const G4String&);
@@ -208,6 +214,8 @@ class G4OpticalParameters
   // cerenkov/////////////////
   G4bool cerenkovStackPhotons;
   G4bool cerenkovTrackSecondariesFirst;
+  G4bool cerenkovOffloadPhotons;
+  G4bool cerenkovGeneral;
   G4int cerenkovVerboseLevel;
   G4int cerenkovMaxPhotons;
   G4double cerenkovMaxBetaChange;
@@ -228,8 +236,11 @@ class G4OpticalParameters
   /// to be attached to a scintillation photon's track
   G4bool scintTrackInfo;
 
-  /// option to allow stacking of secondary Scintillation photons
+  /// option to allow stacking of secondary scintillation photons
   G4bool scintStackPhotons;
+
+  /// option to enable offloading of secondary scintillation photons
+  G4bool scintOffloadPhotons;
 
   G4int scintVerboseLevel;
   G4bool scintTrackSecondariesFirst;

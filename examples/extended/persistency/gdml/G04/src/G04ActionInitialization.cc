@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 /// \file G04ActionInitialization.cc
 /// \brief Implementation of the G04ActionInitialization class
 

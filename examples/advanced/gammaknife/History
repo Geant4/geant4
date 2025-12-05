@@ -4,6 +4,16 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
+## 2025-10-09 Ben Morgan (gammaknife-V11-03-00)
+- Apply [GitHub PR 92](https://github.com/Geant4/geant4/pull/92)
+  - Addressing:
+    - The visualization is not drawing the geometry on the simulation
+    - boxMesh is not being placed correctly, so the eDep file shows all zeroes on deposited energy.
+  - Fixes:
+    - geometry is drawn with `/vis/drawVolume`
+    - boxmesh is positioned at where the patient(a sphere geometry with water) is present
+      (with `/mesh/score/translate/xyz 0. 0. 0. cm)
+
 ## 2023-11-15 I. Hrivnacova (gammaknife-V11-01-01)
 - Updated defaultMacro.mac:
   - Changed "/vis/open XYZ [600x600-0+0]" to "/vis/open" to allow run-time choices

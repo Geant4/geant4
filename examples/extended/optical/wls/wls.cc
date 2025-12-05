@@ -23,11 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file optical/wls/wls.cc
+/// \file wls.cc
 /// \brief Main program of the optical/wls example
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "FTFP_BERT.hh"
 #include "WLSActionInitialization.hh"

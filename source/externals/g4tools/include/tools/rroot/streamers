@@ -9,7 +9,6 @@
 #include "named"
 #include "date"
 #include "directory"
-//#include "graph"
 #include "clss"
 #include "dummy"
 #include "obj_list"
@@ -17,7 +16,6 @@
 #include "../sout"
 #include "../vmanip"
 
-//#include "../histo/histo_data"
 #include "../histo/profile_data"
 
 #include "../histo/h1d"
@@ -147,8 +145,6 @@ inline bool TH_read_1D(buffer& a_buffer,hd_data& a_data,
     short vers;
     if(!a_buffer.read_version(vers,_s,_c)) return false;
 
-    //::printf("debug : tools::rroot::TH_read_1D : version %d\n",vers);
-
     // Version 3 streaming (ROOT/v3-00-6).
 
     std::string name;
@@ -222,10 +218,6 @@ inline bool TH_read_1D(buffer& a_buffer,hd_data& a_data,
 
    {std::string opt;
     if(!a_buffer.read(opt)) return false; //TString fOption
-    //look if it is an "annotation trick" :
-    //if(opt.size()&&(opt[0]==0)) {
-    //  fAnnotation = opt.substr(1,opt.size()-1);
-    //}
     }
 
    {dummy_fac fac(a_buffer.out());
@@ -361,8 +353,6 @@ inline histo::h1d* TH1F_stream(buffer& a_buffer){
     hd_data data;
 
     data.m_dimension = 1;
-    //data.m_coords.resize(data.m_dimension,0);
-    //data.m_ints.resize(data.m_dimension,0);
     data.m_axes.resize(1);
 
     double fEntries; //in range + outflow.
@@ -531,8 +521,6 @@ inline histo::h2d* TH2D_stream(buffer& a_buffer){
     hd_data data;
 
     data.m_dimension = 2;
-    //data.m_coords.resize(data.m_dimension,0);
-    //data.m_ints.resize(data.m_dimension,0);
     data.m_axes.resize(2);
     data.m_in_range_plane_Sxyw.resize(1,0);
 
@@ -588,8 +576,6 @@ inline histo::h3d* TH3D_stream(buffer& a_buffer){
     hd_data data;
 
     data.m_dimension = 3;
-    //data.m_coords.resize(data.m_dimension,0);
-    //data.m_ints.resize(data.m_dimension,0);
     data.m_axes.resize(3);
     data.m_in_range_plane_Sxyw.resize(3,0);
 
@@ -776,8 +762,6 @@ inline histo::p2d* TProfile2D_stream(buffer& a_buffer){
 }
 
 class TDirectory : public directory {
-//public:
-//  static const std::string& store_class() {return TDirectory_cls();}
 public:
   TDirectory(ifile& a_file):directory(a_file){}
   virtual ~TDirectory(){}
@@ -813,7 +797,6 @@ public:
       if(!a_buffer.read(i)) return false;
       m_seek_keys = i;}
     }
-    //short v = version%big_file_version_tag();
 
     if (m_seek_keys) {
       uint32 n;
@@ -891,37 +874,6 @@ inline void dump(std::ostream& a_out,
     }
   }}
 }
-
-/*
-inline bool read_sinfos(ifile& a_file){
-  key& k = a_file.sinfos_key();
-  std::ostream& out = k.out();
-  if(k.object_class()!=TList_cls()) {
-    out << "tools::rroot::read_sinfos :"
-        << " key not a TList."
-        << std::endl;
-    return false;
-  }
-  unsigned int sz;
-  char* buf = k.get_object_buffer(a_file,sz); //we don't have ownership of buf.
-  if(!buf) {
-    out << "tools::rroot::read_sinfos :"
-        << " can't get data buffer of " << k.object_name() << "."
-        << std::endl;
-    return false;
-  }
-  buffer b(out,a_file.byte_swap(),sz,buf,k.key_length(),false);
-  dummy_fac fac(out);
-  obj_list infos(fac);
-  if(!infos.stream(b)) return false;
-  tools_vforcit(iro*,infos,it) {
-    streamer_info* info = safe_cast<iro,streamer_info>(*(*it));
-    if(!info) return false;
-    info->out(out);
-  }
-  return true;
-}
-*/
 
 }}
 

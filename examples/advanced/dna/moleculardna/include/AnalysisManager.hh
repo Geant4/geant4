@@ -175,7 +175,7 @@ class DamageRecord
     static const char* fNotHitChar;
     static const char* fBothDamageChar;
 
-    const char* GetChar(const G4bool&, const G4bool&, const G4double&);
+    static const char* GetChar(const G4bool&, const G4bool&, const G4double&);
 };
 
 struct Node
@@ -199,9 +199,9 @@ class BinaryTree
 
     void Insert(const DNAHit*);
 
-    DNAHit* Search(int64_t);
+    DNAHit* Search(int64_t) const;
 
-    void Destroy_tree();
+    void Destroy_tree() const;
 
     // return left-most node
     DNAHit* First() const;
@@ -210,15 +210,15 @@ class BinaryTree
     DNAHit* Next(const DNAHit*) const;
 
   private:
-    void Destroy_tree_(Node*);
+    static void Destroy_tree_(const Node*);
 
-    void Insert_(DNAHit*, Node*);
+    static void Insert_(DNAHit*, Node*);
 
-    DNAHit* Search_(int64_t, Node*);
+    static DNAHit* Search_(int64_t, const Node*);
 
-    DNAHit* First_(Node*) const;
+    static DNAHit* First_(const Node*);
 
-    DNAHit* Next_(int64_t, Node*) const;
+    static DNAHit* Next_(int64_t, const Node*);
 
     Node* fRoot;
 };
@@ -234,12 +234,12 @@ class AnalysisManager
 
     void ProcessDNAHitsVector(const std::vector<const DNAHit*>&);
 
-    void ProcessChromosomeHitMap(const std::map<uint32_t, ChromosomeHit*>&);
+    void ProcessChromosomeHitMap(const std::map<uint32_t, ChromosomeHit*>&) const;
 
-    void ProcessPrimary(const G4ThreeVector&, const G4double&, const G4double&);
+    void ProcessPrimary(const G4ThreeVector&, const G4double&, const G4double&) const;
 
-    void ProcessCellEdep(const G4double&);  // dousatsu
-    void Close();
+    void ProcessCellEdep(const G4double&) const;  // dousatsu
+    void Close() const;
 
     inline void SetSaveStrands(const G4bool strand) { fSaveStrands = strand; };
 
@@ -253,7 +253,9 @@ class AnalysisManager
 
     inline void SetFileName(const G4String& name) { fFileName = name; };
 
-    void TestClassification();
+    G4String GetFileName() const { return fFileName; };
+
+    static void TestClassification();
 
   private:
     G4AnalysisManager* fAnalysisManager;

@@ -69,9 +69,7 @@ G4ExtrudedSolid::G4ExtrudedSolid( const G4String& pName,
   : G4TessellatedSolid(pName),
     fNv(polygon.size()),
     fNz(zsections.size()),
-    fIsConvex(false),
-    fGeometryType("G4ExtrudedSolid"),
-    fSolidType(0)
+    fGeometryType("G4ExtrudedSolid")
 {
   // General constructor
 
@@ -130,7 +128,10 @@ G4ExtrudedSolid::G4ExtrudedSolid( const G4String& pName,
             << " vertices have been removed from polygon in " << pName 
             << "\nas collinear or coincident with other vertices: "
             << removedVertices[0];
-    for (std::size_t i=1; i<nremoved; ++i) message << ", " << removedVertices[i];
+    for (std::size_t i=1; i<nremoved; ++i)
+    {
+      message << ", " << removedVertices[i];
+    }
     G4Exception("G4ExtrudedSolid::G4ExtrudedSolid()", "GeomSolids1001",
                 JustWarning, message);
   }
@@ -225,7 +226,10 @@ G4ExtrudedSolid::G4ExtrudedSolid( const G4String& pName,
             << " vertices have been removed from polygon in " << pName 
             << "\nas collinear or coincident with other vertices: "
             << removedVertices[0];
-    for (std::size_t i=1; i<nremoved; ++i) message << ", " << removedVertices[i];
+    for (std::size_t i=1; i<nremoved; ++i)
+    {
+      message << ", " << removedVertices[i];
+    }
     G4Exception("G4ExtrudedSolid::G4ExtrudedSolid()", "GeomSolids1001",
                 JustWarning, message);
   }
@@ -289,10 +293,6 @@ G4ExtrudedSolid::G4ExtrudedSolid( __void__& a )
 
 //_____________________________________________________________________________
 
-G4ExtrudedSolid::G4ExtrudedSolid(const G4ExtrudedSolid&) = default;
-
-//_____________________________________________________________________________
-
 G4ExtrudedSolid& G4ExtrudedSolid::operator = (const G4ExtrudedSolid& rhs)
 {
    // Check assignment to self
@@ -315,13 +315,6 @@ G4ExtrudedSolid& G4ExtrudedSolid::operator = (const G4ExtrudedSolid& rhs)
    fKOffsets = rhs.fKOffsets; fOffset0s = rhs.fOffset0s;
 
    return *this;
-}
-
-//_____________________________________________________________________________
-
-G4ExtrudedSolid::~G4ExtrudedSolid()
-{
-  // Destructor
 }
 
 //_____________________________________________________________________________
@@ -422,18 +415,16 @@ G4TwoVector G4ExtrudedSolid::ProjectPoint(const G4ThreeVector& point) const
   // Select projection (z-segment of the solid) according to p.z()
   //
   std::size_t iz = 0;
-  while ( point.z() > fZSections[iz+1].fZ && iz < fNz-2 ) { ++iz; }
-      // Loop checking, 13.08.2015, G.Cosmo
+  while ( point.z() > fZSections[iz+1].fZ && iz < fNz-2 )
+  {
+    ++iz;
+  }  // Loop checking, 13.08.2015, G.Cosmo
   
   G4double z0 = ( fZSections[iz+1].fZ + fZSections[iz].fZ )/2.0;
   G4TwoVector p2(point.x(), point.y());
   G4double pscale  = fKScales[iz]*(point.z()-z0) + fScale0s[iz];
   G4TwoVector poffset = fKOffsets[iz]*(point.z()-z0) + fOffset0s[iz];
   
-  // G4cout << point << " projected to " 
-  //        << iz << "-th z-segment polygon as "
-  //        << (p2 - poffset)/pscale << G4endl;
-
   // pscale is always >0 as it is an interpolation between two
   // positive scale values
   //
@@ -457,9 +448,6 @@ G4bool G4ExtrudedSolid::IsSameLine(const G4TwoVector& p,
    G4double dy= p.y() - predy; 
 
    // Calculate perpendicular distance
-   //
-   // G4double perpD= std::fabs(dy) / std::sqrt( 1 + slope * slope ); 
-   // G4bool   simpleComp= (perpD<kCarToleranceHalf); 
 
    // Check perpendicular distance vs tolerance 'directly'
    //
@@ -520,7 +508,7 @@ G4bool G4ExtrudedSolid::IsPointInside(const G4TwoVector& a,
   if ( ( p.x() < a.x() && p.x() < b.x() && p.x() < c.x() ) || 
        ( p.x() > a.x() && p.x() > b.x() && p.x() > c.x() ) || 
        ( p.y() < a.y() && p.y() < b.y() && p.y() < c.y() ) || 
-       ( p.y() > a.y() && p.y() > b.y() && p.y() > c.y() ) ) return false;
+       ( p.y() > a.y() && p.y() > b.y() && p.y() > c.y() ) ) { return false; }
   
   G4bool inside 
     = IsSameSide(p, a, b, c)
@@ -549,7 +537,7 @@ G4ExtrudedSolid::GetAngle(const G4TwoVector& po,
   
   G4double result = (std::atan2(t1.y(), t1.x()) - std::atan2(t2.y(), t2.x()));
 
-  if ( result < 0 ) result += 2*pi;
+  if ( result < 0 ) { result += 2*pi; }
 
   return result;
 }
@@ -575,9 +563,6 @@ G4ExtrudedSolid::MakeDownFacet(G4int ind1, G4int ind2, G4int ind3) const
   if ( cross.z() > 0.0 )
   {
     // vertices ordered clock wise has to be reordered
-
-    // G4cout << "G4ExtrudedSolid::MakeDownFacet: reordering vertices " 
-    //        << ind1 << ", " << ind2 << ", " << ind3 << G4endl; 
 
     G4ThreeVector tmp = vertices[1];
     vertices[1] = vertices[2];
@@ -610,9 +595,6 @@ G4ExtrudedSolid::MakeUpFacet(G4int ind1, G4int ind2, G4int ind3) const
   {
     // vertices ordered clock wise has to be reordered
 
-    // G4cout << "G4ExtrudedSolid::MakeUpFacet: reordering vertices " 
-    //        << ind1 << ", " << ind2 << ", " << ind3 << G4endl; 
-
     G4ThreeVector tmp = vertices[1];
     vertices[1] = vertices[2];
     vertices[2] = tmp;
@@ -628,7 +610,7 @@ G4bool G4ExtrudedSolid::AddGeneralPolygonFacets()
 {
   // Decompose polygonal sides in triangular facets
 
-  typedef std::pair < G4TwoVector, G4int > Vertex;
+  using Vertex = std::pair < G4TwoVector, G4int >;
 
   static const G4double kAngTolerance =
     G4GeometryTolerance::GetInstance()->GetAngularTolerance();
@@ -647,25 +629,13 @@ G4bool G4ExtrudedSolid::AddGeneralPolygonFacets()
   auto c3 = c1+2;  
   while ( verticesToBeDone.size()>2 )    // Loop checking, 13.08.2015, G.Cosmo
   {
-
-    // G4cout << "Looking at triangle : "
-    //         << c1->second << "  " << c2->second
-    //        << "  " << c3->second << G4endl;  
-    //G4cout << "Looking at triangle : "
-    //        << c1->first << "  " << c2->first
-    //        << "  " << c3->first << G4endl;  
-
     // skip concave vertices
     //
     G4double angle = GetAngle(c2->first, c3->first, c1->first);
    
-    //G4cout << "angle " << angle  << G4endl;
-
     std::size_t counter = 0;
     while ( angle >= (pi-kAngTolerance) )  // Loop checking, 13.08.2015, G.Cosmo
     {
-      // G4cout << "Skipping concave vertex " << c2->second << G4endl;
-
       // try next three consecutive vertices
       //
       c1 = c2;
@@ -673,12 +643,7 @@ G4bool G4ExtrudedSolid::AddGeneralPolygonFacets()
       ++c3; 
       if ( c3 == verticesToBeDone.end() ) { c3 = verticesToBeDone.begin(); }
 
-      //G4cout << "Looking at triangle : "
-      //      << c1->first << "  " << c2->first
-      //        << "  " << c3->first << G4endl; 
-      
       angle = GetAngle(c2->first, c3->first, c1->first); 
-      //G4cout << "angle " << angle  << G4endl;
       
       ++counter;
       
@@ -711,16 +676,10 @@ G4bool G4ExtrudedSolid::AddGeneralPolygonFacets()
         if ( c3 == verticesToBeDone.end() ) { c3 = verticesToBeDone.begin(); }
         break;
       }
-      // else 
-      //   { G4cout << "Point " << it->second << " is outside" << G4endl; }
     }
     if ( good )
     {
       // all points are outside triangle, we can make a facet
-
-      // G4cout << "Found triangle : "
-      //        << c1->second << "  " << c2->second
-      //        << "  " << c3->second << G4endl;  
 
       G4bool result;
       result = AddFacet( MakeDownFacet(c1->second, c2->second, c3->second) );
@@ -882,10 +841,7 @@ EInside G4ExtrudedSolid::Inside(const G4ThreeVector &p) const
       {
         return (dd >= 0) ? kInside : kSurface;
       }
-      else
-      {
-        return (dd > 0) ? kOutside : kSurface;
-      }
+      return (dd > 0) ? kOutside : kSurface;
     }
   }
 
@@ -979,7 +935,7 @@ G4ThreeVector G4ExtrudedSolid::SurfaceNormal(const G4ThreeVector& p) const
       for (std::size_t i=0; i<fNv; ++i)
       {
         G4double dd = fPlanes[i].a*p.x() + fPlanes[i].b*p.y() + fPlanes[i].d;
-        if (std::abs(dd) > kCarToleranceHalf) continue;
+        if (std::abs(dd) > kCarToleranceHalf) { continue; }
         nx += fPlanes[i].a;
         ny += fPlanes[i].b;
         ++nsurf;
@@ -1005,18 +961,18 @@ G4ThreeVector G4ExtrudedSolid::SurfaceNormal(const G4ThreeVector& p) const
         G4double u  = fPlanes[i].a*iy - fPlanes[i].b*ix;
         if (u < 0)
         {
-          if (ix*ix + iy*iy > sqrCarToleranceHalf) continue;
+          if (ix*ix + iy*iy > sqrCarToleranceHalf) { continue; }
         }
         else if (u > fLengths[i])
         {
           G4double kx = p.x() - fPolygon[k].x();
           G4double ky = p.y() - fPolygon[k].y();
-          if (kx*kx + ky*ky > sqrCarToleranceHalf) continue;
+          if (kx*kx + ky*ky > sqrCarToleranceHalf) { continue; }
         }
         else
         {
           G4double dd = fPlanes[i].a*p.x() + fPlanes[i].b*p.y() + fPlanes[i].d;
-          if (dd*dd > sqrCarToleranceHalf) continue;
+          if (dd*dd > sqrCarToleranceHalf) { continue; }
         }
         nx += fPlanes[i].a;
         ny += fPlanes[i].b;
@@ -1036,30 +992,28 @@ G4ThreeVector G4ExtrudedSolid::SurfaceNormal(const G4ThreeVector& p) const
   {
     return { nx,ny,nz };
   }
-  else if (nsurf != 0) // edge or corner
+  if (nsurf != 0) // edge or corner
   {
     return G4ThreeVector(nx,ny,nz).unit();
   }
-  else
-  {
-    // Point is not on the surface, compute approximate normal
-    //
+  
+  // Point is not on the surface, compute approximate normal
+  //
 #ifdef G4CSGDEBUG
-    std::ostringstream message;
-    G4long oldprc = message.precision(16);
-    message << "Point p is not on surface (!?) of solid: "
-            << GetName() << G4endl;
-    message << "Position:\n";
-    message << "   p.x() = " << p.x()/mm << " mm\n";
-    message << "   p.y() = " << p.y()/mm << " mm\n";
-    message << "   p.z() = " << p.z()/mm << " mm";
-    G4cout.precision(oldprc) ;
-    G4Exception("G4TesselatedSolid::SurfaceNormal(p)", "GeomSolids1002",
-                JustWarning, message );
-    DumpInfo();
+  std::ostringstream message;
+  G4long oldprc = message.precision(16);
+  message << "Point p is not on surface (!?) of solid: "
+          << GetName() << G4endl;
+  message << "Position:\n";
+  message << "   p.x() = " << p.x()/mm << " mm\n";
+  message << "   p.y() = " << p.y()/mm << " mm\n";
+  message << "   p.z() = " << p.z()/mm << " mm";
+  G4cout.precision(oldprc) ;
+  G4Exception("G4TesselatedSolid::SurfaceNormal(p)", "GeomSolids1002",
+              JustWarning, message );
+  DumpInfo();
 #endif
-    return ApproxSurfaceNormal(p);
-  }
+  return ApproxSurfaceNormal(p);
 }
 
 //_____________________________________________________________________________
@@ -1116,10 +1070,10 @@ G4ThreeVector G4ExtrudedSolid::ApproxSurfaceNormal(const G4ThreeVector& p) const
     //  3  |   1   |  3
     //
     G4int iregion = 0;
-    if (std::max(dz0,dz1) > 0) iregion = 1;
+    if (std::max(dz0,dz1) > 0) { iregion = 1; }
 
     G4bool in = PointInPolygon(p);
-    if (!in) iregion += 2;
+    if (!in) { iregion += 2; }
 
     // Return normal
     //
@@ -1127,8 +1081,8 @@ G4ThreeVector G4ExtrudedSolid::ApproxSurfaceNormal(const G4ThreeVector& p) const
     {
       case 0:
       {
-        if (ddz0 <= ddz1 && ddz0 <= dd) return {0, 0,-1};
-        if (ddz1 <= ddz0 && ddz1 <= dd) return {0, 0, 1};
+        if (ddz0 <= ddz1 && ddz0 <= dd) { return {0, 0,-1}; }
+        if (ddz1 <= ddz0 && ddz1 <= dd) { return {0, 0, 1}; }
         return { fPlanes[iside].a, fPlanes[iside].b, 0 };
       }
       case 1:
@@ -1142,7 +1096,10 @@ G4ThreeVector G4ExtrudedSolid::ApproxSurfaceNormal(const G4ThreeVector& p) const
       case 3:
       {
         G4double dzmax = std::max(dz0,dz1);
-        if (dzmax*dzmax > dd) return { 0, 0, (G4double)((dz0 > dz1) ? -1 : 1) };
+        if (dzmax*dzmax > dd)
+        {
+          return { 0, 0, (G4double)((dz0 > dz1) ? -1 : 1) };
+        }
         return { fPlanes[iside].a, fPlanes[iside].b, 0 };
       }
     }
@@ -1157,8 +1114,8 @@ G4double G4ExtrudedSolid::DistanceToIn(const G4ThreeVector& p,
 {
   G4double z0 = fZSections[0].fZ;
   G4double z1 = fZSections[fNz-1].fZ;
-  if ((p.z() <= z0 + kCarToleranceHalf) && v.z() <= 0) return kInfinity;
-  if ((p.z() >= z1 - kCarToleranceHalf) && v.z() >= 0) return kInfinity;
+  if ((p.z() <= z0 + kCarToleranceHalf) && v.z() <= 0) { return kInfinity; }
+  if ((p.z() >= z1 - kCarToleranceHalf) && v.z() >= 0) { return kInfinity; }
 
   switch (fSolidType)
   {
@@ -1224,7 +1181,7 @@ G4double G4ExtrudedSolid::DistanceToIn (const G4ThreeVector& p) const
       for (std::size_t i=0; i<np; ++i)
       {
         G4double dd = fPlanes[i].a*p.x() + fPlanes[i].b*p.y() + fPlanes[i].d;
-        if (dd > dist) dist = dd;
+        if (dd > dist) { dist = dd; }
       }
       return (dist > 0) ? dist : 0.;
     }
@@ -1236,13 +1193,11 @@ G4double G4ExtrudedSolid::DistanceToIn (const G4ThreeVector& p) const
         G4double distz= std::max(fZSections[0].fZ-p.z(),p.z()-fZSections[1].fZ);
         return (distz > 0) ? distz : 0;
       }
-      else
-      {
-        G4double distz= std::max(fZSections[0].fZ-p.z(),p.z()-fZSections[1].fZ);
-        G4double dd = DistanceToPolygonSqr(p);
-        if (distz > 0) dd += distz*distz;
-        return std::sqrt(dd);
-      }
+      
+      G4double distz= std::max(fZSections[0].fZ-p.z(),p.z()-fZSections[1].fZ);
+      G4double dd = DistanceToPolygonSqr(p);
+      if (distz > 0) { dd += distz*distz; }
+      return std::sqrt(dd);
     }
   }
 
@@ -1259,18 +1214,18 @@ G4double G4ExtrudedSolid::DistanceToOut (const G4ThreeVector &p,
                                                G4ThreeVector* n) const
 {
   G4bool getnorm = calcNorm;
-  if (getnorm) *validNorm = true;
+  if (getnorm) { *validNorm = true; }
 
   G4double z0 = fZSections[0].fZ;
   G4double z1 = fZSections[fNz-1].fZ;
   if ((p.z() <= z0 + kCarToleranceHalf) && v.z() < 0)
   {
-    if (getnorm) n->set(0,0,-1);
+    if (getnorm) { n->set(0,0,-1); }
     return 0;
   }
   if ((p.z() >= z1 - kCarToleranceHalf) && v.z() > 0)
   {
-    if (getnorm) n->set(0,0,1);
+    if (getnorm) { n->set(0,0,1); }
     return 0;
   }
 
@@ -1298,7 +1253,7 @@ G4double G4ExtrudedSolid::DistanceToOut (const G4ThreeVector &p,
           G4double dist = fPlanes[i].a*p.x()+fPlanes[i].b*p.y()+fPlanes[i].d;
           if (dist >= -kCarToleranceHalf)
           {
-            if (getnorm) n->set(fPlanes[i].a, fPlanes[i].b, fPlanes[i].c);
+            if (getnorm) { n->set(fPlanes[i].a, fPlanes[i].b, fPlanes[i].c); }
             return 0;
           }
           G4double tmp = -dist/cosa;
@@ -1345,7 +1300,7 @@ G4double G4ExtrudedSolid::DistanceToOut(const G4ThreeVector& p) const
       for (std::size_t i=0; i<np; ++i)
       {
         G4double dd = fPlanes[i].a*p.x() + fPlanes[i].b*p.y() + fPlanes[i].d;
-        if (dd > dist) dist = dd;
+        if (dd > dist) { dist = dd; }
       }
       return (dist < 0) ? -dist : 0.;
     }
@@ -1353,7 +1308,7 @@ G4double G4ExtrudedSolid::DistanceToOut(const G4ThreeVector& p) const
     {
       G4double distz = std::max(fZSections[0].fZ-p.z(),p.z()-fZSections[1].fZ);
       G4bool in = PointInPolygon(p);
-      if (distz >= 0 || (!in)) return 0; // point is outside
+      if (distz >= 0 || (!in)) { return 0; } // point is outside
       return std::min(-distz,std::sqrt(DistanceToPolygonSqr(p)));
     }
   }
@@ -1374,11 +1329,11 @@ void G4ExtrudedSolid::BoundingLimits(G4ThreeVector& pMin,
   for (G4int i=0; i<GetNofVertices(); ++i)
   {
     G4double x = fPolygon[i].x();
-    if (x < xmin0) xmin0 = x;
-    if (x > xmax0) xmax0 = x;
+    if (x < xmin0) { xmin0 = x; }
+    if (x > xmax0) { xmax0 = x; }
     G4double y = fPolygon[i].y();
-    if (y < ymin0) ymin0 = y;
-    if (y > ymax0) ymax0 = y;
+    if (y < ymin0) { ymin0 = y; }
+    if (y > ymax0) { ymax0 = y; }
   }
 
   G4double xmin = kInfinity, xmax = -kInfinity;
@@ -1466,7 +1421,10 @@ G4ExtrudedSolid::CalculateExtent(const EAxis pAxis,
   G4int nsect = GetNofZSections();
   std::vector<const G4ThreeVectorList *> polygons;
   polygons.resize(nsect);
-  for (G4int k=0; k<nsect; ++k) { polygons[k] = new G4ThreeVectorList(3); }
+  for (G4int k=0; k<nsect; ++k)
+  {
+    polygons[k] = new G4ThreeVectorList(3);
+  }
 
   // main loop along triangles
   pMin =  kInfinity;
@@ -1501,13 +1459,20 @@ G4ExtrudedSolid::CalculateExtent(const EAxis pAxis,
     // set sub-envelope and adjust extent
     G4double emin,emax;
     G4BoundingEnvelope benv(polygons);
-    if (!benv.CalculateExtent(pAxis,pVoxelLimit,pTransform,emin,emax)) continue;
-    if (emin < pMin) pMin = emin;
-    if (emax > pMax) pMax = emax;
-    if (eminlim > pMin && emaxlim < pMax) break; // max possible extent
+    if (!benv.CalculateExtent(pAxis,pVoxelLimit,pTransform,emin,emax))
+    {
+      continue;
+    }
+    if (emin < pMin) { pMin = emin; }
+    if (emax > pMax) { pMax = emax; }
+    if (eminlim > pMin && emaxlim < pMax) { break; } // max possible extent
   }
   // free memory
-  for (G4int k=0; k<nsect; ++k) { delete polygons[k]; polygons[k]=nullptr;}
+  for (G4int k=0; k<nsect; ++k)
+  {
+    delete polygons[k];
+    polygons[k]=nullptr;
+  }
   return (pMin < pMax);
 }
 

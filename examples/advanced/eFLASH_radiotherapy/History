@@ -4,6 +4,11 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
+## 2025-11-04 G. Milluzzo (eFLASH_radiotherapy-V11-03-00)
+- Added the new class FlashMinibeamTemplate implementing the geometry of collimatiors for minibeam production, including the different geometrical configurations (grid and planar)
+- Modified FlashDetectorConstruction accordigly
+- Added a macro file for minibeam production
+
 ## 2024-11-09 G. Milluzzo (eFLASH_radiotherapy-V11-02-02)
 - Added a new geometry in DetectorConstruction:added an array of multiple small size silicon carbide detectors within the water phantom for dose distribution computation
 - Added the sensitive detector class for the silicon carbide array

@@ -23,12 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file Par01/include/Par01EMShowerModel.hh
+/// \file Par01EMShowerModel.hh
 /// \brief Definition of the Par01EMShowerModel class
-//
-//
-//
-//
+
 //----------------------------------------------
 // Parameterisation of e+/e-/gamma producing hits
 // The hits are the same as defined in the detailed

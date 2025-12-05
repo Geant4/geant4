@@ -36,10 +36,10 @@
 // considered as a generalised logical volume that is addressed
 // by user specifying the constituent logical volume.
 
-// Author: Ivana Hrivnacova (IN2P3/IJCLab Orsay), 16 October 2001
+// Author: Ivana Hrivnacova (IN2P3/IJCLab Orsay), 16.10.2001
 // --------------------------------------------------------------------
 #ifndef G4_REFLECTION_FACTORY_HH
-#define G4_REFLECTION_FACTORY_HH 1
+#define G4_REFLECTION_FACTORY_HH
 
 #include "G4Types.hh"
 #include "G4Transform3D.hh"
@@ -314,14 +314,14 @@ class G4ReflectionFactory
   private:
 
     static G4ThreadLocal G4ReflectionFactory* fInstance;
-    static const G4String       fDefaultNameExtension;
-    static const G4Scale3D      fScale;
-    G4double                    fScalePrecision;
+    static const G4String fDefaultNameExtension;
+    static const G4Scale3D fScale;
+    G4double fScalePrecision;
 
-    G4int              fVerboseLevel = 0;
-    G4String           fNameExtension;
-    G4ReflectedVolumesMap  fConstituentLVMap;
-    G4ReflectedVolumesMap  fReflectedLVMap;
+    G4int fVerboseLevel = 0;
+    G4String fNameExtension;
+    G4ReflectedVolumesMap fConstituentLVMap;
+    G4ReflectedVolumesMap fReflectedLVMap;
 };
 
 #endif

@@ -23,13 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file polarisation/Pol01/include/PhysListEmPolarized.hh
+/// \file PhysListEmPolarized.hh
 /// \brief Definition of the PhysListEmPolarized class
-//
-//
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef PhysListEmPolarized_h
 #define PhysListEmPolarized_h 1

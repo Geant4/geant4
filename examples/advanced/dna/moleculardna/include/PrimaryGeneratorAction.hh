@@ -38,7 +38,7 @@
 class G4GeneralParticleSource;
 class PrimaryGeneratorSourceGRASCSV;
 class PrimaryGeneratorMessenger;
-
+class G4ParticleGun;
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
@@ -54,8 +54,8 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     void SetInputFileName(const G4String& filename) { fMyInputFileName = filename; }
 
   private:
-    G4GeneralParticleSource* fParticleGun = nullptr;
-
+    G4GeneralParticleSource* fpGPS = nullptr;
+    G4ParticleGun* fpParticleGun = nullptr;
     // parameters for input from file
     G4String fMyInputFileName;
     static PrimaryGeneratorSourceGRASCSV* fPrimarySource;

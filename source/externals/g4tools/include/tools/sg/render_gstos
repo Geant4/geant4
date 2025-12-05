@@ -58,7 +58,6 @@ public: //node
 
         a_action.begin_gsto(_id);
         if(draw_edges) {
-          //a_action.set_lighting(false); //NOTE : we should do that if style==draw_fill !
           a_action.color4f(0,0,0,1); //if lighten, then rendered grey.
           a_action.line_width(1);
 
@@ -69,7 +68,6 @@ public: //node
 
           a_action.color4f(state.m_color);
           a_action.line_width(state.m_line_width);
-          //a_action.set_lighting(state.m_GL_LIGHTING);
         }
         if(state.m_draw_type==draw_points) {
           a_action.draw_gsto_v(gl::points(),m_gstos_points_sz/3,pxyzs);

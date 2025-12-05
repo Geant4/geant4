@@ -23,11 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file biasing/ReverseMC01/src/RMC01SD.cc
+/// \file RMC01SD.cc
 /// \brief Implementation of the RMC01SD class
-//
-//
-//////////////////////////////////////////////////////////////
+
 //      Class Name:        RMC01SD
 //        Author:               L. Desorgher
 //         Organisation:         SpaceIT GmbH

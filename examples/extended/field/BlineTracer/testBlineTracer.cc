@@ -23,8 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
 /// \file testBlineTracer.cc
 /// \brief Test program for the G4BlineTracer class
 

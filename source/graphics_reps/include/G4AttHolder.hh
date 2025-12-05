@@ -35,8 +35,6 @@
 //
 // Intended for inheritance by classes that need to hold them.
 //
-// For further details, see the HepRep home page at http://heprep.freehep.org
-//  
 // @author J.Allison
 // @author J.Perl
 // Class Description - End:

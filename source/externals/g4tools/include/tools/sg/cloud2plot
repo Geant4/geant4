@@ -6,14 +6,10 @@
 
 #include "plottables"
 
-#include "../words"
+#include "../tokenize"
 #include "../num2s"
 
 #include "../histo/c2d"
-
-#ifdef TOOLS_MEM
-#include "../mem"
-#endif
 
 namespace tools {
 namespace sg {
@@ -84,14 +80,8 @@ public:
   c2d2plot(const histo::c2d& a_data)
   :m_data(a_data)
   {
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
   }
   virtual ~c2d2plot(){
-#ifdef TOOLS_MEM
-    mem::decrement(s_class().c_str());
-#endif
   }
 public:
   c2d2plot(const c2d2plot& a_from)
@@ -101,9 +91,6 @@ public:
   ,m_name(a_from.m_name)
   ,m_legend(a_from.m_legend)
   {
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
   }
   c2d2plot& operator=(const c2d2plot& a_from){
     m_name = a_from.m_name;
@@ -198,14 +185,8 @@ public:
   c3d2plot(const histo::c3d& a_data)
   :m_data(a_data)
   {
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
   }
   virtual ~c3d2plot(){
-#ifdef TOOLS_MEM
-    mem::decrement(s_class().c_str());
-#endif
   }
 public:
   c3d2plot(const c3d2plot& a_from)
@@ -215,9 +196,6 @@ public:
   ,m_name(a_from.m_name)
   ,m_legend(a_from.m_legend)
   {
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
   }
   c3d2plot& operator=(const c3d2plot& a_from){
     m_name = a_from.m_name;

@@ -5,6 +5,22 @@ which **must** added in reverse chronological order (newest at the top).
 It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
+## 2025-11-4 Shogo Okada (particles-V11-03-01)
+- Scanned all mesons and baryons, including their resonances, to compare their
+  particle properties with PDG-2025. Then, updated mass, decay width, and
+  lifetime for particles below:
+  - messons: G4AntiBsMesonZero.cc, G4BsMesonZero.cc, G4Eta.cc, G4Etac.cc
+             G4JPsi.cc, G4Upsilon.cc
+  - Baryons: G4AntiSigmabMinus, G4AntiSigmabPlus, G4LambdacPlus,
+             G4OmegacZero, G4XicZero,
+  - Resonances: G4ExcitedLambdaConstructor, G4ExcitedNucleonConstructor,
+                G4ExcitedSigmaConstructor, G4ExcitedMessonConstructor,
+                mesons and baryons implemened in G4ShortLivedConstructor
+
+## 2025-07-11 Soon Yung Jun (particles-V11-03-00)
+- Add G4QuasiOpticalPhoton that is a non-physical particle definition designed
+  to encapsulate the conditions for generating a burst of optical photons in
+  processes such as scintillation or Cerenkov radiation.
 
 ## 2024-10-28 Ben Morgan (particles-V11-02-01)
 - Apply [GitHub PR 74](https://github.com/Geant4/geant4/pull/74), fixing bug in
@@ -14,7 +30,7 @@ It must **not** be used as a substitute for writing good git commit messages!
 ## 2024-08-01 Alberto Ribon (particles-V11-02-00)
 - G4ChargedUnknownParticle : new class, similar to G4UnknownParticle for
   charged unknown particles.
-  ( This is part of ATLAS and LHCb request to assign automatically 
+  ( This is part of ATLAS and LHCb request to assign automatically
     ionisation and multiple scattering processes to charged primary particles
     with valid PDG code but not known to Geant4. )
 

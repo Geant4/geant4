@@ -23,11 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file biasing/ReverseMC01/src/RMC01AnalysisManagerMessenger.cc
+/// \file RMC01AnalysisManagerMessenger.cc
 /// \brief Implementation of the RMC01AnalysisManagerMessenger class
-//
-//
-//////////////////////////////////////////////////////////////
+
 //      Class Name:        RMC01AnalysisManagerMessenger
 //        Author:               L. Desorgher
 //         Organisation:         SpaceIT GmbH
@@ -95,47 +93,67 @@ RMC01AnalysisManagerMessenger::RMC01AnalysisManagerMessenger(RMC01AnalysisManage
   fSetPowerLawSpectrumToNormaliseAdjResCmd->SetParameter(e_unit_par);
   fSetPowerLawSpectrumToNormaliseAdjResCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
 
-  fSetExpSpectrumToNormaliseAdjResCmd = new G4UIcommand(
-    "/RMC01/analysis/"
-    "SetExponentialSpectrumForAdjointSim",
-    this);
+  fSetExpSpectrumToNormaliseAdjResCmd = new G4UIcommand("/RMC01/analysis/"
+    "SetExponentialSpectrumForAdjointSim", this);
   fSetExpSpectrumToNormaliseAdjResCmd->SetGuidance(
     "Set the primary spectrum to which adjoint simulation results"
     "will be normalised as exponential (exp(-Ekin/E0)).");
-  fSetExpSpectrumToNormaliseAdjResCmd->SetParameter(new G4UIparameter(*part_name_par));
-  fSetExpSpectrumToNormaliseAdjResCmd->SetParameter(new G4UIparameter(*fluence_par));
-  fSetExpSpectrumToNormaliseAdjResCmd->SetParameter(new G4UIparameter(*fluence_unit_par));
-  fSetExpSpectrumToNormaliseAdjResCmd->SetParameter(new G4UIparameter(*e0_par));
-  fSetExpSpectrumToNormaliseAdjResCmd->SetParameter(new G4UIparameter(*e1_par));
-  fSetExpSpectrumToNormaliseAdjResCmd->SetParameter(new G4UIparameter(*e2_par));
-  fSetExpSpectrumToNormaliseAdjResCmd->SetParameter(new G4UIparameter(*e_unit_par));
-  fSetExpSpectrumToNormaliseAdjResCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
+  fSetExpSpectrumToNormaliseAdjResCmd
+    ->SetParameter(new G4UIparameter(*part_name_par));
+  fSetExpSpectrumToNormaliseAdjResCmd
+    ->SetParameter(new G4UIparameter(*fluence_par));
+  fSetExpSpectrumToNormaliseAdjResCmd
+    ->SetParameter(new G4UIparameter(*fluence_unit_par));
+  fSetExpSpectrumToNormaliseAdjResCmd
+    ->SetParameter(new G4UIparameter(*e0_par));
+  fSetExpSpectrumToNormaliseAdjResCmd
+    ->SetParameter(new G4UIparameter(*e1_par));
+  fSetExpSpectrumToNormaliseAdjResCmd
+    ->SetParameter(new G4UIparameter(*e2_par));
+  fSetExpSpectrumToNormaliseAdjResCmd
+    ->SetParameter(new G4UIparameter(*e_unit_par));
+  fSetExpSpectrumToNormaliseAdjResCmd
+    ->AvailableForStates(G4State_PreInit, G4State_Idle);
+  
+  fSetUserDefinedSpectrumToNormaliseAdjResCmd
+    = new G4UIcommand("/RMC01/analysis/" "SetTableSpectrumForAdjointSim",this);
+  fSetUserDefinedSpectrumToNormaliseAdjResCmd
+    ->SetParameter(new G4UIparameter(*part_name_par));
+  fSetUserDefinedSpectrumToNormaliseAdjResCmd
+    ->SetParameter(new G4UIparameter(*fluence_par));
+  fSetUserDefinedSpectrumToNormaliseAdjResCmd
+    ->SetParameter(new G4UIparameter(*fluence_unit_par));
 
-  fSetPrecisionForConvergenceTestCmd = new G4UIcmdWithADouble(
-    "/RMC01/analysis/"
-    "SetExpectedPrecisionOfResults",
-    this);
+  G4UIparameter* is_arbritray_point_wise_par
+    = new G4UIparameter("Arb",'b',true);
+  fSetUserDefinedSpectrumToNormaliseAdjResCmd
+    ->SetParameter(is_arbritray_point_wise_par);
+
+  fSetPrecisionForConvergenceTestCmd
+    = new G4UIcmdWithADouble("/RMC01/analysis/"
+    "SetExpectedPrecisionOfResults", this);
   fSetPrecisionForConvergenceTestCmd->SetGuidance(
     "Set the precision in % that the computed energy deposited "
     "in the sensitive volume should reached. If this precision is reached"
     " before the end of the run, the run is aborted and the results are "
     "registered.");
   fSetPrecisionForConvergenceTestCmd->SetParameterName("Precision", true);
-  fSetPrecisionForConvergenceTestCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
+  fSetPrecisionForConvergenceTestCmd->AvailableForStates(G4State_PreInit,
+                                                         G4State_Idle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RMC01AnalysisManagerMessenger::~RMC01AnalysisManagerMessenger()
-{
-  delete fAnalysisDir;
+{ if (fAnalysisDir) delete fAnalysisDir;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RMC01AnalysisManagerMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 {
-  if (command == fSetPowerLawSpectrumToNormaliseAdjResCmd) {
+  if (command == fSetPowerLawSpectrumToNormaliseAdjResCmd)
+  {
     G4double alpha, e1, e2, fluence;
     G4String f_unit, e_unit, part_name;
     const char* nv = (const char*)newValue;
@@ -149,7 +167,8 @@ void RMC01AnalysisManagerMessenger::SetNewValue(G4UIcommand* command, G4String n
     e2 *= G4UnitDefinition::GetValueOf(e_unit);
     fAnalysisManager->SetPrimaryPowerLawSpectrumForAdjointSim(part_name, fluence, alpha, e1, e2);
   }
-  else if (command == fSetExpSpectrumToNormaliseAdjResCmd) {
+  else if (command == fSetExpSpectrumToNormaliseAdjResCmd)
+  {
     G4double e0, e1, e2, fluence;
     G4String f_unit, e_unit, part_name;
     const char* nv = (const char*)newValue;
@@ -164,10 +183,34 @@ void RMC01AnalysisManagerMessenger::SetNewValue(G4UIcommand* command, G4String n
     e1 *= G4UnitDefinition::GetValueOf(e_unit);
     e2 *= G4UnitDefinition::GetValueOf(e_unit);
 
-    fAnalysisManager->SetPrimaryExpSpectrumForAdjointSim(part_name, fluence, e0, e1, e2);
+    fAnalysisManager
+      ->SetPrimaryExpSpectrumForAdjointSim(part_name, fluence, e0, e1, e2);
   }
-  else if (command == fSetPrecisionForConvergenceTestCmd) {
-    fAnalysisManager->SetPrecision(fSetPrecisionForConvergenceTestCmd->GetNewDoubleValue(newValue));
+  else if( command == fSetUserDefinedSpectrumToNormaliseAdjResCmd)
+  {
+    G4double  fluence;
+    G4String  part_name,f_unit;
+    G4bool is_arbitrary_point_wise;
+    const char* nv = (const char*)newValue;
+    std::istringstream is(nv);
+    is >> part_name>>fluence>>f_unit>>is_arbitrary_point_wise;
+    G4cout<< is_arbitrary_point_wise<<std::endl;
+    G4cout<< nv<<std::endl;
+
+    G4double factor_f_unit=1/cm2;
+    if (f_unit == "1/m2" || f_unit =="m-2")
+      factor_f_unit=1/m2;
+
+    fluence*=factor_f_unit;
+    fAnalysisManager
+      ->SetUserDefinedSpectrumPointForAdjointSim(part_name, fluence,
+                                                 is_arbitrary_point_wise);
+   }
+  else if (command == fSetPrecisionForConvergenceTestCmd)
+  {
+    fAnalysisManager
+      ->SetPrecision(fSetPrecisionForConvergenceTestCmd
+                     ->GetNewDoubleValue(newValue));
   }
 }
 

@@ -121,6 +121,8 @@ public:
 			     const G4Material* mat,
 			     G4double kineticEnergy) override;
 
+  inline void SetChargeSquareRatio(G4double val);
+
   // hide assignment operator
   G4BraggModel & operator=(const  G4BraggModel &right) = delete;
   G4BraggModel(const  G4BraggModel&) = delete;
@@ -131,8 +133,6 @@ protected:
 
   G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
 			      G4double kinEnergy) final;
-
-  inline void SetChargeSquareRatio(G4double val);
 
 private:
 
@@ -166,7 +166,7 @@ protected:
 
   G4double mass = 0.0;
   G4double spin = 0.0;
-  G4double chargeSquare = 1.0;
+  G4double chargeSquareRatio = 1.0;
   G4double massRate = 1.0;
   G4double ratio = 1.0;
   G4double protonMassAMU = 1.007276;
@@ -186,7 +186,7 @@ private:
 
 inline void G4BraggModel::SetChargeSquareRatio(G4double val)
 {
-  chargeSquare = val;
+  chargeSquareRatio = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

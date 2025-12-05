@@ -39,6 +39,7 @@ G4GIDI_target::G4GIDI_target( PoPI::Database const &a_pops, MCGIDI::DomainHash c
         m_MCGIDI_protare( a_MCGIDI_protare ),
         m_target( a_GIDI_protare.target( ).ID( ) ),
         m_fileName( a_GIDI_protare.fileName( ) ),
+        m_evaluation( a_GIDI_protare.evaluation( ) ),
         m_targetZ( 0 ),
         m_targetA( 0 ),
         m_targetM( 0 ),
@@ -147,7 +148,7 @@ std::vector<channelID> *G4GIDI_target::getProductionChannelIDs( ) const {
 
 double G4GIDI_target::getTotalCrossSectionAtE( double a_energy, double a_temperature ) const {
 
-    int hashIndex = m_domainHash.index( a_energy );
+    std::size_t hashIndex = m_domainHash.index( a_energy );
 
     return( m_MCGIDI_protare->crossSection( m_URR_protareInfos, hashIndex, a_temperature, a_energy ) );
 }
@@ -189,7 +190,7 @@ double G4GIDI_target::getOthersCrossSectionAtE( double a_energy, double a_temper
 
 double G4GIDI_target::sumChannelCrossSectionAtE( std::vector<int> const &a_indices, double a_energy, double a_temperature ) const {
 
-    int hashIndex = m_domainHash.index( a_energy );
+    std::size_t hashIndex = m_domainHash.index( a_energy );
     double crossSection = 0.0;
 
     for( auto indexIter = a_indices.begin( ); indexIter != a_indices.end( ); ++indexIter ) {
@@ -291,9 +292,10 @@ std::vector<G4GIDI_Product> *G4GIDI_target::getFinalState( std::vector<int> cons
 
     MCGIDI::Sampling::StdVectorProductHandler productHandler;
     MCGIDI::Sampling::Input input( false, MCGIDI::Sampling::Upscatter::Model::none );
+    input.setTemperatureAndEnergy( a_temperature, a_energy );
 
     MCGIDI::Reaction const *reaction = m_MCGIDI_protare->reaction( reactionIndex );
-    reaction->sampleProducts( m_MCGIDI_protare, a_energy, input, [&]() -> double { return a_rng( a_rngState ); },
+    reaction->sampleProducts( m_MCGIDI_protare, input, [&]() -> double { return a_rng( a_rngState ); },
         [&] (MCGIDI::Sampling::Product &a_product) -> void { productHandler.push_back( a_product ); }, productHandler );
 
     std::vector<G4GIDI_Product> *products = new std::vector<G4GIDI_Product>( productHandler.size( ) );

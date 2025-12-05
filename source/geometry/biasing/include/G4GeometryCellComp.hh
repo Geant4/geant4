@@ -32,21 +32,31 @@
 // Author: Michael Dressel (CERN), 2002
 // ----------------------------------------------------------------------
 #ifndef G4GEOMETRYCELLCOMP_HH
-#define G4GEOMETRYCELLCOMP_HH 1
+#define G4GEOMETRYCELLCOMP_HH
 
 #include "globals.hh"
 
 class G4GeometryCell;
 
+/**
+ * @brief G4GeometryCellComp is a class needed for comparing G4GeometryCell
+ * objects, e.g. in STL containers.
+ */
+
 class G4GeometryCellComp
 {
   public:
 
-    G4GeometryCellComp();
+    /**
+     * Default Constructor.
+     */
+    G4GeometryCellComp() = default;
 
+    /**
+     * Comparison operator, returns true if g1 < g2.
+     */
     G4bool operator() (const G4GeometryCell& g1,
                        const G4GeometryCell& g2) const;
-      // returns true if g1 < g2
 };
 
 #endif

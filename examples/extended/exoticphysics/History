@@ -4,6 +4,12 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
+## 2025-07-30 I. Hrivnacova (exExoticPhysics-V11-03-00)
+- Migration of README pages to Markdown:
+  - .README.txt replaced with README.md and removed README
+  - Reviewed and fixed external links, references to code,
+    improved formatting.
+
 ## 2024-10-30 A. Sytov (exExoticPhysics-V11-02-00)
 -Updated README related to channeling (added information about
  channeling examples instead of old channeling exampled which

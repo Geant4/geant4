@@ -140,17 +140,17 @@ void G4MuPairProduction::InitialiseEnergyLossProcess(
 
 void G4MuPairProduction::StreamProcessInfo(std::ostream& out) const
 {
-  G4ElementData* ed = EmModel()->GetElementData();
-  if(ed) {
-    for(G4int Z=1; Z<93; ++Z) {
-      G4Physics2DVector* pv = ed->GetElement2DData(Z);
-      if(pv) {
-        out << "      Sampling table " << pv->GetLengthY()
-	    << "x" << pv->GetLengthX() << "; from "
+  auto ptr = EmModel(0);
+  if (nullptr != ptr) {
+    G4ElementData* ed = ptr->GetElementData();
+    if (nullptr != ed) {
+      G4Physics2DVector* pv = ed->GetElement2DData(1);
+      if (nullptr != pv) {
+	out << "      Sampling table " << pv->GetLengthY()
+	    << "x" << pv->GetLengthX() << ", from "
 	    << std::exp(pv->GetY(0))/GeV << " GeV to " 
 	    << std::exp(pv->GetY(pv->GetLengthY()-1))/TeV 
 	    << " TeV " << G4endl;
-	break;
       }
     }
   }

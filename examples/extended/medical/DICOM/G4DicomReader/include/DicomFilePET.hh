@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file DicomFilePET.hh
+/// \brief Definition of the DicomFilePET class
+
 #ifndef DicomFilePET__HH
 #define DicomFilePET__HH
 

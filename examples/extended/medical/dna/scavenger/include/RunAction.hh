@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file scavenger/include/RunAction.hh
+/// \file RunAction.hh
 /// \brief Definition of the scavenger::RunAction class
 
 #ifndef SCAVENGER_RunAction_h

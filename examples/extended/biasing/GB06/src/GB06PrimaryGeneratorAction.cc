@@ -23,9 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file GB06/src/GB06PrimaryGeneratorAction.cc
+/// \file GB06PrimaryGeneratorAction.cc
 /// \brief Implementation of the GB06PrimaryGeneratorAction class
-//
 
 #include "GB06PrimaryGeneratorAction.hh"
 

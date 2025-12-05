@@ -25,8 +25,6 @@
 //
 /// \file SAXSActionInitialization.hh
 /// \brief Definition of the SAXSActionInitialization class
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef SAXSActionInitialization_h
 #define SAXSActionInitialization_h 1

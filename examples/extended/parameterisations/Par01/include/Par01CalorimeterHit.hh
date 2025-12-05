@@ -23,11 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file Par01/include/Par01CalorimeterHit.hh
+/// \file Par01CalorimeterHit.hh
 /// \brief Definition of the Par01CalorimeterHit class
-//
-//
-//
 
 #ifndef Par01CalorimeterHit_h
 #define Par01CalorimeterHit_h 1

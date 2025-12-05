@@ -142,7 +142,7 @@ void DetectorMessenger::SetNewValue(G4UIcommand* command, G4String commandConten
 
 	if( command == changeTheDetectorCmd )
 	{
-		if( commandContent == "Diamond" || commandContent == "MicroDiamond" || commandContent == "Silicon" || commandContent == "SiliconBridge" || commandContent == "SiCDetector" || commandContent == "DiamondTelescope")
+		if( commandContent == "Diamond" || commandContent == "MicroDiamond" || commandContent == "Silicon" || commandContent == "SiliconBridge" || commandContent == "SiCDetector" || commandContent == "DiamondTelescope" || commandContent == "TEPC")
 		{
 			detectorType = commandContent;
 			geometryHasChanged = true;

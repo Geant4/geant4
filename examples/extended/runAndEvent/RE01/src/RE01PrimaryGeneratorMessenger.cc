@@ -23,10 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file runAndEvent/RE01/src/RE01PrimaryGeneratorMessenger.cc
+/// \file RE01PrimaryGeneratorMessenger.cc
 /// \brief Implementation of the RE01PrimaryGeneratorMessenger class
-//
-//
 
 #include "RE01PrimaryGeneratorMessenger.hh"
 

@@ -23,15 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// This example is provided by the Geant4-DNA collaboration
-// Any report or published results obtained using the Geant4-DNA software
-// shall cite the following Geant4-DNA collaboration publication:
-// Med. Phys. 37 (2010) 4692-4708
-// J. Comput. Phys. 274 (2014) 841-882
-// The Geant4-DNA web site is available at http://geant4-dna.org
-//
-// $Id$
-//
 /// \file TimeStepAction.hh
 /// \brief Definition of the TimeStepAction class
 
@@ -46,30 +37,19 @@
 class DetectorConstruction;
 class G4Molecule;
 
-class TimeStepAction : public G4UserTimeStepAction
-{
-  public:
-    TimeStepAction();
-    virtual ~TimeStepAction();
-    TimeStepAction(const TimeStepAction& other);
-    TimeStepAction& operator=(const TimeStepAction& other);
-
-    virtual void StartProcessing() { ; }
-
-    virtual void UserPreTimeStepAction();
-    virtual void UserPostTimeStepAction() { ; }
-
-    virtual void UserReactionAction(const G4Track& /*trackA*/, const G4Track& /*trackB*/,
-                                    const std::vector<G4Track*>* /*products*/);
-
-    virtual void EndProcessing() { ; }
-
-    void Save(G4MolecularConfiguration* molconf);
-    void SaveMoleculeInfo(G4Track* track, G4int molID, const G4String&
-                          /*moleculeName*/);
-
-  private:
-    const DetectorConstruction* fpDetector;
+class TimeStepAction final : public G4UserTimeStepAction {
+public:
+  TimeStepAction();
+  ~TimeStepAction() override = default;
+  TimeStepAction(const TimeStepAction &other) = delete;
+  TimeStepAction &operator=(const TimeStepAction &other) = delete;
+  void UserPreTimeStepAction() override;
+  void EndProcessing() override { ; }
+  static void Save(const G4MolecularConfiguration *molconf);
+  static void SaveMoleculeInfo(const G4Track *track, G4int molID, const G4String &
+                               /*moleculeName*/);
+private:
+  const DetectorConstruction *fpDetector = nullptr;
 };
 
 #endif  // ITACTION_H

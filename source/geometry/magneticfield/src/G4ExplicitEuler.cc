@@ -30,7 +30,7 @@
 // Most simple approach for solving linear differential equations.
 // Take the current derivative and add it to the current position.
 //
-// Created: W.Wander <wwc@mit.edu>, 12.09.1997
+// Author: W.Wander (MIT), 12.09.1997
 // -------------------------------------------------------------------
 
 #include "G4ExplicitEuler.hh"
@@ -46,17 +46,9 @@ G4ExplicitEuler::G4ExplicitEuler(G4EquationOfMotion* EqRhs,
 {
 }
 
-
 ///////////////////////////////////////////////////////////////////////
 //
-// Destructor
-//
-G4ExplicitEuler::~G4ExplicitEuler() = default;
-
-
-///////////////////////////////////////////////////////////////////////
-//
-//
+// DumbStepper
 //
 void
 G4ExplicitEuler::DumbStepper( const G4double yIn[],

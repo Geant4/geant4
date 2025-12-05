@@ -23,10 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file RE06/include/RE06RunAction.hh
+/// \file RE06RunAction.hh
 /// \brief Definition of the RE06RunAction class
-//
-//
 
 #ifndef RE06RunAction_h
 #define RE06RunAction_h 1

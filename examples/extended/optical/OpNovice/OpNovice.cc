@@ -23,14 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file OpNovice/OpNovice.cc
-/// \brief Main program of the OpNovice example
-//
-//
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//
+/// \file OpNovice.cc
+/// \brief Main program of the optical/OpNovice example
+
 // Description: Test of Continuous Process G4Cerenkov
 //              and RestDiscrete Process G4Scintillation
 //              -- Generation Cerenkov Photons --

@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file PeriodicBoundaryPhysics.cc
+/// \brief Implementation of the PeriodicBoundaryPhysics class
 
 #include "PeriodicBoundaryPhysics.hh"
 

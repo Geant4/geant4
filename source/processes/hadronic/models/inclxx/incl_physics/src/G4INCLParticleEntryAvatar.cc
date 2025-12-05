@@ -39,6 +39,8 @@
 #include "G4INCLIChannel.hh"
 #include "G4INCLParticleEntryChannel.hh"
 #include "G4INCLPbarAtrestEntryChannel.hh"
+#include "G4INCLNbarAtrestEntryChannel.hh"
+#include "G4INCLAntinucleiAtrestEntryChannel.hh"
 
 
 namespace G4INCL {
@@ -76,6 +78,15 @@ namespace G4INCL {
     if(theEType == APAR){ 
       return new PbarAtrestEntryChannel(theNucleus, theParticle); 
       INCL_DEBUG("Particle " << theParticle->getID() << " is trying to enter at rest" << '\n');
+    }
+    else if(theEType == ANAR){
+      return new NbarAtrestEntryChannel(theNucleus, theParticle);
+      INCL_DEBUG("Particle " << theParticle->getID() << "is trying to enter at rest " << '\n');
+
+    }
+    else if(theEType == ADAR){
+      return new AntinucleiAtrestEntryChannel(theNucleus, theParticle);
+      INCL_DEBUG("Particle " << theParticle->getID() << "is trying to enter at rest " << '\n');
     }
     else {
       return new ParticleEntryChannel(theNucleus, theParticle);

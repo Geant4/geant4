@@ -344,8 +344,6 @@ public:
   }
 public:
   void update_sg(std::ostream& a_out) {
-    //a_out << "debug : tools::axis::update_sg :" << std::endl;
-
     if(width<=0) {
       m_line_sep.clear();
       m_ticks_sep.clear();
@@ -587,10 +585,6 @@ public:
       vec3f vec(xx,-title_to_axis,0);
       vec += m_title_style.translation.value();
 
-      //std::cout << "debug : axis : update_title :"
-      //          << " pos : " << vec[0] << " " << vec[1] << " " << vec[2]
-      //          << std::endl;
-
       add_string(m_title_sep,
                          font,
                          m_title_style.font_modeling.value(),
@@ -708,8 +702,6 @@ public: //style
     for(it=a_style.begin();it!=a_style.end();++it) {
       const std::string& key = (*it).first;
       const std::string& sv = (*it).second;
-      //::printf("debug : axis::set_from_style : key \"%s\" \"%s\"\n",key.c_str(),sv.c_str());
-      //if(key=="reset") {}
 
       // not part of style :
       //width
@@ -823,7 +815,7 @@ protected:
       float dx = x_mins[index]-x_maxs[index-1];
       if(dx<0) {
         a_overlap = true;
-	dx_overlap = mx(dx_overlap,-dx);
+	dx_overlap = max_of(dx_overlap,-dx);
       }
     }}
     return dx_overlap;

@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file ChemNO2_NO3ScavengerBuilder.cc
+/// \brief Implementation of the ChemNO2_NO3ScavengerBuilder class
 
 #include "ChemNO2_NO3ScavengerBuilder.hh"
 

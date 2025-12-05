@@ -23,18 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// CaTS (Calorimetry and Tracking Simulation)
 //
-
-// ********************************************************************
+// Authors: Hans Wenzel and Soon Yung Jun
+//          (Fermi National Accelerator Laboratory)
 //
-//  CaTS (Calorimetry and Tracking Simulation)
-//
-//  Authors : Hans Wenzel
-//            Soon Yung Jun
-//            (Fermi National Accelerator Laboratory)
-//
-// History
-//   October 18th, 2021 : first implementation
+// History: October 18th, 2021 : first implementation
 //
 // ********************************************************************
 //
@@ -44,33 +38,64 @@
 #ifdef WITH_ROOT
 #pragma once
 
-#include "RtypesCore.h"
 #include <G4Types.hh>
+#include <G4String.hh>
 #include "G4ThreadLocalSingleton.hh"
 
+#include "G4VHit.hh"
+#include "G4VHitsCollection.hh"
+#include "Event.hh"
+
+class G4Event;
+class TBranch;
 class TFile;
 class TTree;
-class TBranch;
-class Event;
 
-class RootIO {
-    friend class G4ThreadLocalSingleton< RootIO >;
-public:
-    virtual ~RootIO()= default;
-    static RootIO* GetInstance();
-    void Write(Event*);
-    void Close();
-    void Merge();
-protected:
-    RootIO();
+class RootIO
+{
+  friend class G4ThreadLocalSingleton<RootIO>;
+
+ public:
+  static RootIO* GetInstance();
+
+  ~RootIO() = default;
+  void Write(const G4Event* event);
+  void Merge();
+  void Close();
+
+ private:
+  // Private constructor used only for the static instance
+  RootIO();
+
+  // Split a string using the delimiter character
+  std::vector<G4String> Split(const G4String& s, char delim);
+
+  // Add hits from sensitive detectors into the CaTS event data
+  template<typename T>
+  void AddHits(G4VHitsCollection* hc, Event* event_data);
 
 private:
-    TFile* fFile{ nullptr };
-    G4int fNevents{ 0 };
-    TTree* ftree{ nullptr };
-    TBranch* fevtbranch{ nullptr };
-    Long64_t fnb{ 0 };
-    G4bool fevtinitialized{ false };
-    static G4ThreadLocal RootIO* fgInstance;
+  G4String fFileName;
+  TBranch* fEvtBranch{ nullptr };
+  TFile* fFile{ nullptr };
+  TTree* fTree{ nullptr };
 };
+
+template<typename T>
+void RootIO::AddHits(G4VHitsCollection* hc, Event* event_data)
+{
+  std::map<G4String, std::vector< G4VHit*>> *hcmap = event_data->GetHCMap();
+  std::vector<G4VHit*> hitsVector;
+  G4int NbHits = hc->GetSize();
+  G4String hcname = hc->GetName();
+
+  for (G4int ii = 0; ii < NbHits; ++ii)
+  {
+    G4VHit* hit = hc->GetHit(ii);
+    T* tpcHit = dynamic_cast<T*> (hit);
+    hitsVector.push_back(tpcHit);
+  }
+  hcmap->insert(std::make_pair(hcname, hitsVector));
+}
+
 #endif /* WITH_ROOT */

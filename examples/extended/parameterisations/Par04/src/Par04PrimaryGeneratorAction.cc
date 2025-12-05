@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file Par04PrimaryGeneratorAction.cc
+/// \brief Implementation of the Par04PrimaryGeneratorAction class
+
 #include "Par04PrimaryGeneratorAction.hh"
 
 #include "Par04EventInformation.hh"  // for Par04EventInformation

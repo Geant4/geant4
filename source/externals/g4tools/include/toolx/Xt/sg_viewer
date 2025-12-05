@@ -6,7 +6,29 @@
 
 #include "session"
 
+#ifndef GL_GLEXT_LEGACY
+#define GL_GLEXT_LEGACY
+#endif
+#include <GL/gl.h>
+
+#ifdef TOOLS_USE_GL_VERSION_3_2
+  #ifndef GL_GLEXT_PROTOTYPES
+  #define GL_GLEXT_PROTOTYPES
+  #endif
+  #include <GL/glext.h>
+#endif
+
+#include "../GL/gl_functions"
+
+#include "../sg/GL_action"
 #include "../sg/GL_viewer"
+
+namespace toolx {
+namespace sg {
+  using GL_action = GL_action_T<GL::gl_functions>;
+  using GL_manager = GL_manager_T<GL::gl_functions>;
+  using GL_viewer = GL_viewer_T<GL_manager,GL_action>;
+}}
 
 #include "OpenGLArea"
 
@@ -62,9 +84,6 @@ public:
     ::XtAddCallback(m_shell,XtNdestroyCallback,destroy_shell_callback,(XtPointer)this);
     
     ::XtRealizeWidget(m_shell);
-
-  //Atom WM_DELETE_WINDOW_atom = ::XInternAtom(XtDisplay(m_shell),"WM_DELETE_WINDOW",False);
-  //::XSetWMProtocols(XtDisplay(m_shell),XtWindow(m_shell),&WM_DELETE_WINDOW_atom,1);
   }
   virtual ~sg_viewer() {
     if(m_shell) {
@@ -105,7 +124,14 @@ public:
   }
 
   void win_render() {
-    if(m_glarea) OpenGLArea::paint(m_glarea);
+    if(!m_glarea) return;
+    OpenGLArea::paint(m_glarea);
+    m_session.sync();
+  }
+
+  void emit_win_render() {
+    if(!m_glarea) return;
+    if(!post_expose(m_glarea)) {}
   }
 
   bool window_size(unsigned int& a_w,unsigned int& a_h) {
@@ -125,7 +151,6 @@ protected:
   static void paint_cbk(Widget a_widget,XtPointer a_tag,XtPointer){
     unsigned int width = a_widget->core.width;
     unsigned int height = a_widget->core.height;
-    //::printf("debug : toolx::Xt::sg_viewer::paint_cbk : %d %d\n",width,height);
     sg_viewer* _this = (sg_viewer*)a_tag;
     _this->set_size(width,height);
     _this->render();
@@ -157,22 +182,26 @@ protected:
       } else if(xevent->xbutton.button==Button5) {  //5=wheel up, or move up double touch on trackpad = zoom out.
         tools::sg::wheel_rotate_event event(-8,xevent->xbutton.x,xevent->xbutton.y,shift_modifier,control_modifier);  //8=cooking.
         _this->m_interactor->wheel_rotate(event);
-      } else {
+      } else if(xevent->xbutton.button==Button1) {
         tools::sg::mouse_down_event event(xevent->xbutton.x,xevent->xbutton.y,shift_modifier,control_modifier);
         _this->m_interactor->mouse_press(event);
       }
     }return;
     case ButtonRelease:{
-      bool shift_modifier = xevent->xkey.state & ShiftMask;
-      bool control_modifier = xevent->xkey.state & ControlMask;
-      tools::sg::mouse_up_event event(xevent->xbutton.x,xevent->xbutton.y,shift_modifier,control_modifier);
-      _this->m_interactor->mouse_release(event);
+      if(xevent->xbutton.button==Button1) {
+        bool shift_modifier = xevent->xkey.state & ShiftMask;
+        bool control_modifier = xevent->xkey.state & ControlMask;
+        tools::sg::mouse_up_event event(xevent->xbutton.x,xevent->xbutton.y,shift_modifier,control_modifier);
+        _this->m_interactor->mouse_release(event);
+      }
     }return;
     case MotionNotify:{
-      bool shift_modifier = xevent->xkey.state & ShiftMask;
-      bool control_modifier = xevent->xkey.state & ControlMask;
-      tools::sg::mouse_move_event event(xevent->xmotion.x,xevent->xmotion.y,shift_modifier,control_modifier,0,0,false);
-      _this->m_interactor->mouse_move(event);
+      if((xevent->xmotion.state & Button1MotionMask)==Button1MotionMask) {
+        bool shift_modifier = xevent->xkey.state & ShiftMask;
+        bool control_modifier = xevent->xkey.state & ControlMask;
+        tools::sg::mouse_move_event event(xevent->xmotion.x,xevent->xmotion.y,shift_modifier,control_modifier,0,0,false);
+        _this->m_interactor->mouse_move(event);
+      }
     }return;
     default:return;}
   }
@@ -197,4 +226,3 @@ protected:
 }}
 
 #endif
-

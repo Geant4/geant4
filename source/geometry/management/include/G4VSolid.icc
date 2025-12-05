@@ -23,8 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 // 
-// G4VSolid inline implementation
+// G4VSolid inline implementations
 //
+// Author: Paul Kent (CERN), 30.06.1995 - Initial version
 // --------------------------------------------------------------------
 
 inline

@@ -72,20 +72,11 @@ public: //node
   }
 public:
   separator():parent(){
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
   }
   virtual ~separator(){
-#ifdef TOOLS_MEM
-    mem::decrement(s_class().c_str());
-#endif
   }
 public:
   separator(const separator& a_from):parent(a_from){
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
   }
   separator& operator=(const separator& a_from){
     parent::operator=(a_from);

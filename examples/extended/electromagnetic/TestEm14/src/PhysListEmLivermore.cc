@@ -25,10 +25,6 @@
 //
 /// \file PhysListEmLivermore.cc
 /// \brief Implementation of the PhysListEmLivermore class
-//
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "PhysListEmLivermore.hh"
 

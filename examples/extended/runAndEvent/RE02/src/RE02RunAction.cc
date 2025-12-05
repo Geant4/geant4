@@ -23,11 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file runAndEvent/RE02/src/RE02RunAction.cc
+/// \file RE02RunAction.cc
 /// \brief Implementation of the RE02RunAction class
-//
-//
-//
+
 #include "RE02RunAction.hh"
 
 #include "RE02Run.hh"

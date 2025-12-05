@@ -23,13 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file optical/wls/include/WLSDetectorMessenger.hh
+/// \file WLSDetectorMessenger.hh
 /// \brief Definition of the WLSDetectorMessenger class
-//
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #ifndef WLSDetectorMessenger_h
 #define WLSDetectorMessenger_h 1

@@ -23,12 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file field/BlineTracer/include/G4BlinePrimaryGeneratorAction.hh
+/// \file G4BlinePrimaryGeneratorAction.hh
 /// \brief Definition of the G4BlinePrimaryGeneratorAction class
-//
-//
-//
-//
+
 // --------------------------------------------------------------------
 //
 // Class description:

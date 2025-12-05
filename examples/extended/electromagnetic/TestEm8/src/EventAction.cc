@@ -23,10 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm8/src/EventAction.cc
+/// \file EventAction.cc
 /// \brief Implementation of the EventAction class
-//
-//
+
 //---------------------------------------------------------------------------
 //
 // ClassName:   EventAction

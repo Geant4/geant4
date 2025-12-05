@@ -1,0 +1,26 @@
+
+/run/initialize
+####
+##########################
+#define incident particle
+/gps/particle proton
+
+##########################
+# Monoenergetic parallel proton beam
+##########################
+
+/gps/pos/shape Circle
+/gps/pos/centre 0. 0. 1. cm
+/gps/pos/radius 1. mm
+/gps/pos/sigma_r 0.3. mm
+
+/gps/pos/type Beam
+#
+/gps/ang/type beam1d 
+/gps/ang/sigma_r 0.1 deg
+#
+/gps/ene/type Gauss
+/gps/ene/mono 60 MeV
+/gps/ene/sigma 0.2 MeV
+
+/run/beamOn 10

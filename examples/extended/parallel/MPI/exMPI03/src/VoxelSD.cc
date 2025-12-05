@@ -23,9 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// @file VoxelSD.cc
-/// @brief Define detector sensitivity on voxels
+/// \file VoxelSD.cc
+/// \brief Implementation of the VoxelSD class
+///
+/// Define detector sensitivity on voxels
 
 // #include "G4MPImanager.hh"
 #include "VoxelSD.hh"

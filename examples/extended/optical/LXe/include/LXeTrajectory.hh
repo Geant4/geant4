@@ -23,10 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file optical/LXe/include/LXeTrajectory.hh
+/// \file LXeTrajectory.hh
 /// \brief Definition of the LXeTrajectory class
-//
+
 #ifndef LXeTrajectory_h
 #define LXeTrajectory_h 1
 

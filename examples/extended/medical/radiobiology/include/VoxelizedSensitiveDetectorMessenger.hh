@@ -23,11 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file radiobiology/include/VoxelizedSensitiveDetectorMessenger.hh
+/// \file VoxelizedSensitiveDetectorMessenger.hh
 /// \brief Definition of the RadioBio::VoxelizedSensitiveDetectorMessenger class
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef RadiobiologyVoxelizedSensitiveDetectorMessenger_h
 #define RadiobiologyVoxelizedSensitiveDetectorMessenger_h 1

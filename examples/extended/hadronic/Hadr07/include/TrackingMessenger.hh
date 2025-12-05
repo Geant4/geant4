@@ -25,10 +25,6 @@
 //
 /// \file TrackingMessenger.hh
 /// \brief Definition of the TrackingMessenger class
-//
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef TrackingMessenger_h
 #define TrackingMessenger_h 1

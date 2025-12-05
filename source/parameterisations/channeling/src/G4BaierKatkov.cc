@@ -32,15 +32,13 @@
 
 #include "Randomize.hh"
 #include "G4Gamma.hh"
-#include "G4SystemOfUnits.hh"
-#include "G4PhysicalConstants.hh"
 #include "G4Log.hh"
 
 G4BaierKatkov::G4BaierKatkov()
 {
     //sets the default spectrum energy range of integration and
     //calls ResetRadIntegral()
-    SetSpectrumEnergyRange(0.1*MeV,1.*GeV,110);
+    SetSpectrumEnergyRange(0.1*CLHEP::MeV,1.*CLHEP::GeV,110);
 
     //Do not worry if the maximal energy > particle energy
     //this elements of spectrum with non-physical energies
@@ -76,12 +74,12 @@ void G4BaierKatkov::ResetRadIntegral()
     //Reset radiation integral internal variables to defaults
     fMeanPhotonAngleX =0.;        //average angle of
                                   //radiated photon direction in sampling, x-plane
-    fParamPhotonAngleX=1.e-3*rad; //a parameter of
-                                  //radiated photon sampling distribution, x-plane
+    fParamPhotonAngleX=1.e-3*CLHEP::rad; //a parameter of
+                                         //radiated photon sampling distribution, x-plane
     fMeanPhotonAngleY =0.;        //average angle of
                                   //radiated photon direction in sampling, y-plane
-    fParamPhotonAngleY=1.e-3*rad; //a parameter of
-                                  //radiated photon sampling distribution, y-plane
+    fParamPhotonAngleY=1.e-3*CLHEP::rad; //a parameter of
+                                         //radiated photon sampling distribution, y-plane
 
     fImin0 = 0;//set the first vector element to 0
 
@@ -349,11 +347,25 @@ void G4BaierKatkov::GeneratePhotonSampling()
         //test if the photon with these angles enter the virtual collimator
         //(doesn't influence the Geant4 simulations,
         //but only the accumulation of fTotalSpectrum
-        fInsideVirtualCollimator.push_back(fVirtualCollimatorAngularDiameter >
-                                           std::sqrt(fPhotonAngleInIntegralX[j]*
-                                                     fPhotonAngleInIntegralX[j]+
-                                                     fPhotonAngleInIntegralY[j]*
-                                                     fPhotonAngleInIntegralY[j]));
+        if(fVirtualCollimatorTypeID == 1) //round or ellipse collimator
+        {
+            fInsideVirtualCollimator.push_back(1. >
+                std::sqrt((fPhotonAngleInIntegralX[j]-fVirtualCollimatorAngularCenterX)*
+                          (fPhotonAngleInIntegralX[j]-fVirtualCollimatorAngularCenterX)/
+                           fVirtualCollimatorAngularHalfWidthX2 +
+                          (fPhotonAngleInIntegralY[j]-fVirtualCollimatorAngularCenterY)*
+                          (fPhotonAngleInIntegralY[j]-fVirtualCollimatorAngularCenterY)/
+                           fVirtualCollimatorAngularHalfWidthY2));
+        }
+        else if (fVirtualCollimatorTypeID == 2) //rectangular collimator
+        {
+            fInsideVirtualCollimator.push_back(
+                std::abs(fPhotonAngleInIntegralX[j]-fVirtualCollimatorAngularCenterX) <
+                         fVirtualCollimatorAngularHalfWidthX&&
+                std::abs(fPhotonAngleInIntegralY[j]-fVirtualCollimatorAngularCenterY) <
+                         fVirtualCollimatorAngularHalfWidthY);
+        }
+        else{fInsideVirtualCollimator.push_back(true);}//default - infinite collimator
     }
     //reinitialize the vector of radiation CDF for each photon
     fPhotonProductionCDF.resize(nmctotal+1);//0 element equal to 0
@@ -586,9 +598,6 @@ G4bool G4BaierKatkov::SetPhotonProductionParameters(G4double etotal, G4double ma
                               momentumDirectionZ*std::tan(photonAngleY),
                               momentumDirectionZ);
 
-      //random calculation of the radiation point index (iNode)
-      //ksi = G4UniformRand()*fTotalRadiationProbabilityAlongTrajectory.back();
-
       //sort fTotalRadiationProbabilityAlongTrajectory
       //(increasing but oscillating function => non-monotonic)
       std::vector<G4double> temporaryVector;
@@ -742,8 +751,6 @@ G4bool G4BaierKatkov::DoRadiation(G4double etotal, G4double mass,
             fItrajectories += 1; //count this trajectory !!!correction 19.07.2023
 
             flagPhotonProduced = SetPhotonProductionParameters(etotal,mass);
-
-            // correction 19.07.2023 fItrajectories += 1; //count this trajectory
 
             //reinitialize intermediate integrals fFa, fSs, fSc, fSsx, fSsy, fScx, fScy;
             //reset radiation integral internal variables to defaults;

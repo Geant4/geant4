@@ -16,7 +16,7 @@ namespace ExternalFiles {
 /*!
  *  loop over external files, if any represent binary store then open up HAPI::DataManager for that file
  */
-void Suite::registerBinaryFiles( LUPI_maybeUnused std::string a_parentDir, LUPI_maybeUnused SetupInfo &a_setupInfo ) {
+void Suite::registerBinaryFiles( LUPI_maybeUnused std::string const &a_parentDir, LUPI_maybeUnused SetupInfo &a_setupInfo ) {
 
 #ifdef HAPI_USE_HDF5
     if (this->has( "HDF" )) {

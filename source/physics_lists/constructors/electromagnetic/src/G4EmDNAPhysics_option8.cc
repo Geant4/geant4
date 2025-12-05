@@ -49,7 +49,10 @@ G4_DECLARE_PHYSCONSTR_FACTORY(G4EmDNAPhysics_option8);
 
 G4EmDNAPhysics_option8::G4EmDNAPhysics_option8(G4int ver, const G4String& nam)
   : G4EmDNAPhysics(ver, nam)
-{}
+{
+  G4EmParameters* param = G4EmParameters::Instance();
+  param->SetDNAFast(true);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

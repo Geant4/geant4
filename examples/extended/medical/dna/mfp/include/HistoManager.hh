@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file HistoManager.hh
+/// \brief Definition of the HistoManager class
+
 // This example is provided by the Geant4-DNA collaboration
 // Any report or published results obtained using the Geant4-DNA software
 // shall cite the following Geant4-DNA collaboration publications:
@@ -33,8 +36,6 @@
 //
 // The Geant4-DNA web site is available at http://geant4-dna.org
 //
-/// \file HistoManager.hh
-/// \brief Definition of the HistoManager class
 
 #ifndef HistoManager_h
 #define HistoManager_h 1

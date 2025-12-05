@@ -27,12 +27,11 @@
 //
 // Class description:
 //
-// Templated version of G4MagErrorStepper
-//
-//
-// Created: Josh Xie  (supported by Google Summer of Code 2014 )
+// Templated version of G4MagErrorStepper.
+// Adapted from G4G4TMagErrorStepper class.
+
+// Author: Josh Xie (CERN, Google Summer of Code 2014), June 2014
 // Supervisors:  Sandro Wenzel, John Apostolakis (CERN)
-// Adapted from G4G4TMagErrorStepper class
 // --------------------------------------------------------------------
 #ifndef G4TMAG_ERROR_STEPPER_HH
 #define G4TMAG_ERROR_STEPPER_HH
@@ -42,50 +41,52 @@
 #include "G4ThreeVector.hh"
 #include "G4LineSection.hh"
 
+/**
+ * @brief G4TMagErrorStepper is a templated version of G4MagErrorStepper.
+ */
+
 template <class T_Stepper, class T_Equation, unsigned int N>
 class G4TMagErrorStepper : public G4MagIntegratorStepper
 {
- public:  // with description
-  G4TMagErrorStepper(T_Equation* EqRhs, G4int numberOfVariables,
-                     G4int numStateVariables = 12)
-    : G4MagIntegratorStepper(EqRhs, numberOfVariables, numStateVariables)
-    , fEquation_Rhs(EqRhs)
-  {
-    // G4int nvar = std::max(this->GetNumberOfVariables(), 8);
-  }
+  public:
 
-  virtual ~G4TMagErrorStepper() { ; }
+    G4TMagErrorStepper(T_Equation* EqRhs, G4int numberOfVariables,
+                       G4int numStateVariables = 12)
+      : G4MagIntegratorStepper(EqRhs, numberOfVariables, numStateVariables)
+      , fEquation_Rhs(EqRhs) { ; }
 
-  inline void RightHandSide(G4double y[], G4double dydx[])
-  {
-    fEquation_Rhs->T_Equation::RightHandSide(y, dydx);
-  }
+    virtual ~G4TMagErrorStepper() = default;
 
-  inline void Stepper(const G4double yInput[], const G4double dydx[],
-                      G4double hstep, G4double yOutput[], G4double yError[]) override final;
+    G4TMagErrorStepper(const G4TMagErrorStepper&) = delete;
+    G4TMagErrorStepper& operator=(const G4TMagErrorStepper&) = delete;
+
+    inline void RightHandSide(G4double y[], G4double dydx[])
+    {
+      fEquation_Rhs->T_Equation::RightHandSide(y, dydx);
+    }
+
+    inline void Stepper(const G4double yInput[], const G4double dydx[],
+                        G4double hstep, G4double yOutput[], G4double yError[]) override final;
  
-  inline G4double DistChord() const override final;
+    inline G4double DistChord() const override final;
+    G4StepperType StepperType() const override { return kTMagErrorStepper; }
 
- private:
-  G4TMagErrorStepper(const G4TMagErrorStepper&);
-  G4TMagErrorStepper& operator=(const G4TMagErrorStepper&);
-  // Private copy constructor and assignment operator.
+  private:
 
- private:
-  // STATE
-  G4ThreeVector fInitialPoint, fMidPoint, fFinalPoint;
-  // Data stored in order to find the chord
+    // STATE
+    G4ThreeVector fInitialPoint, fMidPoint, fFinalPoint;
+    // Data stored in order to find the chord
 
-  // Dependent Objects, owned --- part of the STATE
-  G4double yInitial[N < 8 ? 8 : N];
-  G4double yMiddle[N < 8 ? 8 : N];
-  G4double dydxMid[N < 8 ? 8 : N];
-  G4double yOneStep[N < 8 ? 8 : N];
-  // The following arrays are used only for temporary storage
-  // they are allocated at the class level only for efficiency -
-  // so that calls to new and delete are not made in Stepper().
+    // Dependent Objects, owned --- part of the STATE
+    G4double yInitial[N < 8 ? 8 : N];
+    G4double yMiddle[N < 8 ? 8 : N];
+    G4double dydxMid[N < 8 ? 8 : N];
+    G4double yOneStep[N < 8 ? 8 : N];
+    // The following arrays are used only for temporary storage
+    // they are allocated at the class level only for efficiency -
+    // so that calls to new and delete are not made in Stepper().
 
-  T_Equation* fEquation_Rhs;
+    T_Equation* fEquation_Rhs;
 };
 
 // ------------   Implementation -----------------------
@@ -178,4 +179,4 @@ G4TMagErrorStepper<T_Stepper,T_Equation,N>::DistChord() const
   return distChord;
 }
 
-#endif /* G4TMagErrorStepper_HH */
+#endif

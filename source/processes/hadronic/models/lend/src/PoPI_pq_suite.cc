@@ -66,7 +66,7 @@ void PQ_suite::toXMLList( std::vector<std::string> &a_XMLList, std::string const
 
     if( size( ) == 0 ) return;
     std::string header = a_indent1 + "<" + m_label + ">";
-    a_XMLList.push_back( header );
+    a_XMLList.push_back( std::move( header ) );
     for( std::vector<PhysicalQuantity *>::const_iterator iter = begin( ); iter != end( ); ++iter )
         (*iter)->toXMLList( a_XMLList, indent2 );
     appendXMLEnd( a_XMLList, m_label );

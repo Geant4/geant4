@@ -53,7 +53,7 @@ LUPI_HOST void URR_protareInfos::setup( Vector<Protare *> &a_protares ) {
             ProtareSingle *protareSingle = const_cast<ProtareSingle *>( protare->protare( i2 ) );
 
             if( protareSingle->hasURR_probabilityTables( ) ) {
-                protareSingle->URR_index( URR_protareInfo_1.size( ) );
+                protareSingle->setURR_index( static_cast<int>( URR_protareInfo_1.size( ) ) );
                 URR_protareInfo_1.push_back( URR_protareInfo( ) );
             }
         }
@@ -137,7 +137,8 @@ LUPI_HOST_DEVICE ACE_URR_probabilityTable::~ACE_URR_probabilityTable( ) {
 
 LUPI_HOST_DEVICE double ACE_URR_probabilityTable::sample( double a_rng_Value ) {
 
-    int index = binarySearchVector( a_rng_Value, m_propabilities, true );
+    int intIndex = binarySearchVector( a_rng_Value, m_propabilities, true );
+    std::size_t index = static_cast<std::size_t>( intIndex );
     if( m_propabilities[index] < a_rng_Value ) ++index;
     return( m_crossSections[index] );
 }
@@ -288,7 +289,7 @@ LUPI_HOST void convertACE_URR_probabilityTablesFromGIDI( GIDI::ProtareSingle con
 
         for( auto iter = a_protare.ACE_URR_probabilityTables( ).begin( ); iter != a_protare.ACE_URR_probabilityTables( ).end( ); ++iter ) {
             bool needToInitialize( true );
-            std::map<int, std::string> columnNames;
+            std::map<std::size_t, std::string> columnNames;
             ACE_URR_probabilityTablesFromGIDI *ACE_URR_probabilityTablesFromGIDI1 = new ACE_URR_probabilityTablesFromGIDI( );
             GIDI::ACE_URR::ProbabilityTable *form = dynamic_cast<GIDI::ACE_URR::ProbabilityTable *>( *iter );
             GIDI::ACE_URR::ProbabilityTable::Forms &incidentEnergies = form->forms( );
@@ -296,10 +297,10 @@ LUPI_HOST void convertACE_URR_probabilityTablesFromGIDI( GIDI::ProtareSingle con
             for( auto incidentEnergyIter = incidentEnergies.begin( ); incidentEnergyIter != incidentEnergies.end( ); ++incidentEnergyIter ) {
                 GIDI::ACE_URR::IncidentEnergy *incidentEnergy = *incidentEnergyIter;
                 GIDI::Table::Table const &table = incidentEnergy->table( );
-                int numberOfRows = table.rows( );
-                int numberOfColumns = table.columns( );
+                std::size_t numberOfRows = static_cast<std::size_t>( table.rows( ) );
+                std::size_t numberOfColumns = static_cast<std::size_t>( table.columns( ) );
 
-                int columnIndex = 0;
+                std::size_t columnIndex = 0;
                 for( auto columnHeaderIter = table.columnHeaders( ).begin( ); columnHeaderIter != table.columnHeaders( ).end( ); ++columnHeaderIter ) {
                     GIDI::Table::Column const *columnHeader = dynamic_cast<GIDI::Table::Column *>( *columnHeaderIter );
                     if( needToInitialize && columnIndex > 0 ) {
@@ -321,7 +322,7 @@ LUPI_HOST void convertACE_URR_probabilityTablesFromGIDI( GIDI::ProtareSingle con
                 std::vector<std::vector<double> > columns( numberOfColumns );
                 for( columnIndex = 0; columnIndex < numberOfColumns; ++columnIndex ) {
                     columns[columnIndex].reserve( numberOfRows );
-                    for( int rowIndex = 0; rowIndex < numberOfRows; ++rowIndex ) columns[columnIndex].push_back( dValues[rowIndex*numberOfColumns+columnIndex] );
+                    for( std::size_t rowIndex = 0; rowIndex < numberOfRows; ++rowIndex ) columns[columnIndex].push_back( dValues[rowIndex*numberOfColumns+columnIndex] );
                 }
                 free( dValues );
 

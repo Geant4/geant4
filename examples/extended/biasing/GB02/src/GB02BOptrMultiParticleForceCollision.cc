@@ -23,9 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file GB02/src/GB02BOptrMultiParticleForceCollision.cc
+/// \file GB02BOptrMultiParticleForceCollision.cc
 /// \brief Implementation of the GB02BOptrMultiParticleForceCollision class
-//
+
 #include "GB02BOptrMultiParticleForceCollision.hh"
 
 #include "G4BOptrForceCollision.hh"

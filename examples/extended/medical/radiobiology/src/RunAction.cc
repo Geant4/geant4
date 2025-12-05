@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file radiobiology/src/RunAction.cc
+/// \file RunAction.cc
 /// \brief Implementation of the RadioBio::RunAction class
 
 #include "RunAction.hh"

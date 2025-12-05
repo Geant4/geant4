@@ -24,23 +24,14 @@ public:
   :c2d2plot(m_cp)
   ,m_cp(a_data)
   {
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
   }
   virtual ~c2d2plot_cp(){
-#ifdef TOOLS_MEM
-    mem::decrement(s_class().c_str());
-#endif
   }
 public:
   c2d2plot_cp(const c2d2plot_cp& a_from)
   :plottable(a_from),points2D(a_from),c2d2plot(m_cp)
   ,m_cp(a_from.m_cp)
   {
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
   }
   c2d2plot_cp& operator=(const c2d2plot_cp& a_from){
     c2d2plot::operator=(a_from);
@@ -66,23 +57,14 @@ public:
   :c3d2plot(m_cp)
   ,m_cp(a_data)
   {
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
   }
   virtual ~c3d2plot_cp(){
-#ifdef TOOLS_MEM
-    mem::decrement(s_class().c_str());
-#endif
   }
 public:
   c3d2plot_cp(const c3d2plot_cp& a_from)
   :plottable(a_from),points3D(a_from),c3d2plot(m_cp)
   ,m_cp(a_from.m_cp)
   {
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
   }
   c3d2plot_cp& operator=(const c3d2plot_cp& a_from){
     c3d2plot::operator=(a_from);

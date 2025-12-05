@@ -1,0 +1,101 @@
+\page ExampleAnaEx03 Example AnaEx03
+
+ Example AnaEx03 demonstrates usage of analysis commands for file management
+ (new since Geant4 11.1), in particular writing histograms and ntuples in a file
+ multiple times, and commands for histogram deleting (new since Geant4 11.2).
+
+ It uses the same scenario (detector description, primary generator
+ and physics) as [AnaEx01](../../html_AnaEx01/html/ExampleAnaEx01.html) and
+ [AnaEx02](../../html_AnaEx02/html/ExampleAnaEx02.html).
+ In difference from these examples
+ the analysis manipulations (histograms and ntuples booking and filling)
+ are performed directly with G4AnalysisManager. The classes that are same
+ in all three examples are located in shared directory.
+
+ For detector description, primary generator, physics and the example output
+ see [AnaEx01](../../html_AnaEx01/html/ExampleAnaEx01.html) example.
+
+## Histograms, Ntuple:
+
+ The example produces the same 4 histograms and 2 ntuples as in AnaEx01.
+
+ These histos and ntuples are booked in the RunAction constructor and filled from
+ EventAction.
+
+ The file managent in this example, usually performed via calls to G4AnalysisManager
+ OpenFile(), Write() and CloseFile() in the code, is in this example performed
+ via UI commands in a macro:
+```
+/analysis/openFile
+/analysis/write
+/analysis/closeFile
+```
+
+ Note that the file does not need to be closed at each end of run and the histograms and ntuples
+ can be saved in the same file multiple time. In that case we need to reset the histograms
+ and ntuples data before a new run:
+```
+/analysis/reset
+```
+
+ We can define the default file type and set it to the analysis manager via
+```
+/analysis/setDefaultFileType root    # or csv hdf5 xml
+```
+
+ The file names then need not to be provided with the file extension and the same macro
+ can be used with different output types.
+
+ To demonstrate UI commands for deleting of selected histograms:
+```
+/analysis/h1/delete id [keepSetting]
+```
+ two H1 histograms, id: 1 and 3, are deleted in AnaEx03.in macro before starting Run 2,
+ and new histograms are then created before starting Run3. New histograms are created at
+ id's liberated with previous deleting, 1 and 3.
+
+ It should be notes that using UI commands for writing histograms and ntuples in a file
+ multiple times is not necessary, the same can be achieved by calls to G4AnalysisManager
+ functions from the code using conditional statements.
+
+## Macros
+
+ - The AnaEx03.in macro performs 5 runs and produces 2 files: e-.root, containg data from first
+ 3 runs, and proton.root, containing data from the next 2 runs.
+ The macro uses the `defaultFileType` parameter (alias), which default value, "root" is
+ defined in main().
+
+ - AnaEx03-csv.in, AnaEx03-hdf5.in, AnaEx03-root.in, AnaEx03-xml.in: \n
+   In these macros, the default value of the `defaultFileType` is overritten with
+```
+/control/alias defaultFileType cvs   # or hdf5 root xml
+```
+   and then the AnaEx03.in macro is called.
+
+- The plotter.mac macro can be used in the interactive mode to plot histograms. It should be executed after the first `/run/beamOn` call and before the first `/analysis/reset` call.
+ (See also a commented line with this macro call in AnaEx03.in.)
+
+## How to run
+
+ - It is preferable to execute the exampole in the 'batch' mode from macro files:
+```
+% ./AnaEx03 AnaEx03.in
+% ./AnaEx03 AnaEx03.in >& output
+```
+
+ - When executing AnaEx03 in the 'interactive mode' with visualization, be careful not
+   to forget to issue the /analysis/openFile command befor starting a run:
+```
+% ./AnaEx03
+and type in the commands from AnaEx03[-xyz].mac line by line:
+   Idle> /analysis/openFile myFile
+   Idle> /tracking/verbose 1
+   Idle> /run/beamOn 10
+   Idle> ...
+   Idle> /analysis/write
+   Idle> /analysis/closeFile
+   ....
+   Idle> exit
+```
+
+All AnaEx03-*.in macros are used in Geant4 testing.

@@ -218,13 +218,13 @@ G4String G4THnMessenger<DIM, HT>::GetTVectorAddress() const
 
 //_____________________________________________________________________________
 template <unsigned int DIM, typename HT>
-void G4THnMessenger<DIM, HT>::CreateDirectory() const
+void G4THnMessenger<DIM, HT>::CreateDirectory()
 {
   G4String dirName = "/analysis/" + G4Analysis::GetHnType<HT>() + "/";
   G4String guidance = GetObjectType() + " control";  
 
-  auto directory = std::make_unique<G4UIdirectory>(dirName);
-  directory->SetGuidance(guidance.c_str());
+  fHnDir = std::make_unique<G4UIdirectory>(dirName);
+  fHnDir->SetGuidance(guidance.c_str());
 }
 
 //_____________________________________________________________________________

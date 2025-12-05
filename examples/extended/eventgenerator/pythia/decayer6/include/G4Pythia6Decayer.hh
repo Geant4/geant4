@@ -23,11 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-/// \file eventgenerator/pythia/decayer6/include/G4Pythia6Decayer.hh
+/// \file G4Pythia6Decayer.hh
 /// \brief Definition of the G4Pythia6Decayer class
-//
+
 #ifndef G4_PYTHIA6_DECAYER_H
 #define G4_PYTHIA6_DECAYER_H
 

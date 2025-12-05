@@ -29,11 +29,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file hadronic/Hadr02/src/G4UrQMD1_3Model.cc
+/// \file G4UrQMD1_3Model.cc
 /// \brief Implementation of the G4UrQMD1_3Model class
-//
-//
-///////////////////////////////////////////////////////////////////////////////
+
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
 // MODULE:          G4UrQMD1_3Model.hh

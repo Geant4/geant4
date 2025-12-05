@@ -23,31 +23,31 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//      V. Uzhinsky Nov. 2012
-//   Added method GetProjectileNucleus for simulation of nucleus-nucleus inter.
-//
-// G4VHighEnergyGenerator
 #include "G4VHighEnergyGenerator.hh"
 
-G4VHighEnergyGenerator::G4VHighEnergyGenerator(const G4String& modelName)
-  : G4HadronicInteraction(modelName)
+
+G4VHighEnergyGenerator::G4VHighEnergyGenerator( const G4String& modelName )
+  : G4HadronicInteraction( modelName ),
+    fIsQuasiElasticInteraction( false ), fIsDiffractiveInteraction( false )
 {}
+
 
 G4VHighEnergyGenerator::~G4VHighEnergyGenerator()
 {}
 
-void G4VHighEnergyGenerator::ModelDescription(std::ostream& outFile) const
+
+void G4VHighEnergyGenerator::ModelDescription( std::ostream& outFile ) const
 {
   outFile << " Parton-string models description not written yet \n";
 }
+
 
 G4V3DNucleus * G4VHighEnergyGenerator::GetProjectileNucleus() const
 {                                                                     
   G4ExceptionDescription ed;
   ed << "The used HighEnergyGenerator "<<GetModelName()
      <<" cannot manage with a residual projectile nucleus";
-  G4Exception("G4VHighEnergyGenerator::GetProjectileNucleus ", "G4had_mod_man",
-                FatalException, ed); 
+  G4Exception( "G4VHighEnergyGenerator::GetProjectileNucleus ", "G4had_mod_man",
+	       FatalException, ed ); 
   return 0;
 }

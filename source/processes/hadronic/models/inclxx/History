@@ -6,6 +6,16 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2025-11-06 Gabriele Cosmo (hadr-inclxx-V11-03-03)
+- Fixed compilation warning for implicit type conversion on macOS/XCode
+  in G4INCLAntinucleiAtrestEntryChannel::getAnnihilationPosition().
+
+## 2025-10-01 Jean-Christophe David (hadr-inclxx-V11-03-02)
+- Extension of the INCLXX model to handle antineutron (at rest and in-flight).
+- Fix the use of INCL for the reactions antineutron + H1/H2 and decay omega/eta
+- Forbid the use of SRC
+- back to no hyperremnant.
+
 ## 2025-05-16 Ben Morgan (hadr-inclxx-V11-03-01)
 - Replace the URL root.cern.ch with canonical root.cern
   - Fixes [GitHub PR 87](https://github.com/Geant4/geant4/pull/87)

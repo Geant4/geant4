@@ -197,6 +197,12 @@ namespace G4INCL {
       for(ParticleIter p=pl.begin(), e=pl.end(); p!=e; ++p)
         addToOutgoing(*p);
     }
+ 
+    /** \brief add the particle to the missed particle list (for dbar).
+     * 
+     * \param p pointer to the particle to be added
+     */
+    void addToMissed(Particle *p) { missed.push_back(p); }
 
     /**
      * Remove the particle from the system. This also removes all
@@ -221,6 +227,12 @@ namespace G4INCL {
      * cascade).
      */
     ParticleList const & getOutgoingParticles() const { return outgoing; }
+ 
+    /**
+     * Return the list of missed particles (i.e. particles that have missed the
+     * nucleus and so do not participate in the cascade, only for dbar).
+     */
+    ParticleList const & getMissedParticles() const { return missed; }
 
     /** \brief Returns a list of dynamical spectators
      *
@@ -233,7 +245,7 @@ namespace G4INCL {
       ParticleList spectators;
       for(ParticleIter p=outgoing.begin(), e=outgoing.end(); p!=e; ++p) {
         if((*p)->isProjectileSpectator()) {
-// assert((*p)->isNucleon() || (*p)->isLambda());
+//          assert((*p)->isNucleon() || (*p)->isLambda() || (*p)->isAntiNucleon());
           spectators.push_back(*p); // add them to the list we will return
         }
       }
@@ -251,6 +263,12 @@ namespace G4INCL {
      * participate in collisions).
      */
     ParticleList const & getParticles() const { return inside; }
+ 
+     /**
+     * Return the list of "active" particles (i.e. particles that can
+     * participate in collisions) to define the src-pairs.
+     */
+    ParticleList & getParticlesforSrc() { return inside; }
 
     /**
      * Return the pointer to the Book object which keeps track of
@@ -425,6 +443,11 @@ namespace G4INCL {
      * List of outgoing particles
      */
     ParticleList outgoing;
+ 
+    /**
+     * List of missed particles (for dbar)
+     */
+    ParticleList missed;
 
     /**
      * List of geometrical spectators

@@ -35,18 +35,29 @@
 // The concrete class object is deleted by Geant4 kernel when
 // associated G4Region object is deleted.
 
-// 21/10/2003 - M.Asai, Created.
+// Author: Makoto Asai (SLAC), 21.10.2003
 // --------------------------------------------------------------------
 #ifndef G4VUSERREGIONINFORMATION_HH
-#define G4VUSERREGIONINFORMATION_HH 1
+#define G4VUSERREGIONINFORMATION_HH
+
+/**
+ * @brief G4VUserRegionInformation is an abstract class, the user can subclass
+ * for storing information associated with a G4Region class object.
+ */
 
 class G4VUserRegionInformation
 {
   public:
   
+    /**
+     * Default Constructor and Destructor.
+     */
     G4VUserRegionInformation() = default;
     virtual ~G4VUserRegionInformation() = default;
 
+    /**
+     * Customisable function to print the user information of a region.
+     */
     virtual void Print() const = 0;
 };
 

@@ -1,17 +1,17 @@
-%global geant4_version 11.4.0-beta
+%global geant4_version 11.4.0
 
 %global NEUTRONHPDATA G4NDL.4.7.1
-%global LEDATA G4EMLOW.8.7
-%global LEVELGAMMADATA G4PhotonEvaporation.6.1
+%global LEDATA G4EMLOW.8.8
+%global LEVELGAMMADATA G4PhotonEvaporation.6.1.2
 %global RADIOACTIVEDATA G4RadioactiveDecay.6.1.2
-%global PARTICLEXSDATA G4PARTICLEXS.4.1
+%global PARTICLEXSDATA G4PARTICLEXS.4.2
 %global PIIDATA G4PII.1.3
 %global REALSURFACEDATA G4RealSurface.2.2
 %global SAIDXSDATA G4SAIDDATA.2.0
 %global ABLADATA G4ABLA.3.3
-%global INCLDATA G4INCL.1.2
+%global INCLDATA G4INCL.1.3
 %global ENSDFSTATEDATA G4ENSDFSTATE.3.0
-%global CHANNELINGDATA G4CHANNELING.1.0
+%global CHANNELINGDATA G4CHANNELING.2.0
 %global TENDLDATA G4TENDL.1.4
 %global NUDEXLIBDATA G4NUDEXLIB.1.0
 %global URRPTDATA G4URRPT.1.1
@@ -78,7 +78,6 @@ BuildRequires: SoQt-devel
 %endif
 
 %if %{with qt5}
-BuildRequires: qt5-qt3d-devel
 BuildRequires: qt5-qtbase-devel
 %endif
 
@@ -137,7 +136,6 @@ Requires: SoQt-devel
 %endif
 
 %if %{with qt5}
-Requires: qt5-qt3d-devel
 Requires: qt5-qtbase-devel
 %endif
 
@@ -264,6 +262,11 @@ tar xzf %{SOURCE15} -C %{buildroot}/%{_datadir}/%{name}/data
 %endif
 
 %changelog
+* Mon Nov 17 2025 Gabriele Cosmo <Gabriele.Cosmo@cern.ch> - 11.4.0
+- Update to version 11.4.0
+- Updated datasets: G4CHANNELING-2.0, G4EMLOW-8.8, G4INCL-1.3,
+  G4PARTICLEXS-4.2, G4PhotonEvaporation-6.1.2.
+
 * Thu Jun 26 2025 Gabriele Cosmo <Gabriele.Cosmo@cern.ch> - 11.4.0-b
 - Update to version 11.4.0-beta
 

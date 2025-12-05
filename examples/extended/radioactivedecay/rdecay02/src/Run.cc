@@ -25,8 +25,6 @@
 //
 /// \file Run.cc
 /// \brief Implementation of the Run class
-//
-//
 
 #include "Run.hh"
 

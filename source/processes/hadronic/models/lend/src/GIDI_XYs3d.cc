@@ -121,7 +121,7 @@ double XYs3d::evaluate( double a_x3, double a_x2, double a_x1 ) const {
     }
 
 // Currently does not interpolate;
-    return( m_function2ds[iX3]->evaluate( a_x2, a_x1 ) );
+    return( m_function2ds[static_cast<std::size_t>(iX3)]->evaluate( a_x2, a_x1 ) );
 }
 
 /* *********************************************************************************************************//**

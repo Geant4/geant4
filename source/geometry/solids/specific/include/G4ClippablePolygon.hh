@@ -27,10 +27,9 @@
 //
 // Class description:
 //
-// Declaration of a utility class of a polygon that can be
-// clipped by a voxel.
+// A utility class of a polygon that can be clipped by a voxel.
 
-// Author: David C. Williams (davidw@scipp.ucsc.edu)
+// Author: David C. Williams (UCSC), 1998
 // --------------------------------------------------------------------
 #ifndef G4CLIPPABLEPOLYGON_HH
 #define G4CLIPPABLEPOLYGON_HH
@@ -44,71 +43,125 @@
 class G4AffineTransform;
 class G4VoxelLimits;
 
+/**
+ * @brief G4ClippablePolygon in a utility class defining a polygon
+ * that can be clipped by a voxel.
+ */
+
 class G4ClippablePolygon
 {
   using G4ThreeVectorList = std::vector<G4ThreeVector>;
 
   public:
 
+    /**
+     * Default Constructor and Destructor.
+     */
     G4ClippablePolygon();
-    virtual ~G4ClippablePolygon();
-      // Constructor & virtual destructor.
+    ~G4ClippablePolygon() = default;
   
-    virtual void AddVertexInOrder( const G4ThreeVector vertex );
-    virtual void ClearAllVertices();
+    /**
+     * Adds a vertex to collection.
+     */
+    void AddVertexInOrder( const G4ThreeVector& vertex );
+
+    /**
+     * Clears the collection of vertices.
+     */
+    void ClearAllVertices();
   
-    inline void SetNormal( const G4ThreeVector& newNormal );
+    /**
+     * Accessor and setter for normal vector.
+     */
     inline const G4ThreeVector GetNormal() const;
+    inline void SetNormal( const G4ThreeVector& newNormal );
   
-    virtual G4bool Clip( const G4VoxelLimits& voxelLimit );
+    /**
+     * Clips the polygon along the Cartesian axes, as specified in 'voxelLimit'.
+     *  @returns true if the collection of vertices is not empty.
+     */
+    G4bool Clip( const G4VoxelLimits& voxelLimit );
 
-    virtual G4bool PartialClip( const G4VoxelLimits& voxelLimit,
-                                const EAxis IgnoreMe );
-      // Clip, while ignoring the indicated axis.
+    /**
+     * Clips the polygon while ignoring the indicated axis.
+     *  @returns true if the collection of vertices is not empty.
+     */
+    G4bool PartialClip( const G4VoxelLimits& voxelLimit,
+                        const EAxis IgnoreMe );
 
-    virtual void ClipAlongOneAxis( const G4VoxelLimits& voxelLimit,
-                                   const EAxis axis );
-      // Clip along just one axis, as specified in voxelLimit.
+    /**
+     * Clips the polygon along just one axis, as specified in 'voxelLimit'.
+     */
+    void ClipAlongOneAxis( const G4VoxelLimits& voxelLimit,
+                           const EAxis axis );
 
-    virtual G4bool GetExtent( const EAxis axis, 
-                                    G4double& min, G4double& max ) const;
+    /**
+     * Computes the polygon extent along the specified 'axis'.
+     *  @param[in] axis The Cartesian axis along which computing the extent.
+     *  @param[out] min The minimum extent value.
+     *  @param[out] max The maximum extent value.
+     *  @returns false if invalid polygon (no vertices).
+     */
+    G4bool GetExtent( const EAxis axis, 
+                      G4double& min, G4double& max ) const;
 
-    virtual const G4ThreeVector* GetMinPoint( const EAxis axis ) const;
-      // Returns pointer to minimum point along the specified axis.
-      // Take care! Do not use pointer after destroying parent polygon.
+    /**
+     * Returns a pointer to the minimum or maximum point along specified 'axis'.
+     * Take care! Do not use pointer after destroying parent polygon.
+     */
+    const G4ThreeVector* GetMinPoint( const EAxis axis ) const;
+    const G4ThreeVector* GetMaxPoint( const EAxis axis ) const;
 
-    virtual const G4ThreeVector* GetMaxPoint( const EAxis axis ) const;
-      // Returns pointer to maximum point along the specified axis.
-      // Take care! Do not use pointer after destroying parent polygon.
-
+    /**
+     * Returns the number of vertices in the polygon.
+     */
     inline std::size_t GetNumVertices() const;
+
+    /**
+     * Returns true if collection of vertices is empty.
+     */
     inline G4bool Empty() const;
   
-    virtual G4bool InFrontOf(const G4ClippablePolygon& other, EAxis axis) const;
-      // Decide if the polygon is in "front" of another when
-      // viewed along the specified axis. For our purposes here,
-      // it is sufficient to use the minimum extent of the
-      // polygon along the axis to determine this.
+    /**
+     * Decides if the polygon is in "front" of another when viewed along the
+     * specified 'axis'. For our purposes here, it is sufficient to use the
+     * minimum extent of the polygon along the axis to determine this.
+     */
+    G4bool InFrontOf(const G4ClippablePolygon& other, EAxis axis) const;
 
-    virtual G4bool BehindOf(const G4ClippablePolygon& other, EAxis axis) const;
-      // Decide if this polygon is behind another.
-      // Remarks in method "InFrontOf" are valid here too.
+    /**
+     * Decides if this polygon is behind another.
+     * Remarks in previous method are valid here too.
+     */
+    G4bool BehindOf(const G4ClippablePolygon& other, EAxis axis) const; 
 
-    virtual G4bool GetPlanerExtent( const G4ThreeVector& pointOnPlane, 
-                                    const G4ThreeVector& planeNormal,
-                                          G4double& min, G4double& max ) const;
-      // Get min/max distance in or out of a plane.
+    /**
+     * Gets min/max vertices distance in or out of a plane.
+     *  @param[in] pointOnPlane The point on the plane.
+     *  @param[in] planeNormal The normal vector to the plane.
+     *  @param[out] min The minimum distance from the plane.
+     *  @param[out] max The maximum distance from the plane.
+     *  @returns false if invalid polygon (no vertices).
+     */
+    G4bool GetPlanerExtent( const G4ThreeVector& pointOnPlane, 
+                            const G4ThreeVector& planeNormal,
+                                  G4double& min, G4double& max ) const;
 
-    protected:
+  private:
 
+    /**
+     * Clips 'pPolygon' according to 'pVoxelLimits', which must be only
+     * limited along one axis, and either the maximum along the axis must be
+     * +kInfinity, or the minimum -kInfinity.
+     *  @param[in] pPolygon The polygon to clip.
+     *  @param[out] outputPolygon The resulting clipped polygon.
+     *  @param[in] pVoxelLimit The Cartesian limits.
+     */
     void ClipToSimpleLimits( G4ThreeVectorList& pPolygon,
                              G4ThreeVectorList& outputPolygon,
-                       const G4VoxelLimits& pVoxelLimit  );
-      // pVoxelLimits must be only limited along one axis, and either
-      // the maximum along the axis must be +kInfinity, or the minimum
-      // -kInfinity
+                       const G4VoxelLimits& pVoxelLimit );
 
-    protected:
+  private:
 
     G4ThreeVectorList vertices;
     G4ThreeVector normal;

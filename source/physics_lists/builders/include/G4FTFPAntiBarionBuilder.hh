@@ -40,40 +40,14 @@
 
 #include "globals.hh"
 
-#include "G4HadronElasticProcess.hh"
-#include "G4VAntiBarionBuilder.hh"
-
-#include "G4TheoFSGenerator.hh"
-#include "G4GeneratorPrecompoundInterface.hh"
-#include "G4FTFModel.hh"
-#include "G4LundStringFragmentation.hh"
-#include "G4ExcitedStringDecay.hh"
-#include "G4QuasiElasticChannel.hh"
-
-#include "G4VCrossSectionDataSet.hh"
-#include "G4VComponentCrossSection.hh"
-
-class G4FTFPAntiBarionBuilder : public G4VAntiBarionBuilder
+class G4FTFPAntiBarionBuilder
 {
   public: 
-    G4FTFPAntiBarionBuilder(G4bool quasiElastic=false);
-    virtual ~G4FTFPAntiBarionBuilder();
+    G4FTFPAntiBarionBuilder();
+    ~G4FTFPAntiBarionBuilder();
 
-    virtual void Build(G4HadronElasticProcess *) final override {}
-    virtual void Build(G4HadronInelasticProcess * aP) final override;
-    
-    virtual void SetMinEnergy(G4double val) final override {theMin = val;}
-    virtual void SetMaxEnergy(G4double val) final override {theMax = val;}
-
-    using G4VAntiBarionBuilder::Build;  //Prevent compiler warning
-
-  private:
-    G4TheoFSGenerator * theModel;
-    G4VCrossSectionDataSet* theAntiNucleonData;
-    G4double theMin;
-    G4double theMax;
-
-};
+    void Build();
+ };
 
 #endif
 

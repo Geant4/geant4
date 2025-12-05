@@ -1,8 +1,46 @@
 # Category phys-ctor-hinelastic History
 
 See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
-which **must** added in reverse chronological order (newest at the top). It must **not**
-be used as a substitute for writing good git commit messages!
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
+
+-------------------------------------------------------------------------------
+
+## 2025-11-19 Vladimir Ivanchenko (phys-ctor-hinelastic-V11-03-06)
+- G4HadronPhysicsQGSP_BERT. G4HadronInelasticQBBC - return back cross section
+    G4BGGNucleonInelasticXS for protons, as it was in 11.3. There are problems
+    with G4ParticleInelasticXS for light targets Li, Be, B.
+
+## 2025-11-19 Gabriele Cosmo (phys-ctor-hinelastic-V11-03-05)
+- Removed redundant private dependency to G4had_gamma_nuclear in sources.cmake.
+
+## 2025-11-10 Vladimir Ivanchenko (phys-ctor-hinelastic-V11-03-04)
+- G4HadronPhysicsQGSP_BERT - restore class method as it was in 11.3 (problem
+    reported in CMSSW test build with candidate version).
+- G4HadronPhysicsQGSP_BIC, G4HadronInelasticQBBC - enable usage of R-files for
+    neutron XS cross sections for more accurate simulation in neutron resonance
+    region.
+- G4HadronPhysicsQGS_BIC - do not use QGS/Binary and FTF/Binary models for
+    pions and kaons.
+
+## 2025-10-30 Vladimir Ivanchenko (phys-ctor-hinelastic-V11-03-03)
+- Clean-up the family of QGSP based physics configuration, which starts from the
+  base class G4HadronicPhysicsQGSP_BERT and substitutes only part of configuration,
+  which is different for a given Physics. G4HadronicPhysicsQGSP_BIC_HP and
+  G4HadronicPhysicsQGSP_BIC_AllHP inherits from G4HadronicPhysicsQGSP_BIC. The size of
+  the classes significantly reduced due to removal of the duplicate code. In local tests
+  physics seems to be in statistical agreement with the previous version of the code.
+  In all classes of this family except G4HadronicPhysicsQGSP_BIC_AllHP
+  the G4PARTICLEXSDATA proton cross section is used.
+ - G4HadronPhysicsShielding - technical clean-up: removed unused headers, fixed
+  constructors and destructors.
+
+## 2025-08-02 Vladimir Ivanchenko (phys-ctor-hinelastic-V11-03-02)
+- G4HadronPhysicsQGSP_BERT_HP - minor code cleanup and format.
+- G4Hadron_PhysicsQGS_BIC, G4Hadron_PhysicsQGSP_BIC_HP, G4Hadron_PhysicsQGSP_BIC_AllHP
+    uniform instantiation of neutron and proton physics, enable NuDEX via hadronic
+    parameters for neutron capture in QGSP_BIC_HP and QGSP_BIC_AllHP,
+    code cleanup and format.
 
 ## 2025-06-13 Vladimir Ivanchenko (phys-ctor-hinelastic-V11-03-01)
 - G4HadrocPhysicsQBBC - disable General Neutron Process, which address problem reports

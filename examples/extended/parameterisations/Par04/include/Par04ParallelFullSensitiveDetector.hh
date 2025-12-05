@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file Par04ParallelFullSensitiveDetector.hh
+/// \brief Definition of the Par04ParallelFullSensitiveDetector class
+
 #ifndef PAR04PARALLELFULLSENSITIVEDETECTOR_HH
 #define PAR04PARALLELFULLSENSITIVEDETECTOR_HH
 

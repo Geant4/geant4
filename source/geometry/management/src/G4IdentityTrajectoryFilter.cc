@@ -23,9 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// Class G4IdentityTrajectoryFilter implementation
+// G4IdentityTrajectoryFilter implementation
 //
-// First version: Nov 19, 2002 - Jacek Generowicz
+// Author: Jacek Generowicz (CERN), 19.11.2002
 // ------------------------------------------------------------------------
 
 #include "G4IdentityTrajectoryFilter.hh"

@@ -23,10 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 /// \file Dicom2RunAction.cc
 /// \brief Implementation of the Dicom2RunAction class
-//
 
 #include "Dicom2RunAction.hh"
 

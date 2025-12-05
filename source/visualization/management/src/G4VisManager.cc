@@ -1953,7 +1953,7 @@ G4ThreadFunReturnType G4VisManager::G4VisSubThread(G4ThreadFunArgType p)
       // We have postponed this so that, for normal viewers like OGL, the
       // previous event(s) stay on screen until this new event comes
       // along.  For a file-writing viewer the geometry has to be drawn.
-      // See, for example, G4HepRepFileSceneHandler::ClearTransientStore.
+      // See, for example, G4FRSCENEHANDLER::ClearTransientStore.
       pVisManager->ClearTransientStoreIfMarked();
 
       // Now draw the event...
@@ -2232,7 +2232,7 @@ void G4VisManager::EndOfEventKernel (const G4Event* currentEvent)
     // We have postponed this so that, for normal viewers like OGL, the
     // previous event(s) stay on screen until this new event comes
     // along.  For a file-writing viewer the geometry has to be drawn.
-    // See, for example, G4HepRepFileSceneHandler::ClearTransientStore.
+    // See, for example, G4FRSCENEHANDLER::ClearTransientStore.
     ClearTransientStoreIfMarked();
 
     // Keep while post processing (i.e., drawing), relinquished in EndOfEventCleanup

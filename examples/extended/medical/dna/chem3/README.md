@@ -1,0 +1,89 @@
+\page ExampleChem3 Example chem3
+
+## General description
+  
+This example is provided by the Geant4-DNA collaboration.
+
+  These processes and models are further described at:
+  http://geant4-dna.org
+
+  Any report or published results obtained using the Geant4-DNA software shall 
+  cite the following Geant4-DNA collaboration publications:
+  Phys. Med. 31 (2015) 861-874
+  Med. Phys. 37 (2010) 4692-4708
+
+  How to activate chemistry code.
+  How to set minimum time step limits using TimeStepAction.
+
+## GEOMETRY DEFINITION
+ 
+  It is a simple sphere which represents a 'semi infinite' homogeneous medium.
+    
+  Two parameters define the geometry :
+   - the material of the sphere,
+   - the full size of the sphere.
+        
+  The default geometry is constructed in DetectorConstruction class, but all of 
+  the above parameters can be changed interactively via the commands defined in 
+  the DetectorMessenger class.
+
+## PHYSICS LIST
+  
+  The physics list is initialized in G4EmDNAChemistry, together with chemical
+  stage models configuration.
+ 	 
+## AN EVENT: THE PRIMARY GENERATOR
+ 
+  The primary kinematic consists of a single particle starting at the center of 
+  the sphere. The type of the particle and its energy are set in the 
+  PrimaryGeneratorAction class, and can be changed via the G4 build-in commands 
+  of G4ParticleGun class.
+  The chemistry module is triggered in the StackingAction class when all 
+  physical tracks have been processed.
+
+## HOW TO START ?
+
+  Run the example from build directory.
+
+  To run the example in batch mode
+
+      ./chem3 -mac beam.in
+
+  or
+
+      ./chem3
+
+  then the macro beam.in is processed by default
+
+  In interactive mode, run:
+
+      ./chem3 -gui
+
+  or
+
+      ./chem3 -gui gui.mac
+
+  The user interface will be launched. Continue using /run/beamOn 1 command.
+  By default, the vis.mac visualization macro is called.
+  The vis_vm,.mac macro is used only in the context of the G4DNA tutorial
+  hands-ons.
+
+## OUTPUT
+
+  Physics initialization and the defined reaction table are printed.
+  G4ITStepManager processes the chemical stage time step after time step.
+  Chemical reactions are printed.
+  In the GUI window a cummulative trajectory of the chemical species is drawn.
+
+  The functions in TimeStepAction show how to get species
+  ID, positions at each time step or in a chemical reaction
+## TIME EVOLUTION VISUALIZATION
+
+  User can start a visualization of the chemical track evolution in time and 
+  space using /control/execute movie.mac. (The movie.mac macro then executes
+  the movie_prep.mac, movie_chemistry.mac and movie_physics.mac macros.)
+  Note, that in default setup the simulation requires machine with 6 GB of RAM.
+  To lower memory requirements, either decrease energy of the incident electron
+  in prep.mac or/and shorten the simulation using SetEndTime setting in 
+  src/ActionInitialization.cc.
+  

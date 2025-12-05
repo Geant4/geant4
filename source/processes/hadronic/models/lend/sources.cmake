@@ -3,25 +3,25 @@
 # Define the Geant4 Module.
 geant4_add_module(G4had_lend
   PUBLIC_HEADERS
-    G4LENDCaptureCrossSection.hh
     G4LENDCapture.hh
+    G4LENDCaptureCrossSection.hh
     G4LENDCombinedCrossSection.hh
     G4LENDCombinedModel.hh
     G4LENDCrossSection.hh
-    G4LENDElasticCrossSection.hh
     G4LENDElastic.hh
-    G4LENDFissionCrossSection.hh
+    G4LENDElasticCrossSection.hh
     G4LENDFission.hh
+    G4LENDFissionCrossSection.hh
     G4LENDGammaCrossSection.hh
     G4LENDGammaModel.hh
     G4LENDHeader.hh
-    G4LENDInelasticCrossSection.hh
     G4LENDInelastic.hh
+    G4LENDInelasticCrossSection.hh
     G4LENDManager.hh
     G4LENDModel.hh
     G4LENDUsedTarget.hh
-    g4gidi_version.hh
     G4GIDI.hh
+    g4gidi_version.hh
     nf_Legendre.h
     nf_integration.h
     nf_buffer.h
@@ -36,16 +36,16 @@ geant4_add_module(G4had_lend
     GUPI.hpp
     HAPI.hpp
     LUPI.hpp
+    LUPI_dataBuffer.hpp
     LUPI_declareMacro.hpp
     LUPI_defines.hpp
-    LUPI_dataBuffer.hpp
-    MCGIDI_distributions.hpp
-    MCGIDI_string.hpp
-    MCGIDI_functions.hpp
-    MCGIDI_sampling.hpp
-    MCGIDI_vector.hpp
-    MCGIDI_headerSource.hpp
     MCGIDI.hpp
+    MCGIDI_distributions.hpp
+    MCGIDI_functions.hpp
+    MCGIDI_headerSource.hpp
+    MCGIDI_sampling.hpp
+    MCGIDI_string.hpp
+    MCGIDI_vector.hpp
     PoPI.hpp
     RISI.hpp
   SOURCES
@@ -53,6 +53,7 @@ geant4_add_module(G4had_lend
     G4LENDCaptureCrossSection.cc
     G4LENDCombinedCrossSection.cc
     G4LENDCombinedModel.cc
+    G4LENDCrossSection.cc
     G4LENDElastic.cc
     G4LENDElasticCrossSection.cc
     G4LENDFission.cc
@@ -61,16 +62,15 @@ geant4_add_module(G4had_lend
     G4LENDGammaModel.cc
     G4LENDInelastic.cc
     G4LENDInelasticCrossSection.cc
-    G4LENDUsedTarget.cc
-    G4LENDCrossSection.cc
     G4LENDManager.cc
     G4LENDModel.cc
+    G4LENDUsedTarget.cc
     nf_Legendre.c
     nf_Legendre_GaussianQuadrature.c
     nf_GnG_adaptiveQuadrature.c
+    nf_stringToDoubles.c
     nf_stringToInt32s.c
     nf_utilities.c
-    nf_stringToDoubles.c
     ptwX_core.c
     ptwX_misc.c
     ptwXY_binaryOperators.c
@@ -84,88 +84,90 @@ geant4_add_module(G4had_lend
     ptwXY_unitaryOperators.c
     statusMessageReporting.c
     pugixml.cc
+    G4GIDI.cc
     G4GIDI_misc.cc
     G4GIDI_target.cc
-    G4GIDI.cc
     GIDI_1dData.cc
+    GIDI_GNDS_fileType.cc
+    GIDI_GRIN_continuumGammas.cc
+    GIDI_Legendre1d.cc
     GIDI_URR_probabilityTables.cc
+    GIDI_URR_probabilityTables1d.cc
+    GIDI_XYs1d.cc
     GIDI_XYs2d.cc
     GIDI_XYs3d.cc
+    GIDI_Ys1d.cc
     GIDI_array3d.cc
+    GIDI_arrays.cc
+    GIDI_axes.cc
     GIDI_axis.cc
     GIDI_axisDomain.cc
-    GIDI_construction.cc
-    GIDI_delayedNeutron.cc
-    GIDI_group.cc
-    GIDI_exceptions.cc
-    GIDI_flux.cc
-    GIDI_grid.cc
-    GIDI_gridded2d.cc
-    GIDI_axes.cc
-    GIDI_regions1d.cc
-    GIDI_regions2d.cc
-    GIDI_styles.cc
-    GIDI_settings.cc
-    GIDI_settings_flux.cc
-    GIDI_settings_particle.cc
-    GIDI_suite.cc
-    GIDI_transportable.cc
-    GIDI_protare.cc
-    GIDI_misc.cc
-    GIDI_gridded3d.cc
-    GIDI_Legendre1d.cc
-    GIDI_URR_probabilityTables1d.cc
-    GIDI_Ys1d.cc
-    GIDI_arrays.cc
     GIDI_branching1d.cc
     GIDI_collapse.cc
     GIDI_constant1d.cc
-    GIDI_GRIN_continuumGammas.cc
-    GIDI_misc1d.cc
-    GIDI_sums.cc
-    GIDI_table.cc
-    GIDI_map.cc
-    GIDI_form.cc
-    GIDI_XYs1d.cc
-    GIDI_GNDS_fileType.cc
+    GIDI_construction.cc
+    GIDI_delayedNeutron.cc
     GIDI_discreteGamma2d.cc
     GIDI_distributions.cc
     GIDI_documentation_1_10.cc
     GIDI_doubleDifferentialCrossSection.cc
     GIDI_energyFunctions2d.cc
+    GIDI_exceptions.cc
     GIDI_externalFile.cc
     GIDI_externalFiles.cc
     GIDI_fissionEnergyReleased.cc
     GIDI_fissionFragmentData.cc
+    GIDI_flux.cc
+    GIDI_form.cc
+    GIDI_grid.cc
     GIDI_gridded1d.cc
-    GIDI_product.cc
+    GIDI_gridded2d.cc
+    GIDI_gridded3d.cc
+    GIDI_group.cc
     GIDI_isotropic2d.cc
+    GIDI_map.cc
+    GIDI_matrix.cc
+    GIDI_misc.cc
+    GIDI_misc1d.cc
     GIDI_outputChannel.cc
     GIDI_parseSuites.cc
-    GIDI_polynomial1d.cc
-    GIDI_primaryGamma2d.cc
-    GIDI_protareComposite.cc
-    GIDI_protareTNSL.cc
-    GIDI_recoil2d.cc
-    GIDI_reference1d.cc
-    GIDI_resonancesWithBackground1d.cc
-    GIDI_unspecified1d.cc
-    GIDI_xs_pdf_cdf1d.cc
     GIDI_particleInfo.cc
     GIDI_physicalQuantity.cc
+    GIDI_polynomial1d.cc
+    GIDI_primaryGamma2d.cc
+    GIDI_product.cc
+    GIDI_protare.cc
+    GIDI_protareComposite.cc
+    GIDI_styles.cc
+    GIDI_protareTNSL.cc
     GIDI_reaction.cc
-    GIDI_matrix.cc
-    GIDI_vector.cc
+    GIDI_recoil2d.cc
+    GIDI_reference1d.cc
+    GIDI_regions1d.cc
+    GIDI_regions2d.cc
+    GIDI_resonancesWithBackground1d.cc
+    GIDI_settings.cc
+    GIDI_settings_flux.cc
     GIDI_settings_group.cc
+    GIDI_settings_particle.cc
+    GIDI_suite.cc
+    GIDI_sums.cc
+    GIDI_table.cc
+    GIDI_targetInfo.cc
+    GIDI_transportable.cc
+    GIDI_unspecified1d.cc
+    GIDI_vector.cc
+    GIDI_xs_pdf_cdf1d.cc
+    GUPI_ancestry.cc
     GUPI_documentation.cc
     GUPI_entry.cc
     GUPI_suite.cc
     GUPI_text.cc
-    GUPI_ancestry.cc
     HAPI_Data.cc
     HAPI_Data_internal.cc
     HAPI_File.cc
     HAPI_HDFData.cc
+    HAPI_HDFDataManager.cc
     HAPI_HDFFile.cc
     HAPI_HDFNode.cc
     HAPI_Node.cc
@@ -174,48 +176,47 @@ geant4_add_module(G4had_lend
     HAPI_PugiXMLFile.cc
     HAPI_PugiXMLNode.cc
     HAPI_Text.cc
-    HAPI_HDFDataManager.cc
-    LUPI_misc.cc
-    LUPI_formatVersion.cc
     LUPI_argumentParser.cc
+    LUPI_file.cc
+    LUPI_formatVersion.cc
+    LUPI_misc.cc
     LUPI_statusMessageReporting.cc
     LUPI_times.cc
-    LUPI_file.cc
-    MCGIDI_delayedNeutron.cc
-    MCGIDI_domainHash.cc
-    MCGIDI_string.cc
-    MCGIDI_functions.cc
-    MCGIDI_settings.cc
-    MCGIDI_heatedCrossSections.cc
-    MCGIDI_nuclideGammaBranching.cc
-    MCGIDI_product.cc
-    MCGIDI_distributions.cc
-    MCGIDI_URR.cc
-    MCGIDI_outputChannel.cc
-    MCGIDI_misc.cc
-    MCGIDI_protare.cc
     MCGIDI_GRIN.cc
-    MCGIDI_reaction.cc
-    MCGIDI_protareTNSL.cc
+    MCGIDI_URR.cc
+    MCGIDI_delayedNeutron.cc
+    MCGIDI_distributions.cc
+    MCGIDI_domainHash.cc
+    MCGIDI_functions.cc
+    MCGIDI_heatedCrossSections.cc
+    MCGIDI_misc.cc
+    MCGIDI_nuclideGammaBranching.cc
+    MCGIDI_outputChannel.cc
+    MCGIDI_product.cc
+    MCGIDI_protare.cc
     MCGIDI_protareComposite.cc
+    MCGIDI_protareTNSL.cc
+    MCGIDI_reaction.cc
     MCGIDI_sampling.cc
+    MCGIDI_settings.cc
+    MCGIDI_string.cc
     PoPI_alias.cc
+    PoPI_baryon.cc
     PoPI_base.cc
+    PoPI_chemicalElement.cc
+    PoPI_database.cc
+    PoPI_decayData.cc
+    PoPI_gaugeBoson.cc
     PoPI_intId.cc
     PoPI_isotope.cc
+    PoPI_lepton.cc
     PoPI_misc.cc
     PoPI_nucleus.cc
     PoPI_nuclide.cc
     PoPI_nuclideGammaBranching.cc
-    PoPI_pq_suite.cc
-    PoPI_decayData.cc
-    PoPI_baryon.cc
-    PoPI_chemicalElement.cc
-    PoPI_database.cc
-    PoPI_gaugeBoson.cc
-    PoPI_lepton.cc
     PoPI_particle.cc
     PoPI_physicalQuantity.cc
+    PoPI_pq_suite.cc
     PoPI_unorthodox.cc
     RISI_read.cc)
 

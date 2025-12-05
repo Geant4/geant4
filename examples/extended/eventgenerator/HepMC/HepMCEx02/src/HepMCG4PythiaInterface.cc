@@ -23,10 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file eventgenerator/HepMC/HepMCEx01/src/HepMCG4PythiaInterface.cc
+/// \file HepMCG4PythiaInterface.cc
 /// \brief Implementation of the HepMCG4PythiaInterface class
-//
-//
 
 #ifdef G4LIB_USE_PYTHIA
 

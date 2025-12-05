@@ -77,7 +77,10 @@ G4TriangularFacet::G4TriangularFacet (const G4ThreeVector& vt0,
 
   G4ThreeVector E1xE2 = fE1.cross(fE2);
   fArea = 0.5 * E1xE2.mag();
-  for (G4int i = 0; i < 3; ++i) fIndices[i] = -1;
+  for (G4int i = 0; i < 3; ++i)
+  {
+    fIndices[i] = -1;
+  }
 
   fIsDefined = true;
   G4double delta = kCarTolerance; // Set tolerance for checking
@@ -146,7 +149,10 @@ G4TriangularFacet::G4TriangularFacet ()
   SetVertex(0, zero);
   SetVertex(1, zero);
   SetVertex(2, zero);
-  for (G4int i = 0; i < 3; ++i) fIndices[i] = -1;
+  for (G4int i = 0; i < 3; ++i)
+  {
+    fIndices[i] = -1;
+  }
   fIsDefined = false;
   fSurfaceNormal.set(0,0,0);
   fA = fB = fC = 0;
@@ -173,7 +179,10 @@ void G4TriangularFacet::CopyFrom (const G4TriangularFacet& rhs)
   if (fIndices[0] < 0 && fVertices == nullptr)
   {
     fVertices = new vector<G4ThreeVector>(3);
-    for (G4int i = 0; i < 3; ++i) (*fVertices)[i] = (*rhs.fVertices)[i];
+    for (G4int i = 0; i < 3; ++i)
+    {
+      (*fVertices)[i] = (*rhs.fVertices)[i];
+    }
   }
 }
 
@@ -446,14 +455,14 @@ G4ThreeVector G4TriangularFacet::Distance (const G4ThreeVector& p)
   // Calculation from u = D + q*fE1 + t*fE2 is less efficient, but appears
   // more robust.
   //
-  if (fSqrDist < 0.0) fSqrDist = 0.;
+  if (fSqrDist < 0.0) { fSqrDist = 0.; }
   G4ThreeVector u = D + q*fE1 + t*fE2;
   G4double u2 = u.mag2();
   //
   // The following (part of the roundoff error check) is from Oliver Merle'q
   // updates.
   //
-  if (fSqrDist > u2) fSqrDist = u2;
+  if (fSqrDist > u2) { fSqrDist = u2; }
 
   return u;
 }
@@ -529,10 +538,19 @@ G4double G4TriangularFacet::Distance (const G4ThreeVector& p,
       // Point p is very close to triangle.  Check if it's on the wrong side,
       // in which case return distance of 0.0 otherwise .
       //
-      if (wrongSide) dist = 0.0;
-      else dist = dist1;
+      if (wrongSide)
+      {
+        dist = 0.0;
+      }
+      else
+      {
+        dist = dist1;
+      }
     }
-    else if (!wrongSide) dist = dist1;
+    else if (!wrongSide)
+    {
+      dist = dist1;
+    }
   }
   return dist;
 }
@@ -548,9 +566,9 @@ G4double G4TriangularFacet::Extent (const G4ThreeVector axis)
 {
   G4double ss = GetVertex(0).dot(axis);
   G4double sp = GetVertex(1).dot(axis);
-  if (sp > ss) ss = sp;
+  if (sp > ss) { ss = sp; }
   sp = GetVertex(2).dot(axis);
-  if (sp > ss) ss = sp;
+  if (sp > ss) { ss = sp; }
   return ss;
 }
 
@@ -641,18 +659,16 @@ G4bool G4TriangularFacet::Intersect (const G4ThreeVector& p,
       normal = fSurfaceNormal;
       return true;
     }
-    else
-    {
-      //
-      // We're close to the surface containing the triangle, but sufficiently
-      // far from the triangle, and on the wrong side compared to the directions
-      // of the surface normal and v.  There is no intersection.
-      //
-      distance = kInfinity;
-      distFromSurface = kInfinity;
-      normal.set(0,0,0);
-      return false;
-    }
+    
+    //
+    // We're close to the surface containing the triangle, but sufficiently
+    // far from the triangle, and on the wrong side compared to the directions
+    // of the surface normal and v.  There is no intersection.
+    //
+    distance = kInfinity;
+    distFromSurface = kInfinity;
+    normal.set(0,0,0);
+    return false;
   }
   if (w < dirTolerance && w > -dirTolerance)
   {
@@ -700,32 +716,25 @@ G4bool G4TriangularFacet::Intersect (const G4ThreeVector& p,
         normal.set(0,0,0);
         return false;
       }
-      else
+      
+      G4double dnormDist = normDist1 - normDist0;
+      if (fabs(dnormDist) < DBL_EPSILON)
       {
-        G4double dnormDist = normDist1 - normDist0;
-        if (fabs(dnormDist) < DBL_EPSILON)
-        {
-          distance = s0;
-          normal   = fSurfaceNormal;
-          if (!outgoing) distFromSurface = -distFromSurface;
-          return true;
-        }
-        else
-        {
-          distance = s0 - normDist0*(s1-s0)/dnormDist;
-          normal   = fSurfaceNormal;
-          if (!outgoing) distFromSurface = -distFromSurface;
-          return true;
-        }
+        distance = s0;
+        normal   = fSurfaceNormal;
+        if (!outgoing) { distFromSurface = -distFromSurface; }
+        return true;
       }
+      
+      distance = s0 - normDist0*(s1-s0)/dnormDist;
+      normal   = fSurfaceNormal;
+      if (!outgoing) { distFromSurface = -distFromSurface; }
+      return true;
     }
-    else
-    {
-      distance = kInfinity;
-      distFromSurface = kInfinity;
-      normal.set(0,0,0);
-      return false;
-    }
+    distance = kInfinity;
+    distFromSurface = kInfinity;
+    normal.set(0,0,0);
+    return false;
   }
   //
   //
@@ -756,15 +765,13 @@ G4bool G4TriangularFacet::Intersect (const G4ThreeVector& p,
     normal.set(0,0,0);
     return false;
   }
-  else
-  {
-    //
-    // There is an intersection.  Now we only need to set the surface normal.
-    //
-    normal = fSurfaceNormal;
-    if (!outgoing) distFromSurface = -distFromSurface;
-    return true;
-  }
+  
+  //
+  // There is an intersection.  Now we only need to set the surface normal.
+  //
+  normal = fSurfaceNormal;
+  if (!outgoing) { distFromSurface = -distFromSurface; }
+  return true;
 }
 
 ////////////////////////////////////////////////////////////////////////

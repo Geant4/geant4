@@ -52,7 +52,6 @@ public:
         m_out << "toolx::raxml::load_file :"
               << " reader not found for " << tools::sout(_tag_name)
               << std::endl;
-        //m_objects.clear(); //keep already loaded objects.
         return false;
       } else {
         tools::raxml_out ro = rder(*_tree,m_out,m_verbose,m_read_tag);

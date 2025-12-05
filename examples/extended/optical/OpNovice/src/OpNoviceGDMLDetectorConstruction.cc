@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file OpNoviceGDMLDetectorConstruction.cc
+/// \brief Implementation of the OpNoviceGDMLDetectorConstruction class
 
 #include "OpNoviceGDMLDetectorConstruction.hh"
 

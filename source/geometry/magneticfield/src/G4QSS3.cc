@@ -25,7 +25,7 @@
 //
 // QSS3 implementation
 //
-// Author: Lucio Santi (Univ. Buenos Aires) - 2020-2021
+// Author: Lucio Santi (Univ. Buenos Aires), 2020-2021
 // --------------------------------------------------------------------
 
 #include "G4QSS3.hh"

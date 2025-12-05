@@ -23,10 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file medical/GammaTherapy/include/TargetSD.hh
+/// \file TargetSD.hh
 /// \brief Definition of the TargetSD class
-//
+
 #ifndef TargetSD_h
 #define TargetSD_h 1
 

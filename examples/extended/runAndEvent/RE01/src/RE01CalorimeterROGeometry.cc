@@ -23,10 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file runAndEvent/RE01/src/RE01CalorimeterROGeometry.cc
+/// \file RE01CalorimeterROGeometry.cc
 /// \brief Implementation of the RE01CalorimeterROGeometry class
-//
-//
 
 #include "RE01CalorimeterROGeometry.hh"
 

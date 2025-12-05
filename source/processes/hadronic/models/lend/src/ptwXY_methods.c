@@ -724,7 +724,7 @@ nfu_status ptwXY_scaleAndOffsetDomainWith_ptwXYs( statusMessageReporting *smr, p
     ptwXYPoint *p1;
     nfu_status status1, status2;
     double offsetXYMin, offsetXYMax, slopeXYMin, slopeXYMax, domainMin, domainMax, domainMinXY, domainMaxXY;
-    ptwXYPoints *ptwXY2, *offsetXY2 = NULL, *slopeXY2 = NULL;
+    ptwXYPoints *ptwXY2 = NULL, *offsetXY2 = NULL, *slopeXY2 = NULL;
     ptwXYPoints *mulXY = NULL, *addXY = NULL;
 
     if( ptwXY_simpleCoalescePoints( smr, ptwXY ) != nfu_Okay ) {
@@ -811,9 +811,9 @@ nfu_status ptwXY_scaleAndOffsetDomainWith_ptwXYs( statusMessageReporting *smr, p
     ptwXY_copy( smr, ptwXY, addXY );
 
 TheEnd:
-    ptwXY_free( offsetXY2 );
-    ptwXY_free( slopeXY2 );
-    ptwXY_free( ptwXY2 );
+    if( offsetXY2 != offsetXY ) ptwXY_free( offsetXY2 );
+    if( slopeXY2 != slopeXY ) ptwXY_free( slopeXY2 );
+    if( ptwXY2 != ptwXY ) ptwXY_free( ptwXY2 );
     ptwXY_free( mulXY );
     ptwXY_free( addXY );
 

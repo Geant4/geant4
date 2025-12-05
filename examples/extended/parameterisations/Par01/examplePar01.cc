@@ -23,12 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file Par01/examplePar01.cc
-/// \brief Main program of the Par01 example
-//
-//
-//
-//
+/// \file examplePar01.cc
+/// \brief Main program of the parameterisations/Par01 example
+
 // --------------------------------------------------------------
 //                     Geant4 - examplePar01
 // --------------------------------------------------------------

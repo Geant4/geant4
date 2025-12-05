@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file RunMerger.cc
+/// \brief Implementation of the RunMerger class
+
 #include "RunMerger.hh"
 
 #include "Run.hh"

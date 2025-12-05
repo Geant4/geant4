@@ -23,10 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
+//
+// Modification: 13.08.2025 V.Ivanchenko rewrite
 
 #ifndef G4StatMFMacroCanonical_h
 #define G4StatMFMacroCanonical_h 1
@@ -50,73 +50,43 @@ class G4StatMFMacroCanonical : public G4VStatMFEnsemble {
 
 public:
 
-    // G4StatMFMacroCanonical class must be initialized with a G4Fragment.
-    G4StatMFMacroCanonical(G4Fragment const & theFragment);
+  G4StatMFMacroCanonical();
 
-    // destructor
-    ~G4StatMFMacroCanonical();
+  ~G4StatMFMacroCanonical() override;
 
-private:
-    // default constructor
-    G4StatMFMacroCanonical() {};
+  // Initialise for a given G4Fragment
+  void Initialise(const G4Fragment& theFragment) override;
 
+  // Choice of the channel
+  G4StatMFChannel* ChooseAandZ(const G4Fragment &theFragment) override;
 
-    // copy constructor
-    G4StatMFMacroCanonical(const G4StatMFMacroCanonical &) : G4VStatMFEnsemble() {};
-
-
-    // operators
-    G4StatMFMacroCanonical & operator=(const G4StatMFMacroCanonical & right);
-    G4bool operator==(const G4StatMFMacroCanonical & right) const;
-    G4bool operator!=(const G4StatMFMacroCanonical & right) const;
-
-
-public:
-
-    // Choice of fragment atomic numbers and charges.
-    G4StatMFChannel * ChooseAandZ(const G4Fragment &theFragment);
+  G4StatMFMacroCanonical(const G4StatMFMacroCanonical&) = delete;
+  G4StatMFMacroCanonical& operator=(const G4StatMFMacroCanonical& right) = delete;
+  G4bool operator==(const G4StatMFMacroCanonical& right) const = delete;
+  G4bool operator!=(const G4StatMFMacroCanonical& right) const = delete;
 
 private:
 
-    // Initailization method
-    void Initialize(const G4Fragment & theFragment);
-
-    //
-    void CalculateTemperature(const G4Fragment & theFragment);
-
-    // Determines fragments multiplicities and compute total fragment multiplicity
-    G4double ChooseA(G4int A, std::vector<G4int> & ANumbers);
+  // Determines fragments multiplicities and compute total fragment multiplicity
+  G4double ChooseA(G4int A, std::vector<G4int>& ANumbers);
 	
-    // Samples charges of fragments
-    G4StatMFChannel * ChooseZ(G4int & Z, 
-			      std::vector<G4int> & FragmentsA);
+  // Samples charges of fragments
+  G4StatMFChannel* ChooseZ(G4int Z, std::vector<G4int>& FragmentsA);
 
-    // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-
-    // Chemical Potential \mu
-    G4double _ChemPotentialMu;
-
-    // Chemical Potential \nu
-    G4double _ChemPotentialNu;
-
-
-    // Parameter Kappa
-    G4double _Kappa;
-
-    // Clusters
-    std::vector<G4VStatMFMacroCluster*> _theClusters;
-
-  struct DeleteFragment 
-  {
-    template<typename T>
-    void operator()(const T* ptr) const
-    {
-      delete ptr;
-    }
-  };
+  G4StatMFMacroTemperature* theTemp{nullptr};
   
+  // Chemical Potential \mu
+  G4double fChemPotentialMu{0.0};
 
+  // Chemical Potential \nu
+  G4double fChemPotentialNu{0.0};
+
+  // Parameter Kappa
+  G4double fKappa{0.0};
+
+  // Clusters
+  std::vector<G4VStatMFMacroCluster*> fClusters;
+  std::vector<G4double> fAcumMultiplicity;
 };
 
 #endif

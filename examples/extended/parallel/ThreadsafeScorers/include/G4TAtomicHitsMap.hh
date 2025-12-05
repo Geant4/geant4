@@ -23,12 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file parallel/ThreadsafeScorers/include/G4TAtomicHitsMap.hh
+/// \file G4TAtomicHitsMap.hh
 /// \brief Definition of the G4TAtomicHitsMap class
-//
-//
-//
-//
+///
 /// This is an implementation of G4THitsMap<T> where the underlying
 ///     type is G4atomic<T>, not just T. A static assert is provided to
 ///     ensure that T is fundamental. This class should be used in lieu
@@ -55,15 +52,15 @@
 #include <map>
 #include <type_traits>
 
-// class description:
-//
-//  This is a template class of hits map and parametrized by
-// The concrete class of G4VHit. This is a uniform collection for
-// a particular concrete hit class objects.
-//  An intermediate layer class G4HitsMap appeared in this
-// header file is used just for G4Allocator, because G4Allocator
-// cannot be instansiated with a template class. Thus G4HitsMap
-// class MUST NOT be directly used by the user.
+/// class description:
+///
+///  This is a template class of hits map and parametrized by
+/// The concrete class of G4VHit. This is a uniform collection for
+/// a particular concrete hit class objects.
+///  An intermediate layer class G4HitsMap appeared in this
+/// header file is used just for G4Allocator, because G4Allocator
+/// cannot be instansiated with a template class. Thus G4HitsMap
+/// class MUST NOT be directly used by the user.
 
 template<typename T>
 class G4TAtomicHitsMap : public G4VHitsCollection

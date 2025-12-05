@@ -23,11 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file optical/LXe/LXe.cc
+/// \file LXe.cc
 /// \brief Main program of the optical/LXe example
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "FTFP_BERT.hh"
 #include "LXeActionInitialization.hh"

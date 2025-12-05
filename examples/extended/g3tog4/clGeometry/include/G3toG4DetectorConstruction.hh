@@ -23,11 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file g3tog4/clGeometry/include/G3toG4DetectorConstruction.hh
+/// \file G3toG4DetectorConstruction.hh
 /// \brief Definition of the G3toG4DetectorConstruction class
-//
-//
-//
+
 #ifndef G3toG4DetectorConstruction_h
 #define G3toG4DetectorConstruction_h 1
 

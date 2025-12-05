@@ -23,9 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// class G4VPVDivisionFactory Implementation file
+// G4VPVDivisionFactory Implementation file
 //
-// Author: Ivana Hrivnacova, 4.5.2004
+// Author: Ivana Hrivnacova (IJCLab, Orsay), 04.05.2004
 // ------------------------------------------------------------------------
 
 #include "G4VPVDivisionFactory.hh"

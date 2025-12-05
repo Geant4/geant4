@@ -50,7 +50,7 @@ PrimaryGeneratorSourceGRASCSV* PrimaryGeneratorAction::fPrimarySource = nullptr;
 PrimaryGeneratorAction::PrimaryGeneratorAction()
 {
   G4AutoLock lock(&PrimaryGeneratorMutex);
-  fParticleGun = new G4GeneralParticleSource();
+  fpGPS = new G4GeneralParticleSource();
 
   fFirstEvent = true;
   fGunMessenger = new PrimaryGeneratorMessenger(this);
@@ -61,7 +61,8 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
 PrimaryGeneratorAction::~PrimaryGeneratorAction()
 {
   G4AutoLock lock(&PrimaryGeneratorMutex);
-  delete fParticleGun;
+  delete fpGPS;
+  delete fpParticleGun;
   if (fPrimarySource != nullptr) {
     delete fPrimarySource;
     fPrimarySource = nullptr;
@@ -82,15 +83,15 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
       fFirstEvent = false;
     }
 
-    auto* fpParticleGun = new G4ParticleGun();
+    fpParticleGun = new G4ParticleGun();
 
     // Get a new primary particle.
     Primary* primary = fPrimarySource->GetPrimary();
     if (primary != nullptr) {
       G4String particleName = primary->GetName();
-      G4ThreeVector pos = primary->GetPosition();
-      G4ThreeVector momdir = primary->GetMomentumDirection();
-      G4double energy = primary->GetEnergy();
+      const G4ThreeVector pos = primary->GetPosition();
+      const G4ThreeVector momdir = primary->GetMomentumDirection();
+      const G4double energy = primary->GetEnergy();
       G4ParticleDefinition* particle = primary->GetParticleDefinition();
       // primary->Print();  // print of the data of the primary particle
 
@@ -109,7 +110,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
       G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
       G4ParticleDefinition* particle = pTable->FindParticle("geantino");
       fpParticleGun->SetParticleDefinition(particle);
-      G4ThreeVector pos = G4ThreeVector(kInfinity, kInfinity, kInfinity);
+      const auto pos = G4ThreeVector(kInfinity, kInfinity, kInfinity);
       fpParticleGun->SetParticlePosition(pos);
       fpParticleGun->SetParticleEnergy(0);
       fpParticleGun->SetParticleMomentumDirection(pos);
@@ -117,7 +118,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     }
   }
   else {
-    fParticleGun->GeneratePrimaryVertex(anEvent);
+    fpGPS->GeneratePrimaryVertex(anEvent);
   }
 }
 

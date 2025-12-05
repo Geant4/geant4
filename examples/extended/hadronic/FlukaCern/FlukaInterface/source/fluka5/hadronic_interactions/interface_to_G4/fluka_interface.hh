@@ -30,15 +30,17 @@
 // (G4VCrossSectionDataSet for XS + G4HadronicInteraction for FS).
 //
 // FLUKA inelastic hadron-nucleus interactions:
-// Hadron-NUCLEON interaction models are based on resonance production and decay below a few GeV,
-// and on the Dual Parton model above.
+// Hadron-NUCLEON interaction models are based on resonance production and
+// decay below a few GeV, and on the Dual Parton model above.
 // Hadron-NUCLEUS interactions: the PEANUT package includes
-// a detailed Generalised Intra-Nuclear Cascade (GINC) and a preequilibrium stage,
-// followed by equilibrium processes: evaporation, fission, Fermi break-up, gamma deexcitation.
-// A. Ferrari and P. Sala, “The Physics of High Energy Reactions,” in Proc. Workshop on Nuclear
-// Reaction Data and Nuclear Reactors Physics, Design and Safety, p. 424, World Scientiﬁc, 1998. A.
-// Ferrari and P. Sala, “Nuclear reactions in Monte Carlo codes,” Radiat. Prot. Dosimetry, vol. 99,
-// no. 1-4, pp. 29–38, 2002.
+// a detailed Generalised Intra-Nuclear Cascade (GINC) and a preequilibrium
+// stage, followed by equilibrium processes: evaporation, fission, Fermi
+// break-up, gamma deexcitation.
+// A. Ferrari and P. Sala, The Physics of High Energy Reactions, in Proc.
+// Workshop on Nuclear Reaction Data and Nuclear Reactors Physics, Design and
+// Safety, p. 424, World Scientific, 1998. A. Ferrari and P. Sala, Nuclear
+// reactions in Monte Carlo codes, Radiat. Prot. Dosimetry, vol. 99, no. 1-4,
+// pp. 29-38, 2002.
 //
 //
 // NB 1: The user can choose, directly in G4 client code, to:
@@ -69,8 +71,10 @@ class G4HadFinalState;
 namespace fluka_interface
 {
 
-void initialize(bool activateCoalescence = false, G4bool activateHeavyFragmentsEvaporation = false);
-G4double computeInelasticScatteringXS(const G4DynamicParticle* projectile, const G4int targetZ,
+void initialize(G4bool activateCoalescence = false,
+                G4bool activateHeavyFragmentsEvaporation = false);
+G4double computeInelasticScatteringXS(const G4DynamicParticle* projectile,
+                                      const G4int targetZ,
                                       const G4int targetA = 0);
 void setNuclearInelasticFinalState(G4HadFinalState* const finalState,
                                    const G4HadProjectile& projectile,
@@ -79,8 +83,9 @@ void setNuclearInelasticFinalState(G4HadFinalState* const finalState,
 // HELPERS
 void updateFLUKAProjectileId(G4int& kproj);
 void transformNonSupportedHadrons(G4int& kproj, G4double& ekproj);
-std::pair<G4double, G4double> getKineticEnergyAndMomentum(const G4double ekproj, const G4int kproj);
+std::pair<G4double, G4double> getKineticEnergyAndMomentum(const G4double ekproj,
+                                                          const G4int kproj);
 }  // namespace fluka_interface
 
-#  endif
+#endif
 #endif  // G4_USE_FLUKA

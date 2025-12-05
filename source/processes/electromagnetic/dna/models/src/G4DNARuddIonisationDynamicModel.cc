@@ -35,14 +35,17 @@
 #include "G4VAtomDeexcitation.hh"
 #include "G4UAtomicDeexcitation.hh"
 #include "G4LossTableManager.hh"
+#include "G4EmCorrections.hh"
 #include "G4NistManager.hh"
 #include "G4DNAChemistryManager.hh"
 #include "G4DNAMolecularMaterial.hh"
-#include "G4LogLogInterpolation.hh"
+
 #include "G4ProductionCutsTable.hh"
 
 #include "G4DNAGenericIonsManager.hh"
-#include "G4DNACrossSectionDataSet.hh"
+#include "G4MatUtils.hh"
+#include "G4ExtendedPhysicsVector.hh"
+#include "G4EmParameters.hh"
 #include "G4NistManager.hh"
 
 #include "G4IonTable.hh"
@@ -57,9 +60,11 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4DNACrossSectionDataSet* G4DNARuddIonisationDynamicModel::xsdata_hydrogen = nullptr;
-G4DNACrossSectionDataSet* G4DNARuddIonisationDynamicModel::xsdata_helium = nullptr;
-G4DNACrossSectionDataSet* G4DNARuddIonisationDynamicModel::xsdata_p = nullptr;
+G4ExtendedPhysicsVector* G4DNARuddIonisationDynamicModel::xsdata_alpha = nullptr;
+G4ExtendedPhysicsVector* G4DNARuddIonisationDynamicModel::xsdata_alphap = nullptr;
+G4ExtendedPhysicsVector* G4DNARuddIonisationDynamicModel::xsdata_hydrogen = nullptr;
+G4ExtendedPhysicsVector* G4DNARuddIonisationDynamicModel::xsdata_helium = nullptr;
+G4ExtendedPhysicsVector* G4DNARuddIonisationDynamicModel::xsdata_p = nullptr;
 const std::vector<G4double>* G4DNARuddIonisationDynamicModel::fpWaterDensity = nullptr;
 
 namespace
@@ -79,6 +84,7 @@ G4DNARuddIonisationDynamicModel::G4DNARuddIonisationDynamicModel(const G4Particl
                                                                  const G4String& nam)
   : G4VEmModel(nam)
 {
+  fEmCorrections = G4LossTableManager::Instance()->EmCorrections();
   fGpow = G4Pow::GetInstance();
   fLowestEnergy = 100*CLHEP::eV;
   fAbsorptionEnergy = 50*CLHEP::eV;
@@ -100,6 +106,8 @@ G4DNARuddIonisationDynamicModel::G4DNARuddIonisationDynamicModel(const G4Particl
 G4DNARuddIonisationDynamicModel::~G4DNARuddIonisationDynamicModel()
 {  
   if (isFirst) {
+    delete xsdata_alpha;
+    delete xsdata_alphap;
     delete xsdata_p;
     delete xsdata_hydrogen;
     delete xsdata_helium;
@@ -111,17 +119,27 @@ G4DNARuddIonisationDynamicModel::~G4DNARuddIonisationDynamicModel()
 void G4DNARuddIonisationDynamicModel::LoadData()
 {
   // initialisation of static data once
-  G4String filename = "dna/sigma_ionisation_p_rudd";
-  xsdata_p = new G4DNACrossSectionDataSet(new G4LogLogInterpolation, CLHEP::eV, scaleFactor);
-  xsdata_p->LoadData(filename);
+  const G4String& dirpath = G4EmParameters::Instance()->GetDirLEDATA();
 
-  filename = "dna/sigma_ionisation_h_rudd";
-  xsdata_hydrogen = new G4DNACrossSectionDataSet(new G4LogLogInterpolation, CLHEP::eV, scaleFactor);
-  xsdata_hydrogen->LoadData(filename);
+  G4String filename = "dna/sigma_ionisation_p_rudd.dat";
+  xsdata_p =
+    G4MatUtils::BuildExtendedVector(dirpath, filename, 5, 645, CLHEP::eV, scaleFactor);
 
-  filename = "dna/sigma_ionisation_he_rudd";
-  xsdata_helium = new G4DNACrossSectionDataSet(new G4LogLogInterpolation, CLHEP::eV, scaleFactor);
-  xsdata_helium->LoadData(filename);
+  filename = "dna/sigma_ionisation_alphaplusplus_rudd.dat";
+  xsdata_alpha =
+    G4MatUtils::BuildExtendedVector(dirpath, filename, 5, 540, CLHEP::eV, scaleFactor);
+
+  filename = "dna/sigma_ionisation_alphaplus_rudd.dat";
+  xsdata_alphap =
+    G4MatUtils::BuildExtendedVector(dirpath, filename, 5, 540, CLHEP::eV, scaleFactor);
+
+  filename = "dna/sigma_ionisation_h_rudd.dat";
+  xsdata_hydrogen =
+    G4MatUtils::BuildExtendedVector(dirpath, filename, 5, 600, CLHEP::eV, scaleFactor);
+
+  filename = "dna/sigma_ionisation_he_rudd.dat";
+  xsdata_helium =
+    G4MatUtils::BuildExtendedVector(dirpath, filename, 5, 540, CLHEP::eV, scaleFactor);
   
   // to avoid possible threading problem fill this vector only once
   auto water = G4NistManager::Instance()->FindMaterial("G4_WATER");
@@ -168,6 +186,7 @@ void G4DNARuddIonisationDynamicModel::Initialise(const G4ParticleDefinition* p,
       fLowestEnergy = 1*CLHEP::keV;
     } else if (pname == "alpha+") {
       isHelium = true;
+      xsdata = xsdata_alphap;
       // The following values are provided by M. Dingfelder (priv. comm)
       slaterEffectiveCharge[0]=2.0;
       slaterEffectiveCharge[1]=2.0;
@@ -175,16 +194,21 @@ void G4DNARuddIonisationDynamicModel::Initialise(const G4ParticleDefinition* p,
       sCoefficient[0]=0.7;
       sCoefficient[1]=0.15;
       sCoefficient[2]=0.15;
+    } else if (pname == "alpha") {
+      isHelium = true;
+      xsdata = xsdata_alpha;
     } else if (pname == "hydrogen") {
       xsdata = xsdata_hydrogen;
+    } else if (pname != "proton") {
+      isIon = true;
     }
+    if (isHelium) { fLowestEnergy = 1*CLHEP::keV; }
 
     // defined stationary mode
     statCode = G4EmParameters::Instance()->DNAStationary();
 
     // initialise atomic de-excitation
-    if (!statCode)
-      fAtomDeexcitation = G4LossTableManager::Instance()->AtomDeexcitation();
+    fAtomDeexcitation = G4LossTableManager::Instance()->AtomDeexcitation();
 
     // chemistry
     auto chem = G4DNAChemistryManager::Instance();
@@ -192,7 +216,7 @@ void G4DNARuddIonisationDynamicModel::Initialise(const G4ParticleDefinition* p,
       fChemistry = chem;
     }
 
-    InitialiseIntegrator(0.1, 0.25, 1.05, 1*CLHEP::eV, 0.2*CLHEP::eV, 10*CLHEP::keV);
+    InitialiseIntegrator(0.1, 0.25, 1.05, 4*CLHEP::eV, 0.2*CLHEP::eV, 10*CLHEP::keV);
 
     if (verbose > 0) {
       G4cout << "### G4DNARuddIonisationDynamicModel::Initialise(..) "
@@ -207,7 +231,10 @@ void G4DNARuddIonisationDynamicModel::SetParticle(const G4ParticleDefinition* p)
 {
   fParticle = p;
   fMass = p->GetPDGMass();
-  fMassRate = CLHEP::proton_mass_c2/fMass; 
+  if (isIon) { 
+    fMassRate = CLHEP::proton_mass_c2/fMass;
+    fMass = CLHEP::proton_mass_c2;
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -235,19 +262,17 @@ G4DNARuddIonisationDynamicModel::CrossSectionPerVolume(const G4Material* materia
 
   // ion may be different
   if (fParticle != part) { SetParticle(part); }
-  G4double q = fTrack->GetDynamicParticle()->GetCharge()*inveplus;
 
   // cross section for scaled energy
   G4double e = kinE*fMassRate;
 
-  auto xs = xsdata;
-  if (0.0 == q) { xs = isHelium ? xsdata_helium : xsdata_hydrogen; } 
-  
-  G4double sigma = (e > fLowestEnergy) ? xs->FindValue(e)
-    : xs->FindValue(fLowestEnergy) * e / fLowestEnergy;
+  G4double sigma = (e > fLowestEnergy) ? xsdata->LogLogValue(e, idx)
+    : xsdata->LogLogValue(fLowestEnergy, idx) * e / fLowestEnergy;
 
   sigma *= density;
-  if (q > 1.5) { sigma *= q * q; }
+  if (isIon) {
+    sigma *= fEmCorrections->EffectiveChargeSquareRatio(part, material, kinE);
+  }
 
   if (verbose > 1) {
     G4cout << "G4DNARuddIonisationDynamicModel for " << part->GetParticleName() 
@@ -323,7 +348,11 @@ G4DNARuddIonisationDynamicModel::SampleSecondaries(std::vector<G4DynamicParticle
 	   << G4endl;
   }
   scatteredEnergy = std::max(scatteredEnergy, 0.0);
-  
+  /*
+  G4cout << "Eprim(keV)=" << kinE/CLHEP::keV << " Efin(keV)=" << scatteredEnergy/CLHEP::keV
+	 << " Esec(keV)=" << esec/CLHEP::keV << " Exc(keV)=" << exc/CLHEP::keV
+	 << " tolerance(keV)=" << tolerance/CLHEP::keV << G4endl; 
+  */
   // projectile
   if (!statCode) {
     fParticleChangeForGamma->SetProposedKineticEnergy(scatteredEnergy);
@@ -347,20 +376,7 @@ G4DNARuddIonisationDynamicModel::SampleSecondaries(std::vector<G4DynamicParticle
 
 G4int G4DNARuddIonisationDynamicModel::SelectShell()
 {
-  G4double sum = 0.0;
-  G4double xs;
-  for (G4int i=0; i<5; ++i) {
-    auto ptr = xsdata->GetComponent(i);
-    xs = (fScaledEnergy > fLowestEnergy) ? ptr->FindValue(fScaledEnergy)
-      : ptr->FindValue(fLowestEnergy)*fScaledEnergy/fLowestEnergy;
-    sum += xs;
-    fTemp[i] = sum;
-  }
-  sum *= G4UniformRand();
-  for (G4int i=0; i<5; ++i) {
-    if (sum <= fTemp[i]) { return i; }
-  }
-  return 0;
+  return xsdata->SampleReactionChannel(fScaledEnergy, G4UniformRand(), idx);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -369,7 +385,7 @@ G4double
 G4DNARuddIonisationDynamicModel::MaxEnergy()
 {
   // kinematic limit
-  G4double tau = fScaledEnergy/CLHEP::proton_mass_c2;
+  G4double tau = fScaledEnergy/fMass;
   G4double gam = 1.0 + tau;
   G4double emax = 2.0*CLHEP::electron_mass_c2*tau*(tau + 2.0);
 
@@ -431,6 +447,7 @@ G4DNARuddIonisationDynamicModel::SampleElectronEnergy()
     G4cout << "G4DNARuddIonisationDynamicModel::SampleElectronEnergy: "
 	   << fParticle->GetParticleName()
            << " Escaled(keV)=" << fScaledEnergy/CLHEP::keV << " Ee(keV)=" << e/CLHEP::keV
+	   << " Emax(keV)=" << emax/CLHEP::keV << " shell=" << fSelectedShell
 	   << G4endl;
   }
   return e;
@@ -540,13 +557,13 @@ G4double G4DNARuddIonisationDynamicModel::Rh(G4double ekin, G4double etrans,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double G4DNARuddIonisationDynamicModel::CorrectionFactor() 
+G4double G4DNARuddIonisationDynamicModel::CorrectionFactor()
 {
   // ZF Shortened
   G4double res = 1.0;
   if (fSelectedShell < 4) {
     const G4double ln10 = fGpow->logZ(10);
-    G4double x = 2.0*((G4Log(fScaledEnergy/CLHEP::eV)/ln10) - 4.2);
+    G4double x = 2.0*((G4Log(fScaledEnergy/(fMassRate*CLHEP::eV))/ln10) - 4.2);
     // The following values are provided by M. Dingfelder (priv. comm)
     res = 0.6/(1.0 + G4Exp(x)) + 0.9;
   }

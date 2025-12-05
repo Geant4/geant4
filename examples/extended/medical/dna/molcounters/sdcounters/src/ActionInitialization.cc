@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file ActionInitialization.cc
+/// \brief Implementation of the ActionInitialization class
+
 // The `molcounters` example(s) are provided as part of Geant4-DNA
 // and any report or published result obtained using it shall cite
 // the respective Geant4-DNA collaboration publications.
@@ -44,6 +47,7 @@
 #include "PrimaryGeneratorAction.hh"
 #include "RunAction.hh"
 #include "StackingAction.hh"
+#include "G4SystemOfUnits.hh"
 
 #include "G4DNAChemistryManager.hh"
 #include "G4H2O.hh"

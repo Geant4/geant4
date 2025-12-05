@@ -871,8 +871,9 @@ std::pair<G4LorentzVector,G4LorentzVector> G4QuasiElRatios::Scatter(G4int NPDG,
     G4double maxt=0.;                                    // Prototype of max possible -t
     if(PDG==2212) maxt=PCSmanager->GetHMaxT();           // max possible -t
     else          maxt=NCSmanager->GetHMaxT();           // max possible -t
-    G4double cost=1.-(mint+mint)/maxt; // cos(theta) in CMS
-    if(cost>1. || cost<-1. || !(cost>-1. || cost<=1.))
+    mint = std::max(mint, 0.0);
+    G4double cost = 1. - 2*mint/maxt; // cos(theta) in CMS
+    if (std::abs(cost) > 1.)
     {
         if     (cost>1.)  cost=1.;
         else if(cost<-1.) cost=-1.;
@@ -990,7 +991,7 @@ std::pair<G4LorentzVector,G4LorentzVector> G4QuasiElRatios::ChExer(G4int NPDG,
     if(PDG==2212) maxt=PCSmanager->GetHMaxT();           // max possible -t
     else          maxt=NCSmanager->GetHMaxT();           // max possible -t
     G4double cost=1.-mint/maxt;                          // cos(theta) in CMS
-    if(cost>1. || cost<-1. || !(cost>-1. || cost<=1.))
+    if (std::abs(cost) > 1.)
     {
         if     (cost>1.)  cost=1.;
         else if(cost<-1.) cost=-1.;

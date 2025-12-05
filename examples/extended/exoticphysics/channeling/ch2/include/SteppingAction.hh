@@ -25,8 +25,6 @@
 //
 /// \file SteppingAction.hh
 /// \brief Definition of the SteppingAction class
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef B1SteppingAction_h
 #define B1SteppingAction_h 1
@@ -53,6 +51,13 @@ class SteppingAction : public G4UserSteppingAction
 
     // method from the base class
     void UserSteppingAction(const G4Step*) override;
+
+  private:
+    //remember the event id of a primary passed through the crystal
+    G4int eventID_in = -1;
+    //remember the incoming angles of a primary passed through the crystal
+    G4double angle_x_in = 0.;
+    G4double angle_y_in = 0.;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

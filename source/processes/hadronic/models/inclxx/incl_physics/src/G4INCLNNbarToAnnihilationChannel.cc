@@ -115,11 +115,13 @@ void NNbarToAnnihilationChannel::fillFinalState(FinalState *fs) {
 
 		const G4double plab = 0.001*KinematicsUtils::momentumInLab(particle1, particle2); //GeV
 		const G4double sqrtS = KinematicsUtils::totalEnergyInCM(nucleon, antinucleon);
+		const G4bool IsOnlyPion = (sqrtS < nucleon->getINCLMass() + antinucleon->getINCLMass());
 		G4double rdm = Random::shoot();
 
     const std::vector<G4double> BFMM6 = {66.098, 0.153, -4.576, -38.319, 6.625}; //ppbar annihilation xs
     const std::vector<G4double> BFMM1 = {119.066, 6.251, -0.006, -60.046, 11.958}; //ppbar total xs
     const std::vector<G4double> BFMM471 = {108.104, 15.708, 0.832, -54.632, -6.958}; //npbar total xs
+    const std::vector<G4double> coef_nbarp_total = {1.69447, 5.26254E+08, -5.36346, -0.39766, 0.0243057}; //nbarp total xs (plab <0.5)
 
   //PPbar annihilation xs
     const std::vector<G4double> PPbar_pip_pim = {0.637, -0.340, -0.003, -0.439, 0.144};
@@ -163,11 +165,11 @@ void NNbarToAnnihilationChannel::fillFinalState(FinalState *fs) {
 		      G4String dataPathnpbar(dataPath0 + "/inflightnpbarFS.dat");
 		      G4String dataPathppbark(dataPath0 + "/inflightppbarFSkaonic.dat");
 		      G4String dataPathnpbark(dataPath0 + "/inflightnpbarFSkaonic.dat");
-		      G4String dataPathpnbar(dataPath0 + "/inflightpnbarFS.dat"); //nbar case
-		      G4String dataPathpnbark(dataPath0 + "/inflightpnbarFSkaonic.dat"); // nbar case
+		      G4String dataPathnbarp(dataPath0 + "/inflightpnbarFS.dat"); //nbar case
+		      G4String dataPathnbarpk(dataPath0 + "/inflightpnbarFSkaonic.dat"); // nbar case
 		    #else
 		      //Config *theConfig = new G4INCL::Config;
-			  //theConfig->setINCLXXDataFilePath(G4INCL::theINCLXXDataFilePath);
+			    //theConfig->setINCLXXDataFilePath(G4INCL::theINCLXXDataFilePath);
 		      Config const *theConfig=theNucleus->getStore()->getConfig();
 		      std::string path;
 		      if(theConfig)
@@ -180,8 +182,10 @@ void NNbarToAnnihilationChannel::fillFinalState(FinalState *fs) {
 		      INCL_DEBUG("Reading https://doi.org/10.1016/j.physrep.2005.03.002 ppbar kaonic final states" << dataPathppbark << '\n');
 		      std::string dataPathnpbark(path + "/inflightnpbarFSkaonic.dat");
 		      INCL_DEBUG("Reading https://doi.org/10.1007/BF02818764 and https://link.springer.com/article/10.1007/BF02754930 npbar kaonic final states" << dataPathnpbark << '\n');
-		      std::string dataPathpnbar(path + "/inflightpnbarFS.dat"); //  nbar case
-		      std::string dataPathpnbark(path + "/inflightpnbarFSkaonic.dat"); //  nbar case
+		      std::string dataPathnbarp(path + "/inflightpnbarFS.dat"); //  nbar case
+		      INCL_DEBUG("Reading https://doi.org/10.1016/0375-9474(92)90362-N nnbar final states " << dataPathnbarp << '\n');
+		      std::string dataPathnbarpk(path + "/inflightpnbarFSkaonic.dat");
+		      INCL_DEBUG("Reading https://doi.org/10.1007/BF02818764 and https://link.springer.com/article/10.1007/BF02754930 nbarp kaonic final states" << dataPathnbarpk << '\n');
 		   #endif
 		    /*std::string path = {"/home/zdemid/INCL/inclcode/data"};
 		    std::string dataPathppbar(path + "/inflightppbarFS.dat");
@@ -210,7 +214,119 @@ void NNbarToAnnihilationChannel::fillFinalState(FinalState *fs) {
 		
 		//setting types of new particles and pushing them back to the list
 		if(nucleon->getType()==Neutron && antinucleon->getType()==antiProton){
-			//std::cout << "npbar"<< std::endl;
+			if(IsOnlyPion){
+			  const std::vector<double> channels_Ratio = {0.053, 0.258, 0.531, 0.067, 0.062, 0.007, 0.020, 0.002};//Taken from inflightnpbarFS.dat and renormalised
+			  if(rdm < channels_Ratio.front()){
+			  	Particle *p1 = new Particle(PiMinus, zero, rcol);
+				  Particle *p2 = new Particle(PiZero, zero, rcol);
+
+				  list.push_back(p1);
+				  list.push_back(p2);
+				}
+				else if(rdm < channels_Ratio.front() + channels_Ratio[1]){
+					Particle *p1 = new Particle(PiMinus, zero, rcol);
+					Particle *p2 = new Particle(PiZero, zero, rcol);
+					Particle *p3 = new Particle(PiZero, zero, rcol);
+
+					list.push_back(p1);
+				  list.push_back(p2);
+				  list.push_back(p3);
+				}
+				else if(rdm < channels_Ratio.front() + channels_Ratio[1] + channels_Ratio[2]){
+					Particle *p1 = new Particle(PiMinus, zero, rcol);
+					Particle *p2 = new Particle(PiZero, zero, rcol);
+					Particle *p3 = new Particle(PiZero, zero, rcol);
+					Particle *p4 = new Particle(PiZero, zero, rcol);
+
+					list.push_back(p1);
+					list.push_back(p2);
+					list.push_back(p3);
+					list.push_back(p4);
+				}
+				else if(rdm < channels_Ratio.front() + channels_Ratio[1] + channels_Ratio[2] + channels_Ratio[3]){
+					Particle *p1 = new Particle(PiMinus, zero, rcol);
+					Particle *p2 = new Particle(PiZero, zero, rcol);
+					Particle *p3 = new Particle(PiZero, zero, rcol);
+					Particle *p4 = new Particle(PiZero, zero, rcol);
+					Particle *p5 = new Particle(PiZero, zero, rcol);
+
+					list.push_back(p1);
+					list.push_back(p2);
+					list.push_back(p3);
+					list.push_back(p4);
+					list.push_back(p5);
+				}
+				else if(rdm < channels_Ratio.front() + channels_Ratio[1] + channels_Ratio[2] + channels_Ratio[3] + channels_Ratio[4]){
+					Particle *p1 = new Particle(PiMinus, zero, rcol);
+					Particle *p2 = new Particle(PiZero, zero, rcol);
+					Particle *p3 = new Particle(PiZero, zero, rcol);
+					Particle *p4 = new Particle(PiZero, zero, rcol);
+					Particle *p5 = new Particle(PiZero, zero, rcol);
+					Particle *p6 = new Particle(PiZero, zero, rcol);
+
+					list.push_back(p1);
+					list.push_back(p2);
+					list.push_back(p3);
+					list.push_back(p4);
+					list.push_back(p5);
+					list.push_back(p6);
+				}
+				else if(rdm < channels_Ratio.front() + channels_Ratio[1] + channels_Ratio[2] + channels_Ratio[3] + channels_Ratio[4] + channels_Ratio[5]){
+					Particle *p1 = new Particle(PiPlus, zero, rcol);
+					Particle *p2 = new Particle(PiMinus, zero, rcol);
+					Particle *p3 = new Particle(PiMinus, zero, rcol);
+					Particle *p4 = new Particle(PiZero, zero, rcol);
+					Particle *p5 = new Particle(PiZero, zero, rcol);
+					Particle *p6 = new Particle(PiZero, zero, rcol);
+					Particle *p7 = new Particle(PiZero, zero, rcol);
+
+					list.push_back(p1);
+					list.push_back(p2);
+					list.push_back(p3);
+					list.push_back(p4);
+					list.push_back(p5);
+					list.push_back(p6);
+					list.push_back(p7);
+				}
+				else if(rdm < channels_Ratio.front() + channels_Ratio[1] + channels_Ratio[2] + channels_Ratio[3] + channels_Ratio[4] + channels_Ratio[5] + channels_Ratio[6]){
+					Particle *p1 = new Particle(PiPlus, zero, rcol);
+					Particle *p2 = new Particle(PiPlus, zero, rcol);
+					Particle *p3 = new Particle(PiMinus, zero, rcol);
+					Particle *p4 = new Particle(PiMinus, zero, rcol);
+					Particle *p5 = new Particle(PiMinus, zero, rcol);
+					Particle *p6 = new Particle(PiZero, zero, rcol);
+					Particle *p7 = new Particle(PiZero, zero, rcol);
+
+					list.push_back(p1);
+					list.push_back(p2);
+					list.push_back(p3);
+					list.push_back(p4);
+					list.push_back(p5);
+					list.push_back(p6);
+					list.push_back(p7);
+				}
+				else if(rdm <= channels_Ratio.front() + channels_Ratio[1] + channels_Ratio[2] + channels_Ratio[3] + channels_Ratio[4] + channels_Ratio[5] + channels_Ratio[6] + channels_Ratio[7]){
+					Particle *p1 = new Particle(PiPlus, zero, rcol);
+					Particle *p2 = new Particle(PiPlus, zero, rcol);
+					Particle *p3 = new Particle(PiPlus, zero, rcol);
+					Particle *p4 = new Particle(PiMinus, zero, rcol);
+					Particle *p5 = new Particle(PiMinus, zero, rcol);
+					Particle *p6 = new Particle(PiMinus, zero, rcol);
+					Particle *p7 = new Particle(PiMinus, zero, rcol);
+
+					list.push_back(p1);
+					list.push_back(p2);
+					list.push_back(p3);
+					list.push_back(p4);
+					list.push_back(p5);
+					list.push_back(p6);
+					list.push_back(p7);
+				}
+				else{
+					INCL_ERROR("random draw outside channels for OnlyPion annihilation (low energy)");
+				}
+			}
+			else {
 			const G4double totalpnbar = KinematicsUtils::compute_xs(BFMM6, plab)*KinematicsUtils::compute_xs(BFMM471, plab)/KinematicsUtils::compute_xs(BFMM1, plab);
 			// xs is same for npbar, but the fs has different charge
 
@@ -432,9 +548,208 @@ void NNbarToAnnihilationChannel::fillFinalState(FinalState *fs) {
 		    		}
     			} // end of kaonic option
 			} // end of default annihilation
-
+    } //end of else for IsOnlyPion
 		}
 		else if(nucleon->getType()==Proton && antinucleon->getType()==antiNeutron){
+			if(IsOnlyPion){
+				const std::vector<G4double> channels_Ratio = {0.053, 0.258, 0.531, 0.067, 0.062, 0.007, 0.020, 0.002};//Taken from inflightpnbarFS.dat and renormalised
+			  if(rdm < channels_Ratio.front()){
+			  	Particle *p1 = new Particle(PiPlus, zero, rcol);
+				  Particle *p2 = new Particle(PiZero, zero, rcol);
+
+				  list.push_back(p1);
+				  list.push_back(p2);
+				}
+				else if(rdm < channels_Ratio.front() + channels_Ratio[1]){
+					Particle *p1 = new Particle(PiPlus, zero, rcol);
+					Particle *p2 = new Particle(PiZero, zero, rcol);
+					Particle *p3 = new Particle(PiZero, zero, rcol);
+
+					list.push_back(p1);
+				  list.push_back(p2);
+				  list.push_back(p3);
+				}
+				else if(rdm < channels_Ratio.front() + channels_Ratio[1] + channels_Ratio[2]){
+					Particle *p1 = new Particle(PiPlus, zero, rcol);
+					Particle *p2 = new Particle(PiZero, zero, rcol);
+					Particle *p3 = new Particle(PiZero, zero, rcol);
+					Particle *p4 = new Particle(PiZero, zero, rcol);
+
+					list.push_back(p1);
+					list.push_back(p2);
+					list.push_back(p3);
+					list.push_back(p4);
+				}
+				else if(rdm < channels_Ratio.front() + channels_Ratio[1] + channels_Ratio[2] + channels_Ratio[3]){
+					Particle *p1 = new Particle(PiPlus, zero, rcol);
+					Particle *p2 = new Particle(PiZero, zero, rcol);
+					Particle *p3 = new Particle(PiZero, zero, rcol);
+					Particle *p4 = new Particle(PiZero, zero, rcol);
+					Particle *p5 = new Particle(PiZero, zero, rcol);
+
+					list.push_back(p1);
+					list.push_back(p2);
+					list.push_back(p3);
+					list.push_back(p4);
+					list.push_back(p5);
+				}
+				else if(rdm < channels_Ratio.front() + channels_Ratio[1] + channels_Ratio[2] + channels_Ratio[3] + channels_Ratio[4]){
+					Particle *p1 = new Particle(PiPlus, zero, rcol);
+					Particle *p2 = new Particle(PiZero, zero, rcol);
+					Particle *p3 = new Particle(PiZero, zero, rcol);
+					Particle *p4 = new Particle(PiZero, zero, rcol);
+					Particle *p5 = new Particle(PiZero, zero, rcol);
+					Particle *p6 = new Particle(PiZero, zero, rcol);
+
+					list.push_back(p1);
+					list.push_back(p2);
+					list.push_back(p3);
+					list.push_back(p4);
+					list.push_back(p5);
+					list.push_back(p6);
+				}
+				else if(rdm < channels_Ratio.front() + channels_Ratio[1] + channels_Ratio[2] + channels_Ratio[3] + channels_Ratio[4] + channels_Ratio[5]){
+					Particle *p1 = new Particle(PiPlus, zero, rcol);
+					Particle *p2 = new Particle(PiMinus, zero, rcol);
+					Particle *p3 = new Particle(PiPlus, zero, rcol);
+					Particle *p4 = new Particle(PiZero, zero, rcol);
+					Particle *p5 = new Particle(PiZero, zero, rcol);
+					Particle *p6 = new Particle(PiZero, zero, rcol);
+					Particle *p7 = new Particle(PiZero, zero, rcol);
+
+					list.push_back(p1);
+					list.push_back(p2);
+					list.push_back(p3);
+					list.push_back(p4);
+					list.push_back(p5);
+					list.push_back(p6);
+					list.push_back(p7);
+				}
+				else if(rdm < channels_Ratio.front() + channels_Ratio[1] + channels_Ratio[2] + channels_Ratio[3] + channels_Ratio[4] + channels_Ratio[5] + channels_Ratio[6]){
+					Particle *p1 = new Particle(PiPlus, zero, rcol);
+					Particle *p2 = new Particle(PiPlus, zero, rcol);
+					Particle *p3 = new Particle(PiMinus, zero, rcol);
+					Particle *p4 = new Particle(PiMinus, zero, rcol);
+					Particle *p5 = new Particle(PiPlus, zero, rcol);
+					Particle *p6 = new Particle(PiZero, zero, rcol);
+					Particle *p7 = new Particle(PiZero, zero, rcol);
+
+					list.push_back(p1);
+					list.push_back(p2);
+					list.push_back(p3);
+					list.push_back(p4);
+					list.push_back(p5);
+					list.push_back(p6);
+					list.push_back(p7);
+				}
+				else if(rdm <= channels_Ratio.front() + channels_Ratio[1] + channels_Ratio[2] + channels_Ratio[3] + channels_Ratio[4] + channels_Ratio[5] + channels_Ratio[6] + channels_Ratio[7]){
+					Particle *p1 = new Particle(PiPlus, zero, rcol);
+					Particle *p2 = new Particle(PiPlus, zero, rcol);
+					Particle *p3 = new Particle(PiPlus, zero, rcol);
+					Particle *p4 = new Particle(PiMinus, zero, rcol);
+					Particle *p5 = new Particle(PiMinus, zero, rcol);
+					Particle *p6 = new Particle(PiMinus, zero, rcol);
+					Particle *p7 = new Particle(PiPlus, zero, rcol);
+ 
+					list.push_back(p1);
+					list.push_back(p2);
+					list.push_back(p3);
+					list.push_back(p4);
+					list.push_back(p5);
+					list.push_back(p6);
+					list.push_back(p7);
+		}
+			}
+			else {
+			if (plab < 1.){ //nbar != pbar (< 1. GeV/c)
+				if(rdm < 1. - kaonicFSprob){
+		    INCL_DEBUG("pionic pnbar final state" << '\n');
+		    sum = read_file(dataPathnbarp, probabilities, particle_types);
+		    rdm = (rdm/(1.-kaonicFSprob))*sum; //99.95 normalize by the sum of probabilities in the file
+		    //now get the line number in the file where the FS particles are stored:
+		    G4int n = findStringNumber(rdm, probabilities)-1;
+		    for(G4int j = 0; j < static_cast<G4int>(particle_types[n].size()); j++){
+		      if(particle_types[n][j] == "pi0"){
+		        Particle *p = new Particle(PiZero, zero, rcol);
+		        list.push_back(p);
+		      }
+		      else if(particle_types[n][j] == "pi-"){
+		        Particle *p = new Particle(PiMinus, zero, rcol);
+		        list.push_back(p);
+		      }
+		      else if(particle_types[n][j] == "pi+"){
+		        Particle *p = new Particle(PiPlus, zero, rcol);
+		        list.push_back(p);
+		      }
+		      else if(particle_types[n][j] == "omega"){
+		        Particle *p = new Particle(Omega, zero, rcol);
+		        list.push_back(p);
+		      }
+		      else if(particle_types[n][j] == "eta"){
+		        Particle *p = new Particle(Eta, zero, rcol);
+		        list.push_back(p);
+		      }
+		      else{
+		        INCL_ERROR("Some non-existing FS particle detected when reading nbar FS files");
+		        for(G4int jj = 0; jj < static_cast<G4int>(particle_types[n].size()); jj++){
+		          std::cout << "gotcha! " << particle_types[n][jj] << std::endl;
+		        }
+		      }
+       	}
+        }
+		    else{
+		        INCL_DEBUG("kaonic npbar final state chosen" << '\n');
+		        sum = read_file(dataPathnbarpk, probabilities, particle_types);
+			      rdm = ((1-rdm)/kaonicFSprob)*sum;//3837 normalize by the sum of probabilities in the file
+			      //now get the line number in the file where the FS particles are stored:
+			      G4int n = findStringNumber(rdm, probabilities)-1;
+			      for(G4int j = 0; j < static_cast<int>(particle_types[n].size()); j++){
+				        if(particle_types[n][j] == "pi0"){
+				            Particle *p = new Particle(PiZero, zero, rcol);
+				            list.push_back(p);
+				        }
+				        else if(particle_types[n][j] == "pi-"){
+				            Particle *p = new Particle(PiMinus, zero, rcol);
+				            list.push_back(p);
+				        }
+				        else if(particle_types[n][j] == "pi+"){
+				            Particle *p = new Particle(PiPlus, zero, rcol);
+				            list.push_back(p);
+				        }
+				        else if(particle_types[n][j] == "omega"){
+				            Particle *p = new Particle(Omega, zero, rcol);
+				            list.push_back(p);
+				        }
+	  			      else if(particle_types[n][j] == "eta"){
+		  		          Particle *p = new Particle(Eta, zero, rcol);
+			  	          list.push_back(p);
+				        }
+				        else if(particle_types[n][j] == "K-"){
+				            Particle *p = new Particle(KMinus, zero, rcol);
+				            list.push_back(p);
+				        }
+				        else if(particle_types[n][j] == "K+"){
+				            Particle *p = new Particle(KPlus, zero, rcol);
+				            list.push_back(p);
+				        }
+				        else if(particle_types[n][j] == "K0"){
+				            Particle *p = new Particle(KZero, zero, rcol);
+				            list.push_back(p);
+				        }
+				        else if(particle_types[n][j] == "K0b"){
+				            Particle *p = new Particle(KZeroBar, zero, rcol);
+				            list.push_back(p);
+				        }
+				        else{
+		                INCL_ERROR("Some non-existing FS particle detected when reading nbar FS files");
+		                for(G4int jj = 0; jj < static_cast<int>(particle_types[n].size()); jj++){
+		                    std::cout << "gotcha! " << particle_types[n][jj] << std::endl;
+		                }
+		            }
+       	    }
+        }
+      }
+      else{ //nbar = pbar (>1000 MeV/c)
 			const G4double totalpnbar = KinematicsUtils::compute_xs(BFMM6, plab)*KinematicsUtils::compute_xs(BFMM471, plab)/KinematicsUtils::compute_xs(BFMM1, plab);
 			// xs is same for npbar, but the fs has different charge
 
@@ -570,7 +885,7 @@ void NNbarToAnnihilationChannel::fillFinalState(FinalState *fs) {
 			    // Default condition    
 				if(rdm < (1.-kaonicFSprob)){ // pionic/kaonic choice
 			        INCL_DEBUG("pionic pnbar final state chosen" << '\n');
-			        sum = read_file(dataPathpnbar, probabilities, particle_types);
+			        sum = read_file(dataPathnbarp, probabilities, particle_types);
 			        rdm = (rdm/(1.-kaonicFSprob))*sum; //99.95 normalize by the sum of probabilities in the file
 			        //now get the line number in the file where the FS particles are stored:
 			        G4int n = findStringNumber(rdm, probabilities)-1;
@@ -605,7 +920,7 @@ void NNbarToAnnihilationChannel::fillFinalState(FinalState *fs) {
       			} // end of pionic option
 		        else{
 			        INCL_DEBUG("kaonic pnbar final state chosen" << '\n');
-			        sum = read_file(dataPathnpbark, probabilities, particle_types);
+			        sum = read_file(dataPathnbarpk, probabilities, particle_types);
 			        rdm = ((1-rdm)/kaonicFSprob)*sum;//3837 normalize by the sum of probabilities in the file
 			        //now get the line number in the file where the FS particles are stored:
 			        G4int n = findStringNumber(rdm, probabilities)-1;
@@ -654,10 +969,143 @@ void NNbarToAnnihilationChannel::fillFinalState(FinalState *fs) {
 		    		}
     			} // end of kaonic option
 			} // end of default annihilation
-
+		  }//end of nbarp & pbarn ( with Plab < 1 GeV/c)
+    } //end of else for IsOnlyPion
 		}
 		else{ //ppbar or nnbar
-			//std::cout << "ppbar or nnbar"<< std::endl;
+			if(IsOnlyPion){
+			  const std::vector<G4double> channels_Ratio = {0.0005, 0.0278, 0.0052, 0.3058, 0.0017, 0.3346, 0.0017, 0.0688, 0.2534, 0.0005};//Taken from inflightppbarFS.dat and renormalised
+			  if(rdm < channels_Ratio.front()){
+			  	Particle *p1 = new Particle(PiZero, zero, rcol);
+				  Particle *p2 = new Particle(PiZero, zero, rcol);
+
+				  list.push_back(p1);
+				  list.push_back(p2);
+				}
+				else if(rdm < channels_Ratio.front() + channels_Ratio[1]){
+					Particle *p1 = new Particle(PiZero, zero, rcol);
+					Particle *p2 = new Particle(PiZero, zero, rcol);
+					Particle *p3 = new Particle(PiZero, zero, rcol);
+
+					list.push_back(p1);
+				  list.push_back(p2);
+				  list.push_back(p3);
+				}
+				else if(rdm < channels_Ratio.front() + channels_Ratio[1] + channels_Ratio[2]){
+					Particle *p1 = new Particle(PiZero, zero, rcol);
+					Particle *p2 = new Particle(PiZero, zero, rcol);
+					Particle *p3 = new Particle(PiZero, zero, rcol);
+					Particle *p4 = new Particle(PiZero, zero, rcol);
+
+					list.push_back(p1);
+					list.push_back(p2);
+					list.push_back(p3);
+					list.push_back(p4);
+ 		}
+				else if(rdm < channels_Ratio.front() + channels_Ratio[1] + channels_Ratio[2] + channels_Ratio[3] ){
+					Particle *p1 = new Particle(PiPlus, zero, rcol);
+					Particle *p2 = new Particle(PiMinus, zero, rcol);
+					Particle *p3 = new Particle(PiZero, zero, rcol);
+					Particle *p4 = new Particle(PiZero, zero, rcol);
+
+					list.push_back(p1);
+					list.push_back(p2);
+					list.push_back(p3);
+					list.push_back(p4);
+				}
+				else if(rdm < channels_Ratio.front() + channels_Ratio[1] + channels_Ratio[2] + channels_Ratio[3] + channels_Ratio[4]){
+					Particle *p1 = new Particle(PiZero, zero, rcol);
+					Particle *p2 = new Particle(PiZero, zero, rcol);
+					Particle *p3 = new Particle(PiZero, zero, rcol);
+					Particle *p4 = new Particle(PiZero, zero, rcol);
+					Particle *p5 = new Particle(PiZero, zero, rcol);
+
+					list.push_back(p1);
+					list.push_back(p2);
+					list.push_back(p3);
+					list.push_back(p4);
+					list.push_back(p5);
+				}
+				else if(rdm < channels_Ratio.front() + channels_Ratio[1] + channels_Ratio[2] + channels_Ratio[3] + channels_Ratio[4] + channels_Ratio[5]){
+					Particle *p1 = new Particle(PiPlus, zero, rcol);
+					Particle *p2 = new Particle(PiMinus, zero, rcol);
+					Particle *p3 = new Particle(PiZero, zero, rcol);
+					Particle *p4 = new Particle(PiZero, zero, rcol);
+					Particle *p5 = new Particle(PiZero, zero, rcol);
+
+					list.push_back(p1);
+					list.push_back(p2);
+					list.push_back(p3);
+					list.push_back(p4);
+					list.push_back(p5);
+				}
+				else if(rdm < channels_Ratio.front() + channels_Ratio[1] + channels_Ratio[2] + channels_Ratio[3] + channels_Ratio[4] + channels_Ratio[5] + channels_Ratio[6]){
+					Particle *p1 = new Particle(PiZero, zero, rcol);
+					Particle *p2 = new Particle(PiZero, zero, rcol);
+					Particle *p3 = new Particle(PiZero, zero, rcol);
+					Particle *p4 = new Particle(PiZero, zero, rcol);
+					Particle *p5 = new Particle(PiZero, zero, rcol);
+					Particle *p6 = new Particle(PiZero, zero, rcol);
+
+					list.push_back(p1);
+					list.push_back(p2);
+					list.push_back(p3);
+					list.push_back(p4);
+					list.push_back(p5);
+					list.push_back(p6);
+				}
+				else if(rdm < channels_Ratio.front() + channels_Ratio[1] + channels_Ratio[2] + channels_Ratio[3] + channels_Ratio[4] + channels_Ratio[5] + channels_Ratio[6] + channels_Ratio[7]){
+					Particle *p1 = new Particle(PiPlus, zero, rcol);
+					Particle *p2 = new Particle(PiMinus, zero, rcol);
+					Particle *p3 = new Particle(PiZero, zero, rcol);
+					Particle *p4 = new Particle(PiZero, zero, rcol);
+					Particle *p5 = new Particle(PiZero, zero, rcol);
+					Particle *p6 = new Particle(PiZero, zero, rcol);
+
+					list.push_back(p1);
+					list.push_back(p2);
+					list.push_back(p3);
+					list.push_back(p4);
+					list.push_back(p5);
+					list.push_back(p6);
+				}
+				else if(rdm < channels_Ratio.front() + channels_Ratio[1] + channels_Ratio[2] + channels_Ratio[3] + channels_Ratio[4] + channels_Ratio[5] + channels_Ratio[6] + channels_Ratio[7] + channels_Ratio[8]){
+					Particle *p1 = new Particle(PiPlus, zero, rcol);
+					Particle *p2 = new Particle(PiPlus, zero, rcol);
+					Particle *p3 = new Particle(PiMinus, zero, rcol);
+					Particle *p4 = new Particle(PiMinus, zero, rcol);
+					Particle *p5 = new Particle(PiZero, zero, rcol);
+					Particle *p6 = new Particle(PiZero, zero, rcol);
+
+					list.push_back(p1);
+					list.push_back(p2);
+					list.push_back(p3);
+					list.push_back(p4);
+					list.push_back(p5);
+					list.push_back(p6);
+				}
+				else if(rdm < channels_Ratio.front() + channels_Ratio[1] + channels_Ratio[2] + channels_Ratio[3] + channels_Ratio[4] + channels_Ratio[5] + channels_Ratio[6] + channels_Ratio[7] + channels_Ratio[8] + channels_Ratio[9]){
+					Particle *p1 = new Particle(PiPlus, zero, rcol);
+					Particle *p2 = new Particle(PiMinus, zero, rcol);
+					Particle *p3 = new Particle(PiZero, zero, rcol);
+					Particle *p4 = new Particle(PiZero, zero, rcol);
+					Particle *p5 = new Particle(PiZero, zero, rcol);
+					Particle *p6 = new Particle(PiZero, zero, rcol);
+					Particle *p7 = new Particle(PiZero, zero, rcol);
+
+					list.push_back(p1);
+					list.push_back(p2);
+					list.push_back(p3);
+					list.push_back(p4);
+					list.push_back(p5);
+					list.push_back(p6);
+					list.push_back(p7);
+				}
+				else{
+					INCL_ERROR("random draw outside channels for OnlyPion annihilation (low energy)");
+				}
+			}
+			else{
 			const G4double totalppbar = KinematicsUtils::compute_xs(BFMM6, plab);
 			// same for nnbar
 
@@ -1044,6 +1492,7 @@ void NNbarToAnnihilationChannel::fillFinalState(FinalState *fs) {
 				        }
       			} // end of kaonic option
 					} // end of default condition
+  			 } //end of else for IsOnlyPion
 				} // end of ppbar and nnbar case
 
 

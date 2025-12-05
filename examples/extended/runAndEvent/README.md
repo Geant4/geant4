@@ -1,0 +1,60 @@
+\page Examples_runAndEvent Category "runAndEvent"
+
+ Examples in this directory demonstrate the use of some features in
+Run and Event categories. Since these categories are on the top of
+hierarchy of Geant4 structure to control the full functionarities of
+Geant4, some examples contain features in other categories such as
+Tracking, Track, Particles, Detector responces, and even some cases
+Geometry and Processes.
+
+\ref ExampleRE01
+
+ This example demonstrates how to connect the information between
+primary particles and hits. It also utilizes some user-information 
+classes. Readout geometry is implemented as a parallel world.
+Decay of "Unknown" particle (that may represent whatever a particle 
+Geant4 does not know how to deal with) is taken care as "pre-assigned
+decay products".
+
+\ref ExampleRE02
+
+ This example demonstrates how to accumulate the physics quantities
+such as energy deposition and dose for a run. It also demonstrates
+the use of primitive scorers.
+
+\ref ExampleRE03
+
+ This example demonstrates how to use UI-command base scoring.
+It create parallel world(s) for defining scoring mesh(es).
+
+\ref ExampleRE04
+
+ This example demonstrates how to define layered mass geometry in
+a parallel world and use it in a simulation.
+
+\ref ExampleRE05
+
+Defines a simplified collider detector setup.
+Demonstrates interfacing to the PYTHIA primary generator. Includes
+the definition of a 'readout' geometry. Exercises event filtering using
+the stacking mechanism. Includes visualization. \n
+It was moved in extended examples from novice/N04 with removal of
+novice examples. 
+
+\ref ExampleRE06
+
+Implements three simplified sandwitch calorimeters.
+Shows how to modify part of the geometry setup at run-time. Includes
+detector description parameterisation by materials. Demonstrates
+sharing of a sensitive detector definition for different sub-detectors.
+Defines different geometrical regions with different production
+thresholds. Shows customization of the G4Run. \n
+It was moved in extended examples from novice/N07 with removal of
+novice examples. 
+
+\ref ExampleRE07
+
+Based on extended/electromagnetic/TestEm3, this example demonstrates
+how to register specialized tracking managers for a particle or a set
+of particles.
+

@@ -25,8 +25,6 @@
 //
 /// \file SteppingAction.hh
 /// \brief Definition of the SteppingAction class
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef B1SteppingAction_h
 #define B1SteppingAction_h 1

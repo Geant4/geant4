@@ -29,7 +29,7 @@
 //
 // Class for creation of Uniform Magnetic Field.
 
-// Created: V.Grichine, 30.01.1997
+// Author: Vladimir Grichine (CERN), 30.01.1997
 // -------------------------------------------------------------------
 #ifndef G4UNIFORMMAGFIELD_HH
 #define G4UNIFORMMAGFIELD_HH
@@ -38,31 +38,61 @@
 #include "G4ThreeVector.hh"
 #include "G4MagneticField.hh"
 
+/**
+ * @brief G4UniformMagField is a class for defining a uniform magnetic field.
+ */
+
 class G4UniformMagField : public G4MagneticField
 {
   public:
   
+    /**
+     * Constructor for G4UniformMagField, a field with value equal
+     * to 'FieldVector'.
+     *  @param[in] FieldVector The field vector value.
+     */
     G4UniformMagField(const G4ThreeVector& FieldVector);
-      // A field with value equal to FieldVector.
 
+    /**
+     * Alternative constructor for G4UniformMagField.
+     *  @param[in] vField The field component.
+     *  @param[in] vTheta The Theta component.
+     *  @param[in] vPhi The Phi component.
+     */
     G4UniformMagField(G4double vField,
                       G4double vTheta,
                       G4double vPhi);
 
-   ~G4UniformMagField() override;
+    /**
+     * Default Destructor.
+     */
+    ~G4UniformMagField() override = default;
 
+    /**
+     * Copy constructor and assignment operator.
+     */
     G4UniformMagField(const G4UniformMagField& p);
     G4UniformMagField& operator = (const G4UniformMagField& p);
-      // Copy constructor and assignment operator.
 
+    /**
+     * Returns the field value 'MagField' on given time 'yTrack'.
+     */
     void GetFieldValue(const G4double yTrack[4],
-                               G4double* MagField) const override;
+                             G4double* MagField) const override;
 
+    /**
+     * Sets the field value.
+     */
     void SetFieldValue(const G4ThreeVector& newFieldValue);
 
+    /**
+     * Returns the constant field value.
+     */
     G4ThreeVector GetConstantFieldValue() const;
-      // Return the field value
     
+    /**
+     * Returns a pointer to a new allocated clone of this object.
+     */
     G4Field* Clone() const override;
 
   private:

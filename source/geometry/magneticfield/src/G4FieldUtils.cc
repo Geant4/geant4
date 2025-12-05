@@ -24,8 +24,8 @@
 //
 // Helper namespace field_utils implementation
 //
-// Author: Dmitry Sorokin, Google Summer of Code 2017
-// Supervision: John Apostolakis, CERN
+// Author: Dmitry Sorokin (CERN, Google Summer of Code 2017), 13.10.2017
+// Supervision: John Apostolakis (CERN)
 // --------------------------------------------------------------------
 
 #include "G4FieldUtils.hh"
@@ -39,14 +39,14 @@ G4double absoluteError(const G4double y[],
                        const G4double yError[],
                              G4double hstep)
 {
-   const G4double momentum2 = getValue2(y, Value3D::Momentum);
-   const G4double invMomentum2 = 1.0 / momentum2; 
-   const G4double positionError2 = getValue2(yError, Value3D::Position);
-   const G4double momentumError2 = getValue2(yError, Value3D::Momentum);
-   const G4double relativeMomentumError2 = momentumError2 * invMomentum2;
+  const G4double momentum2 = getValue2(y, Value3D::Momentum);
+  const G4double invMomentum2 = 1.0 / momentum2; 
+  const G4double positionError2 = getValue2(yError, Value3D::Position);
+  const G4double momentumError2 = getValue2(yError, Value3D::Momentum);
+  const G4double relativeMomentumError2 = momentumError2 * invMomentum2;
 
-   return std::max(std::sqrt(positionError2),
-                   std::sqrt(relativeMomentumError2) * hstep);
+  return std::max(std::sqrt(positionError2),
+                  std::sqrt(relativeMomentumError2) * hstep);
 }
 
 G4double relativeError2(const G4double y[],
@@ -54,37 +54,37 @@ G4double relativeError2(const G4double y[],
                               G4double h,
                               G4double eps_rel_max)
 {
-   G4double errmax_sq;
+  G4double errmax_sq;
 
-   G4double inv_eps_vel_sq = 1.0 / (eps_rel_max * eps_rel_max);
-   G4double errvel_sq = 0.0;    // square of momentum vector difference
+  G4double inv_eps_vel_sq = 1.0 / (eps_rel_max * eps_rel_max);
+  G4double errvel_sq = 0.0;    // square of momentum vector difference
 
-   G4double eps_pos = eps_rel_max * h; 
-   G4double inv_eps_pos_sq = 1.0 / (eps_pos * eps_pos); 
+  G4double eps_pos = eps_rel_max * h; 
+  G4double inv_eps_pos_sq = 1.0 / (eps_pos * eps_pos); 
 
-   // Evaluate accuracy
-   //
-   G4double errpos_sq = getValue2(yerr, Value3D::Position);
-   errpos_sq *= inv_eps_pos_sq; // Scale relative to required tolerance
+  // Evaluate accuracy
+  //
+  G4double errpos_sq = getValue2(yerr, Value3D::Position);
+  errpos_sq *= inv_eps_pos_sq; // Scale relative to required tolerance
 
-   // Accuracy for momentum
-   //
-   G4double magvel_sq = getValue2(y, Value3D::Momentum);
-   G4double sumerr_sq = getValue2(yerr, Value3D::Momentum); 
-   if (magvel_sq > 0.0)
-   {
-      errvel_sq = sumerr_sq / magvel_sq; 
-   }
-   else
-   {
-      G4Exception("field_utils::relativeError","Field001",
-                  JustWarning, "found case of zero momentum");
-      errvel_sq = sumerr_sq; 
-   }
-   errvel_sq *= inv_eps_vel_sq;
-   errmax_sq = std::max(errpos_sq, errvel_sq);
+  // Accuracy for momentum
+  //
+  G4double magvel_sq = getValue2(y, Value3D::Momentum);
+  G4double sumerr_sq = getValue2(yerr, Value3D::Momentum); 
+  if (magvel_sq > 0.0)
+  {
+    errvel_sq = sumerr_sq / magvel_sq; 
+  }
+  else
+  {
+    G4Exception("field_utils::relativeError","Field001",
+                JustWarning, "found case of zero momentum");
+    errvel_sq = sumerr_sq; 
+  }
+  errvel_sq *= inv_eps_vel_sq;
+  errmax_sq = std::max(errpos_sq, errvel_sq);
 
-   return errmax_sq;
+  return errmax_sq;
 }
 
 G4double relativeError(const G4double y[],
@@ -92,12 +92,12 @@ G4double relativeError(const G4double y[],
                        const G4double h,
                        const G4double errorTolerance)
 {
-   return std::sqrt(relativeError2(y, yError, h, errorTolerance));
+  return std::sqrt(relativeError2(y, yError, h, errorTolerance));
 }
 
 void copy(G4double dst[], const G4double src[], std::size_t size)
 {
-   std::memcpy(dst, src, sizeof(G4double) * size);
+  std::memcpy(dst, src, sizeof(G4double) * size);
 }
 
 
@@ -105,8 +105,7 @@ G4double inverseCurvatureRadius(G4double particleCharge,
                                 G4double momentum,
                                 G4double BField)
 {
-   return -c_light * particleCharge * BField / momentum;
+  return -c_light * particleCharge * BField / momentum;
 }
 
 } // field_utils
-

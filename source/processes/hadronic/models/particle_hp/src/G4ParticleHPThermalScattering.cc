@@ -688,10 +688,11 @@ G4ParticleHPThermalScattering::sample_inelastic_E_mu(G4double pE,
   }
 
   // Compute interpolation factor of the incident neutron energy
-  G4double factor = (energyLH.second - pE) / (energyLH.second - energyLH.first);
-
-  if ((energyLH.second - pE) <= 0. && std::fabs(pE / energyLH.second - 1) < 1E-11) factor = 0.;
-  if ((energyLH.first - pE) >= 0. && std::fabs(energyLH.first / pE - 1) < 1E-11) factor = 1.;
+  const G4double deltalim = 1.e-6*CLHEP::eV;
+  G4double e1 = energyLH.first;
+  G4double e2 = energyLH.second;
+  G4double factor = (std::abs(e2 - e1) > deltalim) ? (e2 - pE)/(e2 - e1) : 0.0;
+  factor = std::min(factor, 1.0);
 
   G4double rndm1 = G4UniformRand();
   G4double rndm2 = G4UniformRand();
@@ -995,7 +996,7 @@ G4ParticleHPThermalScattering::create_sE_and_EPM_from_pE_and_vE_P_E_isoAng(
 
   E_isoAng anE_isoAng;
   // extreme case - there is no possibility to sample
-  if (nullptr == pE_P_E_isoAng_EL || nullptr == pE_P_E_isoAng_EL) {
+  if (nullptr == pE_P_E_isoAng_EL || nullptr == pE_P_E_isoAng_EH) {
     anE_isoAng.n = 1;
     anE_isoAng.isoAngle.push_back(0.0);
     return std::pair<G4double, E_isoAng>(pE, anE_isoAng);

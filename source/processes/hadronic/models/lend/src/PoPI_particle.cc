@@ -75,7 +75,7 @@ void Particle::toXMLList( std::vector<std::string> &a_XMLList, std::string const
     std::string indent2 = a_indent1 + "  ";
 
     std::string header = a_indent1 + "<" + family( ) + " id=\"" + ID( ) + "\"" + toXMLListExtraAttributes( ) + ">";
-    a_XMLList.push_back( header );
+    a_XMLList.push_back( std::move( header ) );
 
     m_mass.toXMLList( a_XMLList, indent2 );
     m_spin.toXMLList( a_XMLList, indent2 );

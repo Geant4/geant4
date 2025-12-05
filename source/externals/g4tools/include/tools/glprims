@@ -20,9 +20,6 @@ inline mode_t line_strip()     {return 0x0003;} //polyline
 inline mode_t triangles()      {return 0x0004;}
 inline mode_t triangle_strip() {return 0x0005;}
 inline mode_t triangle_fan()   {return 0x0006;}
-//inline mode_t quads()          {return 0x0007;}
-//inline mode_t quad_strip()     {return 0x0008;}
-//inline mode_t polygon()        {return 0x0009;}
 
 inline bool is_mode(mode_t a_mode) {
   return a_mode<=0x006?true:false;

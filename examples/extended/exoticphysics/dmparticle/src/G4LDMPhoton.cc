@@ -23,10 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file exoticphysics/dmparticle/src/G4LDMPhoton.cc
+/// \file G4LDMPhoton.cc
 /// \brief Implementation of the G4LDMPhoton class
-//
-//
+
 //---------------------------------------------------------------------------
 //
 // ClassName:   G4LDMPhoton

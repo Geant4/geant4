@@ -23,10 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file eventgenerator/HepMC/HepMCEx01/src/ExN04CalorimeterSD.cc
+/// \file ExN04CalorimeterSD.cc
 /// \brief Implementation of the ExN04CalorimeterSD class
-//
-//
 
 #include "ExN04CalorimeterSD.hh"
 

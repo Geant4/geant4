@@ -90,12 +90,6 @@ G4IntersectionSolid::G4IntersectionSolid( __void__& a )
 
 //////////////////////////////////////////////////////////////////////////
 //
-//
-
-G4IntersectionSolid::~G4IntersectionSolid() = default;
-
-//////////////////////////////////////////////////////////////////////////
-//
 // Copy constructor
 
 G4IntersectionSolid::G4IntersectionSolid(const G4IntersectionSolid&) = default;
@@ -193,12 +187,13 @@ G4IntersectionSolid::CalculateExtent(const EAxis pAxis,
 EInside G4IntersectionSolid::Inside(const G4ThreeVector& p) const
 {
   EInside positionA = fPtrSolidA->Inside(p);
-  if(positionA == kOutside) return positionA; // outside A
+  if(positionA == kOutside) { return positionA; } // outside A
 
   EInside positionB = fPtrSolidB->Inside(p);
-  if(positionA == kInside)  return positionB;
+  if(positionA == kInside) { return positionB; }
 
-  if(positionB == kOutside) return positionB; // outside B
+  if(positionB == kOutside) { return positionB; } // outside B
+
   return kSurface;                            // surface A & B
 }
 
@@ -310,7 +305,7 @@ G4IntersectionSolid::DistanceToIn( const G4ThreeVector& p,
         {
           dA1 = fPtrSolidA->DistanceToIn(pA, v);
 
-          if( dA1 == kInfinity )   return kInfinity;
+          if( dA1 == kInfinity ) { return kInfinity; }
         
           pA += dA1*v;
         }
@@ -328,7 +323,7 @@ G4IntersectionSolid::DistanceToIn( const G4ThreeVector& p,
         {
           dB1 = fPtrSolidB->DistanceToIn(pB, v);
 
-          if(dB1 == kInfinity)   return kInfinity;
+          if(dB1 == kInfinity) { return kInfinity; }
         
           pB += dB1*v;
         }
@@ -341,7 +336,7 @@ G4IntersectionSolid::DistanceToIn( const G4ThreeVector& p,
 
       if( dA1 < dB1 ) 
       {
-        if( dB1 < dA2 )  return dB1;
+        if( dB1 < dA2 ) { return dB1; }
 
         dA   = dA2;
         pA   = p + dA*v;  // continue from here
@@ -351,7 +346,7 @@ G4IntersectionSolid::DistanceToIn( const G4ThreeVector& p,
       }
       else 
       {
-        if( dA1 < dB2 )  return dA1;
+        if( dA1 < dB2 ) { return dA1; }
 
         dB   = dB2;
         pB   = p + dB*v;  // continue from here
@@ -507,6 +502,10 @@ G4IntersectionSolid::ComputeDimensions( G4VPVParameterisation*,
                                         const G4int,
                                         const G4VPhysicalVolume* ) 
 {
+  DumpInfo();
+  G4Exception("G4IntersectionSolid::ComputeDimensions()",
+              "GeomSolids0001", FatalException,
+              "Method not applicable in this context!");
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -555,10 +554,7 @@ G4IntersectionSolid::CreatePolyhedron () const
     {
       return result;
     }
-    else
-    {
-      return nullptr;
-    }
+    return nullptr;
   }
   else
   {

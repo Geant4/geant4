@@ -249,7 +249,7 @@ class Suite : public Ancestry {
     private:
         std::string m_keyName;                                          /**< The name of the key used to look up items in the suite. */
         mutable Entries m_entries;                                      /**< The list of nodes stored within *this*. */
-        std::map<std::string,int> m_map;                                /**< A map of *this* node labels to their index in *m_entries*. */
+        std::map<std::string,std::size_t> m_map;                        /**< A map of *this* node labels to their index in *m_entries*. */
 
         Suite( Suite const *a_suite );                  // FIXME, should we make public or private copy constructor? Making private for now.
 
@@ -262,7 +262,7 @@ class Suite : public Ancestry {
         std::string const &keyName( ) const { return( m_keyName ); }                        /**< Returns a const reference to the *m_keyName* member. */
         std::size_t size( ) const { return( m_entries.size( ) ); }                            /**< Returns the number of node contained by *this*. */
 
-        int operator[]( std::string const &a_label ) const ;
+        std::size_t operator[]( std::string const &a_label ) const ;
         typedef Entries::iterator iterator;
         typedef Entries::const_iterator const_iterator;
         iterator begin( ) { return m_entries.begin( ); }                                      /**< The C++ begin iterator for *this*. */
@@ -336,7 +336,7 @@ template<typename T> T const *Suite::get( std::size_t a_index ) const {
 
 template<typename T> T *Suite::get( std::string const &a_label ) {
 
-    int index = (*this)[a_label];
+    auto index = (*this)[a_label];
     Entry *entry = m_entries[index];
     T *object = dynamic_cast<T *>( entry );
 
@@ -355,7 +355,7 @@ template<typename T> T *Suite::get( std::string const &a_label ) {
 
 template<typename T> T const *Suite::get( std::string const &a_label ) const {
 
-    int index = (*this)[a_label];
+    auto index = (*this)[a_label];
     Entry *entry = m_entries[index];
     T *object = dynamic_cast<T *>( entry );
 

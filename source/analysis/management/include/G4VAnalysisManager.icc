@@ -84,6 +84,8 @@ G4bool G4VAnalysisManager::FillP2(G4int id,
 inline
 G4bool G4VAnalysisManager::FillNtupleIColumn(G4int columnId, G4int value)
 {
+  if (fVNtupleManager == nullptr) return false;
+
   return fVNtupleManager->FillNtupleIColumn(columnId, value);
 }
 
@@ -91,6 +93,8 @@ G4bool G4VAnalysisManager::FillNtupleIColumn(G4int columnId, G4int value)
 inline
 G4bool G4VAnalysisManager::FillNtupleFColumn(G4int columnId, G4float value)
 {
+  if (fVNtupleManager == nullptr) return false;
+
   return fVNtupleManager->FillNtupleFColumn(columnId, value);
 }
 
@@ -98,6 +102,8 @@ G4bool G4VAnalysisManager::FillNtupleFColumn(G4int columnId, G4float value)
 inline
 G4bool G4VAnalysisManager::FillNtupleDColumn(G4int columnId, G4double value)
 {
+  if (fVNtupleManager == nullptr) return false;
+
   return fVNtupleManager->FillNtupleDColumn(columnId, value);
 }
 
@@ -105,6 +111,8 @@ G4bool G4VAnalysisManager::FillNtupleDColumn(G4int columnId, G4double value)
 inline
 G4bool G4VAnalysisManager::FillNtupleSColumn(G4int columnId, const G4String& value)
 {
+  if (fVNtupleManager == nullptr) return false;
+
   return fVNtupleManager->FillNtupleSColumn(columnId, value);
 }
 
@@ -112,6 +120,8 @@ G4bool G4VAnalysisManager::FillNtupleSColumn(G4int columnId, const G4String& val
 inline
 G4bool G4VAnalysisManager::AddNtupleRow()
 {
+  if (fVNtupleManager == nullptr) return false;
+
   return fVNtupleManager->AddNtupleRow();
 }
 
@@ -120,13 +130,18 @@ inline
 G4bool G4VAnalysisManager::FillNtupleIColumn(G4int ntupleId, G4int columnId,
                                             G4int value)
 {
+  if (fVNtupleManager == nullptr) return false;
+
   return fVNtupleManager->FillNtupleIColumn(ntupleId, columnId, value);
 }
+
 //_____________________________________________________________________________
 inline
 G4bool G4VAnalysisManager::FillNtupleFColumn(G4int ntupleId, G4int columnId,
                                             G4float value)
 {
+  if (fVNtupleManager == nullptr) return false;
+
   return fVNtupleManager->FillNtupleFColumn(ntupleId, columnId, value);
 }
 
@@ -135,6 +150,8 @@ inline
 G4bool G4VAnalysisManager::FillNtupleDColumn(G4int ntupleId, G4int columnId,
                                             G4double value)
 {
+  if (fVNtupleManager == nullptr) return false;
+
   return fVNtupleManager->FillNtupleDColumn(ntupleId, columnId, value);
 }
 
@@ -143,6 +160,8 @@ inline
 G4bool G4VAnalysisManager::FillNtupleSColumn(G4int ntupleId, G4int columnId,
                                             const G4String& value)
 {
+  if (fVNtupleManager == nullptr) return false;
+
   return fVNtupleManager->FillNtupleSColumn(ntupleId, columnId, value);
 }
 
@@ -150,6 +169,8 @@ G4bool G4VAnalysisManager::FillNtupleSColumn(G4int ntupleId, G4int columnId,
 inline
 G4bool G4VAnalysisManager::AddNtupleRow(G4int ntupleId)
 {
+  if (fVNtupleManager == nullptr) return false;
+
   return fVNtupleManager->AddNtupleRow(ntupleId);
 }
 

@@ -23,10 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file field/field04/src/F04StepMax.cc
+/// \file F04StepMax.cc
 /// \brief Implementation of the F04StepMax class
-//
 
 #include "F04StepMax.hh"
 

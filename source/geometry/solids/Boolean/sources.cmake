@@ -8,6 +8,7 @@ geant4_add_module(G4geomBoolean
     G4DisplacedSolid.hh
     G4IntersectionSolid.hh
     G4MultiUnion.hh
+    G4MultiUnion.icc
     G4ScaledSolid.hh
     G4SubtractionSolid.hh
     G4UnionSolid.hh

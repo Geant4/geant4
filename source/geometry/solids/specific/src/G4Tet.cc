@@ -167,8 +167,8 @@ G4Tet& G4Tet::operator = (const G4Tet& rhs)
 ////////////////////////////////////////////////////////////////////////
 //
 // Return true if tetrahedron is degenerate
-// Tetrahedron is concidered as degenerate in case if its minimal
-// height is less than degeneracy tolerance
+// Tetrahedron is considered as degenerate in case its minimal
+// height is less than the degeneracy tolerance
 //
 G4bool G4Tet::CheckDegeneracy(const G4ThreeVector& p0,
                               const G4ThreeVector& p1,
@@ -189,7 +189,10 @@ G4bool G4Tet::CheckDegeneracy(const G4ThreeVector& p0,
 
   // Find face with max area
   G4int k = 0;
-  for (G4int i = 1; i < 4; ++i) { if (ss[i] > ss[k]) k = i; }
+  for (G4int i = 1; i < 4; ++i)
+  {
+    if (ss[i] > ss[k]) { k = i; }
+  }
 
   // Check: vol^2 / s^2 <= hmin^2
   return (vol*vol <= ss[k]*hmin*hmin);
@@ -442,25 +445,30 @@ G4ThreeVector G4Tet::SurfaceNormal( const G4ThreeVector& p) const
   G4ThreeVector norm =
     k[0]*fNormal[0] + k[1]*fNormal[1] + k[2]*fNormal[2] + k[3]*fNormal[3];
 
-  if (nsurf == 1.) return norm;
-  else if (nsurf > 1.) return norm.unit(); // edge or vertex
+  if (nsurf == 1.)
   {
-#ifdef G4SPECSDEBUG
-    std::ostringstream message;
-    G4long oldprc = message.precision(16);
-    message << "Point p is not on surface (!?) of solid: "
-            << GetName() << "\n";
-    message << "Position:\n";
-    message << "   p.x() = " << p.x()/mm << " mm\n";
-    message << "   p.y() = " << p.y()/mm << " mm\n";
-    message << "   p.z() = " << p.z()/mm << " mm";
-    G4cout.precision(oldprc);
-    G4Exception("G4Tet::SurfaceNormal(p)", "GeomSolids1002",
-                JustWarning, message );
-    DumpInfo();
-#endif
-    return ApproxSurfaceNormal(p);
+    return norm;
   }
+  if (nsurf > 1.)
+  {
+    return norm.unit(); // edge or vertex
+  }
+
+#ifdef G4SPECSDEBUG
+  std::ostringstream message;
+  G4long oldprc = message.precision(16);
+  message << "Point p is not on surface (!?) of solid: "
+          << GetName() << "\n";
+  message << "Position:\n";
+  message << "   p.x() = " << p.x()/mm << " mm\n";
+  message << "   p.y() = " << p.y()/mm << " mm\n";
+  message << "   p.z() = " << p.z()/mm << " mm";
+  G4cout.precision(oldprc);
+  G4Exception("G4Tet::SurfaceNormal(p)", "GeomSolids1002",
+              JustWarning, message );
+  DumpInfo();
+#endif
+  return ApproxSurfaceNormal(p);
 }
 
 ////////////////////////////////////////////////////////////////////////

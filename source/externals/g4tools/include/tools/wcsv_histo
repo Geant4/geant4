@@ -18,7 +18,6 @@ inline void axis_to(std::ostream& a_writer,const AXIS& a_axis,char a_hc) {
              << "axis fixed " << a_axis.m_number_of_bins
              << " " << a_axis.m_minimum_value
              << " " << a_axis.m_maximum_value
-//           << " " << a_axis.m_bin_width
              << std::endl;
   } else {
     a_writer << a_hc << "axis edges";

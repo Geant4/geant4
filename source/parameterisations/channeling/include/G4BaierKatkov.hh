@@ -32,7 +32,7 @@
 #define G4BaierKatkov_h 1
 
 #include "globals.hh"
-#include <CLHEP/Units/SystemOfUnits.h>
+#include "G4ios.hh"
 #include <vector>
 #include "G4ThreeVector.hh"
 
@@ -160,8 +160,38 @@ public:
 
     /// Virtual collimator masks the selection of photon angles in fTotalSpectrum
     /// Virtual collimator doesn't influence on Geant4 simulations.
-    void SetVirtualCollimator(G4double virtualCollimatorAngularDiameter)
-         {fVirtualCollimatorAngularDiameter=virtualCollimatorAngularDiameter;}
+    void SetRoundVirtualCollimator(G4double virtualCollimatorAngularRadius,
+                                   G4double virtualCollimatorAngularCenterX = 0.,
+                                   G4double virtualCollimatorAngularCenterY = 0.)
+        {fVirtualCollimatorAngularHalfWidthX2 = virtualCollimatorAngularRadius*
+                                                virtualCollimatorAngularRadius;
+         fVirtualCollimatorAngularHalfWidthY2 = fVirtualCollimatorAngularHalfWidthX2;
+
+         fVirtualCollimatorAngularCenterX = virtualCollimatorAngularCenterX;
+         fVirtualCollimatorAngularCenterY = virtualCollimatorAngularCenterY;
+         fVirtualCollimatorTypeID = 1;}
+
+    void SetEllipticVirtualCollimator(G4double virtualCollimatorAngularRadiusX,
+                                      G4double virtualCollimatorAngularRadiusY,
+                                        G4double virtualCollimatorAngularCenterX = 0.,
+                                        G4double virtualCollimatorAngularCenterY = 0.)
+        {fVirtualCollimatorAngularHalfWidthX2 = virtualCollimatorAngularRadiusX*
+                                                virtualCollimatorAngularRadiusX;
+         fVirtualCollimatorAngularHalfWidthY2 = virtualCollimatorAngularRadiusY*
+                                                virtualCollimatorAngularRadiusY;
+         fVirtualCollimatorAngularCenterX = virtualCollimatorAngularCenterX;
+         fVirtualCollimatorAngularCenterY = virtualCollimatorAngularCenterY;
+         fVirtualCollimatorTypeID = 1;}
+
+    void SetRectangularVirtualCollimator(G4double virtualCollimatorAngularHalfWidthX,
+                                         G4double virtualCollimatorAngularHalfWidthY,
+                                         G4double virtualCollimatorAngularCenterX = 0.,
+                                         G4double virtualCollimatorAngularCenterY = 0.)
+        {fVirtualCollimatorAngularHalfWidthX = virtualCollimatorAngularHalfWidthX;
+         fVirtualCollimatorAngularHalfWidthY = virtualCollimatorAngularHalfWidthY;
+         fVirtualCollimatorAngularCenterX = virtualCollimatorAngularCenterX;
+         fVirtualCollimatorAngularCenterY = virtualCollimatorAngularCenterY;
+         fVirtualCollimatorTypeID = 2;}
 
     /// add the new elements of the trajectory, calculate radiation in a crystal
     /// see complete description in G4BaierKatkov::DoRadiation
@@ -239,8 +269,14 @@ private:
     G4double fLogEdEmin = 1.;   // = log(E/fMinPhotonEnergy), the same as fLogEmaxdEmin
                                // but with the particle energy as the maximal limit
 
-    G4double fVirtualCollimatorAngularDiameter=1.;//default, infinite angle
+    G4double fVirtualCollimatorAngularHalfWidthX = 1.;//angular half width in X
+    G4double fVirtualCollimatorAngularHalfWidthY = 1.;//angular half width in Y
+    G4double fVirtualCollimatorAngularHalfWidthX2=1.;//angular half width X square
+    G4double fVirtualCollimatorAngularHalfWidthY2=1.;//angular half width Y square
+    G4double fVirtualCollimatorAngularCenterX = 0.;// angular center
+    G4double fVirtualCollimatorAngularCenterY = 0.;// angular center
     std::vector<G4bool> fInsideVirtualCollimator;
+    G4int fVirtualCollimatorTypeID = 0; //0 - infinite, 1 - round or ellipse, 2 - rectangular
 
     ///data of the phootn energy range with additional statistics
     std::vector<G4double> fLogAddRangeEmindEmin;//=G4Log(emin/fMinPhotonEnergy)

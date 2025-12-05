@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file EmDNAChemistry.hh
+/// \brief Definition of the EmDNAChemistry class
+
 #ifndef G4EmDNAChemistry_optionx_hh
 #define G4EmDNAChemistry_optionx_hh 1
 

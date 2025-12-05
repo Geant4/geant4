@@ -101,7 +101,7 @@ class G4GeometryMessenger : public G4UImessenger
     G4bool checkParallelWorlds = false;
 
     G4TransportationManager* tmanager;
-    std::vector<G4GeomTestVolume*> tvolumes{};
+    std::vector<G4GeomTestVolume*> tvolumes;
 };
 
 #endif

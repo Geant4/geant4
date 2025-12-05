@@ -23,10 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file exoticphysics/phonon/include/XPhononStackingAction.hh
+/// \file XPhononStackingAction.hh
 /// \brief Definition of the XPhononStackingAction class
-//
-//
+
 #ifndef XPhononStackingAction_h
 #define XPhononStackingAction_h 1
 

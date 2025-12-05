@@ -23,9 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// @file PrimaryGeneratorAction.cc
-/// @brief Define primary generator action
+/// \file PrimaryGeneratorAction.cc
+/// \brief Implementation of the PrimaryGeneratorAction class
+///
+/// Define primary generator action
 
 #include "PrimaryGeneratorAction.hh"
 

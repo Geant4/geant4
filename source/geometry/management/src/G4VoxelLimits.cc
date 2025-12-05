@@ -25,7 +25,7 @@
 //
 // Class G4VoxelLimits implementation
 //
-// 13.07.95, P.Kent - Initial version
+// Author: Paul Kent (CERN), 13.07.1995 - Initial version.
 // --------------------------------------------------------------------
 
 #include "G4VoxelLimits.hh"
@@ -245,32 +245,32 @@ std::ostream& operator << (std::ostream& os, const G4VoxelLimits& pLim)
 {
     os << "{";
     if (pLim.IsXLimited())
-        {
-            os << "(" << pLim.GetMinXExtent() 
-               << "," << pLim.GetMaxXExtent() << ") ";
-        }
+    {
+      os << "(" << pLim.GetMinXExtent() 
+         << "," << pLim.GetMaxXExtent() << ") ";
+    }
     else
-        {
-            os << "(-,-) ";
-        }
+    {
+      os << "(-,-) ";
+    }
     if (pLim.IsYLimited())
-        {
-            os << "(" << pLim.GetMinYExtent() 
-               << "," << pLim.GetMaxYExtent() << ") ";
-        }
+    {
+      os << "(" << pLim.GetMinYExtent() 
+         << "," << pLim.GetMaxYExtent() << ") ";
+    }
     else
-        {
-            os << "(-,-) ";
-        }
+    {
+      os << "(-,-) ";
+    }
     if (pLim.IsZLimited())
-        {
-            os << "(" << pLim.GetMinZExtent()
-               << "," << pLim.GetMaxZExtent() << ")";
-        }
+    {
+      os << "(" << pLim.GetMinZExtent()
+         << "," << pLim.GetMaxZExtent() << ")";
+    }
     else
-        {
-            os << "(-,-)";
-        }
+    {
+      os << "(-,-)";
+    }
     os << "}";
     return os;
 }

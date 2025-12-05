@@ -192,19 +192,18 @@ void G4MuPairProductionModel::Initialise(const G4ParticleDefinition* p,
   if(lowestKinEnergy >= HighEnergyLimit()) { return; }
 
   if (p == particle) {
-    fElementData =
-      G4ElementDataRegistry::Instance()->GetElementDataByName(dataName);
+    auto reg = G4ElementDataRegistry::Instance();
+    fElementData = reg->GetElementDataByName(dataName);
     if (nullptr == fElementData) { 
       G4AutoLock l(&theMuPairMutex);
-      fElementData =
-	G4ElementDataRegistry::Instance()->GetElementDataByName(dataName);
-      if (nullptr == fElementData) { 
-	fElementData = new G4ElementData(NZDATPAIR);
-	fElementData->SetName(dataName);
-      }
+      fElementData = reg->NewElementData(dataName, NZDATPAIR);
       G4bool useDataFile = G4EmParameters::Instance()->RetrieveMuDataFromFile();
-      if (useDataFile)  { useDataFile = RetrieveTables(); }
-      if (!useDataFile) { MakeSamplingTables(); }
+      if (useDataFile) {
+	useDataFile = RetrieveTables();
+      }
+      else {
+	MakeSamplingTables();
+      }
       if (fTableToFile) { StoreTables(); }
       l.unlock();
     }
@@ -485,7 +484,7 @@ void G4MuPairProductionModel::MakeSamplingTables()
   for (G4int iz=0; iz<NZDATPAIR; ++iz) {
 
     G4double Z = ZDATPAIR[iz];
-    G4Physics2DVector* pv = new G4Physics2DVector(nbiny+1,nbine+1);
+    G4Physics2DVector* pv = fElementData->New2DVector(iz, G4int(nbiny)+1, G4int(nbine)+1);
     G4double kinEnergy = emin;
 
     for (std::size_t it=0; it<=nbine; ++it) {
@@ -541,7 +540,6 @@ void G4MuPairProductionModel::MakeSamplingTables()
       // to avoid precision lost
       if(it+1 == nbine) { kinEnergy = emax; }
     }
-    fElementData->InitialiseForElement(iz, pv);
   }
 }
 

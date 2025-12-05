@@ -23,11 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file medical/GammaTherapy/GammaTherapy.cc
+/// \file GammaTherapy.cc
 /// \brief Main program of the medical/GammaTherapy example
-//
-//
+
 // -------------------------------------------------------------
 //      GEANT4 ibrem
 //

@@ -24,12 +24,7 @@
 // ********************************************************************
 //
 /// \file Layer.cc
-/// \brief Main program of the hadronic/ParticleFluence/Layer example
-//
-//
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// \brief Main program of the ParticleFluence/Layer example
 
 #include "ActionInitialization.hh"
 #include "DetectorConstruction.hh"

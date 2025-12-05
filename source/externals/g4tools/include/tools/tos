@@ -52,12 +52,6 @@ inline std::string tos(unsigned int a_value) {
   return _s;
 }
 
-inline std::string tosx(unsigned int a_value) {
-  std::string _s;
-  sprintf(_s,32,"%x",a_value);
-  return _s;
-}
-
 inline std::string tos(int a_value){
   std::string _s;
   sprintf(_s,32,"%d",a_value);
@@ -109,15 +103,6 @@ inline std::string tos(const std::vector<T>& a_vals,
   result += tos(a_vals[number]);
   if(a_sep_at_end) result += a_sep;
   return result;
-}
-
-inline std::string tos(unsigned int a_linen,const char* a_lines[]) {
-  std::string _s;
-  for(unsigned int index=0;index<a_linen;index++) {
-    _s += std::string(a_lines[index]);
-    _s += "\n";
-  }
-  return _s;
 }
 
 }

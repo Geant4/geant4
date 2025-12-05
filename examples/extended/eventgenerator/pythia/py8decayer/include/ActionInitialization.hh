@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file eventgenerator/pythia/pythia8decayer/include/ActionInitialization.hh
+/// \file ActionInitialization.hh
 /// \brief Definition of the ActionInitialization class
 
 #ifndef ActionInitialization_H

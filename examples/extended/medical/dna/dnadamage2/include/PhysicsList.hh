@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file PhysicsList.hh
+/// \brief Definition of the PhysicsList class
+
 // This example is provided by the Geant4-DNA collaboration
 // DNADAMAGE2 example is derived from the chem6 example
 // chem6 example authors: W. G. Shin and S. Incerti (CENBG, France)
@@ -38,8 +41,6 @@
 //
 // Author: J. Naoki D. Kondo (UCSF, US)
 //
-/// \file PhysicsList.hh
-/// \brief Definition of the PhysicsList class
 
 #ifndef DNADAMAGE2_PhysicsList_h
 #define DNADAMAGE2_PhysicsList_h 1

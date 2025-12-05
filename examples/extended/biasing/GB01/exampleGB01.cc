@@ -23,10 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file GB01/exampleGB01.cc
-/// \brief Main program of the GB01 example
-//
-//
+/// \file exampleGB01.cc
+/// \brief Main program of the biasing/GB01 example
 
 #include "FTFP_BERT.hh"
 #include "GB01ActionInitialization.hh"

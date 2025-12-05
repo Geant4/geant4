@@ -23,12 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm10/src/DetectorWatase86.cc
+/// \file DetectorWatase86.cc
 /// \brief Implementation of the DetectorWatase86 class
-//
-//
-//
-//
 
 #include "DetectorWatase86.hh"
 

@@ -32,7 +32,7 @@
 //   By = B[1] = fGradient*(X*X-Y*Y)/2,
 //   Bz = B[2] = 0
 
-// Author: H. Burkhardt - 23/10/2019
+// Author: Helmut Burkhardt (CERN), 23.10.2019
 // -------------------------------------------------------------------
 #ifndef G4SEXTUPOLEMAGFIELD_HH
 #define G4SEXTUPOLEMAGFIELD_HH
@@ -41,17 +41,46 @@
 #include "G4ThreeVector.hh"
 #include "G4RotationMatrix.hh"
 
+/**
+ * @brief G4SextupoleMagField is a class for defining a sextupole
+ * magnetic field.
+ */
+
 class G4SextupoleMagField : public G4MagneticField
 {
   public:
 
+    /**
+     * Constructor for G4SextupoleMagField.
+     *  @param[in] pGradient Field gradient value.
+     */
     G4SextupoleMagField(G4double pGradient);
-    G4SextupoleMagField(      G4double pGradient,
+
+    /**
+     * Constructor for G4QuadrupoleMagField.
+     *  @param[in] pGradient Field gradient value.
+     *  @param[in] pOrigin Origin position.
+     *  @param[in] pMatrix Rotation matrix.
+     */
+    G4SextupoleMagField(G4double pGradient,
                         const G4ThreeVector& pOrigin,
                         G4RotationMatrix* pMatrix);
-   ~G4SextupoleMagField() override;
 
-    void GetFieldValue(const G4double yTrack[], G4double B[] ) const override;
+    /**
+     * Default Destructor.
+     */
+    ~G4SextupoleMagField() override = default;
+
+    /**
+     * Returns the field value on the given position 'yTrack'.
+     *  @param[in] yTrack Time position array.
+     *  @param[out] B The returned field array.
+     */
+    void GetFieldValue(const G4double yTrack[], G4double B[]) const override;
+
+    /**
+     * Returns a pointer to a new allocated clone of this object.
+     */
     G4Field* Clone() const override;
 
   private:

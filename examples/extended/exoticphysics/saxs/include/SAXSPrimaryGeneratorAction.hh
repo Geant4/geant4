@@ -25,7 +25,7 @@
 //
 /// \file SAXSPrimaryGeneratorAction.hh
 /// \brief Definition of the SAXSPrimaryGeneratorAction class
-//
+
 /// The G4GeneralParticleSource generator is defined and the
 /// features of the primary beam are set through macro commands
 //

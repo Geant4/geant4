@@ -194,40 +194,6 @@ if(GEANT4_USE_QT)
   get_target_property(QT_QMAKE_EXECUTABLE Qt${QT_VERSION_MAJOR}::qmake IMPORTED_LOCATION)
   geant4_add_feature(GEANT4_USE_QT "Build Geant4 with Qt${QT_VERSION_MAJOR} support")
 
-  # Qt3D is only supported on 5.15 and above, but always on if available
-  set(QT3D_MINIMUM_VERSION 5.15.0)
-  set(GEANT4_USE_QT3D OFF)
-
-  if(QT_VERSION VERSION_GREATER_EQUAL QT3D_MINIMUM_VERSION)
-    find_package(Qt${QT_VERSION_MAJOR}3DCore ${QT_VERSION} EXACT QUIET)
-    find_package(Qt${QT_VERSION_MAJOR}3DExtras ${QT_VERSION} EXACT QUIET)
-    find_package(Qt${QT_VERSION_MAJOR}3DRender ${QT_VERSION} EXACT QUIET)
-
-    # Forward correct minimum version to CMake/etc files
-    set(QT3D_MINIMUM_VERSION ${QT_VERSION})
-
-    if(Qt${QT_VERSION_MAJOR}3DCore_FOUND AND Qt${QT_VERSION_MAJOR}3DExtras_FOUND AND Qt${QT_VERSION_MAJOR}3DRender_FOUND)
-      set(GEANT4_USE_QT3D ON)
-      geant4_save_package_variables(Qt${QT_VERSION_MAJOR}
-        Qt${QT_VERSION_MAJOR}3DCore_DIR
-        Qt${QT_VERSION_MAJOR}3DExtras_DIR
-        Qt${QT_VERSION_MAJOR}3DRender_DIR)
-      geant4_add_feature(GEANT4_USE_QT3D "Build Geant4 Qt3D driver")
-    else()
-      set(_g4_qt3d_missing)
-      if(NOT Qt${QT_VERSION_MAJOR}3DCore_FOUND)
-        list(APPEND _g4_qt3d_missing "Qt${QT_VERSION_MAJOR}3DCore")
-      endif()
-      if(NOT Qt${QT_VERSION_MAJOR}3DExtras_FOUND)
-        list(APPEND _g4_qt3d_missing "Qt${QT_VERSION_MAJOR}3DExtras")
-      endif()
-      if(NOT Qt${QT_VERSION_MAJOR}3DRender_FOUND)
-        list(APPEND _g4_qt3d_missing "Qt${QT_VERSION_MAJOR}3DRender")
-      endif()
-
-      message(STATUS "Disabling Geant4 Qt3D driver, missing Qt packages: ${_g4_qt3d_missing}")
-    endif()
-  endif()
   # Variables for export to GNUmake
   execute_process(COMMAND ${QT_QMAKE_EXECUTABLE} -query QT_INSTALL_PREFIX OUTPUT_VARIABLE G4QTHOME OUTPUT_STRIP_TRAILING_WHITESPACE)
   execute_process(COMMAND ${QT_QMAKE_EXECUTABLE} -query QT_INSTALL_LIBS OUTPUT_VARIABLE G4QTLIBPATH OUTPUT_STRIP_TRAILING_WHITESPACE)

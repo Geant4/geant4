@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file TrackingAction.cc
+/// \brief Implementation of the TrackingAction class
+
 #include <G4Track.hh>
 #include <G4UnitsTable.hh>
 #include <TrackingAction.hh>

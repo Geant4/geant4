@@ -1,0 +1,98 @@
+\page Examplesvalue Example svalue
+
+\author S. Incerti et al. (a, *) \n
+a. LP2i, IN2P3 / CNRS / Bordeaux University, 33175 Gradignan, France
+* e-mail: incerti@lp2ib.in2p3.fr
+
+## INTRODUCTION.
+
+The svalue example shows how to calculate monoenergetic S values in liquid water
+using the Geant4-DNA physics processes and models.
+
+It is adapted from TestEm12.
+
+This example is provided by the Geant4-DNA collaboration.
+
+These processes and models are further described at:
+http://geant4-dna.org
+
+Any report or published results obtained using the Geant4-DNA software shall
+cite the following Geant4-DNA collaboration publications: \n
+Med. Phys. 51 (2024) 5873–5889 \n
+Med. Phys. 45 (2018) e722-e739 \n
+Phys. Med. 31 (2015) 861-874   \n
+Med. Phys. 37 (2010) 4692-4708 \n
+Int. J. Model. Simul. Sci. Comput. 1 (2010) 157–178
+
+## GEOMETRY SET-UP
+
+The geometry is a spherical nucleus surrounded by a spherical shell
+representing the cytoplasm. Nucleus radius and shell thickness can be selected
+from the provided macro file svalue.in, as well as materials
+(G4_WATER or G4_Galactic). The world is a sphere with radius 1e3 larger than
+the radius of the nucleus
+
+Particles are shot randomly inside the cytoplasm.
+
+Particle type and energy can be controlled by the
+svalue.in macro file.
+
+The PrimaryGeneratorAction class is adapted (G4 state dependent)
+in order to enable generic physics list usage
+(empty modular physics list).
+
+An alternative MyPrimaryGeneratorActionFromFile class is provided as an example
+for reading input data from a file in MT mode for the generation of primaries.
+The MyFileReader class is provided as well. They are documented in:
+https://twiki.cern.ch/twiki/bin/view/Geant4/QuickMigrationGuideForGeant4V10
+
+## SET-UP
+
+Make sure G4LEDATA points to the low energy electromagnetic data files.
+
+Set the variable MYFILE as 1 in MyFile.hh if you wish to use a spectrum file
+of incident energies. By default, this variable is not defined. The file name and
+number of lines to read can be specified in MyFile.cc. A spectrum.txt file is provided
+as example.
+
+The code can be compiled with cmake.
+
+It works in MT mode.
+
+## HOW TO RUN THE EXAMPLE
+
+In interactive mode, run:
+
+```
+./svalue svalue.in
+```
+
+The svalue.in macro allows a full control of the simulation.
+
+Two alternative macros, svalue-iodine125.in and svalue-iodine131.in
+are provided for the simulation of radioactive sources.
+
+The svalue-spectrum.in macro shows how to shoot particles
+from the spectrum.txt file of energies (unit: eV), which has been created
+using the spectrum.C sample ROOT macro.
+
+## PHYSICS
+
+You can select Geant4-DNA physics constructor in svalue.in.
+
+A tracking cut can be applied if requested.
+
+## SIMULATION OUTPUT AND RESULT ANALYSIS
+
+The output results consist in a text file (s.txt), containing :
+- the radius of the nucleus (in nm)
+- the thickness of the cytoplasm (in nm)
+- the energy of incident particles (in eV)
+- the S value for the cytoplasm (in Gy/Bq.s)
+- the rms on S value for the cytoplasm (in Gy/Bq.s)
+- the S value for the nucleus (in Gy/Bq.s)
+- the rms on S value for the nucleus (in Gy/Bq.s)
+
+One can use the plot.C ROOT macro file to display results.
+
+Note: rms values correspond to standard deviation.

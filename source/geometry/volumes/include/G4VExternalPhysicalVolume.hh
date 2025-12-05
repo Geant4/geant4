@@ -34,10 +34,10 @@
 //   * volume type is similar to G4PVPlacement -- not replicated
 //   * external navigator may provide 'many'/Boolean operation
 
-// Author: John Apostolakis (CERN), October 2019
+// Author: John Apostolakis (CERN), 24.10.2019
 // ----------------------------------------------------------------------
 #ifndef G4VEXTERNALPHYSICSVOLUME_HH
-#define G4VEXTERNALPHYSICSVOLUME_HH 1
+#define G4VEXTERNALPHYSICSVOLUME_HH
 
 #include "G4VPhysicalVolume.hh"
 #include "G4Transform3D.hh"
@@ -81,7 +81,7 @@ class G4VExternalPhysicalVolume : public G4VPhysicalVolume
     /**
      * Default Destructor.
      */
-    ~G4VExternalPhysicalVolume() override;
+    ~G4VExternalPhysicalVolume() override = default;
 
     /**
      * Verifies if the placed volume is overlapping with existing daughters
@@ -122,8 +122,8 @@ class G4VExternalPhysicalVolume : public G4VPhysicalVolume
     /**
      * Used only for specialised repeated volumes. Always false with Id 0.
      */
-    G4bool  IsRegularStructure() const final; 
-    G4int   GetRegularStructureId() const final; 
+    G4bool IsRegularStructure() const final; 
+    G4int GetRegularStructureId() const final; 
 
   private:
 

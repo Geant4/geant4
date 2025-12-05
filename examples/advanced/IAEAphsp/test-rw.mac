@@ -1,0 +1,31 @@
+#=======================================================
+# Macro file to test simultaneous r/w of IAEAphsp files
+#=======================================================
+/control/verbose 1
+/run/verbose 1
+/tracking/verbose 1
+/event/verbose 0
+#
+/action/IAEAphspReader/fileName    phsp/PSF_example
+/action/IAEAphspWriter/namePrefix  psf_z
+/action/IAEAphspWriter/zphsp       12.0 cm
+#
+/my_geom/worldXY   25.0 cm
+/my_geom/worldZ    30.0 cm
+#
+/my_phys/setList    QGSP_BIC_HP_EMZ
+#
+/run/initialize
+#
+/run/setCut          0.1 mm
+#
+/IAEAphspReader/verbose 1
+/IAEAphspReader/numberOfParallelRuns 1   # n_parallel >= 1
+/IAEAphspReader/parallelRun          1   # in [1, n_parallel]
+#
+#/run/printProgress  100
+/run/beamOn   200
+#
+/run/beamOn   100
+#
+

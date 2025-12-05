@@ -46,10 +46,10 @@ Array3d::~Array3d( ) {
  * @param a_maxTNSL_index           [in]    All elements up to "row" *a_maxTNSL_index* exclusive are zero-ed.
  ***********************************************************************************************************/
 
-void Array3d::modifiedMultiGroupElasticForTNSL( int a_maxTNSL_index ) {
+void Array3d::modifiedMultiGroupElasticForTNSL( std::size_t a_maxTNSL_index ) {
 
-    std::vector<int> const &m_shape = m_array.shape( );
-    int maxFlatIndex = a_maxTNSL_index * m_shape[1] * m_shape[2];
+    auto const &m_shape = m_array.shape( );
+    std::size_t maxFlatIndex = a_maxTNSL_index * m_shape[1] * m_shape[2];
 
     m_array.setToValueInFlatRange( 0, maxFlatIndex, 0.0 );
 }
@@ -70,13 +70,15 @@ Matrix Array3d::matrix( std::size_t a_index ) const {
         return( matrix );
     }
 
-    std::size_t numberOfOrders = m_array.m_shape[2], rows = m_array.m_shape[0], columns = m_array.m_shape[1];
+    std::size_t numberOfOrders = static_cast<std::size_t>( m_array.m_shape[2] );
+    std::size_t rows = static_cast<std::size_t>( m_array.m_shape[0] );
+    std::size_t columns = static_cast<std::size_t>( m_array.m_shape[1] );
     Matrix matrix( rows, columns );
 
     std::size_t lengthSum = 0;
     for( std::size_t i1 = 0; i1 < m_array.m_numberOfStarts; ++i1 ) {
-        std::size_t start = m_array.m_starts[i1];
-        std::size_t length = m_array.m_lengths[i1];
+        std::size_t start = static_cast<std::size_t>( m_array.m_starts[i1] );
+        std::size_t length = static_cast<std::size_t>( m_array.m_lengths[i1] );
 
         std::size_t energyInIndex = start / ( numberOfOrders * columns );
         std::size_t energyOutIndex = start % ( numberOfOrders * columns );

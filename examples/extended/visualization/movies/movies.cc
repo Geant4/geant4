@@ -23,9 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 /// \file movies.cc
-/// \brief Main program of the Movies example
+/// \brief Main program of the visualization/movies example
 
 #include "FTFP_BERT.hh"
 #include "MoviesActionInitialization.hh"

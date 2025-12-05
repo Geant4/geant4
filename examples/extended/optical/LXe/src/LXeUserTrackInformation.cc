@@ -23,11 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file optical/LXe/src/LXeUserTrackInformation.cc
+/// \file LXeUserTrackInformation.cc
 /// \brief Implementation of the LXeUserTrackInformation class
-//
-//
+
 #include "LXeUserTrackInformation.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -23,13 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file optical/wls/include/WLSDetectorConstruction.hh
+/// \file WLSDetectorConstruction.hh
 /// \brief Definition of the WLSDetectorConstruction class
-//
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #ifndef WLSDetectorConstruction_h
 #define WLSDetectorConstruction_h 1

@@ -6,6 +6,22 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2025-10-28 Gabriele Cosmo (geommng-V11-03-12)
+- Reorganised and enriched comments in headers to follow Doxygen style.
+- Removed empty source files for G4ErrorSurfaceTarget and G4ErrorTanPlaneTarget.
+- Moved inline implementations to .icc file for G4UAdapter.
+
+## 2025-10-13 Ben Morgan (geommng-V11-03-11)
+- Prevent data races in parallel voxelisation.
+
+## 2025-09-09 John Apostolakis (geommng-V11-03-10)
+- Re-engineered voxelisation parallelism in G4GeometryManager, by creating
+  the new helper class 'G4VoxelisationHelper'.
+
+## 2025-08-19 Gabriele Cosmo (geommng-V11-03-09)
+- In G4BoundingEnvelope, simplified for loops ranges in TransformVertices(),
+  by applying clang-tidy 'modernize-loop-convert' check.
+
 ## 2025-03-29 Gabriele Cosmo (geommng-V11-03-08)
 - In G4GeometryManager, removed redundant declaration of method
   ChooseSequentialOptimisation().

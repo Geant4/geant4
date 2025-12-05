@@ -29,35 +29,49 @@
 //
 // Interface class for a weight window store. It defines how the lower 
 // weight window bound can be obtained from a weight window store.
-// 
 
 // Author: Michael Dressel (CERN), 2003
 // ----------------------------------------------------------------------
 #ifndef G4VWEIGHTWINDOWSTORE_HH
-#define G4VWEIGHTWINDOWSTORE_HH 1
+#define G4VWEIGHTWINDOWSTORE_HH
 
 #include "globals.hh"
 
 class G4GeometryCell;
 class G4VPhysicalVolume;
 
+/**
+ * @brief G4VWeightWindowStore is an interface class for a weight window store.
+ * It defines how the lower weight window bound can be obtained from a weight
+ * window store.
+ */
+
 class G4VWeightWindowStore
 {
-  public:  // with description
+  public:
 
-    G4VWeightWindowStore();
-    virtual ~G4VWeightWindowStore();
+    /**
+     * Default Constructor and Destructor.
+     */
+    G4VWeightWindowStore() = default;
+    virtual ~G4VWeightWindowStore() = default;
 
+    /**
+     * Computes a lower weight bound value of a "cell" addressed by a 
+     * G4GeometryCell and the corresponding energy from the store.
+     */
     virtual G4double GetLowerWeight(const G4GeometryCell& gCell, 
                                           G4double partEnergy) const = 0;
-      // derive a lower weight bound value of a "cell" addresed by a 
-      // G4GeometryCell and the coresponding energy from the store.
 
+    /**
+     * Returns true if the gCell is in the store, else false.
+     */
     virtual G4bool IsKnown(const G4GeometryCell& gCell) const = 0;
-      // returns true if the gCell is in the store, else false 
 
-    virtual const G4VPhysicalVolume &GetWorldVolume() const = 0;
-      // return a reference to the wolrd volume of the geometry
+    /**
+     * Returns a reference to the wolrd volume of the geometry.
+     */
+    virtual const G4VPhysicalVolume& GetWorldVolume() const = 0;
 };
 
 #endif

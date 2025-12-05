@@ -23,12 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file eventgenerator/pythia/pythia8decayer/include/Py8DecayerEngine.hh
+/// \file Py8DecayerEngine.hh
 /// \brief Definition of the Py8DecayerEngine class
 ///
 /// \author J. Yarba; FNAL
-///
 
 #ifndef Py8DecayerEngine_H
 #define Py8DecayerEngine_H

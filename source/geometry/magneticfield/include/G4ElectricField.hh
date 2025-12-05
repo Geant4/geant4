@@ -29,7 +29,7 @@
 //
 // Electric field abstract class, implements inquiry function interface.
 
-// Created: J.Apostolakis - 04.11.2003
+// Author: John Apostolakis (CERN), 04.11.2003
 // --------------------------------------------------------------------
 #ifndef G4ELECTRIC_FIELD_HH
 #define G4ELECTRIC_FIELD_HH
@@ -37,23 +37,37 @@
 #include "G4Types.hh"
 #include "G4ElectroMagneticField.hh"
 
+/**
+ * @brief G4ElectricField is an abstract class for electric field.
+ * It implements inquiry function interface.
+ */
+
 class G4ElectricField : public G4ElectroMagneticField
 {
   public:
 
-    G4ElectricField();
-   ~G4ElectricField() override;
-      // Constructor and destructor. No actions.
+    /**
+     * Default Constructor and Destructor.
+     */
+    G4ElectricField() = default;
+    ~G4ElectricField() override = default;
 
-    G4ElectricField(const G4ElectricField& r);
+    /**
+     * Copy constructor and assignment operator.
+     */
+    G4ElectricField(const G4ElectricField& r) = default;
     G4ElectricField& operator = (const G4ElectricField& p);
-      // Copy constructor & assignment operator.
 
-    G4bool   DoesFieldChangeEnergy() const override { return true; }
-      // Since an electric field can change track energy
+    /**
+     * Returns true, since an electric field can change track energy.
+     */
+    inline G4bool DoesFieldChangeEnergy() const override { return true; }
 
-    void  GetFieldValue( const G4double Point[4],
-                               G4double* Bfield ) const override = 0;
+    /**
+     * Interface for returning the field value 'Bfield' on given time 'Point'.
+     */
+    void GetFieldValue( const G4double Point[4],
+                              G4double* Bfield ) const override = 0;
 };
 
-#endif /* G4ELECTRIC_FIELD_DEF */
+#endif

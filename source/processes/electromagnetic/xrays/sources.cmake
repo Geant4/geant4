@@ -4,12 +4,19 @@
 geant4_add_module(G4xrays
   PUBLIC_HEADERS
     G4Cerenkov.hh
+    G4CerenkovQuasiTrackInfo.hh
     G4ForwardXrayTR.hh
     G4GammaXTRadiator.hh
     G4GaussXTRadiator.hh
+    G4GeneralCerenkov.hh
+    G4QuasiCerenkov.hh
+    G4QuasiScintillation.hh
+    G4QuasiOpticalData.hh
     G4RegularXTRadiator.hh
     G4Scintillation.hh
+    G4ScintillationQuasiTrackInfo.hh
     G4ScintillationTrackInformation.hh
+    G4StandardCerenkovModel.hh
     G4StrawTubeXTRadiator.hh
     G4SynchrotronRadiation.hh
     G4SynchrotronRadiationInMat.hh
@@ -25,12 +32,18 @@ geant4_add_module(G4xrays
     G4XrayReflection.hh
   SOURCES
     G4Cerenkov.cc
+    G4CerenkovQuasiTrackInfo.cc
     G4ForwardXrayTR.cc
     G4GammaXTRadiator.cc
     G4GaussXTRadiator.cc
+    G4GeneralCerenkov.cc
+    G4QuasiCerenkov.cc
+    G4QuasiScintillation.cc
     G4RegularXTRadiator.cc
     G4Scintillation.cc
+    G4ScintillationQuasiTrackInfo.cc
     G4ScintillationTrackInformation.cc
+    G4StandardCerenkovModel.cc
     G4StrawTubeXTRadiator.cc
     G4SynchrotronRadiation.cc
     G4SynchrotronRadiationInMat.cc

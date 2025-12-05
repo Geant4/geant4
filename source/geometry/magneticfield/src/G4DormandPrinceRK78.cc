@@ -30,8 +30,8 @@
 // Journal of Computational and Applied Mathematics, Volume 7, Issue 1, 1981,
 // Pages 67-75, ISSN 0377-0427, DOI: 10.1016/0771-050X(81)90010-3
 //
-// Created: Somnath Banerjee, Google Summer of Code 2015, 28 June 2015
-// Supervision: John Apostolakis, CERN
+// Author: Somnath Banerjee (CERN, Google Summer of Code 2015), 28.06.2015
+// Supervision: John Apostolakis (CERN)
 // --------------------------------------------------------------------
 
 #include "G4DormandPrinceRK78.hh"

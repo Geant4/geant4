@@ -23,11 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm7/include/G4ScreenedNuclearRecoil.hh
+/// \file G4ScreenedNuclearRecoil.hh
 /// \brief Definition of the G4ScreenedNuclearRecoil class
-//
-//
-//
+
 // G4ScreenedNuclearRecoil.hh,v 1.24 2008/05/01 19:58:59 marcus Exp
 // GEANT4 tag
 //
@@ -210,7 +208,6 @@ class G4ScreenedNuclearRecoil : public G4ScreenedCoulombCrossSectionInfo, public
   public:
     friend class G4ScreenedCollisionStage;
 
-    /// \brief Construct the process and set some physics parameters for it.
     /// \param processName the name to assign the process
     /// \param ScreeningKey the name of a screening function to use.
     /// The default functions are "zbl" (recommended for soft scattering),
@@ -234,24 +231,17 @@ class G4ScreenedNuclearRecoil : public G4ScreenedCoulombCrossSectionInfo, public
                             const G4String& ScreeningKey = "zbl", G4bool GenerateRecoils = 1,
                             G4double RecoilCutoff = 100.0 * eV, G4double PhysicsCutoff = 10.0 * eV);
 
-    /// \brief destructor
     virtual ~G4ScreenedNuclearRecoil();
 
-    /// \brief used internally by Geant4 machinery
     virtual G4double GetMeanFreePath(const G4Track&, G4double, G4ForceCondition*);
 
-    /// \brief used internally by Geant4 machinery
     virtual G4VParticleChange* PostStepDoIt(const G4Track& aTrack, const G4Step& aStep);
-    /// \brief test if a prticle of type \a aParticleType can use this process
     /// \param aParticleType the particle to test
     virtual G4bool IsApplicable(const G4ParticleDefinition& aParticleType);
-    /// \brief Build physics tables in advance.  Not Implemented.
     /// \param aParticleType the type of particle to build tables for
     virtual void BuildPhysicsTable(const G4ParticleDefinition& aParticleType);
-    /// \brief Export physics tables for persistency.  Not Implemented.
     /// \param aParticleType the type of particle to build tables for
     virtual void DumpPhysicsTable(const G4ParticleDefinition& aParticleType);
-    /// \brief deterine if the moving particle is within  the strong force
     /// range of the selected nucleus
     /// \param A the nucleon number of the beam
     /// \param A1 the nucleon number of the target
@@ -262,14 +252,11 @@ class G4ScreenedNuclearRecoil : public G4ScreenedCoulombCrossSectionInfo, public
 
     virtual G4ScreenedCoulombCrossSection* GetNewCrossSectionHandler(void);
 
-    /// \brief Get non-ionizing energy loss for last step
     G4double GetNIEL() const { return NIEL; }
 
-    /// \brief clear precomputed screening tables
     void ResetTables();
     // clear all data tables to allow changing energy cutoff, materials, etc.
 
-    /// \brief set the upper energy beyond which this process has no
     /// cross section
     ///
     /// This funciton is used to coordinate this process with G4MSC.
@@ -282,19 +269,15 @@ class G4ScreenedNuclearRecoil : public G4ScreenedCoulombCrossSectionInfo, public
 
     void SetMaxEnergyForScattering(G4double energy) { processMaxEnergy = energy; }
 
-    /// \brief find out what screening function we are using
     std::string GetScreeningKey() const { return screeningKey; }
 
-    /// \brief enable or disable all energy deposition by this process
     /// \param flag if true, enable deposition of energy (the default).
     /// If false, disable deposition.
 
     void AllowEnergyDeposition(G4bool flag) { registerDepositedEnergy = flag; }
 
-    /// \brief get flag indicating whether deposition is enabled
     G4bool GetAllowEnergyDeposition() const { return registerDepositedEnergy; }
 
-    /// \brief enable or disable the generation of recoils.
     /// If recoils are disabled, the energy they would have received is just
     /// deposited.
     /// param flag if true, create recoil ions in cases in which the energy
@@ -303,10 +286,8 @@ class G4ScreenedNuclearRecoil : public G4ScreenedCoulombCrossSectionInfo, public
 
     void EnableRecoils(G4bool flag) { generateRecoils = flag; }
 
-    /// \brief find out if generation of recoils is enabled.
     G4bool GetEnableRecoils() const { return generateRecoils; }
 
-    /// \brief set the mean free path scaling as specified
     /// \param scale the factor by which the default MFP will be scaled.
     /// Set to less than 1 for very thin films, typically,
     /// to sample multiple scattering,
@@ -314,10 +295,8 @@ class G4ScreenedNuclearRecoil : public G4ScreenedCoulombCrossSectionInfo, public
 
     void SetMFPScaling(G4double scale) { MFPScale = scale; }
 
-    /// \brief get the MFPScaling parameter
     G4double GetMFPScaling() const { return MFPScale; }
 
-    /// \brief enable or disable whether this process will skip collisions
     /// which are close enough they need hadronic phsyics.
     /// Default is true (skip close collisions).
     /// Disabling this results in excess nuclear stopping power.
@@ -326,20 +305,16 @@ class G4ScreenedNuclearRecoil : public G4ScreenedCoulombCrossSectionInfo, public
 
     void AvoidNuclearReactions(G4bool flag) { avoidReactions = flag; }
 
-    /// \brief get the flag indicating whether hadronic collisions are ignored.
     G4bool GetAvoidNuclearReactions() const { return avoidReactions; }
 
-    /// \brief set the minimum energy (per nucleon) at which recoils can
     /// be generated,
     /// and the energy (per nucleon) below which all ions are stopped.
     /// \param energy energy per nucleon
 
     void SetRecoilCutoff(G4double energy) { recoilCutoff = energy; }
 
-    /// \brief get the recoil cutoff
     G4double GetRecoilCutoff() const { return recoilCutoff; }
 
-    /// \brief set the energy to which screening tables are computed.
     /// Typically, this is 10 eV or so, and not often changed.
     /// \param energy the cutoff energy
 
@@ -349,15 +324,11 @@ class G4ScreenedNuclearRecoil : public G4ScreenedCoulombCrossSectionInfo, public
       ResetTables();
     }
 
-    /// \brief get the physics cutoff energy.
     G4double GetPhysicsCutoff() const { return physicsCutoff; }
 
-    /// \brief set the pointer to a class for paritioning energy into NIEL
-    /// \brief part the pointer to the class.
 
     void SetNIELPartitionFunction(const G4VNIELPartition* part);
 
-    /// \brief set the cross section boost to provide faster computation of
     /// backscattering
     /// \param fraction the fraction of particles to have their cross section
     /// boosted.
@@ -370,16 +341,12 @@ class G4ScreenedNuclearRecoil : public G4ScreenedCoulombCrossSectionInfo, public
       hardeningFactor = HardeningFactor;
     }
 
-    /// \brief get the fraction of particles which will have boosted scattering
     G4double GetHardeningFraction() const { return hardeningFraction; }
 
-    /// \brief get the boost factor in use.
     G4double GetHardeningFactor() const { return hardeningFactor; }
 
-    /// \brief the the interaciton length used in the last scattering.
     G4double GetCurrentInteractionLength() const { return currentInteractionLength; }
 
-    /// \brief set a function to compute screening tables,
     /// if the user needs non-standard behavior.
     /// \param cs a class which constructs the screening tables.
 
@@ -388,7 +355,6 @@ class G4ScreenedNuclearRecoil : public G4ScreenedCoulombCrossSectionInfo, public
       externalCrossSectionConstructor = cs;
     }
 
-    /// \brief get the verbosity.
     G4int GetVerboseLevel() const { return verboseLevel; }
 
     std::map<G4int, G4ScreenedCoulombCrossSection*>& GetCrossSectionHandlers()
@@ -406,26 +372,21 @@ class G4ScreenedNuclearRecoil : public G4ScreenedCoulombCrossSectionInfo, public
 
     G4bool GetValidCollision() const { return validCollision; }
 
-    /// \brief get the pointer to our ParticleChange object.
     /// for internal use, primarily.
     class G4ParticleChange& GetParticleChange()
     {
       return static_cast<G4ParticleChange&>(*pParticleChange);
     }
 
-    /// \brief take the given energy, and use the material information
     /// to partition it into NIEL and ionizing energy.
 
     void DepositEnergy(G4int z1, G4double a1, const G4Material* material, G4double energy);
 
   protected:
-    /// \brief the energy per nucleon above which the MFP is constant
     G4double highEnergyLimit;
 
-    /// \brief the energy per nucleon below which the MFP is zero
     G4double lowEnergyLimit;
 
-    /// \brief the energy per nucleon beyond which the cross section is zero,
     /// to cross over to G4MSC
     G4double processMaxEnergy;
     G4String screeningKey;

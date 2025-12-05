@@ -23,11 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file optical/LXe/src/LXePMTHit.cc
+/// \file LXePMTHit.cc
 /// \brief Implementation of the LXePMTHit class
-//
-//
+
 #include "LXePMTHit.hh"
 
 #include "G4Colour.hh"

@@ -353,14 +353,16 @@ void G4TaskRunManager::CreateAndStartWorkers()
       }
     }
     else {
-      std::stringstream msg;
-      msg << "--> G4TaskRunManager::CreateAndStartWorkers() --> "
-          << "Initializing workers...";
+      if (verboseLevel > 0) {
+        std::stringstream msg;
+        msg << "--> G4TaskRunManager::CreateAndStartWorkers() --> "
+            << "Initializing workers...";
 
-      std::stringstream ss;
-      ss.fill('=');
-      ss << std::setw((G4int)msg.str().length()) << "";
-      G4cout << "\n" << ss.str() << "\n" << msg.str() << "\n" << ss.str() << "\n" << G4endl;
+        std::stringstream ss;
+        ss.fill('=');
+        ss << std::setw((G4int)msg.str().length()) << "";
+        G4cout << "\n" << ss.str() << "\n" << msg.str() << "\n" << ss.str() << "\n" << G4endl;
+      }
 
       G4TaskRunManagerKernel::InitCommandStack() = GetCommandStack();
       threadPool->execute_on_all_threads([]() { G4TaskRunManagerKernel::InitializeWorker(); });
@@ -380,7 +382,7 @@ void G4TaskRunManager::CreateAndStartWorkers()
     // does not execute any tasks
     threadPool->execute_on_all_threads([]() { G4TaskRunManagerKernel::ExecuteWorkerInit(); });
 
-    {
+    if (verboseLevel > 0) {
       std::stringstream msg;
       msg << "--> G4TaskRunManager::CreateAndStartWorkers() --> "
           << "Creating " << numberOfTasks << " tasks with " << numberOfEventsPerTask

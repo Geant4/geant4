@@ -125,8 +125,7 @@ class G4AdjointPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
   private:  // attributes
     G4String rndmFlag;  // flag for a rndm impact point
 
-    // The generator of primary vertex except for weight
-    G4AdjointPrimaryGenerator* theAdjointPrimaryGenerator = nullptr;
+
 
     // Emin and Emax energies of the adjoint source
     //---------------------------------------------

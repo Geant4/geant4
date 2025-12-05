@@ -180,7 +180,6 @@ private:
       
   G4bool killElectron, acousticModelEnabled;
   G4String currentMaterialName;
-  G4bool isOkToBeInitialised;
 
 };
 

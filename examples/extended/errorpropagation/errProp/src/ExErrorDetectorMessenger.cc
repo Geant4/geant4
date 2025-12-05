@@ -23,10 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file errProp/src/ExErrorDetectorMessenger.cc
+/// \file ExErrorDetectorMessenger.cc
 /// \brief Implementation of the ExErrorDetectorMessenger class
-//
 
 #include "ExErrorDetectorMessenger.hh"
 

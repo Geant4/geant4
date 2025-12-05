@@ -37,7 +37,7 @@ const G4double G4StatMFParameters::fKappa = 1.0; // dimensionless
 
 const G4double G4StatMFParameters::fKappaCoulomb = 2.0; // dimensionless
 
-const G4double G4StatMFParameters::fEpsilon0 = 16.0*MeV;
+const G4double G4StatMFParameters::fEpsilon0 = 16.0*CLHEP::MeV;
 
 // Bethe-Weizsacker coefficients
 const G4double G4StatMFParameters::fE0 = 16.0*MeV;

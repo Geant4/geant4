@@ -1,3 +1,5 @@
+\page ModuleFlukaInterface Module FlukaInterface
+
 # Interface to `FLUKA` physics models
 
 This is an interface to the `FLUKA` CERN hadron inelastic physics.  
@@ -9,7 +11,7 @@ please directly follow the `README.md` files included in
 `ProcessLevel/CrossSection` and `ProcessLevel/FinalState`.  
 
 
-# Description
+## Description
 
 The `FLUKA` hadron inelastic physics are accessible both through a `CrossSectionDataSet` and `HadronicInteraction`.  
 The `CrossSectionDataSet` and `HadronicInteraction` can be used to define processes, themselves used to form a `FLUKAHadronInelasticPhysicsConstructor`.  
@@ -17,7 +19,7 @@ The `FLUKAHadronInelasticPhysicsConstructor` can in turn be used to form any `G4
 Note that for consistency, all calls to the random engine rely on the G4 random engine (including the calls from within the downloaded `FLUKA` release; see the `FlukaInterface` `GNUmakefile` to see how this is handled).
 
 
-# Structure
+## Structure
 
 The project contains:  
 - `fluka4_wrapper`: wrapper to `FLUKA`.
@@ -28,7 +30,7 @@ The project contains:
 - `fluka_G4_bridges`: conversion tools to switch between `FLUKA` and G4 worlds (particles, random numbers, etc).
 
 
-# Dependency
+## Dependency
 
 ### Environment
 - **gcc** >= 7 (Linux) and **gcc** >= 9 (MacOS)   
@@ -72,7 +74,7 @@ If (and only if) you went for the source code package option, you will need to b
 (4) Eventually, all you need are the headers `fluka_repo/include`, libraries `fluka_repo/lib`, and data `fluka_repo/data`. Check that they are not empty.    
 Do not forget to add `/path_to_fluka/bin` to your `PATH`. Check with `which fluka`.  
 
-### `FlukaInterface`
+## `FlukaInterface`
 A version of the G4-FLUKA interface (`FLUKA` hadron-nucleus inelastic physics) 
 is located at `geant4/examples/extended/hadronic/FlukaCern/FlukaInterface`.   
 You will first need to build the interface to `FLUKA`, and create the environment scripts.   
@@ -87,7 +89,7 @@ IMPORTANT: `env_FLUKA_G4_interface.sh` needs to be sourced in whichever terminal
 you want to compile / run a G4 application with the `FLUKA` interface.    
 
 
-# Use as a FLUKA physics list (in ANY G4 application)
+## Use as a FLUKA physics list (in ANY G4 application)
 Reminder: this is a generic guide to be able to use the `FLUKA` interface from *any* G4 application.  
 If you are trying to build / run the G4 examples included in `FlukaCern` with `FLUKA`, you can directly follow the `README.md` files included in those examples.  
 Notably, the file in `cmake/Modules` is already included in those examples (the rest of the procedure is the same).  

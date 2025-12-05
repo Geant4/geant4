@@ -23,11 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file biasing/ReverseMC01/include/RMC01DetectorConstruction.hh
+/// \file RMC01DetectorConstruction.hh
 /// \brief Definition of the RMC01DetectorConstruction class
-//
-//
-//////////////////////////////////////////////////////////////
+
 //  Class Name:           RMC01DetectorConstruction
 //        Author:               L. Desorgher
 //        Organisation:         SpaceIT GmbH
@@ -61,6 +59,7 @@ class RMC01DetectorConstruction : public G4VUserDetectorConstruction
     virtual ~RMC01DetectorConstruction();
 
     virtual G4VPhysicalVolume* Construct();
+    void ConstructSDandField();
     void UpdateGeometry();
 
     void SetSensitiveVolumeHeight(G4double h);

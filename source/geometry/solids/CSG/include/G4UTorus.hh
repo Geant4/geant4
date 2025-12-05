@@ -29,7 +29,7 @@
 //
 // Wrapper class for G4Torus to make use of VecGeom Torus.
 
-// 19.08.15 Guilherme Lima, FNAL
+// Author: Guilherme Lima (FNAL), 19.08.2015
 // --------------------------------------------------------------------
 #ifndef G4UTORUS_HH
 #define G4UTORUS_HH
@@ -42,6 +42,10 @@
 
 #include "G4Polyhedron.hh"
 
+/**
+ * @brief G4UTorus is a wrapper class for G4Torus to make use of VecGeom Torus.
+ */
+
 class G4UTorus : public G4UAdapter<vecgeom::UnplacedTorus2>
 {
   using Shape_t = vecgeom::UnplacedTorus2;
@@ -49,19 +53,42 @@ class G4UTorus : public G4UAdapter<vecgeom::UnplacedTorus2>
 
   public:
 
+    /**
+     * Constructs a torus or torus segment with the given name and dimensions.
+     *  @param[in] pName The name of the solid.
+     *  @param[in] rmin Inner radius.
+     *  @param[in] rmax Outer radius.
+     *  @param[in] rtor Swept radius of torus.
+     *  @param[in] sPhi Starting Phi angle in radians
+     *             adjusted such that fSPhi+fDPhi<=2PI, fSPhi>-2PI.
+     *  @param[in] dPhi Delta angle of the segment in radians.
+     */
     G4UTorus(const G4String& pName,
                    G4double rmin, G4double rmax, G4double rtor,
                    G4double sphi, G4double dphi);
-      // Constructs a torus with name and geometrical parameters
 
-   ~G4UTorus() override;
+    /**
+     * Default destructor.
+     */
+    ~G4UTorus() override = default;
 
+    /**
+     * Dispatch method for parameterisation replication mechanism and
+     * dimension computation.
+     */
     void ComputeDimensions(G4VPVParameterisation* p,
                            const G4int n,
                            const G4VPhysicalVolume* pRep) override;
 
+    /**
+     * Makes a clone of the object for use in multi-treading.
+     *  @returns A pointer to the new cloned allocated solid.
+     */
     G4VSolid* Clone() const override;
 
+    /**
+     * Accessors.
+     */
     G4double GetRmin() const;
     G4double GetRmax() const;
     G4double GetRtor() const;
@@ -72,29 +99,58 @@ class G4UTorus : public G4UAdapter<vecgeom::UnplacedTorus2>
     G4double GetSinEndPhi  () const;
     G4double GetCosEndPhi  () const;
 
+    /**
+     * Modifiers.
+     */
     void SetRmin(G4double arg);
     void SetRmax(G4double arg);
     void SetRtor(G4double arg);
     void SetSPhi(G4double arg);
     void SetDPhi(G4double arg);
 
+    /**
+     * Checks and sets all the parameters given in input. Used in constructor.
+     */
     void SetAllParameters(G4double arg1, G4double arg2,
                           G4double arg3, G4double arg4, G4double arg5);
 
+    /**
+     * Returns the type ID, "G4Torus" of the solid.
+     */
     inline G4GeometryType GetEntityType() const override;
 
+    /**
+     * Computes the bounding limits of the solid.
+     *  @param[out] pMin The minimum bounding limit point.
+     *  @param[out] pMax The maximum bounding limit point.
+     */
     void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const override;
 
+    /**
+     * Calculates the minimum and maximum extent of the solid, when under the
+     * specified transform, and within the specified limits.
+     *  @param[in] pAxis The axis along which compute the extent.
+     *  @param[in] pVoxelLimit The limiting space dictated by voxels.
+     *  @param[in] pTransform The internal transformation applied to the solid.
+     *  @param[out] pMin The minimum extent value.
+     *  @param[out] pMax The maximum extent value.
+     *  @returns True if the solid is intersected by the extent region.
+     */
     G4bool CalculateExtent(const EAxis pAxis,
                            const G4VoxelLimits& pVoxelLimit,
                            const G4AffineTransform& pTransform,
-                                 G4double& pmin, G4double& pmax) const override;
+                                 G4double& pMin, G4double& pMax) const override;
 
+    /**
+     * Returns a generated polyhedron as graphical representations.
+     */
     G4Polyhedron* CreatePolyhedron() const override;
 
+    /**
+     * Copy constructor and assignment operator.
+     */
     G4UTorus(const G4UTorus& rhs);
     G4UTorus& operator=(const G4UTorus& rhs);
-      // Copy constructor and assignment operator.
 };
 
 // --------------------------------------------------------------------

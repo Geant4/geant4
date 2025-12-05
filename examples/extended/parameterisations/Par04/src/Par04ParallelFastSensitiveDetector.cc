@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file Par04ParallelFastSensitiveDetector.cc
+/// \brief Implementation of the Par04ParallelFastSensitiveDetector class
+
 #include "Par04ParallelFastSensitiveDetector.hh"
 
 #include "Par04EventInformation.hh"  // for Par04EventInformation

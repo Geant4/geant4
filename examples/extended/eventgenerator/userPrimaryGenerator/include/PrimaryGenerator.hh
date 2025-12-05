@@ -25,10 +25,6 @@
 //
 /// \file PrimaryGenerator.hh
 /// \brief Definition of the PrimaryGenerator class
-//
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef PrimaryGenerator_h
 #define PrimaryGenerator_h 1

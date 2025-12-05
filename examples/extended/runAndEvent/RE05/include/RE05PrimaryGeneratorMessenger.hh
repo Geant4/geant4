@@ -23,10 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file RE05/include/RE05PrimaryGeneratorMessenger.hh
+/// \file RE05PrimaryGeneratorMessenger.hh
 /// \brief Definition of the RE05PrimaryGeneratorMessenger class
-//
 
 #ifndef RE05PrimaryGeneratorMessenger_h
 #define RE05PrimaryGeneratorMessenger_h 1

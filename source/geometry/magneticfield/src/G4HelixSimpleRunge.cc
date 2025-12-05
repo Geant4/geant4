@@ -32,7 +32,7 @@
 //  Take the derivative at a position to be assumed at the middle of the
 //  Step and add it to the current position.
 //
-// Author: W. Wander <wwc@mit.edu>, 03.12.1998
+// Author: W.Wander (MIT), 03.12.1998
 // -------------------------------------------------------------------------
 
 #include "G4HelixSimpleRunge.hh"
@@ -42,8 +42,6 @@ G4HelixSimpleRunge::G4HelixSimpleRunge(G4Mag_EqRhs* EqRhs)
   : G4MagHelicalStepper(EqRhs)
 {
 }
-
-G4HelixSimpleRunge::~G4HelixSimpleRunge() = default;
 
 void
 G4HelixSimpleRunge::DumbStepper( const G4double      yIn[],

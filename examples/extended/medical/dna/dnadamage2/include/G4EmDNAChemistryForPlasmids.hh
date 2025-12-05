@@ -24,7 +24,10 @@
 // ********************************************************************
 //
 /// \file G4EmDNAChemistryForPlasmids.hh
-/// \brief Definition of the Chemistry parameters with DNA reactions
+/// \brief Definition of the G4EmDNAChemistryForPlasmids class
+///
+/// Definition of the Chemistry parameters with DNA reactions
+
 /*
  * G4EmDNAChemistryForPlasmids.hh
  *

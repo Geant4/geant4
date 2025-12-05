@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file Par04ParallelMessenger.hh
+/// \brief Definition of the Par04ParallelMessenger class
 
 #ifndef PAR04PARALLELMESSENGER_H
 #define PAR04PARALLELMESSENGER_H

@@ -23,7 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
+/// \file UserActionInitialization.hh
+/// \brief Definition of the UserActionInitialization class
 
 #ifndef UserActionInitialization_h
 #define UserActionInitialization_h 1

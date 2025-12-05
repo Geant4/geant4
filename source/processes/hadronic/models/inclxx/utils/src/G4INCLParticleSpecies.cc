@@ -128,12 +128,12 @@ namespace G4INCL {
       theZ = 0;
       theS = -2;
       theType = G4INCL::XiZero;  
-    } else if(pS=="pb" || pS=="antiproton") {
+    } else if(pS=="pb" || pS=="pbar" || pS=="antiproton") {
       theA = -1;
       theZ = -1;
       theS = 0;
       theType = G4INCL::antiProton;   
-    } else if(pS=="nb" || pS=="antineutron") {
+    } else if(pS=="nb" || pS=="nbar" || pS=="antineutron") {
       theA = -1;
       theZ = 0;
       theS = 0;
@@ -233,6 +233,11 @@ namespace G4INCL {
       theZ = 0;
       theS = 0;
       theType = G4INCL::Photon;    
+    } else if (pS=="db" || pS=="dbar" || pS=="antideuteron"){
+      theA = -2;
+      theZ = -1;
+      theS = 0;
+      theType = G4INCL::antiComposite;     
     } else
       parseNuclide(pS);
   }
@@ -244,19 +249,33 @@ namespace G4INCL {
     theS(ParticleTable::getStrangenessNumber(theType))
   {}
 
-  ParticleSpecies::ParticleSpecies(const G4int A, const G4int Z) :
-    theType(Composite),
-    theA(A),
-    theZ(Z),
-    theS(0)
-  {}
+  ParticleSpecies::ParticleSpecies(const int A, const int Z){
+    if (A>=0){
+      theType = Composite;
+      theA = A;
+      theZ = Z;
+      theS = 0;
+    } else {
+      theType = antiComposite;
+      theA = A;
+      theZ = Z;
+      theS = 0;
+    }
+  }
 
-  ParticleSpecies::ParticleSpecies(const G4int A, const G4int Z, const G4int S) :
-    theType(Composite),
-    theA(A),
-    theZ(Z),
-    theS(S)
-  {}
+  ParticleSpecies::ParticleSpecies(const int A, const int Z, const int S){
+    if (A>=0){
+      theType = Composite;
+      theA = A;
+      theZ = Z;
+      theS = S;
+    } else {
+      theType = antiComposite;
+      theA = A;
+      theZ = Z;
+      theS = S;
+    }
+  }
 
   void ParticleSpecies::parseNuclide(std::string const &pS) {
     theType = Composite;
@@ -519,6 +538,12 @@ namespace G4INCL {
 			else if(theA == 1 && theZ == 0 && theS == -1) return 3122;
 			else return theA+theZ*1000-theS*1e6; // Here -theS because hyper-nucleus -> theS < 0
 			break;
+    case antiComposite:
+        if(theA == 1 && theZ == 1 && theS == 0) return -2212;
+        else if(theA == 1 && theZ == 0 && theS == 0) return -2112;
+        else if(theA == 1 && theZ == 0 && theS == -1) return -3122;
+        else return -(theA + theZ*1000 - theS*1e6);
+      break;
 		default:
 			INCL_ERROR("ParticleSpecies::getPDGCode: Unknown particle type." << '\n');
 			return 0;

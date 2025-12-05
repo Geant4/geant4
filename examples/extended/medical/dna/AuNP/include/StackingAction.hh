@@ -23,15 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// This example is provided by the Geant4-DNA collaboration
-// Any report or published results obtained using the Geant4-DNA software
-// shall cite the following Geant4-DNA collaboration publication:
-// Med. Phys. 37 (2010) 4692-4708
-// J. Comput. Phys. 274 (2014) 841-882
-// The Geant4-DNA web site is available at http://geant4-dna.org
-//
-// $Id$
-//
 /// \file StackingAction.hh
 /// \brief Definition of the StackingAction class
 
@@ -39,14 +30,12 @@
 #define G4ITStackingAction_h 1
 
 #include "G4UserStackingAction.hh"
-#include "globals.hh"
 
-class StackingAction : public G4UserStackingAction
-{
-  public:
-    StackingAction();
-    virtual ~StackingAction() { ; }
-    virtual void NewStage();
+class StackingAction final : public G4UserStackingAction {
+public:
+  StackingAction() = default;
+  ~StackingAction() override = default;
+  void NewStage() override;
 };
 
 #endif

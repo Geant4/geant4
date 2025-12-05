@@ -34,13 +34,6 @@ public:
 
     GLUtesselator* tobj = gluNewTess();
 
-    // g++-8.1.0 : the five below lines induce warnings : cast between incompatible function types.
-    //::gluTessCallback(tobj,(GLUenum)GLU_TESS_VERTEX_DATA, (Func)vertexCallback);
-    //::gluTessCallback(tobj,(GLUenum)GLU_TESS_BEGIN_DATA,  (Func)beginCallback);
-    //::gluTessCallback(tobj,(GLUenum)GLU_TESS_END_DATA,    (Func)endCallback);
-    //::gluTessCallback(tobj,(GLUenum)GLU_TESS_ERROR_DATA,  (Func)errorCallback);
-    //::gluTessCallback(tobj,(GLUenum)GLU_TESS_COMBINE_DATA,(Func)combineCallback);
-
     // NOTE : the gluTessCallback_<> are tools/glutess specific.
     ::gluTessCallback_GLU_TESS_VERTEX_DATA (tobj,vertexCallback);
     ::gluTessCallback_GLU_TESS_BEGIN_DATA  (tobj,beginCallback);
@@ -51,7 +44,6 @@ public:
     ::gluTessProperty(tobj,(GLUenum)GLU_TESS_WINDING_RULE,GLU_TESS_WINDING_ODD);
 
     for(unsigned int a=0;a<aContour.size();a++) {
-      //if(aContour[a][0]!=aContour[a][aContour[a].size()-1]) continue;
       if(aContour[a].size()<=1) continue; //should not happen.
       size_t vecSize = aContour[a].size()-1;
 
@@ -171,16 +163,9 @@ protected:
     }
   }
 protected:
-#ifdef TOOLS_TESS_CONTOUR_STDCALL
-  typedef GLUvoid(__stdcall *Func)();
-#else
   typedef GLUvoid(*Func)();
-#endif
 
   static void
-#ifdef TOOLS_TESS_CONTOUR_STDCALL
-  __stdcall
-#endif
   beginCallback(GLUenum aWhich,GLUvoid * aThis) {
     tess_contour* This = (tess_contour*)aThis;
     This->setBeginType(aWhich);
@@ -188,9 +173,6 @@ protected:
   }
 
   static void
-#ifdef TOOLS_TESS_CONTOUR_STDCALL
-  __stdcall
-#endif
   errorCallback(GLUenum aErrorCode,GLUvoid * aThis) {
     tess_contour* This = (tess_contour*)aThis;
     This->m_out << "tools::tess_contour::errorCallback : " << aErrorCode << std::endl;
@@ -198,24 +180,15 @@ protected:
   }
 
   static void
-#ifdef TOOLS_TESS_CONTOUR_STDCALL
-  __stdcall
-#endif
   endCallback(void*){}
 
   static void
-#ifdef TOOLS_TESS_CONTOUR_STDCALL
-  __stdcall
-#endif
   vertexCallback(GLUvoid *vertex,GLUvoid* aThis) {
     tess_contour* This = (tess_contour*)aThis;
     This->addVertex((double*)vertex);
   }
 
   static void
-#ifdef TOOLS_TESS_CONTOUR_STDCALL
-  __stdcall
-#endif
   combineCallback(GLUdouble coords[3],
                               void* /*vertex_data*/[4],
                               GLUfloat /*weight*/[4],

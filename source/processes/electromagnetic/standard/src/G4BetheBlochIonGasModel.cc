@@ -51,12 +51,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4BetheBlochIonGasModel::G4BetheBlochIonGasModel(const G4ParticleDefinition* p, 
-  const G4String& nam) : G4BetheBlochModel(p,nam), currentCharge(0.0)
+  const G4String& nam) : G4BetheBlochModel(p,nam), currentCharge(1.0)
 {}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4BetheBlochIonGasModel::~G4BetheBlochIonGasModel() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -66,6 +62,15 @@ G4double G4BetheBlochIonGasModel::ChargeSquareRatio(const G4Track& track)
   G4double q2 = currentCharge*currentCharge;
   SetChargeSquareRatio(q2); 
   return q2;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double
+G4BetheBlochIonGasModel::GetChargeSquareRatio(const G4ParticleDefinition*,
+                                              const G4Material*, G4double)
+{
+  return currentCharge*currentCharge;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

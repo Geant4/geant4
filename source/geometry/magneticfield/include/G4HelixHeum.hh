@@ -33,26 +33,54 @@
 //               3/4 * dx(t0+2/3*h, x0+2/3*h*(dx(t0+h/3,x0+h/3*dx(t0,x0)))) 
 // Third order solver.
 
-// Author: W.Wander <wwc@mit.edu>, 03/11/1998
+// Author: W.Wander (MIT), 03.11.1998
 // -------------------------------------------------------------------
 #ifndef G4HELIXHEUM_HH
 #define G4HELIXHEUM_HH
 
 #include "G4MagHelicalStepper.hh"
 
+/**
+ * @brief G4HelixHeum implements a simple Heum stepper for magnetic field
+ * with 3rd order solver.
+ */
+
 class G4HelixHeum : public G4MagHelicalStepper
 {
   public:
 
-    G4HelixHeum(G4Mag_EqRhs *EqRhs);
-   ~G4HelixHeum() override;
+    /**
+     * Constructor for G4HelixHeum.
+     *  @param[in] EqRhs Pointer to the provided equation of motion.
+     */
+    G4HelixHeum(G4Mag_EqRhs* EqRhs);
+
+    /**
+     * Default Destructor.
+     */
+    ~G4HelixHeum() override = default;
   
+    /**
+     * The stepper function for the integration.
+     *  @param[in] y Starting values array of integration variables.
+     *  @param[in] Bfld The field vector.
+     *  @param[in] h The given step size.
+     *  @param[out] yout Integration output.
+     */
     void DumbStepper( const G4double y[],
                             G4ThreeVector Bfld,
-                            G4double      h,
-                            G4double      yout[] ) override;
+                            G4double h,
+                            G4double yout[] ) override;
 
+    /**
+     * Returns the order, 2, of integration.
+     */
     inline G4int IntegratorOrder() const override { return 2; }
+
+    /**
+     * Returns the stepper type-ID, "kHelixHeum".
+     */
+    inline G4StepperType StepperType() const override { return kHelixHeum; }
 };
 
 #endif

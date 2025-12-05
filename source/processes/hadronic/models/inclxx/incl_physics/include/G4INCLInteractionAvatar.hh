@@ -71,17 +71,30 @@ namespace G4INCL {
 
       /// \brief Release the memory allocated for the backup particles
       static void deleteBackupParticles();
+ 
+     /**
+      * static instance
+      */
+     static InteractionAvatar* Instance();
 
-    protected:
-      virtual G4INCL::IChannel* getChannel() = 0;
-
-      G4bool bringParticleInside(Particle * const p);
+      void setSrcPartner(Particle *p /*, const ThreeVector m*/);
 
       /** \brief Apply local-energy transformation, if appropriate
        *
        * \param p particle to apply the transformation to
        */
       void preInteractionLocalEnergy(Particle * const p);
+ 
+      ThreeVector getboostVector(){return boostVector;}
+      
+      void setboostVector(ThreeVector& v){boostVector = v;}
+
+    protected:
+      virtual G4INCL::IChannel* getChannel() = 0;
+
+      G4bool bringParticleInside(Particle * const p);
+      
+      EventInfo theEventInfo;
 
       /** \brief Store the state of the particles before the interaction
        *
@@ -99,6 +112,8 @@ namespace G4INCL {
        * The state must first be stored by calling preInteractionBlocking().
        */
       void restoreParticles() const;
+ 
+      void restoreSrcPartner(FinalState * fs);
 
       /// \brief true if the given avatar should use local energy
       G4bool shouldUseLocalEnergy() const;
@@ -112,6 +127,10 @@ namespace G4INCL {
       G4double weight;
 
     private:
+      static G4ThreadLocal InteractionAvatar* interactionAvatar;
+      static G4ThreadLocal Particle *backupPartner;
+      static ThreeVector mbackupPartner;
+
       /// \brief RootFunctor-derived object for enforcing energy conservation in N-N.
       class ViolationEMomentumFunctor : public RootFunctor {
         public:

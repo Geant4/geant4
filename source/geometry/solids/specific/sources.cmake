@@ -34,18 +34,24 @@ geant4_add_module(G4specsolids
     G4PolyhedraHistorical.hh
     G4PolyhedraSide.hh
     G4QuadrangularFacet.hh
+    G4QuadrangularFacet.icc
     G4ReduciblePolygon.hh
     G4SolidExtentList.hh
     G4SolidsWorkspace.hh
     G4SurfBits.hh
+    G4SurfBits.icc
     G4TessellatedGeometryAlgorithms.hh
     G4TessellatedSolid.hh
     G4Tet.hh
     G4TriangularFacet.hh
+    G4TriangularFacet.icc
     G4TwistBoxSide.hh
+    G4TwistBoxSide.icc
     G4TwistTrapAlphaSide.hh
+    G4TwistTrapAlphaSide.icc
     G4TwistTrapFlatSide.hh
     G4TwistTrapParallelSide.hh
+    G4TwistTrapParallelSide.icc
     G4TwistTubsFlatSide.hh
     G4TwistTubsHypeSide.hh
     G4TwistTubsSide.hh

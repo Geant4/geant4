@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file G4ElectronCapture.hh
+/// \brief Definition of the G4ElectronCapture class
+
 //---------------------------------------------------------------------------
 //
 // ClassName:   G4ElectronCapture
@@ -53,8 +56,6 @@
 // The Geant4-DNA web site is available at http://geant4-dna.org
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-/// \file G4ElectronCapture.hh
-/// \brief Definition of the G4ElectronCapture class
 
 #ifndef ElectronCapture_h
 #define ElectronCapture_h 1

@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file DicomFileCT_NOdcmrt.hh
+/// \brief Definition of the DicomFileCT_NOdcmrt class
+
 #ifndef DicomFileCT_NOdcmrt__HH
 #define DicomFileCT_NOdcmrt__HH
 

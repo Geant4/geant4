@@ -62,9 +62,6 @@ public:
     ::MoveWindow(a_hwnd,0,0,a_width,a_height,TRUE);
   }
 
-  //void post(HWND a_hwnd,LPARAM a_msg){
-  //  ::PostMessage(a_hwnd,WM_USER,(WPARAM)0,a_msg);
-  //}
 public:
   bool tmp_dir(std::string& a_dir) {
     char* env = ::getenv("TEMP");

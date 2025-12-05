@@ -266,29 +266,26 @@ G4VEnergyLossProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
 
   // Tables preparation
   if (isMaster && nullptr == baseParticle) {
-    if(nullptr == theData) { theData = new G4EmDataHandler(7); }
+    if (nullptr == theData) { theData = new G4EmDataHandler(7, particle->GetParticleName()); }
 
-    if(nullptr != theDEDXTable && isIonisation) {
-      if(nullptr != theIonisationTable && theDEDXTable != theIonisationTable) {
-	theData->CleanTable(0);
-	theDEDXTable = theIonisationTable;
-	theIonisationTable = nullptr;
-      }
+    if (isIonisation && theDEDXTable != theIonisationTable) {
+      theData->CleanTable(0);
+      theDEDXTable = theIonisationTable;
+      theIonisationTable = nullptr;
     }
-    
     theDEDXTable = theData->MakeTable(theDEDXTable, 0);
     bld->InitialiseBaseMaterials(theDEDXTable);
-    theData->UpdateTable(theIonisationTable, 1);
+    theData->MakeTable(theIonisationTable, 1);
 
     if (theParameters->BuildCSDARange()) {
-      theDEDXunRestrictedTable = theData->MakeTable(2);
-      if(isIonisation) { theCSDARangeTable = theData->MakeTable(3); }
+      theDEDXunRestrictedTable = theData->MakeTable(theDEDXunRestrictedTable, 2);
+      if(isIonisation) { theCSDARangeTable = theData->MakeTable(theCSDARangeTable, 3); }
     }
 
-    theLambdaTable = theData->MakeTable(4);
+    theLambdaTable = theData->MakeTable(theLambdaTable, 4);
     if(isIonisation) {
-      theRangeTableForLoss = theData->MakeTable(5);
-      theInverseRangeTable = theData->MakeTable(6);
+      theRangeTableForLoss = theData->MakeTable(theRangeTableForLoss, 5);
+      theInverseRangeTable = theData->MakeTable(theInverseRangeTable, 6);
     }
   }
 
@@ -545,7 +542,7 @@ void G4VEnergyLossProcess::StartTracking(G4Track* track)
 
   // reset ion
   if(isIon) {
-    const G4double newmass = track->GetDefinition()->GetPDGMass();
+    const G4double newmass = track->GetParticleDefinition()->GetPDGMass();
     massRatio = (nullptr == baseParticle) ? CLHEP::proton_mass_c2/newmass
       : baseParticle->GetPDGMass()/newmass;
     logMassRatio = G4Log(massRatio);
@@ -615,7 +612,7 @@ G4double G4VEnergyLossProcess::PostStepGetPhysicalInteractionLength(
     reduceFactor = 1.0/(fFactor*massRatio);
     if (lossFluctuationFlag) {
       auto fluc = currentModel->GetModelOfFluctuations();
-      fluc->SetParticleAndCharge(track.GetDefinition(), q2);
+      fluc->SetParticleAndCharge(track.GetParticleDefinition(), q2);
     }
   }
 
@@ -660,7 +657,7 @@ G4double G4VEnergyLossProcess::PostStepGetPhysicalInteractionLength(
   if (verboseLevel>2) {
     G4cout << "G4VEnergyLossProcess::PostStepGetPhysicalInteractionLength ";
     G4cout << "[ " << GetProcessName() << "]" << G4endl; 
-    G4cout << " for " << track.GetDefinition()->GetParticleName() 
+    G4cout << " for " << track.GetParticleDefinition()->GetParticleName() 
            << " in Material  " <<  currentMaterial->GetName()
            << " Ekin(MeV)= " << preStepKinEnergy/MeV 
            << " track material: " << track.GetMaterial()->GetName()
@@ -854,8 +851,11 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
   G4double esec = 0.0;
 
   // Corrections, which cannot be tabulated
-  if(isIon) {
-    currentModel->CorrectionsAlongStep(currentCouple, dynParticle, 
+  if (isIon) {
+    currentModel->SetCurrentCouple(currentCouple);
+    currentModel->CorrectionsAlongStep(currentMaterial,
+				       track.GetParticleDefinition(),
+				       preStepKinEnergy, cut,
                                        length, eloss);
     eloss = std::max(eloss, 0.0);
   }
@@ -956,7 +956,7 @@ void G4VEnergyLossProcess::FillSecondariesAlongStep(G4double wt)
     if(nullptr != t) {
       t->SetWeight(weight); 
       pParticleChange->AddSecondary(t);
-      G4int pdg = t->GetDefinition()->GetPDGEncoding();
+      G4int pdg = t->GetParticleDefinition()->GetPDGEncoding();
       if (i < n0) {
         if (pdg == 22) {
 	  t->SetCreatorModelID(gpixeID);

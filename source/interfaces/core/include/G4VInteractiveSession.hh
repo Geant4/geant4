@@ -63,6 +63,10 @@ class G4VInteractiveSession
   void AddInteractor(G4String, G4Interactor);
   G4Interactor GetInteractor(const G4String&);
   const std::map<G4String, OutputStyle>& GetOutputStyles() const;
+  
+  virtual void UpdateDrawingStyle(G4int style);
+  virtual void UpdateProjectionStyle(G4int style);
+  virtual void UpdateTransparencySlider(G4double depth, G4int option);
 
  protected:
   void SetStyleUtility(const G4String& destination, const G4String& style);

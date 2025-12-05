@@ -25,7 +25,7 @@
 //
 // G4MonopoleEq implementation
 //
-// Created: V.Grichine, 17.11.2009
+// Author: Vladimir Grichine (CERN), 17.11.2009
 // -------------------------------------------------------------------
 
 #include "G4MonopoleEq.hh"
@@ -37,8 +37,6 @@ G4MonopoleEq::G4MonopoleEq(G4ElectroMagneticField* emField )
   : G4EquationOfMotion( emField )
 {
 }
-
-G4MonopoleEq::~G4MonopoleEq() = default; 
 
 void  
 G4MonopoleEq::SetChargeMomentumMass(G4ChargeState particleCharge, // e+ units

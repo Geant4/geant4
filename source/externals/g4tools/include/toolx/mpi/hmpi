@@ -223,14 +223,8 @@ public:
   ,m_verbose(a_verbose)
   ,m_wrmpi(a_out,a_comm)
   {
-#ifdef TOOLS_MEM
-    tools::mem::increment(s_class().c_str());
-#endif
   }
   virtual ~hmpi(){
-#ifdef TOOLS_MEM
-    tools::mem::decrement(s_class().c_str());
-#endif
   }
 protected:
   hmpi(const hmpi& a_from)
@@ -242,9 +236,6 @@ protected:
   ,m_verbose(a_from.m_verbose)
   ,m_wrmpi(a_from.m_out,a_from.m_comm)
   {
-#ifdef TOOLS_MEM
-    tools::mem::increment(s_class().c_str());
-#endif
   }
   hmpi& operator=(const hmpi& a_from){
     m_rank = a_from.m_rank;

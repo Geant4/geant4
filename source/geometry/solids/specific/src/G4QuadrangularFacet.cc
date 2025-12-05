@@ -205,10 +205,6 @@ G4QuadrangularFacet::G4QuadrangularFacet (const G4ThreeVector& vt0,
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-G4QuadrangularFacet::~G4QuadrangularFacet () = default;
-
-///////////////////////////////////////////////////////////////////////////////
-//
 G4QuadrangularFacet::G4QuadrangularFacet (const G4QuadrangularFacet& rhs)
   : G4VFacet(rhs)
 {
@@ -222,7 +218,7 @@ G4QuadrangularFacet::G4QuadrangularFacet (const G4QuadrangularFacet& rhs)
 G4QuadrangularFacet &
 G4QuadrangularFacet::operator=(const G4QuadrangularFacet& rhs)
 {
-  if (this == &rhs)  return *this;
+  if (this == &rhs) {  return *this; }
 
   fFacet1 = rhs.fFacet1;
   fFacet2 = rhs.fFacet2;
@@ -247,8 +243,11 @@ G4ThreeVector G4QuadrangularFacet::Distance (const G4ThreeVector& p)
   G4ThreeVector v1 = fFacet1.Distance(p);
   G4ThreeVector v2 = fFacet2.Distance(p);
 
-  if (v1.mag2() < v2.mag2()) return v1;
-  else return v2;
+  if (v1.mag2() < v2.mag2())
+  {
+    return v1;
+  }
+  return v2;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -271,9 +270,13 @@ G4double G4QuadrangularFacet::Distance (const G4ThreeVector& p, G4double,
   G4double dir = v.dot(GetSurfaceNormal());
   if ( ((dir > dirTolerance) && (!outgoing))
     || ((dir < -dirTolerance) && outgoing))
+  {
     dist = kInfinity;
-  else 
+  }
+  else
+  { 
     dist = v.mag();
+  }
   return dist;
 }
 
@@ -286,7 +289,7 @@ G4double G4QuadrangularFacet::Extent (const G4ThreeVector axis)
   for (G4int i = 0; i <= 3; ++i)
   {
     G4double sp = GetVertex(i).dot(axis);
-    if (sp > ss) ss = sp;
+    if (sp > ss) { ss = sp; }
   }
   return ss;
 }
@@ -302,8 +305,10 @@ G4bool G4QuadrangularFacet::Intersect (const G4ThreeVector& p,
 {
   G4bool intersect =
     fFacet1.Intersect(p,v,outgoing,distance,distFromSurface,normal);
-  if (!intersect) intersect =
-    fFacet2.Intersect(p,v,outgoing,distance,distFromSurface,normal);
+  if (!intersect)
+  {
+    intersect = fFacet2.Intersect(p,v,outgoing,distance,distFromSurface,normal);
+  }
   if (!intersect)
   {
     distance = distFromSurface = kInfinity;
@@ -320,8 +325,9 @@ G4ThreeVector G4QuadrangularFacet::GetPointOnFace() const
 {
   G4double s1 = fFacet1.GetArea();
   G4double s2 = fFacet2.GetArea();
-  return ((s1 + s2)*G4QuickRand() < s1) ?
-    fFacet1.GetPointOnFace() : fFacet2.GetPointOnFace();
+  return ((s1 + s2)*G4QuickRand() < s1)
+         ? fFacet1.GetPointOnFace()
+         : fFacet2.GetPointOnFace();
 }
 
 ///////////////////////////////////////////////////////////////////////////////

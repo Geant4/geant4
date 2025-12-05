@@ -23,14 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file field/field02/include/F02PrimaryGeneratorAction.hh
+/// \file F02PrimaryGeneratorAction.hh
 /// \brief Definition of the F02PrimaryGeneratorAction class
-//
-//
-//
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef F02PrimaryGeneratorAction_h
 #define F02PrimaryGeneratorAction_h 1

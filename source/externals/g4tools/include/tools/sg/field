@@ -9,10 +9,6 @@
 #include "../scast"
 #include "../S_STRING"
 
-#ifdef TOOLS_MEM
-#include "../mem"
-#endif
-
 namespace tools {
 namespace io {
 class iwbuf;
@@ -38,21 +34,12 @@ public:
   virtual bool s2value(const std::string&) = 0;
 protected:
   field():m_touched(true){
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
   }
 public:
   virtual ~field(){
-#ifdef TOOLS_MEM
-    mem::decrement(s_class().c_str());
-#endif
   }
 protected:
   field(const field&):m_touched(true){
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
   }
   field& operator=(const field&){m_touched=false;return *this;}
 public:

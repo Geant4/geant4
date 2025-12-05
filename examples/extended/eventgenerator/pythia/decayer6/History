@@ -4,6 +4,11 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
+## 2025-07-28 I. Hrivnacova (p6decayer-V11-03-00)
+- Removed 'common' subdirectory and copied only classes used in this example
+  (DetectorConstruction, GunPrimaryGeneration) in  this example include and src
+- Migrated README pages to Markdown
+
 ## 2024-04-25 Ben Morgan (p6decayer-V11-02-00)
 - Update CMake script to use new Pythia6 setup/build variables
 

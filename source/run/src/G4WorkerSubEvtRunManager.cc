@@ -167,174 +167,31 @@ void G4WorkerSubEvtRunManager::RunInitialization()
 
 //============================================================================//
 
-void G4WorkerSubEvtRunManager::DoEventLoop(G4int n_event, const char* macroFile, G4int n_select)
+void G4WorkerSubEvtRunManager::DoEventLoop(G4int /*n_event*/, const char* /*macroFile*/,
+                                           G4int /*n_select*/)
 {
-//MAMAMAMA
-G4Exception("G4WorkerSubEvtRunManager::DoEventLoop()","SuvEvtXXX001",FatalException,"We should not be here!");
-//MAMAMAMA
-  if (userPrimaryGeneratorAction == nullptr) {
-    G4Exception("G4RunManager::GenerateEvent()", "Run0032", FatalException,
-                "G4VUserPrimaryGeneratorAction is not defined!");
-  }
-
-  // This is the same as in the sequential case, just the for-loop indexes are
-  // different
-  InitializeEventLoop(n_event, macroFile, n_select);
-
-  // Reset random number seeds queue
-  while (!seedsQueue.empty())
-    seedsQueue.pop();
-  // for each run, worker should receive at least one set of random number
-  // seeds.
-  // runIsSeeded = false;
-
-  // Event loop
-  eventLoopOnGoing = true;
-  G4int i_event = -1;
-  nevModulo = -1;
-  currEvID = -1;
-
-  for (G4int evt = 0; evt < n_event; ++evt) {
-    ProcessOneEvent(i_event);
-    if (eventLoopOnGoing) {
-      TerminateOneEvent();
-      if (runAborted) eventLoopOnGoing = false;
-    }
-    if (!eventLoopOnGoing) break;
-  }
+  // This method is not used in worker sub-event mode
+  G4Exception("G4WorkerSubEvtRunManager::DoEventLoop()","SubEvtXXX001",FatalException,
+    "This method is not used in the worker thread of sub-event parallel mode");
 }
 
 //============================================================================//
 
-void G4WorkerSubEvtRunManager::ProcessOneEvent(G4int i_event)
+void G4WorkerSubEvtRunManager::ProcessOneEvent(G4int /*i_event*/)
 {
-//MAMAMAMA
-G4Exception("G4WorkerSubEvtRunManager::ProcessOneEvent()","SuvEvtXXX002",FatalException,"We should not be here!");
-//MAMAMAMA
-  currentEvent = GenerateEvent(i_event);
-  if (eventLoopOnGoing) {
-    eventManager->ProcessOneEvent(currentEvent);
-    AnalyzeEvent(currentEvent);
-    UpdateScoring();
-    if (currentEvent->GetEventID() < n_select_msg) {
-      G4cout << "Applying command \"" << msgText << "\" @ " << __FUNCTION__ << ":" << __LINE__
-             << G4endl;
-      G4UImanager::GetUIpointer()->ApplyCommand(msgText);
-    }
-  }
+  // This method is not used in worker sub-event mode
+  G4Exception("G4WorkerSubEvtRunManager::ProcessOneEvent()","SubEvtXXX002",FatalException,
+    "This method is not used in the worker thread of sub-event parallel mode");
 }
 
 //============================================================================//
 
-G4Event* G4WorkerSubEvtRunManager::GenerateEvent(G4int i_event)
+G4Event* G4WorkerSubEvtRunManager::GenerateEvent(G4int /*i_event*/)
 {
-//MAMAMAMA
-G4Exception("G4WorkerSubEvtRunManager::GenerateEvent()","SuvEvtXXX003",FatalException,"We should not be here!");
-//MAMAMAMA
-  auto anEvent = new G4Event(i_event);
-  G4long s1 = 0;
-  G4long s2 = 0;
-  G4long s3 = 0;
-  G4bool eventHasToBeSeeded = true;
-  if (G4MTRunManager::SeedOncePerCommunication() == 1 && runIsSeeded) eventHasToBeSeeded = false;
-
-  if (i_event < 0) {
-    G4int nevM = G4MTRunManager::GetMasterRunManager()->GetEventModulo();
-    if (nevM == 1) {
-      eventLoopOnGoing = G4MTRunManager::GetMasterRunManager()->SetUpAnEvent(anEvent, s1, s2, s3,
-                                                                             eventHasToBeSeeded);
-      runIsSeeded = true;
-    }
-    else {
-      if (nevModulo <= 0) {
-        G4int nevToDo = G4MTRunManager::GetMasterRunManager()->SetUpNEvents(anEvent, &seedsQueue,
-                                                                            eventHasToBeSeeded);
-        if (nevToDo == 0)
-          eventLoopOnGoing = false;
-        else {
-          currEvID = anEvent->GetEventID();
-          nevModulo = nevToDo - 1;
-        }
-      }
-      else {
-        if (G4MTRunManager::SeedOncePerCommunication() > 0) eventHasToBeSeeded = false;
-        anEvent->SetEventID(++currEvID);
-        nevModulo--;
-      }
-      if (eventLoopOnGoing && eventHasToBeSeeded) {
-        s1 = seedsQueue.front();
-        seedsQueue.pop();
-        s2 = seedsQueue.front();
-        seedsQueue.pop();
-      }
-    }
-
-    if (!eventLoopOnGoing) {
-      delete anEvent;
-      return nullptr;
-    }
-  }
-  else if (eventHasToBeSeeded) {
-    // Need to reseed random number generator
-    G4RNGHelper* helper = G4RNGHelper::GetInstance();
-    s1 = helper->GetSeed(i_event * 2);
-    s2 = helper->GetSeed(i_event * 2 + 1);
-  }
-
-  if (eventHasToBeSeeded) {
-    G4long seeds[3] = {s1, s2, 0};
-    G4Random::setTheSeeds(seeds, -1);
-    runIsSeeded = true;
-  }
-
-  // Read from file seed.
-  // Andrea Dotti 4 November 2015
-  // This is required for strong-reproducibility, in MT mode we have that each
-  // thread produces, for each event a status file, we want to do that.
-  // Search a random file with the format run{%d}evt{%d}.rndm
-
-  // This is the filename base constructed from run and event
-  const auto filename = [&] {
-    std::ostringstream os;
-    os << "run" << currentRun->GetRunID() << "evt" << anEvent->GetEventID();
-    return os.str();
-  };
-
-  G4bool RNGstatusReadFromFile = false;
-  if (readStatusFromFile) {
-    // Build full path of RNG status file for this event
-    std::ostringstream os;
-    os << filename() << ".rndm";
-    const G4String& randomStatusFile = os.str();
-    std::ifstream ifile(randomStatusFile.c_str());
-    if (ifile) {
-      // File valid and readable
-      RNGstatusReadFromFile = true;
-      G4Random::restoreEngineStatus(randomStatusFile.c_str());
-    }
-  }
-
-  if (storeRandomNumberStatusToG4Event == 1 || storeRandomNumberStatusToG4Event == 3) {
-    std::ostringstream oss;
-    G4Random::saveFullState(oss);
-    randomNumberStatusForThisEvent = oss.str();
-    anEvent->SetRandomNumberStatus(randomNumberStatusForThisEvent);
-  }
-
-  if (storeRandomNumberStatus && !RNGstatusReadFromFile) {
-    // If reading from file, avoid to rewrite the same
-    G4String fileN = "currentEvent";
-    if (rngStatusEventsFlag) fileN = filename();
-    StoreRNGStatus(fileN);
-  }
-
-  if (printModulo > 0 && anEvent->GetEventID() % printModulo == 0) {
-    G4cout << "--> Event " << anEvent->GetEventID() << " starts";
-    if (eventHasToBeSeeded) G4cout << " with initial seeds (" << s1 << "," << s2 << ")";
-    G4cout << "." << G4endl;
-  }
-  userPrimaryGeneratorAction->GeneratePrimaries(anEvent);
-  return anEvent;
+  // This method is not used in worker sub-event mode
+  G4Exception("G4WorkerSubEvtRunManager::GenerateEvent()","SubEvtXXX003",FatalException,
+    "This method is not used in the worker thread of sub-event parallel mode");
+  return nullptr;
 }
 
 //============================================================================//
@@ -448,7 +305,6 @@ void G4WorkerSubEvtRunManager::DoWork()
     G4cout << "G4WorkerSubEvtRunManager::DoWork() starts.........." << G4endl;
   }
 
-  //G4TaskRunManager* mrm = G4TaskRunManager::GetMasterRunManager();
   G4SubEvtRunManager* mrm = G4SubEvtRunManager::GetMasterRunManager();
   G4bool newRun = false;
   const G4Run* run = mrm->GetCurrentRun();
@@ -489,7 +345,31 @@ void G4WorkerSubEvtRunManager::DoWork()
     else if(subEv==nullptr)
     { 
       // No more sub-event to process
-      needMoreWork = false;
+      // Report the results of previous sub-events if any
+      G4Event* remainingE = nullptr;
+      do
+      {
+        remainingE = eventManager->RetrieveCompletedSubEvent();
+        if(remainingE)
+        {
+          mrm->SubEventFinished(remainingE->GetSubEvent(),remainingE);
+          delete remainingE;
+        }
+      }
+      while(remainingE);
+
+      // Check if no more sub-event in event manager
+      if(eventManager->GetNumberOfRemainingSubEvents()==0)
+      { needMoreWork = false; }
+      else
+      { // Wait 1 second and revisit.
+        G4THREADSLEEP(1);
+        if(verboseLevel>1) {
+          G4cout << "G4WorkerSubEvtRunManager::DoWork() - " 
+                 << eventManager->GetNumberOfRemainingSubEvents()
+                 << " sub-events are still incomplete in the event manager."<< G4endl;
+        }
+      }
     }
     else
     {
@@ -505,7 +385,7 @@ void G4WorkerSubEvtRunManager::DoWork()
       // to be merged into the master event.
       auto masterEvent = subEv->GetEvent();
       G4Event* ev = new G4Event(masterEvent->GetEventID());
-      ev->FlagAsSubEvent(masterEvent,fSubEventType);
+      ev->FlagAsSubEvent(masterEvent,fSubEventType,subEv);
       ++numberOfEventProcessed;
 
       // Create a G4TrackVector as the input
@@ -527,12 +407,35 @@ void G4WorkerSubEvtRunManager::DoWork()
       //////AnalyzeEvent(ev);
       //////UpdateScoring();
 
-      // Report the results to the master
-      mrm->SubEventFinished(subEv,ev);
-     
+      // Report the results to the master if sub-event is completed
+      if(subEv->IsCompleted())
+      {
+        mrm->SubEventFinished(subEv,ev); 
+        delete ev;
+      }
+    
+      // Report the results of previous sub-events if any
+      G4Event* remainingE = nullptr;
+      do 
+      {
+        remainingE = eventManager->RetrieveCompletedSubEvent(); 
+        if(remainingE)
+        {
+          mrm->SubEventFinished(remainingE->GetSubEvent(),remainingE);
+          delete remainingE;
+        }
+      }
+      while(remainingE);
+
+      if(verboseLevel>2)
+      {
+        G4cout << "G4WorkerSubEvtRunManager::DoWork() - " 
+               << eventManager->GetNumberOfRemainingSubEvents()
+               << " sub-events are still incomplete in the event manager."<< G4endl;
+      }
+
       // clean up
       delete tv;
-      delete ev;
     }
   }
 

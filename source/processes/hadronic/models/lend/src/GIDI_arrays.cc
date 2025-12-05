@@ -25,17 +25,14 @@ namespace Array {
  * @return                              Returns a *std::vector<int>* of the shape.
  ***********************************************************************************************************/
 
-static std::vector<int> parseArrayShape( HAPI::Node const &a_node ) {
+static std::vector<std::size_t> parseArrayShape( HAPI::Node const &a_node ) {
 
     std::string shape = a_node.attribute_as_string( GIDI_shapeChars );
-    std::vector<int> shapeInts;
+    std::vector<std::size_t> shapeInts;
 
-    long numberOfDimensions = (long) std::count( shape.begin( ), shape.end( ), ',' ) + 1, prior = 0, next;
-    while( --numberOfDimensions >= 0 ) {
-        next = shape.find( ",", prior );
-        std::string value( shape.substr( prior, next - prior ) );
-        prior = next + 1;
-        shapeInts.push_back( atoi( value.c_str( ) ) );
+    auto shapeItems = LUPI::Misc::splitString( shape, ',', true );
+    for( auto iter = shapeItems.begin( ); iter != shapeItems.end( ); ++iter ) {
+        shapeInts.push_back( static_cast<std::size_t>( atoi( (*iter).c_str( ) ) ) );
     }
 
     return( shapeInts );
@@ -53,7 +50,7 @@ static std::vector<int> parseArrayShape( HAPI::Node const &a_node ) {
  * @param a_shape               [in]    The shape of the full array.
  ***********************************************************************************************************/
 
-FullArray::FullArray( std::vector<int> a_shape ) :
+FullArray::FullArray( std::vector<std::size_t> const &a_shape ) :
         m_shape( a_shape ) {
 
     std::size_t size = 1;
@@ -68,7 +65,7 @@ FullArray::FullArray( std::vector<int> a_shape ) :
  * @param a_flattenedValues     [in]    The values of the array. Its size must be the same has that specified by *a_shape*.
  ***********************************************************************************************************/
 
-FullArray::FullArray( std::vector<int> a_shape, std::vector<double> a_flattenedValues ) :
+FullArray::FullArray( std::vector<std::size_t> const &a_shape, std::vector<double> const &a_flattenedValues ) :
         m_shape( a_shape ) {
 
     std::size_t size = 1;
@@ -169,12 +166,12 @@ FullArray Array::constructArray( ) const {
     else if( m_compression == GIDI_diagonalChars ) {
         throw Exception( "Array::constructArray: compression '" + m_compression + "' not supported." ); }
     else if( m_compression == GIDI_flattenedChars ) {
-        int index = 0;
+        std::size_t index = 0;
         for( std::size_t index1 = 0; index1 < m_starts.size( ); ++index1 ) {
-            int length = m_length[index1];
-            int start = m_starts[index1];
+            std::size_t length = static_cast<std::size_t>( m_length[index1] );
+            std::size_t start = static_cast<std::size_t>( m_starts[index1] );
 
-            for( int index2 = 0; index2 < length; ++index2, ++index ) values[start+index2] = m_values[index];
+            for( std::size_t index2 = 0; index2 < length; ++index2, ++index ) values[start+index2] = m_values[index];
         } }
     else {
         throw Exception( "Array::constructArray: compression '" + m_compression + "' not supported." );
@@ -247,15 +244,10 @@ FlattenedArrayData::FlattenedArrayData( HAPI::Node const &a_node, SetupInfo &a_s
     bool m_dValuesPresent( false );
 
     std::string shape( a_node.attribute_as_string( GIDI_shapeChars ) );
-    long numberOfDimensions = (long) std::count( shape.begin( ), shape.end( ), ',' ), prior = 0, next;
-    while( --numberOfDimensions >= 0 ) {
-        next = shape.find( ",", prior );
-        std::string value( shape.substr( prior, next - prior ) );
-        prior = next + 1;
-        m_shape.push_back( atoi( value.c_str( ) ) );
+    auto shapeItems = LUPI::Misc::splitString( shape, ',', true );
+    for( auto iter = shapeItems.begin( ); iter != shapeItems.end( ); ++iter ) {
+        m_shape.push_back( static_cast<std::size_t>( atoi( (*iter).c_str( ) ) ) );
     }
-    std::string value( shape.substr( prior ) );
-    m_shape.push_back( atoi( value.c_str( ) ) );
 
     if( a_dimensions != (int) m_shape.size( ) ) throw Exception( "a_dimensions != m_shape.size( )" );
 
@@ -303,19 +295,21 @@ FlattenedArrayData::~FlattenedArrayData( ) {
  * @param a_value       [in]    The value to set each double in the range to.
  ***********************************************************************************************************/
 
-void FlattenedArrayData::setToValueInFlatRange( LUPI_maybeUnused int a_start, int a_end, LUPI_maybeUnused double a_value ) {
+void FlattenedArrayData::setToValueInFlatRange( LUPI_maybeUnused std::size_t a_start, std::size_t a_end, LUPI_maybeUnused double a_value ) {
 
-    int size = 1;
+    std::size_t size = 1;
     for( auto iter = m_shape.begin( ); iter != m_shape.end( ); ++iter ) size *= *iter;
     a_end = std::min( a_end, size );
 
     long numberOfValuesToSet = 0;
     for( std::size_t startIndex = 0; startIndex < m_numberOfStarts; ++startIndex ) {
-        long start = m_starts[startIndex];
-        long length = m_lengths[startIndex];
+        std::size_t start = static_cast<std::size_t>( m_starts[startIndex] );
+        std::size_t length = static_cast<std::size_t>( m_lengths[startIndex] );
 
-        if( ( start + length ) > a_end ) length = a_end - start;
-        if( length < 0 ) break;
+        if( ( start + length ) > a_end ) {
+            if( a_end < start ) break;
+            length = a_end - start;
+        }
         numberOfValuesToSet += length;
     }
 
@@ -337,7 +331,7 @@ void FlattenedArrayData::toXMLList( GUPI::WriteInfo &a_writeInfo, std::string co
     std::string shapeString;
     std::string sep = "";
     for( std::size_t i1 = 0; i1 < m_shape.size( ); ++i1 ) {
-        shapeString += sep + intToString( m_shape[i1] );
+        shapeString += sep + intToString( static_cast<int>( m_shape[i1] ) );
         sep = ",";
     }
 

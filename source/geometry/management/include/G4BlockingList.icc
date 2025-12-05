@@ -23,11 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// class G4BlockingList inlined implementation
 //
-//
-//
-// class G4BlockingList  Inlined Implementation
-//
+// Author: Paul Kent (CERN), 24.07.1996
 // --------------------------------------------------------------------
 
 inline std::size_t G4BlockingList::Length() const

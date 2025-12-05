@@ -23,10 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file hadronic/Hadr02/include/HadronPhysicsUrQMD.hh
+/// \file HadronPhysicsUrQMD.hh
 /// \brief Definition of the HadronPhysicsUrQMD class
-//
-//
+
 //---------------------------------------------------------------------------
 //
 // ClassName:

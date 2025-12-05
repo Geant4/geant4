@@ -99,13 +99,6 @@ G4UExtrudedSolid::G4UExtrudedSolid(const G4String&          name,
 
 //////////////////////////////////////////////////////////////////////////
 //
-// Destructor
-//
-G4UExtrudedSolid::~G4UExtrudedSolid() = default;
-
-
-//////////////////////////////////////////////////////////////////////////
-//
 // Copy constructor
 //
 G4UExtrudedSolid::G4UExtrudedSolid(const G4UExtrudedSolid &source)

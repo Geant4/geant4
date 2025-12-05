@@ -25,7 +25,7 @@
 //
 // G4OldMagIntDriver inline methods implementation
 //
-// V.Grichine, 07.10.1996 - Created
+// Author: Vladimir Grichine (CERN), 07.10.1996 - Created
 // --------------------------------------------------------------------
 
 inline
@@ -41,6 +41,17 @@ inline
 void G4OldMagIntDriver::OnStartTracking()
 {
   ChordFinderDelegate::ResetStepEstimate();
+}
+
+inline
+void G4OldMagIntDriver::OnComputeStep(const G4FieldTrack*)
+{
+}
+
+inline
+G4bool G4OldMagIntDriver::DoesReIntegrate() const
+{
+  return true;
 }
 
 inline

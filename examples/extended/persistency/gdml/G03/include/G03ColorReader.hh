@@ -23,12 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file persistency/gdml/G03/include/G03ColorReader.hh
+/// \file G03ColorReader.hh
 /// \brief Definition of the G03ColorReader class
-//
-//
-//
-//
+
 // class G03ColorReader
 //
 // Custom reader for handling "color" tags extensions in GDML.

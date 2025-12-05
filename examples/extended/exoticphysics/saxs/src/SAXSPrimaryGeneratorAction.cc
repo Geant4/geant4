@@ -25,8 +25,6 @@
 //
 /// \file SAXSPrimaryGeneratorAction.cc
 /// \brief Implementation of the SAXSPrimaryGeneratorAction class
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "SAXSPrimaryGeneratorAction.hh"
 

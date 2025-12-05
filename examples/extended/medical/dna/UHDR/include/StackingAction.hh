@@ -22,6 +22,9 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
+//
+/// \file StackingAction.hh
+/// \brief Definition of the StackingAction class
 
 #ifndef StackingAction_h
 #define StackingAction_h 1

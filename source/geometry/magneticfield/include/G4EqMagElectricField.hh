@@ -30,7 +30,7 @@
 // This is the right-hand side of equation of motion in a combined
 // electric and magnetic field.
 
-// Created: V.Grichine, 10.11.1998
+// Author: Vladimir Grichine (CERN), 10.11.1998
 // -------------------------------------------------------------------
 #ifndef G4EQMAGELECTRICFIELD_HH
 #define G4EQMAGELECTRICFIELD_HH
@@ -39,22 +39,52 @@
 #include "G4EquationOfMotion.hh"
 #include "G4ElectroMagneticField.hh"
 
+/**
+ * @brief G4EqMagElectricField implements the right-hand side of equation of
+ * motion in a combined electric and magnetic field.
+ */
+
 class G4EqMagElectricField : public G4EquationOfMotion
 {
   public:
 
+    /**
+     * Constructor for G4EqMagElectricField.
+     *  @param[in] emField Pointer to the electromagnetic field.
+     */
     G4EqMagElectricField(G4ElectroMagneticField* emField );
-   ~G4EqMagElectricField() override;
 
+    /**
+     * Default Destructor.
+     */
+    ~G4EqMagElectricField() override = default;
+
+    /**
+     * Sets the charge, momentum and mass of the current particle.
+     * Used to set the equation's coefficients.
+     *  @param[in] particleCharge Magnetic charge and moments in e+ units.
+     *  @param[in] MomentumXc Particle momentum.
+     *  @param[in] mass Particle mass.
+     */
     void  SetChargeMomentumMass(G4ChargeState particleCharge, // in e+ units
                                 G4double MomentumXc,
                                 G4double mass) override;
 
+    /**
+     * Calculates the value of the derivative, given the value of the
+     * electromagnetic field.
+     *  @param[in] y Coefficients array.
+     *  @param[in] Field Field value.
+     *  @param[out] dydx Derivatives array.
+     */
     void EvaluateRhsGivenB(const G4double y[],
                            const G4double Field[],
                                  G4double dydx[] ) const override;
-      // Given the value of the electromagnetic field, this function 
-      // calculates the value of the derivative dydx.
+
+    /**
+     * Returns the equation type-ID, "kEqElectroMagnetic".
+     */
+    inline G4EquationType GetEquationType() const override { return kEqElectroMagnetic; }
 
   private:
 

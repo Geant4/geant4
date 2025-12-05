@@ -23,10 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file runAndEvent/RE04/include/RE04Trajectory.hh
+/// \file RE04Trajectory.hh
 /// \brief Definition of the RE04Trajectory class
-//
-//
+
 #ifndef RE04Trajectory_h
 #define RE04Trajectory_h 1
 

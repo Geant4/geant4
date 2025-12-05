@@ -7,6 +7,7 @@
 #include "ibo"
 #include "key"
 #include "buffer"
+#include "../cmemT"
 
 namespace tools {
 namespace wroot {
@@ -37,14 +38,6 @@ public: //ibo
     //              basket.write_on_file()
     //            happens only in a branch.fill() that deletes
     //            the basket just after the call.
-  //if(!m_data.length()) {
-  //  // to be sure to not work on a basket already written
-  //  // with write_on_file()
-  //  m_out << "tools::wroot::basket::stream :"
-  //        << " m_data.length() is null."
-  //        << std::endl;
-  //  return false;
-  //}
     if(m_seek_key) {
       m_out << "tools::wroot::basket::stream :"
             << " m_seek_key is not null (" << m_seek_key << ")."
@@ -94,7 +87,6 @@ public: //ibo
 
     buffer bref(m_out,a_buffer.byte_swap(),256);
     if(!_stream_header(bref,m_verbose)) return false; //then header stored twice !
-    //if(bref.length()!=m_key_length) {}
     if(!bref.write_fast_array(m_data.buf(),m_data.length())) return false;
     if(!a_buffer.write_fast_array(bref.buf(),bref.length())) return false;
 
@@ -117,10 +109,6 @@ public:
   ,m_entry_offset(0)
   ,m_displacement(0)
   {
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
-
     if(m_version>big_file_version_tag()) {
     } else {
       // G.Barrand : April 2016 : WARNING : this is a change in the ROOT/IO format compared to CERN-ROOT/4.x :
@@ -141,9 +129,6 @@ public:
     delete [] m_displacement;
     m_entry_offset = 0;
     m_displacement = 0;
-#ifdef TOOLS_MEM
-    mem::decrement(s_class().c_str());
-#endif
   }
 protected:
   basket(const basket& a_from)
@@ -157,9 +142,6 @@ protected:
   ,m_entry_offset(0)
   ,m_displacement(0)
   {
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
   }
   basket& operator=(const basket& a_from){
     parent::operator=(a_from);
@@ -207,13 +189,13 @@ public:
     if(m_entry_offset) {
       if((m_nev+1)>=m_nev_buf_size) { // for the +1, we follow CERN-ROOT/TBasket logic that wants to store
                                       // nev+1 elements for m_entry_offset in the write_on_file() method.
-        uint32 newsize = mx<uint32>(10,2*m_nev_buf_size);
-        if(!realloc<int>(m_entry_offset,newsize,m_nev_buf_size,true)){
+        uint32 newsize = max_of<uint32>(10,2*m_nev_buf_size);
+        if(!cmem_realloc<int>(m_entry_offset,newsize,m_nev_buf_size,true)){
           m_out << "tools::wroot::basket::update : realloc failed." << std::endl;
           return false;
         }
         if(m_displacement) {
-          if(!realloc<int>(m_displacement,newsize,m_nev_buf_size,true)){
+          if(!cmem_realloc<int>(m_displacement,newsize,m_nev_buf_size,true)){
             m_out << "tools::wroot::basket::update : realloc failed." << std::endl;
             return false;
           }
@@ -246,32 +228,6 @@ public:
             << " we should not pass here (1)."
             << std::endl;
       return false;
-/*
-      if(a_file.END()>START_BIG_FILE()) {
-        //GB : enforce m_version>big_file_version_tag() if m_version is still 2 but
-        //     seek_key>START_BIG_FILE. If not doing that we shall
-        //     write a big m_seek_key on a seek32 and then have
-        //     a problem when reading.
-
-        //m_out << "tools::wroot::basket::write_on_file : "
-        //      << " WARNING : pos>START_BIG_FILE."
-        //      << std::endl;
-
-        m_version += big_file_version_tag();
-        m_key_length += 8;
-
-        if(m_entry_offset) {
-          for(uint32 i=0;i<m_nev;i++) m_entry_offset[i] += 8;
-          if(m_displacement) {
-            //??? Do we have to shift them ?
-            m_out << "tools::wroot::basket::write_on_file : "
-                  << " displace logic : m_displacement not null."
-                  << std::endl;
-          }
-        }
-
-      }
-*/
     }
 
     // Transfer m_entry_offset table at the end of fBuffer. Offsets to fBuffer

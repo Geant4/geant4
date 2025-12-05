@@ -6,6 +6,12 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2025-11-03 Vladimir Ivanchenko (phys-builders-V11-03-02)
+- G4AntiBarionBuilder, G4VAntiBarionBuilder - code clean-up
+
+## 2025-09-22 Jean-Christophe David (phys-builders-V11-03-01)
+- G4HadronicBuilder: added the possibility to use antineutron by INCLXX.
+
 ## 2025-06-16 Vladimir Ivanchenko (phys-builders-V11-03-00)
 - G4HadronPHPBuilder - G4ParticleHPCapture and G4ParticleHPCaptureData are
     substituted by G4NeutronRadCaptureHP and G4NeutronHPCaptureData. The

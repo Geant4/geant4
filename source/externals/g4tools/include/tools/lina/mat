@@ -4,15 +4,8 @@
 #ifndef tools_mat
 #define tools_mat
 
-#ifdef TOOLS_MEM
-#include "../mem"
-#endif
-
 #include "MATCOM"
 
-//#include <cstring> //memcpy
-
-//#define TOOLS_MAT_NEW
 namespace tools {
 
 template <class T,unsigned int D>
@@ -23,21 +16,8 @@ class mat {
   TOOLS_MATCOM
 #undef TOOLS_MAT_CLASS
 private:
-#ifdef TOOLS_MEM
-  static const std::string& s_class() {
-    static const std::string s_v("tools::mat");
-    return s_v;
-  }
-#endif
 public:
-  mat(
-#ifdef TOOLS_MEM
-      bool a_inc = true
-#endif
-      ) {
-#ifdef TOOLS_MEM
-    if(a_inc) mem::increment(s_class().c_str());
-#endif
+  mat() {
 #ifdef TOOLS_MAT_NEW
     m_vec = new T[D*D];
 #endif
@@ -47,15 +27,9 @@ public:
 #ifdef TOOLS_MAT_NEW
     delete [] m_vec;
 #endif
-#ifdef TOOLS_MEM
-    mem::decrement(s_class().c_str());
-#endif
   }
 public:
   mat(const mat& a_from) {
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
 #ifdef TOOLS_MAT_NEW
     m_vec = new T[D*D];
 #endif
@@ -68,9 +42,6 @@ public:
   }
 public:
   mat(const T a_v[]){
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
 #ifdef TOOLS_MAT_NEW
     m_vec = new T[D*D];
 #endif
@@ -95,33 +66,18 @@ class nmat {
   TOOLS_MATCOM
 #undef TOOLS_MAT_CLASS
 private:
-#ifdef TOOLS_MEM
-  static const std::string& s_class() {
-    static const std::string s_v("tools::nmat");
-    return s_v;
-  }
-#endif
 public:
   nmat(unsigned int a_D):m_D(a_D),m_D2(a_D*a_D),m_vec(0) {
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
     m_vec = new T[m_D2];
     for(unsigned int i=0;i<m_D2;i++) m_vec[i] = zero();
   }
   virtual ~nmat() {
     delete [] m_vec;
-#ifdef TOOLS_MEM
-    mem::decrement(s_class().c_str());
-#endif
   }
 public:
   nmat(const nmat& a_from)
   :m_D(a_from.m_D),m_D2(a_from.m_D2),m_vec(0)
   {
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
     m_vec = new T[m_D2];
     _copy(a_from.m_vec);
   }
@@ -140,9 +96,6 @@ public:
   nmat(unsigned int a_D,const T a_v[])
   :m_D(a_D),m_D2(a_D*a_D),m_vec(0)
   {
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
     m_vec = new T[m_D2];
     _copy(a_v);
   }
@@ -165,9 +118,6 @@ inline nmat<T> copy(const mat<T,D>& a_from) {
 
 template <class VECTOR>
 inline void multiply(VECTOR& a_vec,const typename VECTOR::value_type& a_mat) {
-  //typedef typename VECTOR::size_type sz_t;
-  //sz_t number = a_vec.size();
-  //for(sz_t index=0;index<number;index++) a_vec[index] *= a_mat;
   typedef typename VECTOR::iterator it_t;
   for(it_t it=a_vec.begin();it!=a_vec.end();++it) *it *= a_mat;
 }
@@ -302,10 +252,6 @@ inline bool decomplex(
 ///////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////
 
-//for sf, mf :
-//template <class T,unsigned int D>
-//inline const T* get_data(const mat<T,D>& a_v) {return a_v.data();}
-
 template <class MAT>
 inline MAT commutator(const MAT& a1,const MAT& a2) {
   return a1*a2-a2*a1;
@@ -424,14 +370,6 @@ inline mat<T,D> operator*(const T& a_fac,const mat<T,D>& a_m) {
   res *= a_fac;
   return res;
 }
-/*
-template <class T,unsigned int D>
-inline mat<T,D> operator*(const mat<T,D>& a_m,const T& a_fac) {
-  mat<T,D> res(a_m);
-  res *= a_fac;
-  return res;
-}
-*/
 
 template <class T>
 inline nmat<T> operator-(const nmat<T>& a1,const nmat<T>& a2) {
@@ -457,14 +395,6 @@ inline nmat<T> operator*(const T& a_fac,const nmat<T>& a_m) {
   res *= a_fac;
   return res;
 }
-/*
-template <class T>
-inline nmat<T> operator*(const nmat<T>& a_m,const T& a_fac) {
-  nmat<T> res(a_m);
-  res *= a_fac;
-  return res;
-}
-*/
 
 template <class MAT,class REAL>
 inline bool mat_fabs(const MAT& a_in,MAT& a_ou,REAL(*a_fabs)(const typename MAT::elem_t&)) {
@@ -478,28 +408,6 @@ inline bool mat_fabs(const MAT& a_in,MAT& a_ou,REAL(*a_fabs)(const typename MAT:
 }
 
 }
-
-/*
-#include <cstdarg>
-
-namespace tools {
-
-template <class MAT>
-inline void matrix_va_set(MAT& a_m,size_t a_dummy,...) {
-  typedef typename MAT::elem_t T;
-  va_list args;
-  va_start(args,a_dummy);
-  unsigned int D = a_m.dimension();
-  for(unsigned int r=0;r<D;r++) {
-    for(unsigned int c=0;c<D;c++) {
-      a_m.set_value(r,c,va_arg(args,T));
-    }
-  }
-  va_end(args);
-}
-
-}
-*/
 
 namespace tools {
 

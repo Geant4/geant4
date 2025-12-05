@@ -27,15 +27,19 @@
 //
 // G4QSS3 simulator
 
-// Authors: Lucio Santi, Rodrigo Castro (Univ. Buenos Aires) - 2018-2021
+// Authors: Lucio Santi, Rodrigo Castro (Univ. Buenos Aires), 2018-2021
 // --------------------------------------------------------------------
-#ifndef _G4QSS3_H_
-#define _G4QSS3_H_ 1
+#ifndef G4QSS3_HH
+#define G4QSS3_HH
 
 #include "G4Types.hh"
 #include "G4qss_misc.hh"
 
 #include <cmath>
+
+/**
+ * @brief G4QSS3 defines the QSS3 simulator engine used in QSS field stepper.
+ */
 
 class G4QSS3
 {

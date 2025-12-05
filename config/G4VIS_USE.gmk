@@ -23,9 +23,6 @@ VISLIBS  += -lG4FR
 CPPFLAGS += -DG4VIS_USE_GMOCRENFILE
 VISLIBS  += -lG4GMocren
 
-CPPFLAGS += -DG4VIS_USE_HEPREPFILE
-VISLIBS  += -lG4visHepRep
-
 CPPFLAGS += -DG4VIS_USE_RAYTRACER
 VISLIBS  += -lG4RayTracer
 
@@ -38,7 +35,6 @@ VISLIBS  += -lG4ToolsSG
 ifneq ($(G4INCLUDE_EXEC),1)
   CPPFLAGS += -I$(G4BASE)/visualization/FukuiRenderer/include
   CPPFLAGS += -I$(G4BASE)/visualization/gMocren/include
-  CPPFLAGS += -I$(G4BASE)/visualization/HepRep/include
   CPPFLAGS += -I$(G4BASE)/visualization/RayTracer/include
   CPPFLAGS += -I$(G4BASE)/visualization/Tree/include
   CPPFLAGS += -I$(G4BASE)/visualization/VRML/include
@@ -115,16 +111,6 @@ ifdef G4VIS_USE_OI
   INC_IV    = 1
   LOAD_IV   = 1
   G4LIB_USE_GL2PS = 1
-endif
-
-ifdef G4VIS_USE_QT3D
-  CPPFLAGS += -DG4VIS_USE_QT3D
-  VISLIBS  += -lG4visQt3D
-  ifneq ($(G4INCLUDE_EXEC),1)
-    CPPFLAGS += -I$(G4BASE)/visualization/Qt3D/include
-  endif
-  INC_QT    = 1
-  LOAD_3DQT = 1
 endif
 
 ifdef G4VIS_USE_RAYTRACERX

@@ -23,11 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file runAndEvent/RE02/include/RE02PSPassageCellFlux.hh
+/// \file RE02PSPassageCellFlux.hh
 /// \brief Definition of the RE02PSPassageCellFlux class
-//
-//
-//
 
 #ifndef RE02PSPassageCellFlux_h
 #define RE02PSPassageCellFlux_h 1

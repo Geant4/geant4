@@ -1,0 +1,61 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_shade_model
+#define tools_sg_shade_model
+
+#include "node"
+
+#include "sf_enum"
+#include "render_action"
+
+namespace tools {
+namespace sg {
+
+class shade_model : public node {
+  TOOLS_NODE(shade_model,tools::sg::shade_model,node)
+public:
+  sf_enum<shade_type> model;
+public:
+  virtual const desc_fields& node_desc_fields() const {
+    TOOLS_FIELD_DESC_NODE_CLASS(tools::sg::shade_model)
+    static const desc_fields s_v(parent::node_desc_fields(),1, //WARNING : take care of count.
+      TOOLS_ARG_FIELD_DESC(model)
+    );
+    return s_v;
+  }
+private:
+  void add_fields(){
+    add_field(&model);
+  }
+public:
+  virtual void render(render_action& a_action) {
+    state& state = a_action.state();
+    state.m_shade_model = model;
+    a_action.set_shade_model(state.m_shade_model);
+  }
+public:
+  shade_model()
+  :parent()
+  ,model(shade_flat)
+  {
+    add_fields();
+  }
+  virtual ~shade_model(){}
+public:
+  shade_model(const shade_model& a_from)
+  :parent(a_from)
+  ,model(a_from.model)
+  {
+    add_fields();
+  }
+  shade_model& operator=(const shade_model& a_from){
+    parent::operator=(a_from);
+    model = a_from.model;
+    return *this;
+  }
+};
+
+}}
+
+#endif

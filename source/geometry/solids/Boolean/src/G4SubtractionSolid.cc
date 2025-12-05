@@ -43,8 +43,14 @@
 #include "HepPolyhedronProcessor.h"
 
 #include "G4IntersectionSolid.hh"
+#include "G4AutoLock.hh"
 
 #include <sstream>
+
+namespace
+{
+  G4RecursiveMutex subMutex = G4MUTEX_INITIALIZER;
+}
 
 //////////////////////////////////////////////////////////////////////////
 //
@@ -92,12 +98,6 @@ G4SubtractionSolid::G4SubtractionSolid( __void__& a )
   : G4BooleanSolid(a)
 {
 }
-
-//////////////////////////////////////////////////////////////////////////
-//
-// Destructor
-
-G4SubtractionSolid::~G4SubtractionSolid() = default;
 
 //////////////////////////////////////////////////////////////////////////
 //
@@ -176,13 +176,13 @@ G4SubtractionSolid::CalculateExtent( const EAxis pAxis,
 EInside G4SubtractionSolid::Inside( const G4ThreeVector& p ) const
 {
   EInside positionA = fPtrSolidA->Inside(p);
-  if (positionA == kOutside) return positionA; // outside A
+  if (positionA == kOutside) { return positionA; } // outside A
 
   EInside positionB = fPtrSolidB->Inside(p);
-  if (positionB == kOutside) return positionA;
+  if (positionB == kOutside) { return positionA; }
 
-  if (positionB == kInside) return kOutside;
-  if (positionA == kInside) return kSurface; // surface B
+  if (positionB == kInside) { return kOutside; }
+  if (positionA == kInside) { return kSurface; } // surface B
 
   // Point is on both surfaces
   //
@@ -342,52 +342,50 @@ G4SubtractionSolid::DistanceToIn( const G4ThreeVector& p,
       {
         return kInfinity ;
       }
-      else
+      
+      G4int count2=0;
+      while( Inside(p+dist*v) == kOutside )  // pushing loop
       {
-        G4int count2=0;
-        while( Inside(p+dist*v) == kOutside )  // pushing loop
-        {
-          disTmp = fPtrSolidB->DistanceToOut(p+dist*v,v) ;
-          dist += disTmp ;
+        disTmp = fPtrSolidB->DistanceToOut(p+dist*v,v) ;
+        dist += disTmp ;
 
-          if( Inside(p+dist*v) == kOutside )
-          { 
-            disTmp = fPtrSolidA->DistanceToIn(p+dist*v,v) ;
+        if( Inside(p+dist*v) == kOutside )
+        { 
+          disTmp = fPtrSolidA->DistanceToIn(p+dist*v,v) ;
 
-            if(disTmp == kInfinity) // past A, hence past A\B
-            {  
-              return kInfinity ;
-            }                 
-            dist2 = dist+disTmp;
-            if (dist == dist2)  { return dist; }   // no progress
-            dist = dist2 ;
-            ++count2;
-            if( count2 > 1000 )  // Infinite loop detected
+          if(disTmp == kInfinity) // past A, hence past A\B
+          {  
+            return kInfinity ;
+          }                 
+          dist2 = dist+disTmp;
+          if (dist == dist2)  { return dist; }   // no progress
+          dist = dist2 ;
+          ++count2;
+          if( count2 > 1000 )  // Infinite loop detected
+          {
+            G4String nameB = fPtrSolidB->GetName();
+            if(fPtrSolidB->GetEntityType()=="G4DisplacedSolid")
             {
-              G4String nameB = fPtrSolidB->GetName();
-              if(fPtrSolidB->GetEntityType()=="G4DisplacedSolid")
-              {
-                nameB = (dynamic_cast<G4DisplacedSolid*>(fPtrSolidB))
-                        ->GetConstituentMovedSolid()->GetName();
-              }
-              std::ostringstream message;
-              message << "Illegal condition caused by solids: "
-                      << fPtrSolidA->GetName() << " and " << nameB << G4endl;
-              message.precision(16);
-              message << "Looping detected in point " << p+dist*v
-                      << ", from original point " << p
-                      << " and direction " << v << G4endl
-                      << "Computed candidate distance: " << dist << "*mm. ";
-              message.precision(6);
-              DumpInfo();
-              G4Exception("G4SubtractionSolid::DistanceToIn(p,v)",
-                          "GeomSolids1001", JustWarning, message,
-                          "Returning candidate distance.");
-              return dist;
+              nameB = (dynamic_cast<G4DisplacedSolid*>(fPtrSolidB))
+                      ->GetConstituentMovedSolid()->GetName();
             }
+            std::ostringstream message;
+            message << "Illegal condition caused by solids: "
+                    << fPtrSolidA->GetName() << " and " << nameB << G4endl;
+            message.precision(16);
+            message << "Looping detected in point " << p+dist*v
+                    << ", from original point " << p
+                    << " and direction " << v << G4endl
+                    << "Computed candidate distance: " << dist << "*mm. ";
+            message.precision(6);
+            DumpInfo();
+            G4Exception("G4SubtractionSolid::DistanceToIn(p,v)",
+                        "GeomSolids1001", JustWarning, message,
+                        "Returning candidate distance.");
+            return dist;
           }
-        }    // Loop checking, 13.08.2015, G.Cosmo
-      }
+        }
+      }    // Loop checking, 13.08.2015, G.Cosmo
     }
   
   return dist ;
@@ -542,6 +540,10 @@ G4SubtractionSolid::ComputeDimensions(       G4VPVParameterisation*,
                                        const G4int,
                                        const G4VPhysicalVolume* ) 
 {
+  DumpInfo();
+  G4Exception("G4SubtractionSolid::ComputeDimensions()",
+              "GeomSolids0001", FatalException,
+              "Method not applicable in this context!");
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -571,10 +573,7 @@ G4Polyhedron* G4SubtractionSolid::CreatePolyhedron () const
     {
       return result;
     }
-    else
-    {
-      return nullptr;
-    }
+    return nullptr;
   }
   else
   {
@@ -593,6 +592,7 @@ G4double G4SubtractionSolid::GetCubicVolume()
   {
     return fCubicVolume;
   }
+  G4RecursiveAutoLock l(&subMutex);
   G4ThreeVector bminA, bmaxA, bminB, bmaxB;
   fPtrSolidA->BoundingLimits(bminA, bmaxA);
   fPtrSolidB->BoundingLimits(bminB, bmaxB);
@@ -619,8 +619,12 @@ G4double G4SubtractionSolid::GetCubicVolume()
 
       G4double cubVolumeA = fPtrSolidA->GetCubicVolume();
       fCubicVolume = cubVolumeA - intersectVol.GetCubicVolume();
-      if (fCubicVolume < 0.01*cubVolumeA) fCubicVolume = G4BooleanSolid::GetCubicVolume();
+      if (fCubicVolume < 0.01*cubVolumeA)
+      {
+        fCubicVolume = G4BooleanSolid::GetCubicVolume();
+      }
     }
   }
+  l.unlock();
   return fCubicVolume;
 }

@@ -34,7 +34,8 @@
 
 #include "G4AuxiliaryNavServices.hh"
 
-#include <cassert>
+// #include <cassert>
+
 #include <ostream>
 
 // ********************************************************************
@@ -771,10 +772,12 @@ void G4VoxelNavigation::RelocateWithinVolume( G4VPhysicalVolume*  motherPhysical
 {
   auto motherLogical = motherPhysical->GetLogicalVolume();
 
-  assert(motherLogical != nullptr);
+  // assert(motherLogical != nullptr);
 
   if ( auto pVoxelHeader = motherLogical->GetVoxelHeader() )
+  {
     VoxelLocate( pVoxelHeader, localPoint );
+  }
 }
 
 // ********************************************************************

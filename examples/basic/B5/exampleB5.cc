@@ -23,9 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 /// \file exampleB5.cc
-/// \brief Main program of the basic B5 example
+/// \brief Main program of the basic/B5 example
 
 #include "ActionInitialization.hh"
 #include "DetectorConstruction.hh"

@@ -41,7 +41,6 @@ public:
   virtual void key_right(){}
   virtual void key_escape(){}
   virtual void close(){
-    //if(m_hwnd) ::PostMessage(m_hwnd,WM_QUIT,0,0);
     ::PostQuitMessage(0);
   }
 public:
@@ -79,23 +78,7 @@ protected:
   ,m_key_shift(a_from.m_key_shift)
   ,m_key_ctrl(a_from.m_key_ctrl)
   ,m_focus_hwnd(0)
-  {
-  /*
-    if(!a_from.m_hwnd) return;
-    int w,h;
-    get_size(a_from.m_hwnd,w,h);
-    register_class();
-    m_hwnd = ::CreateWindow(s_class().c_str(),
-                              NULL,
-                              WS_OVERLAPPEDWINDOW,
-                              CW_USEDEFAULT,CW_USEDEFAULT,
-                              w,h,
-                              NULL,NULL,
-                              ::GetModuleHandle(NULL),
-                              NULL);
-    if(!m_hwnd) return;
-    ::SetWindowLongPtr(m_hwnd,GWLP_USERDATA,LONG_PTR(this));
-    */
+  { 
   }
   window& operator=(const window& a_from){
     m_key_shift = a_from.m_key_shift;
@@ -225,7 +208,6 @@ protected:
     window* _this = (window*)::GetWindowLongPtr(a_hwnd,GWLP_USERDATA);
     if(_this) { //How to be sure that we have a window* ???
       if(_this->m_hwnd!=a_hwnd) {
-        //::printf("WinTk::Component::wm_destroy : HWND mismatch !\n");
       }
       _this->m_hwnd = 0;
     }

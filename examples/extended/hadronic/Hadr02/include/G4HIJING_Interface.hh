@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file G4HIJING_Interface.hh
+/// \brief Definition of the G4HIJING_Interface class
+
 #ifndef G4HIJING_Interface_hh
 #define G4HIJING_Interface_hh
 

@@ -23,10 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file RE06/include/RE06DetectorMessenger.hh
+/// \file RE06DetectorMessenger.hh
 /// \brief Definition of the RE06DetectorMessenger class
-//
-//
 
 #ifndef RE06DetectorMessenger_h
 #define RE06DetectorMessenger_h 1

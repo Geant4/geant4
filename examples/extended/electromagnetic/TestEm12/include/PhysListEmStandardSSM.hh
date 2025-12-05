@@ -23,12 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm12/include/PhysListEmStandardSSM.hh
+/// \file PhysListEmStandardSSM.hh
 /// \brief Definition of the PhysListEmStandardSSM class
-//
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef PhysListEmStandardSSM_h
 #define PhysListEmStandardSSM_h 1

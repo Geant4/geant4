@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file DetectorConstruction.hh
+/// \brief Definition of the DetectorConstruction class
+
 // This example is provided by the Geant4-DNA collaboration
 // chem6 example is derived from chem4 and chem5 examples
 //
@@ -36,11 +39,6 @@
 // The Geant4-DNA web site is available at http://geant4-dna.org
 //
 // Authors: W. G. Shin and S. Incerti (CENBG, France)
-//
-// $Id$
-//
-/// \file DetectorConstruction.hh
-/// \brief Definition of the DetectorConstruction class
 
 #ifndef CHEM6_DetectorConstruction_h
 #define CHEM6_DetectorConstruction_h 1
@@ -50,17 +48,14 @@
 class G4VPhysicalVolume;
 class G4LogicalVolume;
 
-class DetectorConstruction : public G4VUserDetectorConstruction
+class DetectorConstruction final : public G4VUserDetectorConstruction
 {
   public:
-    DetectorConstruction();
-    ~DetectorConstruction() override;
+    DetectorConstruction() = default;
+    ~DetectorConstruction() override = default;
 
-  public:
     G4VPhysicalVolume* Construct() override;
     void ConstructSDandField() override;
-
-  private:
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

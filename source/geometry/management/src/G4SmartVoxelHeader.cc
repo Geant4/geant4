@@ -23,16 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 // 
-// class G4SmartVoxelHeader implementation
+// G4SmartVoxelHeader implementation
 //
 // Define G4GEOMETRY_VOXELDEBUG for debugging information on G4cout
 //
-// 29.04.02 Use 3D voxelisation for non consuming replication - G.C.
-// 18.04.01 Migrated to STL vector - G.C.
-// 12.02.99 Introduction of new quality/smartless: max for (slices/cand) - S.G.
-// 11.02.99 Voxels at lower levels are now built for collapsed slices - S.G.
-// 21.07.95 Full implementation, supporting non divided physical volumes - P.K.
-// 14.07.95 Initial version - stubb definitions only - P.K.
+// 13.07.95 Initial version, stubb definitions only - P.Kent.
+// 21.07.95 Full implementation, supporting non divided volumes - P.Kent.
+// 11.02.99 Voxels at lower levels now built for collapsed slices - S.Giani.
+// 12.02.99 Introduction of new quality/smartless - S.Giani.
+// 18.04.01 Migrated to STL vector - G.Cosmo.
+// 29.04.02 Use 3D voxelisation for non consuming replication - G.Cosmo.
 // --------------------------------------------------------------------
 
 #include "G4SmartVoxelHeader.hh"
@@ -51,7 +51,7 @@
 // ***************************************************************************
 // Constructor for topmost header, to begin voxel construction at a
 // given logical volume.
-// Constructs target List of volumes, calls "Build and refine" constructor.
+// Constructs target list of volumes, calls "Build and refine" constructor.
 // Assumes all daughters represent single volumes (ie. no divisions
 // or parametric)
 // ***************************************************************************
@@ -82,8 +82,7 @@ G4SmartVoxelHeader::G4SmartVoxelHeader(G4LogicalVolume* pVolume,
 }
 
 // ***************************************************************************
-// Protected constructor:
-// builds and refines voxels between specified limits, considering only
+// Builds and refines voxels between specified limits, considering only
 // the physical volumes numbered `pCandidates'. `pSlice' is used to set max
 // and min equivalent slice nos for the header - they apply to the level
 // of the header, not its nodes.
@@ -112,8 +111,7 @@ G4SmartVoxelHeader::G4SmartVoxelHeader(G4LogicalVolume* pVolume,
 }
 
 // ***************************************************************************
-// Destructor:
-// deletes all proxies and underlying objects.
+// Destructor: deletes all proxies and underlying objects.
 // ***************************************************************************
 //
 G4SmartVoxelHeader::~G4SmartVoxelHeader()
@@ -370,9 +368,9 @@ void G4SmartVoxelHeader::BuildReplicaVoxels(G4LogicalVolume* pVolume)
 }
 
 // ***************************************************************************
-// Builds `consumed nodes': nReplicas nodes each containing one replication,
+// Builds 'consumed nodes': nReplicas nodes each containing one replication,
 // numbered in sequence 0->nReplicas-1
-// o Modifies fslices `in place'
+// o Modifies fslices 'in place'
 // o faxis,fminExtent,fmaxExtent NOT modified.
 // ***************************************************************************
 //
@@ -418,7 +416,7 @@ void G4SmartVoxelHeader::BuildConsumedNodes(G4int nReplicas)
 
 // ***************************************************************************
 // Builds and refines voxels between specified limits, considering only
-// the physical volumes numbered `pCandidates'.
+// the physical volumes numbered 'pCandidates'.
 // o Chooses axis
 // o Determines min and max extents (of mother solid) within limits.
 // ***************************************************************************
@@ -704,7 +702,7 @@ void G4SmartVoxelHeader::CollectEquivalentHeaders()
 // ***************************************************************************
 // Builds the nodes corresponding to slices between the specified limits
 // and along the specified axis, using candidate volume no.s in the vector
-// pCandidates. If the `daughters' are replicated volumes (ie. the logical
+// pCandidates. If the 'daughters' are replicated volumes (ie. the logical
 // volume has a single replicated/parameterised volume for a daughter)
 // the candidate no.s are interpreted as PARAMETERISED volume no.s & 
 // PARAMETERISATIONs are applied to compute transformations & solid
@@ -776,7 +774,7 @@ G4ProxyVector* G4SmartVoxelHeader::BuildNodes(G4LogicalVolume* pVolume,
                                         pDaughter->GetTranslation());
     replicated = true;
   }
-    else
+  else
   {
     replicated = false;
   }

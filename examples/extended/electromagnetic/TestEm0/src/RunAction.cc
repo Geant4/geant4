@@ -23,12 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm0/src/RunAction.cc
+/// \file RunAction.cc
 /// \brief Implementation of the RunAction class
-//
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "RunAction.hh"
 
@@ -235,15 +231,18 @@ void RunAction::BeginOfRunAction(const G4Run*)
   dedx2.push_back(dedxtot / density);
 
   // print stopping power
-  G4cout << "\n \n  restricted dE/dx         : ";
+  G4cout << "\n  restricted dE/dx         : ";
   for (size_t j = 0; j <= nproc; ++j) {
     G4cout << "\t" << std::setw(9) << G4BestUnit(dedx1[j], "Energy/Length");
   }
+  G4cout << G4endl;
 
   G4cout << "\n      (MeV/g/cm2)          : ";
   for (size_t j = 0; j <= nproc; ++j) {
     G4cout << "\t" << std::setw(9) << G4BestUnit(dedx2[j], "Energy*Surface/Mass");
   }
+  G4cout << G4endl;
+
   dedxtot = 0.;
 
   for (size_t j = 0; j < nproc; ++j) {
@@ -256,22 +255,24 @@ void RunAction::BeginOfRunAction(const G4Run*)
   dedx2[nproc] = dedxtot / density;
 
   // print stopping power
-  G4cout << "\n \n  unrestricted dE/dx       : ";
+  G4cout << "\n  unrestricted dE/dx       : ";
   for (size_t j = 0; j <= nproc; ++j) {
     G4cout << "\t" << std::setw(9) << G4BestUnit(dedx1[j], "Energy/Length");
   }
+  G4cout << G4endl;
 
-  G4cout << "\n      (MeV/g/cm2)          : ";
+  G4cout << "      (MeV/g/cm2)          : ";
   for (size_t j = 0; j <= nproc; ++j) {
     G4cout << "\t" << std::setw(9) << G4BestUnit(dedx2[j], "Energy*Surface/Mass");
   }
+  G4cout << G4endl;
 
   // get range from restricted dedx
   G4double range1 = emCal.GetRangeFromRestricteDEDX(energy, particle, material);
   G4double range2 = range1 * density;
 
   // print range
-  G4cout << "\n \n  range from restrict dE/dx: "
+  G4cout << "\n  range from restrict dE/dx: "
          << "\t" << std::setw(9) << G4BestUnit(range1, "Length") << " (" << std::setw(9)
          << G4BestUnit(range2, "Mass/Surface") << ")";
 

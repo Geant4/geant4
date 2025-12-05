@@ -38,20 +38,19 @@ class AnalysisManager;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class RunAction : public G4UserRunAction
+class RunAction final : public G4UserRunAction
 {
   public:
     explicit RunAction(AnalysisManager*);
 
     ~RunAction() override = default;
 
-  public:
     void BeginOfRunAction(const G4Run*) override;
 
     void EndOfRunAction(const G4Run*) override;
 
   private:
-    AnalysisManager* fAnalysisManager;
+    AnalysisManager* fAnalysisManager = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

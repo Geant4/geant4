@@ -25,11 +25,6 @@
 //
 /// \file Hadr10.cc
 /// \brief Main program of the hadronic/Hadr10 example
-//
-//
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "ActionInitialization.hh"
 #include "CLHEP/Random/MTwistEngine.h"

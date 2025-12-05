@@ -43,24 +43,15 @@ public:
   :parent()
   ,height_angle(fpi()/4.0f) //45 degrees.
   {
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
     add_fields();
   }
   virtual ~perspective(){
-#ifdef TOOLS_MEM
-    mem::decrement(s_class().c_str());
-#endif
   }
 public:
   perspective(const perspective& a_from)
   :parent(a_from)
   ,height_angle(a_from.height_angle)
   {
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
     add_fields();
   }
   perspective& operator=(const perspective& a_from){

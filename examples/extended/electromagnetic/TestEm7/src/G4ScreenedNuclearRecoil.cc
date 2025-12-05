@@ -23,11 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm7/src/G4ScreenedNuclearRecoil.cc
+/// \file G4ScreenedNuclearRecoil.cc
 /// \brief Implementation of the G4ScreenedNuclearRecoil class
-//
-//
-//
+
 // Class Description
 // Process for screened electromagnetic nuclear elastic scattering;
 // Physics comes from:

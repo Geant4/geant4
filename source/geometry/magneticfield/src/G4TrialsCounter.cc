@@ -25,7 +25,7 @@
 //
 // G4TrialsCounter implementation
 //
-// Author: John Apostolakis, CERN - 08.12.2006   
+// Author: John Apostolakis (CERN), 08.12.2006   
 // -------------------------------------------------------------------
 
 #include "G4TrialsCounter.hh"

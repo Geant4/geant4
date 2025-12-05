@@ -23,12 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file hadronic/Hadr03/src/GammaNuclearPhysics.cc
+/// \file GammaNuclearPhysics.cc
 /// \brief Implementation of the GammaNuclearPhysics class
-//
-//
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "GammaNuclearPhysics.hh"
 
@@ -38,9 +34,9 @@
 // Processes
 
 #include "G4CascadeInterface.hh"
+#include "G4GammaNuclearXS.hh"
 #include "G4HadronInelasticProcess.hh"
 #include "G4LowEGammaNuclearModel.hh"
-#include "G4PhotoNuclearCrossSection.hh"
 #include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -53,7 +49,7 @@ void GammaNuclearPhysics::ConstructProcess()
 {
   G4HadronInelasticProcess* process =
     new G4HadronInelasticProcess("photonNuclear", G4Gamma::Definition());
-  process->AddDataSet(new G4PhotoNuclearCrossSection);
+  process->AddDataSet(new G4GammaNuclearXS);
 
   // to not register a model, set Emax=0; eg. Emax1 = 0.
   const G4double Emax1 = 200 * MeV, Emax2 = 10 * GeV;

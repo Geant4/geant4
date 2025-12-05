@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file Par04MLFastSimModel.hh
+/// \brief Definition of the Par04MLFastSimModel class
+
 #ifdef USE_INFERENCE
 #  ifndef PAR04MLFASTSIMMODEL_HH
 #    define PAR04MLFASTSIMMODEL_HH

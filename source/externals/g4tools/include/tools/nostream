@@ -22,9 +22,6 @@ public:
 private:
   nostream(const nostream&)
   :std::basic_ios<char, std::char_traits<char> >()
-#ifdef TOOLS_STL
-  ,std::basic_streambuf<char, std::char_traits<char> >()
-#endif
   ,std::ostream(0){}
   nostream& operator=(const nostream&){return *this;}
 };

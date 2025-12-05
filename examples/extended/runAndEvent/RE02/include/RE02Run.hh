@@ -23,11 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file runAndEvent/RE02/include/RE02Run.hh
+/// \file RE02Run.hh
 /// \brief Definition of the RE02Run class
-//
-//
-//
 
 #ifndef RE02Run_h
 #define RE02Run_h 1

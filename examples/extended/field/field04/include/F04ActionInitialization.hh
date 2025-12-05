@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 /// \file F04ActionInitialization.hh
 /// \brief Definition of the F04ActionInitialization class
 

@@ -10,7 +10,7 @@
 
 
 **************************************************************
- Geant4 version Name: geant4-11-03-ref-06    (30-June-2025)
+ Geant4 version Name: geant4-11-04-ref-00    (5-December-2025)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -73,7 +73,7 @@ Lowest muon/hadron kinetic energy                  1 keV
 Use ICRU90 data                                    1
 Fluctuations of dE/dx are enabled                  1
 Type of fluctuation model for leptons and hadrons  Urban
-Use built-in Birks satuaration                     0
+Use built-in Birks saturation                      0
 Build CSDA range enabled                           1
 Use cut as a final range enabled                   0
 Enable angular generator interface                 1
@@ -159,7 +159,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.000281s Sys=0.000000s
+  User=0.000000s Real=0.000188s Sys=0.000000s
 
   Material:    Water    density:  1.000 g/cm3   RadL:  36.092 cm   Nucl.Int.Length:  75.356 cm 
                        Imean:  78.000 eV   temperature: 293.15 K  pressure:   1.00 atm
@@ -209,13 +209,13 @@ Index : 1     used in the geometry : Yes
   mean free path           : 	   1.0052 cm    	  3.07519 cm    	5.82593e+288 pc    	  7.57573 mm    
         (g/cm2)            : 	   1.0052 g/cm2 	  3.07519 g/cm2 	2.88022e+285 kg/cm2	  757.573 mg/cm2
 
- 
   restricted dE/dx         : 	  1.61327 MeV/cm	  25.5407 eV/cm 	        0 eV/cm 	   1.6133 MeV/cm
+
       (MeV/g/cm2)          : 	  1.61327 MeV*cm2/g	  25.5407  eV*cm2/g	        0  eV*cm2/g	   1.6133 MeV*cm2/g
- 
+
   unrestricted dE/dx       : 	  1.99147 MeV/cm	  181.698 keV/cm	        0 eV/cm 	  2.17317 MeV/cm
       (MeV/g/cm2)          : 	  1.99147 MeV*cm2/g	  181.698 keV*cm2/g	        0  eV*cm2/g	  2.17317 MeV*cm2/g
- 
+
   range from restrict dE/dx: 	   6.0722 cm  (   6.0722 g/cm2 )
   range from full dE/dx    : 	  4.93182 cm  (  4.93182 g/cm2 )
  
@@ -228,7 +228,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.000150s Sys=0.000000s
+  User=0.000000s Real=0.000104s Sys=0.000000s
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 9 of which, static: 0
 Dynamic pools deleted: 9 / Total memory freed: 0.012 MB

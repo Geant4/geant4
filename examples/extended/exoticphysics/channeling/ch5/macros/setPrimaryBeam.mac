@@ -1,0 +1,18 @@
+#A set of custom commands based on ParticleGun were defined 
+#to better simulate a bunch of particles in a particle accelerator.  
+
+/gun/primaryType e-                #set particle type
+/gun/primaryEnergy 2.86 GeV        #set the mean kinetic energy of the particle
+/gun/primaryRelSigmaEnergy 1.0e-3  #set the relative standard dev. of the particle kinetic energy
+/gun/primaryX 0 mm                 #set the mean particle X coordinate
+/gun/primaryY 0 mm                 #set the mean particle Y coordinate
+/gun/primaryZ -30 mm               #set the mean particle Z coordinate
+/gun/primaryT 0 ns                 #set the mean value of the time of the particle generation
+/gun/primaryXp 0 rad               #set the mean value of x'=px/pz of the particle 
+/gun/primaryYp 0 rad               #set the mean value of y'=py/pz of the particle
+/gun/primarySigmaX 1 mm            #set the standard deviation of particle X coordinate
+/gun/primarySigmaY 1 mm            #set the standard deviation of particle Y coordinate
+/gun/primarySigmaZ 1 mm            #set the standard deviation of particle Z coordinate
+/gun/primarySigmaT 0 ns            #set the standard deviation of the the particle generation
+/gun/primarySigmaXp 0.893e-6 rad   #set the standard deviation of x'=px/pz of the particle 
+/gun/primarySigmaYp 0.893e-6 rad   #set the standard deviation of y'=py/pz of the particle 

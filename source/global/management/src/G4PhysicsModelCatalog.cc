@@ -604,11 +604,17 @@ void G4PhysicsModelCatalog::Initialize() {
 
     // Optical processes
     InsertModel( 12020, "model_Cerenkov" );
+    InsertModel( 12021, "model_QuasiCerenkov" );
     InsertModel( 12030, "model_Scintillation" );
+    InsertModel( 12031, "model_QuasiScintillation" );
     InsertModel( 12040, "model_SynRad" );
     InsertModel( 12050, "model_SynchrotronRadiation" );
     InsertModel( 12060, "model_XTRenergyLoss" );
     InsertModel( 12070, "model_XrayTR" );
+
+    // FTF Quasi-Elastic and Diffractive
+    InsertModel( 21350, "model_QuasiElastic_FTF" ); 
+    InsertModel( 21600, "model_Diffractive_FTF" );
 
     // ...
     

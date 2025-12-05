@@ -23,13 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file optical/wls/include/WLSPhotonDetSD.hh
+/// \file WLSPhotonDetSD.hh
 /// \brief Definition of the WLSPhotonDetSD class
-//
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #ifndef WLSPhotonDetSD_h
 #define WLSPhotonDetSD_h 1

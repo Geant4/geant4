@@ -18,39 +18,6 @@ public: //ifac
   virtual iro* create(const std::string& a_class,const args& /*a_args*/) {
     if(rcmp(a_class,"TGraph")) { //for TH_read_1D/List.
       return new graph();
-/*
-    } else if(rcmp(a_class,"TObjArray")) {
-      std::string* sc = ifac::arg_class(a_args);
-      if(sc) {
-        if((*sc)==streamer_element::s_class()){
-          return new obj_array<streamer_element>(*this);
-        } else {
-          m_out << "tools::rroot::dummy_fac::create :"
-                << " Can't create TObjArray of " << *sc << "."
-                << std::endl;
-          return 0;
-        }
-      } else {
-        return new iros(*this);
-      }
-      */
-/*
-    // for read_sinfos() :
-    } else if(rcmp(a_class,"TStreamerInfo")) {
-      return new streamer_info(*this);
-    } else if(rcmp(a_class,"TStreamerBase")
-            ||rcmp(a_class,"TStreamerBasicType")
-            ||rcmp(a_class,"TStreamerBasicPointer")
-            ||rcmp(a_class,"TStreamerObjectAny")
-            ||rcmp(a_class,"TStreamerObject")
-            ||rcmp(a_class,"TStreamerObjectPointer")
-            ||rcmp(a_class,"TStreamerString")
-            ||rcmp(a_class,"TStreamerSTL")
-            ||rcmp(a_class,"TStreamerLoop")
-            ||rcmp(a_class,"TList")
-             ) {
-      return new dummy_streamer_element();
-*/
     } else {
       m_out << "tools::rroot::dummy_fac::create :"
             << " dummy. Can't create object of class " << sout(a_class) << "."

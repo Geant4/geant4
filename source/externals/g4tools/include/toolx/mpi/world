@@ -10,22 +10,11 @@
 
 #include <mpi.h>
 
-#ifdef TOOLS_MEM
-#include <tools/mem>
-#endif
-
 namespace toolx {
 namespace mpi {
 
 class world : public virtual tools::impi_world {
   typedef tools::impi_world parent;
-#ifdef TOOLS_MEM
-protected:
-  static const std::string& s_class() {
-    static const std::string s_v("toolx::mpi::world");
-    return s_v;
-  }
-#endif
 public:
   virtual bool init(int* a_argc,char*** a_argv) {
     if(::MPI_Init(a_argc,a_argv)!=MPI_SUCCESS) return false;
@@ -48,20 +37,11 @@ public:
   }
 public:
   world() {
-#ifdef TOOLS_MEM
-    tools::mem::increment(s_class().c_str());
-#endif
   }
   virtual ~world(){
-#ifdef TOOLS_MEM
-    tools::mem::decrement(s_class().c_str());
-#endif
   }
 protected:
   world(const world& a_from):parent(a_from) {
-#ifdef TOOLS_MEM
-    tools::mem::increment(s_class().c_str());
-#endif
   }
   world& operator=(const world&) {return *this;}
 };

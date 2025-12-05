@@ -25,7 +25,7 @@
 //
 // G4FieldTrack inline methods implementation
 //
-// Author: John Apostolakis, CERN - First version, 14.10.1996
+// Author: John Apostolakis (CERN), 14.10.1996 - First version
 // -------------------------------------------------------------------
 
 inline
@@ -35,7 +35,6 @@ G4FieldTrack::G4FieldTrack( const G4FieldTrack& rStVec )
    fRestMass_c2( rStVec.fRestMass_c2),
    fLabTimeOfFlight( rStVec.fLabTimeOfFlight ), 
    fProperTimeOfFlight( rStVec.fProperTimeOfFlight ), 
-   // fMomentumModulus( rStVec.fMomentumModulus ),
    fPolarization( rStVec.fPolarization ), 
    fMomentumDir( rStVec.fMomentumDir ),
    fChargeState( rStVec.fChargeState )
@@ -101,8 +100,7 @@ G4FieldTrack::G4FieldTrack(G4FieldTrack&& from) noexcept
 inline
 G4FieldTrack& G4FieldTrack::operator=(G4FieldTrack&& from) noexcept
 {
-  if (&from == this) { return *this;
-}
+  if (&from == this) { return *this; }
 
   SixVector[0]= from.SixVector[0];
   SixVector[1]= from.SixVector[1];
@@ -175,8 +173,6 @@ void G4FieldTrack::SetPosition( const G4ThreeVector& pPosition)
 inline
 const G4ThreeVector& G4FieldTrack::GetMomentumDir() const 
 {
-   // G4ThreeVector myMomentum( SixVector[3], SixVector[4], SixVector[5] );
-   // return myVelocity;
    return fMomentumDir;
 } 
 
@@ -337,8 +333,6 @@ void G4FieldTrack::UpdateFourMomentum( G4double kineticEnergy,
                                     +2.0*fRestMass_c2*kineticEnergy);
   G4ThreeVector momentumVector = momentum_mag * momentumDirection; 
 
-  // SetMomentum( momentumVector );
-    // Set direction (from unit): used sqrt, div
   SixVector[3] = momentumVector.x(); 
   SixVector[4] = momentumVector.y(); 
   SixVector[5] = momentumVector.z(); 
@@ -353,11 +347,9 @@ void G4FieldTrack::UpdateState( const G4ThreeVector& position,
 				const G4ThreeVector& momentumDirection,
 				G4double kineticEnergy )
 { 
-  // SetCurvePnt( position, momentumVector, s_curve=0.0);     
   SetPosition( position); 
   fLabTimeOfFlight = laboratoryTimeOfFlight;
   fDistanceAlongCurve = 0.0;
-
   UpdateFourMomentum( kineticEnergy, momentumDirection); 
 }
 

@@ -31,7 +31,7 @@
 // frame ... or extending the class to include additional forces,
 // e.g., an electric field
 //
-// Created: V.Grichine, 10.11.1998
+// Author: Vladimir Grichine (CERN), 10.11.1998
 // -------------------------------------------------------------------
 
 #include "G4EqMagElectricField.hh"
@@ -43,8 +43,6 @@ G4EqMagElectricField::G4EqMagElectricField(G4ElectroMagneticField* emField )
   : G4EquationOfMotion( emField )
 {
 }
-
-G4EqMagElectricField::~G4EqMagElectricField() = default; 
 
 void  
 G4EqMagElectricField::SetChargeMomentumMass(G4ChargeState particleCharge,

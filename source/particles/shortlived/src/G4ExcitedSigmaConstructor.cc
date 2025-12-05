@@ -31,6 +31,9 @@
 //
 //      Update mass and width following PDG 2023
 //        4 nov 2023 S.Okada
+//
+//      Update mass and width following PDG 2025
+//        4 nov 2025 S.Okada
 // ---------------------------------------------------------------
 
 #include "G4ExcitedSigmaConstructor.hh"
@@ -578,9 +581,9 @@ G4double G4ExcitedSigmaConstructor::GetMass(G4int iState, G4int iso3)
   G4double fmass = mass[iState];
   if (iState == 0) {
     if (iso3 == +2)
-      fmass -= 0.9 * MeV;  // sigma+
+      fmass -= 0.9 * MeV;  // sigma+ (1.3828 GeV from PDG 2025)
     else if (iso3 == -2)
-      fmass += 3.5 * MeV;  // sigma-
+      fmass -= 0.9 * MeV;  // sigma- (1.3828 GeV from PDG 2025)
   }
   return fmass;
 }
@@ -590,9 +593,9 @@ G4double G4ExcitedSigmaConstructor::GetWidth(G4int iState, G4int iso3)
   G4double fw = width[iState];
   if (iState == 0) {
     if (iso3 == +2)
-      fw = 36.0 * MeV;  // sigma+
+      fw = 36.2 * MeV;  // sigma+ (modified based on PDG 2025)
     else if (iso3 == -2)
-      fw = 39.4 * MeV;  // sigma-
+      fw = 36.2 * MeV;  // sigma- (modified based on PDG 2025)
   }
   return fw;
 }

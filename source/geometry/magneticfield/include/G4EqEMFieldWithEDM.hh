@@ -31,7 +31,7 @@
 // electric and magnetic field, with spin tracking for both MDM and
 // EDM terms.
 
-// Created: Kevin Lynch, 19.02.2009 - Based on G4EqEMFieldWithSpin
+// Author: Kevin Lynch (Boston Univ.), 19.02.2009 - Based on G4EqEMFieldWithSpin
 // -------------------------------------------------------------------
 #ifndef G4EQEMFIELDWITHEDM_HH
 #define G4EQEMFIELDWITHEDM_HH
@@ -41,31 +41,65 @@
 
 class G4ElectroMagneticField;
 
+/**
+ * @brief G4EqEMFieldWithEDM implements the right-hand side of equation of
+ * motion in a combined electric and magnetic field, with spin tracking for
+ * both MDM and EDM terms.
+ */
+
 class G4EqEMFieldWithEDM : public G4EquationOfMotion
 {
   public:
 
-    G4EqEMFieldWithEDM(G4ElectroMagneticField* emField );
+    /**
+     * Constructor for G4EqEMFieldWithEDM.
+     *  @param[in] emField Pointer to the electromagnetic field.
+     */
+    G4EqEMFieldWithEDM(G4ElectroMagneticField* emField);
 
-   ~G4EqEMFieldWithEDM() override;
+    /**
+     * Default Destructor.
+     */
+    ~G4EqEMFieldWithEDM() override = default;
   
-    void  SetChargeMomentumMass(G4ChargeState particleCharge, // in e+ units
-                                G4double MomentumXc,
-                                G4double mass) override;
+    /**
+     * Sets the charge, momentum and mass of the current particle.
+     * Used to set the equation's coefficients.
+     *  @param[in] particleCharge Magnetic charge and moments in e+ units.
+     *  @param[in] MomentumXc Particle momentum.
+     *  @param[in] mass Particle mass.
+     */
+    void SetChargeMomentumMass(G4ChargeState particleCharge, // in e+ units
+                               G4double MomentumXc,
+                               G4double mass) override;
 
+    /**
+     * Calculates the value of the derivative, given the value of the
+     * electromagnetic field.
+     *  @param[in] y Coefficients array.
+     *  @param[in] Field Field value.
+     *  @param[out] dydx Derivatives array.
+     */
     void EvaluateRhsGivenB(const G4double y[],
                            const G4double Field[],
                                  G4double dydx[] ) const override;
-      // Given the value of the electromagnetic field, this function 
-      // calculates the value of the derivative dydx.
 
+    /**
+     * Setter and getter for magnetic anomaly.
+     */
     inline void SetAnomaly(G4double a) { anomaly = a; }
     inline G4double GetAnomaly() const { return anomaly; }
-      // set/get magnetic anomaly
 
+    /**
+     * Setter and getter for EDM eta parameter.
+     */
     inline void SetEta(G4double n) { eta = n; }
     inline G4double GetEta() const { return eta; }
-      // set/get EDM eta parameter
+
+    /**
+     * Returns the equation type-ID, "kEqEMfieldWithEDM".
+     */
+    inline G4EquationType GetEquationType() const override { return kEqEMfieldWithEDM; }
 
   private:
 

@@ -23,11 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file runAndEvent/RE02/src/RE02PSFlatSurfaceCurrent.cc
+/// \file RE02PSFlatSurfaceCurrent.cc
 /// \brief Implementation of the RE02PSFlatSurfaceCurrent class
-//
-//
-//
+
 // RE02PSFlatSurfaceCurrent
 #include "RE02PSFlatSurfaceCurrent.hh"
 

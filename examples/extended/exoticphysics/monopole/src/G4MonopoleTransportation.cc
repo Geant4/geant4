@@ -23,13 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file exoticphysics/monopole/src/G4MonopoleTransportation.cc
+/// \file G4MonopoleTransportation.cc
 /// \brief Implementation of the G4MonopoleTransportation class
-//
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//
+
 // This class is a process responsible for the transportation of
 // magnetic monopoles, ie the geometrical propagation that encounters the
 // geometrical sub-volumes of the detectors.

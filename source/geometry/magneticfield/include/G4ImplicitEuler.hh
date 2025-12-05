@@ -35,32 +35,61 @@
 // Takes the output and its derivative. Adds the mean of both
 // derivatives to form the final output.
 
-// Author: W. Wander <wwc@mit.edu>, 12.09.1997
+// Author: W.Wander (MIT), 12.09.1997
 // -------------------------------------------------------------------
 #ifndef G4IMPLICITEULER_HH
 #define G4IMPLICITEULER_HH
 
 #include "G4MagErrorStepper.hh"
 
+/**
+ * @brief G4ImplicitEuler implements a Euler stepper for magnetic field
+ * with 2nd order solver.
+ */
+
 class G4ImplicitEuler : public G4MagErrorStepper
 {
   public:
 
-    G4ImplicitEuler(G4EquationOfMotion* EqRhs, G4int numberOfVariables = 6);
-   ~G4ImplicitEuler() override;
+    /**
+     * Constructor for G4HelixSimpleRunge.
+     *  @param[in] EqRhs Pointer to the provided equation of motion.
+     *  @param[in] numberOfVariables The number of integration variables.
+     */
+    G4ImplicitEuler(G4EquationOfMotion* EqRhs,
+                    G4int numberOfVariables = 6);
 
-    void  DumbStepper( const G4double y[] ,
-                       const G4double dydx[] ,
-                             G4double h ,
-                             G4double yout[] ) override;
+    /**
+     * Destructor.
+     */
+    ~G4ImplicitEuler() override;
 
+    /**
+     * The stepper function for the integration.
+     *  @param[in] y Starting values array of integration variables.
+     *  @param[in] dydx The derivates array.
+     *  @param[in] h The given step size.
+     *  @param[out] yout Integration output.
+     */
+    void DumbStepper( const G4double y[] ,
+                      const G4double dydx[] ,
+                            G4double h ,
+                            G4double yout[] ) override;
+
+    /**
+     * Returns the order, 2, of integration.
+     */
     inline G4int IntegratorOrder() const override { return 2; }
+    /**
+     * Returns the stepper type-ID, "kImplicitEuler".
+     */
+    inline G4StepperType StepperType() const override { return kImplicitEuler; }
 
   private:
 
+    /** Temporaries, created to avoid new/delete on every call. */
     G4double* dydxTemp = nullptr;
     G4double* yTemp = nullptr;    
-      // Temporaries, created to avoid new/delete on every call
 };
 
 #endif

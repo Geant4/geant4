@@ -200,10 +200,16 @@ void G4ToolsSGSceneHandler::ClearStore ()
   EstablishBaseNodes();
 }
 
+#include "G4ToolsSGViewer.hh"
+
 void G4ToolsSGSceneHandler::ClearTransientStore ()
 {
   fpTransient2DObjects.clear();
   fpTransient3DObjects.clear();
+  if(fpViewer) {
+    G4ToolsSG_viewer* tsg_viewer = dynamic_cast<G4ToolsSG_viewer*>(fpViewer);
+    if(tsg_viewer) tsg_viewer->EmitWindowRender();
+  }
 }
 
 void G4ToolsSGSceneHandler::AddPrimitive(const G4Polyline& a_polyline)
@@ -290,11 +296,12 @@ void G4ToolsSGSceneHandler::AddPrimitive (const G4Polymarker& a_polymarker)
   switch (a_polymarker.GetMarkerType()) {
     default:
     case G4Polymarker::dots:{
-      //::printf("debug : GB : Add Markers : +++++++++++++++++++++++++++++++++++++++++++ : dots\n");
       tools::sg::draw_style* ds = new tools::sg::draw_style;
       ds->style = tools::sg::draw_points;
-      ds->point_size = 1;
+      ds->point_size = markerSize;
+      ds->point_smooth = fpViewer->GetViewParameters().IsDotsSmooth()?true:false;
       currentNode->add(ds);
+
       tools::sg::vertices* vtxs = new tools::sg::vertices;
       vtxs->mode = tools::gl::points();
      {for (const auto& i : a_polymarker) {
@@ -303,7 +310,6 @@ void G4ToolsSGSceneHandler::AddPrimitive (const G4Polymarker& a_polymarker)
       currentNode->add(vtxs);
     }break;
     case G4Polymarker::circles:{
-      //::printf("debug : GB : Add Markers : +++++++++++++++++++++++++++++++++++++++++++ : circles\n");
      {tools::sg::markers* markers = new tools::sg::markers;
       G4double diameter = markerSize;  // OK for "screen-size" (the usual case)
       if (markerSizeType == G4VSceneHandler::world ) {
@@ -311,14 +317,13 @@ void G4ToolsSGSceneHandler::AddPrimitive (const G4Polymarker& a_polymarker)
         diameter *= fpScene->GetExtent().GetExtentRadius()/scale;
       }
       markers->size = diameter;
-      markers->style = tools::sg::marker_circle_line;
+      markers->style = tools::sg::marker_circle_filled;
       for (const auto& i : a_polymarker) {
         markers->add(float(i.x()),float(i.y()),float(i.z()));
       }
       currentNode->add(markers);}
     }break;
   case G4Polymarker::squares:{
-    //::printf("debug : GB : Add Markers : +++++++++++++++++++++++++++++++++++++++++++ : square\n");
      {tools::sg::markers* markers = new tools::sg::markers;
       G4double side = markerSize;  // OK for "screen-size" (the usual case)
       if (markerSizeType == G4VSceneHandler::world ) {
@@ -326,7 +331,7 @@ void G4ToolsSGSceneHandler::AddPrimitive (const G4Polymarker& a_polymarker)
         side *= fpScene->GetExtent().GetExtentRadius()/scale;
       }
       markers->size = side;
-      markers->style = tools::sg::marker_square_line;
+      markers->style = tools::sg::marker_square_filled;
       for (const auto& i : a_polymarker) {
         markers->add(float(i.x()),float(i.y()),float(i.z()));
       }
@@ -495,9 +500,9 @@ void G4ToolsSGSceneHandler::AddPrimitive(const G4Polyhedron& a_polyhedron)
       if(isAuxilaryEdgeVisible||edgeFlag[3]>0)insertIfNew(Line(vertex[3],vertex[0]));
     } else {
       G4cerr
-      << "ERROR: polyhedron face with unexpected number of edges (" << nEdges << ')'
-      << "\n  Tag: " << fpModel->GetCurrentTag()
-      << G4endl;
+        << "G4ToolsSGSceneHandler::AddPrimitive(G4Polyhedron): WARNING:"
+        << "\n G4Polyhedron facet with unexpected number of edges (" << nEdges << ")."
+        << G4endl;
       return;
     }
   } while (notLastFace);
@@ -774,6 +779,7 @@ class plots_cbk : public tools::sg::ecbk {
   TOOLS_CBK(plots_cbk,plots_cbk,tools::sg::ecbk)
 public:
   virtual tools::sg::return_action action() {
+    if(!m_event) return tools::sg::return_none;
     if(const tools::sg::size_event* sz_evt = tools::sg::event_cast<tools::sg::event,tools::sg::size_event>(*m_event)){
       m_plots.adjust_size(sz_evt->width(),sz_evt->height());
       m_event_action->set_done(true);

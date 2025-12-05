@@ -23,11 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file persistency/gdml/G02/include/G02ChamberParameterisation.hh
+/// \file G02ChamberParameterisation.hh
 /// \brief Definition of the G02ChamberParameterisation class
-//
-//
-//
+
 // Class G02ChamberParameterisation
 //
 // A parameterisation that describes a series of boxes along Z

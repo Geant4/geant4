@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file B5/src/EmCalorimeterHit.cc
+/// \file EmCalorimeterHit.cc
 /// \brief Implementation of the B5::EmCalorimeterHit class
 
 #include "EmCalorimeterHit.hh"

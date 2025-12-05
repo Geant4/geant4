@@ -29,25 +29,15 @@ find_package(Pythia6 REQUIRED)
 # Locate sources and headers for this project
 #
 include_directories(${PROJECT_SOURCE_DIR}/include 
-                    ${PROJECT_SOURCE_DIR}/common/include 
                     ${Geant4_INCLUDE_DIR})
 file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cc ${PROJECT_SOURCE_DIR}/src/*.c)
 file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 
 #----------------------------------------------------------------------------
-# Add common subdirectory and
-# - disable building examples in common
-# - add a unique prefix to the common library built in this example
-#
-set (EXAMPLES_COMMON OFF)
-set (common_prefix decayer6_)
-add_subdirectory(common) 
-
-#----------------------------------------------------------------------------
 # Add the executable, and link it to the Geant4 libraries
 #
 add_executable(pythia6_decayer pythia6_decayer.cc ${sources} ${headers})
-target_link_libraries(pythia6_decayer ${common_prefix}common ${Geant4_LIBRARIES} Pythia6::Pythia6 )
+target_link_libraries(pythia6_decayer ${Geant4_LIBRARIES} Pythia6::Pythia6 )
 #----------------------------------------------------------------------------
 # Copy all scripts to the build directory, i.e. the directory in which we
 # build decayer6. This is so that we can run the executable directly because it

@@ -23,11 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file optical/LXe/src/LXeMainVolume.cc
+/// \file LXeMainVolume.cc
 /// \brief Implementation of the LXeMainVolume class
-//
-//
+
 #include "LXeMainVolume.hh"
 
 #include "G4Box.hh"

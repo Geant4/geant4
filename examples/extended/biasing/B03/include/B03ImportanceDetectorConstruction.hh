@@ -23,11 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file biasing/B03/include/B03ImportanceDetectorConstruction.hh
+/// \file B03ImportanceDetectorConstruction.hh
 /// \brief Definition of the B03ImportanceDetectorConstruction class
-//
-//
-//
 
 #ifndef B03ImportanceDetectorConstruction_hh
 #define B03ImportanceDetectorConstruction_hh B03ImportanceDetectorConstruction_hh

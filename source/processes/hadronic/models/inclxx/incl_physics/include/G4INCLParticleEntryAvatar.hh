@@ -45,7 +45,7 @@
 
 namespace G4INCL {
 
-  enum EntryType{Default, APAR}; //D
+  enum EntryType{Default, APAR, ANAR, ADAR}; //D
 
   class ParticleEntryAvatar: public G4INCL::IAvatar {
   public:

@@ -101,7 +101,7 @@ G4bool G4TessellatedGeometryAlgorithms::IntersectLineAndTriangle2D (
     return true;
   }
 
-  if ((e0i == 0) && (e1i == 0) && (e2i == 0)) return false;
+  if ((e0i == 0) && (e1i == 0) && (e2i == 0)) { return false; }
 
   if ((e0i == 1) && (e2i == 1))
   {
@@ -179,9 +179,15 @@ G4int G4TessellatedGeometryAlgorithms::IntersectLineAndLineSegment2D (
     // is in positive s where r=p0 + s*d0, and for 0<=t<=1 where r=p1 + t*d1.
     //
     G4double ss = cross(e,d1)/kross;
-    if (ss < 0)         return 0; // Intersection does not occur for positive ss
+    if (ss < 0)
+    {
+      return 0; // Intersection does not occur for positive ss
+    }
     G4double t = cross(e,d0)/kross;
-    if (t < 0 || t > 1) return 0; // Intersection does not occur on line-segment
+    if (t < 0 || t > 1)
+    {
+      return 0; // Intersection does not occur on line-segment
+    }
     //
     // Intersection of lines is a single point on the forward-propagating line
     // defined by r=p0 + ss*d0, and the line segment defined by  r=p1 + t*d1.
@@ -207,22 +213,23 @@ G4int G4TessellatedGeometryAlgorithms::IntersectLineAndLineSegment2D (
   G4double smin = 0.0;
   G4double smax = 0.0;
 
-  if (s0 < s1) {smin = s0; smax = s1;}
-  else         {smin = s1; smax = s0;}
+  if (s0 < s1) { smin = s0; smax = s1; }
+  else         { smin = s1; smax = s0; }
 
-  if (smax < 0.0) return 0;
-  else if (smin < 0.0)
+  if (smax < 0.0)
+  {
+    return 0;
+  }
+  if (smin < 0.0)
   {
     location[0] = p0;
     location[1] = p0 + smax*d0;
     return 2;
   }
-  else
-  {
-    location[0] = p0 + smin*d0;
-    location[1] = p0 + smax*d0;
-    return 2;
-  }
+  
+  location[0] = p0 + smin*d0;
+  location[1] = p0 + smax*d0;
+  return 2;
 }
 
 ///////////////////////////////////////////////////////////////////////////////

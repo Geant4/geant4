@@ -22,7 +22,8 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
+/// @file G4MPIextraWorker.cc
+/// @brief Extra MPI worker
 
 // The extra MPI worker class defines actions on an extra MPI worker
 // which does not perform event processing.

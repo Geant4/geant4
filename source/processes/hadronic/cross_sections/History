@@ -6,6 +6,27 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2025-11-24 Vladimir Ivanchenko (hadr-cross-V11-03-09)
+- G4EMDissociationCrossSection - fixed compilation warning
+
+## 2025-11-06 Vladimir Ivanchenko (hadr-cross-V11-03-08)
+- G4ChargeExchangeXS - fixed units inside SampleTforPion(..) method
+- G4NeutronInelasticXS, G4NeutronElasticXS, G4NeutronCaptureXS - added extra
+    flag to enable/disable reading and usage of precise data in resonance
+    region, which will allow to reduce RSS memory for simple applications,
+    for applications required higher precision of neutron transport the
+    flag should be defined via G4HadronicParameters::SetUseRFilesForXS(true).
+
+## 2025-10-27 Vladimir Ivanchenko (hadr-cross-V11-03-07)
+- G4ChargeExchangeXS - added extra method SampleTforPion(..), which is based on
+    the V. Lyubovitsky parameterisation for different reaction channels.
+
+## 2025-09-30 Vladimir Ivanchenko (hadr-cross-V11-03-06)
+- G4NeutronInelasticXS, G4NeutronElasticXS, G4NeutronCaptureXS - split data
+    tables on two parts: low-energy for neutron resonance region and high
+    energy above this region. This allows increase accuracy of neutron cross
+    sections for non HP (for example, HEP) applications.
+
 ## 2025-05-24 Vladimir Ivanchenko (hadr-cross-V11-03-05)
 - G4CrossSectionFactory, G4CrossSectionFactoryRegistry, G4CrossSectionFactory,
   G4ElectroNuclearCrossSection, G4ChipsAntiBaryonElasticXS - fixed memory leak

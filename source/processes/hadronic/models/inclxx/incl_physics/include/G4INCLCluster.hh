@@ -63,6 +63,7 @@ namespace G4INCL {
       theSpin(0.,0.,0.),
       theParticleSampler(NULL)
     {
+      if(A >= 0){
       setType(Composite);
       theZ = Z;
       theA = A;
@@ -70,6 +71,16 @@ namespace G4INCL {
       setINCLMass();
       if(createParticleSampler)
         theParticleSampler = new ParticleSampler(A,Z,S);
+    }
+      else {
+        setType(antiComposite);
+        theZ = Z;
+        theA = A;
+        theS = S;
+        setINCLMass();
+        if(createParticleSampler)
+          theParticleSampler = new ParticleSampler(A,Z,S);
+      }
     }
 
     /**
@@ -86,6 +97,11 @@ namespace G4INCL {
       for(Iterator i = begin; i != end; ++i) {
         addParticle(*i);
       }
+      if (theA < 0){
+        setType(antiComposite);
+        thePosition /= (-theA);
+      }
+      else 
       thePosition /= theA;
       setINCLMass();
       adjustMomentumFromEnergy();
@@ -260,8 +276,13 @@ namespace G4INCL {
         theTotalMomentum += (*p)->getMomentum();
         //theTotalEnergy += (*p)->getEnergy();
       }
+      if(theA>=0){
       theCMPosition /= theA;
 // assert((unsigned int)theA==particles.size());
+      } else if (theA < 0){
+        theCMPosition /= -theA;
+//assert(-theA==particles.size());
+      }
 
       // Now determine the CM velocity of the particles
       // commented out because currently unused, see below
@@ -270,7 +291,13 @@ namespace G4INCL {
       // The new particle positions and momenta are scaled by a factor of
       // \f$\sqrt{A/(A-1)}\f$, so that the resulting density distributions in
       // the CM have the same variance as the one we started with.
-      const G4double rescaling = std::sqrt(((G4double)theA)/((G4double)(theA-1)));
+      G4double rescaling;
+      if (theA>0)
+        rescaling = std::sqrt(((G4double)theA)/((G4double)(theA-1)));
+      else if (theA<0)
+        rescaling = std::sqrt(((G4double)(-theA))/((G4double)((-theA)-1)));
+      else 
+        rescaling = 0 ;
 
       // Loop again to boost and reposition
       for(ParticleIter p=particles.begin(), e=particles.end(); p!=e; ++p) {
@@ -278,7 +305,10 @@ namespace G4INCL {
         // does not!
         // (*p)->boost(betaCM);
         // Here is what the Fortran version does:}
-        (*p)->setMomentum(((*p)->getMomentum()-theTotalMomentum/theA)*rescaling);
+        if (theA>0)
+         (*p)->setMomentum(((*p)->getMomentum()-theTotalMomentum/theA)*rescaling);
+        else if (theA<0)
+         (*p)->setMomentum(((*p)->getMomentum()-theTotalMomentum/(-theA))*rescaling);
 
         // Set the CM position of the particles
         (*p)->setPosition(((*p)->getPosition()-theCMPosition)*rescaling);
@@ -441,7 +471,7 @@ namespace G4INCL {
         theDynamicalPotential += (*p)->getEnergy();
       }
       theDynamicalPotential -= getTableMass();
-      theDynamicalPotential /= theA;
+      theDynamicalPotential /= std::abs(theA);
 
       return theDynamicalPotential;
     }

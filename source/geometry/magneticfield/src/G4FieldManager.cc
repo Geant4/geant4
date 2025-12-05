@@ -25,7 +25,7 @@
 //
 // G4FieldManager implementation
 //
-// Author: John Apostolakis, 10.03.97 - design and implementation
+// Author: John Apostolakis (CERN), 10.03.1997 - Design and implementation
 // -------------------------------------------------------------------
 
 #include "G4FieldManager.hh"
@@ -36,26 +36,22 @@
 #include "G4SystemOfUnits.hh"
 
 G4ThreadLocal G4FieldManager* G4FieldManager::fGlobalFieldManager = nullptr;
-G4double G4FieldManager::fDefault_Delta_One_Step_Value= 0.01 *    millimeter;
-G4double G4FieldManager::fDefault_Delta_Intersection_Val= 0.001 * millimeter;
-G4bool   G4FieldManager::fVerboseConstruction= false;
+G4bool G4FieldManager::fVerboseConstruction = false;
 
-G4double G4FieldManager::fMaxAcceptedEpsilon= 0.01; //  Legacy value.  Future value = 0.001
-//   Requesting a large epsilon (max) value provides poor accuracy for
-//   every integration segment.
-//   Problems occur because some methods (including DormandPrince(7)45 the estimation of local
-//   error appears to be a substantial underestimate at large epsilon values ( > 0.001 ).
-//   So the value for fMaxAcceptedEpsilon is recommended to be 0.001 or below.
+G4double G4FieldManager::fMaxAcceptedEpsilon = 0.01;
+// Legacy value. Future value = 0.001
+// Requesting a large epsilon (max) value provides poor accuracy for
+// every integration segment.
+// Problems occur because some methods (including DormandPrince(7)45)
+// the estimation of local error appears to be a substantial underestimate
+// at large epsilon values ( > 0.001 ). So the value for fMaxAcceptedEpsilon
+// is recommended to be 0.001 or below.
 
 G4FieldManager::G4FieldManager(G4Field* detectorField, 
                                G4ChordFinder* pChordFinder, 
                                G4bool fieldChangesEnergy )
    : fDetectorField(detectorField), 
-     fChordFinder(pChordFinder), 
-     fDelta_One_Step_Value( fDefault_Delta_One_Step_Value ), 
-     fDelta_Intersection_Val( fDefault_Delta_Intersection_Val ),     
-     fEpsilonMin( fEpsilonMinDefault ),
-     fEpsilonMax( fEpsilonMaxDefault)
+     fChordFinder(pChordFinder)
 { 
    if ( detectorField != nullptr )
    {
@@ -77,11 +73,7 @@ G4FieldManager::G4FieldManager(G4Field* detectorField,
 }
 
 G4FieldManager::G4FieldManager(G4MagneticField* detectorField)
-   : fDetectorField(detectorField), fAllocatedChordFinder(true),
-     fDelta_One_Step_Value(   fDefault_Delta_One_Step_Value ), 
-     fDelta_Intersection_Val( fDefault_Delta_Intersection_Val ),
-     fEpsilonMin( fEpsilonMinDefault ),
-     fEpsilonMax( fEpsilonMaxDefault )
+   : fDetectorField(detectorField), fAllocatedChordFinder(true)
 {
    fChordFinder = new G4ChordFinder( detectorField );
 
@@ -94,12 +86,22 @@ G4FieldManager::G4FieldManager(G4MagneticField* detectorField)
    G4FieldManagerStore::Register(this);
 }
 
+G4FieldManager::~G4FieldManager()
+{
+   if( fAllocatedChordFinder )
+   {
+      delete fChordFinder;
+   }
+   G4FieldManagerStore::DeRegister(this);
+}
+
 G4FieldManager* G4FieldManager::Clone() const
 {
     G4Field* aField = nullptr;
     G4FieldManager* aFM = nullptr;
     G4ChordFinder* aCF = nullptr;
-    try {
+    try
+    {
         if ( fDetectorField != nullptr )
         {
            aField = fDetectorField->Clone();
@@ -154,15 +156,6 @@ G4FieldManager* G4FieldManager::Clone() const
 void G4FieldManager::ConfigureForTrack( const G4Track * ) 
 {
    // Default is to do nothing!
-}
-
-G4FieldManager::~G4FieldManager()
-{
-   if( fAllocatedChordFinder )
-   {
-      delete fChordFinder;
-   }
-   G4FieldManagerStore::DeRegister(this);
 }
 
 void
@@ -420,7 +413,7 @@ G4bool   G4FieldManager::SetMaxAcceptedEpsilon(G4double maxAcceptValue, G4bool s
 // -----------------------------------------------------------------------------
 
 void G4FieldManager::
-ReportBadEpsilonValue(G4ExceptionDescription& erm, G4double value, G4String& name) const
+ReportBadEpsilonValue(G4ExceptionDescription& erm, G4double value, const G4String& name) const
 {
   erm << "Incorrect proposed value of " << name << " = " << value << G4endl
       << " Its value is outside the permitted range from "

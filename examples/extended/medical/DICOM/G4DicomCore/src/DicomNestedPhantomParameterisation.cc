@@ -23,10 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file medical/DICOM/src/DicomNestedPhantomParameterisation.cc
+/// \file DicomNestedPhantomParameterisation.cc
 /// \brief Implementation of the DicomNestedPhantomParameterisation class
-//
-//
 
 #include "DicomNestedPhantomParameterisation.hh"
 

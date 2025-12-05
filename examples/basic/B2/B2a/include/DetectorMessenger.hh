@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file B2/B2a/include/DetectorMessenger.hh
+/// \file DetectorMessenger.hh
 /// \brief Definition of the B2a::DetectorMessenger class
 
 #ifndef B2aDetectorMessenger_h

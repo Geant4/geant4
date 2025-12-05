@@ -8,12 +8,6 @@
 
 namespace tools {
 
-/*
-inline std::string sout(const std::string& a_string) {
-  return "\""+a_string+"\"";
-}
-*/
-
 class sout : public std::string {
   typedef std::string parent;
 public:

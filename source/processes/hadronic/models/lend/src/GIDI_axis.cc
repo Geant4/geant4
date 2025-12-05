@@ -25,7 +25,7 @@ namespace GIDI {
  * @param a_type            [in]     The **type** is either *"axis"* or *"grid"*.
  ***********************************************************************************************************/
 
-Axis::Axis( int a_index, std::string a_label, std::string a_unit, FormType a_type ) :
+Axis::Axis( int a_index, std::string const &a_label, std::string const &a_unit, FormType a_type ) :
         Form( GIDI_axisChars, a_type, a_label ),
         m_index( a_index ),
         m_unit( a_unit ) {

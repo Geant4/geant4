@@ -6,6 +6,15 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2025-11-25 Vladimir Ivanchenko (hadr-cohe-V11-03-05)
+- G4NuclNuclDiffuseElastic, G4DiffuseElastic, G4AntiNuclElastic - fixed
+    compilation warnings.
+
+## 2025-10-27 Vladimir Ivanchenko (hadr-cohe-V11-03-04)
+- G4ChargeExchange - implemented angular distribution of pion charge exchange
+    according to the V. Lubovitsky parameterisation for different reaction
+    channels.
+
 ## 2025-05-15 Vladimir Ivanchenko (hadr-cohe-V11-03-03)
 - G4ChargeExchange, G4HadronElastic - cleanup final state generation: use
     the numerical limit for argument of the exponent to avoid precision loss;

@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file DicomBeam.hh
+/// \brief Definition of the DicomBeam class
+
 #ifndef DicomBeam__HH
 #define DicomBeam__HH
 

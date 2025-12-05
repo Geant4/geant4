@@ -25,8 +25,6 @@
 //
 /// \file SAXSRunActionMessenger.hh
 /// \brief Definition of the SAXSRunActionMessenger class
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef SAXSRunActionMessenger_h
 #define SAXSRunActionMessenger_h 1

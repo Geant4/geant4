@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file radiobiology/include/RBEAccumulable.hh
+/// \file RBEAccumulable.hh
 /// \brief Definition of the RadioBio::RBEAccumulable class
 
 #ifndef RadiobiologyRBEACCUMULABLE_HH

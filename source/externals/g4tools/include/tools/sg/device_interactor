@@ -18,7 +18,6 @@ public:
   virtual void mouse_press        (const mouse_down_event&) = 0;
   virtual void mouse_release      (const mouse_up_event&) = 0;
   virtual void mouse_move         (const mouse_move_event&) = 0;
-//virtual void mouse_double_click (const mouse_double_click_event&) = 0;
   virtual void wheel_rotate       (const wheel_rotate_event&) = 0;
 };
 

@@ -34,7 +34,7 @@
 // reference counting for NavigationLevels.
 // The corresponding handle class is G4NavigationLevel
 
-// 1 October 1997, J.Apostolakis: initial version
+// Author: John Apostolakis (CERN), 01.10.1997- Initial version
 // ----------------------------------------------------------------------
 #ifndef G4NAVIGATIONLEVELREP_HH
 #define G4NAVIGATIONLEVELREP_HH
@@ -47,64 +47,110 @@
 
 #include "geomwdefs.hh"
 
+/**
+ * @brief G4NavigationLevelRep is a data representation class, used to hold
+ * the data for a single level of the nvigation history tree.
+ * This is the body of a handle/body pair of classes, that implement reference
+ * counting for navigation levels. The corresponding handle class is
+ * G4NavigationLevel.
+ */
+
 class G4NavigationLevelRep
 {
+  public:
 
- public:
+    /**
+     * Constructor for G4NavigationLevelRep.
+     *  @param[in] newPtrPhysVol Pointer to the new physical volume.
+     *  @param[in] newT The associated affine transformation.
+     *  @param[in] newVolTp The volume type.
+     *  @param[in] newRepNo The replica number.
+     */
+    inline G4NavigationLevelRep( G4VPhysicalVolume* newPtrPhysVol,
+                           const G4AffineTransform& newT,
+                                 EVolume newVolTp,
+                                 G4int newRepNo = -1 );
 
-   inline G4NavigationLevelRep( G4VPhysicalVolume*  newPtrPhysVol,
-                          const G4AffineTransform&  newT,
-                                EVolume             newVolTp,
-                                G4int               newRepNo = -1 );
+    /**
+     * Alternative Constructor for G4NavigationLevelRep, as the previous
+     * constructor, but instead of giving the new transformation, give 
+     * the affine transformation to the level above and the current level's 
+     * transformation relative to that.
+     *  @param[in] newPtrPhysVol Pointer to the new physical volume.
+     *  @param[in] levelAbove The affine transformation to the level above.
+     *  @param[in] relativeCurrent The affine transformation at current level.
+     *  @param[in] newVolTp The volume type.
+     *  @param[in] newRepNo The replica number.
+     */
+    inline G4NavigationLevelRep( G4VPhysicalVolume* newPtrPhysVol,
+                           const G4AffineTransform& levelAbove,
+                           const G4AffineTransform& relativeCurrent,
+                                 EVolume newVolTp,
+                                 G4int newRepNo = -1 );
 
-   inline G4NavigationLevelRep( G4VPhysicalVolume*  newPtrPhysVol,
-                          const G4AffineTransform&  levelAbove,
-                          const G4AffineTransform&  relativeCurrent,
-                                EVolume             newVolTp,
-                                G4int               newRepNo = -1 );
-     // As the previous constructor, but instead of giving Transform, give 
-     // the AffineTransform to the level above and the current level's 
-     // Transform relative to that.
+    /**
+     * Default Constructor & Destructor.
+     */
+    inline G4NavigationLevelRep();
+    inline ~G4NavigationLevelRep();
 
-   inline G4NavigationLevelRep();
-   inline G4NavigationLevelRep( G4NavigationLevelRep& );
+    /**
+     * Copy constructor and assignment operator.
+     */
+    inline G4NavigationLevelRep( G4NavigationLevelRep& );
+    inline G4NavigationLevelRep& operator=(const G4NavigationLevelRep& );
 
-   inline ~G4NavigationLevelRep();
+    /**
+     * Returns a pointer to the physical volume at the current level.
+     */
+    inline G4VPhysicalVolume* GetPhysicalVolume();
 
-   inline G4NavigationLevelRep& operator=(const G4NavigationLevelRep& right);
+    /**
+     * Methods to return the associated affine transformation.
+     */
+    inline const G4AffineTransform* GetTransformPtr() const ;  // New
+    inline const G4AffineTransform& GetTransform() const ;     // Old
 
-   inline G4VPhysicalVolume* GetPhysicalVolume();
+    /**
+     * Returns the volume type.
+     */
+    inline EVolume GetVolumeType() const ;
 
-   inline const G4AffineTransform* GetTransformPtr() const ;  // New
-   inline const G4AffineTransform& GetTransform() const ;     // Old
+    /**
+     * Returns the replica number.
+     */
+    inline G4int GetReplicaNo() const ;
 
-   inline EVolume            GetVolumeType() const ;
-   inline G4int              GetReplicaNo() const ;
 
-   inline void   AddAReference(); 
-   inline G4bool RemoveAReference(); 
-     // Take care of the reference counts.
+    /**
+     * Methods taking care of the reference counts.
+     */
+    inline void AddAReference(); 
+    inline G4bool RemoveAReference(); 
 
-   inline void* operator new(size_t);
-     // Override "new"    to use "G4Allocator".
-   inline void operator delete(void* aTrack);
-     // Override "delete" to use "G4Allocator".
+    /**
+     * New/delete operator overrides for use by "G4Allocator".
+     */
+    inline void* operator new(size_t);
+    inline void operator delete(void* aTrack);
 
- private:
+  private:
 
-   G4AffineTransform  sTransform;
-     // Compounded global->local transformation (takes a point in the 
-     // global reference system to the system of the volume at this level)
+    /** Compounded global->local transformation; takes a point in the 
+        global reference system to the system of the volume at this level. */
+    G4AffineTransform sTransform;
 
-   G4VPhysicalVolume* sPhysicalVolumePtr = nullptr;
-     // Physical volume ptrs, for this level's volume
+    /** Physical volume pointer, for this level's volume. */
+    G4VPhysicalVolume* sPhysicalVolumePtr = nullptr;
 
-   G4int              sReplicaNo = -1;
-   EVolume            sVolumeType;
-     // Volume `type' 
+    /** Replica number. */
+    G4int sReplicaNo = -1;
 
-   G4int              fCountRef = 1; 
+    /** Volume type. */
+    EVolume sVolumeType;
 
+    /** Reference counter. */
+    G4int fCountRef = 1;
 };
 
 #include "G4NavigationLevelRep.icc"

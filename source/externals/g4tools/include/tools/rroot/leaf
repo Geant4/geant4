@@ -113,13 +113,6 @@ public: //base_leaf
 
       uint32 ndata = len * m_length;
 
-      //if(!ndata) {
-      //  delete [] m_value;
-      //  m_value = new T[1];
-      //  m_size = 0;
-      //  return true;
-      //}
-
       if(ndata>m_size) {
         delete [] m_value;
         m_value = new T[ndata];
@@ -163,7 +156,6 @@ public: //base_leaf
     a_out << m_value[a_index];
     return true;
   }
-//virtual uint32 num_elem() const {return m_length;}
   virtual uint32 num_elem() const {return m_size;}
 public:
   leaf(std::ostream& a_out,ifac& a_fac)
@@ -196,7 +188,6 @@ public:
     return true;
   }
   T get_max() const {return m_max;}
-  //uint32 size() const {return m_size;}
 protected:
   T m_min;    //Minimum value if leaf range is specified
   T m_max;    //Maximum value if leaf range is specified
@@ -262,12 +253,6 @@ public: //base_leaf
       }
     }
     if(len) {
-      //if(!m_length) {
-      //  m_out << "tools::rroot::leaf_string::read_buffer : m_length is zero." << std::endl;
-      //  return false;
-      //}
-      //if(len >= m_length) len = m_length-1;
-
       m_value = new char[len+1];
 
       if(!a_buffer.read_fast_array(m_value,len)) {
@@ -437,7 +422,6 @@ public: //base_leaf
             << " fClassName " << sout(fClassName)
 	    << ". m_obj.store_class_name() " << sout(m_obj->store_class_name())
             << std::endl;
-      //return false;
     }
     if(!m_obj->stream(a_buffer)) {
       m_out << "tools::rroot::leaf_object::read_buffer :"
@@ -446,15 +430,7 @@ public: //base_leaf
             << std::endl;
       return false;
     }
-    // in case we had written a null pointer a Zombie object was created
-    // we must delete it
-    //FIXME
-    //if (object->TestBit(kInvalidObject)) {
-    //  if (object->GetUniqueID() == 123456789) {
-    //    delete object;
-    //    object = 0;
-    //  }
-    //}
+
     return true;
   }
   virtual bool print_value(std::ostream&,uint32) const {

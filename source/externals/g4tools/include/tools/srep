@@ -12,12 +12,6 @@
 
 namespace tools {
 
-inline void replace(std::string& a_string,char a_old,char a_new){
-  tools_sforit(a_string,it) {
-    if((*it)==a_old) *it = a_new;
-  }
-}
-
 inline bool replace(std::string& a_string,const std::string& a_old,const std::string& a_new){
   // return true : some replacement done.
   // return false : nothing replaced.
@@ -70,19 +64,6 @@ inline std::string to_xml(const std::string& a_string){
   std::string _s = a_string;
   toxml(_s);
   return _s;
-}
-
-inline void to_win(std::string& a_string) {
-  replace(a_string,"/cygdrive/c","C:");  // CYGWIN.
-  replace(a_string,"/mnt/c","C:");       // WSL.
-  replace(a_string,'/','\\');
-}
-
-inline void to_win_python(std::string& a_string) {
-  replace(a_string,"/cygdrive/c","c:");  // CYGWIN.
-  replace(a_string,"/mnt/c","c:");       // WSL. (Python wants c: in lowercase).
-  replace(a_string,"C:","c:");
-  replace(a_string,'\\','/');
 }
 
 }

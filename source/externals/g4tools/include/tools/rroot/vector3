@@ -42,8 +42,6 @@ public:
     short v;
     if(!a_buffer.read_version(v,_s,_c)) return false;
 
-    //printf("debug : tools::rroot::vector3::stream : version %d\n",v);
-
    {uint32 id,bits;
     if(!Object_stream(a_buffer,id,bits)) return false;}
 
@@ -57,14 +55,8 @@ public:
 
 public:
   vector3():m_x(0),m_y(0),m_z(0){
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
   }
   virtual ~vector3(){
-#ifdef TOOLS_MEM
-    mem::decrement(s_class().c_str());
-#endif
   }
 public:
   vector3(const vector3& a_from)

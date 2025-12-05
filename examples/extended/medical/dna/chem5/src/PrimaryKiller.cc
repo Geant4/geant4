@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file PrimaryKiller.cc
+/// \brief Implementation of the PrimaryKiller class
+
 // This example is provided by the Geant4-DNA collaboration
 // Any report or published results obtained using the Geant4-DNA software
 // shall cite the following Geant4-DNA collaboration publication:
@@ -41,8 +44,7 @@
 #include <G4UnitsTable.hh>
 #include <globals.hh>
 
-/** \file PrimaryKiller.cc
-    \class PrimaryKiller
+/** \class PrimaryKiller
 
     Kill the primary particle:
     - either after a given energy loss

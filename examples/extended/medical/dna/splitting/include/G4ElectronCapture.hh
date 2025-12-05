@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file G4ElectronCapture.hh
+/// \brief Definition of the G4ElectronCapture class
+
 // This example is provided by the Geant4-DNA collaboration
 // Any report or published results obtained using the Geant4-DNA software
 // shall cite the following Geant4-DNA collaboration publication:
@@ -50,8 +53,6 @@
 //
 // If an electron track is killed then energy deposition is added to the step
 //
-/// \file G4ElectronCapture.hh
-/// \brief Definition of the G4ElectronCapture class
 
 #ifndef ElectronCapture_h
 #define ElectronCapture_h 1

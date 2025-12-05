@@ -4,6 +4,11 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
+## 2025-08-14 Alberto Ribon (had-theo-HE-V11-03-00)
+- G4TheoFSGenerator : introduced the ID model identification for FTF inelastic
+  hadronic interactions that are classified as quasi-elastic or diffractive.
+  Note that this classification is not available for the QGS string model.
+
 ## 2022-11-11 Alberto Ribon (had-theo-HE-V11-00-02)
 - G4TheoFSGenerator: simplified treatment for low-energy inelastic nuclear
   reactions of light hypernuclei (because Bertini and Binary intra-nuclear 

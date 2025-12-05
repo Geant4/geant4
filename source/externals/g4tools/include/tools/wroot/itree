@@ -18,8 +18,6 @@ class itree {
 public:
   virtual ~itree(){}
 public:
-  //virtual void add_tot_bytes(uint32) = 0;
-  //virtual void add_zip_bytes(uint32) = 0;
   virtual idir& dir() = 0;
   virtual const idir& dir() const = 0;
 };

@@ -25,7 +25,7 @@
 //
 // G4Mag_SpinEqRhs implementation
 //
-// Created: J.Apostolakis, P.Gumplinger - 08.02.1999
+// Authors: John Apostolakis (CERN) & Peter Gumplinger (TRIUMF), 08.02.1999
 // --------------------------------------------------------------------
 
 #include "G4Mag_SpinEqRhs.hh"
@@ -38,8 +38,6 @@ G4Mag_SpinEqRhs::G4Mag_SpinEqRhs( G4MagneticField* MagField )
   : G4Mag_EqRhs( MagField )
 {
 }
-
-G4Mag_SpinEqRhs::~G4Mag_SpinEqRhs() = default;
 
 void
 G4Mag_SpinEqRhs::SetChargeMomentumMass(G4ChargeState particleCharge,

@@ -4,8 +4,6 @@
   gROOT->SetStyle("Plain");
   gStyle->SetOptStat(00000);
 
-  system ("hadd -O -f molecular-dna.root molecular-dna_t*.root");
-
   auto c1 = new TCanvas("c1", "Damages", 120, 60, 1000, 1000);
   c1->SetBorderSize(0);
   c1->SetFillColor(0);
@@ -55,15 +53,15 @@
   total_DSBpp2 = 0;
 
   Double_t EnergyDeposited_eV = 0;
-  Double_t acc_edep = 0;
-  Double_t acc_edep2 = 0;
+  //Double_t acc_edep = 0;
+  //Double_t acc_edep2 = 0;
 
   Double_t Energy;
   Char_t Primary;
 
   TFile *f = TFile::Open("molecular-dna.root");
   TTree *tree = (TTree *) f->Get("tuples/primary_source");
-  Float_t number = (Float_t) tree->GetEntries();
+  Long64_t number = (Float_t) tree->GetEntries();
 
   if (number<2) {
     std::cout << "Not enough entries in the \"primary_source\" TTree (" << (long)number << " entries)\n";
@@ -81,9 +79,9 @@
   tree->SetBranchAddress("DSBm",&DSBm);
   tree->SetBranchAddress("DSBh",&DSBh);
 
-  Long64_t nentries = tree->GetEntries();
+  Long64_t nentriesS = tree->GetEntries();
 
-  for(int i = 0;i<nentries;i++){
+  for(int i = 0;i<nentriesS;i++){
     tree->GetEntry(i);
     total_SSBd += SSBd;
     total_SSBd2 += SSBd *SSBd;
@@ -102,6 +100,7 @@
     total_DSBh2 += DSBh *DSBh;
   }
 
+  /*
   tree = (TTree *) f->Get("tuples/damage");
   tree->SetBranchAddress("EnergyDeposited_eV",&EnergyDeposited_eV);
   nentries = tree->GetEntries();
@@ -110,6 +109,7 @@
     acc_edep += EnergyDeposited_eV;
     acc_edep2 += EnergyDeposited_eV *EnergyDeposited_eV;
   }
+  */
 
   tree = (TTree *) f->Get("tuples/classification");
   tree->SetBranchAddress("SSB",&SSB);
@@ -119,9 +119,9 @@
   tree->SetBranchAddress("DSBp",&DSBp);
   tree->SetBranchAddress("DSBpp",&DSBpp);
 
-  nentries = tree->GetEntries();
+  Long64_t nentriesC = tree->GetEntries();
 
-  for(int i = 0;i<nentries;i++){
+  for(int i = 0;i<nentriesC;i++){
     tree->GetEntry(i);
     total_SSB += SSB;
     total_SSB2 += SSB *SSB;
@@ -138,46 +138,56 @@
     total_DSBpp2 += DSBpp *DSBpp;
   }
 
-  mean_SSBd = (Float_t) total_SSBd / number;
-  mean_SSBi = (Float_t) total_SSBi / number;
-  mean_SSBm = (Float_t) total_SSBm / number;
+  // Mean values 
 
-  mean_DSBd = (Float_t) total_DSBd / number;
-  mean_DSBi = (Float_t) total_DSBi / number;
-  mean_DSBm = (Float_t) total_DSBm / number;
-  mean_DSBh = (Float_t) total_DSBh / number;
+  mean_SSBd = (Float_t) total_SSBd / nentriesS;
+  mean_SSBi = (Float_t) total_SSBi / nentriesS;
+  mean_SSBm = (Float_t) total_SSBm / nentriesS;
 
-  Double_t SD_SSBd = sqrt(abs(((total_SSBd2 / number) - pow(total_SSBd / number,2)))/(number -1));
-  Double_t SD_SSBi = sqrt(abs(((total_SSBi2 / number) - pow(total_SSBi / number,2)))/(number -1));
-  Double_t SD_SSBm = sqrt(abs(((total_SSBm2 / number) - pow(total_SSBm / number,2)))/(number -1));
+  mean_DSBd = (Float_t) total_DSBd / nentriesS;
+  mean_DSBi = (Float_t) total_DSBi / nentriesS;
+  mean_DSBm = (Float_t) total_DSBm / nentriesS;
+  mean_DSBh = (Float_t) total_DSBh / nentriesS;
 
-  Double_t SD_DSBd = sqrt(abs(((total_DSBd2 / number) - pow(total_DSBd / number,2)))/(number -1));
-  Double_t SD_DSBi = sqrt(abs(((total_DSBi2 / number) - pow(total_DSBi / number,2)))/(number -1));
-  Double_t SD_DSBm = sqrt(abs(((total_DSBm2 / number) - pow(total_DSBm / number,2)))/(number -1));
-  Double_t SD_DSBh = sqrt(abs(((total_DSBh2 / number) - pow(total_DSBh / number,2)))/(number -1));
+  // SEM values
 
-  mean_SSB = (Float_t) total_SSB / number;
-  mean_SSBp = (Float_t) total_SSBp / number;
-  mean_twoSSB = (Float_t) total_twoSSB / number;
+  Double_t SD_SSBd = sqrt(abs(((total_SSBd2 / nentriesS) - pow(total_SSBd / nentriesS,2)))/(nentriesS -1));
+  Double_t SD_SSBi = sqrt(abs(((total_SSBi2 / nentriesS) - pow(total_SSBi / nentriesS,2)))/(nentriesS -1));
+  Double_t SD_SSBm = sqrt(abs(((total_SSBm2 / nentriesS) - pow(total_SSBm / nentriesS,2)))/(nentriesS -1));
 
-  mean_DSB = (Float_t) total_DSB / number;
-  mean_DSBp = (Float_t) total_DSBp / number;
-  mean_DSBpp = (Float_t) total_DSBpp / number;
+  Double_t SD_DSBd = sqrt(abs(((total_DSBd2 / nentriesS) - pow(total_DSBd / nentriesS,2)))/(nentriesS -1));
+  Double_t SD_DSBi = sqrt(abs(((total_DSBi2 / nentriesS) - pow(total_DSBi / nentriesS,2)))/(nentriesS -1));
+  Double_t SD_DSBm = sqrt(abs(((total_DSBm2 / nentriesS) - pow(total_DSBm / nentriesS,2)))/(nentriesS -1));
+  Double_t SD_DSBh = sqrt(abs(((total_DSBh2 / nentriesS) - pow(total_DSBh / nentriesS,2)))/(nentriesS -1));
 
-  Double_t SD_SSB = sqrt(abs(((total_SSB2 / number) - pow(total_SSB / number,2))/(number -1)));
-  Double_t SD_SSBp = sqrt(abs(((total_SSBp2 / number) - pow(total_SSBp / number,2))
-                            /(number -1)));
-  Double_t SD_twoSSB = sqrt(abs(((total_twoSSB2 / number) - pow(total_twoSSB /
-                                                              number,2))
-                            /(number -1)));
+  // Mean values
+  
+  mean_SSB = (Float_t) total_SSB / nentriesC;
+  mean_SSBp = (Float_t) total_SSBp / nentriesC;
+  mean_twoSSB = (Float_t) total_twoSSB / nentriesC;
 
-  Double_t SD_DSB = sqrt(abs(((total_DSB2 / number) - pow(total_DSB / number,2))/(number -1)));
-  Double_t SD_DSBp = sqrt(abs(((total_DSBp2 / number) - pow(total_DSBp / number,2))
-                           /(number -1)));
-  Double_t SD_DSBpp = sqrt(abs(((total_DSBpp2 / number) - pow(total_DSBpp / number,2))
-                           /(number -1)));
+  mean_DSB = (Float_t) total_DSB / nentriesC;
+  mean_DSBp = (Float_t) total_DSBp / nentriesC;
+  mean_DSBpp = (Float_t) total_DSBpp / nentriesC;
 
-  cout<<"Paricle : "<<Primary<<'\t'
+  // SEM values
+  
+  Double_t SD_SSB = sqrt(abs(((total_SSB2 / nentriesC) - pow(total_SSB / nentriesC,2))/(nentriesC -1)));
+  Double_t SD_SSBp = sqrt(abs(((total_SSBp2 / nentriesC) - pow(total_SSBp / nentriesC,2))
+                            /(nentriesC -1)));
+  Double_t SD_twoSSB = sqrt(abs(((total_twoSSB2 / nentriesC) - pow(total_twoSSB /
+                                                              nentriesC,2))
+                            /(nentriesC -1)));
+
+  Double_t SD_DSB = sqrt(abs(((total_DSB2 / nentriesC) - pow(total_DSB / nentriesC,2))/(nentriesC -1)));
+  Double_t SD_DSBp = sqrt(abs(((total_DSBp2 / nentriesC) - pow(total_DSBp / nentriesC,2))
+                           /(nentriesC -1)));
+  Double_t SD_DSBpp = sqrt(abs(((total_DSBpp2 / nentriesC) - pow(total_DSBpp / nentriesC,2))
+                           /(nentriesC -1)));
+
+  //
+  
+  cout<<"Particle : "<<Primary<<'\t'
        <<"Energy [/MeV] : "<<Energy<<'\t'
        <<"number : "<<number<<'\n'
        <<" Output Damages : "<<'\n'<<

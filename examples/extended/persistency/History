@@ -5,6 +5,12 @@ which **must** added in reverse chronological order (newest at the top). It must
 be used as a substitute for writing good git commit messages!
 
 
+## 2025-07-30 I. Hrivnacova (exPersistency-V11-03-00)
+- Migration of README pages to Markdown:
+  - .README.txt replaced with README.md and removed README
+  - Removed P03/Doxyfile
+  - Reviewed and fixed external link references to code
+
 ## 2023-11-15 I. Hrivnacova (exPersistency-V11-01-00)
 - Updated vis.mac and other macros:
   - Changed "/vis/open XYZ [600x600-0+0]" to "/vis/open" to allow run-time choices

@@ -49,12 +49,11 @@
 
 #include "G4HadronPhysicsQGSP_BIC.hh"
 
-
 class G4HadronPhysicsQGSP_BIC_HP : public G4HadronPhysicsQGSP_BIC {
   public: 
     G4HadronPhysicsQGSP_BIC_HP( G4int verbose = 1 );
     G4HadronPhysicsQGSP_BIC_HP( const G4String& name, G4bool quasiElastic = true );
-    virtual ~G4HadronPhysicsQGSP_BIC_HP() {};
+    ~G4HadronPhysicsQGSP_BIC_HP() override = default;
 
     // copy constructor and hide assignment operator
     G4HadronPhysicsQGSP_BIC_HP(G4HadronPhysicsQGSP_BIC_HP &) = delete;

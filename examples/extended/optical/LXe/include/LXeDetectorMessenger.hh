@@ -23,11 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file optical/LXe/include/LXeDetectorMessenger.hh
+/// \file LXeDetectorMessenger.hh
 /// \brief Definition of the LXeDetectorMessenger class
-//
-//
+
 #ifndef LXeDetectorMessenger_h
 #define LXeDetectorMessenger_h 1
 

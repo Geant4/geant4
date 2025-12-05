@@ -1,0 +1,95 @@
+#FOR SIMPLICITY THIS MACRO USES MODEL DEFAULTS;
+#TO MODIFY PLEASE REFER run.mac
+#AND ADD THE CORRESPONDING OPTIONS TO THIS MACRO
+
+#THIS IS A SIMPLIFIED SETUP FOR A CRYSTAL-BASED POSITRON SOURCE
+#FOR FUTURE LEPTON COLLIDERS.
+#PLEASE REFER THE FOLLOWING PAPERS FOR MORE INFORMATION:
+#L. Bandiera et al. Eur. Phys. J. C 82, 699 (2022).
+#F. Alharthi et al. NIM A 1075, 170412 (2025).
+
+#CAUTION: NO COHERENT PAIR PRODUCTION IS CONSIDERED,
+#FOR THIS, PLEASE REFER TO THE EXAMPLE ch3.
+#THIS IS NOT AN ISSUE BELOW 10 GeV FOR W.
+
+#CAUTION: ONLY A SINGLE CRYSTAL TARGET IS CONSIDERED.
+#NO DEPOSITED ENERGY IS SCORED. FOR MORE FUNCTIONALITY
+#PLEASE REFER TO THE DEDICATED EXAMPLE ch5.
+
+/random/setSeeds 19577794 424238336
+#setting number of cores
+/run/numberOfThreads 2
+
+#crystal geometry
+#change it as you want
+/crystal/setCrystalSize 20. 20. 0.5 mm #feel free to increase the crystal thickness
+/crystal/setCrystalAngleX 0 mrad  #default is 0
+/crystal/setCrystalAngleY 0 mrad  #default is 0
+
+#crystal lattice parameters
+#change it according to the data available in G4CHANNELINGDATA
+/crystal/setCrystalMaterial G4_W  # check G4CHANNELINGDATA dataset
+/crystal/setCrystalLattice  <111> # check G4CHANNELINGDATA dataset
+
+#detector parameters
+#change it as you want
+/crystal/setDetectorSize 10 10 0.03 cm
+/crystal/setFrontPositionZ 1000 mm
+
+#G4ChannelingFastSimModel parameters
+#change it as you want
+/crystal/setChannelingModel true #switch on/off G4ChannelingFastSimModel
+/crystal/setRadiationModel true  #switch on/off G4BaierKatkov
+                                 #(G4ChannelingFastSimModel must be switched on)
+
+#the pass to channeling data if different from the default:
+#/crystal/setChannelingDataPath your_path
+
+#the following can be changed or commented:
+#the low energy threshold for particle to enter the G4ChannelingFastSimModel:
+/crystal/setParticleMinKinEnergy/e+ 500 MeV #to speed up the simulations, please evaluate to change
+/crystal/setParticleMinKinEnergy/e- 500 MeV #to speed up the simulations, please evaluate to change
+
+
+#the following can be changed or commented:
+#high angular threshold for particle to enter the G4ChannelingFastSimModel expressed in Lindhard angles:
+/crystal/setLindhardAngles/e+ 10. #to speed up the simulations, please evaluate to change
+/crystal/setLindhardAngles/e- 10. #to speed up the simulations, please evaluate to change
+
+#the following can be changed or commented:
+#G4BaierKatkov parameters
+#(see also comments in ConstructSDandField in DetectorConstruction):
+/crystal/setMinPhotonEnergy 1 MeV # G4BaierKatkov default
+/crystal/setSamplingPhotonsNumber 150 # G4BaierKatkov default
+/crystal/setNSmallTrajectorySteps 10000 # G4BaierKatkov default
+/crystal/setRadiationAngleFactor 4. # G4BaierKatkov default
+
+/run/initialize
+
+#settings
+/control/verbose 0
+/run/verbose 0
+/tracking/verbose 0
+
+#beam
+/gps/particle e-
+
+#coordinate distribution (radial Gauss)
+/gps/pos/centre 0. 0. -1. cm
+/gps/pos/type Beam
+/gps/pos/sigma_x 1. mm
+/gps/pos/sigma_y 1. mm
+
+#angular distribution (radial Gauss)
+/gps/ang/type beam2d
+/gps/ang/rot1 1  0  0
+/gps/ang/rot2 0 -1  0
+/gps/ang/sigma_x 10.E-6 rad
+/gps/ang/sigma_y 10.E-6 rad
+
+#energy distribution (constant)
+/gps/ene/mono 6. GeV
+
+#statistics
+/run/printProgress 10
+/run/beamOn 50

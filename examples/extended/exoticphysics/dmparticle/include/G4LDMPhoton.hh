@@ -23,7 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
+/// \file G4LDMPhoton.hh
+/// \brief Definition of the G4LDMPhoton class
+
 /////////////////////////////////////////////////
 //
 // ClassName:   G4LDMPhoton

@@ -23,10 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file field/field04/src/F04PhysicsListMessenger.cc
+/// \file F04PhysicsListMessenger.cc
 /// \brief Implementation of the F04PhysicsListMessenger class
-//
 
 #include "F04PhysicsListMessenger.hh"
 

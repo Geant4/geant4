@@ -23,10 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file RE05/include/RE05MuonHit.hh
+/// \file RE05MuonHit.hh
 /// \brief Definition of the RE05MuonHit class
-//
 
 #ifndef RE05MuonHit_h
 #define RE05MuonHit_h 1

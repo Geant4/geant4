@@ -23,10 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file medical/DICOM/include/DicomPhantomZSliceHeader.hh
+/// \file DicomPhantomZSliceHeader.hh
 /// \brief Definition of the DicomPhantomZSliceHeader class
-//
 
 #ifndef DicomPhantomZSliceHeader_h
 #define DicomPhantomZSliceHeader_h 1

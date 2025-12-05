@@ -123,12 +123,11 @@ double Polynomial1d::evaluate( double a_x1 ) const {
  * @param a_scaleFactor     [in]    A factor applied to each evaluation before it is added to *a_results*.
  ***********************************************************************************************************/
 
-void Polynomial1d::mapToXsAndAdd( int a_offset, std::vector<double> const &a_Xs, std::vector<double> &a_results, double a_scaleFactor ) const {
+void Polynomial1d::mapToXsAndAdd( std::size_t a_offset, std::vector<double> const &a_Xs, std::vector<double> &a_results, double a_scaleFactor ) const {
 
     if( a_Xs.size( ) != a_results.size( ) ) throw Exception( "Constant1d::mapToXsAndAdd: a_Xs.size( ) != a_results.size( )." );
-    if( a_offset < 0 ) throw Exception( "Constant1d::mapToXsAndAdd: a_offset < 0." );
 
-    int index = 0;
+    std::size_t index = 0;
     auto XsIter = a_Xs.begin( );
 
     for( ; XsIter != a_Xs.end( ); ++XsIter, ++index ) {

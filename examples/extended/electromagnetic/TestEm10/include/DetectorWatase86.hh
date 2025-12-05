@@ -23,11 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm10/include/DetectorWatase86.hh
+/// \file DetectorWatase86.hh
 /// \brief Definition of the DetectorWatase86 class
-//
-//
-//
+
 // Setup from Y. Watase et al, NIM A248  (1986) 379-388 (fig.7; Li, e-, 2 Gev/c)
 
 #ifndef DetectorWatase86_h

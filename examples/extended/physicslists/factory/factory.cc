@@ -25,9 +25,7 @@
 //
 /// \file factory.cc
 /// \brief Main program of the physicslists/factory example
-//
-//
-//
+
 // -------------------------------------------------------------
 //      factory
 //

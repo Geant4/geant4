@@ -362,22 +362,22 @@ bool c3d::fill(double aX,double aY,double aZ,double aW){
     return m_histo->fill(aX,aY,aZ,aW);
   } else {
     if(m_xs.size()) {
-      m_lower_x = mn<double>(aX,m_lower_x);
-      m_upper_x = mx<double>(aX,m_upper_x);
+      m_lower_x = min_of<double>(aX,m_lower_x);
+      m_upper_x = max_of<double>(aX,m_upper_x);
     } else {
       m_lower_x = aX;
       m_upper_x = aX;
     }
     if(m_ys.size()) {
-      m_lower_y = mn<double>(aY,m_lower_y);
-      m_upper_y = mx<double>(aY,m_upper_y);
+      m_lower_y = min_of<double>(aY,m_lower_y);
+      m_upper_y = max_of<double>(aY,m_upper_y);
     } else {
       m_lower_y = aY;
       m_upper_y = aY;
     }
     if(m_zs.size()) {
-      m_lower_z = mn<double>(aZ,m_lower_z);
-      m_upper_z = mx<double>(aZ,m_upper_z);
+      m_lower_z = min_of<double>(aZ,m_lower_z);
+      m_upper_z = max_of<double>(aZ,m_upper_z);
     } else {
       m_lower_z = aZ;
       m_upper_z = aZ;

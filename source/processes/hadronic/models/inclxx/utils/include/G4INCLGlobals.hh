@@ -42,6 +42,7 @@
 #include <string>
 #include <vector>
 #include "G4INCLParticleType.hh"
+#include <iostream>
 
 namespace G4INCL {
   class Particle;

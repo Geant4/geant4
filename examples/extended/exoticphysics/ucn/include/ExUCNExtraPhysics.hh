@@ -23,13 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file exoticphysics/ucn/include/ExUCNExtraPhysics.hh
+/// \file ExUCNExtraPhysics.hh
 /// \brief Definition of the ExUCNExtraPhysics class
-//
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #ifndef ExUCNExtraPhysics_h
 #define ExUCNExtraPhysics_h 1

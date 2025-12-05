@@ -32,22 +32,44 @@
 // The line current is directed along Z axis and crosses the XY
 // plane in the origin point (0,0).
 
-// Author: V.Grichine, 03.02.1997
+// Author: Vladimir Grichine (CERN), 03.02.1997
 // --------------------------------------------------------------------
 #ifndef G4LINECURRENTMAGFIELD_HH
 #define G4LINECURRENTMAGFIELD_HH
 
 #include "G4MagneticField.hh"
 
+/**
+ * @brief G4LineCurrentMagField is a class describing a line current magnetic
+ * field. The line current is directed along the Z axis and crosses the XY
+ * plane in the origin point.
+ */
+
 class G4LineCurrentMagField : public G4MagneticField
 {
   public:
 
+    /**
+     * Constructor for G4LineCurrentMagField.
+     *  @param[in] pFieldConstant Value of the constant field.
+     */
     G4LineCurrentMagField(G4double pFieldConstant);
-   ~G4LineCurrentMagField() override;
 
-    void GetFieldValue(const G4double yTrack[],
-                             G4double B[] ) const override;
+    /**
+     * Default Destructor.
+     */
+    ~G4LineCurrentMagField() override = default;
+
+    /**
+     * Returns the field value on the given position 'yTrack'.
+     *  @param[in] yTrack Time position array.
+     *  @param[out] B The returned field array.
+     */
+    void GetFieldValue(const G4double yTrack[], G4double B[]) const override;
+
+    /**
+     * Returns a pointer to a new allocated clone of this object.
+     */
     G4Field* Clone() const override;
 
   private:

@@ -1,0 +1,56 @@
+#=======================#
+# Microtrack run macro  #
+#=======================#
+
+/control/verbose 1
+/run/verbose 1
+/tracking/verbose 0
+
+/random/setSeeds 102 001
+
+###########################
+### SETUP CONFIGURATION ###
+###########################
+/mygeom/maxRange        49. um
+/mygeom/material   G4_WATER
+/mygeom/hitSelRegZ     4. um
+/mygeom/hitSelRegXY   100. um
+/mygeom/siteRadius     0.5 um
+
+
+####################
+### PHYSICS LIST ###
+####################
+/physics/addPhysics dna_opt2
+#/physics/addPhysics em_penelope
+
+##################################################
+### PRODUCTION CUT DEFINITIONS (for condensed) ###
+##################################################
+/run/setCutForAGivenParticle gamma   0.01 um
+/run/setCutForAGivenParticle e-      0.01 um
+/run/setCutForAGivenParticle e+      0.01 um
+/run/setCutForAGivenParticle proton  0.01 um
+
+######################
+### INITIALIZATION ###
+######################
+/run/numberOfThreads 8
+/run/initialize
+
+######################################################
+### BEAM PROPERTIES (must be after Initialization) ###
+######################################################
+/gun/particle       proton
+/gun/energy         20.13 MeV  ## Energy compensation from (dE/dx)*Z0
+/beam/position/Z0   -50.99 um 
+
+#######################
+### PRODUCTION CUTS ###
+#######################
+/run/particle/applyCuts true e-
+/run/particle/applyCuts true gamma
+
+
+/run/printProgress 1
+/run/beamOn 50

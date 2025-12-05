@@ -29,13 +29,6 @@ public:
     return parent::cast(a_class);
   }
   virtual const std::string& s_cls() const {return s_class();}
-/*
-  virtual bool equal(const field& a_field) const {
-    bsf<T>* fld = safe_cast<field,bsf<T>>(a_field);
-    if(!fld) return false;
-    return operator==(*fld);
-  }
-*/
 protected:
   bsf():m_value(T()){}
 public:
@@ -75,25 +68,6 @@ public:
   operator const T& () const {return m_value;}
   operator T() {return m_value;}
 
-/* does not work with qrot
-  bsf& operator+=(const T& a_value){
-    m_value += a_value;
-    m_touched = true;
-    return *this;
-  }
-*/
-/* does not work with T=std::string
-  bsf& operator-=(const T& a_value){
-    m_value -= a_value;
-    m_touched = true;
-    return *this;
-  }
-  bsf& operator*=(const T& a_value){
-    m_value *= a_value;
-    m_touched = true;
-    return *this;
-  }
-*/
 public:
   T& value() {return m_value;}
   const T& value() const {return m_value;}
@@ -102,17 +76,9 @@ public:
     m_value = a_value;
   }
   void value_no_cmp(const T& a_value) {
-    //if(a_value!=m_value) m_touched = true;
     m_value = a_value;
   }
-//public: //for style.
-//  bool s2v(const std::string& a_s) {
-//    T v;
-//    if(!to<T>(a_s,v)) return false;
-//    if(v!=m_value) m_touched = true;
-//    m_value = v;
-//    return true;
-//  }
+
 public: //for iv2sg
   void setValue(const T& a_value) {value(a_value);}
   const T& getValue() const {return m_value;}

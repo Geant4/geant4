@@ -26,9 +26,6 @@
 /// \file SteppingAction.cc
 /// \brief Implementation of the SteppingAction class
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 #include "SteppingAction.hh"
 
 #include "DetectorConstruction.hh"

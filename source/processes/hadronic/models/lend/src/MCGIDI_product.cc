@@ -24,6 +24,7 @@ LUPI_HOST_DEVICE Product::Product( ) :
         m_intid( -1 ),
         m_index( -1 ),
         m_userParticleIndex( -1 ),
+        m_isCompleteParticle( false ),
         m_mass( 0.0 ),
         m_excitationEnergy( 0.0 ),
         m_twoBodyOrder( TwoBodyOrder::notApplicable ),

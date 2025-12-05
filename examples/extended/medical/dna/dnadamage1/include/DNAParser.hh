@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file DNAParser.hh
+/// \brief Definition of the DNAParser class
+
 // Authors: S. Meylan and C. Villagrasa (IRSN, France)
 // Update: H. Tran (IRSN, France) :20/12/2018
 //

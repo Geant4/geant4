@@ -59,10 +59,7 @@ public:
       sg::base_freetype* tft = sg::base_freetype::create(m_ttf);
 
            if(a_type==valop::ADD)   unichar2sg(0x0002B,*tft); // +
-    //else if(a_type==valop::SUB)   unichar2sg(0x0002D,*tft); // -
       else if(a_type==valop::SUB)   unichar2sg(0x02212,*tft);
-    //else if(a_type==valop::MUL)   unichar2sg(0x0002A,*tft); // *
-    //else if(a_type==valop::MUL)   unichar2sg(0x02219,*tft); // .
       else if(a_type==valop::MUL)   unichar2sg(0x02A2F,*tft); // x
       else if(a_type==valop::EQUAL) unichar2sg(0x0003D,*tft); // =
       op_sep->add(tft);
@@ -104,7 +101,7 @@ public:
 
       float ymargin = h;
 
-      float osx = mx(mx1[0]-mn1[0],mx2[0]-mn2[0]);
+      float osx = max_of(mx1[0]-mn1[0],mx2[0]-mn2[0]);
       osx *= 1.1f;
 
       op_tsf->mul_scale(osx,1,1);
@@ -194,11 +191,8 @@ public:
       ////////////////////////////////////////////////////////
       sg::separator* op_sep = new sg::separator;
       sep->add(op_sep);
-      //sg::matrix* op_tsf = new sg::matrix;
-      //op_sep->add(op_tsf);
 
       sg::base_freetype* tft = sg::base_freetype::create(m_ttf);
-      //TTNODE* tft = new TTNODE();
       unichar2sg(0x0002D,*tft);
       op_sep->add(tft);
       vec3f omn,omx;
@@ -220,7 +214,6 @@ public:
   virtual bool variable(unsigned int a_type,const value& a_var) {
 
     sg::base_freetype* tft = sg::base_freetype::create(m_ttf);
-    //TTNODE* tft = new TTNODE();
 
     if(a_type==valop::SYMBOL) {
       if(rcmp(a_var.get_string(),s_psi())) {
@@ -273,7 +266,6 @@ public:
 
   virtual bool option(const valop& a_node) {
     sg::base_freetype* tft = sg::base_freetype::create(m_ttf);
-    //TTNODE* tft = new TTNODE();
     s2sg(a_node.m_name,*tft);
     m_group.add(tft);
     return true;
@@ -305,7 +297,6 @@ public:
       op_sep->add(op_tsf);
 
       sg::base_freetype* tft = sg::base_freetype::create(m_ttf);
-      //TTNODE* tft = new TTNODE();
       unichar2sg(0x0221A,*tft);
       op_sep->add(tft);
       vec3f omn,omx;
@@ -329,8 +320,6 @@ public:
         vtcs->mode = gl::triangle_fan();
       }
 
-      //float odx = omx[0]-omn[0];
-      //float xmargin = odx*0.1f;
       float xmargin = 0;
 
       //push  sqrt-symbol at left of a_1
@@ -381,8 +370,6 @@ public:
       mnmx(m_out,*tft,omn,omx);
 
       //push func-symbol at left of a_1 :
-      //float odx = omx[0]-omn[0];
-      //float xmargin = odx*0.1f;
       float xmargin = 0;
       op_tsf->mul_translate(-omx[0]+mn1[0]-xmargin,0,0);
       } //end left op
@@ -396,15 +383,12 @@ public:
       op_sep->add(op_tsf);
 
       sg::base_freetype* tft = sg::base_freetype::create(m_ttf);
-      //TTNODE* tft = new TTNODE();
       unichar2sg(0x00029,*tft);
       op_sep->add(tft);
       vec3f omn,omx;
       mnmx(m_out,*tft,omn,omx);
 
       //push func-symbol at right of a_1 :
-      //float odx = omx[0]-omn[0];
-      //float xmargin = odx*0.1f;
       float xmargin = 0;
       op_tsf->mul_translate(-omn[0]+mx1[0]+xmargin,0,0);
       } //end right op
@@ -428,11 +412,6 @@ public:
         return false;
       }
       mnmx(m_out,*sep1,mn1,mx1);}
-
-      //sg::separator* op_sep = new sg::separator;
-      //sep->add(op_sep);
-      //sg::matrix* op_tsf = new sg::matrix;
-      //op_sep->add(op_tsf);
 
       sg::separator* sep2 = new sg::separator;
       sep->add(sep2);
@@ -506,7 +485,6 @@ public:
       op_sep->add(op_tsf);
 
       sg::base_freetype* tft = sg::base_freetype::create(m_ttf);
-      //TTNODE* tft = new TTNODE();
       s2sg(a_f.m_function->name(),*tft);
       tft->unitext[0].push_back(0x00028); // (
       op_sep->add(tft);
@@ -515,8 +493,6 @@ public:
       mnmx(m_out,*tft,omn,omx);
 
       //push func-symbol at left of a_1 :
-      //float odx = omx[0]-omn[0];
-      //float xmargin = odx*0.1f;
       float xmargin = 0;
       op_tsf->mul_translate(-omx[0]+mn1[0]-xmargin,0,0);
       } //end left op
@@ -531,7 +507,6 @@ public:
       op_sep->add(op_tsf);
 
       sg::base_freetype* tft = sg::base_freetype::create(m_ttf);
-      //TTNODE* tft = new TTNODE();
       unichar2sg(0x0002C,*tft); // ,
       op_sep->add(tft);
       vec3f omn,omx;
@@ -558,15 +533,12 @@ public:
       op_sep->add(op_tsf);
 
       sg::base_freetype* tft = sg::base_freetype::create(m_ttf);
-      //TTNODE* tft = new TTNODE();
       unichar2sg(0x00029,*tft);
       op_sep->add(tft);
       vec3f omn,omx;
       mnmx(m_out,*tft,omn,omx);
 
       //push ")" at right of a_2 :
-      //float odx = omx[0]-omn[0];
-      //float xmargin = odx*0.1f;
       float xmargin = 0;
       op_tsf->mul_translate(-omn[0]+xend2+xmargin,0,0);
       } //end right op
@@ -703,7 +675,7 @@ protected:
     a_node.font = sg::font_stixgeneral_otf();
 
     std::vector<unichar> line;
-    tools_sforcit(a_s,it) line.push_back(char2stix(*it));
+    for(auto it = a_s.cbegin(); it != a_s.cend(); ++it) line.push_back(char2stix(*it));
 
     a_node.unitext.add(line);
   }

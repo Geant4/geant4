@@ -27,9 +27,9 @@
 //
 // Class description:
 //
-// Runga-Kutta integrator stepper from Geant3.
+// Runga-Kutta integrator stepper from Geant-3.
 
-// Created: J.Apostolakis, V.Grichine - 30.01.1997
+// Authors: John Apostolakis & Vladimir Grichine (CERN), 30.01.1997
 // -------------------------------------------------------------------
 #ifndef G4RKG3_STEPPER_HH
 #define G4RKG3_STEPPER_HH
@@ -40,36 +40,75 @@
 
 class G4Mag_EqRhs;
 
+/**
+ * @brief G4RKG3_Stepper implements a Runga-Kutta integrator stepper
+ * used in Geant-3.
+ */
+
 class G4RKG3_Stepper : public G4MagIntegratorStepper
 {
   public:
 
+    /**
+     * Constructor for G4RKG3_Stepper.
+     *  @param[in] EqRhs Pointer to the provided equation of motion.
+     */
     G4RKG3_Stepper(G4Mag_EqRhs* EqRhs);
-      // Integrate over 6 variables only:  position & velocity.
-      // Not implemented yet !
 
-    ~G4RKG3_Stepper() override;
+    /**
+     * Default Destructor.
+     */
+    ~G4RKG3_Stepper() override = default;
 
+    /**
+     * Copy constructor and assignment operator not allowed.
+     */
+    G4RKG3_Stepper(const G4RKG3_Stepper&) = delete;
+    G4RKG3_Stepper& operator= (const G4RKG3_Stepper&) = delete;
+
+    /**
+     * The stepper for the Runge Kutta integration.
+     * Method provided, even if less efficient.
+     * The stepsize is fixed, with the step size given by 'h'.
+     * Integrates ODE starting values yInput[0 to 6].
+     * Outputs yOut[] and its estimated error yErr[].
+     *  @param[in] yIn Starting values array of integration variables.
+     *  @param[in] dydx Derivatives array.
+     *  @param[in] h The given step size.
+     *  @param[out] yOut Integration output.
+     *  @param[out] yErr The estimated error.
+     */
     void Stepper( const G4double yIn[],
                   const G4double dydx[],
                         G4double h,
                         G4double yOut[],
                         G4double yErr[] ) override;
-      // The method which must be provided, even if less efficient.
 
-    G4double  DistChord() const override ;
+    /**
+     * Returns the distance from chord line.
+     */
+    G4double DistChord() const override ;
  
+    /**
+     * Integrator of Runge-Kutta Stepper from Geant-3 with only two field
+     * evaluation per Step. It is used in propagating the initial Step
+     * by small substeps after solution error and delta geometry
+     * considerations. B[3] is magnetic field which is passed from substep
+     * to substep.
+     */
     void StepNoErr( const G4double tIn[8],
                     const G4double dydx[6],
                           G4double Step,
                           G4double tOut[8],
                           G4double B[3] );
-      // Integrator RK Stepper from G3 with only two field evaluation per 
-      // Step. It is used in propagation initial Step by small substeps
-      // after solution error and delta geometry considerations. 
-      // B[3] is magnetic field which is passed from substep to substep.
-
-    void StepWithEst( const G4double  tIn[8],
+    /**
+     * Integrator for Runge-Kutta from Geant-3 with evaluation of error in
+     * solution and delta geometry based on naive similarity with the case
+     * of uniform magnetic field.
+     * B1[3] is in input and is the first magnetic field values
+     * B2[3] is the output and is the final magnetic field values.
+     */
+    void StepWithEst( const G4double tIn[8],
                       const G4double dydx[6],
                             G4double Step,
                             G4double tOut[8],
@@ -77,13 +116,16 @@ class G4RKG3_Stepper : public G4MagIntegratorStepper
                             G4double& beta2,
                       const G4double B1[3],
                             G4double B2[3] );
-      // Integrator for RK from G3 with evaluation of error in solution and
-      // delta geometry based on naive similarity with the case of uniform
-      // magnetic field.
-      // B1[3] is input  and is the first magnetic field values
-      // B2[3] is output and is the final magnetic field values.
 
+    /**
+     * Returns the order, 4, of integration.
+     */
     inline G4int IntegratorOrder() const override { return 4; }
+
+    /**
+     * Returns the stepper type-ID, "kRKG3Stepper".
+     */
+    inline G4StepperType StepperType() const override { return kRKG3Stepper; }
 
   private:
 

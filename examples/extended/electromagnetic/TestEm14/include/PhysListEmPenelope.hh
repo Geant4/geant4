@@ -25,10 +25,6 @@
 //
 /// \file PhysListEmPenelope.hh
 /// \brief Definition of the PhysListEmPenelope class
-//
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef PhysListEmPenelope_h
 #define PhysListEmPenelope_h 1

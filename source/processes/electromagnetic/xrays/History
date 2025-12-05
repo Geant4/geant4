@@ -6,6 +6,46 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2025-11-06 Gabriele Cosmo (xrays-V11-03-06)
+- Fixed compilation warning for implicit type conversion on macOS/XCode
+  in G4GeneralCherenkov::BuildPhysicsTable().
+
+## 2025-11-03 Vladimir Ivanchenko (xrays-V11-03-05)
+- G4GeneralCerenkov, G4StandardCerenkovModel - fixed Coverity warnings.
+
+## 2025-10-29 Vladimir Ivanchenko (xrays-V11-03-04)
+- Added new classes G4GeneralCerenkov and G4StandardCerenkovModel with the
+  first implementation of the model approach for X-Ray processes
+- G4Cerenkov, G4Scintillation, G4GeneralCerenkov - fixed IsApplicable(..)
+  method for UnknownParticle type - use dynamic charge and kinematics for these
+  processes
+- G4Cerenkov, G4GeneralCerenkov - use inheritance from G4VDiscreteProcess
+
+##2025-07-24 Soon Yung Jun (xrays-V11-03-03)
+- Add physics model catalog IDs and class descriptions for G4QuasiCerenkov and
+  G4QuasiScintillation
+
+##2025-07-21 Soon Yung Jun (xrays-V11-03-02)
+  1) Add G4ScintillationQuasiTrackInfo: Concrete implementation of
+     G4VAuxiliaryTrackInformation used to store metadata associated with a
+     quasi-scintillation track generated during the scintillation process
+  2) Add G4QuasiScintillation: Add offloading capability for scintillation
+     photon generation
+  3) G4Scintillation: Relocate loop-invariant variables outside the photon
+     generation loop
+  4) G4CerenkovQuasiTrackInfo: Add the use of G4Allocator
+
+##2025-07-16 Soon Yung Jun (xrays-V11-03-01)
+- 1) Add G4QuasiOpticalData: Common data structure used for Cerenkov and
+     Scintillation photon sampling
+  2) Add G4CerenkovQuasiTrackInfo: Concrete implementation of
+     G4VAuxiliaryTrackInformation used to store metadata associated with a
+     quasi-Cerenkov track generated during the Cerenkov process
+  3) Add G4QuasiCerenkov: Add offloading capability for Cerenkov photon
+     generation
+  4) G4Cerenkov: Relocated loop-invariant variables outside the photon
+     generation loop
+
 ##2025-05-07 Soon Yung Jun (xrays-V11-03-00)
 - 1) G4Scintillation: Build the scintillation integral tables for materials
   that have non-empty material property tables and add BuildInverseCdfTable.

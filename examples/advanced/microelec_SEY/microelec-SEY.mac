@@ -1,0 +1,172 @@
+/tracking/verbose 0
+
+
+#---------------------------------------------------------------------------------------
+#	Geométry
+#---------------------------------------------------------------------------------------
+
+#Substrat (Green)
+#/testem/det/setMat G4_Be
+#/testem/det/setMat G4_C
+#/testem/det/setMat G4_Al
+/testem/det/setMat G4_Si
+#/testem/det/setMat G4_Ti
+#/testem/det/setMat G4_Fe
+#/testem/det/setMat G4_Ni
+#/testem/det/setMat G4_Cu
+#/testem/det/setMat G4_Ge
+#/testem/det/setMat G4_Ag
+#/testem/det/setMat G4_Au
+#/testem/det/setMat G4_W
+#/testem/det/setMat G4_KAPTON
+#/testem/det/setMat G4_SILICON_DIOXIDE
+#/testem/det/setMat G4_ALUMINUM_OXIDE
+#/testem/det/setMat G4_BORON_NITRIDE
+#/testem/det/setMat G4_TITANIUM_NITRIDE
+/testem/det/setSize 500 nm
+/testem/det/setWidth 500 nm
+
+#Layer4 (Red)
+#/testem/det/setMatLayer4 G4_Be
+#/testem/det/setMatLayer4 G4_C
+#/testem/det/setMatLayer4 G4_Al
+/testem/det/setMatLayer4 G4_Si
+#/testem/det/setMatLayer4 G4_Ti
+#/testem/det/setMatLayer4 G4_Fe
+#/testem/det/setMatLayer4 G4_Ni
+#/testem/det/setMatLayer4 G4_Cu
+#/testem/det/setMatLayer4 G4_Ge
+#/testem/det/setMatLayer4 G4_Ag
+#/testem/det/setMatLayer4 G4_Au
+#/testem/det/setMatLayer4 G4_W
+#/testem/det/setMatLayer4 G4_KAPTON
+#/testem/det/setMatLayer4 G4_SILICON_DIOXIDE
+#/testem/det/setMatLayer4 G4_ALUMINUM_OXIDE
+#/testem/det/setMatLayer4 G4_BORON_NITRIDE
+#/testem/det/setMatLayer4 G4_TITANIUM_NITRIDE
+/testem/det/setSizeLayer4 4 nm
+
+#Layer3 (Red)
+#/testem/det/setMatLayer3 G4_Be
+#/testem/det/setMatLayer3 G4_C
+#/testem/det/setMatLayer3 G4_Al
+/testem/det/setMatLayer3 G4_Si
+#/testem/det/setMatLayer3 G4_Ti
+#/testem/det/setMatLayer3 G4_Fe
+#/testem/det/setMatLayer3 G4_Ni
+#/testem/det/setMatLayer3 G4_Cu
+#/testem/det/setMatLayer3 G4_Ge
+#/testem/det/setMatLayer3 G4_Ag
+#/testem/det/setMatLayer3 G4_Au
+#/testem/det/setMatLayer3 G4_W
+#/testem/det/setMatLayer3 G4_KAPTON
+#/testem/det/setMatLayer3 G4_SILICON_DIOXIDE
+#/testem/det/setMatLayer3 G4_ALUMINUM_OXIDE
+#/testem/det/setMatLayer3 G4_BORON_NITRIDE
+#/testem/det/setMatLayer3 G4_TITANIUM_NITRIDE
+/testem/det/setSizeLayer3 4 nm
+
+#Layer2 (Red)
+#/testem/det/setMatLayer2 G4_Be
+#/testem/det/setMatLayer2 G4_C
+#/testem/det/setMatLayer2 G4_Al
+/testem/det/setMatLayer2 G4_Si
+#/testem/det/setMatLayer2 G4_Ti
+#/testem/det/setMatLayer2 G4_Fe
+#/testem/det/setMatLayer2 G4_Ni
+#/testem/det/setMatLayer2 G4_Cu
+#/testem/det/setMatLayer2 G4_Ge
+#/testem/det/setMatLayer2 G4_Ag
+#/testem/det/setMatLayer2 G4_Au
+#/testem/det/setMatLayer2 G4_W
+#/testem/det/setMatLayer2 G4_KAPTON
+#/testem/det/setMatLayer2 G4_SILICON_DIOXIDE
+#/testem/det/setMatLayer2 G4_ALUMINUM_OXIDE
+#/testem/det/setMatLayer2 G4_BORON_NITRIDE
+#/testem/det/setMatLayer2 G4_TITANIUM_NITRIDE
+/testem/det/setSizeLayer2 2.0 nm
+
+#Layer1 (Red)
+#/testem/det/setMatLayer1 G4_Be
+#/testem/det/setMatLayer1 G4_C
+#/testem/det/setMatLayer1 G4_Al
+/testem/det/setMatLayer1 G4_Si
+#/testem/det/setMatLayer1 G4_Ti
+#/testem/det/setMatLayer1 G4_Fe
+#/testem/det/setMatLayer1 G4_Ni
+#/testem/det/setMatLayer1 G4_Cu
+#/testem/det/setMatLayer1 G4_Ge
+#/testem/det/setMatLayer1 G4_Ag
+#/testem/det/setMatLayer1 G4_Au
+#/testem/det/setMatLayer1 G4_W
+#/testem/det/setMatLayer1 G4_KAPTON
+#/testem/det/setMatLayer1 G4_SILICON_DIOXIDE
+#/testem/det/setMatLayer1 G4_ALUMINUM_OXIDE
+#/testem/det/setMatLayer1 G4_BORON_NITRIDE
+#/testem/det/setMatLayer1 G4_TITANIUM_NITRIDE
+/testem/det/setSizeLayer1 1.0 mm
+
+#Surface (Red)
+#/testem/det/setMatSurf G4_Be
+#/testem/det/setMatSurf G4_C
+#/testem/det/setMatSurf G4_Al
+#/testem/det/setMatSurf G4_Si
+#/testem/det/setMatSurf G4_Ti
+#/testem/det/setMatSurf G4_Fe
+#/testem/det/setMatSurf G4_Ni
+#/testem/det/setMatSurf G4_Cu
+#/testem/det/setMatSurf G4_Ge
+#/testem/det/setMatSurf G4_Ag
+#/testem/det/setMatSurf G4_Au
+#/testem/det/setMatSurf G4_W
+#/testem/det/setMatSurf G4_KAPTON
+/testem/det/setMatSurf  G4_SILICON_DIOXIDE
+#/testem/det/setMatSurf G4_ALUMINUM_OXIDE
+#/testem/det/setMatSurf G4_BORON_NITRIDE
+#/testem/det/setMatSurf G4_TITANIUM_NITRIDE
+/testem/det/setSizeSurf 20.0 nm
+
+/testem/det/update
+
+
+#---------------------------------------------------------------------------------------
+# General particle source GPS
+#---------------------------------------------------------------------------------------
+
+/gps/pos/type Plane
+/gps/pos/shape Square
+/gps/pos/halfx 0.00 mm
+/gps/pos/halfy 0.00 mm
+/gps/pos/centre 0.000 0 -50.0 nm
+
+/gps/ang/type cos
+/gps/ang/mintheta 30.000 deg
+/gps/ang/maxtheta 30.000 deg
+/gps/ang/minphi 0.000 deg
+/gps/ang/maxphi 0.000 deg
+/gps/pos/rot1 0 1 0
+/gps/pos/rot2 1 0 0
+
+/gps/particle e-
+#/gps/ene/mono 1000 eV
+#/run/numberOfThreads 2 #if MT is activated
+/run/printProgress 100
+
+/run/initialize
+#/control/execute vis-win.mac
+
+#---------------------------------------------------------------------------------------
+#	Boucle énergie
+#---------------------------------------------------------------------------------------
+#/control/loop loop_ekin.mac Ekin 5 20 5
+/control/loop loop_ekin.mac Ekin 25 50 25
+/control/loop loop_ekin.mac Ekin 100 800 100
+/control/loop loop_ekin.mac Ekin 1000 3000 1000
+# ---------------
+#/control/loop loop_ekin.mac Ekin 1000 1600 200
+#/control/loop loop_ekin.mac Ekin 2000 8000 2000
+#/control/loop loop_ekin.mac Ekin 10 4000 1
+
+# default setting
+# ---------------
+#/run/beamOn 3000

@@ -23,10 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// Class G4SmartVoxelNode implementation
+// G4SmartVoxelNode implementation
 //
-// 18.04.01, G.Cosmo - Migrated to STL vector
-// 12.07.95, P.Kent - Initial version
+// Author: Paul Kent (CERN), 12.07.1995 - Initial version
+//         Gabriele Cosmo (CERN), 18.04.2001 - Migrated to STL vector
 // --------------------------------------------------------------------
 
 #include "G4SmartVoxelNode.hh"

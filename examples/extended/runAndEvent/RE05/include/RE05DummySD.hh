@@ -23,10 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file RE05/include/RE05DummySD.hh
+/// \file RE05DummySD.hh
 /// \brief Definition of the RE05DummySD class
-//
 
 // Dummy sensitive used only to flag sensitivity
 // in cells of RO geometry.

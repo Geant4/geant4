@@ -23,12 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file parallel/ThreadsafeScorers/include/TSActionInitialization.hh
+/// \file TSActionInitialization.hh
 /// \brief Definition of the TSActionInitialization class
-//
-//
-//
-//
+///
 /// Standard ActionInitialization class creating a RunAction instance for the
 ///     master thread and RunAction and PrimaryGeneratorAction instances for
 ///     the worker threads

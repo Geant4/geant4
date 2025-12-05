@@ -48,6 +48,7 @@ namespace LUPI {
 #define GNDS_formatVersion_1_10Chars "1.10"
 #define GNDS_formatVersion_2_0Chars "2.0"
 #define GNDS_formatVersion_2_0_LLNL_4Chars "2.0.LLNL_4"
+#define GNDS_formatVersion_2_1Chars "2.1"
 
 void deprecatedFunction( std::string const &a_functionName, std::string const &a_replacementName, std::string const &a_asOf );
 
@@ -115,7 +116,7 @@ class StatusMessageReporting {
         bool isError( ) { return( smr_isError( &m_smr ) ); }
         void clear( ) { smr_release( &m_smr ); }
         std::string constructMessage( std::string a_prefix, int a_reports = 1, bool a_clear = false );
-        std::string constructFullMessage( std::string a_prefix, int a_reports = 1, bool a_clear = false );
+        std::string constructFullMessage( std::string const &a_prefix, int a_reports = 1, bool a_clear = false );
 };
 
 /*
@@ -190,7 +191,7 @@ class ArgumentBase {
         std::string m_descriptor;                           /**< The desciption printed help. */
         int m_minimumNeeded;                                /**< Minimum number of times *this* argument is required on the command line. */
         int m_maximumNeeded;                                /**< Maximum number of times *this* argument is required on the command line. */
-        int m_counts;                                       /**< The number of time this argument was entered on the command line. */
+        std::size_t m_counts;                               /**< The number of time this argument was entered on the command line. */
         std::vector<std::string> m_values;                  /**< list of values entered for this argument. Only used for types Store, Append and Positional. */
 
         void addAlias( std::string const &a_name );                         /**< Adds the alias *a_name* to *this*. */
@@ -210,7 +211,7 @@ class ArgumentBase {
         std::string const &descriptor( ) const { return( m_descriptor ); }
         int minimumNeeded( ) const { return( m_minimumNeeded ); }
         int maximumNeeded( ) const { return( m_maximumNeeded ); }
-        int counts( ) const { return( m_counts ); }
+        std::size_t counts( ) const { return( m_counts ); }
 
         virtual std::string const &value( std::size_t a_index = 0 ) const ;
         std::vector<std::string> const &values( ) const { return( m_values ); }
@@ -430,8 +431,11 @@ namespace Misc {
 std::string stripString( std::string const &a_string, bool a_left = true, bool a_right = true );
 std::vector<std::string> splitString( std::string const &a_string, char a_delimiter, bool a_strip = false );
 std::vector<std::string> splitString( std::string const &a_string, std::string const &a_delimiter, bool a_strip = false );
+std::string joinStrings( std::string const &a_sep, std::vector<std::string> a_strings );
+std::string replaceString( std::string const &a_string, std::string const &a_old, std::string const &a_new, bool a_all );
 std::vector<std::string> splitXLinkString( std::string const &a_string );
 bool stringToInt( std::string const &a_string, int &a_value );
+bool stringToSize_t( std::string const &a_string, std::size_t &a_value );
 
 std::string argumentsToString( char const *a_format, ... );
 std::string doubleToString3( char const *a_format, double a_value, bool a_reduceBits = false );

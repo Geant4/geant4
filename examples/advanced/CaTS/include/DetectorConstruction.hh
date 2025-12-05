@@ -23,47 +23,86 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// CaTS (Calorimetry and Tracking Simulation)
 //
+// Authors: Hans Wenzel and Soon Yung Jun
+//          (Fermi National Accelerator Laboratory)
+//
+// History: October 18th, 2021 : first implementation
+//
+// ********************************************************************
 
-// ********************************************************************
-//
-//  CaTS (Calorimetry and Tracking Simulation)
-//
-//  Authors : Hans Wenzel
-//            Soon Yung Jun
-//            (Fermi National Accelerator Laboratory)
-//
-// History
-//   October 18th, 2021 : first implementation
-//
-// ********************************************************************
-//
 /// \file DetectorConstruction.hh
 /// \brief Definition of the CaTS::DetectorConstruction class
 
 #pragma once
 
+#include "G4String.hh"
+#include "G4VSensitiveDetector.hh"
 #include "G4VUserDetectorConstruction.hh"
-#include <G4String.hh>
-class G4VPhysicalVolume;
+
+#include "TrackerSD.hh"
+#include "MscSD.hh"
+#include "lArTPCSD.hh"
+#include "CalorimeterSD.hh"
+#include "DRCalorimeterSD.hh"
+#include "RadiatorSD.hh"
+#include "PhotonSD.hh"
+#include "InteractionSD.hh"
+
+#include <memory>
+#include <string>
+#include <unordered_map>
+
 class ColorReader;
 class G4GDMLParser;
+class G4VPhysicalVolume;
 
 class DetectorConstruction final : public G4VUserDetectorConstruction
 {
  public:
-  DetectorConstruction(G4String fname);
-  ~DetectorConstruction() final;
+  explicit DetectorConstruction(G4String fname);
+  ~DetectorConstruction() final {};
   DetectorConstruction& operator=(const DetectorConstruction& right) = delete;
-  DetectorConstruction(const DetectorConstruction&)                  = delete;
-  void ReadGDML();
+  DetectorConstruction(const DetectorConstruction&) = delete;
+
   G4VPhysicalVolume* Construct() final;
   void ConstructSDandField() final;
-  void UpdateGeometry();
 
  private:
+  void ReadGDML();
+  void UpdateGeometry();
+
+  // The map of sensitive detectors
+  using SDMap = std::unordered_map<std::string,
+    std::function<std::unique_ptr<G4VSensitiveDetector>(const G4String&)>>;
+
+  inline const SDMap& GetSDMap()
+  {
+    static const SDMap sdMap = {
+      {"PhotonDetector", [](const G4String& name)
+        { return std::make_unique<PhotonSD>(name); }},
+      {"Target", [](const G4String& name)
+        { return std::make_unique<InteractionSD>(name); }},
+      {"Tracker", [](const G4String& name)
+        { return std::make_unique<TrackerSD>(name); }},
+      {"Msc", [](const G4String& name)
+        { return std::make_unique<MscSD>(name); }},
+      {"lArTPC", [](const G4String& name)
+        { return std::make_unique<lArTPCSD>(name); }},
+      {"Radiator", [](const G4String& name)
+        { return std::make_unique<RadiatorSD>(name); }},
+      {"Calorimeter", [](const G4String& name)
+        { return std::make_unique<CalorimeterSD>(name); }},
+      {"DRCalorimeter", [](const G4String& name)
+        { return std::make_unique<DRCalorimeterSD>(name); }}
+    };
+    return sdMap;
+  }
+
+private:
+  G4bool verbose{ false };
   G4String gdmlFile;
   G4GDMLParser* parser{ nullptr };
   ColorReader* fReader{ nullptr };
-  G4bool verbose{ false };
 };

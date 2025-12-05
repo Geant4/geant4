@@ -23,75 +23,62 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file medical/dna/range/include/DetectorConstruction.hh
+/// \file DetectorConstruction.hh
 /// \brief Definition of the DetectorConstruction class
-//
-// $Id: DetectorConstruction.hh 78723 2014-01-20 10:32:17Z gcosmo $
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef DetectorConstruction_h
 #define DetectorConstruction_h 1
 
 #include "G4LogicalVolume.hh"
 #include "G4VUserDetectorConstruction.hh"
-#include "globals.hh"
-
+#include "DetectorMessenger.hh"
+#include <memory>
 class G4VPhysicalVolume;
 class G4Material;
 class G4MultiFunctionalDetector;
-class DetectorMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class DetectorConstruction : public G4VUserDetectorConstruction
-{
-  public:
-    DetectorConstruction();
-    ~DetectorConstruction();
-
-  public:
-    void SetNReplicaR(G4int);
-    void SetNReplicaAzm(G4int);
-    void SetAbsRadius(G4double);
-    void SetAbsMaterial(G4String);
-    void SetNPRadius(G4double);
-    void SetNPMaterial(G4String);
-    void SetTrackingCut(G4double);
-    virtual G4VPhysicalVolume* Construct();
-
-    inline G4double GetNReplicaR() const { return fNreplicaR; }
-    inline G4double GetNReplicaAzm() const { return fNreplicaAzm; }
-    inline G4double GetAbsRadius() const { return fAbsRadius; }
-    inline G4double GetNPRadius() const { return fNPRadius; }
-    inline G4Material* GetNPMaterial() const { return fNPMaterial; }
-    inline G4double GetTrackingCut() const { return fTrackingCut; }
-    inline G4double GetNPMass() const { return fLogicalNP->GetMass(); }
-
-    inline G4MultiFunctionalDetector* GetMFDetector() const { return fMFD; }
-    void PrintParameters() const;
-    G4Region* GetTargetRegion() { return fRegion; }
-
-  private:
-    void DefineMaterials();
-    G4VPhysicalVolume* ConstructVolumes();
-
-    G4int fNreplicaR;
-    G4int fNreplicaAzm;
-    G4double fTrackingCut;
-    G4double fNPRadius;
-    G4double fAbsRadius;
-    G4Material* fNPMaterial;
-    G4Material* fAbsMaterial;
-    G4VPhysicalVolume* pWorld;
-    G4VPhysicalVolume* fNP;
-    G4VPhysicalVolume* fAbs;
-    G4LogicalVolume* fLogicalNP;
-    G4LogicalVolume* fLogicalAbs;
-    DetectorMessenger* fDetectorMessenger;
-    G4MultiFunctionalDetector* fMFD;
-    G4Region* fRegion;
+class DetectorConstruction final : public G4VUserDetectorConstruction {
+public:
+  DetectorConstruction();
+  ~DetectorConstruction() override = default;
+  void SetNReplicaR(G4int);
+  void SetNReplicaAzm(G4int);
+  void SetAbsRadius(G4double);
+  void SetAbsMaterial(const G4String&);
+  void SetNPRadius(G4double);
+  void SetNPMaterial(const G4String&);
+  void SetTrackingCut(G4double);
+  G4VPhysicalVolume *Construct() override;
+  G4double GetNReplicaR() const { return fNreplicaR; }
+  G4double GetNReplicaAzm() const { return fNreplicaAzm; }
+  G4double GetAbsRadius() const { return fAbsRadius; }
+  G4double GetNPRadius() const { return fNPRadius; }
+  G4Material *GetNPMaterial() const { return fNPMaterial; }
+  G4double GetTrackingCut() const { return fTrackingCut; }
+  G4double GetNPMass() const { return fLogicalNP->GetMass(); }
+  G4MultiFunctionalDetector *GetMFDetector() const { return fMFD; }
+  void PrintParameters() const;
+  G4Region *GetTargetRegion() const { return fRegion;}
+private:
+  static void DefineMaterials();
+  G4VPhysicalVolume *ConstructVolumes();
+  G4int fNreplicaR = 1000;
+  G4int fNreplicaAzm = 360;
+  G4double fTrackingCut = 10.0 * CLHEP::eV; // default tracking cut
+  G4double fNPRadius = 50 * CLHEP::nm;
+  G4double fAbsRadius = 100000 * CLHEP::nm + fNPRadius;
+  G4Material *fNPMaterial = nullptr;
+  G4Material *fAbsMaterial = nullptr;
+  G4VPhysicalVolume *pWorld = nullptr;
+  G4VPhysicalVolume *fNP = nullptr;
+  G4VPhysicalVolume *fAbs = nullptr;
+  G4LogicalVolume *fLogicalNP = nullptr;
+  G4LogicalVolume *fLogicalAbs = nullptr;
+  std::unique_ptr<DetectorMessenger> fDetectorMessenger;
+  G4MultiFunctionalDetector *fMFD = nullptr;
+  G4Region *fRegion = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -13,8 +13,6 @@
 
 namespace PoPI {
 
-#define PoPI_chemicalElementChars "chemicalElement"
-#define PoPI_isotopesChars "isotopes"
 #define PoPI_Z_Chars "Z"
 
 static std::string emptyString( "" );
@@ -92,11 +90,11 @@ void ChemicalElement::toXMLList( std::vector<std::string> &a_XMLList, std::strin
     if( size == 0 ) return;
 
     std::string header = a_indent1 + "<chemicalElement symbol=\"" + symbol( ) + "\" Z=\"" + ZStr + "\" name=\"" + m_name + "\">";
-    a_XMLList.push_back( header );
+    a_XMLList.push_back( std::move( header ) );
 
     std::string indent2 = a_indent1 + "  ";
     std::string isotopeSuite = indent2 + "<" + PoPI_isotopesChars + ">";
-    a_XMLList.push_back( isotopeSuite );
+    a_XMLList.push_back( std::move( isotopeSuite ) );
 
     std::string indent3 = indent2 + "  ";
     for( std::string::size_type i1 = 0; i1 < size; ++i1 ) m_isotopes[i1].toXMLList( a_XMLList, indent3 );
@@ -966,7 +964,7 @@ std::string chemicalElementInfoFromZ( int a_Z, bool a_wantSymbol, bool a_asNucle
 
     if( a_wantSymbol && a_asNucleus ) {
         char c1[3];
-        c1[0] = tolower( info.c_str( )[0] );
+        c1[0] = static_cast<char>( tolower( info.c_str( )[0] ) );
         c1[1] = 0;
         c1[2] = 0;
         if( info.size( ) > 1 ) c1[1] = info.c_str( )[1];
@@ -1071,7 +1069,7 @@ ParseIdInfo::ParseIdInfo( std::string const &a_id ) :
     std::string symbolCap;
     if( symbol.size( ) > 0 ) {
         char firstChar[2];
-        firstChar[0] = std::toupper( symbol[0] );
+        firstChar[0] = static_cast<char>( std::toupper( symbol[0] ) );
         firstChar[1] = 0;
         std::string firstStringChar( firstChar );
         symbolCap = firstStringChar + symbol.substr( 1 );
@@ -1105,7 +1103,7 @@ ParseIdInfo::ParseIdInfo( std::string const &a_id ) :
     else if( symbol.size( ) > 0 ) {
         m_Z = Z_FromChemicalElementSymbol( symbolCap );
         if( m_Z > 0 ) {
-            m_symbol = symbolCap;
+            m_symbol = std::move( symbolCap );
             m_isChemicalElement = true;
             m_isSupported = true;
         }

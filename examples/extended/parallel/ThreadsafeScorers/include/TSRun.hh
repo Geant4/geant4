@@ -23,12 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file parallel/ThreadsafeScorers/include/TSRun.hh
+/// \file TSRun.hh
 /// \brief Definition of the TSRun class
-//
-//
-//
-//
+///
 /// TSRun contains three collections of hits maps: a thread-local hits map,
 ///     a global atomic hits map (implemented as a static since TSRun is
 ///     implemented as a thread-local instance), and a global "mutex" hits map
@@ -42,6 +39,7 @@
 ///     for instance); (2) It does not need to, nor should be, summed in
 ///     G4Run::Merge(); and (3) destruction -- it should only be cleared by
 ///     the master thread since there is only one instance.
+///
 /// A "mutex" hits map is also included as reference for checking the results
 ///     accumulated by the thread-local hits maps and atomic hits maps. The
 ///     differences w.r.t. this hits maps are computed in

@@ -45,48 +45,19 @@
 
 #include "globals.hh"
 
-#include "G4VPhysicsConstructor.hh"
+#include "G4HadronPhysicsQGSP_BERT.hh"
 
-class G4HadronPhysicsQGSP_BIC : public G4VPhysicsConstructor
+class G4HadronPhysicsQGSP_BIC : public G4HadronPhysicsQGSP_BERT
 {
   public: 
-    G4HadronPhysicsQGSP_BIC(G4int verbose =1);
-    G4HadronPhysicsQGSP_BIC(const G4String& name,G4bool quasiElastic=true);
-    virtual ~G4HadronPhysicsQGSP_BIC();
-
-    void ConstructParticle() override;
-    void ConstructProcess() override;
+    G4HadronPhysicsQGSP_BIC(G4int verbose = 1);
+    G4HadronPhysicsQGSP_BIC(const G4String& name, G4bool quasiElastic = true);
+    ~G4HadronPhysicsQGSP_BIC() override = default;
 
     // copy constructor and hide assignment operator
     G4HadronPhysicsQGSP_BIC(G4HadronPhysicsQGSP_BIC &) = delete;
     G4HadronPhysicsQGSP_BIC & operator =
     (const G4HadronPhysicsQGSP_BIC &right) = delete;
-
-  protected:
-    void CreateModels();
-    virtual void Neutron();
-    virtual void Proton();
-    virtual void Pion();
-    virtual void Others();
-    virtual void DumpBanner() {}
-    
-    G4double minQGSP_neutron;
-    G4double minQGSP_proton;
-    G4double minQGSP_pik;
-    G4double maxFTFP_proton;
-    G4double maxFTFP_neutron;
-    G4double maxFTFP_pik;
-    G4double minFTFP_proton;
-    G4double minFTFP_neutron;
-    G4double minFTFP_pik;
-    G4double maxBIC_proton;
-    G4double minBIC_neutron;
-    G4double minBIC_proton;
-    G4double maxBIC_neutron;
-    G4double maxBERT_pik;
-
-    G4bool QuasiElasticFTF;
-    G4bool QuasiElasticQGS;
 };
 
 #endif

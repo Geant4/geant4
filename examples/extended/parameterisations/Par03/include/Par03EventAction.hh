@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file Par03EventAction.hh
+/// \brief Definition of the Par03EventAction class
+
 #ifndef PAR03EVENTACTION_HH
 #define PAR03EVENTACTION_HH
 

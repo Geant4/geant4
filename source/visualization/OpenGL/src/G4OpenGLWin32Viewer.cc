@@ -130,15 +130,15 @@ void G4OpenGLWin32Viewer::CreateMainWindow (
   
   //FIXME : NOT tested !
   fWindow = ::CreateWindowEx(0, (PTSTR)className, (PTSTR)fName.c_str(),
-			   WS_OVERLAPPEDWINDOW,
-			   //WS_CHILD | WS_VISIBLE,
+               WS_OVERLAPPEDWINDOW,
+               //WS_CHILD | WS_VISIBLE,
                            //			   0,0,
                            fVP.GetWindowAbsoluteLocationHintX(x_res),
                            fVP.GetWindowAbsoluteLocationHintY(y_res),
-			   getWinWidth(), getWinHeight(),
-			   NULL, NULL, 
-			   ::GetModuleHandle(NULL),
-			   NULL);
+               getWinWidth(), getWinHeight(),
+               NULL, NULL, 
+               ::GetModuleHandle(NULL),
+               NULL);
   if(!fWindow) return;
 
   ::SetWindowLongPtr(fWindow,GWLP_USERDATA,LONG_PTR(this));
@@ -341,7 +341,6 @@ LRESULT CALLBACK G4OpenGLWin32Viewer::WindowProc(
       G4int delta = (short) HIWORD(aWParam);
 
       This->SetZoom(delta);
-
       This->SetView();
       This->ClearView();
       This->DrawView();
@@ -399,9 +398,9 @@ G4bool G4OpenGLWin32Viewer::SetWindowPixelFormat(
   if (pixelIndex==0) {
     pixelIndex = 1;	
     if (::DescribePixelFormat(aHdc, 
-			      pixelIndex, 
-			      sizeof(PIXELFORMATDESCRIPTOR), 
-			      &pfd)==0) {
+                  pixelIndex, 
+                  sizeof(PIXELFORMATDESCRIPTOR), 
+                  &pfd)==0) {
       return false;
     }
   }
@@ -476,18 +475,28 @@ void G4OpenGLWin32Viewer::SetRotation(
 }
 
 //////////////////////////////////////////////////////////////////////////////
-void G4OpenGLWin32Viewer::SetZoom(
- G4int delta
-)
+void G4OpenGLWin32Viewer::SetZoom(G4int delta)
 //////////////////////////////////////////////////////////////////////////////
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
 {
-    if (fVP.GetFieldHalfAngle() == 0.) {  // Orthographic projection
-        const G4double scale = 500;  // Empirically chosen
-        fVP.MultiplyZoomFactor(1. + delta/scale);
-    } else {                              // Perspective projection
-        const G4double scale = fVP.GetFieldHalfAngle()/(10.*deg);  // Empirical
-        fVP.SetDolly(fVP.GetDolly() + delta/scale);
-    }
+  POINT mousePos;
+  GetCursorPos(&mousePos);
+  ScreenToClient(fWindow, &mousePos);
+
+  ZoomFromMouseWheel(delta, GetKeyState(VK_SHIFT) & 0x8000, mousePos.x, mousePos.y);
+
 }
 
+G4bool G4OpenGLWin32Viewer::GetWindowSize(unsigned int& a_w, unsigned int& a_h)
+{
+  a_w = fWinSize_x;
+  a_h = fWinSize_y;
+  return true;
+}
+
+G4bool G4OpenGLWin32Viewer::GetRenderAreaSize(unsigned int& a_w, unsigned int& a_h)
+{
+  a_w = fWinSize_x;
+  a_h = fWinSize_y;
+  return true;
+}

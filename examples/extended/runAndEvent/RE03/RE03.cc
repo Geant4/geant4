@@ -23,17 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file runAndEvent/RE03/RE03.cc
+/// \file RE03.cc
 /// \brief Main program of the runAndEvent/RE03 example
-//
-//
-//
 
 #include "G4Types.hh"
 
 #include "G4RunManagerFactory.hh"
 #include "G4UImanager.hh"
 #include "G4ScoringManager.hh"
+#include "G4GeometryManager.hh"
 
 #include "RE03DetectorConstruction.hh"
 #include "FTFP_BERT.hh" 
@@ -59,6 +57,10 @@ int main(int argc,char** argv)
  //
  auto* runManager = G4RunManagerFactory::CreateRunManager();
  runManager->SetNumberOfThreads(4);
+
+ // Disable parallel geometry optimization for sub-event parallel mode
+ if(runManager->GetRunManagerType()==G4RunManager::subEventMasterRM)
+ { G4GeometryManager::GetInstance()->RequestParallelOptimisation(false); }
 
  // Activate UI-command base scorer
  G4ScoringManager * scManager = G4ScoringManager::GetScoringManager();

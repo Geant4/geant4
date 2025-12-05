@@ -6,6 +6,14 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2025-09-15 Gabriele Cosmo (geomdiv-V11-03-01)
+- Reorganised and enriched comments in headers to follow Doxygen style.
+- Removed unused data in G4VDivisionParameterisation.
+
+## 2025-08-21 Gabriele Cosmo (geomdiv-V11-03-00)
+- Applied clang-tidy fixes (readability-braces-around-statements,
+  readability-else-after-return).
+
 ## 2024-04-02 Gabriele Cosmo (geomdiv-V11-02-00)
 - Applied trivial clang-tidy fixes to G4PVDivisionFactory, i.e. use of default
   constructor/destructor.

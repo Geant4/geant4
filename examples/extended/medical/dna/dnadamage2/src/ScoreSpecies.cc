@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file ScoreSpecies.cc
+/// \brief Implementation of the ScoreSpecies class
+
 // This example is provided by the Geant4-DNA collaboration
 // dnadamage3 example is derived from the chem6 example
 // chem6 example authors: W. G. Shin and S. Incerti (CENBG, France)
@@ -39,8 +42,6 @@
 // Authors: J. Naoki D. Kondo (UCSF, US)
 //          J. Ramos-Mendez and B. Faddegon (UCSF, US)
 //
-/// \file ScoreSpecies.cc
-/// \brief Implementation of the ScoreSpecies class
 ///
 ///  This is a primitive scorer class for molecular species.
 ///  The number of species is recorded for all times (predetermined or

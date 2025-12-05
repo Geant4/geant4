@@ -13,21 +13,18 @@ public:
   :m_x_min(0),m_x_max(0)
   ,m_v_min(0),m_val(0)
   ,m_ratio(0)
-  //,fSeparator(0)
   {}
 
   rep_bin1D(float aXmin,float aXmax,float aVmin,float aVal)
   :m_x_min(aXmin),m_x_max(aXmax)
   ,m_v_min(aVmin),m_val(aVal)
   ,m_ratio(0)
-  //,fSeparator(0)
   {}
 public:
   rep_bin1D(const rep_bin1D& a_from)
   :m_x_min(a_from.m_x_min),m_x_max(a_from.m_x_max)
   ,m_v_min(a_from.m_v_min),m_val(a_from.m_val)
   ,m_ratio(a_from.m_ratio)
-  //,fSeparator(0)
   {}
   rep_bin1D& operator=(const rep_bin1D& a_from){
     m_x_min = a_from.m_x_min;
@@ -43,7 +40,6 @@ public:
   float m_v_min;
   float m_val;
   float m_ratio;
-  //SoSeparator* fSeparator;
 };
 
 class rep_bin2D {

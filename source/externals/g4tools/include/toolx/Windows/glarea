@@ -10,7 +10,6 @@
 
 #include <tools/sg/device_interactor>
 #include <tools/sg/keys>
-//#include <tools/log_file>
 
 #include <string>
 
@@ -76,8 +75,6 @@ public:
     register_class();
     RECT rect;
     ::GetClientRect(m_parent,&rect);
-    //printf("debug : glarea : ca : %d %d\n",rect.right-rect.left,rect.bottom-rect.top);
-    //toolx::log_file::get().writef("debug : glarea : ca : %d %d\n",rect.right-rect.left,rect.bottom-rect.top);
     m_hwnd = ::CreateWindow((PTSTR)s_class().c_str(),
                              NULL,
                              WS_CHILD | WS_VISIBLE,
@@ -101,7 +98,6 @@ public:
     if((digitizer_status & (0x80 + 0x40)) == 0) {
       m_touch_available = false;
     } else {
-      //BYTE nInputs = (BYTE)::GetSystemMetrics(SM_MAXIMUMTOUCHES);
       m_touch_available = true;
       if(!::RegisterTouchWindow(m_hwnd,0)) m_touch_available = false;
     }}
@@ -175,7 +171,6 @@ public:
   }
   void wm_paint() {
     PAINTSTRUCT ps;
-    //HDC hDC =
     BeginPaint(m_hwnd,&ps);
     if(m_HDC && m_context) {
       ::wglMakeCurrent(m_HDC,m_context);
@@ -184,9 +179,6 @@ public:
       ::GetClientRect(m_hwnd,&rect);
       unsigned int w = rect.right-rect.left;
       unsigned int h = rect.bottom-rect.top;
-
-      //printf("debug : glarea : paint : %d %d\n",w,h);
-      //toolx::log_file::get().writef("debug : glarea : paint : %d %d\n",w,h);
 
       paint(w,h);
 
@@ -318,12 +310,10 @@ protected:
       glarea* _this = (glarea*)::GetWindowLongPtr(a_hwnd,GWLP_USERDATA);
       if(_this && _this->m_touch_available) {
         RECT rect;
-        //::GetWindowRect(hwnd,&rect); ???
         ::GetClientRect(a_hwnd,&rect);
         unsigned int h = rect.bottom-rect.top;
 
         unsigned int num_inputs = (int)a_wparam;
-        //::printf("debug : WM_TOUCH : 001 : %d\n",num_inputs);
         TOUCHINPUT* ti = new TOUCHINPUT[num_inputs];
         POINT p;
         if(::GetTouchInputInfo((HTOUCHINPUT)a_lparam,num_inputs,ti,sizeof(TOUCHINPUT))) {
@@ -332,14 +322,11 @@ protected:
             p.y = TOUCH_COORD_TO_PIXEL(ti[i].y);
             if(!::ScreenToClient(a_hwnd,&p)) {}
             if(ti[i].dwFlags & TOUCHEVENTF_DOWN) {
-              //::printf("debug : TOUCHEVENTF_DOWN %lu %lu\n",p.x,p.y);
               _this->left_button_down(p.x,h-p.y);
             } else if (ti[i].dwFlags & TOUCHEVENTF_UP) {
-              //::printf("debug : TOUCHEVENTF_UP %lu %lu\n",p.x,p.y);
               _this->left_button_up(p.x,h-p.y);
             } else if (ti[i].dwFlags & TOUCHEVENTF_MOVE) {
               bool ldown = true; //we assume that a TOUCHEVENT_DOWN had been done.
-              //::printf("debug : TOUCHEVENTF_MOVE %lu %lu\n",p.x,p.y);
               _this->mouse_move(p.x,h-p.y,ldown);
             }
           }
@@ -407,7 +394,6 @@ protected:
     if(_this) { //How to be sure that we have a glarea* ???
       _this->close();
       if(_this->m_hwnd!=a_hwnd) {
-        //::printf("WinTk::Component::wm_destroy : HWND mismatch !\n");
       }
       _this->m_hwnd = 0;
     }

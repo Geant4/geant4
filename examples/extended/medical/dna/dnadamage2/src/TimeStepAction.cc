@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file TimeStepAction.cc
+/// \brief Implementation of the TimeStepAction class
+
 // This example is provided by the Geant4-DNA collaboration
 // dnadamage3 example is derived from the chem6 example
 // chem6 example authors: W. G. Shin and S. Incerti (CENBG, France)
@@ -40,8 +43,6 @@
 //          J. Ramos-Mendez and B. Faddegon (UCSF, US)
 //
 //
-/// \file TimeStepAction.hh
-/// \brief Implementation of the TimeStepAction class
 ///  Filtering of molecules by material at the beggining of the chemical stage
 
 #include "TimeStepAction.hh"

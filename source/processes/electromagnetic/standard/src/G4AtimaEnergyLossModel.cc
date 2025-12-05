@@ -268,17 +268,15 @@ G4double G4AtimaEnergyLossModel::ComputeDEDXPerVolume(const G4Material* material
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4AtimaEnergyLossModel::CorrectionsAlongStep(const G4MaterialCutsCouple* couple,
-                                                  const G4DynamicParticle* dp,
+void G4AtimaEnergyLossModel::CorrectionsAlongStep(const G4Material* mat,
+						  const G4ParticleDefinition* p,
+						  const G4double kinEnergy,
+						  const G4double cutEnergy,
                                                   const G4double& length,
                                                   G4double& eloss)
 {
-  if(isIon) {
-    const G4ParticleDefinition* p = dp->GetDefinition();
-    const G4Material* mat = couple->GetMaterial();
-    G4double cutEnergy = DBL_MAX;
-    G4double kineticEnergy = dp->GetKineticEnergy();
-    eloss = ComputeDEDXPerVolume(mat, p, kineticEnergy, cutEnergy)*length/(cm);
+  if (isIon) {
+    eloss = ComputeDEDXPerVolume(mat, p, kinEnergy, cutEnergy)*length/(cm);
   }
 }
 

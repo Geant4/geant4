@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file eventgenerator/pythia/pythia8decayer/src/DetConstruction.cc
+/// \file DetConstruction.cc
 /// \brief Implementation of the DetConstruction class
 ///
 /// \author J. Yarba; FNAL

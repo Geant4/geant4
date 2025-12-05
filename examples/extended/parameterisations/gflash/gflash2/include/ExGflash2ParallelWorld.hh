@@ -23,10 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 /// \file ExGflash2ParallelWorld.hh
 /// \brief Definition of the ExGflash2ParallelWorld class
-//
+
 #ifndef ExGflash2ParallelWorld_h
 #define ExGflash2ParallelWorld_h 1
 

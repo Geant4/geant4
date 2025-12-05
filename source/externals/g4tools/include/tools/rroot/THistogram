@@ -14,7 +14,6 @@
 namespace tools {
 namespace rroot {
 
-//typedef histo::histo_data<double,unsigned int,double> hd_data;
 typedef histo::profile_data<double,unsigned int,unsigned int,double,double> pd_data_t;
 typedef histo::axis<double,unsigned int> axis_t;
 typedef std::map<std::string,std::string> annotations_t;
@@ -602,7 +601,6 @@ inline bool read_annotations(buffer& a_buffer,annotations_t& a_annotations) {
     if(!a_buffer.read(value)) return false;
     bool sticky;
     if(!a_buffer.read(sticky)) return false;
-    //if(!a_annotations.addItem(key,value,sticky)) return false; //FIXME : handle sticky ?
     a_annotations[key] = value;
   }
   return true;
@@ -638,9 +636,6 @@ inline bool read_THistogram(buffer& a_buffer,pd_data_t& a_data,annotations_t& a_
   } else {
     return false;
   }
-
-  //data.m_coords.resize(data.m_dimension,0);
-  //data.m_ints.resize(data.m_dimension,0);
 
   a_data.update_fast_getters();
 

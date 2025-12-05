@@ -23,11 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file exoticphysics/ucn/src/ExUCNPhysicsList.cc
+/// \file ExUCNPhysicsList.cc
 /// \brief Implementation of the ExUCNPhysicsList class
-//
-//
+
 #include "ExUCNPhysicsList.hh"
 
 #include "ExUCNExtraPhysics.hh"

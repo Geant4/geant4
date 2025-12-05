@@ -23,10 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file medical/GammaTherapy/include/PhantomSD.hh
+/// \file PhantomSD.hh
 /// \brief Definition of the PhantomSD class
-//
+
 #ifndef PhantomSD_h
 #define PhantomSD_h 1
 

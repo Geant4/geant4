@@ -39,7 +39,7 @@
 // Author: Radovan Chytracek (CERN), November 2000
 // ----------------------------------------------------------------------
 #ifndef G4_ASSEMBLYTRIPLET_HH
-#define G4_ASSEMBLYTRIPLET_HH 1
+#define G4_ASSEMBLYTRIPLET_HH
 
 #include "G4ThreeVector.hh"
 #include "G4RotationMatrix.hh"

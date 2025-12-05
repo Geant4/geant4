@@ -25,7 +25,7 @@
 //
 // G4LogicalVolumeStore implementation
 //
-// 10.07.95, P.Kent, G.Cosmo
+// Authors: Gabriele Cosmo & Paul Kent (CERN), 10.07.1995 - Initial version
 // --------------------------------------------------------------------
 
 #include "G4Types.hh"

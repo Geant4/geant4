@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 /// \file Par02TrackingAction.cc
 /// \brief Implementation of the Par02TrackingAction class
 

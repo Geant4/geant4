@@ -45,6 +45,12 @@
 #include "HepPolyhedronProcessor.h"
 
 #include "G4IntersectionSolid.hh"
+#include "G4AutoLock.hh"
+
+namespace
+{
+  G4RecursiveMutex unionMutex = G4MUTEX_INITIALIZER;
+}
 
 //////////////////////////////////////////////////////////////////////////
 //
@@ -99,13 +105,6 @@ G4UnionSolid::G4UnionSolid( __void__& a )
 
 //////////////////////////////////////////////////////////////////////////
 //
-// Destructor
-
-G4UnionSolid::~G4UnionSolid()
-= default;
-
-//////////////////////////////////////////////////////////////////////////
-//
 // Copy constructor
 
 G4UnionSolid::G4UnionSolid(const G4UnionSolid& rhs)
@@ -113,7 +112,7 @@ G4UnionSolid::G4UnionSolid(const G4UnionSolid& rhs)
 {
   fPMin = rhs.fPMin;
   fPMax = rhs.fPMax;
-  halfCarTolerance=0.5*kCarTolerance;
+  halfCarTolerance = 0.5*kCarTolerance;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -148,7 +147,7 @@ void G4UnionSolid::Init()
   BoundingLimits(pmin, pmax);
   fPMin = pmin - pdelta;
   fPMax = pmax + pdelta;
-  halfCarTolerance=0.5*kCarTolerance;
+  halfCarTolerance = 0.5*kCarTolerance;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -256,10 +255,10 @@ G4UnionSolid::SurfaceNormal( const G4ThreeVector& p ) const
   EInside positionB = fPtrSolidB->Inside(p);
 
   if (positionA == kSurface &&
-      positionB == kOutside) return fPtrSolidA->SurfaceNormal(p);
+      positionB == kOutside) { return fPtrSolidA->SurfaceNormal(p); }
 
   if (positionA == kOutside &&
-      positionB == kSurface) return fPtrSolidB->SurfaceNormal(p);
+      positionB == kSurface) { return fPtrSolidB->SurfaceNormal(p); }
 
   if (positionA == kSurface &&
       positionB == kSurface)
@@ -337,7 +336,7 @@ G4UnionSolid::DistanceToIn( const G4ThreeVector& p ) const
   G4double distA = fPtrSolidA->DistanceToIn(p) ;
   G4double distB = fPtrSolidB->DistanceToIn(p) ;
   G4double safety = std::min(distA,distB) ;
-  if(safety < 0.0) safety = 0.0 ;
+  if(safety < 0.0) { safety = 0.0 ; }
   return safety ;
 }
 
@@ -506,6 +505,10 @@ G4UnionSolid::ComputeDimensions(       G4VPVParameterisation*,
                                  const G4int,
                                  const G4VPhysicalVolume* ) 
 {
+  DumpInfo();
+  G4Exception("G4UnionSolid::ComputeDimensions()",
+              "GeomSolids0001", FatalException,
+              "Method not applicable in this context!");
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -536,10 +539,7 @@ G4UnionSolid::CreatePolyhedron () const
     {
       return result;
     }
-    else
-    {
-      return nullptr;
-    }
+    return nullptr;
   }
   else
   {
@@ -557,6 +557,7 @@ G4double G4UnionSolid::GetCubicVolume()
   {
     return fCubicVolume;
   }
+  G4RecursiveAutoLock l(&unionMutex);
   G4ThreeVector bminA, bmaxA, bminB, bmaxB;
   fPtrSolidA->BoundingLimits(bminA, bmaxA);
   fPtrSolidB->BoundingLimits(bminB, bmaxB);
@@ -585,5 +586,6 @@ G4double G4UnionSolid::GetCubicVolume()
         - intersectVol.GetCubicVolume();
     }
   }
+  l.unlock();
   return fCubicVolume;
 }

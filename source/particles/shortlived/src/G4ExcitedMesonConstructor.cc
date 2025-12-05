@@ -31,6 +31,8 @@
 //    01 Oct. 02 Fixed PDG codes for a0(1450), f0(1370), k0_star(1430)
 //
 //    Update mass and width following PDG 2023 5 Nov. 2023 S.Okada
+//    Update mass and width for excited messons following PDG 2025
+//                                             4 Nov. 2025 S.Okada
 
 #include "G4ExcitedMesonConstructor.hh"
 
@@ -1370,16 +1372,16 @@ const char* G4ExcitedMesonConstructor::name[G4ExcitedMesonConstructor::NMultiple
 
 const G4double G4ExcitedMesonConstructor::mass[G4ExcitedMesonConstructor::NMultiplets ][ G4ExcitedMesonConstructor::NMesonTypes ] =
 {
-  {  1.2295*GeV, 1.166*GeV, 1.409*GeV, 1.253*GeV,  1.253*GeV },
-  {   1.439*GeV, 1.350*GeV,       0.0, 1.425*GeV,  1.425*GeV },
-  {   1.230*GeV,1.2819*GeV,1.4263*GeV, 1.403*GeV,  1.403*GeV },
-  {  1.3182*GeV,1.2750*GeV,1.5174*GeV,1.4273*GeV, 1.4273*GeV },
-  {  1.6706*GeV, 1.617*GeV, 1.842*GeV, 1.773*GeV,  1.773*GeV },
-  {   1.729*GeV, 1.670*GeV,       0.0, 1.718*GeV,  1.718*GeV },
-  {  1.6888*GeV, 1.667*GeV, 1.854*GeV, 1.779*GeV,  1.779*GeV },
-  {   1.300*GeV, 1.294*GeV, 1.475*GeV, 1.482*GeV,  1.482*GeV },
-  {   1.465*GeV, 1.410*GeV, 1.680*GeV, 1.414*GeV,  1.414*GeV },
-  {         0.0, 1.815*GeV, 2.011*GeV, 1.994*GeV,  1.994*GeV }
+  {  1.2295*GeV,  1.166*GeV, 1.4091*GeV, 1.2531*GeV, 1.2531*GeV },
+  {  1.4387*GeV,  1.350*GeV,        0.0,  1.425*GeV,  1.425*GeV },
+  {   1.230*GeV, 1.2818*GeV, 1.4025*GeV,  1.403*GeV,  1.403*GeV },
+  {  1.3182*GeV, 1.2754*GeV, 1.5173*GeV, 1.4324*GeV, 1.4324*GeV },
+  {  1.6706*GeV, 1.6173*GeV, 1.8417*GeV,  1.773*GeV,  1.773*GeV },
+  {   1.720*GeV,  1.670*GeV,        0.0, 1.7176*GeV, 1.7176*GeV },
+  {  1.6888*GeV, 1.6672*GeV, 1.8543*GeV, 1.7789*GeV, 1.7789*GeV },
+  {   1.300*GeV, 1.2937*GeV, 1.4755*GeV,  1.482*GeV,  1.482*GeV },
+  {   1.465*GeV,  1.410*GeV,  1.680*GeV, 1.4137*GeV, 1.4137*GeV },
+  {         0.0, 1.8149*GeV,  2.011*GeV, 1.9945*GeV, 1.9945*GeV }
 };
 
 const G4double  G4ExcitedMesonConstructor::massKdiff[ G4ExcitedMesonConstructor::NMultiplets ] = {
@@ -1394,16 +1396,16 @@ const G4double  G4ExcitedMesonConstructor::widthKdiff[ G4ExcitedMesonConstructor
 
 const G4double G4ExcitedMesonConstructor::width[G4ExcitedMesonConstructor::NMultiplets ][ G4ExcitedMesonConstructor::NMesonTypes ] =
 {
-  {  142.0*MeV, 375.0*MeV,  78.0*MeV,  90.0*MeV,  90.0*MeV },
+  {  142.4*MeV, 375.0*MeV,  78.0*MeV,  90.0*MeV,  90.0*MeV },
   {  258.0*MeV, 350.0*MeV,       0.0, 270.0*MeV, 270.0*MeV },
-  {  420.0*MeV,  22.7*MeV,  54.5*MeV, 174.0*MeV, 174.0*MeV },
-  {  107.0*MeV, 186.6*MeV,  86.0*MeV, 100.0*MeV, 100.0*MeV },
-  {  258.0*MeV, 181.0*MeV, 225.0*MeV, 186.0*MeV, 186.0*MeV },
-  {  250.0*MeV, 315.0*MeV,       0.0, 322.0*MeV, 322.0*MeV },
-  {  161.0*MeV, 168.0*MeV,  87.0*MeV, 161.0*MeV, 161.0*MeV },
-  {  400.0*MeV,  55.0*MeV,  90.0*MeV, 335.0*MeV, 335.0*MeV },
-  {  400.0*MeV, 290.0*MeV, 150.0*MeV, 232.0*MeV, 232.0*MeV },
-  {        0.0, 197.0*MeV, 202.0*MeV, 348.0*MeV, 348.0*MeV }
+  {  425.0*MeV,  23.0*MeV, 173.9*MeV, 174.0*MeV, 174.0*MeV },
+  {  107.0*MeV, 186.6*MeV,  71.9*MeV, 108.9*MeV, 108.9*MeV },
+  {  257.5*MeV, 180.9*MeV, 225.2*MeV, 186.1*MeV, 186.1*MeV },
+  {  250.0*MeV, 315.0*MeV,       0.0, 322.4*MeV, 322.4*MeV },
+  {  160.5*MeV, 167.5*MeV,  86.8*MeV, 161.2*MeV, 161.2*MeV },
+  {  400.0*MeV,  55.3*MeV,  95.7*MeV, 335.0*MeV, 335.0*MeV },
+  {  400.0*MeV, 290.0*MeV, 150.0*MeV, 231.8*MeV, 231.8*MeV },
+  {        0.0, 197.4*MeV, 202.0*MeV, 348.0*MeV, 348.0*MeV }
 };
 
 

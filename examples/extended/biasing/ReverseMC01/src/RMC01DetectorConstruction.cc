@@ -23,11 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file biasing/ReverseMC01/src/RMC01DetectorConstruction.cc
+/// \file RMC01DetectorConstruction.cc
 /// \brief Implementation of the RMC01DetectorConstruction class
-//
-//
-//////////////////////////////////////////////////////////////
+
 //      Class Name:        RMC01DetectorConstruction
 //        Author:               L. Desorgher
 //         Organisation:         SpaceIT GmbH
@@ -60,6 +58,8 @@
 #include "G4Tubs.hh"
 #include "G4VisAttributes.hh"
 
+#include "G4StateManager.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RMC01DetectorConstruction::RMC01DetectorConstruction()
@@ -76,7 +76,7 @@ RMC01DetectorConstruction::RMC01DetectorConstruction()
 
 RMC01DetectorConstruction::~RMC01DetectorConstruction()
 {
-  delete fDetectorMessenger;
+  if (fDetectorMessenger) delete fDetectorMessenger;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -85,6 +85,22 @@ G4VPhysicalVolume* RMC01DetectorConstruction::Construct()
 {
   DefineMaterials();
   return ConstructSimpleGeometry();
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void RMC01DetectorConstruction::ConstructSDandField()
+{
+
+  G4SDManager::GetSDMpointer()->SetVerboseLevel(1);
+
+  RMC01SD *theSensitiveDetector = new RMC01SD("/SensitiveCylinder");
+
+  G4SDManager::GetSDMpointer()->AddNewDetector(theSensitiveDetector);
+  //logicDetectingCylinder->SetSensitiveDetector(theSensitiveDetector);
+  SetSensitiveDetector("SensitiveVolume", theSensitiveDetector);
+
+  G4SDManager::GetSDMpointer()->SetVerboseLevel(0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -205,12 +221,7 @@ G4VPhysicalVolume* RMC01DetectorConstruction::ConstructSimpleGeometry()
                     false,  // no boolean operation
                     0);
 
-  RMC01SD* theSensitiveDetector = new RMC01SD("/SensitiveCylinder");
-
-  G4SDManager::GetSDMpointer()->AddNewDetector(theSensitiveDetector);
-  logicDetectingCylinder->SetSensitiveDetector(theSensitiveDetector);
-
-  // Tantalum Plates on the top and beside
+   // Tantalum Plates on the top and beside
   //-------------------------------------
   G4Box* solidPlate = new G4Box("TantalumPlate", 4. * cm, 4. * cm, 0.25 * mm);
   G4LogicalVolume* logicPlate =
@@ -240,8 +251,8 @@ G4VPhysicalVolume* RMC01DetectorConstruction::ConstructSimpleGeometry()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RMC01DetectorConstruction::SetSensitiveVolumeRadius(G4double r)
-{
-  fSensitive_cylinder_Rout = r;
+{  fSensitive_cylinder_Rout=r;
+UpdateGeometry();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -249,13 +260,27 @@ void RMC01DetectorConstruction::SetSensitiveVolumeRadius(G4double r)
 void RMC01DetectorConstruction::SetSensitiveVolumeHeight(G4double h)
 {
   fSensitive_cylinder_H = h;
+  UpdateGeometry();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RMC01DetectorConstruction::SetShieldingThickness(G4double d)
+{ fShield_Thickness=d;
+  UpdateGeometry();
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void RMC01DetectorConstruction::UpdateGeometry()
 {
-  fShield_Thickness = d;
+  G4RunManager* runManager = G4RunManager::GetRunManager();
+   if ( G4StateManager::GetStateManager()->GetCurrentState() != G4State_PreInit ) {
+//      delete G4SDManager::GetSDMpointer()->FindSensitiveDetector("SensitiveVolume");
+      runManager->DefineWorldVolume(ConstructSimpleGeometry());
+//      runManager->DefineWorldVolume(Construct());
+      runManager->ReinitializeGeometry();
+   }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file exampleVecGeomNav.cc
+/// \brief Main program of the geometry/vecGeomNavigation example
+
 //  Author: J. Apostolakis, S. Wenzel,  2018-2021
 //
 //  Started from FullCMS Geant4 application by Mihaly Novak  (2017)

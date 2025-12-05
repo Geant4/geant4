@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file B4/B4b/include/RunData.hh
+/// \file RunData.hh
 /// \brief Definition of the B4b::RunData class
 
 #ifndef B4bRunData_h

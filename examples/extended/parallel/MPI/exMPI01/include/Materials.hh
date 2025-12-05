@@ -23,9 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// @file Materials.hh
-/// @brief Define materials
+/// \file Materials.hh
+/// \brief Definition of the Materials class
+///
+/// Define materials
 
 #ifndef MATERIALS_H
 #define MATERIALS_H

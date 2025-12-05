@@ -34,12 +34,17 @@
 //
 // Adapted from G4Mag_UsualEqRhs.
 //
-// Created: Josh Xie, Google Summer of Code 2014
+// Author: Josh Xie (CERN, Google Summer of Code 2014), June 2014
+// Supervisors:  Sandro Wenzel, John Apostolakis (CERN)
 // --------------------------------------------------------------------
 #ifndef G4TMAGFIELD_EQUATION_HH
 #define G4TMAGFIELD_EQUATION_HH
 
 #include "G4Mag_UsualEqRhs.hh"
+
+/**
+ * @brief G4TMagFieldEquation is a templated version of G4MagFieldEquation.
+ */
 
 template <class T_Field>
 class G4TMagFieldEquation : public G4Mag_UsualEqRhs

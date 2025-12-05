@@ -22,39 +22,47 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
+//
+// G4FieldParameters
+//
+// Class description:
+//
+// The class defines the type of equation of motion of a particle
+// in a field and the integration method, as well as other accuracy
+// parameters.
+//
+// The default values correspond to the defaults set in Geant4.
 
-/// \file G4FieldParameters.hh
-/// \brief Definition of the G4FieldParameters class
-///
-/// This code was initially developed in Geant4 VMC package
-/// (https://github.com/vmc-project)
-/// and adapted to Geant4.
-///
-/// \author I. Hrivnacova; IJCLab, Orsay
-
+// Author: Ivana Hrivnacova (IJCLab, Orsay), 2024.
+// -------------------------------------------------------------------
 #ifndef G4FIELDPARAMETERS_HH
 #define G4FIELDPARAMETERS_HH
 
-#include "G4MagneticField.hh"
 #include "globals.hh"
 
 #include <CLHEP/Units/SystemOfUnits.h>
 
 class G4FieldParametersMessenger;
-
 class G4EquationOfMotion;
 class G4MagIntegratorStepper;
 
-/// The available fields in Geant4
+/**
+ * @brief G4FieldType defines the available fields in Geant4.
+ */
+
 enum G4FieldType
 {
-  kMagnetic,        ///< magnetic field
-  kElectroMagnetic, ///< electromagnetic field
-  kGravity          ///< gravity field
+  kMagnetic,           ///< magnetic field
+  kElectroMagnetic,    ///< electromagnetic field
+  kGravity,            ///< gravity field
+  kUserFieldType       ///< User defined field type
 };
 
-/// The available equations of motion of a particle in a field
-/// in Geant4
+/**
+ * @brief G4EquationType defines the types of equations of motion of a
+ * particle in a field in Geant4.
+ */
+
 enum G4EquationType
 {
   kEqMagnetic,        ///< G4Mag_UsualEqRhs: the standard right-hand side for
@@ -70,11 +78,22 @@ enum G4EquationType
   kEqEMfieldWithEDM,  ///< G4EqEMFieldWithEDM: Equation of motion in a combined
                       ///< electric and magnetic field, with spin tracking for
                       ///< both MDM and EDM terms
+  kEqGravity,         ///< G4EqGravityField: equation of motion in a gravity field
+                      ///  (not build by G4FieldBuilder)
+  kEqMonopole,        ///< G4MonopoleEq: the right-hand side of equation of motion for monopole
+                      ///  in a combined electric and magnetic field
+                      ///  (not build by G4FieldBuilder)
+  kEqReplate,         ///< G4RepleteEofM: equation of motion in a combined field, including:
+                      ///  magnetic, electric, gravity, and gradient B field, as well as spin tracking
+                      ///  (not build by G4FieldBuilder)
   kUserEquation       ///< User defined equation of motion
 };
 
-/// The available integrator of particle's equation of motion
-/// in Geant4
+/**
+ * @brief G4StepperType defines the available integrator of particle's
+ * equation of motion in Geant4.
+ */
+
 enum G4StepperType
 {
   // steppers with equation of motion of generic type (G4EquationOfMotion)
@@ -82,6 +101,7 @@ enum G4StepperType
   kClassicalRK4,      ///< G4ClassicalRK4
   kBogackiShampine23, ///< G4BogackiShampine23
   kBogackiShampine45, ///< G4BogackiShampine45
+  kDoLoMcPriRK34,     ///< G4DoLoMcPriRK34
   kDormandPrince745,  ///< G4DormandPrince745
   kDormandPrinceRK56, ///< G4DormandPrinceRK56
   kDormandPrinceRK78, ///< G4DormandPrinceRK78
@@ -104,310 +124,281 @@ enum G4StepperType
   kUserStepper,        ///< User defined stepper
 
   // FSAL steppers
-  kRK547FEq1, ///< G4RK547FEq1
-  kRK547FEq2, ///< G4RK547FEq2
-  kRK547FEq3  ///< G4RK547FEq3
+  kRK547FEq1,          ///< G4RK547FEq1
+  kRK547FEq2,          ///< G4RK547FEq2
+  kRK547FEq3,          ///< G4RK547FEq3
+
+  // Templated steppers (not build by G4FieldBuilder)
+  kTCashKarpRKF45,     ///< G4TCashKarpRKF45
+  kTDormandPrince45,   ///< G4TDormandPrince45
+  kTMagErrorStepper,   ///< G4TMagErrorStepper
+  kQSStepper           ///< G4QSStepper
 };
 
-/// \brief The magnetic field parameters
-///
-/// The class defines the type of equation of motion of a particle
-/// in a field and the integration method, as well as other accuracy
-/// parameters.
-///
-/// The default values correspond to the defaults set in Geant4
-/// (taken from Geant4 9.3 release.)
-/// As Geant4 classes to not provide access methods for these defaults,
-/// the defaults have to be checked with each new Geant4 release.
-///
-/// \author I. Hrivnacova; IJCLab, Orsay
+/**
+ * @brief G4FieldDefaults defines the magnetic field parameters defaults.
+ * The namespace defines the default values of the field paraments as constexpr
+ * so that they can be used also as the default values in the magnetic field
+ * classes constructors and other member functions.
+ */
+
+namespace G4FieldDefaults
+{
+  /// Default minimum step in G4ChordFinder
+  constexpr G4double kMinimumStep  = 0.01 * CLHEP::mm;
+  /// Default delta chord in G4ChordFinder
+  constexpr G4double kDeltaChord = 0.25 * CLHEP::mm;
+  /// Default delta one step in global field manager
+  constexpr G4double kDeltaOneStep = 0.01 * CLHEP::mm;
+  /// Delta intersection in global field manager
+  constexpr G4double kDeltaIntersection = 0.001 * CLHEP::mm;
+  /// Default minimum epsilon step in global field manager
+  constexpr G4double kMinimumEpsilonStep = 5.0e-5;  // Expected: 5.0e-5 to 1.0e-10 ...
+  /// Default maximum epsilon step in global field manager
+  constexpr G4double kMaximumEpsilonStep = 0.001;   // Expected: 1.0e-3 to 1.0e-8 ...
+}
+
+/**
+ * @brief G4FieldParameters defines the type of equation of motion of a
+ * particle in a field and the integration method, as well as other accuracy
+ * parameters. The default values correspond to the defaults set in Geant4.
+ */
 
 class G4FieldParameters
 {
- public:
-  /// Standard and default constructor
-  G4FieldParameters(const G4String& volumeName = "");
-  /// Destructor
-  ~G4FieldParameters();
+  public:
 
-  // Methods
-  //
+    /**
+     * Constructor for G4FieldParameters.
+     *  @param[in] volumeName The volume name where field is applied.
+     */
+    G4FieldParameters(const G4String& volumeName = "");
 
-  /// Return the field type as a string
-  static G4String FieldTypeName(G4FieldType field);
-  /// Return the equation type as a string
-  static G4String EquationTypeName(G4EquationType equation);
-  /// Return the stepper type as a string
-  static G4String StepperTypeName(G4StepperType stepper);
-  /// Return the field type for given field type name
-  static G4FieldType GetFieldType(const G4String& name);
-  /// Return the equation type for given equation type name
-  static G4EquationType GetEquationType(const G4String& name);
-  /// Return the stepper type for given stepper type name
-  static G4StepperType GetStepperType(const G4String& name);
+    /**
+     * Destructor.
+     */
+    ~G4FieldParameters();
 
-  /// Prints all customizable accuracy parameters
-  void PrintParameters() const;
+    /**
+     * Copy constructor and assignment operator not allowed.
+     */
+    G4FieldParameters(const G4FieldParameters& right) = delete;
+    G4FieldParameters& operator=(const G4FieldParameters& right) = delete;
 
-  // Set methods
-  //
+    /**
+     * Returns the field type as a string.
+     */
+    static G4String FieldTypeName(G4FieldType field);
 
-  /// Set type of field
-  void SetFieldType(G4FieldType field);
-  /// Set Type of equation of motion of a particle in a field
-  void SetEquationType(G4EquationType equation);
-  /// Type of integrator of particle's equation of motion
-  void SetStepperType(G4StepperType stepper);
-  /// Set user defined equation of motion
-  void SetUserEquationOfMotion(G4EquationOfMotion* equation);
-  /// Set user defined integrator of particle's equation of motion
-  void SetUserStepper(G4MagIntegratorStepper* stepper);
+    /**
+     * Returns the equation type as a string.
+     */
+    static G4String EquationTypeName(G4EquationType equation);
 
-  /// Set minimum step in G4ChordFinder
-  void SetMinimumStep(G4double value);
-  /// Set delta chord in G4ChordFinder
-  void SetDeltaChord(G4double value);
-  /// Set delta one step in global field manager
-  void SetDeltaOneStep(G4double value);
-  /// Set delta intersection in global field manager
-  void SetDeltaIntersection(G4double value);
-  /// Set minimum epsilon step in global field manager
-  void SetMinimumEpsilonStep(G4double value);
-  /// Set maximum epsilon step in global field manager
-  void SetMaximumEpsilonStep(G4double value);
-  /// Set the distance within which the field is considered constant
-  void SetConstDistance(G4double value);
+    /**
+     * Returns the stepper type as a string.
+     */
+    static G4String StepperTypeName(G4StepperType stepper);
 
-  // Get methods
-  //
+    /**
+     * Returns the field type for given field type name.
+     */
+    static G4FieldType GetFieldType(const G4String& name);
 
-  // Get the name of associated volume, if local field
-  G4String GetVolumeName() const;
+    /**
+     * Returns the equation type for given equation type name.
+     */
+    static G4EquationType GetEquationType(const G4String& name);
 
-  /// Get type of field
-  G4FieldType GetFieldType() const;
-  /// Get type of equation of motion of a particle in a field
-  G4EquationType GetEquationType() const;
-  /// Get rype of integrator of particle's equation of motion
-  G4StepperType GetStepperType() const;
-  /// Get user defined equation of motion
-  G4EquationOfMotion* GetUserEquationOfMotion() const;
-  /// Get user defined integrator of particle's equation of motion
-  G4MagIntegratorStepper* GetUserStepper() const;
+    /**
+     * Returns the stepper type for given stepper type name.
+     */
+    static G4StepperType GetStepperType(const G4String& name);
 
-  /// Get minimum step in G4ChordFinder
-  G4double GetMinimumStep() const;
-  /// Get delta chord in G4ChordFinder
-  G4double GetDeltaChord() const;
-  /// Get delta one step in global field manager
-  G4double GetDeltaOneStep() const;
-  /// Get delta intersection in global field manager
-  G4double GetDeltaIntersection() const;
-  /// Get minimum epsilon step in global field manager
-  G4double GetMinimumEpsilonStep() const;
-  /// Get maximum epsilon step in global field manager
-  G4double GetMaximumEpsilonStep() const;
-  /// Get the distance within which the field is considered constant
-  G4double GetConstDistance() const;
+    /**
+     * Prints all customisable accuracy parameters.
+     */
+    void PrintParameters() const;
 
- private:
-  /// Not implemented
-  G4FieldParameters(const G4FieldParameters& right) = delete;
-  /// Not implemented
-  G4FieldParameters& operator=(const G4FieldParameters& right) = delete;
+    // Set methods ------------------------------------------------------------
 
-  // static data members
-  //
-  /// Default minimum step in G4ChordFinder
-  inline static const G4double fgkDefaultMinimumStep  = 0.01 * CLHEP::mm;
-  /// Default delta chord in G4ChordFinder
-  inline static const G4double fgkDefaultDeltaChord = 0.25 * CLHEP::mm;
-  /// Default delta one step in global field manager
-  inline static const G4double fgkDefaultDeltaOneStep = 0.01 * CLHEP::mm;
-  /// Delta intersection in global field manager
-  inline static const G4double fgkDefaultDeltaIntersection = 0.001 * CLHEP::mm;
-  /// Default minimum epsilon step in global field manager
-  inline static const G4double fgkDefaultMinimumEpsilonStep = 5.0e-5;
-  /// Default maximum epsilon step in global field manager
-  inline static const G4double fgkDefaultMaximumEpsilonStep = 0.001;
-  /// Default constant distance
-  inline static const G4double fgkDefaultConstDistance = 0.;
+    /**
+     * Sets the type of field.
+     */
+    void SetFieldType(G4FieldType field);
 
-  // data members
-  //
-  /// Messenger for this class
-  G4FieldParametersMessenger* fMessenger = nullptr;
+    /**
+     * Sets the type of equation of motion of a particle in a field.
+     */
+    void SetEquationType(G4EquationType equation);
 
-  /// The name of associated volume, if local field
-  G4String fVolumeName;
+    /**
+     * Sets the type of integrator of particle's equation of motion.
+     */
+    void SetStepperType(G4StepperType stepper);
 
-  /// Minimum step in G4ChordFinder
-  G4double fMinimumStep = fgkDefaultMinimumStep;
-  /// Delta chord in G4ChordFinder
-  G4double fDeltaChord = fgkDefaultDeltaChord;
-  /// Delta one step in global field manager
-  G4double fDeltaOneStep = fgkDefaultDeltaOneStep;
-  /// Delta intersection in global field manager
-  G4double fDeltaIntersection = fgkDefaultDeltaIntersection;
-  /// Minimum epsilon step in global field manager
-  G4double fMinimumEpsilonStep = fgkDefaultMinimumEpsilonStep;
-  /// Maximum epsilon step in global field manager
-  G4double fMaximumEpsilonStep = fgkDefaultMaximumEpsilonStep;
+    /**
+     * Sets the user defined equation of motion.
+     */
+    void SetUserEquationOfMotion(G4EquationOfMotion* equation);
 
-  /// Type of field
-  G4FieldType fField = kMagnetic;
+    /**
+     * Sets the user defined integrator of particle's equation of motion.
+     */
+    void SetUserStepper(G4MagIntegratorStepper* stepper);
 
-  /// Type of equation of motion of a particle in a field
-  G4EquationType fEquation = kEqMagnetic;
+    /**
+     * Sets the minimum step in G4ChordFinder.
+     */
+    void SetMinimumStep(G4double value);
 
-  /// Type of integrator of particle's equation of motion
-  G4StepperType fStepper = kDormandPrince745;
+    /**
+     * Sets the delta chord in G4ChordFinder.
+     */
+    void SetDeltaChord(G4double value);
 
-  /// User defined equation of motion
-  G4EquationOfMotion* fUserEquation = nullptr;
+    /**
+     * Sets the delta one step in global field manager.
+     */
+    void SetDeltaOneStep(G4double value);
 
-  /// User defined integrator of particle's equation of motion
-  G4MagIntegratorStepper* fUserStepper = nullptr;
+    /**
+     * Sets the delta intersection in global field manager.
+     */
+    void SetDeltaIntersection(G4double value);
 
-  /// The distance within which the field is considered constant
-  G4double fConstDistance = fgkDefaultConstDistance;
+    /**
+     * Sets the minimum epsilon step in global field manager.
+     */
+    void SetMinimumEpsilonStep(G4double value);
+
+    /**
+     * Sets the maximum epsilon step in global field manager.
+     */
+    void SetMaximumEpsilonStep(G4double value);
+
+    /**
+     * Sets the distance within which the field is considered constant.
+     */
+    void SetConstDistance(G4double value);
+
+    // Get methods ------------------------------------------------------------
+
+    /**
+     * Gets the name of associated volume, if local field.
+     */
+    const G4String& GetVolumeName() const;
+
+    /**
+     * Gets the type of field.
+     */
+    const G4FieldType& GetFieldType() const;
+
+    /**
+     * Gets the type of equation of motion of a particle in a field.
+     */
+    const G4EquationType& GetEquationType() const;
+
+    /**
+     * Gets the type of integrator of particle's equation of motion.
+     */
+    const G4StepperType& GetStepperType() const;
+
+    /**
+     * Gets the user defined equation of motion.
+     */
+    G4EquationOfMotion* GetUserEquationOfMotion() const;
+
+    /**
+     * Gets the user defined integrator of particle's equation of motion.
+     */
+    G4MagIntegratorStepper* GetUserStepper() const;
+
+    /**
+     * Gets the minimum step in G4ChordFinder.
+     */
+    G4double GetMinimumStep() const;
+
+    /**
+     * Gets the delta chord in G4ChordFinder.
+     */
+    G4double GetDeltaChord() const;
+
+    /**
+     * Gets the delta one step in global field manager.
+     */
+    G4double GetDeltaOneStep() const;
+
+    /**
+     * Gets the delta intersection in global field manager.
+     */
+    G4double GetDeltaIntersection() const;
+
+    /**
+     * Gets the minimum epsilon step in global field manager.
+     */
+    G4double GetMinimumEpsilonStep() const;
+
+    /**
+     * Gets the maximum epsilon step in global field manager.
+     */
+    G4double GetMaximumEpsilonStep() const;
+
+    /**
+     * Gets the distance within which the field is considered constant.
+     */
+    G4double GetConstDistance() const;
+
+  private:
+
+    /** Default constant distance. */
+    inline static const G4double fgkDefaultConstDistance = 0.;
+
+    /** Messenger for this class. */
+    G4FieldParametersMessenger* fMessenger = nullptr;
+
+    /** The name of the associated volume, if local field. */
+    G4String fVolumeName;
+
+    /** The minimum step in G4ChordFinder. */
+    G4double fMinimumStep = G4FieldDefaults::kMinimumStep;
+
+    /** The delta chord in G4ChordFinder. */
+    G4double fDeltaChord = G4FieldDefaults::kDeltaChord;
+
+    /** The delta one step in global field manager. */
+    G4double fDeltaOneStep = G4FieldDefaults::kDeltaOneStep;
+
+    /** The delta intersection in global field manager. */
+    G4double fDeltaIntersection = G4FieldDefaults::kDeltaIntersection;
+
+    /** The minimum epsilon step in global field manager. */
+    G4double fMinimumEpsilonStep = G4FieldDefaults::kMinimumEpsilonStep;
+
+    /** The maximum epsilon step in global field manager. */
+    G4double fMaximumEpsilonStep = G4FieldDefaults::kMaximumEpsilonStep;
+
+    /** The type of field. */
+    G4FieldType fField = kMagnetic;
+
+    /** Type of equation of motion of a particle in a field. */
+    G4EquationType fEquation = kEqMagnetic;
+
+    /** Type of integrator of particle's equation of motion. */
+    G4StepperType fStepper = kDormandPrince745;
+
+    /** User defined equation of motion. */
+    G4EquationOfMotion* fUserEquation = nullptr;
+
+    /// User defined integrator of particle's equation of motion. */
+    G4MagIntegratorStepper* fUserStepper = nullptr;
+
+    /** The distance within which the field is considered constant. */
+    G4double fConstDistance = fgkDefaultConstDistance;
 };
 
-// inline functions
+// Inline functions
 
-// Set type of field
-inline void G4FieldParameters::SetFieldType(G4FieldType field)
-{
-  fField = field;
-}
+#include "G4FieldParameters.icc"
 
-// Set the type of equation of motion of a particle in a field
-inline void G4FieldParameters::SetEquationType(G4EquationType equation)
-{
-  fEquation = equation;
-}
-
-// Set the type of integrator of particle's equation of motion
-inline void G4FieldParameters::SetStepperType(G4StepperType stepper)
-{
-  fStepper = stepper;
-}
-
-// Set minimum step in G4ChordFinder
-inline void G4FieldParameters::SetMinimumStep(G4double value)
-{
-  fMinimumStep = value;
-}
-
-// Set delta chord in G4ChordFinder
-inline void G4FieldParameters::SetDeltaChord(G4double value)
-{
-  fDeltaChord = value;
-}
-
-// Set delta one step in global field manager
-inline void G4FieldParameters::SetDeltaOneStep(G4double value)
-{
-  fDeltaOneStep = value;
-}
-
-// Set delta intersection in global field manager
-inline void G4FieldParameters::SetDeltaIntersection(G4double value)
-{
-  fDeltaIntersection = value;
-}
-
-// Set minimum epsilon step in global field manager
-inline void G4FieldParameters::SetMinimumEpsilonStep(G4double value)
-{
-  fMinimumEpsilonStep = value;
-}
-
-// Set maximum epsilon step in global field manager
-inline void G4FieldParameters::SetMaximumEpsilonStep(G4double value)
-{
-  fMaximumEpsilonStep = value;
-}
-
-// Set the distance within which the field is considered constant
-inline void G4FieldParameters::SetConstDistance(G4double value)
-{
-  fConstDistance = value;
-}
-
-// Return the name of associated volume, if local field
-inline G4String G4FieldParameters::GetVolumeName() const
-{
-  return fVolumeName;
-}
-
-// Return the type of field
-inline G4FieldType G4FieldParameters::GetFieldType() const { return fField; }
-
-// Return the type of equation of motion of a particle in a field
-inline G4EquationType G4FieldParameters::GetEquationType() const
-{
-  return fEquation;
-}
-
-// Return the type of integrator of particle's equation of motion
-inline G4StepperType G4FieldParameters::GetStepperType() const
-{
-  return fStepper;
-}
-
-// Return the user defined equation of motion
-inline G4EquationOfMotion* G4FieldParameters::GetUserEquationOfMotion() const
-{
-  return fUserEquation;
-}
-
-// Return the user defined integrator of particle's equation of motion
-inline G4MagIntegratorStepper* G4FieldParameters::GetUserStepper() const
-{
-  return fUserStepper;
-}
-
-// Return minimum step in G4ChordFinder
-inline G4double G4FieldParameters::GetMinimumStep() const
-{
-  return fMinimumStep;
-}
-
-// Return delta chord in G4ChordFinder
-inline G4double G4FieldParameters::GetDeltaChord() const
-{
-  return fDeltaChord;
-}
-
-// Return delta one step in global field manager
-inline G4double G4FieldParameters::GetDeltaOneStep() const
-{
-  return fDeltaOneStep;
-}
-
-// Return delta intersection in global field manager
-inline G4double G4FieldParameters::GetDeltaIntersection() const
-{
-  return fDeltaIntersection;
-}
-
-// Return minimum epsilon step in global field manager
-inline G4double G4FieldParameters::GetMinimumEpsilonStep() const
-{
-  return fMinimumEpsilonStep;
-}
-
-// Return maximum epsilon step in global field manager
-inline G4double G4FieldParameters::GetMaximumEpsilonStep() const
-{
-  return fMaximumEpsilonStep;
-}
-
-// Return the distance within which the field is considered constant
-inline G4double G4FieldParameters::GetConstDistance() const
-{
-  return fConstDistance;
-}
-
-#endif // G4FIELDPARAMETERS_HH
+#endif

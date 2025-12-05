@@ -25,10 +25,6 @@
 //
 /// \file RunMessenger.cc
 /// \brief Implementation of the RunMessenger class
-//
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "RunMessenger.hh"
 

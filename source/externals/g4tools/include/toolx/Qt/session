@@ -83,12 +83,9 @@ public:
     top->setWindowFlags(::Qt::CustomizeWindowHint
                       | ::Qt::WindowTitleHint
                       | ::Qt::WindowMinMaxButtonsHint
-//                    | ::Qt::WindowSystemMenuHint
-//		      | ::Qt::WindowFullscreenButtonHint
     );
     top->setGeometry(a_x,a_y,a_width,a_height);
     top->setWindowTitle(s2q(a_title));
-  //top->setAttribute(Qt::WA_DeleteOnClose,false);
     return top;
   }
   void delete_window(QWidget* a_window) const {

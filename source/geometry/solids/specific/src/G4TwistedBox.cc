@@ -25,12 +25,18 @@
 //
 // G4TwistedBox implementation
 //
-// Author:  10/11/2004 - O.Link (Oliver.Link@cern.ch)
+// Author: Oliver Link (CERN), 27.10.2004 - Created
 // --------------------------------------------------------------------
 
 #include "G4TwistedBox.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4Polyhedron.hh"
+#include "G4AutoLock.hh"
+
+namespace
+{
+  G4Mutex twboxMutex = G4MUTEX_INITIALIZER;
+}
 
 //=====================================================================
 //* Constructor -------------------------------------------------------
@@ -53,11 +59,6 @@ G4TwistedBox::G4TwistedBox( __void__& a )
   : G4VTwistedFaceted(a)
 {
 }
-
-//=====================================================================
-//* Destructor --------------------------------------------------------
-
-G4TwistedBox::~G4TwistedBox() = default;
 
 //=====================================================================
 //* Copy constructor --------------------------------------------------
@@ -128,9 +129,11 @@ G4VSolid* G4TwistedBox::Clone() const
 
 double G4TwistedBox::GetCubicVolume()
 {
-  if (fCubicVolume == 0.)
+  if (fCubicVolume == 0)
   {
+    G4AutoLock l(&twboxMutex);
     fCubicVolume = 8.*GetXHalfLength()*GetYHalfLength()*GetZHalfLength();
+    l.unlock();
   }
   return fCubicVolume;
 }
@@ -140,8 +143,9 @@ double G4TwistedBox::GetCubicVolume()
 
 double G4TwistedBox::GetSurfaceArea()
 {
-  if (fSurfaceArea == 0.)
+  if (fSurfaceArea == 0)
   {
+    G4AutoLock l(&twboxMutex);
     G4double ang = GetPhiTwist();
     G4double dx = GetXHalfLength();
     G4double dy = GetYHalfLength();
@@ -160,6 +164,7 @@ double G4TwistedBox::GetSurfaceArea()
         2.*(dx*std::sqrt(hh + dxang*dxang) + hh*std::asinh(dxang/h)/ang) +
         2.*(dy*std::sqrt(hh + dyang*dyang) + hh*std::asinh(dyang/h)/ang);
     }
+    l.unlock();
   }
   return fSurfaceArea;
 }

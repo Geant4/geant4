@@ -37,7 +37,7 @@
 // Intended principally to enable resetting of 'state' at start of event.
 // The underlying container initially has a capacity of 100.
 
-// Author: J.Apostolakis, 07.12.2007 - Initial version
+// Author: John Apostolakis (CERN), 07.12.2007 - Initial version
 // --------------------------------------------------------------------
 #ifndef G4FIELDMANAGERSTORE_HH
 #define G4FIELDMANAGERSTORE_HH
@@ -46,29 +46,55 @@
 
 #include "G4FieldManager.hh"
 
+/**
+ * @brief G4FieldManagerStore is a container for all field managers, with
+ * functionality derived from std::vector<T>. The class is a singleton.
+ * All field managers should be registered with G4FieldManagerStore,
+ * and removed on their destruction. Intended principally to enable resetting
+ * of 'state' at start of an event.
+ */
+
 class G4FieldManagerStore : public std::vector<G4FieldManager*>
 {
-  public:  // with description
+  public:
 
-    static void Register(G4FieldManager* pVolume);
-      // Add the logical volume to the collection.
-    static void DeRegister(G4FieldManager* pVolume);
-      // Remove the logical volume from the collection.
+    /**
+     * Gets a pointer to the unique G4FieldManagerStore, creating it if
+     * necessary.
+     */
     static G4FieldManagerStore* GetInstance();
-      // Get a ptr to the unique G4FieldManagerStore, creating it if necessary.
     static G4FieldManagerStore* GetInstanceIfExist();
-      // Get a ptr to the unique G4FieldManagerStore.
+
+    /**
+     * Adds the field manager to the collection.
+     */
+    static void Register(G4FieldManager* pFieldMan);
+
+    /**
+     * Removes the field manager from the collection.
+     */
+    static void DeRegister(G4FieldManager* pFieldMan);
+
+    /**
+     * Deletes all managers from the store.
+     */
     static void Clean();
-      // Delete all volumes from the store.
 
+    /**
+     * Loops over all field managers and calls each one to reset step estimate.
+     */
     void ClearAllChordFindersState();
-      // Looping over all field managers, call each one to reset step estimate
 
+    /**
+     * Destructor: takes care to delete the allocated field managers.
+     */
     ~G4FieldManagerStore();
-      // Destructor: takes care to delete allocated field managers.
 
-  protected:
+  private:
   
+    /**
+     * Private constructor.
+     */
     G4FieldManagerStore();
 
   private:

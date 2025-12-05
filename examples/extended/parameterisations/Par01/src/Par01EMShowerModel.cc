@@ -23,11 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file Par01/src/Par01EMShowerModel.cc
+/// \file Par01EMShowerModel.cc
 /// \brief Implementation of the Par01EMShowerModel class
-//
-//
-//
+
 #include "Par01EMShowerModel.hh"
 
 #include "Par01EnergySpot.hh"

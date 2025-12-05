@@ -23,6 +23,9 @@
 # Run initialization
 /run/initialize
 #
+# Inactivation of nuclearStopping process for ions (> helium)
+#/process/inactivate nuclearStopping
+#
 # Incident particle type
 /gun/particle e-
 #### Example of ion

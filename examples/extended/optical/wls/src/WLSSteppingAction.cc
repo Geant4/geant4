@@ -23,11 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file optical/wls/src/WLSSteppingAction.cc
+/// \file WLSSteppingAction.cc
 /// \brief Implementation of the WLSSteppingAction class
-//
-//
+
 #include "WLSSteppingAction.hh"
 
 #include "WLSDetectorConstruction.hh"

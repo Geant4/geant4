@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 /// \file GB03DetectorConstruction.hh
 /// \brief Definition of the GB03DetectorConstruction class
 
@@ -38,7 +37,7 @@ class G4VPhysicalVolume;
 class G4PVReplica;
 class G4Material;
 class G4Box;
-class GB03DetectorMessenger;
+class G4GenericMessenger;
 
 class GB03DetectorConstruction : public G4VUserDetectorConstruction
 {
@@ -80,21 +79,21 @@ class GB03DetectorConstruction : public G4VUserDetectorConstruction
     G4Material* fWorldMaterial;
     G4Material* fAbsorberMaterial;
     G4Material* fGapMaterial;
+    G4Material* fHodoMaterial;
 
     G4Box* fLayerSolid;
     G4Box* fGapSolid;
 
-    G4LogicalVolume* fWorldLogical;
     G4LogicalVolume* fCalorLogical;
     G4LogicalVolume* fLayerLogical;
     G4LogicalVolume* fGapLogical;
+    G4LogicalVolume* fHodoLogical;
 
     G4VPhysicalVolume* fWorldPhysical;
-    G4VPhysicalVolume* fCalorPhysical;
     G4PVReplica* fLayerPhysical;
     G4VPhysicalVolume* fGapPhysical;
 
-    GB03DetectorMessenger* fDetectorMessenger;
+    G4GenericMessenger* fDetectorMessenger;
 
     G4int fVerboseLevel;
     G4bool fBiasingFlag;

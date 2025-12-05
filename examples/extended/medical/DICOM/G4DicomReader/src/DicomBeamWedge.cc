@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file DicomBeamWedge.cc
+/// \brief Implementation of the DicomBeamWedge class
+
 #include "DicomBeamWedge.hh"
 
 #include "dcmtk/dcmrt/seq/drtws.h"

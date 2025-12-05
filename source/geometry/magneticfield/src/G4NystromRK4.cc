@@ -25,8 +25,8 @@
 //
 // G4NystromRK4 implmentation
 //
-// Created: I.Gavrilenko, 15.05.2009 (as G4AtlasRK4)
-// Adaptations: J.Apostolakis, November 2009
+// Author: Igor Gavrilenko (CERN), 15.05.2009 (as G4AtlasRK4)
+// Adaptations: John Apostolakis (CERN), 05.11.2009
 // -------------------------------------------------------------------
 
 #include <memory>

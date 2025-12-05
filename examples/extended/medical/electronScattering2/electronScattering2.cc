@@ -23,9 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file medical/electronScattering2/electronScattering2.cc
+/// \file electronScattering2.cc
 /// \brief Main program of the medical/electronScattering2 example
+
 #include "ElectronActionInitialization.hh"
 #include "ElectronBenchmarkDetector.hh"
 #include "PhysicsList.hh"

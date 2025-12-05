@@ -88,6 +88,10 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 	else if( detectorType == "SiliconBridge" ) ConstructSiliconBridgeDetector();
 	else if( detectorType == "DiamondTelescope" ) ConstructDiamondTelescope();
 	else if( detectorType ==  "SiCDetector") ConstructSiC();
+	else if( detectorType ==  "TEPC") ConstructTEPC(); ///////////
+	
+
+	
 	else
 	{
 		G4cout << "ERROR: " << detectorType << " is not an allowed detector type. ";
@@ -1066,53 +1070,122 @@ void DetectorConstruction::ConstructSiC()
 {
 
 //Define SiC
- G4double A = 12.01 * g/mole;
- G4double Z = 6;
-G4double A_Si=28.086*g/mole;
- G4double Z_Si=14;
-G4double density_SiC=3.22*g/cm3;
-G4Element *Si=new G4Element("Silicum","Si",Z_Si,A_Si);
-G4Element *C=new G4Element("Carbon","C",Z,A);
-G4Material *SiC=new G4Material("SiC", density_SiC,2);
-SiC->AddElement(Si,1);
-SiC->AddElement(C,1);
-
+  G4double A = 12.01 * g/mole;
+  G4double Z = 6;
+  G4double A_Si=28.086*g/mole;
+  G4double Z_Si=14;
+  G4double density_SiC=3.22*g/cm3;
+  G4Element *Si=new G4Element("Silicum","Si",Z_Si,A_Si);
+  G4Element *C=new G4Element("Carbon","C",Z,A);
+  G4Material *SiC=new G4Material("SiC", density_SiC,2);
+  SiC->AddElement(Si,1);
+  SiC->AddElement(C,1);
 /*G4Material *airNist = G4NistManager::Instance()->FindOrBuildMaterial("G4_AIR", isotopes);
   G4Material *Silicon = G4NistManager::Instance()->FindOrBuildMaterial("G4_Si", isotopes);*/
-
-	
-detectorSizeWidth=0.1*mm;
- detectorSizeThickness=22*um;//10*um;
-
- G4double substrate_thickness=370*um;
- 
- G4double SV_x = detectorSizeWidth/2;
- G4double SV_y = detectorSizeWidth/2;
- G4double SV_z = detectorSizeThickness/2; 
-
- G4Box* SV_box = new G4Box("SV_box",SV_x,SV_y,SV_z);
-
- G4LogicalVolume* logical_SV = new G4LogicalVolume(SV_box, SiC, "SV_log", 0,0,0);
-
- new G4PVPlacement(0, G4ThreeVector(0*mm,0*mm,-SV_z), logical_SV,"SV_phys1",
+  detectorSizeWidth=0.1*mm;
+  detectorSizeThickness=22*um;//10*um;
+  G4double substrate_thickness=370*um;
+  G4double SV_x = detectorSizeWidth/2;
+  G4double SV_y = detectorSizeWidth/2;
+  G4double SV_z = detectorSizeThickness/2; 
+  G4Box* SV_box = new G4Box("SV_box",SV_x,SV_y,SV_z);
+  G4LogicalVolume* logical_SV = new G4LogicalVolume(SV_box, SiC, "SV_log", 0,0,0);
+  new G4PVPlacement(0, G4ThreeVector(0*mm,0*mm,-SV_z), logical_SV,"SV_phys1",
 		    logical_motherVolumeForDetector,false, 0, true);
-
-
- G4Box* Substrate_box = new G4Box("Substrate_box",SV_x,SV_y,substrate_thickness/2); 
-
- 
+  G4Box* Substrate_box = new G4Box("Substrate_box",SV_x,SV_y,substrate_thickness/2); 
   G4LogicalVolume* logical_substrate = new G4LogicalVolume(Substrate_box, SiC, "substrate_log", 0,0,0);
-
   new G4PVPlacement(0, G4ThreeVector(0,0,-2*SV_z-substrate_thickness/2), logical_substrate,"substrate_phys",
 			  logical_motherVolumeForDetector, 
-			  false, 0, true);
-   
- 
+		    false, 0, true);
 // Visualisation attributes
-
 	G4VisAttributes vis_SV(G4Colour(198, 226, 255));
 	vis_SV.SetForceSolid(true);
 	logical_SV -> SetVisAttributes(vis_SV);
+}
+
+void DetectorConstruction::ConstructTEPC()
+{
+        //Define polystirene
+	G4Material* polys = nistMan->FindOrBuildMaterial("G4_POLYSTYRENE");
+	//Define Aluminum
+	G4Material* aluminum = nistMan->FindOrBuildMaterial("G4_Al");
+	//Define A150
+	G4Material* a_150 = nistMan->FindOrBuildMaterial("G4_A-150_TISSUE");
+	//Define propane
+	//G4Material* propane = nistMan->FindOrBuildMaterial("G4_PROPANE");
+	// define gas material at non STP conditions
+	G4Material* propane_mat = nistMan->ConstructNewGasMaterial("propane_mat","G4_PROPANE",293.*kelvin,408*bar*0.001);
+	G4double MotherRadius=7.5*mm; ///Cylinder 1
+	G4double MotherHeight=50*mm;
+        G4double MotherInt_ExtRadius=7.5*mm;   ///Cylinder 2
+	G4double MotherInt_IntRadius=7.25*mm;
+       	G4double MotherTEPC_Radius=1.5*mm; ///Cylinder 3
+	G4double MotherTEPC_Height=10*mm;
+	G4double Al_TEPC_Radius=1.5*mm; ///Cylinder 4 & 5
+	G4double Al_TEPC_Height=2*mm;
+	G4double A150_TEPC_ExtRadius=1.5*mm; ///Cylinder 6
+	G4double A150_TEPC_IntRadius=0.5*mm;
+	G4double A150_TEPC_Height=2*mm;
+	G4double TEPC_Radius=0.5*mm; ///Cylinder 7---> sensitive volume
+	G4double TEPC_Height=1*mm;
+	G4double phi = 90. * deg;
+	G4RotationMatrix rm;
+	rm.rotateY(phi);
+	G4Tubs* MotherVolume= new G4Tubs("MotherVolume", 0,
+                                     MotherRadius,
+                                     MotherHeight/2,
+                                     0*deg,360*deg);
+	G4LogicalVolume* logical_Mother = new G4LogicalVolume(MotherVolume, polys, "Mother_log", 0,0,0);
+	new G4PVPlacement(G4Transform3D(rm,G4ThreeVector(0*cm,0*mm,0*mm)),logical_Mother,"Mother_phys",logical_motherVolumeForDetector,
+		    false, 0,true);
+	G4VisAttributes*white;
+	white= new G4VisAttributes(G4Colour(198, 226, 255));
+	//	Mothercolour.SetForceSolid(true);
+	 white->SetVisibility(true);
+	logical_Mother -> SetVisAttributes(white);
+	//ALUMINUM
+       	G4Tubs* MotherIntVolume= new G4Tubs("MotherIntVolume",MotherInt_IntRadius ,
+                                     MotherInt_ExtRadius,
+                                     MotherHeight/2,
+                                     0*deg,360*deg);
+	G4LogicalVolume* logical_IntMother = new G4LogicalVolume(MotherIntVolume, aluminum, "MotherInt_log", 0,0,0);
+	 new G4PVPlacement(0, G4ThreeVector(0*mm,0*mm,0*mm),logical_IntMother,"MotherInt_phys",logical_Mother,
+		    false, 0, true);
+	 ///////// /////////  ///////// TEPC  ///////// ///////// ///////// ///////// /////////
+	G4Tubs* MotherTEPC= new G4Tubs("MotherTEPC",0,
+                                     MotherTEPC_Radius,
+                                      MotherTEPC_Height/2,
+                                     0*deg,360*deg);
+	G4LogicalVolume* logical_MotherTEPC = new G4LogicalVolume(MotherTEPC, polys, "MotherTEPC_log", 0,0,0);
+	new G4PVPlacement(0, G4ThreeVector(0*mm,0*mm,0*mm),logical_MotherTEPC,"logical_MotherTEPC_phys",logical_Mother,
+			  false, 0, true);
+        G4Tubs* Al_TEPC= new G4Tubs("Al_TEPC",0,
+                                     Al_TEPC_Radius,
+                                      Al_TEPC_Height/2,
+                                     0*deg,360*deg);
+	G4LogicalVolume* logical_Al_TEPC = new G4LogicalVolume(Al_TEPC, aluminum, "Al_TEPC_log", 0,0,0);
+	new G4PVPlacement(0, G4ThreeVector(0*mm,0*mm,4*mm),logical_Al_TEPC,"Al_TEPC_phys1",logical_MotherTEPC,
+		    false, 0, true);
+	new G4PVPlacement(0, G4ThreeVector(0*mm,0*mm,-4*mm),logical_Al_TEPC,"Al_TEPC_phys2",logical_MotherTEPC, 
+		    false, 0,true);
+        G4Tubs* A150_TEPC= new G4Tubs("A150_TEPC",A150_TEPC_IntRadius ,
+                                     A150_TEPC_ExtRadius,
+                                     A150_TEPC_Height/2,
+                                     0*deg,360*deg);
+	G4LogicalVolume* logical_A150_TEPC = new G4LogicalVolume(A150_TEPC, a_150, "A150_TEPC_log", 0,0,0);
+		  new G4PVPlacement(0, G4ThreeVector(0*mm,0*mm,0*mm),logical_A150_TEPC,"logical_A150_TEPC_phys",logical_MotherTEPC,
+				    false, 0,true);
+	G4Tubs* TEPC= new G4Tubs("Sv_box",
+                                     0,
+                                     TEPC_Radius,
+                                     TEPC_Height/2,
+                                     0*deg,360*deg);
+        G4LogicalVolume* logical_SV = new G4LogicalVolume(TEPC, propane_mat, "SV_log", 0,0,0);
+	new G4PVPlacement(0, G4ThreeVector(0*mm,0*mm,0*mm),logical_SV,"SV_phys",logical_MotherTEPC,
+		   false, 0,true);
+    	G4VisAttributes SVcolour(G4Colour(0.5, 0.5, 0.5));
+	SVcolour.SetForceSolid(true);
+	logical_SV -> SetVisAttributes(SVcolour);
 }
 
 
@@ -1122,7 +1195,6 @@ void DetectorConstruction::ConstructSDandField()
    SensitiveDetector* SD = new SensitiveDetector("SD", "DetectorHitsCollection", true, analysis);
    G4SDManager::GetSDMpointer()->AddNewDetector(SD);
    SetSensitiveDetector("SV_log", SD);
-
 	if (detectorType == "SiliconBridge")
 	{
 		SetSensitiveDetector("bridgeVol_log", SD);

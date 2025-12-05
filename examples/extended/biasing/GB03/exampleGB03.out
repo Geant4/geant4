@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-03-ref-06    (30-June-2025)
+ Geant4 version Name: geant4-11-04-ref-00    (5-December-2025)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -32,7 +32,6 @@ You have successfully registered the following graphics systems.
 Registered graphics systems are:
   ASCIITree (ATree)
   DAWNFILE (DAWNFILE)
-  G4HepRepFile (HepRepFile)
   RayTracer (RT)
   VRML2FILE (VRML2FILE)
   gMocrenFile (gMocrenFile)
@@ -45,13 +44,12 @@ Registered graphics systems are:
   OpenGLStoredX (OGLSX, OGLSQt_FALLBACK, OGLSXm_FALLBACK)
   RayTracerX (RTX)
   RayTracerQt (RTQt)
-  Qt3D (Qt3D)
   TOOLSSG_X11_GLES (TSG_X11_GLES, TSGX11, TSG_XT_GLES_FALLBACK)
   TOOLSSG_X11_ZB (TSG_X11_ZB, TSGX11ZB)
   TOOLSSG_XT_GLES (TSG_XT_GLES, TSGXt, TSG_QT_GLES_FALLBACK)
   TOOLSSG_XT_ZB (TSG_XT_ZB, TSGXtZB)
   TOOLSSG_QT_GLES (TSG_QT_GLES, TSGQt, TSG, OGL)
-  TOOLSSG_QT_ZB (TSG_QT_ZB, TSGQtZB)
+  TOOLSSG_QT_ZB (TSG_QT_ZB, TSGQtZB, TSGZB)
 You may choose a graphics system (driver) with a parameter of
 the command "/vis/open" or "/vis/sceneHandler/create",
 or you may omit the driver parameter and choose at run time:
@@ -98,12 +96,6 @@ Some /vis commands (optionally) take a string to specify colour.
  Absorber is made of Lead
  Gap is made of Scintillator
 --------------------------------------------------------
-G4SDManager::AddNewCollection : the collection <Calor_abs/eDep> is registered at 1
-G4SDManager::AddNewCollection : the collection <Calor_abs/nNeutral> is registered at 2
-G4SDManager::AddNewCollection : the collection <Calor_abs/nCharged> is registered at 3
-G4SDManager::AddNewCollection : the collection <Calor_gap/eDep> is registered at 4
-G4SDManager::AddNewCollection : the collection <Calor_gap/nNeutral> is registered at 5
-G4SDManager::AddNewCollection : the collection <Calor_gap/nCharged> is registered at 6
 
  hInelastic FTFP_BERT : threshold between BERT and FTFP is over the interval 
  for pions :   3 to 6 GeV
@@ -153,7 +145,7 @@ Lowest muon/hadron kinetic energy                  1 keV
 Use ICRU90 data                                    0
 Fluctuations of dE/dx are enabled                  1
 Type of fluctuation model for leptons and hadrons  Urban
-Use built-in Birks satuaration                     0
+Use built-in Birks saturation                      0
 Build CSDA range enabled                           0
 Use cut as a final range enabled                   0
 Enable angular generator interface                 0
@@ -290,7 +282,7 @@ hBrems:  for proton  XStype:1  SubType=3
 hPairProd:  for proton  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
-      Sampling table 17x1001 from 7.50618 GeV to 100 TeV 
+      Sampling table 17x1001, from 7.50618 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
@@ -348,7 +340,7 @@ hBrems:  for anti_proton  XStype:1  SubType=3
 hPairProd:  for anti_proton  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
-      Sampling table 17x1001 from 7.50618 GeV to 100 TeV 
+      Sampling table 17x1001, from 7.50618 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
@@ -380,7 +372,7 @@ hBrems:  for kaon+  XStype:1  SubType=3
 hPairProd:  for kaon+  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
-      Sampling table 18x1001 from 3.94942 GeV to 100 TeV 
+      Sampling table 18x1001, from 3.94942 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
@@ -412,7 +404,7 @@ hBrems:  for kaon-  XStype:1  SubType=3
 hPairProd:  for kaon-  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
-      Sampling table 18x1001 from 3.94942 GeV to 100 TeV 
+      Sampling table 18x1001, from 3.94942 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
@@ -444,7 +436,7 @@ muBrems:  for mu+  XStype:1  SubType=3
 muPairProd:  for mu+  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
-      Sampling table 21x1001 from 0.85 GeV to 100 TeV 
+      Sampling table 21x1001, from 0.85 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
@@ -476,7 +468,7 @@ muBrems:  for mu-  XStype:1  SubType=3
 muPairProd:  for mu-  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
-      Sampling table 21x1001 from 0.85 GeV to 100 TeV 
+      Sampling table 21x1001, from 0.85 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
@@ -508,7 +500,7 @@ hBrems:  for pi+  XStype:1  SubType=3
 hPairProd:  for pi+  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
-      Sampling table 20x1001 from 1.11656 GeV to 100 TeV 
+      Sampling table 20x1001, from 1.11656 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
@@ -540,7 +532,7 @@ hBrems:  for pi-  XStype:1  SubType=3
 hPairProd:  for pi-  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
-      Sampling table 20x1001 from 1.11656 GeV to 100 TeV 
+      Sampling table 20x1001, from 1.11656 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
@@ -795,8 +787,8 @@ CoulombScat:  for pi- XStype:1 SubType=1 BuildTable=1
 Type of pre-compound model                          0
 Type of pre-compound inverse x-section              1
 Pre-compound model active                           1
-Pre-compound excitation low energy                  100 keV
-Pre-compound excitation high energy                 30 MeV
+Pre-compound excitation low energy                  0.1 MeV 
+Pre-compound excitation high energy                 15 MeV 
 Angular generator for pre-compound model            1
 Use NeverGoBack option for pre-compound model       0
 Use SoftCutOff option for pre-compound model        0
@@ -810,9 +802,8 @@ Type of de-excitation inverse x-section             3
 Type of de-excitation factory                       Evaporation+GEM
 Number of de-excitation channels                    68
 Type of Fermi BreakUp model                         ModelVI
-Min excitation energy                               10 eV 
-Min energy per nucleon for multifragmentation       200 GeV
-Limit excitation energy for Fermi BreakUp           20 MeV
+Min excitation energy                               0.01 keV 
+Min energy per nucleon for multifragmentation       2e+05 MeV
 Level density (1/MeV)                               0.075
 Use simple level density model                      1
 Use discrete excitation energy of the residual      0
@@ -864,7 +855,7 @@ Index : 2     used in the geometry : Yes
 
 Start closing geometry.
 --------------------------------------------------------------------------------
-G4GeometryManager::ReportVoxelStats -- Voxel Statistics
+G4VoxelisationHelper::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   0 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
@@ -872,20 +863,61 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Voxelisation: top CPU users:
     Percent   Total CPU    System CPU       Memory  Volume
     -------   ----------   ----------     --------  ----------
+       0.00         0.00         0.00            0k World
        0.00         0.00         0.00            1k Calor
 
     Voxelisation: top memory users:
     Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
     -------   --------     ------   ------   --------   ----------    ----------
-     100.00          0k         1       10         10         0.00    Calor
+      68.10          0k         1       10         10         0.00    Calor
+      31.90          0k         1        4          4         0.00    World
 --------------------------------------------------------------------------------
 
 GB03BOptrGeometryBasedBiasing : starting run with splitting factor = 2, and probability for applying the technique 1 . 
 ### Run 0 starts.
+   2112       neutron, kinetic energy (MeV) =     0.829274, position (cm) = (3.96759,15.3229,100) weight = 0.000976562
+   2212        proton, kinetic energy (MeV) =     0.447629, position (cm) = (2.9474,15.014,102.236) weight = 0.000976562
+   2212        proton, kinetic energy (MeV) =     0.376527, position (cm) = (3.78608,15.5981,100.616) weight = 0.000976562
+   2112       neutron, kinetic energy (MeV) =     0.743328, position (cm) = (2.17122,11.2466,100) weight = 0.000976562
+   2212        proton, kinetic energy (MeV) =     0.157177, position (cm) = (1.52924,7.64999,102.711) weight = 0.000976562
+   2212        proton, kinetic energy (MeV) =     0.371541, position (cm) = (2.02729,11.2202,100.248) weight = 0.000976562
+   2112       neutron, kinetic energy (MeV) =      80.5996, position (cm) = (-1.98995,28.4384,100) weight = 0.00195312
+   2112       neutron, kinetic energy (MeV) =  3.17627e-06, position (cm) = (1.18493,32.9152,100) weight = 0.000976562
+   2112       neutron, kinetic energy (MeV) =   6.3992e-09, position (cm) = (2.44437,31.3731,100) weight = 0.000976562
+   2112       neutron, kinetic energy (MeV) =       2.3281, position (cm) = (12.3197,31.3603,100) weight = 0.000976562
+   2112       neutron, kinetic energy (MeV) =   5.3971e-05, position (cm) = (12.6129,38.85,100) weight = 0.000976562
+   2212        proton, kinetic energy (MeV) =     0.337683, position (cm) = (13.8015,35.1811,103.591) weight = 0.000976562
+   2212        proton, kinetic energy (MeV) =       1.1512, position (cm) = (12.717,33.3588,103.564) weight = 0.000976562
+   2212        proton, kinetic energy (MeV) =     0.246877, position (cm) = (12.607,31.5669,100.928) weight = 0.000976562
+   2212        proton, kinetic energy (MeV) =     0.525351, position (cm) = (12.5609,31.4404,100.364) weight = 0.000976562
+   2112       neutron, kinetic energy (MeV) =  0.000178442, position (cm) = (-4.84605,28.2605,100) weight = 0.000976562
+   2112       neutron, kinetic energy (MeV) =  2.31003e-05, position (cm) = (-4.27077,29.681,100) weight = 0.000976562
+     22         gamma, kinetic energy (MeV) =      1.49188, position (cm) = (-17.0239,45.7481,100) weight = 0.00195312
+     11            e-, kinetic energy (MeV) =       1.0798, position (cm) = (-16.9968,45.7896,100.175) weight = 0.00195312
+   2112       neutron, kinetic energy (MeV) =      99.9574, position (cm) = (15.413,24.0207,100) weight = 0.000976562
+   2112       neutron, kinetic energy (MeV) =  0.000959955, position (cm) = (-26.1507,3.16807,100) weight = 0.000976562
+   2112       neutron, kinetic energy (MeV) =      3.06313, position (cm) = (16.8768,20.5726,100) weight = 0.000976562
+   2212        proton, kinetic energy (MeV) =     0.177922, position (cm) = (20.838,22.5315,106.606) weight = 0.000976562
+   2212        proton, kinetic energy (MeV) =      1.34524, position (cm) = (19.5819,21.5836,105.907) weight = 0.000976562
+   2112       neutron, kinetic energy (MeV) =      3.06313, position (cm) = (16.8768,20.5726,100) weight = 0.000976562
+   2112       neutron, kinetic energy (MeV) =      1.29171, position (cm) = (-2.91205,23.5296,100) weight = 0.000976562
+   2212        proton, kinetic energy (MeV) =     0.909698, position (cm) = (-1.88048,25.6612,101.828) weight = 0.000976562
+   2212        proton, kinetic energy (MeV) =     0.153744, position (cm) = (-2.77499,25.4958,101.678) weight = 0.000976562
+1000060120           C12, kinetic energy (MeV) =     0.132706, position (cm) = (-2.96978,25.4777,101.564) weight = 0.000976562
+   2112       neutron, kinetic energy (MeV) =      9.88715, position (cm) = (-18.0188,16.7328,100) weight = 0.000976562
+   2112       neutron, kinetic energy (MeV) =      83.6718, position (cm) = (-18.9696,32.7715,100) weight = 0.000976562
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.060000s Real=0.060830s Sys=0.000000s
+  User=0.030000s Real=0.035782s Sys=0.000000s
+for the entire run 10
+
+                  C12       1  0.000976562 Emin     0.132706 Emax     0.132706 (MeV) 
+                   e-       1   0.00195312 Emin       1.0798 Emax       1.0798 (MeV) 
+                gamma       1   0.00195312 Emin      1.49188 Emax      1.49188 (MeV) 
+              neutron      16    0.0166016 Emin   6.3992e-09 Emax      99.9574 (MeV) 
+               proton      12    0.0117188 Emin     0.153744 Emax      1.34524 (MeV) 
+
 
 Region <DefaultRegionForTheWorld> --  -- appears in <World> world volume
  This region is in the mass world.
@@ -927,7 +959,7 @@ Index : 2     used in the geometry : Yes
 
 Start closing geometry.
 --------------------------------------------------------------------------------
-G4GeometryManager::ReportVoxelStats -- Voxel Statistics
+G4VoxelisationHelper::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   1 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
@@ -935,27 +967,119 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Voxelisation: top CPU users:
     Percent   Total CPU    System CPU       Memory  Volume
     -------   ----------   ----------     --------  ----------
+       0.00         0.00         0.00            0k World
        0.00         0.00         0.00            1k Calor
 
     Voxelisation: top memory users:
     Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
     -------   --------     ------   ------   --------   ----------    ----------
-     100.00          1k         1       20         20         0.00    Calor
+      80.11          1k         1       20         20         0.00    Calor
+      19.89          0k         1        4          4         0.00    World
 --------------------------------------------------------------------------------
 
 GB03BOptrGeometryBasedBiasing : starting run with splitting factor = 2, and probability for applying the technique 0.5 . 
 ### Run 1 starts.
+   2112       neutron, kinetic energy (MeV) =      71.7713, position (cm) = (47.5946,-20.8524,100) weight = 0.000976562
+   2112       neutron, kinetic energy (MeV) =      71.7713, position (cm) = (47.5946,-20.8524,100) weight = 0.000976562
+   2112       neutron, kinetic energy (MeV) =      71.7713, position (cm) = (47.5394,-20.8854,100) weight = 0.000976562
+   2112       neutron, kinetic energy (MeV) =  1.85401e-05, position (cm) = (42.9372,-19.0808,100) weight = 0.000244141
+     22         gamma, kinetic energy (MeV) =     0.232521, position (cm) = (24.7166,-11.3925,100) weight = 0.000244141
+     22         gamma, kinetic energy (MeV) =    0.0477694, position (cm) = (32.4158,-25.1617,100) weight = 0.000244141
+     11            e-, kinetic energy (MeV) =     0.032039, position (cm) = (42.3823,-32.7567,102.582) weight = 0.000244141
+     11            e-, kinetic energy (MeV) =   0.00419496, position (cm) = (39.3454,-33.5305,103.175) weight = 0.000244141
+     11            e-, kinetic energy (MeV) =    0.0024003, position (cm) = (39.6971,-33.5917,102.889) weight = 0.000244141
+     11            e-, kinetic energy (MeV) =   0.00243106, position (cm) = (38.7697,-30.4325,100.135) weight = 0.000244141
+     11            e-, kinetic energy (MeV) =   0.00641602, position (cm) = (39.4717,-29.8436,100.246) weight = 0.000244141
+     11            e-, kinetic energy (MeV) =     0.016558, position (cm) = (26.9388,-6.80226,100.222) weight = 0.000244141
+     11            e-, kinetic energy (MeV) =    0.0141326, position (cm) = (26.8443,-6.84347,100.198) weight = 0.000244141
+     11            e-, kinetic energy (MeV) =    0.0220823, position (cm) = (25.5085,-7.48864,103.683) weight = 0.000244141
+     11            e-, kinetic energy (MeV) =    0.0173471, position (cm) = (25.1347,-10.6575,103.259) weight = 0.000244141
+     11            e-, kinetic energy (MeV) =    0.0923917, position (cm) = (22.6154,-11.8563,100.832) weight = 0.000244141
+   2112       neutron, kinetic energy (MeV) =      0.26943, position (cm) = (45.6342,-18.982,100) weight = 0.000488281
+   2212        proton, kinetic energy (MeV) =     0.113606, position (cm) = (44.6153,-20.0169,100.768) weight = 0.000488281
+   2112       neutron, kinetic energy (MeV) =      4.63621, position (cm) = (45.4375,-18.4368,100) weight = 0.000976562
+   2212        proton, kinetic energy (MeV) =    0.0953083, position (cm) = (49.2064,-20.0891,103.193) weight = 0.000976562
+   2212        proton, kinetic energy (MeV) =     0.896977, position (cm) = (48.2264,-18.418,102.975) weight = 0.000976562
+   2212        proton, kinetic energy (MeV) =     0.149262, position (cm) = (46.8951,-18.7274,102.265) weight = 0.000976562
+1000060120           C12, kinetic energy (MeV) =     0.314334, position (cm) = (44.9263,-18.7989,100.169) weight = 0.000976562
+   2212        proton, kinetic energy (MeV) =      3.17905, position (cm) = (45.4149,-18.4556,100.065) weight = 0.000976562
+   2112       neutron, kinetic energy (MeV) =      71.3954, position (cm) = (31.6571,1.84456,100) weight = 0.00195312
+1000060120           C12, kinetic energy (MeV) =     0.112779, position (cm) = (32.402,2.45099,104.999) weight = 0.00195312
+   2112       neutron, kinetic energy (MeV) =      71.3954, position (cm) = (31.6571,1.84456,100) weight = 0.00195312
+1000060120           C12, kinetic energy (MeV) =      1.20538, position (cm) = (33.7263,5.87508,108.132) weight = 0.00195312
+   2212        proton, kinetic energy (MeV) =      61.7261, position (cm) = (32.755,2.73836,107.368) weight = 0.00195312
+1000050100           B10, kinetic energy (MeV) =      1.69626, position (cm) = (32.7797,2.61056,107.896) weight = 0.00195312
+     22         gamma, kinetic energy (MeV) =     0.121137, position (cm) = (32.7797,2.61056,107.896) weight = 0.00195312
+     22         gamma, kinetic energy (MeV) =    0.0318199, position (cm) = (28.7548,19.2207,100) weight = 0.00195312
+     22         gamma, kinetic energy (MeV) =     0.027869, position (cm) = (26.6925,21.3081,100) weight = 0.00195312
+     11            e-, kinetic energy (MeV) =     0.027581, position (cm) = (25.2948,22.4778,103.344) weight = 0.00195312
+     11            e-, kinetic energy (MeV) =   0.00331237, position (cm) = (29.0008,18.9992,100.4) weight = 0.00195312
+     11            e-, kinetic energy (MeV) =  0.000766734, position (cm) = (22.1017,13.0404,108.358) weight = 0.00195312
+     11            e-, kinetic energy (MeV) =   0.00215531, position (cm) = (22.0848,12.6844,108.628) weight = 0.00195312
+     11            e-, kinetic energy (MeV) =   0.00131258, position (cm) = (26.7944,7.2611,108.557) weight = 0.00195312
+     11            e-, kinetic energy (MeV) =   0.00291445, position (cm) = (26.828,6.6869,108.73) weight = 0.00195312
+     11            e-, kinetic energy (MeV) =   0.00272469, position (cm) = (24.99,3.24881,105.956) weight = 0.00195312
+     11            e-, kinetic energy (MeV) =   0.00656042, position (cm) = (25.0355,3.22296,105.627) weight = 0.00195312
+     11            e-, kinetic energy (MeV) =   0.00065658, position (cm) = (26.6515,2.25171,105.69) weight = 0.00195312
+     11            e-, kinetic energy (MeV) =    0.0201432, position (cm) = (29.6949,1.57903,106.556) weight = 0.00195312
+     11            e-, kinetic energy (MeV) =     0.035101, position (cm) = (28.8391,1.84883,106.873) weight = 0.00195312
+   2112       neutron, kinetic energy (MeV) =     0.960511, position (cm) = (32.7797,2.61056,107.896) weight = 0.00195312
+1000010020      deuteron, kinetic energy (MeV) =   0.00128867, position (cm) = (22.8863,-8.31242,105.176) weight = 0.00195312
+     22         gamma, kinetic energy (MeV) =      2.22309, position (cm) = (22.8863,-8.31242,105.176) weight = 0.00195312
+     11            e-, kinetic energy (MeV) =      1.97528, position (cm) = (32.0538,7.19874,101.522) weight = 0.00195312
+   2212        proton, kinetic energy (MeV) =     0.915669, position (cm) = (22.1421,-6.27689,107.242) weight = 0.00195312
+     22         gamma, kinetic energy (MeV) =      3.36257, position (cm) = (32.7797,2.61056,107.896) weight = 0.00195312
+   2212        proton, kinetic energy (MeV) =      8.91916, position (cm) = (32.7797,2.61056,107.896) weight = 0.00195312
+   2212        proton, kinetic energy (MeV) =      12.9145, position (cm) = (32.7797,2.61056,107.896) weight = 0.00195312
+     22         gamma, kinetic energy (MeV) =     0.556383, position (cm) = (30.0563,-1.36515,100) weight = 0.00195312
+     11            e-, kinetic energy (MeV) =   0.00312528, position (cm) = (31.0764,-8.69634,107.464) weight = 0.00195312
+     11            e-, kinetic energy (MeV) =    0.0541009, position (cm) = (32.3842,-9.05528,107.935) weight = 0.00195312
+     11            e-, kinetic energy (MeV) =    0.0567282, position (cm) = (29.5495,-3.53222,100.653) weight = 0.00195312
+     11            e-, kinetic energy (MeV) =     0.340896, position (cm) = (30.4538,-1.28295,101.492) weight = 0.00195312
+   2112       neutron, kinetic energy (MeV) =     0.057378, position (cm) = (33.9358,8.86319,100) weight = 0.00195312
+     22         gamma, kinetic energy (MeV) =     0.060201, position (cm) = (24.4962,10.2059,100) weight = 0.00195312
+     11            e-, kinetic energy (MeV) =    0.0033695, position (cm) = (40.739,17.6259,100.224) weight = 0.00195312
+     11            e-, kinetic energy (MeV) =   0.00343788, position (cm) = (38.7895,19.4041,103.204) weight = 0.00195312
+     11            e-, kinetic energy (MeV) =  0.000465387, position (cm) = (35.5591,18.0631,101.545) weight = 0.00195312
+     11            e-, kinetic energy (MeV) =   0.00173762, position (cm) = (27.636,9.65159,100.186) weight = 0.00195312
+     11            e-, kinetic energy (MeV) =  0.000739839, position (cm) = (25.639,9.66585,101.098) weight = 0.00195312
+     11            e-, kinetic energy (MeV) =   0.00598271, position (cm) = (25.0062,10.1856,101.588) weight = 0.00195312
+     11            e-, kinetic energy (MeV) =   0.00874521, position (cm) = (25.0064,9.97751,101.671) weight = 0.00195312
+     11            e-, kinetic energy (MeV) =  0.000175159, position (cm) = (24.7383,10.0954,100.521) weight = 0.00195312
+     22         gamma, kinetic energy (MeV) =     0.501832, position (cm) = (32.2616,0.581145,100) weight = 0.00195312
+     22         gamma, kinetic energy (MeV) =    0.0407281, position (cm) = (22.4195,-2.43381,100) weight = 0.00195312
+     11            e-, kinetic energy (MeV) =    0.0310312, position (cm) = (14.9157,-12.7046,104.512) weight = 0.00195312
+     11            e-, kinetic energy (MeV) =  0.000269068, position (cm) = (15.0031,-12.3047,104.534) weight = 0.00195312
+     11            e-, kinetic energy (MeV) =    0.0041163, position (cm) = (14.3414,-9.30089,103.697) weight = 0.00195312
+     11            e-, kinetic energy (MeV) =    0.0050235, position (cm) = (14.3231,-9.3758,103.697) weight = 0.00195312
+     11            e-, kinetic energy (MeV) =    0.0215153, position (cm) = (35.2253,-9.39213,100.787) weight = 0.00195312
+     11            e-, kinetic energy (MeV) =    0.0970399, position (cm) = (35.9055,-2.95016,105.928) weight = 0.00195312
+     11            e-, kinetic energy (MeV) =     0.227675, position (cm) = (37.3549,-0.534816,102.561) weight = 0.00195312
+   2112       neutron, kinetic energy (MeV) =      1.17332, position (cm) = (19.2012,11.5882,100) weight = 0.00195312
+   2212        proton, kinetic energy (MeV) =     0.476219, position (cm) = (17.5047,11.9321,100.35) weight = 0.00195312
+1000060120           C12, kinetic energy (MeV) =     0.090993, position (cm) = (17.9657,11.8261,100.641) weight = 0.00195312
+   2112       neutron, kinetic energy (MeV) =      71.3985, position (cm) = (31.0977,2.12017,100) weight = 0.00195312
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.020000s Real=0.026905s Sys=0.000000s
+  User=0.030000s Real=0.044712s Sys=0.000000s
+for the entire run 10
+
+                  B10       1   0.00195312 Emin      1.69626 Emax      1.69626 (MeV) 
+                  C12       4   0.00683594 Emin     0.090993 Emax      1.20538 (MeV) 
+             deuteron       1   0.00195312 Emin   0.00128867 Emax   0.00128867 (MeV) 
+                   e-      41    0.0629883 Emin  0.000175159 Emax      1.97528 (MeV) 
+                gamma      11    0.0180664 Emin     0.027869 Emax      3.36257 (MeV) 
+              neutron      12    0.0163574 Emin  1.85401e-05 Emax      71.7713 (MeV) 
+               proton      10    0.0141602 Emin    0.0953083 Emax      61.7261 (MeV) 
+
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.
 Deleting G4Run (id:1) 
-UserDetectorConstruction deleted 0x80b2f0
-UserPhysicsList deleted 0x80be00
-UserActionInitialization deleted 0x9c7e10
+UserDetectorConstruction deleted 0x1e52a20
+UserPhysicsList deleted 0x1e908e0
+UserActionInitialization deleted 0x20213c0
 UserWorkerInitialization deleted 0
 UserWorkerThreadInitialization deleted 0
 UserRunAction deleted.
@@ -965,22 +1089,24 @@ G4SDManager deleted.
 EventManager deleted.
 Units table cleared.
 TransportationManager deleted.
-Total navigation history collections cleaned: 25
+Total navigation history collections cleaned: 24
 G4RNGHelper object is deleted.
 ================== Deleting memory pools ===================
-Pool ID '20G4NavigationLevelRep', size : 0.0356 MB
+Pool ID '20G4NavigationLevelRep', size : 0.0346 MB
 Pool ID '24G4ReferenceCountedHandleIvE', size : 0.000961 MB
 Pool ID '17G4DynamicParticle', size : 0.00481 MB
 Pool ID '7G4Event', size : 0.000961 MB
 Pool ID '15G4PrimaryVertex', size : 0.000961 MB
 Pool ID '17G4PrimaryParticle', size : 0.000961 MB
 Pool ID '15G4HCofThisEvent', size : 0.000961 MB
-Pool ID '7G4Track', size : 0.00865 MB
+Pool ID '16G4HitsCollection', size : 0.000961 MB
+Pool ID '7G4Track', size : 0.00961 MB
 Pool ID '18G4TouchableHistory', size : 0.00288 MB
 Pool ID '15G4CountedObjectIvE', size : 0.000961 MB
+Pool ID '11GB03HodoHit', size : 0.00481 MB
 Pool ID '10G4Fragment', size : 0.000961 MB
-Number of memory pools allocated: 11 of which, static: 0
-Dynamic pools deleted: 11 / Total memory freed: 0.059 MB
+Number of memory pools allocated: 13 of which, static: 0
+Dynamic pools deleted: 13 / Total memory freed: 0.064 MB
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

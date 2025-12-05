@@ -23,7 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
+/// \file G4LDMHiBar.cc
+/// \brief Implementation of the G4LDMHiBar class
+
 //---------------------------------------------------------------------------
 //
 // ClassName:   G4LDMHiBar

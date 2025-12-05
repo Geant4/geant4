@@ -30,6 +30,9 @@
 //
 //      Update mass and width following PDG 2023
 //        4 nov 2023 S.Okada
+//
+//      Update mass for N(1535) following PDG 2025
+//        4 nov 2025 S.Okada
 // ---------------------------------------------------------------
 
 #include "G4ExcitedNucleonConstructor.hh"
@@ -559,7 +562,7 @@ const char* G4ExcitedNucleonConstructor::name[] = {
 };
 
 const G4double G4ExcitedNucleonConstructor::mass[] = {
-  1.440*GeV, 1.515*GeV, 1.535*GeV, 1.650*GeV,  1.675*GeV,
+  1.440*GeV, 1.515*GeV, 1.530*GeV, 1.650*GeV,  1.675*GeV,
   1.685*GeV, 1.720*GeV, 1.710*GeV, 1.720*GeV,  1.920*GeV,
   2.020*GeV, 2.080*GeV, 2.180*GeV, 2.250*GeV, 2.280*GeV
 };

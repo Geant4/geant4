@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file B3/B3a/src/ActionInitialization.cc
+/// \file ActionInitialization.cc
 /// \brief Implementation of the B3a::ActionInitialization class
 
 #include "ActionInitialization.hh"
@@ -32,7 +31,10 @@
 #include "EventAction.hh"
 #include "PrimaryGeneratorAction.hh"
 #include "RunAction.hh"
-#include "StackingAction.hh"
+
+#include "G4RunManager.hh"
+#include "G4NeutrinoE.hh"
+#include "G4ClassificationOfNewTrack.hh"
 
 using namespace B3;
 
@@ -55,7 +57,10 @@ void ActionInitialization::Build() const
 
   SetUserAction(new EventAction(runAction));
   SetUserAction(new PrimaryGeneratorAction);
-  SetUserAction(new StackingAction);
+
+  // Do not track neutrinos, but kill them immediately
+  auto runManager = G4RunManager::GetRunManager();
+  runManager->SetDefaultClassification(G4NeutrinoE::Definition(), fKill);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

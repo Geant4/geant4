@@ -77,13 +77,7 @@ inline bool axis_stream(buffer& a_buffer,
     if(!a_buffer.write(a_axis.upper_edge())) return false;
 
     // fXbins
-    //if(a_axis.m_fixed) {
-    //  std::vector<double> v;
-    //  ArrayT<double> dummy(v);
-    //  if(!dummy.stream(a_buffer)) return false; //TArrayD
-    //} else {
       if(!a_buffer.write_array(a_axis.edges())) return false; //TArrayD
-    //}
 
     if(!a_buffer.write((int)0)) return false; //fFirst
     if(!a_buffer.write((int)0)) return false; //fLast

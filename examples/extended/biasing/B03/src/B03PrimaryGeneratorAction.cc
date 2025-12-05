@@ -23,11 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file biasing/B03/src/B03PrimaryGeneratorAction.cc
+/// \file B03PrimaryGeneratorAction.cc
 /// \brief Implementation of the B03PrimaryGeneratorAction class
-//
-//
-//
 
 #include "B03PrimaryGeneratorAction.hh"
 

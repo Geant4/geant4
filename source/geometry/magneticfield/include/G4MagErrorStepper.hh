@@ -30,7 +30,7 @@
 // Abstract base class for integrator of particle's equation of motion,
 // used in tracking in space dependent magnetic field.
 
-// Author: W.Wander <wwc@mit.edu>, 09.12.1997
+// Author: W.Wander (MIT), 09.12.1997
 // --------------------------------------------------------------------
 #ifndef G4MAGERRORSTEPPER_HH
 #define G4MAGERRORSTEPPER_HH
@@ -40,47 +40,77 @@
 #include "G4Mag_EqRhs.hh"
 #include "G4ThreeVector.hh"
 
+/**
+ * @brief G4MagErrorStepper is an abstract base class for integrator of
+ * particle's equation of motion, used in tracking in space dependent
+ * magnetic field.
+ */
+
 class G4MagErrorStepper : public G4MagIntegratorStepper
 {
   public:
 
+    /**
+     * Constructor for G4MagErrorStepper.
+     *  @param[in] EqRhs Pointer to the provided equation of motion.
+     *  @param[in] numberOfVariables The number of integration variables.
+     *  @param[in] numberOfVariables The number of state variables.
+     */
     G4MagErrorStepper(G4EquationOfMotion*EqRhs,
                       G4int numberOfVariables,
                       G4int numStateVariables = 12);
+
+    /**
+     * Destructor.
+     */
     ~G4MagErrorStepper() override;
   
+    /**
+     * Copy constructor and assignment operator not allowed.
+     */
     G4MagErrorStepper(const G4MagErrorStepper&) = delete;
     G4MagErrorStepper& operator=(const G4MagErrorStepper&) = delete;
 
+    /**
+     * The stepper for the Runge Kutta integration.
+     * The stepsize is fixed, with the step size given by 'h'.
+     * Integrates ODE starting values y[0 to 6].
+     * Outputs yout[] and its estimated error yerr[].
+     *  @param[in] y Starting values array of integration variables.
+     *  @param[in] dydx Derivatives array.
+     *  @param[in] h The given step size.
+     *  @param[out] yout Integration output.
+     *  @param[out] yerr The estimated error.
+     */
     void Stepper( const G4double y[],
                   const G4double dydx[],
                         G4double h,
                         G4double yout[],
                         G4double yerr[] ) override;
-      // The stepper for the Runge Kutta integration. The stepsize 
-      // is fixed, with the Step size given by h.
-      // Integrates ODE starting values y[0 to 6].
-      // Outputs yout[] and its estimated error yerr[].
 
-    virtual  void DumbStepper( const G4double y[],
-                               const G4double dydx[],
-                                     G4double h,
-                                     G4double yout[] ) = 0;
-      // Performs a 'dump' Step without error calculation.
+    /**
+     * Same as Stepper() function above, but should perform a 'dump' step
+     * without error calculation. To be implemented in concrete derived classes.
+     */
+    virtual void DumbStepper( const G4double y[],
+                              const G4double dydx[],
+                                    G4double h,
+                                    G4double yout[] ) = 0;
 
+    /**
+     * Estimates the maximum distance of curved solution and chord.
+     */
     G4double DistChord() const override;
 
   private:
 
-    // STATE
+    /** Data stored in order to find the chord. */
     G4ThreeVector fInitialPoint, fMidPoint, fFinalPoint;
-      // Data stored in order to find the chord
  
-    // Dependent Objects, owned --- part of the STATE 
+    /** Arrays used only for temporary storage; they are allocated at the
+        class level only for efficiency, so that calls to new and delete are
+        not made in Stepper(). */
     G4double *yInitial, *yMiddle, *dydxMid, *yOneStep;
-      // The following arrays are used only for temporary storage
-      // they are allocated at the class level only for efficiency -
-      // so that calls to new and delete are not made in Stepper().
 };
 
 #include  "G4MagErrorStepper.icc"

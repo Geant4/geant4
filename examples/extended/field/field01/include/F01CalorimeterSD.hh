@@ -23,14 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file field/field01/include/F01CalorimeterSD.hh
+/// \file F01CalorimeterSD.hh
 /// \brief Definition of the F01CalorimeterSD class
-//
-//
-//
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef F01CalorimeterSD_h
 #define F01CalorimeterSD_h 1

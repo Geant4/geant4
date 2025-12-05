@@ -23,12 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file medical/fanoCavity2/include/PhysListEmStandard_option4.hh
+/// \file PhysListEmStandard_option4.hh
 /// \brief Definition of the PhysListEmStandard_option4 class
-//
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef PhysListEmStandard_option4_h
 #define PhysListEmStandard_option4_h 1

@@ -25,8 +25,8 @@
 //
 // G4TwistTubsHypeSide implementation
 //
-// 01-Aug-2002 - Kotoyo Hoshina (hoshina@hepburn.s.chiba-u.ac.jp), created.
-// 13-Nov-2003 - O.Link (Oliver.Link@cern.ch), Integration in Geant4
+// Author: Kotoyo Hoshina (Chiba University), 01.08.2002 - Created.
+//         Oliver Link (CERN), 13.11.2003 - Integration in Geant4
 //               from original version in Jupiter-2.5.02 application.
 // --------------------------------------------------------------------
 
@@ -124,11 +124,6 @@ G4TwistTubsHypeSide::G4TwistTubsHypeSide( __void__& a )
   : G4VTwistSurface(a)
 {
 }
-
-//=====================================================================
-//* destructor --------------------------------------------------------
-
-G4TwistTubsHypeSide::~G4TwistTubsHypeSide() = default;
 
 //=====================================================================
 //* GetNormal ---------------------------------------------------------
@@ -302,17 +297,16 @@ G4int G4TwistTubsHypeSide::DistanceToSurface(const G4ThreeVector& gp,
       }
       return fCurStatWithV.GetNXX();
    }
-   else   // initialize
+
+   // initialize
+   for (auto i=0; i<2; ++i)
    {
-      for (auto i=0; i<2; ++i)
-      {
-         distance[i] = kInfinity;
-         areacode[i] = sOutside;
-         isvalid[i]  = false;
-         gxx[i].set(kInfinity, kInfinity, kInfinity);
-      }
+      distance[i] = kInfinity;
+      areacode[i] = sOutside;
+      isvalid[i]  = false;
+      gxx[i].set(kInfinity, kInfinity, kInfinity);
    }
-   
+
    G4ThreeVector p = ComputeLocalPoint(gp);
    G4ThreeVector v = ComputeLocalDirection(gv);
    G4ThreeVector xx[2]; 
@@ -368,7 +362,7 @@ G4int G4TwistTubsHypeSide::DistanceToSurface(const G4ThreeVector& gp,
          areacode[0] = GetAreaCode(xx[0]);
          if (!IsOutside(areacode[0]))
          {
-            if (distance[0] >= 0) isvalid[0] = true;
+            if (distance[0] >= 0) { isvalid[0] = true; }
          }
       }
       else if (validate == kValidateWithoutTol)
@@ -376,13 +370,13 @@ G4int G4TwistTubsHypeSide::DistanceToSurface(const G4ThreeVector& gp,
          areacode[0] = GetAreaCode(xx[0], false);
          if (IsInside(areacode[0]))
          {
-            if (distance[0] >= 0) isvalid[0] = true;
+            if (distance[0] >= 0) { isvalid[0] = true; }
          }
       }
       else  // kDontValidate                       
       {
          areacode[0] = sInside;
-            if (distance[0] >= 0) isvalid[0] = true;
+            if (distance[0] >= 0) { isvalid[0] = true; }
       }
                  
       fCurStatWithV.SetCurrentStatus(0, gxx[0], distance[0], areacode[0],
@@ -414,7 +408,7 @@ G4int G4TwistTubsHypeSide::DistanceToSurface(const G4ThreeVector& gp,
             areacode[0] = GetAreaCode(xx[0]);
             if (!IsOutside(areacode[0]))
             {
-               if (distance[0] >= 0) isvalid[0] = true;
+               if (distance[0] >= 0) { isvalid[0] = true; }
             }
          }
          else if (validate == kValidateWithoutTol)
@@ -422,13 +416,13 @@ G4int G4TwistTubsHypeSide::DistanceToSurface(const G4ThreeVector& gp,
             areacode[0] = GetAreaCode(xx[0], false);
             if (IsInside(areacode[0]))
             {
-               if (distance[0] >= 0) isvalid[0] = true;
+               if (distance[0] >= 0) { isvalid[0] = true; }
             }
          }
          else  // kDontValidate                       
          {
             areacode[0] = sInside;
-               if (distance[0] >= 0) isvalid[0] = true;
+               if (distance[0] >= 0) { isvalid[0] = true; }
          }
                  
          fCurStatWithV.SetCurrentStatus(0, gxx[0], distance[0], areacode[0],
@@ -466,7 +460,7 @@ G4int G4TwistTubsHypeSide::DistanceToSurface(const G4ThreeVector& gp,
             tmpareacode[i] = GetAreaCode(tmpxx[i]);
             if (!IsOutside(tmpareacode[i]))
             {
-               if (tmpdist[i] >= 0) tmpisvalid[i] = true;
+               if (tmpdist[i] >= 0) { tmpisvalid[i] = true; }
                continue;
             }
          }
@@ -475,14 +469,14 @@ G4int G4TwistTubsHypeSide::DistanceToSurface(const G4ThreeVector& gp,
             tmpareacode[i] = GetAreaCode(tmpxx[i], false);
             if (IsInside(tmpareacode[i]))
             {
-               if (tmpdist[i] >= 0) tmpisvalid[i] = true;
+               if (tmpdist[i] >= 0) { tmpisvalid[i] = true; }
                continue;
             }
          }
          else  // kDontValidate
          {
             tmpareacode[i] = sInside;
-               if (tmpdist[i] >= 0) tmpisvalid[i] = true;
+               if (tmpdist[i] >= 0) { tmpisvalid[i] = true; }
             continue;
          }
       }      
@@ -563,16 +557,14 @@ G4int G4TwistTubsHypeSide::DistanceToSurface(const G4ThreeVector& gp,
       }
       return fCurStat.GetNXX();
    }
-   else  // initialize
+
+   // initialize
+   for (auto i=0; i<2; ++i)
    {
-      for (auto i=0; i<2; ++i)
-      {
-         distance[i] = kInfinity;
-         areacode[i] = sOutside;
-         gxx[i].set(kInfinity, kInfinity, kInfinity);
-      }
+      distance[i] = kInfinity;
+      areacode[i] = sOutside;
+      gxx[i].set(kInfinity, kInfinity, kInfinity);
    }
-   
 
    G4ThreeVector p = ComputeLocalPoint(gp);
    G4ThreeVector xx;
@@ -719,33 +711,44 @@ G4int G4TwistTubsHypeSide::GetAreaCode(const G4ThreeVector& xx,
 
          if ((phiareacode & sAxisMin) == sAxisMin)
          {
-            areacode |= (sAxis0 & (sAxisPhi | sAxisMin)) | sBoundary;
-            if (isoutsideinphi) isoutside = true;
+           areacode |= (sAxis0 & (sAxisPhi | sAxisMin)) | sBoundary;
+           if (isoutsideinphi) { isoutside = true; }
          }
          else if ((phiareacode & sAxisMax)  == sAxisMax)
          {
-            areacode |= (sAxis0 & (sAxisPhi | sAxisMax)) | sBoundary;
-            if (isoutsideinphi) isoutside = true;
+           areacode |= (sAxis0 & (sAxisPhi | sAxisMax)) | sBoundary;
+           if (isoutsideinphi) { isoutside = true; }
          }
 
          // test boundary of zaxis
 
          if (xx.z() < fAxisMin[zaxis] + ctol)
          {
-            areacode |= (sAxis1 & (sAxisZ | sAxisMin));
-            if   ((areacode & sBoundary) != 0) areacode |= sCorner;  // xx is on corner.
-            else                        areacode |= sBoundary;
+           areacode |= (sAxis1 & (sAxisZ | sAxisMin));
+           if ((areacode & sBoundary) != 0)
+           {
+             areacode |= sCorner;  // xx is on corner.
+           }
+           else
+           {
+             areacode |= sBoundary;
+           }
 
-            if (xx.z() <= fAxisMin[zaxis] - ctol) isoutside = true;
-
+           if (xx.z() <= fAxisMin[zaxis] - ctol) { isoutside = true; }
          }
          else if (xx.z() > fAxisMax[zaxis] - ctol)
          {
-            areacode |= (sAxis1 & (sAxisZ | sAxisMax));
-            if   ((areacode & sBoundary) != 0) areacode |= sCorner;  // xx is on corner.
-            else                        areacode |= sBoundary;
+           areacode |= (sAxis1 & (sAxisZ | sAxisMax));
+           if ((areacode & sBoundary) != 0)
+           {
+             areacode |= sCorner;  // xx is on corner.
+           }
+           else
+           {
+             areacode |= sBoundary;
+           }
 
-            if (xx.z() >= fAxisMax[zaxis] + ctol) isoutside = true;
+           if (xx.z() >= fAxisMax[zaxis] + ctol) { isoutside = true; }
          }
 
          // if isoutside = true, clear sInside bit.
@@ -753,56 +756,64 @@ G4int G4TwistTubsHypeSide::GetAreaCode(const G4ThreeVector& xx,
 
          if (isoutside)
          {
-            G4int tmpareacode = areacode & (~sInside);
-            areacode = tmpareacode;
+           G4int tmpareacode = areacode & (~sInside);
+           areacode = tmpareacode;
          }
          else if ((areacode & sBoundary) != sBoundary)
          {
-            areacode |= (sAxis0 & sAxisPhi) | (sAxis1 & sAxisZ);
+           areacode |= (sAxis0 & sAxisPhi) | (sAxis1 & sAxisZ);
          }
 
          return areacode;
       }
-      else
-      {
-         G4int phiareacode = GetAreaCodeInPhi(xx, false);
+      
+      G4int phiareacode = GetAreaCodeInPhi(xx, false);
          
-         // test boundary of z-axis
+      // test boundary of z-axis
 
-         if (xx.z() < fAxisMin[zaxis])
-         {
-            areacode |= (sAxis1 & (sAxisZ | sAxisMin)) | sBoundary;
-
-         }
-         else if (xx.z() > fAxisMax[zaxis])
-         {
-            areacode |= (sAxis1 & (sAxisZ | sAxisMax)) | sBoundary;
-         }
-
-         // boundary of phi-axis
-
-         if (phiareacode == sAxisMin)
-         {
-            areacode |= (sAxis0 & (sAxisPhi | sAxisMin));
-            if   ((areacode & sBoundary) != 0) areacode |= sCorner;  // xx is on corner.
-            else                        areacode |= sBoundary; 
-             
-         }
-         else if (phiareacode == sAxisMax)
-         {
-            areacode |= (sAxis0 & (sAxisPhi | sAxisMax));
-            if   ((areacode & sBoundary) != 0) areacode |= sCorner;  // xx is on corner.
-            else                        areacode |= sBoundary;
-         }
-
-         // if not on boundary, add boundary information. 
-
-         if ((areacode & sBoundary) != sBoundary)
-         {
-            areacode |= (sAxis0 & sAxisPhi) | (sAxis1 & sAxisZ);
-         }
-         return areacode;
+      if (xx.z() < fAxisMin[zaxis])
+      {
+        areacode |= (sAxis1 & (sAxisZ | sAxisMin)) | sBoundary;
       }
+      else if (xx.z() > fAxisMax[zaxis])
+      {
+        areacode |= (sAxis1 & (sAxisZ | sAxisMax)) | sBoundary;
+      }
+
+      // boundary of phi-axis
+
+      if (phiareacode == sAxisMin)
+      {
+        areacode |= (sAxis0 & (sAxisPhi | sAxisMin));
+        if ((areacode & sBoundary) != 0)
+        {
+          areacode |= sCorner;  // xx is on corner.
+        }
+        else
+        {
+          areacode |= sBoundary; 
+        }
+      }
+      else if (phiareacode == sAxisMax)
+      {
+        areacode |= (sAxis0 & (sAxisPhi | sAxisMax));
+        if ((areacode & sBoundary) != 0)
+        {
+          areacode |= sCorner;  // xx is on corner.
+        }
+        else
+        {
+          areacode |= sBoundary;
+        }
+      }
+
+      // if not on boundary, add boundary information. 
+
+      if ((areacode & sBoundary) != sBoundary)
+      {
+        areacode |= (sAxis0 & sAxisPhi) | (sAxis1 & sAxisZ);
+      }
+      return areacode;
    }
    else
    {
@@ -836,13 +847,12 @@ G4int G4TwistTubsHypeSide::GetAreaCodeInPhi(const G4ThreeVector& xx,
       if (AmIOnLeftSide(xx, lowerlimit) >= 0)       // xx is on lowerlimit
       {
          areacode |= (sAxisMin | sBoundary);
-         if (AmIOnLeftSide(xx, lowerlimit) > 0) isoutside = true; 
-
+         if (AmIOnLeftSide(xx, lowerlimit) > 0) { isoutside = true;  }
       }
       else if (AmIOnLeftSide(xx, upperlimit) <= 0)  // xx is on upperlimit
       {
          areacode |= (sAxisMax | sBoundary);
-         if (AmIOnLeftSide(xx, upperlimit) < 0) isoutside = true; 
+         if (AmIOnLeftSide(xx, upperlimit) < 0) { isoutside = true;  }
       }
 
       // if isoutside = true, clear inside bit.

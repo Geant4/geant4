@@ -60,6 +60,8 @@ private:
   G4UIcmdWithAString*   fpCommandCutawayMode;
   G4UIcommand*          fpCommandDefaultColour;
   G4UIcommand*          fpCommandDefaultTextColour;
+  G4UIcmdWithADouble*   fpCommandDotsSize;
+  G4UIcmdWithABool*     fpCommandDotsSmooth;
   G4UIcmdWithABool*     fpCommandEdge;
   G4UIcommand*          fpCommandExplodeFactor;
   G4UIcmdWithADouble*   fpCommandGlobalMarkerScale;
@@ -95,6 +97,7 @@ private:
   G4UIcommand*          fpCommandTimeWindowEndTime;
   G4UIcmdWithADouble*   fpCommandTimeWindowFadeFactor;
   G4UIcommand*          fpCommandTimeWindowStartTime;
+  G4UIcmdWithABool*     fpCommandZoomToCursor;
 };
 
 #endif

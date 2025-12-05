@@ -29,7 +29,7 @@
 //
 // Class describing a twisted boundary surface for a trapezoid.
 
-// Author: 27-Oct-2004 - O.Link (Oliver.Link@cern.ch)
+// Author: Oliver Link (CERN), 27.10.2004 - Created
 // --------------------------------------------------------------------
 #ifndef G4TWISTTRAPALPHASIDE_HH
 #define G4TWISTTRAPALPHASIDE_HH
@@ -38,10 +38,31 @@
 
 #include <vector>
 
+/**
+ * @brief G4TwistTrapAlphaSide describes a twisted boundary surface
+ * for a trapezoid.
+ */
+
 class G4TwistTrapAlphaSide : public G4VTwistSurface
 {
   public:
    
+    /**
+     * Constructs a trapezoid twisted boundary surface, given its parameters.
+     *  @param[in] name The surface name.
+     *  @param[in] PhiTwist The twist angle.
+     *  @param[in] pDz Half z length.
+     *  @param[in] pTheta Direction between end planes - polar angle.
+     *  @param[in] pPhi Direction between end planes - azimuthal angle.
+     *  @param[in] pDy1 Half y length at -pDz.
+     *  @param[in] pDx1 Half x length at -pDz,-pDy.
+     *  @param[in] pDx2 Half x length at -pDz,+pDy.
+     *  @param[in] pDy2 Half y length at +pDz.
+     *  @param[in] pDx3 Half x length at +pDz,-pDy.
+     *  @param[in] pDx4 Half x length at +pDz,+pDy.
+     *  @param[in] pAlph Tilt angle at +pDz.
+     *  @param[in] AngleSide Parity.
+     */
     G4TwistTrapAlphaSide(const G4String& name,
                                G4double  PhiTwist, // twist angle
                                G4double  pDz,      // half z lenght
@@ -57,48 +78,100 @@ class G4TwistTrapAlphaSide : public G4VTwistSurface
                                G4double  AngleSide // parity
                          );
   
-    ~G4TwistTrapAlphaSide() override;
+    /**
+     * Default destructor.
+     */
+    ~G4TwistTrapAlphaSide() override = default;
    
-    G4ThreeVector  GetNormal(const G4ThreeVector& xx,
-                                           G4bool isGlobal = false) override ;   
+    /**
+     * Returns a normal vector at a surface (or very close to the surface)
+     * point at 'p'.
+     *  @param[in] p The point where computing the normal.
+     *  @param[in] isGlobal If true, it returns the normal in global coordinates.
+     *  @returns The normal vector.
+     */
+    G4ThreeVector GetNormal(const G4ThreeVector& p,
+                                  G4bool isGlobal = false) override ;   
    
+    /**
+     * Returns the distance to surface, given point 'gp' and direction 'gv'.
+     *  @param[in] gp The point from where computing the distance.
+     *  @param[in] gv The direction along which computing the distance.
+     *  @param[out] gxx Vector of global points based on number of solutions.
+     *  @param[out] distance The distance vector based on number of solutions.
+     *  @param[out] areacode The location vector based on number of solutions.
+     *  @param[out] isvalid Validity vector based on number of solutions.
+     *  @param[in] validate Adopted validation criteria.
+     *  @returns The number of solutions.
+     */
     G4int DistanceToSurface(const G4ThreeVector& gp,
                             const G4ThreeVector& gv,
-                                  G4ThreeVector  gxx[],
-                                  G4double  distance[],
-                                  G4int     areacode[],
-                                  G4bool    isvalid[],
+                                  G4ThreeVector gxx[],
+                                  G4double distance[],
+                                  G4int areacode[],
+                                  G4bool isvalid[],
                             EValidate validate = kValidateWithTol) override;
                                                   
+    /**
+     * Returns the safety distance to surface, given point 'gp'.
+     *  @param[in] gp The point from where computing the safety distance.
+     *  @param[out] gxx Vector of global points based on number of solutions.
+     *  @param[out] distance The distance vector based on number of solutions.
+     *  @param[out] areacode The location vector based on number of solutions.
+     *  @returns The number of solutions.
+     */
     G4int DistanceToSurface(const G4ThreeVector& gp,
-                                  G4ThreeVector  gxx[],
-                                  G4double       distance[],
-                                  G4int          areacode[]) override;
+                                  G4ThreeVector gxx[],
+                                  G4double distance[],
+                                  G4int areacode[]) override;
 
+    /**
+     * Fake default constructor for usage restricted to direct object
+     * persistency for clients requiring preallocation of memory for
+     * persistifiable objects.
+     */
     G4TwistTrapAlphaSide(__void__&);
-      // Fake default constructor for usage restricted to direct object
-      // persistency for clients requiring preallocation of memory for
-      // persistifiable objects.
 
   private:
 
+    /**
+     * Returns the area code for point 'xx' using or not surface tolerance.
+     */
     G4int GetAreaCode(const G4ThreeVector& xx, 
                             G4bool withTol = true) override;
+
+    /**
+     * Setters.
+     */
     void SetCorners() override;
     void SetBoundaries() override;
 
+    /**
+     * Finds the closest point on surface for a given point 'p', returning
+     * 'phi' and 'u'.
+     */
     void GetPhiUAtX(const G4ThreeVector& p, G4double& phi, G4double& u);
+
+    /**
+     * Returns projection on surface of a given point 'p'.
+     */
     G4ThreeVector ProjectPoint(const G4ThreeVector& p,
                                      G4bool isglobal = false);
 
+    /**
+     * Returns point on surface given 'phi' and 'u'.
+     */
     inline G4ThreeVector SurfacePoint(G4double phi, G4double u,
                                       G4bool isGlobal = false ) override;
+
+    /**
+     * Internal accessors.
+     */
     inline G4double GetBoundaryMin(G4double phi) override;
     inline G4double GetBoundaryMax(G4double phi) override;
     inline G4double GetSurfaceArea() override;
     void GetFacets( G4int m, G4int n, G4double xyz[][3],
                     G4int faces[][4], G4int iside ) override;
-
     inline G4ThreeVector NormAng(G4double phi, G4double u);
     inline G4double GetValueA(G4double phi);
     inline G4double GetValueB(G4double phi);
@@ -145,92 +218,6 @@ class G4TwistTrapAlphaSide : public G4VTwistSurface
 // inline functions
 //========================================================
 
-inline
-G4double G4TwistTrapAlphaSide::GetValueA(G4double phi)
-{
-  return ( fDx4plus2 + fDx4minus2 * ( 2 * phi ) / fPhiTwist  ) ;
-}
-
-inline
-G4double G4TwistTrapAlphaSide::GetValueD(G4double phi) 
-{
-  return ( fDx3plus1 + fDx3minus1 * ( 2 * phi) / fPhiTwist  ) ;
-} 
-
-inline 
-G4double G4TwistTrapAlphaSide::GetValueB(G4double phi) 
-{
-  return ( fDy2plus1 + fDy2minus1 * ( 2 * phi ) / fPhiTwist ) ;
-}
-
-
-inline
-G4double G4TwistTrapAlphaSide::Xcoef(G4double u, G4double phi)
-{
-  
-  return GetValueA(phi)/2. + (GetValueD(phi)-GetValueA(phi))/4. 
-    - u*( ( GetValueD(phi)-GetValueA(phi) )/( 2 * GetValueB(phi) ) - fTAlph );
-
-}
-
-inline G4ThreeVector
-G4TwistTrapAlphaSide::SurfacePoint(G4double phi, G4double u , G4bool isGlobal)
-{
-  // function to calculate a point on the surface, given by parameters phi,u
-
-  G4ThreeVector SurfPoint ( Xcoef(u,phi) * std::cos(phi)
-                          - u * std::sin(phi) + fdeltaX*phi/fPhiTwist,
-                            Xcoef(u,phi) * std::sin(phi)
-                          + u * std::cos(phi) + fdeltaY*phi/fPhiTwist,
-                            2*fDz*phi/fPhiTwist  );
-  if (isGlobal) { return (fRot * SurfPoint + fTrans); }
-  return SurfPoint;
-}
-
-inline
-G4double G4TwistTrapAlphaSide::GetBoundaryMin(G4double phi)
-{
-  return -0.5*GetValueB(phi) ;
-}
-
-inline
-G4double G4TwistTrapAlphaSide::GetBoundaryMax(G4double phi)
-{
-  return 0.5*GetValueB(phi) ;
-}
-
-inline
-G4double G4TwistTrapAlphaSide::GetSurfaceArea()
-{
-  return (fDz*(std::sqrt(16*fDy1*fDy1
-             + (fa1md1 + 4*fDy1*fTAlph)*(fa1md1 + 4*fDy1*fTAlph))
-             + std::sqrt(16*fDy2*fDy2 + (fa2md2 + 4*fDy2*fTAlph)
-                                      * (fa2md2 + 4*fDy2*fTAlph))))/2. ;
-}
-
-inline
-G4ThreeVector G4TwistTrapAlphaSide::NormAng( G4double phi, G4double u ) 
-{
-  // function to calculate the norm at a given point on the surface
-  // replace a1-d1
-
-  G4ThreeVector nvec ( fDy1* fDz*(4*fDy1*std::cos(phi)
-                     + (fa1md1 + 4*fDy1*fTAlph)*std::sin(phi)),
-                       -(fDy1* fDz*((fa1md1 + 4*fDy1*fTAlph)*std::cos(phi)
-                     - 4*fDy1*std::sin(phi))),
-                       (fDy1*(-8*(fDx3minus1 + fDx4minus2)*fDy1
-                                + fa1md1*(fDx2 + fDx3plus1 + fDx4)*fPhiTwist
-                                + 4*(fDx2 + fDx3plus1 + fDx4)*fDy1*fPhiTwist
-                                *fTAlph + 2*(fDx3minus1 + fDx4minus2)
-                                *(fa1md1 + 4*fDy1*fTAlph)*phi)
-                                + fPhiTwist*(16*fDy1*fDy1
-                                + (fa1md1 + 4*fDy1*fTAlph)
-                                *(fa1md1 + 4*fDy1*fTAlph))*u
-                                + 4*fDy1*(fa1md1*fdeltaY - 4*fdeltaX*fDy1
-                                + 4*fdeltaY*fDy1*fTAlph)* std::cos(phi)
-                                - 4*fDy1*(fa1md1*fdeltaX + 4*fDy1*(fdeltaY
-                                + fdeltaX*fTAlph))*std::sin(phi))/ 8. ) ;
-  return nvec.unit();
-}
+#include "G4TwistTrapAlphaSide.icc"
 
 #endif

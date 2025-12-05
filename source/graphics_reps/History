@@ -6,6 +6,16 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2025-11-07 John Allison (greps-V11-03-03)
+- G4AttDef.hh, G4AttValue.hh, G4AttCheck.hh, G4AttHolder.hh:
+  - Fix link to description of HepRep data communication format (used by G4Atts).
+
+## 2025-10-02 John Allison (greps-V11-03-02)
+- G4Visible.cc: Copy constructor and assignment operator:
+  - Fix Coverity warnings.
+    - Add extra testing for null pointers - for cases that will never happen
+      but they will keep Coverity happy.
+
 ## 2025-05-29 John Allison (greps-V11-03-01)
 - Use "// clang-format off/on" on the following carefully crafted files:
   - G4Colour.hh/cc, G4VisAttributes.hh/cc, G4VisExtent.cc.

@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file Par03EMShowerMessenger.cc
+/// \brief Implementation of the Par03EMShowerMessenger class
+
 #include "Par03EMShowerMessenger.hh"
 
 #include "Par03EMShowerModel.hh"

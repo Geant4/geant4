@@ -23,12 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file field/BlineTracer/include/G4BlineEquation.hh
+/// \file G4BlineEquation.hh
 /// \brief Definition of the G4BlineEquation class
-//
-//
-//
-//
+
 // --------------------------------------------------------------------
 //
 // G4BlineEquation

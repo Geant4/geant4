@@ -29,19 +29,14 @@
 //
 // A class responsible for high level geometrical functions, and for
 // high level objects in the geometry subdomain.
-// The class is a `singleton', with access via the static method
+// The class is a 'singleton', with access via the static method
 // G4GeometryManager::GetInstance().
-//
-// Member data:
-//
-//   - fgInstance
-//     Ptr to the unique instance of class (per Thread)
 
-// 26.07.95, P.Kent - Initial version, including optimisation build
-// 12.06.24, J.Apostolakis - Added parallel optimisation in workers
+// Author: Paul Kent (CERN), 26.07.1995 - Initial version
+//         John Apostolakis (CERN), 12.06.2024 - Added parallel optimisation
 // --------------------------------------------------------------------
 #ifndef G4GEOMETRYMANAGER_HH
-#define G4GEOMETRYMANAGER_HH 1
+#define G4GEOMETRYMANAGER_HH
 
 #include <vector>
 
@@ -51,141 +46,146 @@
 
 class G4VPhysicalVolume;
 class G4Timer;
+class G4VoxelisationHelper;
+
+/**
+ * @brief G4GeometryManager is a singleton class responsible for high level
+ * geometrical functions, and for high level objects in the geometry subdomain.
+ */
 
 class G4GeometryManager
 {
   public:
   
-    G4bool CloseGeometry(G4bool pOptimise = true, G4bool verbose = false,
-                         G4VPhysicalVolume* vol = nullptr);
-      // Close (`lock') the geometry: perform sanity and `completion' checks
-      // and optionally [default=yes] build optimisation information.
-      // Applies to just a specific subtree if a physical volume is specified.
-
-    void OpenGeometry(G4VPhysicalVolume* vol = nullptr);
-      // Open (`unlock') the geometry and remove optimisation information if
-      // present. Applies to just a specific subtree if a physical volume is
-      // specified.
-
-    inline G4bool IsGeometryClosed() { return fIsClosed; }
-      // Return true/false according to state of optimised geometry.
-
-    void SetWorldMaximumExtent(G4double worldExtent);
-      // Set the maximum extent of the world volume. The operation is
-      // allowed only if NO solids have been created already.
-
-    static G4GeometryManager* GetInstance();
-      // Return ptr to singleton instance of the class, creating it if
-      // not existing.
-
-    static G4GeometryManager* GetInstanceIfExist();
-      // Return ptr to singleton instance.
-
-    void OptimiseInParallel(G4bool val = true);
-      // Request optimisation using threads (if MT is enabled & used ).
-  
-    void UndertakeOptimisation();
-      // Method that contributes to (Voxel) optimisation until all work is done.
-      // Must be called by Worker thread initialisation - not a user callable
-      // method.
-
-    void RequestParallelOptimisation(G4bool val = true,
-                                     G4bool verbose = true);
-      // Detailed method for user to request parallel Optimisation
-      // (if verbosity is required). Calling this is enough to ask for it.
-      // It will be used if Geant4 is built with MT/tasks.
-  
-    G4bool IsParallelOptimisationConfigured();
-      // Check whether parallel optimisation was requested.
-    G4bool IsParallelOptimisationFinished();
-      // Report whether parallel optimisation is done.
-  
+    /**
+     * Destructor; called by G4RunManagerKernel.
+     */
     ~G4GeometryManager();
-      // Destructor; called by G4RunManagerKernel.
+
+    /**
+     * Returns a pointer to the singleton instance of the class, creating
+     * it if not existing.
+     */
+    static G4GeometryManager* GetInstance();
+
+    /**
+     * Simply returns a pointer to the singleton instance.
+     */
+    static G4GeometryManager* GetInstanceIfExist();
+
+    /**
+     * Closes ('locks') the geometry: performs sanity and 'completion' checks
+     * and optionally [default=yes] builds the optimisation structure.
+     * Applies to just a specific subtree if a physical volume is specified.
+     *  @param[in] pOptimise Flag to enabling/disabling optimisation structure.
+     *  @param[in] verbose Flag for verbosity.
+     *  @param[in] vol Optional pointer to a physical volume (subtree) for
+     *             optimisation.
+     *  @returns true if process succeeds.
+     */
+    G4bool CloseGeometry(G4bool pOptimise = true,
+                         G4bool verbose = false,
+                         G4VPhysicalVolume* vol = nullptr);
+ 
+    /**
+     * Opens ('unlocks') the geometry and removes the optimisation structure if
+     * present. Applies to just a specific subtree if a physical volume is
+     * specified.
+     *  @param[in] vol Optional pointer to a physical volume (subtree) for
+     *             optimisation.
+     */
+    void OpenGeometry(G4VPhysicalVolume* vol = nullptr);
+
+    /**
+     * Returns true/false according to the state of the optimised geometry.
+     */
+    G4bool IsGeometryClosed();
+
+    /**
+     * Sets the maximum extent of the world volume.
+     * The operation is allowed only if NO solids have been created already.
+     */
+    void SetWorldMaximumExtent(G4double worldExtent);
+
+    // Methods to choose or undertake Parallel Optimisation
+    // ----------------------------------------------------
+
+    /**
+     * Requests optimisation using threads (if MT is enabled & used ).
+     */
+    void OptimiseInParallel(G4bool val = true);
+  
+    /**
+     * Method that contributes to (voxel) optimisation until all work is done.
+     * To be called by a worker thread initialisation - not by the user.
+     */
+    void UndertakeOptimisation();
+
+    /**
+     * Detailed method for user to request parallel optimisation (if verbosity
+     * is required). Calling this method is enough to ask for it.
+     * It will be used if Geant4 is built with MT/tasks.
+     * Parallelism will be used if Geant4 is built with MT/tasks.
+     */
+    void RequestParallelOptimisation(G4bool val = true, G4bool verbose = true);
+
+    /**
+     * Checks whether parallel optimisation was requested and configured.
+     */
+    G4bool IsParallelOptimisationConfigured();
+
+    /**
+     * Reports whether parallel optimisation was completed.
+     */
+    G4bool IsParallelOptimisationFinished();
 
   private:
 
-    G4GeometryManager() = default;
-      // Private constructor. Set the geometry to be open.
+    /**
+     * Private Constructor. Set the geometry to be open.
+     */
+    G4GeometryManager();
 
+    // Create the voxel optimisation information. Return whether work is completed
+    // (In case of parallel optimisation, it will be done later by the workers)
+
+    /**
+     * Optimises all volumes or just multi-volumes (parameterisations, etc. ).
+     */
     G4bool BuildOptimisations(G4bool allOpt, G4bool verbose = false);  
-       // Optimise all or just multi-volumes (parameterisations, .. ).
-    void BuildOptimisations(G4bool allOpt, G4VPhysicalVolume* vol);
-       // Optimise one volume or subtree only.
-    void DeleteOptimisations();
-    void DeleteOptimisations(G4VPhysicalVolume* vol);
-  
-    void ReportVoxelStats( std::vector<G4SmartVoxelStat>& stats,
-                           G4double totalCpuTime,
-                           std::ostream &os = G4cout );
-    void ReportVoxelInfo(G4LogicalVolume * logVolume, std::ostream& os);
-   
-    void PrepareParallelOptimisation(G4bool allOpts, G4bool verbose = true);
+
+    /**
+     * Optimises one volume or subtree only.
+     */
+    G4bool BuildOptimisations(G4bool allOpt, G4VPhysicalVolume* vol);
+
+    /**
+     * Builds the optimisation structure in sequential mode.
+     */
     void BuildOptimisationsSequential(G4bool allOpts, G4bool verbose = true);
 
-    // Methods for parallel initialization
-    void CreateListOfVolumesToOptimise(G4bool allOpts, G4bool verbose);
-      // Build vector of relevant volumes.
-    G4LogicalVolume* ObtainVolumeToOptimise();
-
-    void ConfigureParallelOptimisation(G4bool verbose);
-      // Prepare for parallel optimisation.
-
-    G4int ReportWorkerIsDoneOptimising(unsigned int numVolumesOptimised);
-      // Thread-safe method for worker to report it's finished its work.
-      // It counts the number of workers that finished, and returns count.
-      // It counts the number of volumes optimised; if all workers have
-      // reported, it results in a 'Finished' state.
-  
-    void InformOptimisationIsFinished(G4bool verbose);
-      // Returns true if all workers are finished (or all work is done).
-  
-    void ResetListOfVolumesToOptimise();
-      // Resets (empties) the list of candidate volumes for optimisation.
-      // Must be called when Optimisation is finished.
-  
-    G4int CheckOptimisation();
-      // Check volumes marked to optimised are done, and report number
-      // that are missing voxel header.
-  
-    void WaitForVoxelisationFinish(G4bool verbose = false);
-      // Wait until the voxelisation is all done.
+    /**
+     * Methods to delete the optimisation structure.
+     */
+    void DeleteOptimisations();
+    void DeleteOptimisations(G4VPhysicalVolume* vol);
 
   private:
 
+    /** The static instance. */
     static G4ThreadLocal G4GeometryManager* fgInstance;
+
+    /** Pointer to the voxelisation helper. */
+    static G4VoxelisationHelper* fParallelVoxeliser;
+
     G4bool fIsClosed = false;
 
-    static std::vector<G4LogicalVolume*> fVolumesToOptimise;
-      // The list of volumes which threads need to optimise.
-    static std::vector<G4LogicalVolume*>::const_iterator fLogVolumeIterator;
-      // Iterator used by UndertakeOptimisation().
-
-    static std::vector<G4SmartVoxelStat> fGlobVoxelStats;
-      // Statistics container shared by all workers
-  
     // Flags for parallel initialization
     // ---------------------------------
-    static G4bool fVerboseParallel;
     static G4bool fParallelVoxelOptimisationRequested;
-      // Flag to register it was requested.
+   
+    /** Not just requested, but adopted (i.e. also in MT/tasking mode). */
     static G4bool fOptimiseInParallelConfigured;
-      // Not just requested, but adopted (i.e. also in MT/tasking mode).
-    static G4bool fParallelVoxelOptimisationUnderway; // It has started
-    static G4bool fParallelVoxelOptimisationFinished; // It is done
-    static G4bool fUsingExistingWorkers; // Can and will use existing MT/tasks.
-
-    // Statistics for parallel Optimisation - used in 'verbose' mode
-    // ------------------------------------
-    static G4double fSumVoxelTime;
-    static G4int fNumberThreadsReporting;
-    static unsigned int fTotalNumberVolumesOptimised;
-      // Counters.
-  
-    // For Wall Clock time in parallel mode ...
-    //
-    static G4Timer* fWallClockTimer;   // Owned by master thread
-    static G4bool fWallClockStarted;
 };
 
 #endif

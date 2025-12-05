@@ -47,7 +47,8 @@ LUPI_HOST_DEVICE ProtareComposite::ProtareComposite( ) :
 
 LUPI_HOST ProtareComposite::ProtareComposite( LUPI::StatusMessageReporting &a_smr, GIDI::ProtareComposite const &a_protare, PoPI::Database const &a_pops, 
                 Transporting::MC &a_settings, GIDI::Transporting::Particles const &a_particles, DomainHash const &a_domainHash, 
-                GIDI::Styles::TemperatureInfos const &a_temperatureInfos, std::set<int> const &a_reactionsToExclude, int a_reactionsToExcludeOffset, LUPI_maybeUnused bool a_allowFixedGrid ) :
+                GIDI::Styles::TemperatureInfos const &a_temperatureInfos, GIDI::ExcludeReactionsSet const &a_reactionsToExclude,
+                std::size_t a_reactionsToExcludeOffset, LUPI_maybeUnused bool a_allowFixedGrid ) :
         Protare( ProtareType::composite, a_protare, a_settings, a_pops ),
         m_numberOfReactions( 0 ),
         m_numberOfOrphanProducts( 0 ) {
@@ -169,12 +170,10 @@ LUPI_HOST_DEVICE ProtareSingle *ProtareComposite::protare( std::size_t a_index )
  * @return                              Pointer to the requested protare or nullptr if invalid *a_index*..
  ***********************************************************************************************************/
 
-LUPI_HOST_DEVICE ProtareSingle const *ProtareComposite::protareWithReaction( int a_index ) const {
-
-    if( a_index < 0 ) return( nullptr );
+LUPI_HOST_DEVICE ProtareSingle const *ProtareComposite::protareWithReaction( std::size_t a_index ) const {
 
     for( std::size_t i1 = 0; i1 < m_protares.size( ); ++i1 ) {
-        int numberOfReactions = m_protares[i1]->numberOfReactions( );
+        std::size_t numberOfReactions = m_protares[i1]->numberOfReactions( );
 
         if( a_index < numberOfReactions ) return( m_protares[i1] );
         a_index -= numberOfReactions;
@@ -215,12 +214,12 @@ LUPI_HOST_DEVICE Vector<double> ProtareComposite::temperatures( std::size_t a_in
  * @return                          The reaction at index *a_index*.
  ***********************************************************************************************************/
 
-LUPI_HOST_DEVICE Reaction const *ProtareComposite::reaction( int a_index ) const {
+LUPI_HOST_DEVICE Reaction const *ProtareComposite::reaction( std::size_t a_index ) const {
 
     std::size_t length = static_cast<std::size_t>( m_protares.size( ) );
 
     for( std::size_t i1 = 0; i1 < length; ++i1 ) {
-        int numberOfReactions = m_protares[i1]->numberOfReactions( );
+        std::size_t numberOfReactions = m_protares[i1]->numberOfReactions( );
 
         if( a_index < numberOfReactions ) return( m_protares[i1]->reaction( a_index ) );
         a_index -= numberOfReactions;
@@ -238,12 +237,12 @@ LUPI_HOST_DEVICE Reaction const *ProtareComposite::reaction( int a_index ) const
  * @return                          The reaction at index *a_index*.
  ***********************************************************************************************************/
 
-LUPI_HOST_DEVICE Reaction const *ProtareComposite::orphanProduct( int a_index ) const {
+LUPI_HOST_DEVICE Reaction const *ProtareComposite::orphanProduct( std::size_t a_index ) const {
 
     std::size_t length = static_cast<std::size_t>( m_protares.size( ) );
 
     for( std::size_t i1 = 0; i1 < length; ++i1 ) {
-        int numberOfReactions = m_protares[i1]->numberOfOrphanProducts( );
+        std::size_t numberOfReactions = m_protares[i1]->numberOfOrphanProducts( );
 
         if( a_index < numberOfReactions ) return( m_protares[i1]->orphanProduct( a_index ) );
         a_index -= numberOfReactions;
@@ -354,12 +353,12 @@ LUPI_HOST_DEVICE double ProtareComposite::URR_domainMax( ) const {
  * @return                          *true* if the reaction has URR robability tables and false otherwise.
  ***********************************************************************************************************/
 
-LUPI_HOST_DEVICE bool ProtareComposite::reactionHasURR_probabilityTables( int a_index ) const {
+LUPI_HOST_DEVICE bool ProtareComposite::reactionHasURR_probabilityTables( std::size_t a_index ) const {
 
-    std::size_t length = static_cast<std::size_t>( m_protares.size( ) );
+    std::size_t length = m_protares.size( );
 
     for( std::size_t i1 = 0; i1 < length; ++i1 ) {
-        int numberOfReactions = m_protares[i1]->numberOfReactions( );
+        std::size_t numberOfReactions = m_protares[i1]->numberOfReactions( );
 
         if( a_index < numberOfReactions ) return( m_protares[i1]->reactionHasURR_probabilityTables( a_index ) );
         a_index -= numberOfReactions;
@@ -404,7 +403,7 @@ LUPI_HOST_DEVICE double ProtareComposite::threshold( std::size_t a_index ) const
  * @return                              The total cross section.
  ***********************************************************************************************************/
 
-LUPI_HOST_DEVICE double ProtareComposite::crossSection( URR_protareInfos const &a_URR_protareInfos, int a_hashIndex, double a_temperature, double a_energy, bool a_sampling ) const {
+LUPI_HOST_DEVICE double ProtareComposite::crossSection( URR_protareInfos const &a_URR_protareInfos, std::size_t a_hashIndex, double a_temperature, double a_energy, bool a_sampling ) const {
 
     std::size_t length = static_cast<std::size_t>( m_protares.size( ) );
     double cross_section = 0.0;
@@ -423,7 +422,7 @@ LUPI_HOST_DEVICE double ProtareComposite::crossSection( URR_protareInfos const &
  * @param   a_crossSectionVector        [in/out]    The energy dependent, total cross section to add cross section data to.
  ***********************************************************************************************************/
 
-LUPI_HOST_DEVICE void ProtareComposite::crossSectionVector( double a_temperature, double a_userFactor, int a_numberAllocated, double *a_crossSectionVector ) const {
+LUPI_HOST_DEVICE void ProtareComposite::crossSectionVector( double a_temperature, double a_userFactor, std::size_t a_numberAllocated, double *a_crossSectionVector ) const {
 
     std::size_t length = static_cast<std::size_t>( m_protares.size( ) );
 
@@ -444,13 +443,13 @@ LUPI_HOST_DEVICE void ProtareComposite::crossSectionVector( double a_temperature
  * @return                              The total cross section.
  ***********************************************************************************************************/
 
-LUPI_HOST_DEVICE double ProtareComposite::reactionCrossSection( int a_reactionIndex, URR_protareInfos const &a_URR_protareInfos, int a_hashIndex, double a_temperature, double a_energy, bool a_sampling ) const {
+LUPI_HOST_DEVICE double ProtareComposite::reactionCrossSection( std::size_t a_reactionIndex, URR_protareInfos const &a_URR_protareInfos, std::size_t a_hashIndex, double a_temperature, double a_energy, bool a_sampling ) const {
 
     std::size_t length = static_cast<std::size_t>( m_protares.size( ) );
     double cross_section = 0.0;
 
     for( std::size_t i1 = 0; i1 < length; ++i1 ) {
-        int numberOfReactions = m_protares[i1]->numberOfReactions( );
+        std::size_t numberOfReactions = m_protares[i1]->numberOfReactions( );
 
         if( a_reactionIndex < numberOfReactions ) {
             cross_section = m_protares[i1]->reactionCrossSection( a_reactionIndex, a_URR_protareInfos, a_hashIndex, a_temperature, a_energy, a_sampling );
@@ -473,13 +472,13 @@ LUPI_HOST_DEVICE double ProtareComposite::reactionCrossSection( int a_reactionIn
  * @return                              The total cross section.
  ***********************************************************************************************************/
 
-LUPI_HOST_DEVICE double ProtareComposite::reactionCrossSection( int a_reactionIndex, URR_protareInfos const &a_URR_protareInfos, double a_temperature, double a_energy ) const {
+LUPI_HOST_DEVICE double ProtareComposite::reactionCrossSection( std::size_t a_reactionIndex, URR_protareInfos const &a_URR_protareInfos, double a_temperature, double a_energy ) const {
 
     std::size_t length = static_cast<std::size_t>( m_protares.size( ) );
     double cross_section = 0.0;
 
     for( std::size_t i1 = 0; i1 < length; ++i1 ) {
-        int numberOfReactions = m_protares[i1]->numberOfReactions( );
+        std::size_t numberOfReactions = m_protares[i1]->numberOfReactions( );
 
         if( a_reactionIndex < numberOfReactions ) {
             cross_section = m_protares[i1]->reactionCrossSection( a_reactionIndex, a_URR_protareInfos, a_temperature, a_energy );
@@ -501,7 +500,7 @@ LUPI_HOST_DEVICE double ProtareComposite::reactionCrossSection( int a_reactionIn
  * @return                          The total deposition energy.
  ***********************************************************************************************************/
 
-LUPI_HOST_DEVICE double ProtareComposite::depositionEnergy( int a_hashIndex, double a_temperature, double a_energy ) const {
+LUPI_HOST_DEVICE double ProtareComposite::depositionEnergy( std::size_t a_hashIndex, double a_temperature, double a_energy ) const {
 
     std::size_t length = static_cast<std::size_t>( m_protares.size( ) );
     double deposition_energy = 0.0;
@@ -521,7 +520,7 @@ LUPI_HOST_DEVICE double ProtareComposite::depositionEnergy( int a_hashIndex, dou
  * @return                          The total deposition momentum.
  ***********************************************************************************************************/
 
-LUPI_HOST_DEVICE double ProtareComposite::depositionMomentum( int a_hashIndex, double a_temperature, double a_energy ) const {
+LUPI_HOST_DEVICE double ProtareComposite::depositionMomentum( std::size_t a_hashIndex, double a_temperature, double a_energy ) const {
 
     std::size_t length = static_cast<std::size_t>( m_protares.size( ) );
     double deposition_momentum = 0.0;
@@ -541,7 +540,7 @@ LUPI_HOST_DEVICE double ProtareComposite::depositionMomentum( int a_hashIndex, d
  * @return                          The total production energy.
  ***********************************************************************************************************/
 
-LUPI_HOST_DEVICE double ProtareComposite::productionEnergy( int a_hashIndex, double a_temperature, double a_energy ) const {
+LUPI_HOST_DEVICE double ProtareComposite::productionEnergy( std::size_t a_hashIndex, double a_temperature, double a_energy ) const {
 
     std::size_t length = static_cast<std::size_t>( m_protares.size( ) );
     double production_energy = 0.0;
@@ -562,7 +561,7 @@ LUPI_HOST_DEVICE double ProtareComposite::productionEnergy( int a_hashIndex, dou
  * @return                      [in]    A vector of the length of the number of multi-group groups.
  ***********************************************************************************************************/
 
-LUPI_HOST_DEVICE double ProtareComposite::gain( int a_hashIndex, double a_temperature, double a_energy, int a_particleIndex ) const {
+LUPI_HOST_DEVICE double ProtareComposite::gain( std::size_t a_hashIndex, double a_temperature, double a_energy, int a_particleIndex ) const {
 
     std::size_t length = static_cast<std::size_t>( m_protares.size( ) );
     double gain1 = m_protares[0]->gain( a_hashIndex, a_temperature, a_energy, a_particleIndex );
@@ -583,7 +582,7 @@ LUPI_HOST_DEVICE double ProtareComposite::gain( int a_hashIndex, double a_temper
  * @return                      [in]    A vector of the length of the number of multi-group groups.
  ***********************************************************************************************************/
 
-LUPI_HOST_DEVICE double ProtareComposite::gainViaIntid( int a_hashIndex, double a_temperature, double a_energy, int a_particleIntid ) const {
+LUPI_HOST_DEVICE double ProtareComposite::gainViaIntid( std::size_t a_hashIndex, double a_temperature, double a_energy, int a_particleIntid ) const {
 
     std::size_t length = static_cast<std::size_t>( m_protares.size( ) );
     double gain1 = m_protares[0]->gainViaIntid( a_hashIndex, a_temperature, a_energy, a_particleIntid );
@@ -607,8 +606,8 @@ LUPI_HOST_DEVICE void ProtareComposite::serialize2( LUPI::DataBuffer &a_buffer, 
     int vectorSizeInt = static_cast<int>( vectorSize );
     LUPI::DataBuffer *workingBuffer = &a_buffer;
 
-    DATA_MEMBER_INT( m_numberOfReactions, a_buffer, a_mode );
-    DATA_MEMBER_INT( m_numberOfOrphanProducts, a_buffer, a_mode );
+    DATA_MEMBER_SIZE_T( m_numberOfReactions, a_buffer, a_mode );
+    DATA_MEMBER_SIZE_T( m_numberOfOrphanProducts, a_buffer, a_mode );
     DATA_MEMBER_DOUBLE( m_minimumEnergy, a_buffer, a_mode );
     DATA_MEMBER_DOUBLE( m_maximumEnergy, a_buffer, a_mode );
 
@@ -631,7 +630,10 @@ LUPI_HOST_DEVICE void ProtareComposite::serialize2( LUPI::DataBuffer &a_buffer, 
         a_buffer.incrementPlacement( sizeof( ProtareSingle ) * vectorSize );
     }
 
-    for( std::size_t i1 = 0; i1 < vectorSize; ++i1 ) m_protares[i1]->serialize2( a_buffer, a_mode );
+    for( std::size_t i1 = 0; i1 < vectorSize; ++i1 ) {
+        m_protares[i1]->serializeCommon( a_buffer, a_mode );
+        m_protares[i1]->serialize2( a_buffer, a_mode );
+    }
 }
 
 }

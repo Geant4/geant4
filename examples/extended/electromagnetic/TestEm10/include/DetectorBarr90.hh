@@ -23,11 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm10/include/DetectorBarr90.hh
+/// \file DetectorBarr90.hh
 /// \brief Definition of the DetectorBarr90 class
-//
-//
-//
+
 // Setuo from G.D. Barr et al NIM A294 (1990) 465-472 (fig.11)
 
 #ifndef DetectorBarr90_h

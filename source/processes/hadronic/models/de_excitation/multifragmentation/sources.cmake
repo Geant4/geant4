@@ -3,8 +3,6 @@
 # Define the Geant4 Module.
 geant4_add_module(G4hadronic_deex_multifragmentation
   PUBLIC_HEADERS
-    G4Solver.hh
-    G4Solver.icc
     G4StatMF.hh
     G4StatMFChannel.hh
     G4StatMFFragment.hh
@@ -25,7 +23,6 @@ geant4_add_module(G4hadronic_deex_multifragmentation
     G4VStatMFEnsemble.hh
     G4VStatMFMacroCluster.hh
   SOURCES
-    G4Solver.cc
     G4StatMF.cc
     G4StatMFChannel.cc
     G4StatMFFragment.cc
@@ -43,12 +40,12 @@ geant4_add_module(G4hadronic_deex_multifragmentation
     G4StatMFMicroPartition.cc
     G4StatMFParameters.cc
     G4VMultiFragmentation.cc
-    G4VStatMFEnsemble.cc
     G4VStatMFMacroCluster.cc)
 
 geant4_module_link_libraries(G4hadronic_deex_multifragmentation
   PUBLIC
     G4globman
     G4hadronic_util
+    G4hepnumerics
     G4heprandom
     G4partman)

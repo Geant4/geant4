@@ -25,7 +25,7 @@
 //
 // G4TrialCounts inline methods implementation
 //
-// Author: John Apostolakis, CERN - 08.12.2006   
+// Author: John Apostolakis (CERN), 08.12.2006   
 // -------------------------------------------------------------------
 
 inline void G4TrialsCounter::AccumulateCounts( G4int noTrials )

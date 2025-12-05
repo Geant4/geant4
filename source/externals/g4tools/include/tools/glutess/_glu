@@ -41,10 +41,6 @@ typedef double		GLUclampd;	/* double precision float in [0,1] */
 
 /*************************************************************/
 
-// mesa glu has the below for Windows.
-//#define GLUAPIENTRY __stdcall
-//typedef void (__stdcall* _GLUfuncptr)();
-
 #define GLUAPIENTRY
 typedef void (* _GLUfuncptr)();
 
@@ -54,20 +50,6 @@ typedef struct GLUtesselator GLUtesselator;
 
 typedef GLUtesselator GLUtesselatorObj;
 typedef GLUtesselator GLUtriangulatorObj;
-
-  /*
-GLUAPI GLUtesselator* GLUAPIENTRY gluNewTess (void);
-GLUAPI void GLUAPIENTRY gluDeleteTess (GLUtesselator* tess);
-
-GLUAPI void GLUAPIENTRY gluTessBeginContour (GLUtesselator* tess);
-GLUAPI void GLUAPIENTRY gluTessBeginPolygon (GLUtesselator* tess, GLUvoid* data);
-GLUAPI void GLUAPIENTRY gluTessCallback (GLUtesselator* tess, GLUenum which, _GLUfuncptr CallBackFunc);
-GLUAPI void GLUAPIENTRY gluTessEndContour (GLUtesselator* tess);
-GLUAPI void GLUAPIENTRY gluTessEndPolygon (GLUtesselator* tess);
-GLUAPI void GLUAPIENTRY gluTessNormal (GLUtesselator* tess, GLUdouble valueX, GLUdouble valueY, GLUdouble valueZ);
-GLUAPI void GLUAPIENTRY gluTessProperty (GLUtesselator* tess, GLUenum which, GLUdouble data);
-GLUAPI void GLUAPIENTRY gluTessVertex (GLUtesselator* tess, GLUdouble *location, GLUvoid* data);
-  */
 
 #define GLU_MIN(x,y)	((x) <= (y) ? (x) : (y))
 #define GLU_MAX(x,y)	((x) >= (y) ? (x) : (y))

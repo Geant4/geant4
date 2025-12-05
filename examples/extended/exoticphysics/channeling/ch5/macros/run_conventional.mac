@@ -1,0 +1,30 @@
+#Positron Source type
+/det/isHybridSource false
+
+#Amorphous volume (randomly oriented crystal) settings
+/crystal/setCrystalMaterial W
+/crystal/setCrystalSize 20 20 15.0 mm
+/crystal/setCrystalLattice <111>
+/crystal/setOCeffects false #Orientetional Coherent (OC) effects in crystals are deactivated!
+
+/run/initialize
+
+/run/verbose 1
+
+/run/setfilenamesave output/output_2.86GeV_W15.0mm_conventional.root
+
+/control/execute macros/setPrimaryBeam.mac
+        
+/score/create/boxMesh boxMesh1                
+/score/mesh/boxSize 10 10 7.5 mm
+/score/mesh/nBin 41 41 31
+/score/mesh/translate/xyz 0 0 -7.5 mm
+/score/quantity/energyDeposit Edep #[MeV]       
+/score/close
+/score/list             
+
+#statistics
+/run/printProgress 100
+/run/beamOn 10000                            
+
+/score/dumpQuantityToFile boxMesh1 Edep output/Edep_2.86GeV_W15.0mm_conventional.txt

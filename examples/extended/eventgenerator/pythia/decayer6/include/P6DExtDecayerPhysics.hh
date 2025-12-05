@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file eventgenerator/pythia/decayer6/include/P6DExtDecayerPhysics.hh
+/// \file P6DExtDecayerPhysics.hh
 /// \brief Definition of the P6DExtDecayerPhysics class
 ///
 /// \author I. Hrivnacova; IPN Orsay

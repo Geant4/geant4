@@ -1,3 +1,5 @@
+\page refPar04training_vae Module training_vae
+
 This repository contains the set of scripts used to train, generate and validate the generative model used
 in this example.
 

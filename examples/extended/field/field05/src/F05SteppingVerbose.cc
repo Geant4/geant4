@@ -23,13 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file field/field05/src/F05SteppingVerbose.cc
+/// \file F05SteppingVerbose.cc
 /// \brief Implementation of the F05SteppingVerbose class
-//
-//
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 #include "F05SteppingVerbose.hh"
 

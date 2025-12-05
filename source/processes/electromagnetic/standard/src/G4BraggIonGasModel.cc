@@ -53,12 +53,8 @@
 using namespace std;
 
 G4BraggIonGasModel::G4BraggIonGasModel(const G4ParticleDefinition* p, 
-  const G4String& nam) : G4BraggModel(p,nam), currentCharge(0.0)
+  const G4String& nam) : G4BraggModel(p,nam), currentCharge(1.0)
 {}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4BraggIonGasModel::~G4BraggIonGasModel() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -68,6 +64,13 @@ G4double G4BraggIonGasModel::ChargeSquareRatio(const G4Track& track)
   G4double q2 = currentCharge*currentCharge;
   SetChargeSquareRatio(q2); 
   return q2;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......                                                                              
+G4double G4BraggIonGasModel::GetChargeSquareRatio(const G4ParticleDefinition*,
+                                                  const G4Material*, G4double)
+{
+  return currentCharge*currentCharge;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

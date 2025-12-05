@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file ClusteringAlgo.hh
+/// \brief Definition of the ClusteringAlgo class
+
 // This example is provided by the Geant4-DNA collaboration
 // Any report or published results obtained using the Geant4-DNA software
 // shall cite the following Geant4-DNA collaboration publication:
@@ -32,8 +35,6 @@
 // Authors: Henri Payno and Yann Perrot
 //
 //
-/// \file ClusteringAlgo.hh
-/// \brief Definition of the ClustreringAlgo class
 
 #ifndef ClusteringAlgo_H
 #define ClusteringAlgo_H 1

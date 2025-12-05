@@ -23,9 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// @file RunAction.hh
-/// @brief Describe run actions
+/// \file RunAction.hh
+/// \brief Definition of the RunAction class
+///
+/// Describe run actions
 
 #ifndef RUN_ACTION_H
 #define RUN_ACTION_H

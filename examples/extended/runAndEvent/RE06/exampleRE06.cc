@@ -23,10 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file RE06/exampleRE06.cc
-/// \brief Main program of the RE06 example
-//
-//
+/// \file exampleRE06.cc
+/// \brief Main program of the runAndEvent/RE06 example
+
 // --------------------------------------------------------------
 //      GEANT 4 - example RE06
 // --------------------------------------------------------------

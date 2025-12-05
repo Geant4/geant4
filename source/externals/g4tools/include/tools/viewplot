@@ -45,12 +45,6 @@ public:
     return *this;
   }
 public:
-#ifdef tools_viewplot
-  //deprecated, use set_current_plotter_style().
-  void style_from_res(const std::string& a_path,bool a_verbose = false) {
-    style_from_res(a_path,m_plots.current_plotter(),a_verbose);
-  }
-#endif
   void set_current_plotter_style(const std::string& a_path,bool a_verbose = false) {
     style_from_res(a_path,m_plots.current_plotter(),a_verbose);
   }
@@ -62,14 +56,12 @@ public:
     m_plots.adjust_size(width(),height());
   }
 
-//#ifdef tools_viewplot
   bool write(const std::string& a_file,bool a_anonymous = false) {
     return parent::write_inzb_ps(a_file,a_anonymous);
   }
   bool open_file(const std::string& a_file,bool a_anonymous = false) {return open_inzb_ps_file(a_file,a_anonymous);}
   bool write_page() {return write_inzb_ps_page();}
   bool close_file() {return close_inzb_ps_file();}
-//#endif
 
 
   const xml::styles& styles() const {return m_styles;}

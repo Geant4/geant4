@@ -3117,8 +3117,7 @@ G4VisCommandSceneAddVolume::G4VisCommandSceneAddVolume () {
      "\nFor example, \"/Shap/\" adds \"Shape1\" and \"Shape2\".");
   fpCommand -> SetGuidance
     ("It may help to see a textual representation of the geometry hierarchy of"
-     "\nthe worlds. Try \"/vis/drawTree [worlds]\" or one of the driver/browser"
-     "\ncombinations that have the required functionality, e.g., HepRepFile.");
+     "\nthe worlds. Try \"/vis/drawTree [worlds]\".");
   fpCommand -> SetGuidance
     ("If clip-volume-type is specified, the subsequent parameters are used to"
      "\nto define a clipping volume. For example,"

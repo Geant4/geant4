@@ -23,15 +23,18 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-///  \file FinalStateHistoManager.hh
-///  \brief Create a set of histos for final state study.
+/// \file FinalStateHistoManager.hh
+/// \brief Definition of the FinalStateHistoManager class
+///
+/// Create a set of histos for final state study.
+
 //
 //  Author: G.Hugo, 08 December 2022
 //
 // ***************************************************************************
 //
-//      FinalStateHistoManager
-//
+///  \class FinalStateHistoManager
+///
 ///  Create a set of histos for final state study.
 ///  In practice, the interactions studied here are hadron nuclear inelastic interactions
 ///  (though the code is fully generic).

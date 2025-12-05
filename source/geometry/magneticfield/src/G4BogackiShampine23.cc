@@ -42,7 +42,7 @@
 //    |2/9      1/3     4/9    0
 //    |7/24 1/4 1/3 1/8
 //
-// Created: Somnath Banerjee, Google Summer of Code 2015, 20 May 2015
+// Author: Somnath Banerjee, Google Summer of Code 2015, 20 May 2015
 // Supervision: John Apostolakis, CERN
 // --------------------------------------------------------------------
 

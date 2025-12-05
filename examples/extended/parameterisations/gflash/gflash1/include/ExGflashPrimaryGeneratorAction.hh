@@ -23,10 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 /// \file ExGflashPrimaryGeneratorAction.hh
 /// \brief Definition of the ExGflashPrimaryGeneratorAction class
-//
+
 #ifndef ExGflashPrimaryGeneratorAction_h
 #define ExGflashPrimaryGeneratorAction_h
 

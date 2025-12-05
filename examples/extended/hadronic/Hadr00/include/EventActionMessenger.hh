@@ -23,10 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file hadronic/Hadr00/include/EventActionMessenger.hh
+/// \file EventActionMessenger.hh
 /// \brief Definition of the EventActionMessenger class
-//
-//
+
 /////////////////////////////////////////////////////////////////////////
 //
 // EventActionMessenger

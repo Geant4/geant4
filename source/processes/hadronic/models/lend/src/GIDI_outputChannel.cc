@@ -16,7 +16,7 @@ namespace GIDI {
  * This class represents a **GNDS** outputChannel.
 */
 
-OutputChannel::OutputChannel( bool a_twoBody, bool a_fissions, std::string a_process ) :
+OutputChannel::OutputChannel( bool a_twoBody, bool a_fissions, std::string const &a_process ) :
         GUPI::Ancestry( GIDI_outputChannelChars ),
         m_twoBody( a_twoBody ),
         m_fissions( a_fissions ),
@@ -119,7 +119,7 @@ bool OutputChannel::areAllProductsTracked( Transporting::Particles const &a_part
  *                                                  for the TNSL data for that boundary.
  ***********************************************************************************************************/
 
-void OutputChannel::modifiedMultiGroupElasticForTNSL( std::map<std::string,std::size_t> a_maximumTNSL_MultiGroupIndex ) {
+void OutputChannel::modifiedMultiGroupElasticForTNSL( std::map<std::string,std::size_t> const &a_maximumTNSL_MultiGroupIndex ) {
 
         // No need to fix m_Q as it is all 0.0's for elastic scattering.
     for( auto iter = m_products.begin( ); iter != m_products.end( ); ++iter ) {
@@ -373,7 +373,8 @@ Vector OutputChannel::multiGroupQ( LUPI::StatusMessageReporting &a_smr, Transpor
  ***********************************************************************************************************/
 
 Matrix OutputChannel::multiGroupProductMatrix( LUPI::StatusMessageReporting &a_smr, Transporting::MG const &a_settings, 
-                Styles::TemperatureInfo const &a_temperatureInfo, Transporting::Particles const &a_particles, std::string const &a_productID, int a_order ) const {
+                Styles::TemperatureInfo const &a_temperatureInfo, Transporting::Particles const &a_particles, std::string const &a_productID, 
+                std::size_t a_order ) const {
 
     Matrix matrix( 0, 0 );
 
@@ -500,7 +501,7 @@ void OutputChannel::continuousEnergyProductData( Transporting::Settings const &a
  ***********************************************************************************************************/
  
 void OutputChannel::mapContinuousEnergyProductData( Transporting::Settings const &a_settings, std::string const &a_particleID, 
-                std::vector<double> const &a_energies, int a_offset, std::vector<double> &a_productEnergies, std::vector<double> &a_productMomenta, 
+                std::vector<double> const &a_energies, std::size_t a_offset, std::vector<double> &a_productEnergies, std::vector<double> &a_productMomenta, 
                 std::vector<double> &a_productGains, bool a_ignoreIncompleteParticles ) const {
 
     for( std::size_t index = 0; index < m_products.size( ); ++index ) {

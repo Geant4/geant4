@@ -23,9 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// \file PhysicsListEmSpecialized.cc
+/// \brief Implementation of the PhysicsListEmSpecialized class
 
 #include "PhysicsListEmSpecialized.hh"
 

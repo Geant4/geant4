@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file F01RunAction.cc
+/// \brief Implementation of the F01RunAction class
+
 #include "F01RunAction.hh"
 
 #include "G4CoupledTransportation.hh"

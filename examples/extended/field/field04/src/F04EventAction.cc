@@ -23,10 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file field/field04/src/F04EventAction.cc
+/// \file F04EventAction.cc
 /// \brief Implementation of the F04EventAction class
-//
 
 #include "F04EventAction.hh"
 

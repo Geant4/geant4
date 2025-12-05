@@ -128,3 +128,7 @@ if(WIN32)
   geant4_module_sources(G4ToolsSG PUBLIC_HEADERS G4ToolsSGWindowsZB.hh SOURCES G4ToolsSGWindowsZB.cc)
   geant4_module_compile_definitions(G4ToolsSG PUBLIC G4VIS_USE_TOOLSSG_WINDOWS_ZB)
 endif()
+
+if(GEANT4_USE_VTK)
+  geant4_module_compile_definitions(G4ToolsSG PRIVATE TOOLS_USE_GL_VERSION_3_2)
+endif()

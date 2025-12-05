@@ -29,7 +29,7 @@
 //
 // Caches Magnetic Field value, for field whose evaluation is expensive.
 
-// Author: J.Apostolakis, 20 July 2009.
+// Author: John Apostolakis (CERN), 20.07.2009.
 // --------------------------------------------------------------------
 #ifndef G4CACHED_MAGNETIC_FIELD_HH
 #define G4CACHED_MAGNETIC_FIELD_HH
@@ -38,29 +38,68 @@
 #include "G4ThreeVector.hh"
 #include "G4MagneticField.hh"
 
+/**
+ * @brief G4CachedMagneticField is a specialisation of G4MagneticField and
+ * is used to cache the Magnetic Field value, for fields whose evaluation is
+ * expensive.
+ */
+
 class G4CachedMagneticField : public G4MagneticField
 {
   public:
 
-    G4CachedMagneticField(G4MagneticField*, G4double distanceConst);
-    ~G4CachedMagneticField() override;
-      // Constructor and destructor. No actions.
+    /**
+     * Constructor for G4CachedMagneticField.
+     *  @param[in] pMagField Pointer to the original magnetic field.
+     *  @param[in] distance Distance for field evaluation, within
+     *             which the field does not change.
+     */
+    G4CachedMagneticField(G4MagneticField* pMagField, G4double distance);
 
+    /**
+     * Default Destructor.
+     */
+    ~G4CachedMagneticField() override = default;
+
+    /**
+     * Copy constructor and assignment operator.
+     */
     G4CachedMagneticField(const G4CachedMagneticField& r);
     G4CachedMagneticField& operator = (const G4CachedMagneticField& p);
-      // Copy constructor & assignment operator.
 
+    /**
+     * Returns the value of the field at the give 'Point'.
+     *  @param[in] Point The given position time vector (x,y,z,t).
+     *  @param[out] Bfield The returned field array.
+     */
     void GetFieldValue( const G4double Point[4],
                               G4double* Bfield ) const override;
      
-    G4double GetConstDistance() const { return fDistanceConst; } 
-    void SetConstDistance( G4double dist ) { fDistanceConst= dist;}
+    /**
+     * Getter and setter for the distance within which field is constant.
+     */
+    inline G4double GetConstDistance() const { return fDistanceConst; } 
+    inline void SetConstDistance( G4double dist ) { fDistanceConst = dist;}
 
-    G4int GetCountCalls() const { return fCountCalls; }
-    G4int GetCountEvaluations() const { return fCountEvaluations; } 
-    void ClearCounts() { fCountCalls = 0; fCountEvaluations=0; }
+    /**
+     * Accessors.
+     */
+    inline G4int GetCountCalls() const { return fCountCalls; }
+    inline G4int GetCountEvaluations() const { return fCountEvaluations; } 
+
+    /**
+     * Resets counters.
+     */
+    inline void ClearCounts() { fCountCalls = 0; fCountEvaluations=0; }
+
+    /**
+     * Streams on standard output the values of counters.
+     */
     void ReportStatistics();
     
+    /**
+     * Returns a pointer of an allocated clone of the field.
+     */
     G4Field* Clone() const override;
 
   protected:
@@ -70,13 +109,13 @@ class G4CachedMagneticField : public G4MagneticField
   private:
 
     G4MagneticField* fpMagneticField = nullptr;
-    G4double fDistanceConst;
-      // When the field is evaluated within this distance it will not change
 
-    // Caching state
-    //
+    /** When the field is evaluated within this distance it will not change. */
+    G4double fDistanceConst;
+
+    /** Caching state. */
     mutable G4ThreeVector fLastLocation;
     mutable G4ThreeVector fLastValue;
 };
 
-#endif /* G4CACHED_MAGNETIC_FIELD_DEF */
+#endif

@@ -27,60 +27,96 @@
 //
 // Class description:
 //
-//  A G4TwistedBox is a twisted cuboid of given half lengths pDx,pDy,pDz
-//  and twist angle pPhiTwist.
-//  The Box is  centred on the origin with sides parallel to the x/y/z axes.
+// A G4TwistedBox is a twisted cuboid of given half lengths pDx,pDy,pDz
+// and twist angle pPhiTwist.
+// The Box is centred on the origin with sides parallel to the x/y/z axes.
 //
-//   Member Data:
+// Member Data:
 //
-//     pDx    Half-length along x axis
-//     pDy    Half-length along y asis
-//     pDz    Half-length along z axis
-//     pPhiTwist Twist angle
+//   pDx    Half-length along x axis
+//   pDy    Half-length along y asis
+//   pDz    Half-length along z axis
+//   pPhiTwist Twist angle
 
-// Author: 27-Oct-2004 - O.Link (Oliver.Link@cern.ch)
+// Author: Oliver Link (CERN), 27.10.2004 - Created
 // --------------------------------------------------------------------
 #ifndef G4TWISTEDBOX_HH
 #define G4TWISTEDBOX_HH
 
 #include "G4VTwistedFaceted.hh"
 
+/**
+ * @brief G4TwistedBox is a twisted cuboid of given half lengths and twist
+ * angle. The box is centred on the origin with sides parallel to the
+ * Cartesian axes.
+ */
+
 class G4TwistedBox : public G4VTwistedFaceted
 {
   public:
 
+    /**
+     * Constructs a twisted box, given its parameters.
+     *  @param[in] pName The solid name.
+     *  @param[in] pPhiTwist Twist angle.
+     *  @param[in] pDx Half-length along X axis.
+     *  @param[in] pDy Half-length along Y axis.
+     *  @param[in] pDz Half-length along Z axis.
+     */
     G4TwistedBox(const G4String& pName,
                        G4double  pPhiTwist,
                        G4double  pDx,
                        G4double  pDy,
                        G4double  pDz );
 
-    ~G4TwistedBox() override;
+    /**
+     * Default destructor.
+     */
+    ~G4TwistedBox() override = default;
 
-    // accessors
-
+    /**
+     * Accessors.
+     */
     inline G4double GetXHalfLength() const { return GetDx1() ; }
     inline G4double GetYHalfLength() const { return GetDy1() ; }
     inline G4double GetZHalfLength() const { return GetDz()  ; }
     inline G4double GetPhiTwist()    const { return GetTwistAngle() ; }
 
-    G4GeometryType GetEntityType()    const override;
+    /**
+     * Returns the type ID, "G4TwistedBox" of the solid.
+     */
+    G4GeometryType GetEntityType() const override;
 
+    /**
+     * Returning an estimation of the solid volume (capacity) and
+     * surface area, in internal units.
+     */
     G4double GetCubicVolume() override;
     G4double GetSurfaceArea() override;
 
+    /**
+     * Makes a clone of the object for use in multi-treading.
+     *  @returns A pointer to the new cloned allocated solid.
+     */
     G4VSolid* Clone() const override;
 
+    /**
+     * Streams the object contents to an output stream.
+     */
     std::ostream& StreamInfo(std::ostream& os) const override;
 
+    /**
+     * Fake default constructor for usage restricted to direct object
+     * persistency for clients requiring preallocation of memory for
+     * persistifiable objects.
+     */
     G4TwistedBox(__void__&);
-      // Fake default constructor for usage restricted to direct object
-      // persistency for clients requiring preallocation of memory for
-      // persistifiable objects.
 
+    /**
+     * Copy constructor and assignment operator.
+     */
     G4TwistedBox(const G4TwistedBox& rhs);
     G4TwistedBox& operator=(const G4TwistedBox& rhs);
-      // Copy constructor and assignment operator.
 };
 
 #endif

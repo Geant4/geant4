@@ -42,12 +42,10 @@ public: //branch
 public:
   branch_object(std::ostream& a_out,ifac& a_fac)
   :parent(a_out,a_fac)
-  //,m_obj(0)
   ,fClassName()
   {}
 
   virtual ~branch_object(){
-    //delete m_obj;
   }
 protected:
   branch_object(const branch_object& a_from)
@@ -55,9 +53,6 @@ protected:
   branch_object& operator=(const branch_object&){return *this;}
 public:
   const std::string& class_name() const {return fClassName;}
-//  iro* object() {return m_obj;}
-protected:
-//  iro* m_obj;
 protected:
   std::string fClassName; //Class name of referenced object
 };

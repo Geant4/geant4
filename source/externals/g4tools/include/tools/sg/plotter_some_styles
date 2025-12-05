@@ -40,17 +40,12 @@ inline void set_ROOT_default_style(std::ostream& a_out,const cmaps_t& a_cmaps,pl
 
  {style& _style = a_plotter.background_style();
   _style.visible = true;
-//if(!set_style_color(a_out,a_cmaps,"ROOT/grey19",_style.back_color.value())) {}
-  //border:
   if(!set_style_color(a_out,a_cmaps,"black",_style.color.value())) {}
   _style.line_width = 0.003;  // 0 = no border. In % of width.
   }
 
-// <!-- <style name="wall_style"><visible>false</visible></style> -->
-
  {style& _style = a_plotter.grid_style();
   _style.visible = false;
-//if(!set_style_color(a_out,a_cmaps,"white",_style.color.value())) {}
   }
 
   // plot title done with the title_box (and not plotter title):
@@ -79,7 +74,6 @@ inline void set_ROOT_default_style(std::ostream& a_out,const cmaps_t& a_cmaps,pl
   _style.visible = true;
   if(!set_style_color(a_out,a_cmaps,"black",_style.color.value())) {}
   _style.line_width = 1.0f;  
-//_style.line_pattern = line_solid;
   }
 
   //////////////////////////////////////////////////////////
@@ -242,13 +236,9 @@ inline void set_ROOT_default_style(std::ostream& a_out,const cmaps_t& a_cmaps,pl
   _style.modeling = modeling_top_lines();
   if(!set_style_color(a_out,a_cmaps,"black",_style.color.value())) {}
   _style.line_width = 3.0f;
-//_style.line_pattern = line_solid;
   }
   
 }
-
-// a_font = font_helvetica_ttf();
-// a_font = font_lato_regular_ttf(); //open source replacement for helvetica
 
 inline void set_hippodraw_style(std::ostream& a_out,const cmaps_t& a_cmaps,plotter& a_plotter,const std::string& a_font) {
   // In memory of P.Kunz.
@@ -260,8 +250,6 @@ inline void set_hippodraw_style(std::ostream& a_out,const cmaps_t& a_cmaps,plott
   a_plotter.right_margin = 0.16f;
   a_plotter.title_to_axis = 0.1f;
   a_plotter.title_height = 0.03f;
-
-// <!-- <style name="wall_style"><visible>false</visible></style> -->
 
  {style& _style = a_plotter.grid_style();
   _style.visible = false;}
@@ -334,14 +322,12 @@ inline void set_hippodraw_style(std::ostream& a_out,const cmaps_t& a_cmaps,plott
   _style.modeling = modeling_top_lines();
   if(!set_style_color(a_out,a_cmaps,"black",_style.color.value())) {}
   _style.line_width = 1.0f;
-//_style.line_pattern = line_solid;
   }
   
  {style& _style = a_plotter.func_style(0);
   _style.modeling = modeling_top_lines();
   if(!set_style_color(a_out,a_cmaps,"black",_style.color.value())) {}
   _style.line_width = 1.0f;
-//_style.line_pattern = line_solid;
   }
 
  {style& _style = a_plotter.errors_style(0);

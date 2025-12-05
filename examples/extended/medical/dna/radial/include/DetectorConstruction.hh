@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file DetectorConstruction.hh
+/// \brief Definition of the DetectorConstruction class
+
 // This example is provided by the Geant4-DNA collaboration
 // Any report or published results obtained using the Geant4-DNA software
 // shall cite the following Geant4-DNA collaboration publications:
@@ -34,8 +37,6 @@
 //
 // The Geant4-DNA web site is available at http://geant4-dna.org
 //
-/// \file DetectorConstruction.hh
-/// \brief Definition of the DetectorConstruction class
 
 #ifndef DetectorConstruction_h
 #define DetectorConstruction_h 1
@@ -56,24 +57,31 @@ class DetectorConstruction : public G4VUserDetectorConstruction
     G4VPhysicalVolume* Construct() override;
 
     void SetMaterial(const G4String&);
+
     void SetWorldRadius(const G4double&);
-    void SetWorldLength(const G4double&);
-    void SetThicknessCylinders(const G4double&);
-    void SetMinRadiusCylinders(const G4double&);
-    void SetMaxRadiusCylinders(const G4double&);
+    void SetWorldOffsetLength(const G4double&);
+    
+    void SetCylinderLength(const G4double&);
+    void SetCylinderThickness(const G4double&);
+    void SetCylinderMinRadius(const G4double&);
+    void SetCylinderMaxRadius(const G4double&);
 
-    G4int GetNumberCylinders() const {return fNumberCylinders;}
-    G4double GetThicknessCylinders() const {return fThicknessCylinders;}
-    G4double GetWorldLength() const {return fWorldLength;}
+    G4double GetWorldOffsetLength() const {return fWorldOffsetLength;}
 
+    G4int GetCylinderNumber() const {return fCylinderNumber;}
+    G4double GetCylinderThickness() const {return fCylinderThickness;}
+    G4double GetCylinderLength() const {return fCylinderLength;}
+    
+  
   private:
 
     G4double fWorldRadius = 0;
-    G4double fWorldLength = 0;
+    G4double fWorldOffsetLength = 0;
 
-    G4double fThicknessCylinders = 0;
-    G4double fNumberCylinders = 0;
-    G4double fMinRadiusCylinders = 0;
+    G4double fCylinderLength = 0;
+    G4double fCylinderThickness = 0;
+    G4double fCylinderNumber = 0;
+    G4double fCylinderMinRadius = 0;
 
     void DefineMaterials();
 

@@ -23,10 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file persistency/P01/readHits.cc
+/// \file readHits.cc
 /// \brief Main program of the persistency/P01 example
-//
+
 // Include files
 #include "TFile.h"
 #include "TKey.h"

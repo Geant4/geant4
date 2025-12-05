@@ -42,7 +42,7 @@
 // Authors: John Apostolakis (CERN), Andrea Dotti (SLAC), July 2013
 // --------------------------------------------------------------------
 #ifndef G4GEOMETRYWORKSPACE_HH
-#define G4GEOMETRYWORKSPACE_HH 1
+#define G4GEOMETRYWORKSPACE_HH
 
 #include "G4TWorkspacePool.hh"
 

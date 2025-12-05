@@ -18,21 +18,21 @@ geant4_add_dataset(
 # - Low energy electromagnetics
 geant4_add_dataset(
   NAME      G4EMLOW
-  VERSION   8.7
+  VERSION   8.8
   FILENAME  G4EMLOW
   EXTENSION tar.gz
   ENVVAR    G4LEDATA
-  MD5SUM    949c9422ae668208562be1b991750df1
+  MD5SUM    328330009df633f7e9b3a9f445745298
   )
 
 # - Photon evaporation
 geant4_add_dataset(
   NAME      PhotonEvaporation
-  VERSION   6.1
+  VERSION   6.1.2
   FILENAME  G4PhotonEvaporation
   EXTENSION tar.gz
   ENVVAR    G4LEVELGAMMADATA
-  MD5SUM    92d68b937cdad0fd49892a66878863de 
+  MD5SUM    d80ba9bdefcf9e23487a26adfa273304
   )
 
 # - Radioisotopes
@@ -48,11 +48,11 @@ geant4_add_dataset(
 # - Particle XS - replaces Neutron XS
 geant4_add_dataset(
   NAME      G4PARTICLEXS
-  VERSION   4.1
+  VERSION   4.2
   FILENAME  G4PARTICLEXS
   EXTENSION tar.gz
   ENVVAR    G4PARTICLEXSDATA
-  MD5SUM    878252a464ba6b38f085741840f053e6
+  MD5SUM    b63341cc97a472b04ff607b094493174
   )
 
 # - PII
@@ -99,11 +99,11 @@ geant4_add_dataset(
 # - INCL
 geant4_add_dataset(
   NAME      G4INCL
-  VERSION   1.2
+  VERSION   1.3
   FILENAME  G4INCL
   EXTENSION tar.gz
   ENVVAR    G4INCLDATA
-  MD5SUM    0a76df936839bb557dae7254117eb58e
+  MD5SUM    72c3ff5f7f1e6f727f2ebf3b11ce784f
   )
 
 # - ENSDFSTATE
@@ -119,11 +119,11 @@ geant4_add_dataset(
 # - Channeling
 geant4_add_dataset(
   NAME      G4CHANNELING
-  VERSION   1.0
+  VERSION   2.0
   FILENAME  G4CHANNELING
   EXTENSION tar.gz
   ENVVAR    G4CHANNELINGDATA
-  MD5SUM    b2f692ec7109418c6354ea1ecbc62da7
+  MD5SUM    e853fbcba1e8640f7c3a437253955482
   )
 
 # - TENDL

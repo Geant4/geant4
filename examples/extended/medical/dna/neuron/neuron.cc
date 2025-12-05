@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file neuron.cc
+/// \brief Main program of the dna/neuron example
+
 // This example is provided by the Geant4-DNA collaboration
 // Any report or published results obtained using the Geant4-DNA software
 // shall cite the following Geant4-DNA collaboration publication:
@@ -36,8 +39,6 @@
 // November 2016
 // -------------------------------------------------------------------
 //
-/// \file neuron.cc
-/// \brief Implementation of the neuron example
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 #include "ActionInitialization.hh"
@@ -102,9 +103,6 @@ int main(int argc, char** argv)
 
   // User action initialization
   runManager->SetUserInitialization(new ActionInitialization(detector));
-
-  // Initialize G4 kernel
-  runManager->Initialize();
 
   // Initialize visualization
   G4VisManager* visManager = new G4VisExecutive;

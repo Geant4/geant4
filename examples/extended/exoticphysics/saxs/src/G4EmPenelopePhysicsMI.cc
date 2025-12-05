@@ -23,10 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmPenelopePhysicsMI.cc 109526 2018-04-30 07:11:52Z gcosmo $
+/// \file G4EmPenelopePhysicsMI.cc
+/// \brief Implementation of the G4EmPenelopePhysicsMI class
+
 // customized by gpaterno for MI in Rayleigh Scattering, March 2019
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4EmPenelopePhysicsMI.hh"
 

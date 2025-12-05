@@ -79,8 +79,6 @@ inline bool center_adjust(std::ostream& a_out,
   }
   float vp_aspect = float(a_ww)/float(a_wh);
   float scene_aspect = float(a_dx)/float(a_dy);
-  //::printf("debug : set_tsf : %d %d : %g %g %g : %g %g\n",
-  //    a_ww,a_wh,a_dx,a_dy,a_dz,vp_aspect,scene_aspect);
   float scale;
   if(vp_aspect>=scene_aspect) {
     scale = a_height/a_dy;

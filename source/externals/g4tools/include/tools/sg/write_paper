@@ -71,7 +71,6 @@ inline bool write_paper(std::ostream& a_out,
       return false;
     } else if(a_do_transparency) {
       if(action.have_to_do_transparency()) {
-        //a_out << "tools::sg::write_paper: warning: gl2ps does not handle transparency." << std::endl;
         action.set_do_transparency(true);
         a_scene_graph.render(action);
         if(!action.end()) { //check that matrices stack are ok.
@@ -131,7 +130,7 @@ inline bool write_paper(std::ostream& a_out,
       return false;
     }
 
-    if(!a_png_writer(a_out,a_file,vec_data(buffer),a_width,a_height,4)) {
+    if(!a_png_writer(a_out,a_file,buffer.data(),a_width,a_height,4)) {
       a_out << "tools::sg::write_paper : tools::png::write() failed." << std::endl;
       return false;
     }
@@ -151,7 +150,7 @@ inline bool write_paper(std::ostream& a_out,
       return false;
     }
 
-    if(!a_jpeg_writer(a_out,a_file,vec_data(buffer),a_width,a_height,3,100)) {
+    if(!a_jpeg_writer(a_out,a_file,buffer.data(),a_width,a_height,3,100)) {
       a_out << "tools::sg::write_paper : tools::jpeg::write() failed." << std::endl;
       return false;
     }

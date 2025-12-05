@@ -25,10 +25,6 @@
 //
 /// \file StepMaxProcess.cc
 /// \brief Implementation of the StepMaxProcess class
-//
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "StepMaxProcess.hh"
 

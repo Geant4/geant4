@@ -232,7 +232,7 @@ void G4HadronicBuilder::BuildINCLXX(const std::vector<G4int>& partList,
     if ( part == nullptr ) { continue; }
 
     auto hadi = new G4HadronInelasticProcess( part->GetParticleName()+"Inelastic", part );
-    if( pdg == -2212 ) { // pbar use INCLXX
+    if( pdg == -2212 || pdg == -2112) { // pbar and nbar use INCLXX
       hadi->AddDataSet( xsinel );
       hadi->RegisterMe( theModelINCLXX );
       if( param->ApplyFactorXS() ) hadi->MultiplyCrossSectionBy( param->XSFactorHadronInelastic() );

@@ -134,7 +134,7 @@ int ArgumentBase::parse( ArgumentParser const &a_argumentParser, int a_index, in
         if( m_argumentType == ArgumentType::Positional ) {
             if( maximumNeeded1 < 0 ) maximumNeeded1 = a_argc; }
         else {
-            if( ( maximumNeeded1 < counts( ) ) && ( maximumNeeded1 > -1 ) )
+            if( ( maximumNeeded1 < static_cast<int>( counts( ) ) ) && ( maximumNeeded1 > -1 ) )
                 throw std::runtime_error( "ERROR 1220 in ArgumentBase::parse: too many values for optional argument " + name( ) + " entered." );
             maximumNeeded1 = 1;
         }
@@ -647,7 +647,7 @@ void ArgumentParser::parse( int a_argc, char **a_argv, bool a_printArguments ) {
         }
     }
     for( auto argumentIterator2 = m_arguments.begin( ); argumentIterator2 != m_arguments.end( ); ++argumentIterator2 ) {
-        if( (*argumentIterator2)->counts( ) < (*argumentIterator2)->minimumNeeded( ) ) {
+        if( static_cast<int>( (*argumentIterator2)->counts( ) ) < (*argumentIterator2)->minimumNeeded( ) ) {
             std::string msg( "arguments for" );
 
             if( (*argumentIterator2)->isOptionalArgument( ) ) msg = "number of option";

@@ -23,10 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 /// \file VectorAccummulable.hh
 /// \brief Definition of the VectorAccummulable class
-///
+
 /// This class defines an accummulable of a vector<T> type
 /// that merges the vectors filled on workers in a single vector.
 

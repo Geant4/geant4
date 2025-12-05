@@ -23,6 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file ScavengerMolecules.hh
+/// \brief Definition of the ScavengerMolecules class
+///
+/// Definition of the Background Scavenber chemical species
+
 // In order for Geant4-DNA to be maintained and still open-source,
 // article citations are crucial.
 // If you use Geant4-DNA chemistry and you publish papers about your software,
@@ -39,8 +44,6 @@
 // J. Comput. Phys. 274 (2014) 841-882
 // Prog. Nucl. Sci. Tec. 2 (2011) 503-508
 //
-/// \file ScavengerMolecules.hh
-/// \brief Definition of the Background Scavenber chemical species
 
 #ifndef DNADAMAGE2_ScavengerMolecules_h
 #define DNADAMAGE2_ScavengerMolecules_h 1

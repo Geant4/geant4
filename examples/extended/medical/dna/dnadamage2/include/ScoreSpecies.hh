@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file ScoreSpecies.hh
+/// \brief Definition of the ScoreSpecies class
+
 // This example is provided by the Geant4-DNA collaboration
 // dnadamage3 example is derived from the chem6 example
 // chem6 example authors: W. G. Shin and S. Incerti (CENBG, France)
@@ -37,8 +40,6 @@
 // The Geant4-DNA web site is available at http://geant4-dna.org
 //
 //
-/// \file ScoreSpecies.hh
-/// \brief Definition of the ScoreSpecies class
 // Description:
 //   This is a primitive scorer class for scoring the radiolitic species
 // produced after irradiation in a water volume

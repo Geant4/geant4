@@ -23,10 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// Implementation of a custom tracking manager for e-/e+ and gamma, using
-// the same processes as defined in G4EmStandardPhysics.
-//
-// Original author: Jonas Hahnfeld, 2021
+/// \file EmStandardPhysicsTrackingManager.cc
+/// \brief Implementation of the EmStandardPhysicsTrackingManager class
+///
+/// Implementation of a custom tracking manager for e-/e+ and gamma, using
+/// the same processes as defined in G4EmStandardPhysics.
+///
+/// Original author: Jonas Hahnfeld, 2021
 
 #include "EmStandardPhysicsTrackingManager.hh"
 

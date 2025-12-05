@@ -41,8 +41,6 @@
  *  If it is moving to the left, then we don't want it to flip until
  *  we traverse an entire pixel.
  */
-#define LARGE_COORDINATE 1000000
-#define SMALL_COORDINATE -LARGE_COORDINATE
 
 #define BRESINITPGON(dy, x1, x2, xStart, d, m, m1, incr1, incr2) { \
     int dx;      /* local storage */ \

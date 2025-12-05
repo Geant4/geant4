@@ -25,11 +25,10 @@
 //
 // G4EqEMFieldWithEDM implementation
 //
-//  This is the standard right-hand side for equation of motion.
+// This is the standard right-hand side for equation of motion.
 //
-// Created: Kevin Lynch, 19.02.2009 - Based on G4EqEMFieldWithSpin
-// Modified: Hiromi Iinuma, 06.11.2009 - see:
-//   http://hypernews.slac.stanford.edu/HyperNews/geant4/get/emfields/161.html
+// Author: Kevin Lynch (Boston Univ.), 19.02.2009 - Based on G4EqEMFieldWithSpin
+//         Hiromi Iinuma (KEK), 06.11.2009 - Modified
 // -------------------------------------------------------------------
 
 #include "G4EqEMFieldWithEDM.hh"
@@ -43,8 +42,6 @@ G4EqEMFieldWithEDM::G4EqEMFieldWithEDM(G4ElectroMagneticField* emField )
   : G4EquationOfMotion( emField ) 
 {
 }
-
-G4EqEMFieldWithEDM::~G4EqEMFieldWithEDM() = default; 
 
 void  
 G4EqEMFieldWithEDM::SetChargeMomentumMass(G4ChargeState particleCharge,

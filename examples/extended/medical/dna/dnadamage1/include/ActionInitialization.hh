@@ -23,12 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
+/// \file ActionInitialization.hh
+/// \brief Definition of the ActionInitialization class
 
 #pragma once
 #include "G4VUserActionInitialization.hh"
 
-class DetectorConstruction;
 class PhysicsList;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -36,11 +36,8 @@ class PhysicsList;
 class ActionInitialization : public G4VUserActionInitialization
 {
   public:
-    ActionInitialization(DetectorConstruction* pDetector);
-    ~ActionInitialization() override;
+    ActionInitialization();
+    ~ActionInitialization() override = default;
     void BuildForMaster() const override;
     void Build() const override;
-
-  private:
-    DetectorConstruction* fpDetector;
 };

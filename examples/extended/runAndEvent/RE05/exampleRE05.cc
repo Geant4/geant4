@@ -23,13 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file RE05/exampleRE05.cc
-/// \brief Main program of the RE05 example
-//
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// \file exampleRE05.cc
+/// \brief Main program of the runAndEvent/RE05 example
 
 #include "QBBC.hh"
 #include "RE05ActionInitialization.hh"

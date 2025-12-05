@@ -23,10 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file field/field04/include/F04Materials.hh
+/// \file F04Materials.hh
 /// \brief Definition of the F04Materials class
-//
 
 #ifndef F04Materials_h
 #define F04Materials_h 1

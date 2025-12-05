@@ -60,7 +60,7 @@ void G4VEmissionProbability::Initialise()
 
 void G4VEmissionProbability::ResetIntegrator(G4double de, G4double eps)
 {
-  InitialiseIntegrator(eps, 0.25, 1.10, de, 0.1*CLHEP::MeV, 2*CLHEP::MeV);
+  InitialiseIntegrator(eps, 0.25, 1.25, de, 0.1*CLHEP::MeV, 2*CLHEP::MeV);
 }
 
 G4double G4VEmissionProbability::EmissionProbability(const G4Fragment&, G4double)

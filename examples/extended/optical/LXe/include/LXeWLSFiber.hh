@@ -23,10 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file optical/LXe/include/LXeWLSFiber.hh
+/// \file LXeWLSFiber.hh
 /// \brief Definition of the LXeWLSFiber class
-//
+
 #ifndef LXeWLSFiber_h
 #define LXeWLSFiber_h 1
 

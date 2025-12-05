@@ -186,6 +186,7 @@ namespace G4INCL {
     transmissionRadius[antiSigmaMinus] = theProtonTransmissionRadius;
     transmissionRadius[XiMinus] = theProtonTransmissionRadius;
     transmissionRadius[antiXiMinus] = theProtonTransmissionRadius;
+    transmissionRadius[antiComposite] = theProtonNuclearRadius;
 
     // transmission radii for neutral particles intentionally left uninitialised
   }

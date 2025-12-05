@@ -25,8 +25,6 @@
 //
 /// \file SAXSPhysicsListMessenger.hh
 /// \brief Definition of the SAXSPhysicsListMessenger class
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef SAXSPhysicsListMessenger_h
 #define SAXSPhysicsListMessenger_h 1

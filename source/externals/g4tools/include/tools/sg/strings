@@ -258,11 +258,6 @@ inline const std::string& font_ROOT_142() {static const std::string s_v("wingdin
 namespace tools {
 namespace sg {
 TOOLS_GLOBAL_STRING(node_end) //for write_bsg, sg::rbsg
-//TOOLS_GLOBAL_STRING(clear_scene)
-//TOOLS_GLOBAL_STRING(no_hide_menu)
-//TOOLS_GLOBAL_STRING(back_color)
-//TOOLS_GLOBAL_STRING(adapt_camera)
-//TOOLS_GLOBAL_STRING(adapt_camera_sg_was_empty)
 TOOLS_GLOBAL_STRING(delete)
 TOOLS_GLOBAL_STRING(movable)
 
@@ -270,7 +265,6 @@ TOOLS_GLOBAL_STRING(1D)
 TOOLS_GLOBAL_STRING(2D)
 TOOLS_GLOBAL_STRING(3D)
 
-//TOOLS_GLOBAL_STRING(whole)
 TOOLS_GLOBAL_STRING(col)
 TOOLS_GLOBAL_STRING(row)
 
@@ -285,7 +279,6 @@ TOOLS_GLOBAL_STRING(pos_x_wcam)
 TOOLS_GLOBAL_STRING(pos_y_hcam)
 TOOLS_GLOBAL_STRING(scale)
 TOOLS_GLOBAL_STRING(rad_per_sec)
-//TOOLS_GLOBAL_STRING(kind)
 TOOLS_GLOBAL_STRING(axis)
 TOOLS_GLOBAL_STRING(time_interval)
 TOOLS_GLOBAL_STRING(pos_col)
@@ -306,7 +299,6 @@ TOOLS_GLOBAL_STRING_VALUE(placement_screen,screen)
 TOOLS_GLOBAL_STRING_VALUE(send_radius,radius)
 TOOLS_GLOBAL_STRING_VALUE(send_scale,scale)
 TOOLS_GLOBAL_STRING_VALUE(send_clear,clear)
-//TOOLS_GLOBAL_STRING_VALUE(send_height,height)
 
 TOOLS_GLOBAL_STRING_VALUE(protocol_start,start)
 TOOLS_GLOBAL_STRING_VALUE(protocol_disconnect,disconnect)
@@ -327,14 +319,6 @@ TOOLS_GLOBAL_STRING(protocol_set_background_black)
 TOOLS_GLOBAL_STRING(protocol_set_background_white)
 TOOLS_GLOBAL_STRING(protocol_disable_anim)
 TOOLS_GLOBAL_STRING(protocol_reset_camera)
-
-/* if adding protocols, think to declare corresponding methods to SWIG.
-protocol_set_plane_viewer(bool)
-protocol_set_scene_light_on(bool)
-protocol_hide_main_menu
-protocol_hide_meta_zone
-protocol_show_camera_menu
-*/
 
 TOOLS_GLOBAL_STRING_VALUE(dir_diaporama,diaporama)
 

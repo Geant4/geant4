@@ -4,8 +4,6 @@
 #ifndef tools_rroot_info
 #define tools_rroot_info
 
-//#include "buffer"
-//#include "element"
 #include "named"
 #include "obj_array"
 #include "../forit"
@@ -63,15 +61,9 @@ public:
   :fName(),fTitle(),fType(-1)
   ,fSize(0),fArrayLength(0),fArrayDim(0),fOffset(0)
   ,fTypeName(){
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
     for(int i=0;i<5;i++) fMaxIndex[i] = 0;
   }
   virtual ~streamer_element(){
-#ifdef TOOLS_MEM
-    mem::decrement(s_class().c_str());
-#endif
   }
 protected:
   streamer_element(const streamer_element& a_from)
@@ -81,9 +73,6 @@ protected:
   ,fArrayLength(a_from.fArrayLength)
   ,fArrayDim(a_from.fArrayDim),fOffset(a_from.fOffset)
   ,fTypeName(a_from.fTypeName){
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
     for(int i=0;i<5;i++) fMaxIndex[i] = a_from.fMaxIndex[i];
   }
   streamer_element& operator=(const streamer_element& a_from){
@@ -118,7 +107,6 @@ protected:
   int fArrayDim;        //number of array dimensions
   int fMaxIndex[5];     //Maximum array index for array dimension "dim"
   int fOffset;          //!element offset in class
-  //FIXME Int_t         fNewType;         //!new element type when reading
   std::string fTypeName;        //Data type name of data member
 };
 
@@ -214,14 +202,8 @@ public:
   ,m_streamed_class_version(0)
   ,m_elements(a_fac)
   {
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
   }
   virtual ~streamer_info(){
-#ifdef TOOLS_MEM
-    mem::decrement(s_class().c_str());
-#endif
   }
 protected:
   streamer_info(const streamer_info& a_from)
@@ -233,9 +215,6 @@ protected:
   ,m_streamed_class_version(a_from.m_streamed_class_version)
   ,m_elements(a_from.m_elements)
   {
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
   }
   streamer_info& operator=(const streamer_info& a_from){
     m_name = a_from.m_name;
@@ -259,7 +238,6 @@ protected: //Named
 protected:
   unsigned int m_check_sum;    //checksum of original class
   int m_streamed_class_version; //Class version identifier
-  //int fNumber;               //!Unique identifier
   obj_array<streamer_element> m_elements; //Array of TStreamerElements
 };
 

@@ -6,7 +6,6 @@
 
 #include "sf"
 
-#include "../cstr"
 #include "../HEADER"
 
 namespace tools {
@@ -22,7 +21,7 @@ public:
     char* cstr = 0;
     if(!a_buffer.read_cstr(cstr)) return false;
     m_value = cstr;
-    str_del(cstr);
+    ::free(cstr);
     return true;
   }
   virtual bool dump(std::ostream& a_out) {

@@ -25,8 +25,7 @@
 //
 // G4SurfBits implementation
 //
-// 19.10.12 - Marek Gayer, created and adapted from original implementation
-//                         of Root's TBits class by P.Canal
+// 19.10.12 - Marek Gayer, created and adapted from Root/TBits class
 // --------------------------------------------------------------------
 
 #include "G4SurfBits.hh"
@@ -37,7 +36,7 @@ G4SurfBits::G4SurfBits(unsigned int nBits) : fNBits(nBits)
 {
   // G4SurfBits constructor.  All bits set to 0
 
-  if (fNBits <= 0) fNBits = 0;
+  if (fNBits <= 0) { fNBits = 0; }
   fNBytes  = fNBits != 0u ? ((fNBits-1)/8) + 1 : 1;
   fAllBits = new unsigned char[fNBytes];
   // this is redundant only with libNew
@@ -101,7 +100,7 @@ void G4SurfBits::Compact()
 {
   // Reduce the storage used by the object to a minimun
 
-  if ((fNBits == 0u) || (fAllBits == nullptr)) return;
+  if ((fNBits == 0u) || (fAllBits == nullptr)) { return; }
   unsigned int needed;
   for(needed=fNBytes-1; needed > 0 && fAllBits[needed]==0; ) { --needed; }
   ++needed;
@@ -144,7 +143,7 @@ void G4SurfBits::Print() const
     unsigned char val = fAllBits[i];
     for (unsigned int j=0; j<8; ++j)
     {
-      if ((val & 1) != 0) G4cout << " bit:" << count << " = 1" << G4endl;
+      if ((val & 1) != 0) { G4cout << " bit:" << count << " = 1" << G4endl; }
       ++count;
       val = val >> 1;
     }
@@ -154,7 +153,7 @@ void G4SurfBits::Print() const
 //______________________________________________________________________________
 void G4SurfBits::ResetAllBits(G4bool value)
 {
-  if (fAllBits != nullptr) std::memset(fAllBits, value ? 0xFF : 0, fNBytes);
+  if (fAllBits != nullptr) { std::memset(fAllBits, value ? 0xFF : 0, fNBytes); }
 }
 
 //______________________________________________________________________________

@@ -23,9 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// \file saxs.cc
+/// \brief Main program of the exoticphysics/saxs example
 
 #include "SAXSActionInitialization.hh"
 #include "SAXSDetectorConstruction.hh"

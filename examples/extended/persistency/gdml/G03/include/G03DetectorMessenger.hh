@@ -23,11 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file persistency/gdml/G03/include/G03DetectorMessenger.hh
+/// \file G03DetectorMessenger.hh
 /// \brief Definition of the G03DetectorMessenger class
-//
-//
-//
+
 // Class G03DetectorMessenger
 //
 // Utility messenger for defining run-time commands relative to the example.

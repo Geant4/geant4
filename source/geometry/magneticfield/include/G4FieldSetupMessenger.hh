@@ -22,12 +22,18 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
+//
+// G4FieldSetupMessenger
+//
+// Class description:
+//
+// Messenger class that defines commands for G4FieldSetup.
+//
+// Implements commands:
+// - /field/update
 
-/// \file G4FieldSetupMessenger.h
-/// \brief Definition of the G4FieldSetupMessenger class
-///
-/// \author I. Hrivnacova; IJCLab, Orsay
-
+// Author: Ivana Hrivnacova (IJCLab, Orsay), 2024
+// --------------------------------------------------------------------
 #ifndef G4FIELDSETUPMESSENGER_HH
 #define G4FIELDSETUPMESSENGER_HH
 
@@ -41,42 +47,42 @@ class G4UIdirectory;
 class G4UIcmdWithoutParameter;
 class G4UIcmdWithAnInteger;
 
-/// \ingroup geometry
-/// \brief Messenger class that defines commands for G4FieldSetup
-///
-/// Implements commands:
-/// - /field/update
-///
-/// \author I. Hrivnacova; IJCLab, Orsay
+/**
+ * @brief G4FieldSetupMessenger is a messenger class that defines
+ * commands for G4FieldSetup.
+ */
 
 class G4FieldSetupMessenger : public G4UImessenger
 {
- public:
-  /// Standard constructor
-  G4FieldSetupMessenger(G4FieldSetup* fieldSetup);
-  /// Destructor
-  ~G4FieldSetupMessenger() override;
+  public:
 
-  // methods
-  /// Apply command to the associated object.
-  void SetNewValue(G4UIcommand* command, G4String newValues) override;
+    /**
+     * Standard Constructor and Destructor.
+     */
+    G4FieldSetupMessenger(G4FieldSetup* fieldSetup);
+    ~G4FieldSetupMessenger() override;
 
- private:
-  /// Not implemented
-  G4FieldSetupMessenger() = delete;
-  /// Not implemented
-  G4FieldSetupMessenger(const G4FieldSetupMessenger& right) = delete;
-  /// Not implemented
-  G4FieldSetupMessenger& operator=(const G4FieldSetupMessenger& right) = delete;
+    /**
+     * Default constructor, copy constructor and assignment operator not allowed.
+     */
+    G4FieldSetupMessenger() = delete;
+    G4FieldSetupMessenger(const G4FieldSetupMessenger&) = delete;
+    G4FieldSetupMessenger& operator=(const G4FieldSetupMessenger&) = delete;
 
-  // data members
-  G4FieldSetup* fFieldSetup = nullptr; ///< associated class
+    /**
+     * Applies command to the associated object.
+     */
+    void SetNewValue(G4UIcommand* command, G4String newValues) override;
 
-  //
-  // commands data members
+  private:
 
-  /// Command: update
-  G4UIcmdWithoutParameter* fUpdateCmd = nullptr; 
+    /** Associated class object. */
+    G4FieldSetup* fFieldSetup = nullptr;
+
+    // Commands data members
+
+    /** Command: update. */
+    G4UIcmdWithoutParameter* fUpdateCmd = nullptr; 
 };
 
-#endif // G4FIELDBUILDERMESSENGER_HH
+#endif

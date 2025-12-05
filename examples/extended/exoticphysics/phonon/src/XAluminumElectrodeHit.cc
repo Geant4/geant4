@@ -23,10 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file exoticphysics/phonon/src/XAluminumElectrodeHit.cc
+/// \file XAluminumElectrodeHit.cc
 /// \brief Implementation of the XAluminumElectrodeHit class
-//
-//
+
 // 20141008  Allocators must be thread-local, and must be pointers
 
 #include "XAluminumElectrodeHit.hh"

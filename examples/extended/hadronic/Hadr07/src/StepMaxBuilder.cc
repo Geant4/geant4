@@ -25,10 +25,6 @@
 //
 /// \file StepMaxBuilder.cc
 /// \brief Implementation of the StepMaxBuilder class
-//
-//
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "StepMaxBuilder.hh"
 

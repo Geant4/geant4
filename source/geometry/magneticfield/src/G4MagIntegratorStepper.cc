@@ -25,10 +25,9 @@
 //
 // G4MagIntegratorStepper implementation
 //
-// Author: J.Apostolakis, CERN - 15.01.1997
+// Author: John Apostolakis (CERN), 15.01.1997
 // --------------------------------------------------------------------
 
-#include <cassert>
 #include "G4MagIntegratorStepper.hh"
 
 // Constructor for stepper abstract base class. 
@@ -44,9 +43,9 @@ G4MagIntegratorStepper( G4EquationOfMotion* Equation,
     fNoStateVariables(std::max(num_state_vars,8)),
     fIsFSAL(isFSAL)
 {
-  if( Equation == nullptr ) {
+  if( Equation == nullptr )
+  {
      G4Exception( "G4MagIntegratorStepper::G4MagIntegratorStepper", "GeomField0003",
                   FatalErrorInArgument, "Must have non-null equation." );
   }
-  assert( Equation != nullptr );
 }

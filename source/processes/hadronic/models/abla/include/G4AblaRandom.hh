@@ -35,6 +35,7 @@
 
 #include "globals.hh"
 
-namespace G4AblaRandom {
+namespace G4AblaRandom
+{
 G4double flat();
 }

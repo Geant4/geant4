@@ -4,6 +4,12 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
+## 2025-07-29 I. Hrivnacova (exEventGenerator-V11-03-00)
+- Migration of README pages to Markdown:
+  - .README.txt replaced with README.md and removed README
+  - Reviewed and fixed external links, references to code,
+    improved formatting.
+
 ## 2024-04-25 Ben Morgan (exEventGenerator-V11-02-01)
 - Update CMake script to use new Pythia6 setup/build variables
 

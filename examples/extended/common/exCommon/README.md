@@ -1,0 +1,26 @@
+\page ExampleexCommon Example exCommon
+
+  This example includes a set of classes independent on each other which
+  can be reused in "feature" examples demonstrating just a particular feature
+  or users applications.
+
+  It provides the following sets of classes:
+
+  - Detector construction classes
+    - two simple detector construction classes with a messenger
+
+  - Physics list classes
+    - GeantinoPhysicsList - physics list with geantino and chargedgeantino only
+
+  - Primary generator classes
+    - two simple primary generator classes (with G4ParticleGun and
+      G4ParticleGeneralSource)
+
+  These classes can be tested with the following programs:
+  - testCommon.cc - only instantiates all classes
+  - exampleCommonNoVis.cc - Geant4 application without visualization, that can be run
+      both interactively or in batch (with the init.mac or run.mac macro)
+  - exampleCommonNoVis.cc - Geant4 application with visualization, that can be run
+      both interactively or in batch (with the init_vis.mac or run.mac macro)
+
+  Building examples programs can be disabled with the CMake option: -DEXAMPLES_COMMON=OFF.

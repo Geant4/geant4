@@ -1,0 +1,95 @@
+#FOR SIMPLICITY THIS MACRO USES MODEL DEFAULTS;
+#TO MODIFY PLEASE REFER run.mac
+#AND ADD THE CORRESPONDING OPTIONS TO THIS MACRO
+
+#THIS EXAMPLE ALLOWS ONE TO STUDY CHANNELING - PLANAR OR AXIAL;
+#VOLUME REFLECTION, MULTIPLE VOLUME REFLECTION IN ONE BENT CRYSTAL etc.
+#AND ANY CRYSTAL ORIENTATIONS of TRANSITION BETWEEN THESE EFFECTS.
+
+#THE CURRENT CRYSTAL PARAMETERS ARE TYPICAL FOR
+#BEAM DEFLECTION EXPERIMENTS AT HIGH ENERGIES.
+#YOU MAY REFER TO VARIOUS PAPERS ABOUT REAL EXPERIMENTS:
+#W. Scandale et al. Phys. Lett. B 680, 129–132 (2009).
+#W. Scandale et al. Phys. Lett. B 682, 274–277 (2009).
+#R. Rossi et al. NIM B 355, 369–373 (2015).
+#L. Bandiera et al. Eur. Phys. J. C 76, 80 (2016).
+
+#CAUTION: THIS IS A SIMPLIFIED EXAMPLE. IF YOU NEED
+#A REALISTIC RESOLUTION OF ANGLES MEASUREMENT,
+#PLEASE MODIFY DetectorConstruction ACCORDINGLY.
+#FOR THE RESOLUTION OF INCOMING ANGLES YOU MAY ALSO SET UP
+#AN EQUIVALENT INCOMING ANGULAR DIVERGENCE.
+
+#CAUTION: NO CRYSTAL TORSION EFFECTS ARE CONSIDERED.
+
+#CAUTION: HADRONIC PHYSICS IS SWITCHED OFF WHEN
+#G4ChannelingFastSimModel IS EXPLOITED.
+#IT DOES NOT AFFECT CHANNELING EFFICIENCY FOR A SHORT CRYSTAL,
+#NOT EXCEEDING FEW MM LENGTH ALONG THE BEAM DIRECTION.
+#THIS MAY HAVE ISSUES FOR LONGER CRYSTALS OR FOR COLLIMATION
+#STUDIES. IN THE CASE OF ANY PROBLEMS PLEASE CONTACT THE DEVELOPERS.
+
+/random/setSeeds 19577794 424238336
+#setting number of cores
+/run/numberOfThreads 2
+
+#change it as you want
+/crystal/setCrystalSize 6. 50. 4. mm
+/crystal/setCrystalBendingAngle 0.1 mrad #default is 0
+/crystal/setCrystalAngleX 0 mrad  #default is 0
+/crystal/setCrystalAngleY 0 mrad  #default is 0
+
+#crystal lattice parameters
+#change it according to the data available in G4CHANNELINGDATA
+/crystal/setCrystalMaterial G4_Si  # check G4CHANNELINGDATA dataset;
+                                   # G4_Ge and G4_Diamond are also available
+/crystal/setCrystalLattice  (110)  # check G4CHANNELINGDATA dataset;
+                                   # planes (111) and (100) as well as
+                                   # axes <100>, <110> and <111> are also available
+
+#detector parameters
+#change it as you want
+/crystal/setDetectorSize 10 10 0.03 cm
+/crystal/setFrontPositionZ 10. m
+
+#G4ChannelingFastSimModel parameters
+#change it as you want
+/crystal/setChannelingModel true #switch on/off G4ChannelingFastSimModel
+/crystal/setRadiationModel false  #switch on/off G4BaierKatkov
+                                 #(G4ChannelingFastSimModel must be switched on)
+
+/run/initialize
+
+#settings
+/control/verbose 0
+/run/verbose 0
+/tracking/verbose 0
+
+#beam
+/gps/particle proton #pi+, pi-, anti_proton, GenericIon, mu+ or mu- are also ok;
+                     #for e+, e- please evaluate, whether you need
+                     #to switch on the radiation model (see above)
+                     #which will accurately simulate radiation energy loss
+                     #but will considerably slow down the code execution.
+
+#coordinate distribution (radial Gauss)
+#feel free to change
+/gps/pos/centre 0. 0. -1. cm
+/gps/pos/type Beam
+/gps/pos/sigma_x 0.1 mm
+/gps/pos/sigma_y 0.1 mm
+
+#angular distribution (radial Gauss)
+#feel free to change
+/gps/ang/type beam2d
+/gps/ang/rot1 1  0  0
+/gps/ang/rot2 0 -1  0
+/gps/ang/sigma_x 5.E-6 rad
+/gps/ang/sigma_y 5.E-6 rad
+
+#energy distribution (constant)
+/gps/ene/mono 200 GeV #feel free to change
+
+#statistics
+/run/printProgress 100
+/run/beamOn 1000

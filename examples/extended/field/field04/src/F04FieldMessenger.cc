@@ -23,10 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file field/field04/src/F04FieldMessenger.cc
+/// \file F04FieldMessenger.cc
 /// \brief Implementation of the F04FieldMessenger class
-//
 
 #include "F04FieldMessenger.hh"
 

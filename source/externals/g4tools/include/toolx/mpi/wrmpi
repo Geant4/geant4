@@ -7,30 +7,19 @@
 #include "wait_buffer"
 
 #include <tools/impi>
-#include <tools/vdata>
-#include <tools/realloc>
+#include <tools/cmemT>
 #include <tools/mnmx>
-
-#ifdef TOOLS_MEM
-#include <tools/mem>
-#endif
 
 // the below must be in sync with tools/typedefs
 #if defined(_MSC_VER) || defined(__MINGW32__)
-//typedef __int64 int64;
-//typedef unsigned __int64 uint64;
 #define TOOLX_MPI_UINT64 MPI_UNSIGNED_LONG_LONG
 #define TOOLX_MPI_INT64  MPI_LONG_LONG
 #elif defined(_LP64)
 // 64 Bit Platforms
-//typedef long int64;
-//typedef unsigned long uint64;
 #define TOOLX_MPI_UINT64 MPI_UNSIGNED_LONG
 #define TOOLX_MPI_INT64  MPI_LONG
 #else
 // 32-Bit Platforms
-//typedef long long int64;
-//typedef unsigned long long uint64;
 #define TOOLX_MPI_UINT64 MPI_UNSIGNED_LONG_LONG
 #define TOOLX_MPI_INT64  MPI_LONG_LONG
 #endif
@@ -159,10 +148,10 @@ public: //tools::impi
     tools::uint32 sz = (tools::uint32)(a_v.size()*sizeof(unsigned int));
     if((m_pos+sz)>m_max) {if(!expand2(m_size+sz)) return false;}
 #if defined(TOOLX_USE_MPI_PACK_NOT_CONST) || defined(TOOLS_USE_MPI_PACK_NOT_CONST)
-    if(::MPI_Pack(const_cast<unsigned int*>(tools::vec_data(a_v)),a_v.size(),
+    if(::MPI_Pack(const_cast<unsigned int*>(a_v.data()),a_v.size(),
                   MPI_UNSIGNED,m_buffer,m_size,&m_ipos,m_comm)!=MPI_SUCCESS) {
 #else
-    if(::MPI_Pack(tools::vec_data(a_v),a_v.size(),MPI_UNSIGNED,m_buffer,m_size,&m_ipos,m_comm)!=MPI_SUCCESS) {
+    if(::MPI_Pack(a_v.data(),a_v.size(),MPI_UNSIGNED,m_buffer,m_size,&m_ipos,m_comm)!=MPI_SUCCESS) {
 #endif
       m_out << "toolx::mpi::wrmpi : MPI_Pack(std::vector<unsigned int>) failed." << std::endl;
       return false;
@@ -175,9 +164,9 @@ public: //tools::impi
     tools::uint32 sz = (tools::uint32)(a_v.size()*sizeof(int));
     if((m_pos+sz)>m_max) {if(!expand2(m_size+sz)) return false;}
 #if defined(TOOLX_USE_MPI_PACK_NOT_CONST) || defined(TOOLS_USE_MPI_PACK_NOT_CONST)
-    if(::MPI_Pack(const_cast<int*>(tools::vec_data(a_v)),a_v.size(),MPI_INT,m_buffer,m_size,&m_ipos,m_comm)!=MPI_SUCCESS) {
+    if(::MPI_Pack(const_cast<int*>(a_v.data()),a_v.size(),MPI_INT,m_buffer,m_size,&m_ipos,m_comm)!=MPI_SUCCESS) {
 #else
-    if(::MPI_Pack(tools::vec_data(a_v),a_v.size(),MPI_INT,m_buffer,m_size,&m_ipos,m_comm)!=MPI_SUCCESS) {
+    if(::MPI_Pack(a_v.data(),a_v.size(),MPI_INT,m_buffer,m_size,&m_ipos,m_comm)!=MPI_SUCCESS) {
 #endif
       m_out << "toolx::mpi::wrmpi : MPI_Pack(std::vector<int>) failed." << std::endl;
       return false;
@@ -190,9 +179,9 @@ public: //tools::impi
     tools::uint32 sz = (tools::uint32)(a_v.size()*sizeof(double));
     if((m_pos+sz)>m_max) {if(!expand2(m_size+sz)) return false;}
 #if defined(TOOLX_USE_MPI_PACK_NOT_CONST) || defined(TOOLS_USE_MPI_PACK_NOT_CONST)
-    if(::MPI_Pack(const_cast<double*>(tools::vec_data(a_v)),a_v.size(),MPI_DOUBLE,m_buffer,m_size,&m_ipos,m_comm)!=MPI_SUCCESS) {
+    if(::MPI_Pack(const_cast<double*>(a_v.data()),a_v.size(),MPI_DOUBLE,m_buffer,m_size,&m_ipos,m_comm)!=MPI_SUCCESS) {
 #else
-    if(::MPI_Pack(tools::vec_data(a_v),a_v.size(),MPI_DOUBLE,m_buffer,m_size,&m_ipos,m_comm)!=MPI_SUCCESS) {
+    if(::MPI_Pack(a_v.data(),a_v.size(),MPI_DOUBLE,m_buffer,m_size,&m_ipos,m_comm)!=MPI_SUCCESS) {
 #endif
       m_out << "toolx::mpi::wrmpi : MPI_Pack(std::vector<double>) failed." << std::endl;
       return false;
@@ -311,7 +300,7 @@ public: //tools::impi
     num_t num;
     if(!unpack(num)) {a_v.clear();return false;}
     a_v.resize(num);
-    if(::MPI_Unpack(m_buffer,m_size,&m_ipos,tools::vec_data(a_v),a_v.size(),MPI_UNSIGNED,m_comm)!=MPI_SUCCESS) {
+    if(::MPI_Unpack(m_buffer,m_size,&m_ipos,a_v.data(),a_v.size(),MPI_UNSIGNED,m_comm)!=MPI_SUCCESS) {
       m_out << "toolx::mpi::wrmpi : MPI_Unpack(std::vector<unsigned int>) failed." << std::endl;
       a_v.clear();
       return false;
@@ -322,7 +311,7 @@ public: //tools::impi
     num_t num;
     if(!unpack(num)) {a_v.clear();return false;}
     a_v.resize(num);
-    if(::MPI_Unpack(m_buffer,m_size,&m_ipos,tools::vec_data(a_v),a_v.size(),MPI_INT,m_comm)!=MPI_SUCCESS) {
+    if(::MPI_Unpack(m_buffer,m_size,&m_ipos,a_v.data(),a_v.size(),MPI_INT,m_comm)!=MPI_SUCCESS) {
       m_out << "toolx::mpi::wrmpi : MPI_Unpack(std::vector<int>) failed." << std::endl;
       a_v.clear();
       return false;
@@ -333,7 +322,7 @@ public: //tools::impi
     num_t num;
     if(!unpack(num)) {a_v.clear();return false;}
     a_v.resize(num);
-    if(::MPI_Unpack(m_buffer,m_size,&m_ipos,tools::vec_data(a_v),a_v.size(),MPI_DOUBLE,m_comm)!=MPI_SUCCESS) {
+    if(::MPI_Unpack(m_buffer,m_size,&m_ipos,a_v.data(),a_v.size(),MPI_DOUBLE,m_comm)!=MPI_SUCCESS) {
       m_out << "toolx::mpi::wrmpi : MPI_Unpack(std::vector<double>) failed." << std::endl;
       a_v.clear();
       return false;
@@ -384,7 +373,6 @@ public: //tools::impi
     delete [] m_buffer;
     m_size = 128;
     m_buffer = new char[m_size];
-    //if(!m_buffer) {}
     m_max = m_buffer+m_size;
     m_pos = m_buffer;
     m_ipos = 0; //IMPORTANT
@@ -429,9 +417,6 @@ public:
   ,m_pos(0)
   ,m_ipos(0)
   {
-#ifdef TOOLS_MEM
-    tools::mem::increment(s_class().c_str());
-#endif
     m_size = a_size;
     m_buffer = new char[m_size];
     //if(!m_buffer) {}
@@ -447,17 +432,11 @@ public:
   ,m_pos(0)
   ,m_ipos(0)
   {
-#ifdef TOOLS_MEM
-    tools::mem::increment(s_class().c_str());
-#endif
     m_max = m_buffer+m_size;
     m_pos = m_buffer;
   }
   virtual ~wrmpi(){
     delete [] m_buffer;
-#ifdef TOOLS_MEM
-    tools::mem::decrement(s_class().c_str());
-#endif
   }
 protected:
   wrmpi(const wrmpi& a_from)
@@ -470,9 +449,6 @@ protected:
   ,m_pos(0)
   ,m_ipos(0)
   {
-#ifdef TOOLS_MEM
-    tools::mem::increment(s_class().c_str());
-#endif
   }
   wrmpi& operator=(const wrmpi&){return *this;}
 public:
@@ -484,18 +460,17 @@ public:
 #endif
 
 protected:
-  bool expand2(tools::uint32 a_new_size) {return expand(tools::mx<tools::uint32>(2*m_size,a_new_size));} //CERN-ROOT logic.
+  bool expand2(tools::uint32 a_new_size) {return expand(tools::max_of<tools::uint32>(2*m_size,a_new_size));} //CERN-ROOT logic.
 
   bool expand(tools::uint32 a_new_size) {
     tools::diff_pointer_t len = m_pos-m_buffer;
-    if(!tools::realloc<char>(m_buffer,a_new_size,m_size)) {
+    if(!tools::cmem_realloc<char>(m_buffer,a_new_size,m_size)) {
       m_out << "toolx::mpi::wrmpi::expand :"
             << " can't realloc " << a_new_size << " bytes."
             << std::endl;
       m_size = 0;
       m_max = 0;
       m_pos = 0;
-      //m_wb.set_eob(m_max);
       return false;
     }
     m_size = a_new_size;

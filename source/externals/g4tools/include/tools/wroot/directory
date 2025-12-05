@@ -47,9 +47,6 @@ public:
   ,m_seek_parent(0)
   ,m_seek_keys(0)
   {
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
   }
   directory(ifile& a_file,const std::string& a_name,const std::string& a_title)
   :m_file(a_file)
@@ -63,9 +60,6 @@ public:
   ,m_seek_parent(0)
   ,m_seek_keys(0)
   {
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
     m_date_C = get_date();
     m_date_M = get_date();
 
@@ -100,9 +94,6 @@ public:
   ,m_seek_parent(0)
   ,m_seek_keys(0)
   {
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
     m_date_C = get_date();
     m_date_M = get_date();
 
@@ -176,9 +167,6 @@ public:
     clear_dirs();
     clear_objs();
     clear_keys();
-#ifdef TOOLS_MEM
-    mem::decrement(s_class().c_str());
-#endif
   }
 protected:
   directory(const directory& a_from)
@@ -186,9 +174,6 @@ protected:
   ,m_file(a_from.m_file)
   ,m_parent(0)
   ,m_is_valid(false){
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
   }
   directory& operator=(const directory &){
     m_is_valid = false;
@@ -327,7 +312,6 @@ public:
   void clear_objs() {safe_clear<iobject>(m_objs);}
 
   const std::list<key*>& keys() const {return m_keys;}
-  //std::list<key*>& keys() {return m_keys;}
 
 protected:
   void clear_keys() {
@@ -393,11 +377,6 @@ protected:
     // The list of keys (m_keys) is written as a single data record
     // Delete the old keys structure if it exists
 
-    //if(fSeekKeys) {
-    //  if(!fFile.makeFreeSegment
-    //     (fSeekKeys, fSeekKeys + fNbytesKeys -1)) return false;
-    //}
-
     // Write new keys record :
     uint32 nkeys  = uint32(m_keys.size());
 
@@ -459,7 +438,6 @@ protected:
     }
     // do not overwrite the name/title part
     seek pointer = m_seek_directory + m_nbytes_name;
-    //fModified = false;
     if(!m_file.set_pos(pointer)) {
       delete [] header;
       return false;

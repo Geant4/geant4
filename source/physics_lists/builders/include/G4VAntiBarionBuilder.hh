@@ -39,17 +39,18 @@
 #define G4VAntiBarionBuilder_h
 
 #include "G4PhysicsBuilderInterface.hh"
-#include "G4HadronElasticProcess.hh"
-#include "G4HadronInelasticProcess.hh"
+
+class G4HadronInelasticProcess;
+class G4HadronElasticProcess;
 
 class G4VAntiBarionBuilder : public G4PhysicsBuilderInterface
 {
 public:
   G4VAntiBarionBuilder() = default;
-  virtual ~G4VAntiBarionBuilder() {} 
-  virtual void Build(G4HadronElasticProcess * aP) = 0;
-  virtual void Build(G4HadronInelasticProcess * aP) = 0;
-  using G4PhysicsBuilderInterface::Build; //Prevent compiler warning
+  ~G4VAntiBarionBuilder() override = default;
+  //  virtual void Build(G4HadronElasticProcess * aP) = 0;
+  // virtual void Build(G4HadronInelasticProcess * aP) = 0;
+  // using G4PhysicsBuilderInterface::Build; //Prevent compiler warning
 };
 
 #endif

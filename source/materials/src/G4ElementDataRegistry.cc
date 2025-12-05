@@ -53,6 +53,7 @@ G4ElementDataRegistry::~G4ElementDataRegistry()
   for (auto const & ptr : elmdata) {
     delete ptr;
   }
+  elmdata.clear();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -64,8 +65,7 @@ G4ElementDataRegistry::G4ElementDataRegistry()
 
 void G4ElementDataRegistry::RegisterMe(G4ElementData* p)
 {
-  for (auto & ptr : elmdata) { if (ptr == p) { return; } } 
-
+  for (auto const & ptr : elmdata) { if (ptr == p) { return; } }
   elmdata.push_back(p);
 }
 
@@ -93,6 +93,21 @@ G4ElementData* G4ElementDataRegistry::GetElementDataByName(const G4String& nam)
       break;
     }
   }
+  return ptr;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4ElementData*
+G4ElementDataRegistry::NewElementData(const G4String& nam, G4int n)
+{
+  for (auto const & p : elmdata) {
+    if (p->GetName() == nam) {
+      return p;
+    }
+  }
+  auto ptr = new G4ElementData(n);
+  ptr->SetName(nam);
   return ptr;
 }
 

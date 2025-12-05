@@ -279,7 +279,7 @@ void G4XrayReflection::SaveHenkeDataAsMaterialProperty()
         for (std::size_t i = 0; i < Ephot.size(); ++i) {
           G4double lambda = CLHEP::twopi * CLHEP::hbarc / Ephot[i];
           G4double lambda_sqr = lambda * lambda;
-          RealIndex[i] = fmax(0, factor * lambda_sqr * f1[i]);  // delta or 1-RealIndex
+          RealIndex[i] = std::fmax(0, factor * lambda_sqr * f1[i]);  // delta or 1-RealIndex
           ImagIndex[i] = factor * lambda_sqr * f2[i];  // beta  or  -ImagIndex
           if (GetVerboseLevel() > 2)
             G4cout << "Ephot=" << std::setw(10) << Ephot[i] / eV << " eV delta=" << std::setw(10)

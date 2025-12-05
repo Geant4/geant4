@@ -368,34 +368,23 @@ G4double G4AntiNuclElastic::SampleInvariantT(const G4ParticleDefinition* particl
  G4double G4AntiNuclElastic::SampleThetaCMS(const G4ParticleDefinition* p, G4double plab,
                                                                          G4int Z, G4int A)
 { 
-  G4double T;
-  T =  SampleInvariantT( p, plab,  Z,  A);
+  G4double T = SampleInvariantT( p, plab,  Z,  A);
+  if (T <= 0.0 || fTmax <= 0.0) { return 1.0; }
 
-   // NaN finder
-  if(!(T < 0.0 || T >= 0.0))
+   // NaN finder substituted by simple check
+  if (T > fTmax)
   {
     if (verboseLevel > 0)
     {
-      G4cout << "G4DiffuseElastic:WARNING: A = " << A
-             << " mom(GeV)= " << plab/GeV
-             << " S-wave will be sampled"
+      G4cout << "G4AntiNuclElastic::SampleThetaCMS WARNING: A = " << A
+             << " mom(GeV)=" << plab/GeV << "  t(GeV2)=" << T/(GeV*GeV)
+             << " > Tmax(GeV2)=" << fTmax/(GeV*GeV) << " S-wave will be sampled"
              << G4endl;
     }
     T = G4UniformRand()*fTmax;
- 
   }
-
-  if(fptot > 0.)
-  {
-   G4double cosTet=1.0-T/(2.*fptot*fptot);
-   if(cosTet >  1.0 ) cosTet= 1.;
-   if(cosTet < -1.0 ) cosTet=-1.;
-   fTetaCMS=std::acos(cosTet); 
-   return fTetaCMS;
-  } else
-  {
-   return 2.*G4UniformRand()-1.;
-  }
+  G4double cosTet = 1.0 - 2*T/fTmax;
+  return cosTet;
 }  
 
 
@@ -404,42 +393,25 @@ G4double G4AntiNuclElastic::SampleInvariantT(const G4ParticleDefinition* particl
  G4double G4AntiNuclElastic::SampleThetaLab(const G4ParticleDefinition* p, G4double plab,
                                                                          G4int Z, G4int A)
 { 
-  G4double T; 
-  T = SampleInvariantT( p, plab,  Z,  A);
+  G4double T = SampleInvariantT( p, plab,  Z,  A);
+  if (T <= 0.0 || fTmax <= 0.0) { return 1.0; }
 
- // NaN finder
-  if(!(T < 0.0 || T >= 0.0))
+   // NaN finder substituted by simple check
+  if (T > fTmax)
   {
-    if (verboseLevel > 0)               
+    if (verboseLevel > 0)
     {
-      G4cout << "G4DiffuseElastic:WARNING: A = " << A
-             << " mom(GeV)= " << plab/GeV
-             << " S-wave will be sampled"
+      G4cout << "G4AntiNuclElastic::SampleThetaLab WARNING: A = " << A
+             << " mom(GeV)=" << plab/GeV << "  t(GeV2)=" << T/(GeV*GeV)
+             << " > Tmax(GeV2)=" << fTmax/(GeV*GeV) << " S-wave will be sampled"
              << G4endl;
     }
     T = G4UniformRand()*fTmax;
   }
 
-  G4double phi  = G4UniformRand()*twopi;
-
-  G4double cost(1.);
-  if(fTmax > 0.) {cost = 1. - 2.0*T/fTmax;}
-
-  G4double sint;
-  if( cost >= 1.0 )
-  {
-    cost = 1.0;
-    sint = 0.0;
-  }
-  else if( cost <= -1.0)
-  {
-    cost = -1.0;
-    sint =  0.0;
-  }
-  else
-  {
-    sint = std::sqrt((1.0-cost)*(1.0+cost));
-  }
+  G4double cost = 1.0 - 2*T/fTmax;
+  G4double phi = G4UniformRand()*twopi;
+  G4double sint = std::sqrt((1.0-cost)*(1.0+cost));
 
   G4double m1 = p->GetPDGMass();
   G4ThreeVector v(sint*std::cos(phi),sint*std::sin(phi),cost);

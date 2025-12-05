@@ -36,75 +36,124 @@
 // If a cell is not known by the importance store no biasing should be
 // applied between this cell and its nighbors.
 
-// Author: Michael Dressel (CERN), 2002
-// Modified: Alex Howard (CERN), 2013 - Changed class to a 'singleton'
+// Author: Michael Dressel (CERN), 2002 - Created
+//         Alex Howard (CERN), 2013 - Changed class to a 'singleton'
 // ----------------------------------------------------------------------
 #ifndef G4ISTORE_HH
-#define G4ISTORE_HH 1
+#define G4ISTORE_HH
 
 #include "G4VIStore.hh"
 #include "G4GeometryCellImportance.hh"
 #include "G4TransportationManager.hh"
 
+/**
+ * @brief G4IStore is a concrete implementation of an "importance store", as
+ * derived from G4VIStore. It is a singleton, using G4GeometryCellImportance
+ * as the container to store the "cells" together with the importance values.
+ * Giving a cell, the importance 0 is allowed as a flagging that no biasing
+ * should happen between this cell and its neighbors.
+ * If a cell is not known by the importance store no biasing should be
+ * applied between this cell and its nighbors.
+ */
+
 class G4IStore : public G4VIStore
 {
   public:
 
+    /**
+     * Returns a pointer to the singleton instance of the class.
+     */
     static G4IStore* GetInstance();
-      // return ptr to singleton instance of the class.
 
+    /**
+     * Returns a pointer to the singleton instance of the class, given
+     * the name of the parallel world of reference.
+     */
     static G4IStore* GetInstance(const G4String& ParallelWorldName);
-      // return ptr to singleton instance of the class.
 
+    /**
+     * Returns the importance value of a "cell" from the store addressed
+     * by 'gCell'.
+     *  @param[in] gCell The cell of reference.
+     *  @returns The associated importance weight.
+     */
     G4double GetImportance(const G4GeometryCell& gCell) const override;
-      // derive an importance value of a "cell" addressed by a
-      // G4GeometryCell from the store.
 
+    /**
+     * Returns true if 'gCell' is in the store, else false.
+     *  @param[in] gCell The cell of reference.
+     *  @returns true if present in the store, false otherwise.
+     */
     G4bool IsKnown(const G4GeometryCell& gCell) const override;
-      // returns true if the gCell is in the store, else false 
 
+    /**
+     * Clears the cells importance store.
+     */
     void Clear();
 
+    /**
+     * Sets a reference to world volume of the "importance" geometry.
+     */
     void SetWorldVolume();
-      // set a reference to the world volume of the "importance" geometry
 
+    /**
+     * Sets a reference to parallel world volume of the "importance" geometry.
+     */
     void SetParallelWorldVolume(const G4String& paraName);
-      // set a reference to parallel world volume of the "importance" geometry
 
+    /**
+     * Returns a reference to the world volume of the "importance" geometry.
+     */
     const G4VPhysicalVolume& GetWorldVolume() const override;
-      // return a reference to the world volume of the "importance" geometry
 
-    virtual const G4VPhysicalVolume* GetParallelWorldVolumePointer() const;
-      // return a pointer to the world volume of the "importance" geometry
+    /**
+     * Returns a pointer to the world volume of the "importance" geometry.
+     */
+    const G4VPhysicalVolume* GetParallelWorldVolumePointer() const;
 
+    /**
+     * Methods to add a "cell" together with an importance value to the store.
+     */
     void AddImportanceGeometryCell(G4double importance,
                              const G4GeometryCell &gCell);
     void AddImportanceGeometryCell(G4double importance,
                              const G4VPhysicalVolume &,
                              G4int aRepNum = 0);
-      // add a "cell" together with a importance value to the store.
 
+    /**
+     * Methods to change an importance value of a "cell".
+     */
     void ChangeImportance(G4double importance, const G4GeometryCell& gCell);
     void ChangeImportance(G4double importance, const G4VPhysicalVolume&,
                           G4int aRepNum = 0);
-      // change a importance value of a "cell".
 
-    G4double GetImportance(const G4VPhysicalVolume&, G4int aRepNum = 0) const;
+    /**
+     * Returns the importance weight, given the volume and replica number.
+     */
+    G4double GetImportance(const G4VPhysicalVolume& vol, G4int rpNum = 0) const;
   
-  protected:
-
-    explicit G4IStore();
-      // initialise the importance store for the given geometry
-    explicit G4IStore(const G4String& ParallelWorldName);
-      // initialise the importance store for the given geometry
-
-    ~G4IStore() override;
-      // destructor
-
   private:
 
+    /**
+     * Constructors. Initialising the importance store for the given geometry.
+     */
+    explicit G4IStore();
+    explicit G4IStore(const G4String& ParallelWorldName);
+
+    /**
+     * Default Destructor.
+     */
+    ~G4IStore() override = default;
+
+    /**
+     * Internal utilities.
+     */
     G4bool IsInWorld(const G4VPhysicalVolume&) const;
     void SetInternalIterator(const G4GeometryCell& gCell) const;
+
+    /**
+     * Internal logger.
+     */
     void Error(const G4String& m) const;
 
   private:

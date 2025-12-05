@@ -33,29 +33,44 @@
 // Author: Michael Dressel (CERN), 2002
 // ----------------------------------------------------------------------
 #ifndef G4IMPORTANCEALGORITHM_HH
-#define G4IMPORTANCEALGORITHM_HH 1
+#define G4IMPORTANCEALGORITHM_HH
 
 #include "G4Threading.hh"
 #include "G4VImportanceAlgorithm.hh"
 
+/**
+ * @brief G4ImportanceAlgorithm is a concrete implementation of a
+ * G4VImportanceAlgorithm.
+ */
+
 class G4ImportanceAlgorithm : public G4VImportanceAlgorithm
 {
-  public:  // with description
+  public:
 
-    G4ImportanceAlgorithm();
-      // simple construction
+    /**
+     * Default Constructor and Destructor.
+     */
+    G4ImportanceAlgorithm() = default;
+    ~G4ImportanceAlgorithm() override = default;
 
-    ~G4ImportanceAlgorithm() override;
-      // repeate warning if triggered
-
+    /**
+     * Calculates the number of tracks and their weight according to the
+     * pre and post importance value and the weight of the mother track.
+     *  @param[in] ipre "pre" importance value.
+     *  @param[in] ipost "post" importance value.
+     *  @param[in] init_w Initial weight value.
+     *  @returns A struct containing the number of copies (including the
+     *           mother track) to be produced and the weight of each track.
+     */
     G4Nsplit_Weight Calculate(G4double ipre, 
-                                      G4double ipost, 
-                                      G4double init_w) const override;
-      // calculate the number of tracks and their weight according to the
-      // pre and post importance value and the weight of the mother track
+                              G4double ipost, 
+                              G4double init_w) const override;
 
   private:
 
+    /**
+     * Simple internal loggers.
+     */
     void Error(const G4String& m) const;
     void Warning(const G4String& m) const;
 

@@ -121,7 +121,7 @@ double Regions2d::evaluate( double a_x2, double a_x1 ) const {
         iX1 = 0;                /* x1 < last value of Xs. */
     }
 
-    return( m_function2ds[iX1]->evaluate( a_x2, a_x1 ) );
+    return( m_function2ds[static_cast<std::size_t>(iX1)]->evaluate( a_x2, a_x1 ) );
 }
 
 /* *********************************************************************************************************//**

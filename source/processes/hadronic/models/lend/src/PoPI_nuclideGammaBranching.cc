@@ -50,7 +50,8 @@ NuclideGammaBranchInfo::NuclideGammaBranchInfo( NuclideGammaBranchInfo const &a_
 ================= NuclideGammaBranchStateInfo ================
 ============================================================
 */
-NuclideGammaBranchStateInfo::NuclideGammaBranchStateInfo( std::string a_state, int a_intid, std::string const &a_kind, double a_nuclearLevelEnergy ) :
+NuclideGammaBranchStateInfo::NuclideGammaBranchStateInfo( std::string const &a_state, int a_intid, std::string const &a_kind, 
+                double a_nuclearLevelEnergy ) :
         m_state( a_state ),
         m_intid( a_intid ),
         m_kind( a_kind ),

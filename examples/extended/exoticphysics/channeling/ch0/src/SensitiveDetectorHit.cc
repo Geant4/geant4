@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file SensitiveDetectorHit.cc
+/// \brief Implementation of the SensitiveDetectorHit class
 
 #include "SensitiveDetectorHit.hh"
 

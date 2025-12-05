@@ -23,8 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
 //
@@ -33,34 +31,40 @@
 //          Mishustin (FIAS, Frankfurt, INR, Moscow and Kurchatov Institute, 
 //          Moscow, pshenich@fias.uni-frankfurt.de) additional checks in
 //          solver of equation for the chemical potential
+//
+// 13.08.2025 V.Ivanchenko rewrite
 
 #include "G4StatMFMacroMultiplicity.hh"
 #include "G4PhysicalConstants.hh"
+#include "G4StatMFParameters.hh"
 #include "G4Pow.hh"
 
-// operators definitions
-G4StatMFMacroMultiplicity & 
-G4StatMFMacroMultiplicity::operator=(const G4StatMFMacroMultiplicity & ) 
+G4StatMFMacroMultiplicity::G4StatMFMacroMultiplicity()
 {
-    throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMacroMultiplicity::operator= meant to not be accessible");
-    return *this;
+  fSolver = new G4FunctionSolver<G4StatMFMacroMultiplicity>(this, 100, 5.e-4);
 }
 
-G4bool G4StatMFMacroMultiplicity::operator==(const G4StatMFMacroMultiplicity & ) const 
+G4StatMFMacroMultiplicity::~G4StatMFMacroMultiplicity()
 {
-    throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMacroMultiplicity::operator== meant to not be accessible");
-    return false;
+  delete fSolver;
 }
 
-
-G4bool G4StatMFMacroMultiplicity::operator!=(const G4StatMFMacroMultiplicity & ) const 
+void G4StatMFMacroMultiplicity::Initialise(const G4int anA, 
+					   const G4double kappa, 
+					   const G4double temp, 
+					   const G4double nu,
+					   std::vector<G4VStatMFMacroCluster*>* v)
 {
-    throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMacroMultiplicity::operator!= meant to not be accessible");
-    return true;
+  A = anA;
+  theA = anA;
+  fKappa = kappa;
+  fMeanTemperature = temp;
+  fChemPotentialNu = nu;
+  fClusters = v;
 }
 
-G4double G4StatMFMacroMultiplicity::CalcChemicalPotentialMu(void) 
-    //	Calculate Chemical potential \mu
+G4double G4StatMFMacroMultiplicity::CalcChemicalPotentialMu() 
+    // Calculate Chemical potential \mu
     // For that is necesary to calculate mean multiplicities
 {
   G4Pow* g4calc = G4Pow::GetInstance();
@@ -68,74 +72,22 @@ G4double G4StatMFMacroMultiplicity::CalcChemicalPotentialMu(void)
 
   // starting value for chemical potential \mu
   // it is the derivative of F(T,V)-\nu*Z w.r.t. Af in Af=5
-  G4double ZA5 = _theClusters->operator[](4)->GetZARatio();
-  G4double ILD5 = _theClusters->operator[](4)->GetInvLevelDensity();
-  _ChemPotentialMu = -G4StatMFParameters::GetE0()-
-    _MeanTemperature*_MeanTemperature/ILD5 -
-    _ChemPotentialNu*ZA5 + 
+  G4double ZA5 = (*fClusters)[4]->GetZARatio();
+  G4double ILD5 = (*fClusters)[4]->GetInvLevelDensity();
+  fChemPotentialMu = -G4StatMFParameters::GetE0()-
+    fMeanTemperature*fMeanTemperature/ILD5 -
+    fChemPotentialNu*ZA5 + 
     G4StatMFParameters::GetGamma0()*(1.0-2.0*ZA5)*(1.0-2.0*ZA5) +
-    (2.0/3.0)*G4StatMFParameters::Beta(_MeanTemperature)/g4calc->Z13(5) +
+    (2.0/3.0)*G4StatMFParameters::Beta(fMeanTemperature)/g4calc->Z13(5) +
     (5.0/3.0)*CP*ZA5*ZA5*g4calc->Z23(5) -
-    1.5*_MeanTemperature/5.0;
+    1.5*fMeanTemperature/5.0;
 		
-  G4double ChemPa = _ChemPotentialMu;
-  if (ChemPa/_MeanTemperature > 10.0) ChemPa = 10.0*_MeanTemperature;
+  G4double ChemPa = fChemPotentialMu;
+  if (ChemPa > 10*fMeanTemperature) { ChemPa = 10*fMeanTemperature; }
   G4double ChemPb = ChemPa - 0.5*std::abs(ChemPa);
- 
-  G4double fChemPa = this->operator()(ChemPa); 
-  G4double fChemPb = this->operator()(ChemPb); 
-     
-  // Set the precision level for locating the root. 
-  // If the root is inside this interval, then it's done! 
-  const G4double intervalWidth = 1.e-4;
-
-  // bracketing the solution
-  G4int iterations = 0;
-  // Loop checking, 05-Aug-2015, Vladimir Ivanchenko
-  while (fChemPa*fChemPb > 0.0 && iterations < 100) 
-    {
-      iterations++;
-      if (std::abs(fChemPa) <= std::abs(fChemPb)) 
-	{
-	  ChemPa += 0.6*(ChemPa-ChemPb);
-	  fChemPa = this->operator()(ChemPa);
-	} 
-      else 
-	{
-	  ChemPb += 0.6*(ChemPb-ChemPa);
-	  fChemPb = this->operator()(ChemPb);
-	}
-    }
-
-  if (fChemPa*fChemPb > 0.0) // the bracketing failed, complain 
-    {
-      G4cout <<"G4StatMFMacroMultiplicity:"<<" ChemPa="<<ChemPa
-	     <<" ChemPb="<<ChemPb<< G4endl;
-      G4cout <<"G4StatMFMacroMultiplicity:"<<" fChemPa="<<fChemPa
-	     <<" fChemPb="<<fChemPb<< G4endl;
-      throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMacroMultiplicity::CalcChemicalPotentialMu: I couldn't bracket the root.");
-    }
-  else if (fChemPa*fChemPb < 0.0 && std::abs(ChemPa-ChemPb) > intervalWidth)
-    {	
-    G4Solver<G4StatMFMacroMultiplicity> * theSolver = 
-      new G4Solver<G4StatMFMacroMultiplicity>(100,intervalWidth);
-    theSolver->SetIntervalLimits(ChemPa,ChemPb);
-    //    if (!theSolver->Crenshaw(*this)) 
-    if (!theSolver->Brent(*this)) 
-    {
-      G4cout <<"G4StatMFMacroMultiplicity:"<<" ChemPa="<<ChemPa
-	     <<" ChemPb="<<ChemPb<< G4endl;
-      throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMacroMultiplicity::CalcChemicalPotentialMu: I couldn't find the root.");
-    }
-    _ChemPotentialMu = theSolver->GetRoot();
-    delete theSolver;
-    }
-  else // the root is within the interval, which is shorter then the precision level - all done 
-    {
-     _ChemPotentialMu = ChemPa;
-    }
-
-  return _ChemPotentialMu;
+  fSolver->SetIntervalLimits(ChemPa, ChemPb);
+  fSolver->FindRoot(fChemPotentialMu); 
+  return fChemPotentialMu;
 }
 
 G4double G4StatMFMacroMultiplicity::CalcMeanA(const G4double mu)
@@ -145,17 +97,18 @@ G4double G4StatMFMacroMultiplicity::CalcMeanA(const G4double mu)
 
   G4double MeanA = 0.0;
 	
-  _MeanMultiplicity = 0.0;
+  fMeanMultiplicity = 0.0;
 	
   G4int n = 1;
-  for (std::vector<G4VStatMFMacroCluster*>::iterator i = _theClusters->begin(); 
-      i != _theClusters->end(); ++i) 
-   {
-     G4double multip = (*i)->CalcMeanMultiplicity(V0*_Kappa,mu,_ChemPotentialNu,
-						  _MeanTemperature);
-     MeanA += multip*(n++);
-     _MeanMultiplicity += multip;
-   }
+  G4int nn = (G4int)fClusters->size();
+  nn = std::min(nn, A);
+  for (G4int i=0; i<nn; ++i) {
+    G4double multip =
+      (*fClusters)[i]->CalcMeanMultiplicity(V0*fKappa,mu,fChemPotentialNu,
+					    fMeanTemperature);
+    MeanA += multip*(++n);
+    fMeanMultiplicity += multip;
+  }
 
   return MeanA;
 }

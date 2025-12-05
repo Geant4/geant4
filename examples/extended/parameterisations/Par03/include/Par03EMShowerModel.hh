@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file Par03EMShowerModel.hh
+/// \brief Definition of the Par03EMShowerModel class
+
 #ifndef PAR03EMSHOWERMODEL_HH
 #define PAR03EMSHOWERMODEL_HH
 

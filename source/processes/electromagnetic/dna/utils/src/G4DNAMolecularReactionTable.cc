@@ -616,12 +616,13 @@ G4DNAMolecularReactionTable::GetReactionData(Reactant* pReactant1,
 
     if (it1 == fReactionData.end())
     {
-        G4String errMsg =
-            "No reaction table was implemented for this molecule Definition : " + pReactant1
-            ->GetName();
-        G4Exception("G4MolecularInteractionTable::GetReactionData", "",
-                    FatalErrorInArgument, errMsg);
-        // Though the above is Fatal and will terminate program, put return in to quieten Coverity
+        if (fVerbose) {
+          G4ExceptionDescription errMsg;
+          errMsg << "No reaction table was implemented for this molecule Definition : "
+             + pReactant1->GetName();
+          G4Exception(G4String("G4MolecularInteractionTable::GetReactionData"),
+                      "", JustWarning, errMsg);
+        }
         return nullptr;
     }
 
@@ -629,10 +630,9 @@ G4DNAMolecularReactionTable::GetReactionData(Reactant* pReactant1,
 
     if (it2 == it1->second.end())
     {
-        G4cout << "Name : " << pReactant2->GetName() << G4endl;
-        G4String errMsg = "No reaction table was implemented for this molecule : "
-            + pReactant2->GetName();
-        G4Exception("G4MolecularInteractionTable::GetReactionData", "", FatalErrorInArgument, errMsg);
+      //no reactant should return nullptr reaction data (not an exception).
+      //This helps UI chemistry
+      return nullptr;
     }
 
     return (it2->second);
@@ -751,10 +751,13 @@ G4DNAMolecularReactionTable::GetReactionData(const G4MolecularConfiguration* mol
 
     if (it == fReactionDataMV.end())
     {
-        G4String errMsg = "No reaction table was implemented for this molecule Definition : "
-            + molecule->GetName();
-        G4Exception("G4MolecularInteractionTable::GetReactionData", "", FatalErrorInArgument, errMsg);
-        // Though the above is Fatal and will terminate program, put return in to quieten Coverity
+        if (fVerbose) {
+          G4ExceptionDescription errMsg;
+          errMsg << "No reaction table was implemented for this molecule Definition : "
+             + molecule->GetName();
+          G4Exception(G4String("G4MolecularInteractionTable::GetReactionData"),
+                      "", JustWarning, errMsg);
+        }
         return nullptr;
     }
 

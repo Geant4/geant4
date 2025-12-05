@@ -23,10 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file exoticphysics/dmparticle/src/TargetSD.cc
-/// \brief Implementation of the TargetSD. class
-//
-//
+/// \file TargetSD.cc
+/// \brief Implementation of the TargetSD class
+
 /////////////////////////////////////////////////
 //
 // ClassName:  TargetSD

@@ -35,39 +35,58 @@
 // Author: Michael Dressel (CERN), 2002
 // ----------------------------------------------------------------------
 #ifndef G4GEOMETRYCELL_HH
-#define G4GEOMETRYCELL_HH 1
+#define G4GEOMETRYCELL_HH
 
 #include "globals.hh"
 
 class G4VPhysicalVolume;
 
+/**
+ * @brief G4GeometryCell is used for scoring and importance sampling.
+ * It defines a "cell", which, similar to the concept of "touchable",
+ + is identified by a reference to a G4VPhysicalVolume and a number
+ * (replica number).
+ */
+
 class G4GeometryCell
 {
   public:
 
+    /**
+     * Constructor. Initialises volume and replica number.
+     *  @param[in] aVolume The name of the physical volume.
+     *  @param[in] RepNum The associated replica number.
+     */
     G4GeometryCell(const G4VPhysicalVolume& aVolume, G4int RepNum);
-      // initialise volume and replica number
 
+    /**
+     * Copy constructor and assignment operator.
+     */
     G4GeometryCell(const G4GeometryCell& rhs) = default;
     G4GeometryCell& operator=(const G4GeometryCell& rhs);
-      // copy constructor and assignment operator
 
+    /**
+     * Default Destructor.
+     */
     ~G4GeometryCell() = default;
-      // simple destruction
   
+    /**
+     * Returns the physical volume of the cell.
+     */
     const G4VPhysicalVolume& GetPhysicalVolume() const;
-      // return the physical volume of the cell
 
+    /**
+     * Returns the replica number of the cell.
+     */
     G4int GetReplicaNumber() const;
-      // returns the replica number of the cell
  
   private:
 
+    /** Pointer to the physical volume of the "cell"; treated as identifier. */
     const G4VPhysicalVolume* fVPhysicalVolume = nullptr;
-      // pointer to the G4VPhysicalVolume of the "cell"; treated as identifyer 
 
+    /** Replica number of the "cell". */
     G4int fRepNum = 0;
-      // replica number of the "cell"
 };
 
 G4bool operator==(const G4GeometryCell& k1, const G4GeometryCell& k2);

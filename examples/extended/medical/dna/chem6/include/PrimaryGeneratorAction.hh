@@ -23,39 +23,35 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file PrimaryGeneratorAction.hh
+/// \brief Definition of the PrimaryGeneratorAction class
+
 // This example is provided by the Geant4-DNA collaboration
 // Any report or published results obtained using the Geant4-DNA software
 // shall cite the following Geant4-DNA collaboration publication:
 // Med. Phys. 37 (2010) 4692-4708
 // J. Comput. Phys. 274 (2014) 841-882
 // The Geant4-DNA web site is available at http://geant4-dna.org
-//
-// $Id$
-//
-/// \file PrimaryGeneratorAction.hh
-/// \brief Definition of the PrimaryGeneratorAction class
 
 #ifndef CHEM6_PrimaryGeneratorAction_h
 #define CHEM6_PrimaryGeneratorAction_h 1
 
 #include "G4ParticleGun.hh"
 #include "G4VUserPrimaryGeneratorAction.hh"
+#include <memory>
 
-class G4ParticleGun;
-class G4Event;
+class PrimaryGeneratorAction final : public G4VUserPrimaryGeneratorAction {
+public:
+  PrimaryGeneratorAction();
 
-/// The primary generator action class with particle gun.
+  ~PrimaryGeneratorAction() override = default;
 
-class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
-{
-  public:
-    PrimaryGeneratorAction();
-    virtual ~PrimaryGeneratorAction();
-    virtual void GeneratePrimaries(G4Event*);
-    const G4ParticleGun* GetParticleGun() const { return fParticleGun; }
+  void GeneratePrimaries(G4Event *) override;
 
-  private:
-    G4ParticleGun* fParticleGun;
+  const G4ParticleGun *GetParticleGun() const { return fParticleGun.get(); }
+
+private:
+  std::unique_ptr<G4ParticleGun> fParticleGun;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

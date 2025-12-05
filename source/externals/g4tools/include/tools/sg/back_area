@@ -170,7 +170,6 @@ protected:
     float xe =  width*0.5f;
     float yb = -height*0.5f;
 
-  //float zshadow = -0.05f;
     float zshadow = -0.005f; //ok with gopaw and ROOT_default.
     float zback = 0;
     float zborder = 0.01f;
@@ -205,7 +204,6 @@ protected:
     m_back_sep.add(nm);
 
     if(gradient.value()) {
-//    if(true) {
       //color gradient from (bottom,color) to (top,color_top)
 
       atb_vertices* vtxs = new atb_vertices;

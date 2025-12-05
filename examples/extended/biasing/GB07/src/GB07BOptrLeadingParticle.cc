@@ -23,9 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file GB07/src/GB07BOptrLeadingParticle.cc
+/// \file GB07BOptrLeadingParticle.cc
 /// \brief Implementation of the GB07BOptrLeadingParticle class
-//
+
 #include "GB07BOptrLeadingParticle.hh"
 
 #include "G4BOptnLeadingParticle.hh"

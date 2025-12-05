@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-03-ref-06    (30-June-2025)
+ Geant4 version Name: geant4-11-04-ref-00    (5-December-2025)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -172,7 +172,7 @@ Lowest muon/hadron kinetic energy                  1 keV
 Use ICRU90 data                                    0
 Fluctuations of dE/dx are enabled                  1
 Type of fluctuation model for leptons and hadrons  Urban
-Use built-in Birks satuaration                     0
+Use built-in Birks saturation                      0
 Build CSDA range enabled                           1
 Use cut as a final range enabled                   0
 Enable angular generator interface                 0
@@ -306,47 +306,47 @@ N=17 V[N]={906770732717044781, 629165745432651234, 1235682547346241386, 68420008
 ### Run 0 start.
 --> Event 0 starts.
 --> Event 10000 starts.
---->evntNb= 10000 Nwall= 9997 Ncav= 4 Ic/Iw= 2.10768 Ne-_cav= 2958 doseCavity/Ebeam= 1.18242  (100*(ratio-1) = 18.24224 %) 
+--->evntNb= 10000 Nwall= 10000 Ncav= 1 Ic/Iw= 0.52676 Ne-_cav= 2897 doseCavity/Ebeam= 1.39427  (100*(ratio-1) = 39.42713 %) 
 
 --> Event 20000 starts.
---->evntNb= 20000 Nwall= 19995 Ncav= 6 Ic/Iw= 1.58068 Ne-_cav= 5838 doseCavity/Ebeam= 1.15579  (100*(ratio-1) = 15.57930 %) 
+--->evntNb= 20000 Nwall= 19998 Ncav= 3 Ic/Iw= 0.79022 Ne-_cav= 5792 doseCavity/Ebeam= 1.38029  (100*(ratio-1) = 38.02885 %) 
 
 --> Event 30000 starts.
---->evntNb= 30000 Nwall= 29992 Ncav= 9 Ic/Iw= 1.58071 Ne-_cav= 8657 doseCavity/Ebeam= 1.07851  (100*(ratio-1) = 7.85147 %) 
+--->evntNb= 30000 Nwall= 29997 Ncav= 4 Ic/Iw= 0.70242 Ne-_cav= 8787 doseCavity/Ebeam= 1.35957  (100*(ratio-1) = 35.95705 %) 
 
  Run terminated.
 Run Summary
   Number of events processed : 40000
-  User=0.930000s Real=0.940515s Sys=0.000000s
+  User=1.160000s Real=1.166454s Sys=0.000000s
 
- Process calls frequency --->  eIoni= 315000  msc= 275995  Transportation= 22864
+ Process calls frequency --->  msc= 462440  eIoni= 294859  Transportation= 23567
 
  Charged particle flow in cavity :
-      Enter --> nbParticles = 11430	 Energy = 7.218 GeV
-      Exit  --> nbParticles = 11434	 Energy = 7.223 GeV
+      Enter --> nbParticles = 11785	 Energy = 7.394 GeV
+      Exit  --> nbParticles = 11782	 Energy = 7.390 GeV
 
- beamFluence in wall = 39987	 in cavity = 13	 Icav/Iwall = 1.71253	 energyFluence = 37.96066 MeV*cm2/mg
+ beamFluence in wall = 39994	 in cavity = 6	 Icav/Iwall = 0.79026	 energyFluence = 37.96066 MeV*cm2/mg
 
- Total edep in cavity = 8.08834 MeV +- 4.39251 %
- Total dose in cavity = 40.44169 MeV*cm2/mg +- 4.39251 %
+ Total edep in cavity = 10.01010 MeV +- 6.01148 %
+ Total dose in cavity = 50.05051 MeV*cm2/mg +- 6.01148 %
 
- DoseCavity/EnergyFluence = 1.06536 +- 0.04680
+ DoseCavity/EnergyFluence = 1.31848 +- 0.07926
 
- Total charged trackLength in cavity = 36.6239 m     (mean value = 3.2042 mm )
+ Total charged trackLength in cavity = 39.8376 m     (mean value = 3.3804 mm )
 
- StepSize of ch. tracks in wall   = 299.9595 um  +- 255.1711 um 	 (nbSteps/track = 14.7233)
- StepSize of ch. tracks in cavity = 1.4581 mm  +- 2.6789 mm 	 (nbSteps/track = 2.1976)
+ StepSize of ch. tracks in wall   = 234.0248 um  +- 212.6845 um 	 (nbSteps/track = 18.8719)
+ StepSize of ch. tracks in cavity = 1.5261 mm  +- 3.4141 mm 	 (nbSteps/track = 2.2151)
 
 ------- MixMaxRng engine status -------
  Current state vector is:
 mixmax state, file version 1.0
-N=17 V[N]={1122560079547894776, 489338179114589148, 962953981966901183, 1371396244330764127, 1216257719796551649, 871351706115100433, 1331924270603534972, 1161597106298325732, 1677528997079743374, 561171356176391074, 1761454154557839398, 593086082936043028, 652088176841567984, 1436493037053116940, 1396378354312194542, 1141314676005422410, 747120547568034109} counter= 17sumtot= 47270596594463271
+N=17 V[N]={981359493551345738, 221287272102767240, 352089700931225789, 924941496541748919, 2212451798641518444, 324703581815280411, 1230397619605032637, 1666020444994938840, 1004307374653187138, 13221397563870817, 2001214821276548064, 997164841040811300, 1615691239076880242, 1377295079414092979, 1358550558398543004, 684665586851921670, 1409884879335145494} counter= 8sumtot= 2234346121299001069
 ---------------------------------------
 
 ------- MixMaxRng engine status -------
  Current state vector is:
 mixmax state, file version 1.0
-N=17 V[N]={1122560079547894776, 489338179114589148, 962953981966901183, 1371396244330764127, 1216257719796551649, 871351706115100433, 1331924270603534972, 1161597106298325732, 1677528997079743374, 561171356176391074, 1761454154557839398, 593086082936043028, 652088176841567984, 1436493037053116940, 1396378354312194542, 1141314676005422410, 747120547568034109} counter= 17sumtot= 47270596594463271
+N=17 V[N]={981359493551345738, 221287272102767240, 352089700931225789, 924941496541748919, 2212451798641518444, 324703581815280411, 1230397619605032637, 1666020444994938840, 1004307374653187138, 13221397563870817, 2001214821276548064, 997164841040811300, 1615691239076880242, 1377295079414092979, 1358550558398543004, 684665586851921670, 1409884879335145494} counter= 8sumtot= 2234346121299001069
 ---------------------------------------
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 9 of which, static: 0

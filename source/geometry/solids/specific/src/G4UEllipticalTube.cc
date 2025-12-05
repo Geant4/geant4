@@ -53,12 +53,6 @@ G4UEllipticalTube::G4UEllipticalTube(const G4String& pName,
 
 //////////////////////////////////////////////////////////////////////////
 //
-// Destructor
-
-G4UEllipticalTube::~G4UEllipticalTube() = default;
-
-//////////////////////////////////////////////////////////////////////////
-//
 // Copy constructor
 
 G4UEllipticalTube::G4UEllipticalTube(const G4UEllipticalTube& rhs)

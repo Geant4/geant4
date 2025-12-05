@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file B4/B4b/src/RunData.cc
+/// \file RunData.cc
 /// \brief Implementation of the B4b::RunData class
 
 #include "RunData.hh"

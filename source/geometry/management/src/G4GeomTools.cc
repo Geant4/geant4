@@ -23,9 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// class G4GeomTools implementation
+// G4GeomTools implementation
 //
-// 10.10.2016, E.Tcherniaev: initial version.
+// Author: Evgueni Tcherniaev (CERN), 10.10.2016
 // --------------------------------------------------------------------
 
 #include "G4GeomTools.hh"
@@ -76,8 +76,8 @@ G4double G4GeomTools::QuadArea(const G4TwoVector& A,
 G4double G4GeomTools::PolygonArea(const G4TwoVectorList& p)
 {
   auto  n = (G4int)p.size();
-  if (n < 3) { return 0.0; // degenerate polygon
-}
+  if (n < 3) { return 0.0; } // degenerate polygon
+
   G4double area = p[n-1].x()*p[0].y() - p[0].x()*p[n-1].y();
   for(G4int i=1; i<n; ++i)
   {
@@ -221,11 +221,14 @@ G4bool G4GeomTools::TriangulatePolygon(const G4TwoVectorList& polygon,
   //
   G4double area = G4GeomTools::PolygonArea(polygon);
   auto  V = new G4int[n];
-  if (area > 0.) {
+  if (area > 0.)
+  {
     for (G4int i=0; i<n; ++i) { V[i] = i; }
-  } else {
+  }
+  else
+  {
     for (G4int i=0; i<n; ++i) { V[i] = (n-1)-i; }
-}
+  }
 
   //  Triangulation: remove nv-2 Vertices, creating 1 triangle every time
   //
@@ -376,10 +379,14 @@ void G4GeomTools::RemoveRedundantVertices(G4TwoVectorList& polygon,
   }
   for (G4int i=0; i<nv; ++i) // move points, if required
   {
-    if (polygon[i].x() != removeIt) {
+    if (polygon[i].x() != removeIt)
+    {
       polygon[icur++] = polygon[i];
-    } else {
-      iout.push_back(i); }
+    }
+    else
+    {
+      iout.push_back(i);
+    }
   }
   if (icur < nv) { polygon.resize(icur); }
   return;
@@ -724,9 +731,12 @@ G4GeomTools::ClosestPointOnTriangle(const G4ThreeVector& P,
   */
 
   G4int region = -1;
-  if (t0+t1 <= det) {
+  if (t0+t1 <= det)
+  {
     region = (t0 < 0) ? ((t1 < 0) ? 4 : 3) : ((t1 < 0) ? 5 : 0);
-  } else {
+  }
+  else
+  {
     region = (t0 < 0) ? 2 : ((t1 < 0) ? 6 : 1);
   }
 

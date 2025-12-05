@@ -61,9 +61,6 @@ public:
     return true;
   }
   bool sync() {
-  //if(!m_app_widget) return false;
-  //Display* display = XtDisplay(m_app_widget);
-  //::XSync(display,False);
     if(!m_app_context) return false;
     while(true) { 
       XtInputMask input = ::XtAppPending(m_app_context);
@@ -85,5 +82,31 @@ protected:
 
 }}
 
+#include <X11/IntrinsicP.h>
+
+namespace toolx {
+namespace Xt {
+
+inline bool post_expose(Widget a_widget) {
+  if(!XtIsRealized(a_widget)) return false;
+  XEvent event;
+  event.type = Expose;
+  event.xexpose.serial = 0;
+  event.xexpose.send_event = True;
+  event.xexpose.display = XtDisplay(a_widget);
+  event.xexpose.window = XtWindow(a_widget);
+  event.xexpose.x = 0;
+  event.xexpose.y = 0;
+  event.xexpose.width = a_widget->core.width;
+  event.xexpose.height = a_widget->core.height;
+  event.xexpose.count = 0;
+  //locks
+  Status stat = ::XSendEvent(event.xexpose.display,event.xexpose.window,False,0L,&event);
+  ::XFlush(event.xexpose.display);
+  //unlock();
+  return (stat==0?false:true);
+}
+
+}}
 
 #endif

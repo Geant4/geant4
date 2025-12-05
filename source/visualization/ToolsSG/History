@@ -5,6 +5,37 @@ which **must** added in reverse chronological order (newest at the top).
 It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
+## 2025-10-24 Guy Barrand (vis_toolssg-V11-03-12)
+- implementation/sources.cmake: handle "-DTOOLS_USE_GL_VERSION_3_2" in case "GEANT4_USE_VTK".
+
+## 2025-10-13 Guy Barrand (vis_toolssg-V11-03-11)
+- G4ToolsSceneHandler.cc/AddPrimitive(G4Polymarker):
+  - G4Polymarker::dots: handle "dot smoothing".
+  - G4Polymarker::circles, squares: by default, have them "filled" instead of "line" to match OGLI/OGLS style.
+- G4ToolsSceneHandler.cc/ClearTransientStore: have a "viewer EmitWindowRender()" to fix a "missing refresh" with
+  extended/runAndEvent/RE03/run.mac.
+- G4ToolsSGViewer.hh: have a G4ToolsSG_viewer base class with a virtual EmitWindowRender() method
+  to be used in G4ToolsSceneHander::ClearTransientStore.
+- G4ToolsSceneHandler.cc: two corrections to quiet Coverity.
+
+## 2025-10-01 John Allison (vis_toolssg-V11-03-10)
+- G4ToolsSGViewer.hh:
+  - CompareForKernelVisit():
+    - Include dotsSize and dotsSmooth for decision on kernel visit.
+- G4ToolsSGSceneHandler.cc:
+  - AddPrimitive(G4Polymarker&):
+    - Respect marker size for dots.
+
+## 2025-08-12 Guy Barrand (vis_toolssg-V11-03-09)
+- G4ToolsSGViewer.hh: in CreateSG(), for 3D scenes, have a tools::sg::shade_model node set to "smooth" so that
+  TSG_GLES have the same "/vis/viewer/set/style surface" rendering as in OGLI/OGLS. (Then issuing Gouraud shading
+  on surfaces by default, as for OGLI/OGLS). Note that for TSG_ZB, the rendering of surfaces will be still "flat",
+  since we have not (yet) Gouraud shading on triangles for this TSG sub driver.
+
+## 2025-06-18 Andrea Barresi (vis_toolssg-V11-03-08)
+- G4ToolsSGViewer.hh:
+  - Modified wheel_rotate function to call ZoomFromMouseWheel of G4VViewer
+  - Added method GetSceneNearWidth
 
 ## 2025-06-17 Guy Barrand (vis_toolssg-V11-03-07)
 - G4ToolsSGViewer.hh: in mouse_move(), use the event.shift_modifier() method, introduced

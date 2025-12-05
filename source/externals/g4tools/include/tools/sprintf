@@ -55,25 +55,6 @@ inline bool sprintf(std::string& a_string,int a_length,const char* a_format,...)
   return true;
 }
 
-inline bool print2sv(std::string& a_string,int a_length,const char* a_format,va_list a_args){
-  if(a_length<0) {a_string.clear();return false;}
-  if(!a_format) {a_string.clear();return false;}
-  a_string.assign(a_length,' '); //data = a_length+1
-  char* _s = const_cast<char*>(a_string.c_str());
-  //_s[a_length] shoulg be '\0'.
-  int n = vsnpf(_s,a_length+1,a_format,a_args);
-  if(n>a_length) { //a_string is compromised.
-    a_string.clear(); //we cross fingers.
-    return false;
-  }
-  if(_s[a_length]!='\0') { //a_string is compromised.
-    a_string.clear(); //we cross fingers.
-    return false;
-  }
-  a_string.resize(n);
-  return true;
-}
-
 inline bool print2s(std::string& a_string,int a_length,const char* a_format,...){
   if(a_length<0) {a_string.clear();return false;}
   if(!a_format) {a_string.clear();return false;}
@@ -94,19 +75,6 @@ inline bool print2s(std::string& a_string,int a_length,const char* a_format,...)
   }
   a_string.resize(n);
   return true;
-}
-
-template <class MATRIX> //for example : MATRIX = mat<symbol,4>
-inline void set_matrix(MATRIX& a_matrix,const std::string& a_fmt) {
-  unsigned int DR = a_matrix.rows();
-  unsigned int DC = a_matrix.cols();
-  std::string ss;
-  for(unsigned int i=0;i<DR;i++) {
-    for(unsigned int j=0;j<DC;j++) {
-      tools::sprintf(ss,128,a_fmt.c_str(),i,j);
-      a_matrix.set_value(i,j,ss);
-    }
-  }
 }
 
 }

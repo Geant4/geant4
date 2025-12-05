@@ -25,8 +25,6 @@
 //
 /// \file SAXSSteppingAction.hh
 /// \brief Definition of the SAXSSteppingAction class
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef SAXSSteppingAction_h
 #define SAXSSteppingAction_h 1

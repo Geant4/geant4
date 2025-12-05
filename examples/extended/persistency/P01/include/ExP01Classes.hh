@@ -23,10 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file persistency/P01/include/ExP01Classes.hh
-/// \brief Declaration of the classes for generating dictionaries
-//
-//
+/// \file ExP01Classes.hh
+/// \brief Definition of the ExP01Classes class
+
 #include "ExP01TrackerHit.hh"
 
 std::vector<ExP01TrackerHit*> a;

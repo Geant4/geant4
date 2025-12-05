@@ -153,7 +153,8 @@ Vector DelayedNeutron::multiGroupMultiplicity( LUPI::StatusMessageReporting &a_s
  ***********************************************************************************************************/
 
 Matrix DelayedNeutron::multiGroupProductMatrix( LUPI::StatusMessageReporting &a_smr, Transporting::MG const &a_settings, 
-                Styles::TemperatureInfo const &a_temperatureInfo, Transporting::Particles const &a_particles, std::string const &a_productID, int a_order ) const {
+                Styles::TemperatureInfo const &a_temperatureInfo, Transporting::Particles const &a_particles, std::string const &a_productID, 
+                std::size_t a_order ) const {
 
     return( m_product.multiGroupProductMatrix( a_smr, a_settings, a_temperatureInfo, a_particles, a_productID, a_order ) );
 }
@@ -237,7 +238,7 @@ void DelayedNeutron::continuousEnergyProductData( Transporting::Settings const &
  ***********************************************************************************************************/
 
 void DelayedNeutron::mapContinuousEnergyProductData( Transporting::Settings const &a_settings, std::string const &a_particleID,
-                std::vector<double> const &a_energies, int a_offset, std::vector<double> &a_productEnergies, std::vector<double> &a_productMomenta,
+                std::vector<double> const &a_energies, std::size_t a_offset, std::vector<double> &a_productEnergies, std::vector<double> &a_productMomenta,
                 std::vector<double> &a_productGains, bool a_ignoreIncompleteParticles ) const {
     
     m_product.mapContinuousEnergyProductData( a_settings, a_particleID, a_energies, a_offset, a_productEnergies, a_productMomenta,

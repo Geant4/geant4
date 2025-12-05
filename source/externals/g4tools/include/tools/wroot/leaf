@@ -7,7 +7,6 @@
 #include "base_leaf"
 
 #include "../cids"
-#include "../vdata"
 
 namespace tools {
 namespace wroot {
@@ -232,7 +231,7 @@ public: //ibo
   }
 public: //base_leaf
   virtual bool fill_buffer(buffer& a_buffer) const {
-    if(!a_buffer.write_fast_array(vec_data(m_ref),uint32(m_ref.size()))) return false;
+    if(!a_buffer.write_fast_array(m_ref.data(),uint32(m_ref.size()))) return false;
     return true;
   }
 public:

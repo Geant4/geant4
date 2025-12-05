@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file B4/B4c/include/DetectorConstruction.hh
+/// \file DetectorConstruction.hh
 /// \brief Definition of the B4c::DetectorConstruction class
 
 #ifndef B4cDetectorConstruction_h

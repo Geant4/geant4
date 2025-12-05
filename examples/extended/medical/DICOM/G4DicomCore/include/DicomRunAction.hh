@@ -23,10 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file medical/DICOM/include/DicomRunAction.hh
+/// \file DicomRunAction.hh
 /// \brief Definition of the DicomRunAction class
-//
 
 #ifndef DicomRunAction_h
 #define DicomRunAction_h 1

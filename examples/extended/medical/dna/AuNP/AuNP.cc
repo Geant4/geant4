@@ -23,25 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file medical/dna/AuNP/AuNP.cc
-/// \brief Main program of the medical/dna/AuNP example
-//
-// $Id: w.cc 85260 2014-10-27 08:53:35Z gcosmo $
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// \file AuNP.cc
+/// \brief Main program of the dna/AuNP example
+
 #include "G4Types.hh"
-
-// #ifdef G4MULTITHREADED
-// #include "G4MTRunManager.hh"
-// #else
-// #include "G4RunManager.hh"
-// #endif
-
 #include "ActionInitialization.hh"
 #include "DetectorConstruction.hh"
 #include "PhysicsList.hh"
-#include "SteppingVerbose.hh"
 
 #include "G4RunManagerFactory.hh"
 #include "G4UIExecutive.hh"
@@ -75,15 +63,9 @@ int main(int argc, char** argv)
          << " #####" << G4endl;
 
   // set mandatory initialization classes
-  DetectorConstruction* det = new DetectorConstruction;
-  runManager->SetUserInitialization(det);
-
-  PhysicsList* phys = new PhysicsList;
-  runManager->SetUserInitialization(phys);
-
+  runManager->SetUserInitialization(new DetectorConstruction);
+  runManager->SetUserInitialization(new PhysicsList);
   runManager->SetUserInitialization(new ActionInitialization());
-
-  // runManager->Initialize(); //execute in macro file
 
   // initialize visualization
   G4VisManager* visManager = nullptr;

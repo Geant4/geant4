@@ -25,7 +25,8 @@
 // G4BulirschStoer class implementation
 // Based on bulirsch_stoer.hpp from boost
 //
-// Author: Dmitry Sorokin, Google Summer of Code 2016
+// Author: Dmitry Sorokin (CERN, Google Summer of Code 2016), 13.02.2018
+// Supervision: John Apostolakis (CERN)
 // --------------------------------------------------------------------
 
 #include "G4BulirschStoer.hh"
@@ -237,8 +238,8 @@ void G4BulirschStoer::reset()
 
 void G4BulirschStoer::extrapolate(std::size_t k , G4double xest[])
 {
-  /* polynomial extrapolation, see http://www.nr.com/webnotes/nr3web21.pdf
-   * uses the obtained intermediate results to extrapolate to dt->0 */
+  /* polynomial extrapolation.
+   * Uses the obtained intermediate results to extrapolate to dt->0 */
 
   for(std::size_t j = k - 1 ; j > 0; --j)
   {
@@ -300,12 +301,12 @@ G4bool G4BulirschStoer::set_k_opt(std::size_t k, G4double& dt)
     dt = h_opt[m_current_k_opt];
     return true;
   }
-  else {   // order increase - only if last step was not rejected
-    m_current_k_opt = (G4int)k + 1;
-    dt = h_opt[m_current_k_opt - 1] * m_cost[m_current_k_opt]
-       / m_cost[m_current_k_opt - 1];
-    return true;
-  }
+
+  // order increase - only if last step was not rejected
+  m_current_k_opt = (G4int)k + 1;
+  dt = h_opt[m_current_k_opt - 1] * m_cost[m_current_k_opt]
+     / m_cost[m_current_k_opt - 1];
+  return true;
 }
 
 G4bool G4BulirschStoer::in_convergence_window(G4int k) const
@@ -335,8 +336,6 @@ G4bool G4BulirschStoer::should_reject(G4double error, G4int k) const
     const auto  e = G4double(m_interval_sequence[0]);
     return error * e * e > d * d; //  was return error > dOld * dOld; (where dOld= d/e; )
   }
-  else
-  {
-    return error > 1.0;
-  }
+  
+  return error > 1.0;
 }

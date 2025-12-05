@@ -1,0 +1,68 @@
+\page ExampleSlowing Example slowing
+
+\author S. Incerti (a, *) \n
+a. LP2i, IN2P3 / CNRS / Bordeaux University, 33175 Gradignan, France \n
+* e-mail: incerti@lp2ib.in2p3.fr \n
+
+## INTRODUCTION.
+
+The slowing example shows how to simulate slowing down spectra for electrons
+in liquid water using the Geant4-DNA physics processes and models.
+
+This example is provided by the Geant4-DNA collaboration.
+
+It is described in Nucl. Instrum. and Meth. B 397 (2017) 45-50.
+
+The Geant4-DNA processes and models are further described at:
+http://geant4-dna.org
+
+Any report or published results obtained using the Geant4-DNA software shall
+cite the following Geant4-DNA collaboration publications:
+Med. Phys. 51 (2024) 5873–5889
+Med. Phys. 45 (2018) e722-e739
+Phys. Med. 31 (2015) 861-874
+Med. Phys. 37 (2010) 4692-4708
+Int. J. Model. Simul. Sci. Comput. 1 (2010) 157–178
+
+## GEOMETRY SET-UP.
+
+The geometry is a cube (World) made of liquid water (G4_WATER
+material). Electrons are shot from the center of the volume.
+
+## SET-UP
+
+Make sure $G4LEDATA points to the low energy electromagnetic data files.
+
+The code can be compiled with cmake.
+
+It works in MT mode.
+
+## HOW TO RUN THE EXAMPLE
+
+In batch mode, run:
+```
+./slowing slowing.in
+```
+
+The macro slowing.in shows how to use/define:
+- number of threads
+- Geant4-DNA physics constructors
+- tracking cut
+- atomic deexcitation
+- histograms
+
+## PHYSICS
+
+All Geant4-DNA physics constructors can be used.
+
+## SIMULATION OUTPUT AND RESULT ANALYSIS
+
+The output results consist in a slowing.root file containing 3 histograms
+of slowing down spectrum Phi/D (unit is /cm2/eV/Gy) as a function of energy
+(log (E/eV)) for:
+- all electrons (histogram number 1)
+- primary electrons (histogram number 2)
+- secondary electrons (histogram number 3)
+
+This file can be easily analyzed using the provided ROOT macro
+file plot.C (root plot.C).

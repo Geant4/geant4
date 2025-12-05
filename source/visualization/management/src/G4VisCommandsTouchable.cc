@@ -96,8 +96,7 @@ G4VisCommandsTouchable::G4VisCommandsTouchable()
    "\nFor example, \"/Shap/\" matches \"Shape1\" and \"Shape2\".");
   fpCommandFindPath -> SetGuidance
   ("It may help to see a textual representation of the geometry hierarchy of"
-   "\nthe worlds. Try \"/vis/drawTree [worlds]\" or one of the driver/browser"
-   "\ncombinations that have the required functionality, e.g., HepRep.");
+   "\nthe worlds. Try \"/vis/drawTree [worlds]\".");
   G4UIparameter* parameter;
   parameter = new G4UIparameter ("physical-volume-name", 's', omitable = true);
   parameter -> SetDefaultValue ("world");

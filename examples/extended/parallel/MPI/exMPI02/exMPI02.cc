@@ -22,9 +22,9 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-/// @file exMPI02.cc
 //
-/// @brief A MPI example code
+/// \file exMPI02.cc
+/// \brief Main program of the MPI/exMPI02 example
 
 #include "G4MPImanager.hh"
 #include "G4MPIsession.hh"

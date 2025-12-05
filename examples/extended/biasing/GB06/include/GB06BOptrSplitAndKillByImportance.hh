@@ -23,9 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file GB06/include/GB06BOptrSplitAndKillByImportance.hh
+/// \file GB06BOptrSplitAndKillByImportance.hh
 /// \brief Definition of the GB06BOptrSplitAndKillByImportance class
-//
+
 //---------------------------------------------------------------
 //
 // GB06BOptrSplitAndKillByImportance

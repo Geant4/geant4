@@ -240,13 +240,6 @@ public: //CERN-ROOT API
   bool Fill(TC aX,TC aY,TC aZ,TW aWeight = 1) {return fill(aX,aY,aZ,aWeight);}
 
 public:
-/*
-  // Slices :
-  h2d* slice_xy(int aKbeg,int aKend) const;
-  h2d* slice_yz(int aIbeg,int aIend) const;
-  h2d* slice_xz(int aJbeg,int aJend) const;
-*/
-public:
   h3(const std::string& a_title,
      bn_t aXnumber,TC aXmin,TC aXmax,
      bn_t aYnumber,TC aYmin,TC aYmax,

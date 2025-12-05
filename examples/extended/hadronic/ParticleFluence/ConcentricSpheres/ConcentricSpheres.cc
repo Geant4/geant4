@@ -24,12 +24,7 @@
 // ********************************************************************
 //
 /// \file ConcentricSpheres.cc
-/// \brief Main program of the hadronic/ParticleFluence/ConcentricSpheres example
-//
-//
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// \brief Main program of the ParticleFluence/ConcentricSpheres example
 
 #include "ActionInitialization.hh"
 #include "DetectorConstruction.hh"

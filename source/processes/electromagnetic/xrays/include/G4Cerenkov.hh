@@ -48,7 +48,7 @@
 #include "G4ForceCondition.hh"
 #include "G4GPILSelection.hh"
 #include "G4MaterialPropertyVector.hh"
-#include "G4VProcess.hh"
+#include "G4VDiscreteProcess.hh"
 
 #include <map>
 
@@ -59,15 +59,14 @@ class G4Step;
 class G4Track;
 class G4VParticleChange;
 
-class G4Cerenkov : public G4VProcess
+class G4Cerenkov : public G4VDiscreteProcess
 {
  public:
   explicit G4Cerenkov(const G4String& processName = "Cerenkov",
-                      G4ProcessType type          = fElectromagnetic);
-  ~G4Cerenkov();
+                      G4ProcessType type = fElectromagnetic);
+  ~G4Cerenkov() override;
 
-  explicit G4Cerenkov(const G4Cerenkov& right);
-
+  G4Cerenkov(const G4Cerenkov& right) = delete;
   G4Cerenkov& operator=(const G4Cerenkov& right) = delete;
 
   G4bool IsApplicable(const G4ParticleDefinition& aParticleType) override;
@@ -78,9 +77,8 @@ class G4Cerenkov : public G4VProcess
   // Build table at a right time
 
   void PreparePhysicsTable(const G4ParticleDefinition& part) override;
-  void Initialise();
 
-  G4double GetMeanFreePath(const G4Track& aTrack, G4double, G4ForceCondition*);
+  G4double GetMeanFreePath(const G4Track& aTrack, G4double, G4ForceCondition*) override;
   // Returns the discrete step limit and sets the 'StronglyForced'
   // condition for the DoIt to be invoked at every step.
 
@@ -92,31 +90,6 @@ class G4Cerenkov : public G4VProcess
   G4VParticleChange* PostStepDoIt(const G4Track& aTrack,
                                   const G4Step& aStep) override;
   // This is the method implementing the Cerenkov process.
-
-  //  no operation in  AtRestDoIt and  AlongStepDoIt
-  virtual G4double AlongStepGetPhysicalInteractionLength(
-    const G4Track&, G4double, G4double, G4double&, G4GPILSelection*) override
-  {
-    return -1.0;
-  };
-
-  virtual G4double AtRestGetPhysicalInteractionLength(
-    const G4Track&, G4ForceCondition*) override
-  {
-    return -1.0;
-  };
-
-  //  no operation in  AtRestDoIt and  AlongStepDoIt
-  virtual G4VParticleChange* AtRestDoIt(const G4Track&, const G4Step&) override
-  {
-    return nullptr;
-  };
-
-  virtual G4VParticleChange* AlongStepDoIt(const G4Track&,
-                                           const G4Step&) override
-  {
-    return nullptr;
-  };
 
   void SetTrackSecondariesFirst(const G4bool state);
   // If set, the primary particle tracking is interrupted and any
@@ -144,10 +117,10 @@ class G4Cerenkov : public G4VProcess
   // generated during a tracking step.
 
   void SetStackPhotons(const G4bool);
-  // Call by the user to set the flag for stacking the scint. photons
+  // Call by the user to set the flag for stacking the Cerenkov photons
 
   G4bool GetStackPhotons() const;
-  // Return the boolean for whether or not the scint. photons are stacked
+  // Return the boolean for whether or not the Cerenkov photons are stacked
 
   G4int GetNumPhotons() const;
   // Returns the current number of scint. photons (after PostStepDoIt)
@@ -162,7 +135,7 @@ class G4Cerenkov : public G4VProcess
                                      const G4Material* aMaterial,
                                      G4MaterialPropertyVector* Rindex) const;
 
-  void DumpInfo() const override {ProcessDescription(G4cout);};
+  void DumpInfo() const override;
   void ProcessDescription(std::ostream& out) const override;
 
   void SetVerboseLevel(G4int);
@@ -173,6 +146,8 @@ class G4Cerenkov : public G4VProcess
   std::map<std::size_t, std::size_t> fIndexMPT;
 
  private:
+  void Initialise();
+
   G4double fMaxBetaChange;
   
   G4int fMaxPhotons;
@@ -182,7 +157,6 @@ class G4Cerenkov : public G4VProcess
   G4bool fTrackSecondariesFirst;
 
   G4int secID = -1;  // creator modelID
-
 };
 
 inline G4bool G4Cerenkov::GetTrackSecondariesFirst() const

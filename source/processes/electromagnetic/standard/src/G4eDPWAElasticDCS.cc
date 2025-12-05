@@ -278,7 +278,7 @@ void G4eDPWAElasticDCS::ComputeCSPerAtom(G4int iz, G4double ekin, G4double& elcs
   mumin = std::max(0.0, std::min(1.0, mumin));
   mumax = std::max(0.0, std::min(1.0, mumax));
   if (mumin>=mumax) return;
-  // make sure that kin. energy is within the available range (10 eV-100MeV)  
+  // make sure that kin. energy is within the available range (10 eV-100MeV)
   const G4double lekin = std::max(gTheEnergies[0], std::min(gTheEnergies[gNumEnergies-1], G4Log(ekin)));
   // if the lower, denser in theta, DCS set should be used
   const G4bool isLowerGrid = (fIsElectron && lekin<gTheEnergies[gIndxEnergyLim]);
@@ -378,7 +378,17 @@ void G4eDPWAElasticDCS::BuildSmplingTableForZ(G4int iz) {
       for (std::size_t id=0; id<ndata; ++id) {
         fin >> aTable.fI[id];
       }
+    } else {
+      G4double ddum;
+      for (std::size_t id=0; id<ndata; ++id) {
+        fin >> ddum;
+      }
+      G4int idum;
+      for (std::size_t id=0; id<ndata; ++id) {
+        fin >> idum;
+      }
     }
+
     for (std::size_t id=0; id<ndata; ++id) {
       fin >> aTable.fCum[id];
     }
@@ -693,11 +703,10 @@ void G4eDPWAElasticDCS::ComputeMParams(const G4Material* mat, G4double& theBc,
    //
    G4double z0 = (0.0 == sa) ? 0.0 : zs/sa;
    G4double z1 = (0.0 == zs) ? 0.0 : (ze - zx)/zs;
-   
+
    theBc  = const1*density*z0*G4Exp(z1);  //[1/cm]
    theXc2 = const2*density*z0;  // [MeV2/cm]
    // change to Geant4 internal units of 1/length and energ2/length
    theBc  *= 1.0/CLHEP::cm;
    theXc2 *= CLHEP::MeV*CLHEP::MeV/CLHEP::cm;
 }
-

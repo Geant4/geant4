@@ -23,13 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file persistency/P01/include/ExP01TrackerHit.hh
+/// \file ExP01TrackerHit.hh
 /// \brief Definition of the ExP01TrackerHit class
-//
-//
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef ExP01TrackerHit_h
 #define ExP01TrackerHit_h 1

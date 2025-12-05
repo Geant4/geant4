@@ -6,6 +6,9 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2025-09-22 Jean-Christophe David (hadr-stopping-V11-03-01)
+- G4HadronicAbsorptionINCLXX: the energy max is different for antiproton and antineutron in INCLXX.
+
 ## 2023-10-05 Jean-Christophe David (hadr-stopping-V11-01-01)
 - G4HadronicAbsorptionINCLXX: the energy max is reduced from 10 GeV to 200 MeV.
 

@@ -319,10 +319,10 @@ G4EmDNABuilder::ConstructDNAElectronPhysics(const G4double emaxDNA,
   G4double emaxT = 7.4*CLHEP::eV;
   // limit for CPA100 models
   G4double emaxCPA100 = 250*CLHEP::keV;
-  if (4 == opt || 8 == opt) {
+  if (4 == opt) {
     emaxE = 10.*CLHEP::keV;
     emaxT = 10.*CLHEP::eV;
-  } else if(5 < opt) {
+  } else if(6 <= opt) {
     emaxT = 11.*CLHEP::eV;
   }
 
@@ -336,9 +336,9 @@ G4EmDNABuilder::ConstructDNAElectronPhysics(const G4double emaxDNA,
   auto pElasticProcess = FindOrBuildElastic(part, "e-_G4DNAElastic");
   G4VEmModel* elast;
   G4VEmModel* elast2 = nullptr;
-  if(4 == opt || 8 == opt) {
+  if(4 == opt) {
     elast = new G4DNAUeharaScreenedRutherfordElasticModel();
-  } else if(5 < opt) {
+  } else if(6 <= opt) {
     auto mod = new G4DNACPA100ElasticModel();
     mod->SelectStationary(stationary);
     elast = mod;
@@ -346,6 +346,7 @@ G4EmDNABuilder::ConstructDNAElectronPhysics(const G4double emaxDNA,
   } else {
     elast = new G4DNAChampionElasticModel();
   }
+  elast->SetLowEnergyLimit(emaxT);
   elast->SetHighEnergyLimit(lowEnergyMSC);
   pElasticProcess->AddEmModel(-2, elast, reg);
 
@@ -358,7 +359,7 @@ G4EmDNABuilder::ConstructDNAElectronPhysics(const G4double emaxDNA,
 
   // *** Excitation ***
   auto theDNAExc = FindOrBuildExcitation(part, "e-_G4DNAExcitation");
-  if(emaxE > 0.0) {
+  if (emaxE > 0.0) {
     auto modE = new G4DNAEmfietzoglouExcitationModel();
     theDNAExc->AddEmModel(-1, modE, reg);
     modE->SelectStationary(stationary);
@@ -446,8 +447,7 @@ G4EmDNABuilder::ConstructDNAProtonPhysics(const G4double e1DNA,
   G4EmParameters* param = G4EmParameters::Instance();
   const G4double emax = param->MaxKinEnergy();
   G4ParticleDefinition* part = G4Proton::Proton();
-  G4double e2DNA = (8 == opt) ?
-    std::min(lowEnergyRPWBA, emax) : std::min(e1DNA, lowEnergyRPWBA);
+  G4double e2DNA = (8 == opt) ? std::min(lowEnergyRPWBA, emax) : e1DNA;
 
   // *** Elastic scattering ***
   auto pElasticProcess = FindOrBuildElastic(part, "proton_G4DNAElastic");
@@ -481,12 +481,10 @@ G4EmDNABuilder::ConstructDNAProtonPhysics(const G4double e1DNA,
   // *** Ionisation ***
   auto theDNAIoni = FindOrBuildIonisation(part, "proton_G4DNAIonisation");
   G4VEmModel* modRI;
-  if (2 == opt) {
-    modRI = new G4DNARuddIonisationExtendedModel();
-  } else if (8 == opt) {
+  if (8 == opt) {
     modRI = new G4DNARuddIonisationDynamicModel();
   } else {
-    modRI = new G4DNARuddIonisationModel();
+    modRI = new G4DNARuddIonisationExtendedModel();
   }
   modRI->SetHighEnergyLimit(e2DNA);
   theDNAIoni->AddEmModel(-1, modRI, reg);
@@ -580,12 +578,10 @@ G4EmDNABuilder::ConstructDNALightIonPhysics(G4ParticleDefinition* part,
   // *** Ionisation ***
   auto theDNAIoni = FindOrBuildIonisation(part, name + "_G4DNAIonisation");
   G4VEmModel* modRI;
-  if (2 == opt) {
-    modRI = new G4DNARuddIonisationExtendedModel();
-  } else if (8 == opt) {
+  if (8 == opt) {
     modRI = new G4DNARuddIonisationDynamicModel();
   } else {
-    modRI = new G4DNARuddIonisationModel();
+    modRI = new G4DNARuddIonisationExtendedModel();
   }
   modRI->SetHighEnergyLimit(elim2);
   theDNAIoni->AddEmModel(-2, modRI, reg);

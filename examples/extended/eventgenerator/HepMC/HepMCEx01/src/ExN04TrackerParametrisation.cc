@@ -23,10 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file eventgenerator/HepMC/HepMCEx01/src/ExN04TrackerParametrisation.cc
+/// \file ExN04TrackerParametrisation.cc
 /// \brief Implementation of the ExN04TrackerParametrisation class
-//
-//
 
 #include "ExN04TrackerParametrisation.hh"
 

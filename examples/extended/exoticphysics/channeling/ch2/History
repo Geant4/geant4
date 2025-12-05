@@ -1,9 +1,19 @@
-# Category ch1 History
+# Category ch2 History
 
 See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
+## 2025-10-31 Alexei Sytov (ch2-V11-03-01)
+- Update of python analysis tools, no change in Geant4 code.
+  Added a jupyter notebook version of a python script.
+
+## 2025-10-27 Alexei Sytov (ch2-V11-03-00)
+- Significant update:
+  -new macros dedicated to specific applications;
+  -extended output at the detector;
+  -scoring of radiation spectrum from the Baier-Katkov method; virtual collimator
+  was introduced.
 
 ## 2024-09-25 Alexei Sytov (ch2-V11-02-00)
 - First implementation

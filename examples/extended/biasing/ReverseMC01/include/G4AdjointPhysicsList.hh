@@ -23,11 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file biasing/ReverseMC01/include/G4AdjointPhysicsList.hh
+/// \file G4AdjointPhysicsList.hh
 /// \brief Definition of the G4AdjointPhysicsList class
-//
-//
-//////////////////////////////////////////////////////////////
+
 //  Class Name:             G4AdjointPhysicsList
 //        Author:               L. Desorgher
 //        Organisation:         SpaceIT GmbH
@@ -87,8 +85,8 @@ class G4AdjointPhysicsList : public G4VUserPhysicsList
     // these methods Construct physics processes and register them
     void ConstructGeneral();
     void ConstructEM();
-    G4eIonisation* fEminusIonisation;
-    G4hIonisation* fPIonisation;
+
+
 
   private:
     G4AdjointPhysicsMessenger* fPhysicsMessenger;

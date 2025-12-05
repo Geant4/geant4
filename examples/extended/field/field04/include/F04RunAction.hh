@@ -23,10 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file field/field04/include/F04RunAction.hh
+/// \file F04RunAction.hh
 /// \brief Definition of the F04RunAction class
-//
 
 #ifndef F04RunAction_h
 #define F04RunAction_h 1

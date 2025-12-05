@@ -25,7 +25,7 @@
 //
 // G4NavigationLevel implementation
 //
-// 30.09.97 J.Apostolakis Initial version
+// Author: John Apostolakis (CERN), 30.09.1997 - Initial version
 // ----------------------------------------------------------------------
 
 #include "G4NavigationLevel.hh"

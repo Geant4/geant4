@@ -9,7 +9,6 @@
 #include "sf_enum"
 #include "mf"
 #include "enums" //hjust,vjust
-//#include "../lina/box3f"
 
 namespace tools {
 namespace sg {
@@ -76,16 +75,6 @@ protected:
     vjust = a_from.vjust;
     return *this;
   }
-public:
-
-//  void get_bounds(float a_height,box3f& a_box) {
-//    //for backward compatibility.
-//    float mn_x,mn_y,mn_z;
-//    float mx_x,mx_y,mx_z;
-//    get_bounds(a_height,mn_x,mn_y,mn_z,mx_x,mx_y,mx_z);
-//    a_box.set_bounds(mn_x,mn_y,mn_z,mx_x,mx_y,mx_z);
-//  }
-
 };
 
 }}

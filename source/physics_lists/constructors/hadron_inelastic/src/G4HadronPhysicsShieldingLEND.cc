@@ -76,6 +76,3 @@ G4HadronPhysicsShieldingLEND::G4HadronPhysicsShieldingLEND(
   useLEND_ = true;
 }
 
-G4HadronPhysicsShieldingLEND::~G4HadronPhysicsShieldingLEND()
-{}
-

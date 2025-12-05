@@ -23,12 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm10/include/TransitionRadiationPhysics.hh
+/// \file TransitionRadiationPhysics.hh
 /// \brief Definition of the TransitionRadiationPhysics class
-//
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef TransitionRadiationPhysics_h
 #define TransitionRadiationPhysics_h 1

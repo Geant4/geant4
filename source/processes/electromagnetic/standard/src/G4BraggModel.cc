@@ -162,8 +162,6 @@ void G4BraggModel::SetParticle(const G4ParticleDefinition* p)
   particle = p;
   mass = particle->GetPDGMass();
   spin = particle->GetPDGSpin();
-  G4double q = particle->GetPDGCharge()/CLHEP::eplus;
-  chargeSquare = q*q;
   massRate = mass/CLHEP::proton_mass_c2;
   ratio = CLHEP::electron_mass_c2/mass;
 }
@@ -175,8 +173,8 @@ G4double G4BraggModel::GetChargeSquareRatio(const G4ParticleDefinition* p,
                                             G4double kinEnergy)
 {
   // this method is called only for ions
-  chargeSquare = corr->EffectiveChargeSquareRatio(p, mat, kinEnergy);
-  return chargeSquare;
+  chargeSquareRatio = corr->EffectiveChargeSquareRatio(p, mat, kinEnergy);
+  return chargeSquareRatio;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -193,7 +191,7 @@ G4double G4BraggModel::GetParticleCharge(const G4ParticleDefinition* p,
                                          const G4Material* mat,
                                          G4double kineticEnergy)
 {
-  // this method is called only for ions, so no check if it is an ion 
+  // this method is called only for ions, so no check if it is an ion
   return corr->GetParticleCharge(p,mat,kineticEnergy);
 }
 
@@ -206,10 +204,10 @@ G4double G4BraggModel::ComputeCrossSectionPerElectron(
                                                  G4double maxKinEnergy)
 {
   G4double cross = 0.0;
-  const G4double tmax      = MaxSecondaryEnergy(p, kineticEnergy);
+  const G4double tmax = MaxSecondaryEnergy(p, kineticEnergy);
   const G4double maxEnergy = std::min(tmax, maxKinEnergy);
   const G4double cutEnergy = std::max(cut, lowestKinEnergy*massRate);
-  if(cutEnergy < maxEnergy) {
+  if (cutEnergy < maxEnergy) {
 
     const G4double energy  = kineticEnergy + mass;
     const G4double energy2 = energy*energy;
@@ -219,7 +217,7 @@ G4double G4BraggModel::ComputeCrossSectionPerElectron(
 
     if( 0.0 < spin ) { cross += 0.5*(maxEnergy - cutEnergy)/energy2; }
 
-    cross *= CLHEP::twopi_mc2_rcl2*chargeSquare/beta2;
+    cross *= CLHEP::twopi_mc2_rcl2*chargeSquareRatio/beta2;
   }
   //   G4cout << "BR: e= " << kineticEnergy << " tmin= " << cutEnergy 
   //          << " tmax= " << tmax << " cross= " << cross << G4endl;
@@ -278,10 +276,12 @@ G4double G4BraggModel::ComputeDEDXPerVolume(const G4Material* material,
 	CLHEP::twopi_mc2_rcl2 * material->GetElectronDensity();
     }
   }
-  dedx = std::max(dedx, 0.0) * chargeSquare;
-
-  //G4cout << "E(MeV)= " << tkin/MeV << " dedx= " << dedx 
-  //         << "  " << material->GetName() << G4endl;
+  dedx = std::max(dedx, 0.0) * chargeSquareRatio;
+  /*
+  G4cout << "BraggDEDX: E(MeV)= " << tkin << " dedx= " << dedx << " tmax="
+	 << tmax << " cut=" << cutEnergy << " q2=" << chargeSquareRatio
+	 << "  " << material->GetName() << G4endl;
+  */
   return dedx;
 }
 
@@ -736,14 +736,14 @@ G4bool G4BraggModel::MolecIsInZiegler1988(const G4Material* material)
   
   static const std::size_t numberOfMolecula = 53;
   static const G4String nameOfMol[numberOfMolecula] = {
-    "H_2O",      "C_2H_4O",    "C_3H_6O",  "C_2H_2",             "C_H_3OH",
+    "H_2O",      "C_2H_4O",    "C_3H_6O",  "C_2H_2",             "CH_3OH",
     "C_2H_5OH",  "C_3H_7OH",   "C_3H_4",   "NH_3",               "C_14H_10",
     "C_6H_6",    "C_4H_10",    "C_4H_6",   "C_4H_8O",            "CCl_4",
     "CF_4",      "C_6H_8",     "C_6H_12",  "C_6H_10O",           "C_6H_10",
     "C_8H_16",   "C_5H_10",    "C_5H_8",   "C_3H_6-Cyclopropane","C_2H_4F_2",
     "C_2H_2F_2", "C_4H_8O_2",  "C_2H_6",   "C_2F_6",             "C_2H_6O",
     "C_3H_6O",   "C_4H_10O",   "C_2H_4",   "C_2H_4O",            "C_2H_4S",
-    "SH_2",      "CH_4",       "CCLF_3",   "CCl_2F_2",           "CHCl_2F",
+    "SH_2",      "CH_4",       "CClF_3",   "CCl_2F_2",           "CHCl_2F",
     "(CH_3)_2S", "N_2O",       "C_5H_10O", "C_8H_6",             "(CH_2)_N",
     "(C_3H_6)_N","(C_8H_8)_N", "C_3H_8",   "C_3H_6-Propylene",   "C_3H_6O",
     "C_3H_6S",   "C_4H_4S",    "C_7H_8"

@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file Par03Hit.hh
+/// \brief Definition of the Par03Hit class
+
 #ifndef PAR03HIT_HH
 #define PAR03HIT_HH
 

@@ -25,7 +25,7 @@
 //
 // G4FieldManager inline implementation 
 //
-// Author: John Apostolakis, 10.03.97 - design and implementation
+// Author: John Apostolakis (CERN), 10.03.1997 - Design and implementation
 // -------------------------------------------------------------------
 
 inline

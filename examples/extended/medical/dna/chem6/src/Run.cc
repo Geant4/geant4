@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file Run.cc
+/// \brief Implementation of the Run class
+
 // This example is provided by the Geant4-DNA collaboration
 // chem6 example is derived from chem4 and chem5 examples
 //
@@ -36,11 +39,6 @@
 // The Geant4-DNA web site is available at http://geant4-dna.org
 //
 // Authors: W. G. Shin and S. Incerti (CENBG, France)
-//
-// $Id$
-//
-/// \file Run.cc
-/// \brief Implementation of the Run class
 
 #include "Run.hh"
 
@@ -51,19 +49,19 @@
 #include "G4HCofThisEvent.hh"
 #include "G4RunManager.hh"
 #include "G4SDManager.hh"
-#include "G4SystemOfUnits.hh"
 #include "G4THitsMap.hh"
 #include "G4VSensitiveDetector.hh"
 
 #include <map>
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-Run::Run() : G4Run(), fSumEne(0), fScorerRun(0), fLETScorerRun(0)
-{
-  G4MultiFunctionalDetector* mfdet = dynamic_cast<G4MultiFunctionalDetector*>(
+Run::Run() : G4Run() {
+  const auto mfdet = dynamic_cast<G4MultiFunctionalDetector *>(
     G4SDManager::GetSDMpointer()->FindSensitiveDetector("mfDetector"));
-  G4int CollectionIDspecies = G4SDManager::GetSDMpointer()->GetCollectionID("mfDetector/Species");
-  G4int CollectionIDLET = G4SDManager::GetSDMpointer()->GetCollectionID("mfDetector/LET");
+  const G4int CollectionIDspecies =
+      G4SDManager::GetSDMpointer()->GetCollectionID("mfDetector/Species");
+  const G4int CollectionIDLET =
+      G4SDManager::GetSDMpointer()->GetCollectionID("mfDetector/LET");
 
   fTotalLET = new G4THitsMap<G4double>("mfDetector", "LET");
   fScorerRun = mfdet->GetPrimitive(CollectionIDspecies);
@@ -72,43 +70,38 @@ Run::Run() : G4Run(), fSumEne(0), fScorerRun(0), fLETScorerRun(0)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-Run::~Run() {}
+void Run::RecordEvent(const G4Event *event) {
+  if (event->IsAborted()) { return; }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+  const G4int CollectionID =
+      G4SDManager::GetSDMpointer()->GetCollectionID("mfDetector/Species");
 
-void Run::RecordEvent(const G4Event* event)
-{
-  if (event->IsAborted()) return;
-
-  G4int CollectionID = G4SDManager::GetSDMpointer()->GetCollectionID("mfDetector/Species");
-
-  G4int CollectionIDLET = G4SDManager::GetSDMpointer()->GetCollectionID("mfDetector/LET");
+  const G4int CollectionIDLET =
+      G4SDManager::GetSDMpointer()->GetCollectionID("mfDetector/LET");
 
   // Hits collections
   //
-  G4HCofThisEvent* HCE = event->GetHCofThisEvent();
-  if (!HCE) return;
+  G4HCofThisEvent *HCE = event->GetHCofThisEvent();
+  if (!HCE) { return; }
 
-  G4THitsMap<G4double>* evtMap = static_cast<G4THitsMap<G4double>*>(HCE->GetHC(CollectionID));
+  const auto evtMap = static_cast<G4THitsMap<G4double> *>(HCE->GetHC(CollectionID));
 
-  G4THitsMap<G4double>* evtLET = static_cast<G4THitsMap<G4double>*>(HCE->GetHC(CollectionIDLET));
+  const auto evtLET = static_cast<G4THitsMap<G4double> *>(HCE->GetHC(CollectionIDLET));
 
-  G4int nOfMap = evtLET->entries();
+  const G4int nOfMap = evtLET->entries();
 
-  G4int nOftotal = fTotalLET->entries();
+  const G4int nOftotal = fTotalLET->entries();
 
   for (G4int i = 0; i < nOfMap; i++) {
-    G4double* LET = (*evtLET)[i];
-    if (!LET) continue;
+    G4double *LET = (*evtLET)[i];
+    if (!LET) { continue; }
     fTotalLET->add(nOftotal + i, *LET);
   }
 
-  std::map<G4int, G4double*>::iterator itr;
-
-  for (itr = evtMap->GetMap()->begin(); itr != evtMap->GetMap()->end(); itr++) {
-    G4double edep = *(itr->second);
+  for (auto itr = evtMap->GetMap()->begin();
+       itr != evtMap->GetMap()->end(); ++itr) {
+    const G4double edep = *(itr->second);
     fSumEne += edep;
-    //    G4cout<<"Energy for this event: "<<edep/eV<<" eV"<<G4endl;
   }
 
   G4Run::RecordEvent(event);
@@ -116,26 +109,25 @@ void Run::RecordEvent(const G4Event* event)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-void Run::Merge(const G4Run* aRun)
-{
+void Run::Merge(const G4Run *aRun) {
   if (aRun == this) {
     return;
   }
 
-  const Run* localRun = static_cast<const Run*>(aRun);
+  const auto localRun = static_cast<const Run *>(aRun);
   fSumEne += localRun->fSumEne;
 
-  G4int nOfMaster = fTotalLET->entries();
-  G4int nOfLocal = localRun->fTotalLET->entries();
+  const G4int nOfMaster = fTotalLET->entries();
+  const G4int nOfLocal = localRun->fTotalLET->entries();
   for (G4int i = 0; i < nOfLocal; i++) {
-    G4double* LET = (*localRun->fTotalLET)[i];
+    G4double *LET = (*localRun->fTotalLET)[i];
     if (!LET) continue;
     fTotalLET->add(nOfMaster + i, *LET);
   }
 
-  ScoreSpecies* masterScorer = dynamic_cast<ScoreSpecies*>(this->fScorerRun);
+  const auto masterScorer = dynamic_cast<ScoreSpecies *>(this->fScorerRun);
 
-  ScoreSpecies* localScorer = dynamic_cast<ScoreSpecies*>(localRun->fScorerRun);
+  const auto localScorer = dynamic_cast<ScoreSpecies *>(localRun->fScorerRun);
 
   masterScorer->AbsorbResultsFromWorkerScorer(localScorer);
   G4Run::Merge(aRun);

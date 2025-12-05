@@ -22,8 +22,9 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// --------------------------------------------------------------
 //
+/// \file DetectorConstruction.hh
+/// \brief Definition of the DetectorConstruction class
 
 #ifndef DetectorConstruction_h
 #  define DetectorConstruction_h 1

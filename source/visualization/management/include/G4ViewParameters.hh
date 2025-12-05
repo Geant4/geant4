@@ -201,6 +201,9 @@ public: // With description
   const std::vector<G4ModelingParameters::PVNameCopyNo>& GetSpecialMeshVolumes () const;
         G4double         GetTransparencyByDepth  () const;
         G4int            GetTransparencyByDepthOption () const;
+        G4bool           IsZoomToCursor          () const;
+        G4bool           IsDotsSmooth            () const;
+        G4double         GetDotsSize             () const;
 
   // Here Follow functions to evaluate useful quantities as a
   // function of the radius of the Bounding Extent of the object being
@@ -281,6 +284,9 @@ public: // With description
   void SetSpecialMeshVolumes   (const std::vector<G4ModelingParameters::PVNameCopyNo>&);
   void SetTransparencyByDepth  (G4double);
   void SetTransparencyByDepthOption (G4int);
+  void SetZoomToCursor         (G4bool);
+  void SetDotsSmooth           (G4bool);
+  void SetDotsSize             (G4double);
 
   // Command dumping functions.
   // For camera commands we need to provide the standard target point from
@@ -371,6 +377,9 @@ private:
   std::vector<G4ModelingParameters::PVNameCopyNo> fSpecialMeshVolumes;  // If empty, all meshes.
   G4double     fTransparencyByDepth;  // Transparency ~= (geometry depth) - fTransparencyByDepth
   G4int        fTransparencyByDepthOption;  // Its option
+  G4bool       fZoomToCursor;  // If possible zoom to cursor with mouse wheel
+  G4bool       fDotsSmooth;  // Use glEnable(GL_POINT_SMOOTH) or equivalent for dots if available
+  G4double     fDotsSize;  // Size of G4Polymarker::dots
 
   enum { // Constants for geometry mask in ParseGeometry and related functions.
     fNoValue     = 0,

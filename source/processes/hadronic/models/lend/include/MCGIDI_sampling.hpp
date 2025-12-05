@@ -24,7 +24,7 @@ namespace MCGIDI {
 class DomainHash {
 
     private:
-        int m_bins;                                                         /**< The number of bins for the hash. */
+        std::size_t m_bins;                                                 /**< The number of bins for the hash. */
         double m_domainMin;                                                 /**< The minimum domain value for the hash. */
         double m_domainMax;                                                 /**< The maximum domain value for the hash. */
         double m_u_domainMin;                                               /**< The log of m_domainMin ). */
@@ -33,18 +33,18 @@ class DomainHash {
 
     public:
         LUPI_HOST_DEVICE DomainHash( );
-        LUPI_HOST_DEVICE DomainHash( int a_bins, double a_domainMin, double a_domainMax );
+        LUPI_HOST_DEVICE DomainHash( std::size_t a_bins, double a_domainMin, double a_domainMax );
         LUPI_HOST_DEVICE DomainHash( DomainHash const &a_domainHash );
 
-        LUPI_HOST_DEVICE int bins( ) const { return( m_bins ); }                     /**< Returns the value of the **m_bins**. */
+        LUPI_HOST_DEVICE std::size_t bins( ) const { return( m_bins ); }                     /**< Returns the value of the **m_bins**. */
         LUPI_HOST_DEVICE double domainMin( ) const { return( m_domainMin ); }        /**< Returns the value of the **m_domainMax**. */
         LUPI_HOST_DEVICE double domainMax( ) const { return( m_domainMax ); }        /**< Returns the value of the **m_domainMax**. */
         LUPI_HOST_DEVICE double u_domainMin( ) const { return( m_u_domainMin ); }    /**< Returns the value of the **m_u_domainMin**. */
         LUPI_HOST_DEVICE double u_domainMax( ) const { return( m_u_domainMax ); }    /**< Returns the value of the **m_u_domainMax**. */
         LUPI_HOST_DEVICE double inverse_du( ) const { return( m_inverse_du ); }      /**< Returns the value of the **m_inverse_du**. */
 
-        LUPI_HOST_DEVICE int index( double a_domain ) const ;
-        LUPI_HOST_DEVICE Vector<int> map( Vector<double> const &a_domainValues ) const ;
+        LUPI_HOST_DEVICE std::size_t index( double a_domain ) const ;
+        LUPI_HOST_DEVICE Vector<std::size_t > map( Vector<double> const &a_domainValues ) const ;
 
         LUPI_HOST_DEVICE void serialize( LUPI::DataBuffer &a_buffer, LUPI::DataBuffer::Mode a_mode );
 
@@ -54,8 +54,9 @@ class DomainHash {
 namespace Sampling {
 
 enum class SampledType { firstTwoBody, secondTwoBody, uncorrelatedBody, unspecified, photon };
+class ProductHandler;
 
-LUPI_HOST_DEVICE int evaluationForHashIndex( int a_hashIndex, Vector<int> const &a_hashIndices, double a_energy, 
+LUPI_HOST_DEVICE std::size_t evaluationForHashIndex( std::size_t a_hashIndex, Vector<std::size_t> const &a_hashIndices, double a_energy, 
                 Vector<double> const &a_energies, double *a_energyFraction );
 
 namespace Upscatter {
@@ -75,7 +76,7 @@ class ModelDBRC_data {
         double m_targetMass;                    /**< The mass of the target. */
         Vector<double> m_energies;              /**< The energy grid for the cross section. */
         Vector<double> m_crossSections;         /**< The cross sections corresponding to the energy grid. */
-        Vector<int> m_hashIndices;              /**< The indicies for the energy hash function. */
+        Vector<std::size_t> m_hashIndices;      /**< The indicies for the energy hash function. */
         MCGIDI::DomainHash m_domainHash;        /**< The hash "function". */
 
     public:
@@ -134,26 +135,40 @@ class ClientCodeRNGData : public ClientRandomNumberGenerator {
 =========================== Input ==========================
 ============================================================
 */
+
 class Input {
+
+    friend ProtareSingle;
+    friend Reaction;
+    friend MCGIDI::Sampling::ProductHandler;
+    friend GRIN_capture;
+    friend GRIN_inelastic;
 
     private:
         bool m_wantVelocity = true ;                        /**< See member m_isVelocity in class Product for meaning. This is user input. */
 
+        bool m_dataInTargetFrame = false;                   /**< **True** if the data are in the target's frame and **false** otherwise. */
+        double m_modelTemperature = 0.0;                    /**< The temperature used when sampling product data. For example, in upscatter model A the projectile is boosted into a sampled target's frame and the modelled temperature is 0.0. */
+        double m_modelEnergy = 0.0;                         /**< The projectile energy used when sampling product data (see comment for member **m_modelTemperature**. */
+
+        SampledType m_sampledType = SampledType::uncorrelatedBody;  /**< For internal use only. Set by distributions and used in the method **MCGIDI::Sampling::ProductHandler::add**. */
+
+                                                    // The next 2 members are set by the user via the setTemperatureAndEnergy method.
+        double m_temperature = 0.0;                         /**< The temperature of the material. This member is set by the user. */
+        double m_energy = 0.0;                              /**< The energy of the projectile. This member is set by the user. */
+
     public:
-        double m_temperature = 0.0;                         /**< Set by user. */
 
         Upscatter::Model m_upscatterModel = Upscatter::Model::none; /**< The upscatter model to use when sampling a target's velocity. */
+
+
                                                     // The rest of the members are set by MCGIDI methods.
-                                                    // These five are used for upscatter model A.
-        bool m_dataInTargetFrame = false;                   /**< **true if the data are in the target's frame and **false** otherwise. */
+                                                    // These five are used for upscatter model A and the last 4 also used by model B.
         double m_projectileBeta = 0.0;                      /**< The beta = speed / c of the projectile. */
-        double m_relativeMu = 0.0;                          /**< BRB */
+        double m_muLab = 0.0;                               /**< The cosine of the angle between the projectile's and the sampled target's velocities. */
         double m_targetBeta = 0.0;                          /**< The beta = speed / c of the target. */
-        double m_relativeBeta = 0.0;                        /**< The beta = speed / c of the relative speed between the projectile and the target.*/
+        double m_relativeBeta = 0.0;                        /**< The beta = speed / c of the relative speed between the projectile and the target. */
 
-        double m_projectileEnergy = 0.0;                    /**< The energy of the projectile. */
-
-        SampledType m_sampledType = SampledType::uncorrelatedBody;                  /**< BRB */
         Reaction const *m_reaction = nullptr;               /**< The current reaction whose products are being sampled. */
 
         double m_projectileMass = 0.0;                      /**< The mass of the projectile. */
@@ -182,7 +197,17 @@ class Input {
 
         LUPI_HOST_DEVICE Input( bool a_wantVelocity, Upscatter::Model a_upscatterModel );
 
-        LUPI_HOST_DEVICE bool wantVelocity( ) const { return( m_wantVelocity ); }                            /**< BRB */
+        LUPI_HOST_DEVICE bool wantVelocity( ) const { return( m_wantVelocity ); }                       /**< Returns the value of the *m_wantVelocity* member. */
+        LUPI_HOST_DEVICE double temperature( ) const { return( m_temperature ); }                       /**< Returns the value of the *m_temperature* member. */
+        LUPI_HOST_DEVICE double energy( ) const { return( m_energy ); }                                 /**< Returns the value of the *m_energy* member. */
+        LUPI_HOST_DEVICE void setTemperatureAndEnergy( double a_temperature, double a_energy );
+
+        LUPI_HOST_DEVICE bool dataInTargetFrame( ) const { return( m_dataInTargetFrame ); }             /**< Returns the value of the *m_dataInTargetFrame*. */
+        LUPI_HOST_DEVICE double modelTemperature( ) const { return( m_modelTemperature ); }             /**< Returns the value of the *m_dataInTargetFrame* member. */
+        LUPI_HOST_DEVICE double modelEnergy( ) const { return( m_modelEnergy ); }                       /**< Returns the value of the *m_modelEnergy* member. */
+
+        SampledType sampledType( ) const { return( m_sampledType ); }                                   /**< Returns the value of the *m_sampledType* member. */
+        LUPI_HOST_DEVICE void setSampledType( SampledType a_sampledType ) { m_sampledType = a_sampledType; }             /**< Sets the member *m_sampledType* to *a_sampledType*. */
 };
 
 /*
@@ -266,7 +291,7 @@ class StdVectorProductHandler : public ProductHandler {
         LUPI_HOST_DEVICE ~StdVectorProductHandler( ) { }
 
         LUPI_HOST_DEVICE std::size_t size( ) { return( m_products.size( ) ); }
-        LUPI_HOST_DEVICE Product &operator[]( long a_index ) { return( m_products[a_index] ); }
+        LUPI_HOST_DEVICE Product &operator[]( std::size_t a_index ) { return( m_products[a_index] ); }
         LUPI_HOST_DEVICE std::vector<Product> &products( ) { return( m_products ); }
         LUPI_HOST_DEVICE void push_back( Product &a_product ) { m_products.push_back( a_product ); }
         LUPI_HOST_DEVICE void clear( ) { m_products.clear( ); }

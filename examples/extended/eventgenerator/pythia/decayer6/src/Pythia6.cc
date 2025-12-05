@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file eventgenerator/pythia/decayer6/src/Pythia6.cc
+/// \file Pythia6.cc
 /// \brief Implementation of the Pythia6 class
 
 // ----------------------------------------------------------------------------

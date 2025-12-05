@@ -23,14 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file visualization/standalone/standalone.cc
+/// \file standalone.cc
 /// \brief Main program of the visualization/standalone example
-//
-//
-//
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "DrawGeometryVisAction.hh"
 #include "StandaloneVisAction.hh"

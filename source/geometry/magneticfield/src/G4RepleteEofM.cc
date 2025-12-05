@@ -25,7 +25,7 @@
 //
 // G4RepleteEofM implementation
 //
-// Created: P.Gumplinger, 08.04.2013
+// Author: Peter Gumplinger (TRIUMF), 08.04.2013
 // -------------------------------------------------------------------
 
 #include "G4RepleteEofM.hh"
@@ -42,8 +42,6 @@ G4RepleteEofM::G4RepleteEofM( G4Field* field, G4int nvar )
 {
    fGfield = field->IsGravityActive();
 }
-
-G4RepleteEofM::~G4RepleteEofM() = default;
 
 void  
 G4RepleteEofM::SetChargeMomentumMass(G4ChargeState particleCharge, // e+ units

@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file radiobiology/src/VoxelizedSensitiveDetectorMessenger.cc
+/// \file VoxelizedSensitiveDetectorMessenger.cc
 /// \brief Implementation of the RadioBio::VoxelizedSensitiveDetectorMessenger class
 
 #include "VoxelizedSensitiveDetectorMessenger.hh"

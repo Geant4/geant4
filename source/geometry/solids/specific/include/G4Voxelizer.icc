@@ -29,7 +29,7 @@
 // --------------------------------------------------------------------
 
 template <typename T> inline
-G4int G4Voxelizer::BinarySearch(const std::vector<T>& vec, T value)
+G4int G4Voxelizer::BinarySearch(const std::vector<T>& vec, T value) const
 {
   auto begin=vec.cbegin(), end=vec.cend();
   return G4int(std::upper_bound(begin, end, value) - begin - 1);

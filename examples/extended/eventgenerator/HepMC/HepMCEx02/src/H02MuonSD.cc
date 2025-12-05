@@ -23,10 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file eventgenerator/HepMC/HepMCEx02/src/H02MuonSD.cc
+/// \file H02MuonSD.cc
 /// \brief Implementation of the H02MuonSD class
-//
-//
+
 #include "H02MuonSD.hh"
 
 #include "H02MuonHit.hh"

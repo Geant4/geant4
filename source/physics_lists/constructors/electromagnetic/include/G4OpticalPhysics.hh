@@ -51,7 +51,7 @@ class G4OpticalPhysics : public G4VPhysicsConstructor
 {
  public:
   G4OpticalPhysics(G4int verbose = 0, const G4String& name = "Optical");
-  ~G4OpticalPhysics() override;
+  ~G4OpticalPhysics() override = default;
   void PrintStatistics() const;
 
   G4OpticalPhysics(const G4OpticalPhysics& right) = delete;

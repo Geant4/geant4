@@ -25,6 +25,7 @@
 //
 // Class G4BooleanSolid inline implementation
 //
+// Author: Vladimir Grichine (CERN), 10.09.1998.
 // --------------------------------------------------------------------
 
 inline
@@ -63,14 +64,4 @@ void G4BooleanSolid::SetAreaAccuracy(G4double ep)
 {
   if (ep != fAreaAccuracy) { fSurfaceArea = -1.; }
   fAreaAccuracy = ep;
-}
-
-inline
-G4double G4BooleanSolid::GetSurfaceArea()
-{
-  if(fSurfaceArea < 0.)
-  {
-    fSurfaceArea = EstimateSurfaceArea(fAreaStatistics, fAreaAccuracy);
-  }
-  return fSurfaceArea;
 }

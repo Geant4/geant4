@@ -23,8 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: ActionInitialization.hh 68058 2013-03-13 14:47:43Z gcosmo $
-//
 /// \file ActionInitialization.hh
 /// \brief Definition of the ActionInitialization class
 
@@ -36,16 +34,12 @@
 class DetectorConstruction;
 class G4VSteppingVerbose;
 
-class ActionInitialization : public G4VUserActionInitialization
-{
-  public:
-    ActionInitialization();
-    virtual ~ActionInitialization();
-
-    virtual void BuildForMaster() const;
-    virtual void Build() const;
-
-    virtual G4VSteppingVerbose* InitializeSteppingVerbose() const;
+class ActionInitialization final : public G4VUserActionInitialization {
+public:
+  ActionInitialization() = default;
+  ~ActionInitialization() override = default;
+  void BuildForMaster() const override;
+  void Build() const override;
 };
 
 #endif

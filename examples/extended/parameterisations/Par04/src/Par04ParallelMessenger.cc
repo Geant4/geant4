@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file Par04ParallelMessenger.cc
+/// \brief Implementation of the Par04ParallelMessenger class
+
 #include "Par04ParallelMessenger.hh"
 
 #include "Par04ParallelFullWorld.hh"  // for Par04ParallelFullWorld

@@ -29,7 +29,7 @@
 //
 // Wrapper class for G4Paraboloid to make use of VecGeom Paraboloid.
 
-// 19.08.15 Guilherme Lima, FNAL
+// Author: Guilherme Lima (FNAL), 19.08.2015
 // --------------------------------------------------------------------
 #ifndef G4UPARABOLOID_HH
 #define G4UPARABOLOID_HH
@@ -42,6 +42,11 @@
 
 #include "G4Polyhedron.hh"
 
+/**
+ * @brief G4UParaboloid is a wrapper class for G4Paraboloid
+ * to make use of VecGeom Paraboloid.
+ */
+
 class G4UParaboloid : public G4UAdapter<vecgeom::UnplacedParaboloid>
 {
   using Shape_t = vecgeom::UnplacedParaboloid;
@@ -49,33 +54,80 @@ class G4UParaboloid : public G4UAdapter<vecgeom::UnplacedParaboloid>
 
   public:
 
-    G4UParaboloid(const G4String& name, G4double dz,
-                                        G4double rlo,
-                                        G4double rhi);
-   ~G4UParaboloid() override;
+    /**
+     * Constructs a paraboloid, given its parameters.
+     *  @param[in] name The solid name.
+     *  @param[in] dz Half length in Z.
+     *  @param[in] rlo Radius at -Dz.
+     *  @param[in] rhi Radius at +Dz greater than pR1.
+     */
+    G4UParaboloid(const G4String& name,
+                        G4double dz,
+                        G4double rlo,
+                        G4double rhi);
 
+    /**
+     * Default destructor.
+     */
+    ~G4UParaboloid() override = default;
+
+    /**
+     * Makes a clone of the object for use in multi-treading.
+     *  @returns A pointer to the new cloned allocated solid.
+     */
     G4VSolid* Clone() const override;
 
+    /**
+     * Accessors.
+     */
     G4double GetZHalfLength() const;
     G4double GetRadiusMinusZ() const;
     G4double GetRadiusPlusZ() const;
 
+    /**
+     * Modifiers.
+     */
     void SetZHalfLength(G4double dz);
     void SetRadiusMinusZ(G4double r1);
     void SetRadiusPlusZ(G4double r2);
 
+    /**
+     * Returns the type ID, "G4Paraboloid" of the solid.
+     */
     inline G4GeometryType GetEntityType() const override;
 
-    G4UParaboloid( const G4UParaboloid& source );
-    G4UParaboloid& operator=( const G4UParaboloid& source );
-      // Copy constructor and assignment operator.
-
+    /**
+     * Computes the bounding limits of the solid.
+     *  @param[out] pMin The minimum bounding limit point.
+     *  @param[out] pMax The maximum bounding limit point.
+     */
     void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const override;
+
+    /**
+     * Calculates the minimum and maximum extent of the solid, when under the
+     * specified transform, and within the specified limits.
+     *  @param[in] pAxis The axis along which compute the extent.
+     *  @param[in] pVoxelLimit The limiting space dictated by voxels.
+     *  @param[in] pTransform The internal transformation applied to the solid.
+     *  @param[out] pMin The minimum extent value.
+     *  @param[out] pMax The maximum extent value.
+     *  @returns True if the solid is intersected by the extent region.
+     */
     G4bool CalculateExtent(const EAxis pAxis,
                            const G4VoxelLimits& pVoxelLimit,
                            const G4AffineTransform& pTransform,
                            G4double& pmin, G4double& pmax) const override;
+
+    /**
+     * Returns a generated polyhedron as graphical representations.
+     */
     G4Polyhedron* CreatePolyhedron() const override;
+
+    /**
+     * Copy constructor and assignment operator.
+     */
+    G4UParaboloid( const G4UParaboloid& source );
+    G4UParaboloid& operator=( const G4UParaboloid& source );
 };
 
 // --------------------------------------------------------------------

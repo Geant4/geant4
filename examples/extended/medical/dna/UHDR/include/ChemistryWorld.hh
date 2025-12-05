@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file ChemistryWorld.hh
+/// \brief Definition of the ChemistryWorld class
 
 #ifndef CHEMISTRYWORLD_HH
 #  define CHEMISTRYWORLD_HH 1

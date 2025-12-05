@@ -23,10 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file exoticphysics/phonon/include/XPhysicsList.hh
+/// \file XPhysicsList.hh
 /// \brief Definition of the XPhysicsList class
-//
-//
+
 // 20131117  Add verbosity argument, to set verbosity from main program
 
 #ifndef XPhysicsList_h

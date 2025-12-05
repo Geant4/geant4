@@ -25,7 +25,7 @@
 //
 // Implementation for G4ReflectedSolid class
 //
-// Author: Vladimir Grichine, 23.07.01  (Vladimir.Grichine@cern.ch)
+// Author: Vladimir Grichine (CERN), 23.07.2001 - Created
 // --------------------------------------------------------------------
 
 #include "G4ReflectedSolid.hh"
@@ -473,9 +473,9 @@ G4ReflectedSolid::GetPolyhedron () const
   if ((fpPolyhedron == nullptr) || fRebuildPolyhedron ||
       (fpPolyhedron->GetNumberOfRotationStepsAtTimeOfCreation() !=
        fpPolyhedron->GetNumberOfRotationSteps()))
-    {
-      fpPolyhedron = CreatePolyhedron();
-      fRebuildPolyhedron = false;
-    }
+  {
+    fpPolyhedron = CreatePolyhedron();
+    fRebuildPolyhedron = false;
+  }
   return fpPolyhedron;
 }

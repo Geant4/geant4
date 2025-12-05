@@ -25,7 +25,7 @@
 //
 // G4LineCurrentMagField implementation
 //
-// Author: V.Grichine, 03.02.1997
+// Author: Vladimir Grichine (CERN), 03.02.1997
 // -------------------------------------------------------------------
 
 #include "G4LineCurrentMagField.hh"
@@ -42,10 +42,6 @@ G4Field* G4LineCurrentMagField::Clone() const
 {
    return new G4LineCurrentMagField( fFieldConstant );
 }
-
-// -----------------------------------------------------------------
-
-G4LineCurrentMagField::~G4LineCurrentMagField() = default;
 
 // -----------------------------------------------------------------
 

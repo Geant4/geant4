@@ -26,34 +26,17 @@
 //  http://www.iro.umontreal.ca/~lecuyer/myftp/papers/tausme.ps
 //  http://www.iro.umontreal.ca/~lecuyer/myftp/papers/tausme2.ps
 
-#ifdef TOOLS_MEM
-#include "mem"
-#include "S_STRING"
-#endif
-
 namespace tools {
 
 class rtausmeui {
-#ifdef TOOLS_MEM
-  TOOLS_SCLASS(tools::rtausmeui)
-#endif
 public:
   rtausmeui(unsigned int a_seed = 1):m_seed(0),m_seed1(0),m_seed2(0){
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
     set_seed(a_seed);
   }
   virtual ~rtausmeui(){
-#ifdef TOOLS_MEM
-    mem::decrement(s_class().c_str());
-#endif
   }
 public:
   rtausmeui(const rtausmeui& a_from):m_seed(a_from.m_seed),m_seed1(a_from.m_seed1),m_seed2(a_from.m_seed2){
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
   }
   rtausmeui& operator=(const rtausmeui& a_from) {
     m_seed = a_from.m_seed;

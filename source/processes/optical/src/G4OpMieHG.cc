@@ -91,50 +91,35 @@ G4VParticleChange* G4OpMieHG::PostStepDoIt(const G4Track& aTrack,
            << G4endl;
   }
 
-  G4double gg;
-  G4int direction;
-  if(G4UniformRand() <= forwardRatio)
-  {
-    gg        = MPT->GetConstProperty(kMIEHG_FORWARD);
-    direction = 1;
-  }
-  else
-  {
-    gg        = MPT->GetConstProperty(kMIEHG_BACKWARD);
-    direction = -1;
-  }
+  G4bool isForward = (G4UniformRand() <= forwardRatio);
+  G4double gg =
+    MPT->GetConstProperty(isForward ? kMIEHG_FORWARD : kMIEHG_BACKWARD);
 
+  // Sample the direction
   G4double r = G4UniformRand();
+  G4double costh;
 
-  // sample the direction
-  G4double theta;
   if(gg != 0.)
   {
-    theta = std::acos(2. * r * (1. + gg) * (1. + gg) * (1. - gg + gg * r) /
-                        ((1. - gg + 2. * gg * r) * (1. - gg + 2. * gg * r)) -
-                      1.);
+    G4double fact = (1. + gg)/(1. - gg + 2. * gg * r);
+    costh = 2. * r * fact * fact * (1. - gg + gg * r) - 1.;
   }
   else
   {
-    theta = std::acos(2. * r - 1.);
+    costh = 2. * r - 1.;
   }
+  G4double sinth = std::sqrt(std::max(0., (1. - costh) * ( 1. + costh)));
+
+  if(!isForward)
+    costh *= -1.0;  // backward scattering
+
   G4double phi = G4UniformRand() * twopi;
-
-  if(direction == -1)
-    theta = pi - theta;  // backward scattering
-
-  G4ThreeVector newMomDir, oldMomDir;
-  G4ThreeVector newPol, oldPol;
-
-  G4double sinth = std::sin(theta);
-  newMomDir.set(sinth * std::cos(phi), sinth * std::sin(phi), std::cos(theta));
-  oldMomDir = aParticle->GetMomentumDirection();
-  newMomDir.rotateUz(oldMomDir);
+  G4ThreeVector newMomDir(sinth * std::cos(phi), sinth * std::sin(phi), costh);
+  newMomDir.rotateUz(aParticle->GetMomentumDirection());
   newMomDir = newMomDir.unit();
 
-  oldPol = aParticle->GetPolarization();
-  newPol = newMomDir - oldPol / newMomDir.dot(oldPol);
-  newPol = newPol.unit();
+  G4ThreeVector oldPol = aParticle->GetPolarization();
+  G4ThreeVector newPol = (newMomDir - oldPol / newMomDir.dot(oldPol)).unit();
 
   if(newPol.mag() == 0.)
   {

@@ -24,10 +24,8 @@
 // ********************************************************************
 //
 /// \file extensibleFactory.cc
-/// \brief Main program of the extensibleFactory example
-//
-//
-//
+/// \brief Main program of the physicslists/extensibleFactory example
+
 // -------------------------------------------------------------
 //      extensibleFactory
 //

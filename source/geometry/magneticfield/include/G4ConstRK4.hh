@@ -25,7 +25,7 @@
 //
 // G4ConstRK4
 //
-// class description:
+// Class description:
 //
 // G4ConstRK4 performs the integration of one step with error calculation
 // in constant magnetic field. The integration method is the same as in
@@ -33,7 +33,7 @@
 // This field evaluation is called only once per step.
 // G4ConstRK4 can be used only for magnetic fields.
 
-// Created: J.Apostolakis, T.Nikitina - 18.09.2008
+// Authors: J.Apostolakis, T.Nikitina (CERN), 18.09.2008
 // -------------------------------------------------------------------
 #ifndef G4CONSTRK4_HH
 #define G4CONSTRK4_HH
@@ -42,34 +42,99 @@
 #include "G4EquationOfMotion.hh"
 #include "G4Mag_EqRhs.hh"
 
+/**
+ * @brief G4ConstRK4 performs the integration of one step with error
+ * calculation in constant magnetic field. The integration method is the
+ * same as in ClassicalRK4. The field value is assumed constant for the step.
+ * This field evaluation is called only once per step.
+ * G4ConstRK4 can be used only for magnetic fields.
+ */
+
 class G4ConstRK4 : public G4MagErrorStepper 
 {
    public:
 
-     G4ConstRK4(G4Mag_EqRhs* EquationMotion, G4int numberOfStateVariables=8);
-    ~G4ConstRK4() override;
+    /**
+     * Constructor for G4ConstRK4.
+     *  @param[in] EqRhs Pointer to the provided equation of motion.
+     *  @param[in] numberOfVariables The number of integration variables.
+     */
+     G4ConstRK4(G4Mag_EqRhs* EquationMotion,
+                G4int numberOfStateVariables=8);
 
+    /**
+     * Destructor.
+     */
+     ~G4ConstRK4() override;
+
+    /**
+     * Copy constructor and assignment operator not allowed.
+     */
      G4ConstRK4(const G4ConstRK4&) = delete;
      G4ConstRK4& operator=(const G4ConstRK4&) = delete;
-       // Copy constructor and assignment operator not allowed
 
+    /**
+     * The stepper for the Runge Kutta integration.
+     * The stepsize is fixed, with the step size given by 'h'.
+     * Integrates ODE starting values y[0 to 6].
+     * Outputs yout[] and its estimated error yerr[].
+     *  @param[in] y Starting values array of integration variables.
+     *  @param[in] dydx Derivatives array.
+     *  @param[in] h The given step size.
+     *  @param[out] yout Integration output.
+     *  @param[out] yerr The estimated error.
+     */
      void Stepper( const G4double y[],
                    const G4double dydx[],
                          G4double h,
                          G4double yout[],
                          G4double yerr[]  ) override;
+
+    /**
+     * Given values for the variables y[0,..,n-1] and their derivatives
+     * dydx[0,...,n-1] known at x, uses the classical 4th Runge-Kutta
+     * method to advance the solution over an interval h and returns the
+     * incremented variables as yout[0,...,n-1]. The user supplies the
+     * function RightHandSide(x,y,dydx), which returns derivatives dydx at x.
+     * The source is routine rk4 from NRC p.712-713.
+     *  @param[in] y Starting values array of integration variables.
+     *  @param[in] dydx Derivatives array.
+     *  @param[in] h The given step size.
+     *  @param[out] yout Integration output.
+     */
      void DumbStepper( const G4double yIn[],
                        const G4double dydx[],
                              G4double h,
                              G4double yOut[] ) override ;
+
+    /**
+     * Returns the distance from chord line.
+     */
      G4double DistChord() const override;   
  
-     inline void  RightHandSideConst(const G4double y[],
-                                           G4double dydx[] ) const;
+    /**
+     * Returns the derivatives value, at position and time 'y'.
+     *  @param[in] y The position vector plus time (x,y,z,t).
+     *  @param[out] dydx The derivatives array.
+     */
+     inline void RightHandSideConst(const G4double y[], G4double dydx[] ) const;
 
-     inline void  GetConstField(const G4double y[], G4double Field[]);
+    /**
+     * Returns the field values, at position and time 'y'.
+     *  @param[in] y The position vector plus time (x,y,z,t).
+     *  @param[out] Field The field value in output.
+     */
+     inline void GetConstField(const G4double y[], G4double Field[]);
 
-     G4int IntegratorOrder() const override { return 4; }
+    /**
+     * Returns the order, 4, of integration.
+     */
+     inline G4int IntegratorOrder() const override { return 4; }
+
+    /**
+     * Returns the stepper type-ID, "kConstRK4".
+     */
+     inline G4StepperType StepperType() const override { return kConstRK4; }
 
    private:
 

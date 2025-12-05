@@ -128,7 +128,7 @@ G4double G4EMDissociationCrossSection::GetElementCrossSection
   G4double AP   = definitionP->GetBaryonNumber();
   G4double ZP   = definitionP->GetPDGCharge();
   G4double b    = theDynamicParticle->GetBeta();
-  if (b <= 0.0 && b >= 1.0) { return 0.0; }
+  if (b <= 0.0) { return 0.0; }
   
   G4double AT   = G4NistManager::Instance()->GetAtomicMassAmu(Z);
   G4double ZT   = (G4double)Z;

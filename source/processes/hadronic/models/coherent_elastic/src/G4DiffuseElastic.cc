@@ -1158,9 +1158,10 @@ G4DiffuseElastic::SampleThetaLab( const G4HadProjectile* aParticle,
   //
   
   t = SampleT( theParticle, ptot, A);
+  if (t <= 0.0) { return 0.0; }
 
-  // NaN finder
-  if(!(t < 0.0 || t >= 0.0)) 
+  // NaN finder substituted 
+  if (t > tmax)
   {
     if (verboseLevel > 0) 
     {
@@ -1180,22 +1181,8 @@ G4DiffuseElastic::SampleThetaLab( const G4HadProjectile* aParticle,
 
   G4double phi  = G4UniformRand()*twopi;
   G4double cost = 1. - 2.0*t/tmax;
-  G4double sint;
-
-  if( cost >= 1.0 ) 
-  {
-    cost = 1.0;
-    sint = 0.0;
-  }
-  else if( cost <= -1.0) 
-  {
-    cost = -1.0;
-    sint =  0.0;
-  }
-  else  
-  {
-    sint = std::sqrt((1.0-cost)*(1.0+cost));
-  }    
+  G4double sint = std::sqrt((1.0-cost)*(1.0+cost));
+  
   if (verboseLevel>1) 
   {
     G4cout << "cos(t)=" << cost << " std::sin(t)=" << sint << G4endl;

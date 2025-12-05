@@ -40,21 +40,44 @@
 // Author: Michael Dressel (CERN), 2002
 // ----------------------------------------------------------------------
 #ifndef G4VIMPORTANCEALGORITHM_HH
-#define G4VIMPORTANCEALGORITHM_HH 1
+#define G4VIMPORTANCEALGORITHM_HH
 
 #include "G4Nsplit_Weight.hh"
 
+/**
+ * @brief G4VImportanceAlgorithm is an interface used by importance sampling
+ * to get the number of copies and weight a mother particle should be split 
+ * into when crossing a boundary of "importance cells". 
+ * The interface defines the input to be the ratio of the pre over the post
+ * importance and the weight of the mother track.
+ * It returns a struct containing the number of copies (including the mother
+ * track) to be produced and the weight of each track.
+ * A user defined algorithm deriving from this interface may be used by the
+ * importance sampling.
+ */
+
 class G4VImportanceAlgorithm
 {
-  public:  // with description
+  public:
 
-    G4VImportanceAlgorithm();
-    virtual ~G4VImportanceAlgorithm();
+    /**
+     * Default Constructor and Destructor.
+     */
+    G4VImportanceAlgorithm() = default;
+    virtual ~G4VImportanceAlgorithm() = default;
+
+    /**
+     * Calculates the number of tracks and their weight according to the
+     * pre and post importance value and the weight of the mother track.
+     *  @param[in] ipre "pre" importance value.
+     *  @param[in] ipost "post" importance value.
+     *  @param[in] init_w Initial weight value.
+     *  @returns A struct containing the number of copies (including the
+     *           mother track) to be produced and the weight of each track.
+     */
     virtual G4Nsplit_Weight Calculate(G4double ipre,
                                       G4double ipost,
                                       G4double init_w) const = 0;
-      // calculate the number of tracks and their weight according to the
-      // pre and post importance value and the weight of the mother track
 };
 
 #endif

@@ -109,10 +109,12 @@ DeltaTime Timer::deltaTime( ) {
     clock_t CPU_time = clock( );
     gettimeofday( &wallTime, 0 );
 
-    double dWallTime = ( wallTime.tv_sec - m_wallTime.tv_sec ) + 1e-6 * ( wallTime.tv_usec - m_wallTime.tv_usec );
+    double dWallTime = static_cast<double>( wallTime.tv_sec - m_wallTime.tv_sec ) 
+            + 1e-6 * static_cast<double>( wallTime.tv_usec - m_wallTime.tv_usec );
     double dCPU_time = double( CPU_time - m_CPU_time ) / CLOCKS_PER_SEC;
 
-    double dWallTimeIncremental = ( wallTime.tv_sec - m_wallTimeIncremental.tv_sec ) + 1e-6 * ( wallTime.tv_usec - m_wallTimeIncremental.tv_usec );
+    double dWallTimeIncremental = static_cast<double>( wallTime.tv_sec - m_wallTimeIncremental.tv_sec ) 
+            + 1e-6 * static_cast<double>( wallTime.tv_usec - m_wallTimeIncremental.tv_usec );
     double dCPU_timeIncremental = double( CPU_time - m_CPU_timeIncremental ) / CLOCKS_PER_SEC;
 
     m_CPU_timeIncremental = CPU_time;

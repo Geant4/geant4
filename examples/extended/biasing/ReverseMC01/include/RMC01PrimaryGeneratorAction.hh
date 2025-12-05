@@ -23,11 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file biasing/ReverseMC01/include/RMC01PrimaryGeneratorAction.hh
+/// \file RMC01PrimaryGeneratorAction.hh
 /// \brief Definition of the RMC01PrimaryGeneratorAction class
-//
-//
-//////////////////////////////////////////////////////////////
+
 //  Class Name:           RMC01PrimaryGeneratorAction
 //        Author:               L. Desorgher
 //        Organisation:         SpaceIT GmbH
@@ -59,6 +57,7 @@ class RMC01PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     virtual ~RMC01PrimaryGeneratorAction();
 
     virtual void GeneratePrimaries(G4Event*);
+    inline G4GeneralParticleSource* GetParticleGun() const {return fParticleSource;}
 
   private:
     G4GeneralParticleSource* fParticleSource;

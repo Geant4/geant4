@@ -23,13 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file eventgenerator/exgps/include/TrackingAction.hh
-/// \brief Definition of the  TrackingAction class
-//
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// \file TrackingAction.hh
+/// \brief Definition of the TrackingAction class
 
 #ifndef TrackingAction_h
 #define TrackingAction_h 1

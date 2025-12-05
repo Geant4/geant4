@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file DicomFileMgr.cc
+/// \brief Implementation of the DicomFileMgr class
+
 #include "DicomFileMgr.hh"
 
 #include "DicomFileCT.hh"

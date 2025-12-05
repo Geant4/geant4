@@ -36,7 +36,7 @@ PhysicalQuantity::PhysicalQuantity( HAPI::Node const &a_node, SetupInfo &a_setup
  * @param a_unit            [in]     The physical quantity's unit.
  ***********************************************************************************************************/
 
-PhysicalQuantity::PhysicalQuantity( double a_value, std::string a_unit ) :
+PhysicalQuantity::PhysicalQuantity( double a_value, std::string const &a_unit ) :
         Form( FormType::physicalQuantity ),
         m_value( a_value ),
         m_unit( a_unit ) {

@@ -53,11 +53,6 @@ G4LogicalSkinSurface::G4LogicalSkinSurface(const G4String&  name,
 }
 
 // --------------------------------------------------------------------
-// Default destructor
-//
-G4LogicalSkinSurface::~G4LogicalSkinSurface() = default;
-
-// --------------------------------------------------------------------
 G4bool
 G4LogicalSkinSurface::operator==(const G4LogicalSkinSurface& right) const
 {

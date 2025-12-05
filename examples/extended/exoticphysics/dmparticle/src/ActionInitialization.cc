@@ -23,11 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file exoticphysics/dmparticle/src/DetectorConstruction.cc
-/// \brief Implementation of the DetectorConstruction class
-//
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+/// \file ActionInitialization.cc
+/// \brief Implementation of the ActionInitialization class
 
 #include "ActionInitialization.hh"
 

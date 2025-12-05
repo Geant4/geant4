@@ -23,8 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-///  \file XSHistoManager.cc
-///  \brief Create a set of profiles for XS study.
+/// \file XSHistoManager.cc
+/// \brief Implementation of the XSHistoManager class
+
 //
 //  Adapted from hadronic/Hadr00/src/HistoManager.cc
 //  Author: G.Hugo, 06 January 2023

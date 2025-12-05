@@ -1,8 +1,8 @@
 Collection name='THashList', class='THashList', size=4
- TKey Name = Event_1, Title = object title, Cycle = 1
- TKey Name = Event_2, Title = object title, Cycle = 1
- TKey Name = Event_3, Title = object title, Cycle = 1
- TKey Name = Event_4, Title = object title, Cycle = 1
+ TKey Name = Event_1, Title = , Cycle = 1
+ TKey Name = Event_2, Title = , Cycle = 1
+ TKey Name = Event_3, Title = , Cycle = 1
+ TKey Name = Event_4, Title = , Cycle = 1
 Collection: Event_1
 Number of hits: 119
   trackID: 1  chamberNb: 0  energy deposit[MeV]: 0.00573155  position[mm]: (-12.9017,3.05064,-1588.05)

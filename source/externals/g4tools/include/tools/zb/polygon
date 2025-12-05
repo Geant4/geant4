@@ -48,7 +48,8 @@ public:
   void scan(int    Count,         /* number of pts  */
             const point* Pts,	  /* the pts        */
             int	   rule,          /* winding rule   */
-            scan_func a_proc,void* a_tag){
+            scan_func a_proc,void* a_tag,
+            unsigned int a_width,unsigned int a_height){
     // polytoregion
     //   Scan converts a polygon by returning a run-length
     //   encoding of the resultant bitmap -- the run-length
@@ -71,6 +72,37 @@ public:
     if(a_proc==NULL) return;
     if(Count==0)  return;
 
+    if(Count==3)  {
+      point pts[3];
+      pts[0] = Pts[0];
+      pts[1] = Pts[1];
+      pts[2] = Pts[2];
+
+      point vp_down[3];
+      vp_down[0] = point(0,0,0);
+      vp_down[1] = point(a_width,0,0);
+      vp_down[2] = point(a_width,a_height,0);
+      if(triangles_overlap(pts,vp_down)) {
+      } else {
+        point vp_up[3];
+        vp_up[0] = point(0,0,0);
+        vp_up[1] = point(a_width,a_height,0);
+        vp_up[2] = point(0,a_height,0);
+        if(!triangles_overlap(pts,vp_up)) return;
+      }
+    }
+
+    int pts_xmin = Pts[0].x;
+    int pts_xmax = pts_xmin;
+    int pts_ymin = Pts[0].y;
+    int pts_ymax = pts_ymin;
+   {for(int count=1;count<Count;count++) {
+      if(Pts[count].x<pts_xmin) pts_xmin = Pts[count].x;
+      if(Pts[count].x>pts_xmax) pts_xmax = Pts[count].x;
+      if(Pts[count].y<pts_ymin) pts_ymin = Pts[count].y;
+      if(Pts[count].y>pts_ymax) pts_ymax = Pts[count].y;
+    }}
+
     /* special case a rectangle */
     point* pts = (point*)Pts;
     if (((Count == 4) ||
@@ -85,10 +117,10 @@ public:
 	  (pts[3].y == pts[0].y))))
       {
         int  xmin,xmax,ymin,ymax;
-	xmin = (int)mn(pts[0].x, pts[2].x);
-	ymin = (int)mn(pts[0].y, pts[2].y);
-	xmax = (int)mx(pts[0].x, pts[2].x);
-	ymax = (int)mx(pts[0].y, pts[2].y);
+	xmin = (int)min_of(pts[0].x, pts[2].x);
+	ymin = (int)min_of(pts[0].y, pts[2].y);
+	xmax = (int)max_of(pts[0].x, pts[2].x);
+	ymax = (int)max_of(pts[0].y, pts[2].y);
 	if ((xmin != xmax) && (ymin != ymax))
 	    {
               for(y=ymin;y<=ymax;y++)  a_proc(a_tag,xmin  ,xmax  ,y);
@@ -108,20 +140,18 @@ public:
 	  }
       }
 
-    /*G.Barrand : quiet g++-11 warnings : begin :*/
     ET.scanlines.next = (ScanLineList*)NULL;
-    ET.ymax = SMALL_COORDINATE;
-    ET.ymin = LARGE_COORDINATE;
+    ET.ymax = pts_ymin;
+    ET.ymin = pts_ymax;
     
     AET.next = (EdgeTableEntry*)NULL;
     AET.back = (EdgeTableEntry*)NULL;
     AET.nextWETE = (EdgeTableEntry*)NULL;
-    AET.bres.minor_axis = SMALL_COORDINATE;
+    AET.bres.minor_axis = pts_xmin;
     
     SLLBlock.next = (ScanLineListBlock*)NULL;
-    /*G.Barrand : end.*/
     
-    CreateETandAET (Count,(point*)Pts, &ET, &AET, m_pETEs, &SLLBlock);
+    CreateETandAET (Count,(point*)Pts, &ET, &AET, m_pETEs, &SLLBlock,pts_xmin,pts_ymin,pts_ymax);
 
     pSLL           = ET.scanlines.next;
 
@@ -290,6 +320,51 @@ protected:
       }
   }
 
+  // from: https://rosettacode.org/wiki/Determine_if_two_triangles_overlap#C++
+  static double det_2D(const point& a_p1,const point& a_p2,const point& a_p3) {
+    return a_p1.x*(a_p2.y-a_p3.y)+a_p2.x*(a_p3.y-a_p1.y)+a_p3.x*(a_p1.y-a_p2.y);
+  }
+
+  static void check_winding(point& a_p1,point& a_p2,point& a_p3) {
+    double detTri = det_2D(a_p1, a_p2, a_p3);
+    if(detTri < 0.0) { //swap p2 and p3:
+      point a = a_p3;
+      a_p3 = a_p2;
+      a_p2 = a;
+    }
+  }
+
+  static bool check_boundary_overlap(point& a_p1,point& a_p2,point& a_p3) {return det_2D(a_p1, a_p2, a_p3) < 0.0;}
+
+  static bool triangles_overlap(point* a_t1,point* a_t2) {
+    //Trangles must be expressed anti-clockwise
+    check_winding(a_t1[0], a_t1[1], a_t1[2]);
+    check_winding(a_t2[0], a_t2[1], a_t2[2]);
+
+    //For edge E of trangle 1,
+    for(int i=0; i<3; i++) {
+      int j=(i+1)%3;
+
+      //Check all points of trangle 2 lay on the external side of the edge E. If
+      //they do, the triangles do not overlap.
+      if (check_boundary_overlap(a_t1[i], a_t1[j], a_t2[0]) &&
+          check_boundary_overlap(a_t1[i], a_t1[j], a_t2[1]) &&
+          check_boundary_overlap(a_t1[i], a_t1[j], a_t2[2])) return false;
+    }
+
+    //For edge E of trangle 2,
+    for(int i=0; i<3; i++) {
+      int j=(i+1)%3;
+
+      //Check all points of trangle 1 lay on the external side of the edge E. If
+      //they do, the triangles do not overlap.
+      if (check_boundary_overlap(a_t2[i], a_t2[j], a_t1[0]) &&
+          check_boundary_overlap(a_t2[i], a_t2[j], a_t1[1]) &&
+          check_boundary_overlap(a_t2[i], a_t2[j], a_t1[2])) return false;
+    }
+
+    return true; //the triangles overlap.
+  }
 
 };
 

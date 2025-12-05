@@ -99,19 +99,19 @@ G4VEmModel::~G4VEmModel()
     xSectionTable = nullptr; 
   }
   fEmManager->DeRegister(this);
+  if (localChange) { delete pParticleChange; }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4ParticleChangeForLoss* G4VEmModel::GetParticleChangeForLoss()
 {
-  G4ParticleChangeForLoss* p = nullptr;
-  if (pParticleChange != nullptr) {
-    p = static_cast<G4ParticleChangeForLoss*>(pParticleChange);
-  } else {
+  auto p = dynamic_cast<G4ParticleChangeForLoss*>(pParticleChange);
+  if (p == nullptr) {
     p = new G4ParticleChangeForLoss();
-    pParticleChange = p;
+    localChange = true;
   }
+  pParticleChange = p;
   if(fTripletModel != nullptr) { fTripletModel->SetParticleChange(p); }
   return p;
 }
@@ -120,13 +120,12 @@ G4ParticleChangeForLoss* G4VEmModel::GetParticleChangeForLoss()
 
 G4ParticleChangeForGamma* G4VEmModel::GetParticleChangeForGamma()
 {
-  G4ParticleChangeForGamma* p = nullptr;
-  if (pParticleChange != nullptr) {
-    p = static_cast<G4ParticleChangeForGamma*>(pParticleChange);
-  } else {
+  auto p = dynamic_cast<G4ParticleChangeForGamma*>(pParticleChange);
+  if (p == nullptr) {
     p = new G4ParticleChangeForGamma();
-    pParticleChange = p;
+    localChange = true;
   }
+  pParticleChange = p;
   if(fTripletModel != nullptr) { fTripletModel->SetParticleChange(p); }
   return p;
 }
@@ -337,9 +336,9 @@ G4double G4VEmModel::GetParticleCharge(const G4ParticleDefinition* p,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4VEmModel::CorrectionsAlongStep(const G4MaterialCutsCouple*,
-                                      const G4DynamicParticle*,
-                                      const G4double&,G4double&)
+void G4VEmModel::CorrectionsAlongStep(const G4Material*, const G4ParticleDefinition*,
+				      const G4double, const G4double, const G4double&,
+                                      G4double&)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

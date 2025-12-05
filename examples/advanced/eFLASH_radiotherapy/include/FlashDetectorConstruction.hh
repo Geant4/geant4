@@ -46,6 +46,7 @@ class G4Tubs;
 class G4Box;
 class G4Element;
 class G4VisAttributes;
+class FlashMinibeamTemplate;
 
 
 class FlashDetectorMessenger;
@@ -127,7 +128,12 @@ private:
  
   G4NistManager *nist;
 
+  //minibeam
 
+  FlashMinibeamTemplate * fTemp_;
+  //G4LogicalVolume *AirBox;
+
+  //G4Material *TEFLON;
  
 
 };

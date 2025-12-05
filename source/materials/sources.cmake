@@ -28,6 +28,7 @@ geant4_add_module(G4materials
 		G4IsotopeVector.hh
 		G4LatticeLogical.hh
 		G4LatticePhysical.hh
+		G4MatUtils.hh
 		G4Material.hh
                 G4MaterialPropertiesIndex.hh
 		G4MaterialPropertiesTable.hh
@@ -68,6 +69,7 @@ geant4_add_module(G4materials
 		G4Isotope.cc
 		G4LatticeLogical.cc
 		G4LatticePhysical.cc
+		G4MatUtils.cc
 		G4Material.cc
 		G4MaterialPropertiesTable.cc
                 G4MicroElecMaterialStructure.cc

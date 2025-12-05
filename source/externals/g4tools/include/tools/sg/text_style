@@ -199,9 +199,7 @@ public:
 
     sp.visible(visible.value());
     sp.color(color.value());
-  //sp.transparency(transparency.value());
     sp.back_color(back_color.value());
-  //sp.back_transparency(back_transparency.value());
     sp.back_shadow(back_shadow.value());
     sp.modeling(modeling.value());
     sp.font(font.value());
@@ -211,10 +209,6 @@ public:
     sp.smoothing(smoothing.value());
     sp.hinting(hinting.value());
     sp.scale(scale.value());
-    //sp.angle(angle.value());
-    //sp.x_orientation(x_orientation.value());
-    //sp.y_orientation(y_orientation.value());
-    //sp.rotated(rotated.value());
     sp.line_width(line_width.value());
     sp.line_pattern(line_pattern.value());
     sp.enforced(enforced.value());
@@ -231,9 +225,7 @@ public:
 
     visible.value(sp.visible());
     color.value(sp.color());
-  //transparency.value(sp.transparency());
     back_color.value(sp.back_color());
-  //back_transparency.value(sp.back_transparency());
     back_shadow.value(sp.back_shadow());
     modeling.value(sp.modeling());
     font.value(sp.font());
@@ -243,10 +235,6 @@ public:
     smoothing.value(sp.smoothing());
     hinting.value(sp.hinting());
     scale.value(sp.scale());
-    //angle.value(sp.angle());
-    //x_orientation.value(sp.x_orientation());
-    //y_orientation.value(sp.y_orientation());
-    //rotated.value(sp.rotated());
     line_width.value(sp.line_width());
     line_pattern.value(sp.line_pattern());
     enforced.value(sp.enforced());

@@ -27,29 +27,47 @@
 //
 // Class description:
 //
-// Class describing the DELPHI magnetic field. This axial symmetry
-// field mainly directed along Z axis. The function MagneticField(yTrack,B)
+// Class describing the DELPHI magnetic field. The axial symmetry
+// field is mainly directed along Z axis. The function MagneticField(yTrack,B)
 // calculates the magnetic induction vector B in point corresponding to
 // yTrack according to parametrization given in:
-//   P.Billoir, Precise tracking in a quasi-honogeneous magnetic field,
+//   P.Billoir, Precise tracking in a quasi-homogeneous magnetic field,
 //              DELPHI 87-6 PROG 65, 1987.
 
-// Created: V.Grichine - 03.02.1997
+// Author: Vladimir Grichine (CERN), 03.02.1997
 // -------------------------------------------------------------------
 #ifndef G4DELPHIMAGFIELD_HH
 #define G4DELPHIMAGFIELD_HH
 
 #include "G4MagneticField.hh"
 
+/**
+ * @brief describes the DELPHI magnetic field. The axial symmetry field is
+ * mainly directed along Z axis. The function MagneticField(yTrack,B)
+ * calculates the magnetic induction vector B in given point corresponding
+ * according to parameterisation given in: P.Billoir, DELPHI 87-6 PROG 65, 1987.
+ */
+
 class G4DELPHIMagField : public G4MagneticField
 {
   public:
                        
-    G4DELPHIMagField();
-   ~G4DELPHIMagField() override;
+    /**
+     * Default Constructor and Destructor.
+     */
+    G4DELPHIMagField() = default;
+    ~G4DELPHIMagField() override = default;
 
-    void GetFieldValue(const G4double yTrack[],
-                             G4double B[]     ) const override;
+    /**
+     * Returns the field value on the given position 'yTrack'.
+     *  @param[in] yTrack Time position array.
+     *  @param[out] B The returned field array.
+     */
+    void GetFieldValue(const G4double yTrack[], G4double B[]) const override;
+
+    /**
+     * Returns a pointer to a new allocated clone of this object.
+     */
     G4Field* Clone() const override;
 };
 

@@ -48,7 +48,6 @@ public:
     if(m_glarea) m_glarea->set_device_interactor(0);
     if(m_shell && m_own_shell) {
       m_session.delete_window(m_shell);
-      //m_session.sync();
     }
   }
 protected:
@@ -74,7 +73,13 @@ public:
 
   void win_render() {
     if(!m_glarea) return;
-    m_glarea->update();
+    m_glarea->repaint(); //immediate.
+    m_session.sync();
+  }
+
+  void emit_win_render() {
+    if(!m_glarea) return;
+    m_glarea->update();  //delayed.
   }
 
   bool window_size(unsigned int& a_w,unsigned int& a_h) {
@@ -110,4 +115,3 @@ protected:
 }}
 
 #endif
-

@@ -7,6 +7,14 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2025-11-06 Vladimir Ivanchenko (hadr-util-V11-03-06)
+- G4HadronicParameters: added extra flag to enable/disable usage of precise
+    XS data for neutrons in resonance energy region.
+
+## 2025-09-15 Vladimir Ivanchenko (hadr-util-V11-03-05)
+- G4IsotopeList - A.Berngardt added data on energy interval of neutron resonance
+    regions per element for Z=1-92
+
 ## 2025-05-20 Ben Morgan (hadr-util-V11-03-04)
 - G4HadronicParameters: Implement pretty-print to ostream to allow users to check
   values at runtime, ala G4EmParameters (request from ATLAS).

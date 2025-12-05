@@ -23,11 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file runAndEvent/RE01/src/RE01RunAction.cc
+/// \file RE01RunAction.cc
 /// \brief Implementation of the RE01RunAction class
-//
-//
-//
 
 #include "RE01RunAction.hh"
 

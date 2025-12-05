@@ -201,29 +201,40 @@ inline std::size_t G4PhysicsVector::GetBin(const G4double e) const
 }
 
 // ---------------------------------------------------------------
-inline G4double
-G4PhysicsVector::Value(const G4double e, std::size_t& idx) const
+inline G4bool
+G4PhysicsVector::CheckIndex(const G4double e, std::size_t& idx) const
 {
-  G4double res;
+  G4bool interpolation = false;
   if (idx + 1 < numberOfNodes &&
       e >= binVector[idx] && e <= binVector[idx+1])
   {
-    res = Interpolation(idx, e);
-  } 
+    interpolation = true;
+  }
   else if (e > edgeMin && e < edgeMax)
   {
     idx = GetBin(e);
-    res = Interpolation(idx, e);
-  } 
+    interpolation = true;
+  }
   else if(e <= edgeMin)
   {
-    res = dataVector[0];
     idx = 0;
-  } 
-  else 
+  }
+  else
   {
-    res = dataVector[idxmax + 1];
-    idx = idxmax;
+    idx = idxmax + 1;
+  }
+  return interpolation;
+}
+
+// ---------------------------------------------------------------
+inline G4double
+G4PhysicsVector::Value(const G4double e, std::size_t& idx) const
+{
+  G4bool interpolation = CheckIndex(e, idx);
+  G4double res = dataVector[idx];
+  if (interpolation)
+  {
+    res = Interpolation(idx, e);
   }
   return res;
 }
@@ -270,7 +281,7 @@ G4PhysicsVector::LogVectorValue(const G4double e, const G4double loge) const
   }
   else
   {
-    res = dataVector[idxmax - 1];
+    res = dataVector[idxmax + 1];
   }
   return res;
 }

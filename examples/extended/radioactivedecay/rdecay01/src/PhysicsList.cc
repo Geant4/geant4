@@ -25,8 +25,6 @@
 //
 /// \file PhysicsList.cc
 /// \brief Implementation of the PhysicsList class
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "PhysicsList.hh"
 

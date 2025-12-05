@@ -6,10 +6,30 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
-## 2025-05-14 Bret Beck, Caleb Matoon, Godfree Gert, Douglas M Wright (hadr-lend-V11-03-02)
+## 2025-11-21 Gabriele Cosmo (hadr-lend-V11-03-07)
+- Fixed implicit type conversions from size_t to int (reported on macOS/XCode)
+  in G4GIDI_target.cc.
+
+## 2025-11-19 Gabriele Cosmo (hadr-lend-V11-03-06)
+- Fixed compilation error on macOS with CXX23 enabled in MCGIDI_string.hpp
+  for use of size_t.
+
+## 2025-11-14 Bret Beck, Caleb Mattoon, Godfree Gert, Douglas M Wright (hadr-lend-V11-03-05)
+- Remove the default evaluation string from G4LEND. This change means the user only needs to
+  update the G4LENDDATA environment variable to switch to a different nuclear data library
+- Fixes for various issues identified by Coverity and by compiling with the -Wconversion flag in clang.
+
+## 2025-11-13 Gabriele Cosmo (hadr-lend-V11-03-04)
+- Fixed implicit type conversions from size_t to int (reported on macOS/XCode) in headers:
+  GIDI.hpp, MCGIDI.hpp and MCGIDI_headerSource.hpp.
+
+## 2025-06-20 Bret Beck, Caleb Mattoon, Godfree Gert, Douglas M Wright (hadr-lend-V11-03-03)
+- Fixes for all high and most medium impact issues identified by Coverity.
+
+## 2025-05-14 Bret Beck, Caleb Mattoon, Godfree Gert, Douglas M Wright (hadr-lend-V11-03-02)
 - Fixes aimed for high impact issues identified by Coverity.
 
-## 2025-02-04 Bret Beck, Caleb Matoon, Godfree Gert, Douglas M Wright (hadr-lend-V11-03-01)
+## 2025-02-04 Bret Beck, Caleb Mattoon, Godfree Gert, Douglas M Wright (hadr-lend-V11-03-01)
 - Major update of GIDIplus interface with refactored c++ code including:
    o uses official GNDS formatted data
    o added feature for high-fidelity gamma cascades following reactions such as neutron capture and inelastic scattering

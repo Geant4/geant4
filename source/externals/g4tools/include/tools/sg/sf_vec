@@ -6,7 +6,7 @@
 
 #include "sf"
 
-#include "../words"
+#include "../tokenize"
 
 namespace tools {
 namespace sg {
@@ -35,23 +35,14 @@ public:
     uint32 n;
     TT* v;
     if(!a_buffer.read_vec(n,v)) {
-      //::printf("debug : sf_vec::read : failed(0).\n");
       return false;
     }
     if(n!=vec.size()) {
       delete [] v;
-#ifdef TOOLS_MEM
-      mem::decrement(s_new().c_str());
-#endif
-      //::printf("debug : sf_vec::read : failed(1) : %d (expected %d).\n",
-      //    n,vec.size());
       return false;
     }
     for(uint32 index=0;index<n;index++) vec[index] = v[index];
     delete [] v;
-#ifdef TOOLS_MEM
-    mem::decrement(s_new().c_str());
-#endif
     return true;
   }
   virtual bool dump(std::ostream& a_out) {

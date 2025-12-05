@@ -24,11 +24,7 @@
 // ********************************************************************
 //
 /// \file PrimaryGenerator.cc
-/// \brief Implementation of the PrimaryGenerator1 class
-//
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// \brief Implementation of the PrimaryGenerator class
 
 #include "PrimaryGenerator.hh"
 

@@ -23,12 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file field/BlineTracer/src/G4BlineTracer.cc
+/// \file G4BlineTracer.cc
 /// \brief Implementation of the G4BlineTracer class
-//
-//
-//
-//
+
 // --------------------------------------------------------------------
 //
 // G4BlineTracer implementation

@@ -40,12 +40,15 @@
 #include "G4ExceptionSeverity.hh"
 #include "G4VExceptionHandler.hh"
 #include "globals.hh"
+#include <unordered_map>
+
+class G4ExceptionHandlerMessenger;
 
 class G4ExceptionHandler : public G4VExceptionHandler
 {
   public:
-    G4ExceptionHandler() = default;
-    ~G4ExceptionHandler() override = default;
+    G4ExceptionHandler();
+    ~G4ExceptionHandler() override;
     G4bool operator==(const G4ExceptionHandler& right) const;
     G4bool operator!=(const G4ExceptionHandler& right) const;
 
@@ -58,8 +61,20 @@ class G4ExceptionHandler : public G4VExceptionHandler
     G4bool Notify(const char* originOfException, const char* exceptionCode,
                   G4ExceptionSeverity severity, const char* description) override;
 
+    // Set methods for maximum number of warning messages
+    void SetMaxTotalWarning(G4int mx)
+    { fTotalWarnCount = mx; }
+    void SetMaxWarning(const char* errCode,G4int mx)
+    { fWarnCount[errCode] = mx; }
+
   private:
     void DumpTrackInfo();
+    G4bool IfPrint(const char* errCode);
+
+  private:
+    G4ExceptionHandlerMessenger* messenger;
+    G4int fTotalWarnCount = INT_MAX;
+    std::unordered_map<std::string,G4int> fWarnCount;
 };
 
 #endif

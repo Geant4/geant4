@@ -66,6 +66,9 @@
 #include "G4Exp.hh"
 #include "G4PhysicsModelCatalog.hh"
 
+#include "G4VMultiFragmentation.hh"
+#include "G4StatMF.hh"
+
 ////////////////////////////////////////////////////////////////////////////////
 
 G4PreCompoundModel::G4PreCompoundModel(G4ExcitationHandler* ptr) 
@@ -87,6 +90,7 @@ G4PreCompoundModel::~G4PreCompoundModel()
   delete theEmission;
   delete theTransition;
   delete GetExcitationHandler();
+  delete theMultiFrag;
   theResult.Clear();
 }
 
@@ -101,19 +105,11 @@ void G4PreCompoundModel::BuildPhysicsTable(const G4ParticleDefinition&)
 
 void G4PreCompoundModel::InitialiseModel() 
 {
-  if(isInitialised) { return; }
+  if (isInitialised) { return; }
   isInitialised = true;
 
   G4DeexPrecoParameters* param = fNuclData->GetParameters();
   fVerbose = param->GetVerbose();
-
-  fLowLimitExc = param->GetPrecoLowEnergy();
-  fHighLimitExc = param->GetPrecoHighEnergy();
-
-  useSCO = param->UseSoftCutoff();
-
-  minZ = param->GetMinZForPreco();
-  minA = param->GetMinAForPreco();
 
   if (param->PrecoDummy() || eDeexcitation == param->GetPreCompoundType()) {
     isActive = false;
@@ -132,7 +128,18 @@ void G4PreCompoundModel::InitialiseModel()
     theTransition->UseNGB(param->NeverGoBack());
     theTransition->UseCEMtr(param->UseCEM());
   }
+  if (isActive) {
+    theMultiFrag = new G4StatMF(); 
+    fLowLimitExc = param->GetPrecoLowEnergy();
+    fHighLimitExc = param->GetPrecoHighEnergy();
+    fMinEForMultiFrag = param->GetMinExPerNucleounForMF();
 
+    useSCO = param->UseSoftCutoff();
+
+    minZ = param->GetMinZForPreco();
+    minA = param->GetMinAForPreco();
+  }
+  
   GetExcitationHandler()->Initialise();
 }
 
@@ -205,31 +212,62 @@ G4ReactionProductVector* G4PreCompoundModel::DeExcite(G4Fragment& aFragment)
   if (usePrecoInterface) { return fInterface->DeExcite(aFragment); }
 
   G4ReactionProductVector* result = new G4ReactionProductVector();
-  G4double U = aFragment.GetExcitationEnergy();
-  G4int Z = aFragment.GetZ_asInt(); 
+
+  G4int Z = aFragment.GetZ_asInt();
   G4int A = aFragment.GetA_asInt();
+  G4double U = aFragment.GetExcitationEnergy();
 
   if (1 < fVerbose) {
     G4cout << "### G4PreCompoundModel::DeExcite Z=" << Z << " A=" << A
-	   << " U(MeV)=" << U << G4endl;
+	   << " U(MeV)=" << U << " Umin=" << fLowLimitExc*A << G4endl;
+    G4cout << aFragment << G4endl;
   }  
-
+  
   // Conditions to skip pre-compound and perform equilibrium emission 
-  if (!isActive || (Z < minZ && A < minA) || 
-      U < fLowLimitExc*A || U > A*fHighLimitExc ||
-      0 <  aFragment.GetNumberOfLambdas()) {
+  if (!isActive || (Z < minZ && A < minA) || U < fLowLimitExc*A ||
+      U > fHighLimitExc*A || 0 < aFragment.GetNumberOfLambdas() ||
+      0 == Z || Z >= A) {
     PerformEquilibriumEmission(aFragment, result);
     return result;
   }
   
+  // apply multi-fragmentation above threshold
+  G4FragmentVector* theTempResult;
+  if (U > A*fMinEForMultiFrag) {
+    theTempResult = theMultiFrag->BreakItUp(aFragment);
+  }
+  else {
+    theTempResult = new G4FragmentVector();
+    theTempResult->push_back(new G4Fragment(aFragment));
+  }
+
+  // apply pre-compound on the list of fragments 
+  for (auto & ptr : *theTempResult) {
+    DoIt(result, *ptr);
+    delete ptr;
+  }
+  delete theTempResult;
+  return result;
+}
+
+void G4PreCompoundModel::DoIt(G4ReactionProductVector* result, G4Fragment& aFragment)
+{
   // main loop  
   G4int count = 0;
   const G4double ldfact = 12.0/CLHEP::pi2;
-  const G4int countmax = 1000;
+  const G4int countmax = 300;
   for (;;) {
-    U = aFragment.GetExcitationEnergy();
-    Z = aFragment.GetZ_asInt();
-    A = aFragment.GetA_asInt();
+    G4double U = aFragment.GetExcitationEnergy();
+    G4int Z = aFragment.GetZ_asInt();
+    G4int A = aFragment.GetA_asInt();
+    G4int nExcitons = aFragment.GetNumberOfExcitons();
+
+    // check conditions for pre-compound model for updated fragment
+    if (nExcitons <= 0 || (Z < minZ && A < minA) ||
+	U > fHighLimitExc*A || U <= fLowLimitExc*A) {
+      PerformEquilibriumEmission(aFragment, result);
+      return;
+    }
     G4int eqExcitonNumber =
       G4lrint(std::sqrt(ldfact*U*fNuclData->GetLevelDensity(Z, A, U)));
     if (2 < fVerbose) {
@@ -242,67 +280,66 @@ G4ReactionProductVector* G4PreCompoundModel::DeExcite(G4Fragment& aFragment)
     
     // Loop for transitions, it is performed while there are 
     // preequilibrium transitions.
-    G4bool isTransition = false;   
+    G4bool isTransition = true;
     do {
       ++count;
-      //G4cout<<"transition number .."<<count
-      //      <<" n ="<<aFragment.GetNumberOfExcitons()<<G4endl;
+      
       // soft cutoff criterium as an "ad-hoc" solution to force 
-      // increase in  evaporation  
-      G4int ne = aFragment.GetNumberOfExcitons();
-      G4bool go_ahead = (ne <= eqExcitonNumber);
+      // increase in  evaporation
+      nExcitons = aFragment.GetNumberOfExcitons();
+      if (nExcitons <= 0) {
+        PerformEquilibriumEmission(aFragment, result);
+        return;
+      }
 
-      //J. M. Quesada (Apr. 08): soft-cutoff switched off by default
+      //J. M. Quesada (Apr. 2008): soft-cutoff switched off by default
+      G4bool go_ahead = (nExcitons < eqExcitonNumber);
       if (useSCO && go_ahead) {
-	G4double x = (G4double)(ne - eqExcitonNumber)/(G4double)eqExcitonNumber;
-	if( G4UniformRand() < 1.0 -  G4Exp(-x*x/0.32) ) { go_ahead = false; }
-      } 
-        
-      // JMQ: WARNING:  CalculateProbability MUST be called prior to Get!! 
-      // (O values would be returned otherwise)
-      G4double transProbability = 
-	theTransition->CalculateProbability(aFragment);
+        G4double x = (G4double)(nExcitons - eqExcitonNumber)/(G4double)eqExcitonNumber;
+        if (G4UniformRand() < 1.0 - G4Exp(-x*x/0.32)) { go_ahead = false; }
+      }      
+      if (!go_ahead) {
+        PerformEquilibriumEmission(aFragment, result);
+        return;
+      }
+      // compute transition probability 
+      G4double transProbability = theTransition->CalculateProbability(aFragment);
       G4double P1 = theTransition->GetTransitionProb1();
       G4double P2 = theTransition->GetTransitionProb2();
       G4double P3 = theTransition->GetTransitionProb3();
       if (2 < fVerbose) {
-	G4cout << "   2nd loop " << count << ". Nex=" << ne << " P1=" << P1
-	     << " P2=" << P2 << " P3=" << P3 << G4endl;
+	G4cout << "   2nd loop " << count << ". Nex=" << nExcitons << " P1=" << P1
+	       << " P2=" << P2 << " P3=" << P3 << G4endl;
+	G4cout << aFragment << G4endl;
       }
       //J.M. Quesada (May 2008) Physical criterium (lamdas)  PREVAILS over 
       //                        approximation (critical exciton number)
-      //V.Ivanchenko (May 2011) added check on number of nucleons
-      //                        to send a fragment to FermiBreakUp
-      //                        or check on limits of excitation
-      if(!go_ahead || P1 <= P2+P3 || Z < minZ || A < minA || 
-         U <= fLowLimitExc*A || U > A*fHighLimitExc || ne <= 0) {
+      if (P1 <= P2+P3) {
         PerformEquilibriumEmission(aFragment, result);
-	return result;
+	return;
       }
-      G4double emissionProbability = 
-	theEmission->GetTotalProbability(aFragment);
-      G4double TotalProbability = emissionProbability + transProbability;
+      // compute emission probability
+      G4double emissionProbability = theEmission->GetTotalProbability(aFragment);
+      G4double totProbability = emissionProbability + transProbability;
       if (2 < fVerbose) {
 	G4cout << "             prob_em=" << emissionProbability
-	     << " prob_tot=" << TotalProbability << G4endl;
+	       << " prob_tot=" << totProbability << G4endl;
       }
             
       // Select subprocess
-      if (TotalProbability*G4UniformRand() > emissionProbability) {
+      if (totProbability*G4UniformRand() > emissionProbability) {
 	// It will be transition to state with a new number of excitons
-	isTransition = true;		
-	// Perform the transition
 	theTransition->PerformTransition(aFragment);
       } else {
-	// It will be fragment emission
+	// pre-compound fragment emission, primary fragment is changed 
 	isTransition = false;
 	result->push_back(theEmission->PerformEmission(aFragment));
       }
       // Loop checking, 05-Aug-2015, Vladimir Ivanchenko
-    } while (isTransition);   // end of do loop
+    } while (isTransition);   // end of do loop with emission
 
     // stop if too many iterations
-    if(count >= countmax) {
+    if (count >= countmax) {
       G4ExceptionDescription ed;
       ed << "G4PreCompoundModel loop over " << countmax << " iterations; "
 	 << "current G4Fragment: \n" << aFragment;
@@ -312,7 +349,6 @@ G4ReactionProductVector* G4PreCompoundModel::DeExcite(G4Fragment& aFragment)
     }
   } // end of for (;;) loop
   PerformEquilibriumEmission(aFragment, result);
-  return result;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -330,7 +366,7 @@ void G4PreCompoundModel::ModelDescription(std::ostream& outFile) const
     <<	"equilibrium deexcitation models.\n"
     <<	"The initial information for calculation of pre-compound nuclear stage\n"
     <<	"consists of the atomic mass number A, charge Z of residual nucleus, its\n"
-    <<	"four momentum P0 , excitation energy U and number of excitons n, which equals\n"
+    <<	"four momentum P0, excitation energy U and number of excitons n, which equals\n"
     <<	"the sum of the number of particles p (from them p_Z are charged) and the number of\n"
     <<	"holes h.\n"
     <<	"At the preequilibrium stage of reaction, we follow the exciton model approach in ref. [1],\n"

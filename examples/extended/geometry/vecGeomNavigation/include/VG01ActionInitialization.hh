@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 /// \file VG01ActionInitialization.hh
 /// \brief Definition of the VG01ActionInitialization class
 

@@ -11,12 +11,6 @@ namespace wroot {
 
 class branch_object : public branch {
   typedef branch parent;
-#ifdef TOOLS_MEM
-  static const std::string& s_class() {
-    static const std::string s_v("tools::wroot::branch_object");
-    return s_v;
-  }
-#endif
 public: //ibo
   virtual const std::string& store_cls() const {
     static const std::string s_v("TBranchObject");
@@ -42,14 +36,8 @@ public:
   :parent(a_out,a_byte_swap,a_compression,a_seek_directory,a_name,a_title,a_verbose)
   ,fClassName()
   {
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
   }
   virtual ~branch_object(){
-#ifdef TOOLS_MEM
-    mem::decrement(s_class().c_str());
-#endif
   }
 protected:
   branch_object(const branch_object& a_from):ibo(a_from),parent(a_from) {}

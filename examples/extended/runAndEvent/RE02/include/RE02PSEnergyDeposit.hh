@@ -23,11 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file runAndEvent/RE02/include/RE02PSEnergyDeposit.hh
+/// \file RE02PSEnergyDeposit.hh
 /// \brief Definition of the RE02PSEnergyDeposit class
-//
-//
-//
 
 #ifndef RE02PSEnergyDeposit_h
 #define RE02PSEnergyDeposit_h 1

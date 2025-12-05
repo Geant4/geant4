@@ -30,9 +30,9 @@
 // Base class for parameterisations defining divisions of volumes
 // for different kind of CSG and specific solids.
 
-// 09.05.01 - P.Arce, Initial version
-// 08.04.04 - I.Hrivnacova, Implemented reflection
-// 21.04.10 - M.Asai, Added gaps
+// Author: Pedro Arce (CIEMAT), 09.05.2001 - Initial version
+//         Ivana Hrivnacova (Orsay), 08.04.2004 - Implemented reflection
+//         Makoto Asai (SLAC), 21.04.2010 - Added gaps
 //---------------------------------------------------------------------
 #ifndef G4VDIVISIONPARAMETERISATION_HH
 #define G4VDIVISIONPARAMETERISATION_HH 1
@@ -47,20 +47,53 @@ enum DivisionType { DivNDIVandWIDTH, DivNDIV, DivWIDTH };
 class G4VPhysicalVolume;
 class G4VSolid;
 
+/**
+ * @brief G4VDivisionParameterisation is the base class for parameterisations
+ * defining divisions of volumes for different kind of CSG and specific solids.
+ */
+
 class G4VDivisionParameterisation : public G4VPVParameterisation
 { 
-  public:  // with description
+  public:
   
-    G4VDivisionParameterisation( EAxis axis, G4int nDiv, G4double width,
-                                 G4double offset, DivisionType divType,
-                                 G4VSolid* motherSolid = nullptr);
+    /**
+     * Constructor with number of divisions and width.
+     *  @param[in] axis The axis along which do the division.
+     *  @param[in] nDiv The number of division copies to replicate.
+     *  @param[in] width The witdh of the divided slice along the axis.
+     *  @param[in] offset The optional offset distance from mother's border.
+     *  @param[in] divType The kind of division type, based on input parameters.
+     *  @param[in] motherSolid Pointer to the solid to be divided.
+     */
+    G4VDivisionParameterisation( EAxis axis,
+                                 G4int nDiv,
+                                 G4double width,
+                                 G4double offset,
+                                 DivisionType divType,
+                                 G4VSolid* motherSolid = nullptr );
+
+    /**
+     * Destructor.
+     */
     ~G4VDivisionParameterisation() override;
   
-    G4VSolid* ComputeSolid(const G4int, G4VPhysicalVolume*) override;
+    /**
+     * Invokes the base parameterisation to compute the parameterised solid.
+     *  @param[in] pv Pointer to the physical volume to divide.
+     *  @returns The pointer to the generated solid slice.
+     */
+    G4VSolid* ComputeSolid(const G4int, G4VPhysicalVolume* pv) override;
 
+    /**
+     * Base method to be implemented in derived classes for defining the
+     * transformation in the parameterisation.
+     */
     void ComputeTransformation(const G4int copyNo,
-                                       G4VPhysicalVolume *physVol) const override = 0;
+                               G4VPhysicalVolume* physVol) const override = 0;
   
+    /**
+     * Accessors and setters.
+     */
     inline const G4String& GetType() const;
     inline EAxis GetAxis() const;
     inline G4int GetNoDiv() const;
@@ -68,46 +101,80 @@ class G4VDivisionParameterisation : public G4VPVParameterisation
     inline G4double GetOffset() const;
     inline G4VSolid* GetMotherSolid() const;
     inline void SetType(const G4String& type);
-    inline G4int VolumeFirstCopyNo() const;
     inline void SetHalfGap(G4double hg);
     inline G4double GetHalfGap() const;
 
-  protected:  // with description
+  protected:
 
+    /**
+     * Defines and sets rotation on Z in trasformation for given volume.
+     *  @param[in,out] physVol Pointer to the physical volume to apply rotation.
+     *  @param[in] rotZ The rotation on Z (default is 0).
+     */
     void ChangeRotMatrix( G4VPhysicalVolume* physVol,
                           G4double rotZ = 0.0 ) const;
   
+    /**
+     * Calculates the number of divisions, based on the input parameters.
+     *  @param[in] motherDim The width of the volume to divide.
+     *  @param[in] width The width of the division slice.
+     *  @param[in] offset The optional offset distance from mother's border.
+     *  @returns The number of divisions.
+     */
     G4int CalculateNDiv( G4double motherDim, G4double width,
                          G4double offset ) const;
+
+    /**
+     * Calculates the slice width, based on the input parameters.
+     *  @param[in] motherDim The width of the volume to divide.
+     *  @param[in] nDiv The number of division slices to create.
+     *  @param[in] offset The optional offset distance from mother's border.
+     *  @returns The width of the division slice.
+     */
     G4double CalculateWidth( G4double motherDim, G4int nDiv,
                              G4double offset ) const;
   
+    /**
+     * Checks the validity of parameters given in input, issuing an exception.
+     */
     virtual void CheckParametersValidity();
+
+    /**
+     * Internal methods for checking parameters.
+     */
     void CheckOffset( G4double maxPar );
     void CheckNDivAndWidth( G4double maxPar );
+
+    /**
+     * Returns the max width along the axis of division.
+     *  @returns The maximum width of the solid to divide along the axis.
+     */
     virtual G4double GetMaxParameter() const = 0;
+
+    /**
+     * Sets the offset, taking into account potential reflection.
+     */
     G4double OffsetZ() const;
 
   protected:
   
-    G4String ftype;
-    EAxis faxis;
-    G4int fnDiv = 0;
-    G4double fwidth = 0.0;
-    G4double foffset = 0.0;
-    DivisionType fDivisionType;
-    G4VSolid* fmotherSolid = nullptr;
-    G4bool fReflectedSolid = false;
-    G4bool fDeleteSolid = false;
+    G4String ftype;    // String for division type
+    EAxis faxis;       // Axis of division
+    G4int fnDiv = 0;   // Number of divisions
+    G4double fwidth = 0.0;       // Width of division slice
+    G4double foffset = 0.0;      // Offset distance from mother's border
+    DivisionType fDivisionType;  // Division type ID
+    G4VSolid* fmotherSolid = nullptr;  // Pointer to solid to divide
+    G4bool fReflectedSolid = false;    // Specifies if solid is reflected
+    G4bool fDeleteSolid = false;       // Specifies if delete solid to divide
 
-    static G4ThreadLocal G4RotationMatrix* fRot;
+    static G4ThreadLocal G4RotationMatrix* fRot;  // Rotation transformation
 
-    static const G4int verbose;
-    G4int theVoluFirstCopyNo = 1;
+    static const G4int verbose;   // Verbosity level
 
-    G4double kCarTolerance;
+    G4double kCarTolerance;       // Cached surface tolerance
 
-    G4double fhgap = 0.0;
+    G4double fhgap = 0.0;         // Cached gap between slices
 };
 
 #include "G4VDivisionParameterisation.icc"

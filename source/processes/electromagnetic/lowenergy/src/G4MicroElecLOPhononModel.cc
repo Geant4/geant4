@@ -70,7 +70,6 @@ G4MicroElecLOPhononModel::G4MicroElecLOPhononModel(const G4ParticleDefinition*,
 void G4MicroElecLOPhononModel::Initialise(const G4ParticleDefinition*,
 				          const G4DataVector& /*cuts*/)
 {
-  if (isInitialised) { return; }
   fParticleChangeForGamma = GetParticleChangeForGamma();
   isInitialised = true;
 }
@@ -134,6 +133,11 @@ CrossSectionPerVolume(const G4Material* material,
 
   G4double hw = (phononEnergy / eV) * e;
   G4double n = 1.0 / (std::exp(hw / (kb*T)) - 1); //Phonon distribution
+  
+  if (E<=hw)
+  {
+    return 1 / DBL_MAX;
+  }
 
   if (absor)  // Absorption
   {
@@ -151,8 +155,7 @@ CrossSectionPerVolume(const G4Material* material,
   G4double MFP = (std::sqrt(2 * E / m0) / P)*m;
 
   if (material->GetName() == "G4_SILICON_DIOXIDE") { return 2 / MFP; }
-  return 1/(MFP);
-  // correction CI 12/1/2023 add					
+  return 1/(MFP);					
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

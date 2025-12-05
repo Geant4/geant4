@@ -69,9 +69,6 @@ public:
     iscreen = XScreenNumberOfScreen(screen);
     m_pixwin = new toolx::X11::pixwin(a_session.out(),iscreen,XtDisplay(app_widget));
     m_pixwin->set_size(m_image_area->core.width,m_image_area->core.height);}
-
-  //Atom WM_DELETE_WINDOW_atom = ::XInternAtom(XtDisplay(m_shell),"WM_DELETE_WINDOW",False);
-  //::XSetWMProtocols(XtDisplay(m_shell),XtWindow(m_shell),&WM_DELETE_WINDOW_atom,1);
   }
   virtual ~zb_viewer() {
     delete m_pixwin;
@@ -113,7 +110,14 @@ public:
   }
 
   void win_render() {
-    if(m_image_area) ImageArea::paint(m_image_area);
+    if(!m_image_area) return;
+    ImageArea::paint(m_image_area);
+    m_session.sync();
+  }
+
+  void emit_win_render() {
+    if(!m_image_area) return;
+    if(!post_expose(m_image_area)) {}
   }
 
   bool window_size(unsigned int& a_w,unsigned int& a_h) {
@@ -133,7 +137,6 @@ protected:
     if(!XtIsRealized(a_widget)) return;
     unsigned int width = a_widget->core.width;
     unsigned int height = a_widget->core.height;
-    //::printf("debug: toolx::Xt::zb_viewer::resize_cbk: %d %d\n",width,height);
     zb_viewer* _this = (zb_viewer*)a_tag;
     _this->set_size(width,height);
     _this->m_pixwin->set_size(width,height);
@@ -142,11 +145,9 @@ protected:
     if(!XtIsRealized(a_widget)) return;
     unsigned int width = a_widget->core.width;
     unsigned int height = a_widget->core.height;
-    //::printf("debug: toolx::Xt::zb_viewer::paint_cbk: %d %d\n",width,height);
     zb_viewer* _this = (zb_viewer*)a_tag;
     if(!_this->render(tools::sg::zb_viewer::get_rgbas,false)) return;  //rgbas because Qt wants an image 32 bits aligned.
-    _this->m_pixwin->put_buffer(XtWindow(a_widget),width,height,tools::vec_data(_this->out_buffer()));
-   //parent::after_render();
+    _this->m_pixwin->put_buffer(XtWindow(a_widget),width,height,_this->out_buffer().data());
     _this->out_buffer_clear();
   }
   static void event_cbk(Widget,XtPointer a_tag,XtPointer a_data){

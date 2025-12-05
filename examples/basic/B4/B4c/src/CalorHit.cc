@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file B4/B4c/src/CalorHit.cc
+/// \file CalorHit.cc
 /// \brief Implementation of the B4c::CalorHit class
 
 #include "CalorHit.hh"

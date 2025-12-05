@@ -585,35 +585,6 @@ gluTessEndPolygon( GLUtesselator *tess )
 }
 
 
-/*******************************************************/
-
-/* Obsolete calls -- for backward compatibility */
-
-/*
-inline void GLUAPIENTRY
-gluBeginPolygon( GLUtesselator *tess )
-{
-  gluTessBeginPolygon( tess, NULL );
-  gluTessBeginContour( tess );
-}
-
-
-inline void GLUAPIENTRY
-gluNextContour( GLUtesselator *tess, GLUenum type )
-{
-  gluTessEndContour( tess );
-  gluTessBeginContour( tess );
-}
-
-
-inline void GLUAPIENTRY
-gluEndPolygon( GLUtesselator *tess )
-{
-  gluTessEndContour( tess );
-  gluTessEndPolygon( tess );
-}
-*/
-
 #include "undef"
 
 #endif

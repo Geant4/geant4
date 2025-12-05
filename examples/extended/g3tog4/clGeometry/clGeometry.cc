@@ -23,12 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file g3tog4/clGeometry/clGeometry.cc
+/// \file clGeometry.cc
 /// \brief Main program of the g3tog4/clGeometry example
-//
-//
-//
-//
 
 // package includes
 #include "G3toG4ActionInitialization.hh"

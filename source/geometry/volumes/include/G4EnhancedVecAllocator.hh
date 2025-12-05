@@ -34,7 +34,7 @@
 // Reviewed implementation: G.Cosmo (CERN), December 2009
 // ------------------------------------------------------------
 #ifndef G4EnhancedVecAllocator_hh
-#define G4EnhancedVecAllocator_hh 1
+#define G4EnhancedVecAllocator_hh
 
 #include "G4Types.hh"
 

@@ -22,10 +22,9 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
+/// @file G4VMPIextraWorker.hh
+/// @brief The interface class for an extra MPI worker
 
-// The interface class for an extra MPI worker
-//
 // Author: Ivana Hrivnacova, 21/11/2018 (ivana@ipno.in2p3.fr)
 
 #ifndef G4MVPIEXTRAWORKER_HH

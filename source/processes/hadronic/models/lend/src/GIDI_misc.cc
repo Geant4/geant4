@@ -34,8 +34,8 @@ long binarySearchVector( double a_x, std::vector<double> const &a_Xs ) {
 /*
 *   Returns -2 is a_x < first point of a_Xs, -1 if > last point of a_Xs, and the lower index of a_Xs otherwise.
 */
-    long size = a_Xs.size( );
-    long imin = 0, imid, imax = size - 1;
+    std::size_t size = a_Xs.size( );
+    std::size_t imin = 0, imid, imax = size - 1;
 
     if( a_x < a_Xs[0] ) return( -2 );
     if( a_x > a_Xs[size-1] ) return( -1 );
@@ -48,7 +48,7 @@ long binarySearchVector( double a_x, std::vector<double> const &a_Xs ) {
             imin = imid;
         }
     }
-    return( imin );
+    return( static_cast<long>( imin ) );
 }
 
 /* *********************************************************************************************************//**
@@ -60,7 +60,7 @@ long binarySearchVector( double a_x, std::vector<double> const &a_Xs ) {
  * @param a_attributes          [in]        String representation of the attributes for the GNDS **values** node.
  ***********************************************************************************************************/
 
-void intsToXMLList( GUPI::WriteInfo &a_writeInfo, std::string const &a_indent, std::vector<int> a_values, std::string const &a_attributes ) {
+void intsToXMLList( GUPI::WriteInfo &a_writeInfo, std::string const &a_indent, std::vector<int> const &a_values, std::string const &a_attributes ) {
 
     a_writeInfo.addNodeStarter( a_indent, GIDI_valuesChars, a_attributes );
 
@@ -106,7 +106,7 @@ void parseValuesOfDoubles( HAPI::Node const &a_node, SetupInfo &a_setupInfo, nf_
 
     if( href != "" ) {
         std::size_t startIndex = startIndexAttribute( a_node );
-        std::size_t count = a_node.attribute_as_long( GIDI_countChars );
+        std::size_t count = static_cast<std::size_t>( a_node.attribute_as_long( GIDI_countChars ) );
         if( a_setupInfo.m_protare->dataManager( ) == nullptr )
             throw Exception( "parseValuesOfDoubles: Cannot read from HDF5 file as GIDI+ was compiled without HDF5 support." );
         a_setupInfo.m_protare->dataManager( )->getDoubles( a_values, startIndex, startIndex + count ); }
@@ -149,7 +149,7 @@ void parseValuesOfInts( HAPI::Node const &a_node, SetupInfo &a_setupInfo, nf_Buf
 
     if( href != "" ) {
         std::size_t startIndex = startIndexAttribute( a_node );
-        std::size_t count = a_node.attribute_as_long( GIDI_countChars );
+        std::size_t count = static_cast<std::size_t>( a_node.attribute_as_long( GIDI_countChars ) );
         if( a_setupInfo.m_protare->dataManager( ) == nullptr )
             	throw Exception( "parseValuesOfInts: Cannot read from HDF5 file as GIDI+ was compiled without HDF5 support." );
         a_setupInfo.m_protare->dataManager( )->getInts( a_values, startIndex, startIndex + count ); }
@@ -177,7 +177,7 @@ void parseValuesOfInts( HAPI::Node const &a_node, SetupInfo &a_setupInfo, nf_Buf
  * @param a_valueType           [in]        The value for the *valueType* attribute.
  ***********************************************************************************************************/
 
-void doublesToXMLList( GUPI::WriteInfo &a_writeInfo, std::string const &a_indent, std::vector<double> a_values, std::size_t a_start, bool a_newLine, std::string const &a_valueType ) {
+void doublesToXMLList( GUPI::WriteInfo &a_writeInfo, std::string const &a_indent, std::vector<double> const &a_values, std::size_t a_start, bool a_newLine, std::string const &a_valueType ) {
 
     int valuesPerLine( a_writeInfo.m_valuesPerLine );
     std::string indent( a_indent );
@@ -458,16 +458,17 @@ void energy2dToXMLList( GUPI::WriteInfo &a_writeInfo, std::string const &a_monik
  * @return                              returns the startIndex attribute of *a_node*.
  ***********************************************************************************************************/
 
-void excludeReactionsSetAdjust( ExcludeReactionsSet a_excludeReactionsSet, Protare const &a_protare ) {
+void excludeReactionsSetAdjust( ExcludeReactionsSet &a_excludeReactionsSet, Protare const &a_protare ) {
 
     ExcludeReactionsSet excludeReactionsSet;
 
     for( auto iter = a_excludeReactionsSet.begin( ); iter != a_excludeReactionsSet.end( ); ++iter ) {
-        int index = (*iter) - a_protare.numberOfReactions( );
-        if( index > -1 ) excludeReactionsSet.insert( index );
+        if( (*iter) >= a_protare.numberOfReactions( ) ) {
+            excludeReactionsSet.insert( (*iter) - a_protare.numberOfReactions( ) );
+        }
     }
 
-    a_excludeReactionsSet = excludeReactionsSet;
+    a_excludeReactionsSet = std::move( excludeReactionsSet );
 }
 
 /* *********************************************************************************************************//**
@@ -484,10 +485,10 @@ static std::size_t startIndexAttribute( HAPI::Node const &a_node ) {
 
     std::string attribute = a_node.attribute_as_string( GIDI_startIndexChars );
     if( attribute != "" ) {
-        startIndex = a_node.attribute_as_long( GIDI_startIndexChars ); }
+        startIndex = static_cast<std::size_t>( a_node.attribute_as_long( GIDI_startIndexChars ) ); }
     else {
         attribute = a_node.attribute_as_string( GIDI_offsetChars );
-        if( attribute != "" ) startIndex = a_node.attribute_as_long( GIDI_offsetChars );
+        if( attribute != "" ) startIndex = static_cast<std::size_t>( a_node.attribute_as_long( GIDI_offsetChars ) );
     }
 
     return( startIndex );

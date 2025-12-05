@@ -23,12 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file eventgenerator/HepMC/HepMCEx02/HepMCEx02.cc
-/// \brief Main program of the eventgenerator/HepMC/HepMCEx02 example
-//
-//
-//
-//
+/// \file HepMCEx02.cc
+/// \brief Main program of the HepMC/HepMCEx02 example
+
 // --------------------------------------------------------------
 //      GEANT 4 - example of HepMC-interface
 // --------------------------------------------------------------

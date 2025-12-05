@@ -23,10 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file runAndEvent/RE01/src/RE01CalorimeterSD.cc
+/// \file RE01CalorimeterSD.cc
 /// \brief Implementation of the RE01CalorimeterSD class
-//
-//
 
 #include "RE01CalorimeterSD.hh"
 

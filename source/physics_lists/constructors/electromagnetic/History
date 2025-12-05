@@ -6,13 +6,44 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2025-10-29 Vladimir Ivanchenko (phys-ctor-em-V11-03-15)
+- G4OpticalPhysics - instantiate a process only if it is activated,
+    added option to instantiate a new G4GeneralCerenkov.
+
+## 2025-10-27 Mihaly Novak (phys-ctor-em-V11-03-14)
+- G4EmStandardPhysicsGS - update according to the changes in the GS MSC model,
+    the standard GS EM constructor is expected to provide accurate e-/e+
+    simulations now (similar accuracy as in Livermove, Penelope and option 4)
+
+## 2025-09-10 Vladimir Ivanchenko (phys-ctor-em-V11-03-13)
+- G4EmDNABuilder - use upper energy limits from G4EmParameters.
+
+## 2025-07-25 Vladimir Ivanchenko (phys-ctor-em-V11-03-12)
+- G4EmDNABuilder - restore usage of Born model of ionisation in the energy
+    interval 0.5 - 100 MeV.
+
+## 2025-07-19 Vladimir Ivanchenko (phys-ctor-em-V11-03-11)
+- G4EmDNAPhysics_option4, G4EmDNAPhysics_option6, G4EmDNAPhysics_option8
+    used fast option - a significant speed-up of physics.
+
+## 2025-07-16 Soon Yung Jun (phys-ctor-em-V11-03-10)
+- G4OpticalPhoton - add G4QuasiOpticalPhoton to support offloading of optical
+  photon generation
+
+## 2025-07-16 Vladimir Ivanchenko (phys-ctor-em-V11-03-09)
+- G4EmDNABuilder - used Rudd extended model for light ions in all physics
+    configurations instead of old Rudd model, which should improve CPU
+    performance; in opt8 configuration use the same models as in opt2 for
+    electrons; increased low-energy limit to 11 eV for the CPA100 elastic
+    scattering model
+
 ## 2025-06-22 Vladimir Ivanchenko (phys-ctor-em-V11-03-08)
 - G4EmDNABuilder - fixed upper energy limit for ionisation of hydrogen.
 
 ## 2025-06-20 Vladimir Ivanchenko (phys-ctor-em-V11-03-07)
 - G4EmDNABuilder - fixed enegy limits for excitation model for light ions,
   for increase/decrease models. This modification provides a correct
-  printout and does not change any DNA physics result. 
+  printout and does not change any DNA physics result.
 
 ## 2025-06-13 Vladimir Ivanchenko (phys-ctor-em-V11-03-06)
 - G4EmDNABuilder - fixed upper limit of energy increase/decrease processes,
@@ -21,7 +52,7 @@ It must **not** be used as a substitute for writing good git commit messages!
 ## 2025-06-05 Vladimir Ivanchenko (phys-ctor-em-V11-03-05)
 - G4EmDNABuilder - for opt8 configuration use the same configuration of
   models for e- and protons as in opt2.
-- in all DNA constructors the upper limit for DNA models for ions is set 
+- in all DNA constructors the upper limit for DNA models for ions is set
   to 300 MeV instead of 400 MeV.
 
 ## 2025-05-25 Vladimir Ivanchenko (phys-ctor-em-V11-03-04)
@@ -29,7 +60,7 @@ It must **not** be used as a substitute for writing good git commit messages!
     electromagnetic/utils
 
 ## 2025-05-22 Sebastien Incerti (phys-ctor-em-V11-03-03)
-- G4EmDNABuilder - replaced G4DNABornIonisationModel by 
+- G4EmDNABuilder - replaced G4DNABornIonisationModel by
   G4DNABornIonisationModel1 for proton ionisation
 
 ## 2025-05-21 Vladimir Ivanchenko (phys-ctor-em-V11-03-02)
@@ -89,7 +120,7 @@ It must **not** be used as a substitute for writing good git commit messages!
   annihilation on fly with 3-gamma annihilation channel enabled.
 
 ## 2024-05-04 Vladimir Ivanchenko (phys-ctor-em-V11-02-05)
-- G4GammaGeneralProcess - updated according to change in EM data tables 
+- G4GammaGeneralProcess - updated according to change in EM data tables
 
 ## 2024-04-05 Vladimir Ivanchenko (phys-ctor-em-V11-02-04)
 - G4EmDNABuilder - added nuclear stopping process for G4GenericIon below 1 MeV/u.
@@ -134,7 +165,7 @@ It must **not** be used as a substitute for writing good git commit messages!
     for protons in order to have under control results of various tests.
 
 ## 2023-07-19 Vladimir Ivanchenko (phys-ctor-em-V11-01-08)
-- G4EmDNABuilder - for Opt2, 4, 6 use for protons and ions 
+- G4EmDNABuilder - for Opt2, 4, 6 use for protons and ions
     G4DNARuddIonisationExtendedModel from zero to 100 MeV; ion capture
     limit is set to 0.1 keV.
 
@@ -149,7 +180,7 @@ It must **not** be used as a substitute for writing good git commit messages!
 - G4EmParticleList - added method EmChargedPartNames(), which returns a minimal
     list of charged EM particles
 - G4EmModelActivator - fix #2530 - single scattering per region is implemented
-    by addition of extra sngle scattering process, which is active inside this 
+    by addition of extra sngle scattering process, which is active inside this
     region, and not active outside; multiple scattering and single scattering
     processes for a given charged particle are disabled to this region
 
@@ -160,7 +191,7 @@ It must **not** be used as a substitute for writing good git commit messages!
 - G4GammaGeneralProcess - added method GetGammaNuclear() useful for testing
 
 ## 2023-02-21 Vladimir Ivanchenko (phys-ctor-em-V11-01-02)
-- G4EmBuilder, G4EmStandardPhysicsSS - use new constructor for 
+- G4EmBuilder, G4EmStandardPhysicsSS - use new constructor for
     the G4CoulombScattering process
 - G4EmModelActivator - use new constructor for the G4CoulombScattering process,
     allow add G4EmStandardPhysicsSS on top of G4EmStandardPhysics_option3
@@ -176,7 +207,7 @@ It must **not** be used as a substitute for writing good git commit messages!
 - Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
 
 ## 2022-11-15 Vladimir Ivanchenko (phys-ctor-em-V11-00-34)
-- G4EmBuilder - added G4AntiLambda and G4PionZero to the minimal 
+- G4EmBuilder - added G4AntiLambda and G4PionZero to the minimal
     EM particle list to avoid warnings issued due to new hypernuclei
 
 ## 2022-11-08 Vladimir Ivanchenko (phys-ctor-em-V11-00-33)
@@ -187,7 +218,7 @@ It must **not** be used as a substitute for writing good git commit messages!
 - G4EmBuilder - added e- and mu- neutrino and anti-neutrino to
     the minimal EM particle list
 - G4EmDNABuilder - added minimal list of EM standard particles
-    to all DNA physics variants, this allowing enable radioactive 
+    to all DNA physics variants, this allowing enable radioactive
     decay, provides correct printout of EM processes and models,
     and fix problem #2412
 
@@ -200,7 +231,7 @@ It must **not** be used as a substitute for writing good git commit messages!
 - G4EmDNABuilder - introduced const upper limit 1 MeV for DNA
     models; introduced const upper limit 2 MeV for standard
     low-energy ionisation; use the same upper limit for DNA
-    excitation and ionisation  
+    excitation and ionisation
 
 ## 2022-09-05 Ben Morgan (phys-ctor-em-V11-00-29)
 - Update public/private dependencies for consistency
@@ -214,21 +245,21 @@ It must **not** be used as a substitute for writing good git commit messages!
 ## 2022-07-06 Vladimir Ivanchenko (phys-ctor-em-V11-00-26)
 - G4GammaGeneralProcess - fixed problem of Compton scattering selection
     in the low energy interval < 150 keV identified in test67; apply
-    spline interpolation for tables at low energy (<150 keV) and at 
-    high energy (> 100 MeV) 
+    spline interpolation for tables at low energy (<150 keV) and at
+    high energy (> 100 MeV)
 
 ## 2022-06-17 Vladimir Ivanchenko (phys-ctor-em-V11-00-25)
-- G4EmStandardPhysics_option4 - use Penelope ionisation model for e- 
+- G4EmStandardPhysics_option4 - use Penelope ionisation model for e-
     below 100 keV
 
 ## 2022-06-05 Vladimir Ivanchenko (phys-ctor-em-V11-00-24)
 - G4EmBuilder - use check on process sub-type, do not substitute
-    G4CoupledTransportation with G4TransportationWithMsc   
+    G4CoupledTransportation with G4TransportationWithMsc
 
 ## 2022-05-27 Vladimir Ivanchenko (phys-ctor-em-V11-00-23)
 - G4EmLivermorePhysics, G4EmPenelopePhysics, G4EmStandardPhysics_option4,
-    G4EmStandardPhysics_option3, G4EmStandardPhysics - selection of the 
-    model of energy loss fluctuation is inside processes of ionisation 
+    G4EmStandardPhysics_option3, G4EmStandardPhysics - selection of the
+    model of energy loss fluctuation is inside processes of ionisation
     according to the type defined in G4EmParameters
 
 ## 2022-05-24 Vladimir Ivanchenko (phys-ctor-em-V11-00-22)
@@ -240,9 +271,9 @@ It must **not** be used as a substitute for writing good git commit messages!
 - GNUmakefile, source.cmake - updated list of sub-libraries and includes
 
 ## 2022-05-16 Vladimir Ivanchenko (phys-ctor-em-V11-00-20)
-- G4EmLivermorePhysics, G4EmPenelopePhysics, G4EmStandardPhysicsSS - use 
+- G4EmLivermorePhysics, G4EmPenelopePhysics, G4EmStandardPhysicsSS - use
     G4LinhardSorensenIonModel for GenericIon
-- G4EmStandardPhysics, G4EmStandardPhysics_option3, 
+- G4EmStandardPhysics, G4EmStandardPhysics_option3,
   G4EmStandardPhysics_option4 - use G4GammaGeneralProcess by default
 
 ## 2022-05-11 Jonas Hahnfeld (phys-ctor-em-V11-00-19)
@@ -262,19 +293,19 @@ It must **not** be used as a substitute for writing good git commit messages!
 - GNUmakefile, source.cmake - updated according to really used sub-libraries
 
 ## 2022-04-22 Vladimir Ivanchenko (phys-ctor-em-V11-00-14)
-- G4EmDNABuilder, G4EmDNAPhysicsActivator, and DNA constructors - updated 
-    configuration for Opt2 
+- G4EmDNABuilder, G4EmDNAPhysicsActivator, and DNA constructors - updated
+    configuration for Opt2
 
 ## 2022-04-19 Jonas Hahnfeld (phys-ctor-em-V11-00-13)
 - Honor option to enable `G4TransportationWithMsc`
 - Enable by default in `G4EmStandardPhysics_option1`
 
 ## 2022-04-05 Vladimir Ivanchenko (phys-ctor-em-V11-00-12)
-- G4EmDNABuilder, G4EmDNAPhysicsActivator - fixed Opt4 and Opt5 
+- G4EmDNABuilder, G4EmDNAPhysicsActivator - fixed Opt4 and Opt5
     configurations according to prescription
 
 ## 2022-04-05 Vladimir Ivanchenko (phys-ctor-em-V11-00-11)
-- G4EmDNABuilder, G4EmDNAPhysicsActivator - fixed instantiation 
+- G4EmDNABuilder, G4EmDNAPhysicsActivator - fixed instantiation
     of DNA elastic scattering and ionisation for e-
 
 ## 2022-03-28 Vladimir Ivanchenko (phys-ctor-em-V11-00-10)
@@ -282,13 +313,13 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 ## 2022-03-24 Vladimir Ivanchenko (phys-ctor-em-V11-00-09)
 - G4EmDNABuilder, G4EmDNAPhysicsActivator - make consistent
-    configuration of DNA physics on top of standard physics 
+    configuration of DNA physics on top of standard physics
 
 ## 2022-03-15 Hoang Tran (phys-ctor-em-V11-00-08)
 - add SBS and IRT_syn models in G4EmDNAChemistry_option3
 
 ## 2022-03-10 Vladimir Ivanchenko (phys-ctor-em-V11-00-07)
-- G4EmDNABuilder - added extra utility methods to find or to build 
+- G4EmDNABuilder - added extra utility methods to find or to build
     electron processes
 - G4EmDNAPhysics_option6, G4EmDNAPhysics_option8 - use "fast" option
 
@@ -303,29 +334,29 @@ It must **not** be used as a substitute for writing good git commit messages!
   G4EmDNAPhysics_option3, G4EmDNAPhysics_stationary_option2
     maximally simplified
 - G4EmDNAPhysicsActivator - fixed for light ions
-- G4EmStandardPhysics_option4 - use G4UrbanFluctuation model 
+- G4EmStandardPhysics_option4 - use G4UrbanFluctuation model
     for e+- to address problem #2466
 
 ## 2022-02-23 Vladimir Ivanchenko (phys-ctor-em-V11-00-04)
 - G4EmDNABuilder - added option4 configuration
-- G4EmDNAPhysics - address interface to G4EmDNABuilder 
+- G4EmDNAPhysics - address interface to G4EmDNABuilder
 - G4EmDNAPhysics_option4 - use G4EmDNABuilder
 - G4EmDNAPhysics_option5, G4EmDNAPhysics_stationary_option4
     maximally simplified
 
 ## 2022-02-22 Vladimir Ivanchenko (phys-ctor-em-V11-00-03)
-- G4EmDNABuilder - new utility class, which provides instantiation of 
+- G4EmDNABuilder - new utility class, which provides instantiation of
     standard and DNA processes/models; this reduces code duplication
     for DNA physics, energy intervals for DNA models are defined
     in one place
 - G4EmDNAPhysics is the base class for DNA physics constructors
-- G4EmDNAPhysics_option1, G4EmDNAPhysics_stationary - maximally simplified 
+- G4EmDNAPhysics_option1, G4EmDNAPhysics_stationary - maximally simplified
 
 ## 2022-02-10 Vladimir Ivanchenko (phys-ctor-em-V11-00-02)
 - G4EmModelActivator - fixed mechanism to define PAI model per region
 
 ## 2021-12-11 Vladimir Ivanchenko (phys-ctor-em-V11-00-01)
-- G4EmStandardPhysics_option3 - use options providing more accurate 
+- G4EmStandardPhysics_option3 - use options providing more accurate
     simulation without loss of CPU performance: RangeFactor=0.03,
     and SafetyPlus step limitation instead of DistanceToBoundary,
     which significantly improving fanoCavity results
@@ -338,17 +369,17 @@ It must **not** be used as a substitute for writing good git commit messages!
 # History entries prior to 11.0
 
 12 November 2021, V.Ivanchenko (phys-ctor-em-V10-07-23)
-- G4EmStandardPhysicsWVI - making this experimantal configuration 
+- G4EmStandardPhysicsWVI - making this experimantal configuration
     compatible for CPU performance with Opt3 (it was similar to SS)
 
 10 November 2021, V.Ivanchenko (phys-ctor-em-V10-07-22)
 - G4EmStandardPhysicsWVI - use similar options as in Opt3, for ions
     use G4LinhardSorensenIonModel
-- G4EmModelActivator - updated according to the current Opt3 and Opt4 
+- G4EmModelActivator - updated according to the current Opt3 and Opt4
     configurations
 
 29 October 2021, M. Novak (phys-ctor-em-V10-07-21)
-- G4GammaGeneralProcess - make some methods/fields visible for 
+- G4GammaGeneralProcess - make some methods/fields visible for
     derived classes
 
 25 October 2021, V.Ivanchenko (phys-ctor-em-V10-07-20)

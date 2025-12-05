@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file PeriodicBoundaryPhysics.hh
+/// \brief Definition of the PeriodicBoundaryPhysics class
+
 #ifndef PeriodicBoundaryPhysics_hh
 #define PeriodicBoundaryPhysics_hh 1
 

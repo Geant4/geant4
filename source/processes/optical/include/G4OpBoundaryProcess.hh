@@ -170,6 +170,11 @@ class G4OpBoundaryProcess : public G4VDiscreteProcess
   void ChooseReflection();
   void DoAbsorption();
   void DoReflection();
+  void DoTransmission();
+
+  void ApplyDielectricBoundaryTransition(G4double cost, G4bool roughnessPass,
+                                         G4bool& inside, G4bool& swap);
+  // Apply boundary actions at a dielectric–dielectric interface
 
   G4double GetIncidentAngle();
   // Returns the incident angle of optical photon
@@ -190,6 +195,12 @@ class G4OpBoundaryProcess : public G4VDiscreteProcess
 
   // Invoke SD for post step point if the photon is 'detected'
   G4bool InvokeSD(const G4Step* step);
+
+  // Check if the given surface finish corresponds to a backpainted surface
+  static constexpr G4bool IsBackpainted(G4OpticalSurfaceFinish finish) noexcept
+  {
+    return finish == polishedbackpainted || finish == groundbackpainted;
+  }
 
   G4ThreeVector fOldMomentum;
   G4ThreeVector fOldPolarization;
@@ -319,6 +330,15 @@ inline void G4OpBoundaryProcess::DoAbsorption()
   fNewPolarization = fOldPolarization;
 
   aParticleChange.ProposeTrackStatus(fStopAndKill);
+}
+
+inline void G4OpBoundaryProcess::DoTransmission()
+{
+  // Optical photons pass through the boundary without changing momentum or
+  // polarization
+  fStatus = Transmission;
+  fNewMomentum = fOldMomentum;
+  fNewPolarization = fOldPolarization;
 }
 
 inline void G4OpBoundaryProcess::DoReflection()

@@ -23,13 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file geometry/transforms/transforms.cc
+/// \file transforms.cc
 /// \brief Main program of the geometry/transforms example
-//
-//
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 #include "DetectorConstruction.hh"
 #include "PhysicsList.hh"

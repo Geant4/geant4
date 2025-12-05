@@ -23,12 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file persistency/P02/include/ExP02PrimaryGeneratorAction.hh
+/// \file ExP02PrimaryGeneratorAction.hh
 /// \brief Definition of the ExP02PrimaryGeneratorAction class
-//
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef ExP02PrimaryGeneratorAction_h
 #define ExP02PrimaryGeneratorAction_h 1

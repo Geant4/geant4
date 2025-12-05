@@ -23,10 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file hadronic/Hadr02/Hadr02.cc
+/// \file Hadr02.cc
 /// \brief Main program of the hadronic/Hadr02 example
-//
-//
+
 // -------------------------------------------------------------
 //      GEANT4 Hadr02
 //

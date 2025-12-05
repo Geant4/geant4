@@ -25,6 +25,7 @@
 // 
 // G4VoxelLimits inline implementation
 //
+// Author: Paul Kent (CERN), 13.07.1995
 // --------------------------------------------------------------------
 
 inline

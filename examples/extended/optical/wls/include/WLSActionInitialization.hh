@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file optical/wls/include/WLSActionInitialization.hh
+/// \file WLSActionInitialization.hh
 /// \brief Definition of the WLSActionInitialization class
 
 #ifndef WLSActionInitialization_h

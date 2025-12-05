@@ -27,7 +27,7 @@
 // test, reduce, and/or otherwise manipulate a 2D polygon.
 // See G4ReduciblePolygon.hh for more info.
 //
-// Author: David C. Williams (davidw@scipp.ucsc.edu)
+// Author: David C. Williams (UCSC), 1998
 // --------------------------------------------------------------------
 
 #include "G4ReduciblePolygon.hh"
@@ -86,8 +86,10 @@ void G4ReduciblePolygon::Create( const G4double a[],
                                  const G4double b[], G4int n )
 {
   if (n<3)
-   G4Exception("G4ReduciblePolygon::Create()", "GeomSolids0002",
-               FatalErrorInArgument, "Less than 3 vertices specified.");
+  {
+    G4Exception("G4ReduciblePolygon::Create()", "GeomSolids0002",
+                FatalErrorInArgument, "Less than 3 vertices specified.");
+  }
   
   const G4double *anext = a, *bnext = b;
   ABVertex* prev = nullptr;
@@ -195,7 +197,7 @@ G4bool G4ReduciblePolygon::RemoveDuplicateVertices( G4double tolerance )
   while( curr != nullptr )    // Loop checking, 13.08.2015, G.Cosmo
   {
     next = curr->next;
-    if (next == nullptr) next = vertexHead;
+    if (next == nullptr) { next = vertexHead; }
     
     if (std::fabs(curr->a-next->a) < tolerance &&
         std::fabs(curr->b-next->b) < tolerance     )
@@ -219,9 +221,13 @@ G4bool G4ReduciblePolygon::RemoveDuplicateVertices( G4double tolerance )
       numVertices--;
       
       if (prev != nullptr)
+      {
         prev->next = curr;
-      else 
+      }
+      else
+      { 
         vertexHead = curr;
+      }
     }
     else
     {
@@ -248,7 +254,7 @@ G4bool G4ReduciblePolygon::RemoveRedundantVertices( G4double tolerance )
   //
   // Under these circumstances, we can quit now!
   //
-  if (numVertices <= 2) return false;
+  if (numVertices <= 2) { return false; }
   
   G4double tolerance2 = tolerance*tolerance;
 
@@ -259,7 +265,7 @@ G4bool G4ReduciblePolygon::RemoveRedundantVertices( G4double tolerance )
   while( curr != nullptr )    // Loop checking, 13.08.2015, G.Cosmo
   {
     next = curr->next;
-    if (next == nullptr) next = vertexHead;
+    if (next == nullptr) { next = vertexHead; }
     
     G4double da = next->a - curr->a,
              db = next->b - curr->b;
@@ -273,12 +279,12 @@ G4bool G4ReduciblePolygon::RemoveRedundantVertices( G4double tolerance )
       // Get vertex after next
       //
       ABVertex* test = next->next;
-      if (test == nullptr) test = vertexHead;
+      if (test == nullptr) { test = vertexHead; }
       
       //
       // If we are back to the original vertex, stop
       //
-      if (test==curr) break;
+      if (test==curr) { break; }
     
       //
       // Test for parallel line segments
@@ -286,7 +292,7 @@ G4bool G4ReduciblePolygon::RemoveRedundantVertices( G4double tolerance )
       G4double dat = test->a - curr->a,
                dbt = test->b - curr->b;
          
-      if (std::fabs(dat*db-dbt*da)>tolerance2) break;
+      if (std::fabs(dat*db-dbt*da)>tolerance2) { break; }
       
       //
       // Redundant vertex found: do we have > 3 vertices?
@@ -303,14 +309,20 @@ G4bool G4ReduciblePolygon::RemoveRedundantVertices( G4double tolerance )
       if (curr->next != nullptr)
       {    // next is not head
         if (next->next != nullptr)
+        {
           curr->next = test;  // next is not tail
+        }
         else
+        {
           curr->next = nullptr;    // New tail
+        }
       }
       else
+      {
         vertexHead = test;  // New head
+      }
         
-      if ((curr != next) && (next != test)) delete next;
+      if ((curr != next) && (next != test)) { delete next; }
       
       --numVertices;
       
@@ -342,10 +354,10 @@ void G4ReduciblePolygon::ReverseOrder()
   // Loop over all vertices
   //
   ABVertex* prev = vertexHead;
-  if (prev==nullptr) return;    // No vertices
+  if (prev==nullptr) { return; }   // No vertices
   
   ABVertex* curr = prev->next;
-  if (curr==nullptr) return;    // Just one vertex
+  if (curr==nullptr) { return; }   // Just one vertex
   
   //
   // Our new tail
@@ -368,7 +380,7 @@ void G4ReduciblePolygon::ReverseOrder()
     //
     // Last vertex?
     //
-    if (save == nullptr) break;
+    if (save == nullptr) { break; }
     
     //
     // Next vertex
@@ -386,7 +398,7 @@ void G4ReduciblePolygon::ReverseOrder()
 
 // StartWithZMin
 //
-// Starting alway with Zmin=bMin
+// Starting always with Zmin=bMin
 // This method is used for GenericPolycone 
 //
 void G4ReduciblePolygon::StartWithZMin()
@@ -442,7 +454,7 @@ G4bool G4ReduciblePolygon::CrossesItself( G4double tolerance )
     while( curr2 != nullptr )    // Loop checking, 13.08.2015, G.Cosmo
     {
       ABVertex* next2 = curr2->next;
-      if (next2==nullptr) next2 = vertexHead;
+      if (next2==nullptr) { next2 = vertexHead; }
       G4double da2 = next2->a-curr2->a,
                db2 = next2->b-curr2->b;
       G4double a12 = curr2->a-curr1->a,
@@ -460,7 +472,7 @@ G4bool G4ReduciblePolygon::CrossesItself( G4double tolerance )
         if (s1 >= zero && s1 < one)
         {
           s2 = -(da1*b12-db1*a12)/deter;
-          if (s2 >= zero && s2 < one) return true;
+          if (s2 >= zero && s2 < one) { return true; }
         }
       }
       curr2 = curr2->next;   
@@ -494,12 +506,12 @@ G4bool G4ReduciblePolygon::BisectedBy( G4double a1, G4double b1,
     
     if (cross < -tolerance)
     {
-      if (nPos != 0) return true;
+      if (nPos != 0) { return true; }
       ++nNeg;
     }
     else if (cross > tolerance)
     {
-      if (nNeg != 0) return true;
+      if (nNeg != 0) { return true; }
       ++nPos;
     }
     curr = curr->next;
@@ -524,7 +536,7 @@ G4double G4ReduciblePolygon::Area()
   do    // Loop checking, 13.08.2015, G.Cosmo
   {
     next = curr->next;
-    if (next==nullptr) next = vertexHead;
+    if (next==nullptr) { next = vertexHead; }
     
     answer += curr->a*next->b - curr->b*next->a;
     curr = curr->next;
@@ -559,14 +571,22 @@ void G4ReduciblePolygon::CalculateMaxMin()
   while( curr != nullptr )    // Loop checking, 13.08.2015, G.Cosmo
   {
     if (curr->a < aMin)
+    {
       aMin = curr->a;
+    }
     else if (curr->a > aMax)
+    {
       aMax = curr->a;
+    }
 
     if (curr->b < bMin)
+    {
       bMin = curr->b;
+    }
     else if (curr->b > bMax)
+    {
       bMax = curr->b;
+    }
     
     curr = curr->next;
   }

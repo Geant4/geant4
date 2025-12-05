@@ -25,10 +25,6 @@
 //
 /// \file ElectromagneticPhysics.hh
 /// \brief Definition of the ElectromagneticPhysics class
-//
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef ElectromagneticPhysics_h
 #define ElectromagneticPhysics_h 1

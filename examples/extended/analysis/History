@@ -4,6 +4,11 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
+## 2025-07-30 I. Hrivnacova (analysisExample-V11-03-00)
+- Migration of README pages to Markdown:
+  - .README.txt replaced with README.md and removed README
+- Reviewed and fixed external links, references to code
+
 ## 2024-08-12 I. Hrivnacova (analysisExample-V11-02-00)
 - Updated for changes in accumulables:
   use new "Register" method with shorter name

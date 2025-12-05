@@ -23,10 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file exoticphysics/phonon/XGeBox.cc
+/// \file XGeBox.cc
 /// \brief Main program of the exoticphysics/phonon example
-//
-//
 
 #include "XActionInitialization.hh"
 #include "XDetectorConstruction.hh"

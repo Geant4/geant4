@@ -33,16 +33,17 @@
 #include "G4SystemOfUnits.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
-#include "G4ProtonBuilder.hh"
 #include "G4FTFPProtonBuilder.hh"
 #include "G4QGSPProtonBuilder.hh"
 #include "G4BinaryProtonBuilder.hh"
-#include "G4ProtonPHPBuilder.hh"
-#include "G4ProcessVector.hh"
+#include "G4BertiniProtonBuilder.hh"
 #include "G4ProcessManager.hh"
-#include "G4CrossSectionDataSetRegistry.hh"
-#include "G4PhysListUtil.hh"
 #include "G4HadronicParameters.hh"
+#include "G4HadronInelasticProcess.hh"
+#include "G4Proton.hh"
+#include "G4ParticleInelasticXS.hh"
+#include "G4ParticleHPInelasticData.hh"
+#include "G4ParticleHPInelastic.hh"
 // factory
 #include "G4PhysicsConstructorFactory.hh"
 //
@@ -62,36 +63,45 @@ G4HadronPhysicsQGSP_BIC_AllHP::G4HadronPhysicsQGSP_BIC_AllHP( const G4String& na
   maxHP_proton  = 200.0*CLHEP::MeV;
 }
 
-
 void G4HadronPhysicsQGSP_BIC_AllHP::Proton() {
   G4HadronicParameters* param = G4HadronicParameters::Instance();
   G4bool useFactorXS = param->ApplyFactorXS();
 
-  auto pro = new G4ProtonBuilder;
-  AddBuilder( pro );
-  auto qgs = new G4QGSPProtonBuilder( QuasiElasticQGS );
-  AddBuilder( qgs );
-  qgs->SetMinEnergy( minQGSP_proton );
-  pro->RegisterMe( qgs );
-  auto ftf = new G4FTFPProtonBuilder( QuasiElasticFTF );
-  AddBuilder( ftf );
-  ftf->SetMinEnergy( minFTFP_proton );
-  ftf->SetMaxEnergy( maxFTFP_proton );
-  pro->RegisterMe( ftf );
-  auto bic = new G4BinaryProtonBuilder;
-  AddBuilder( bic );
-  bic->SetMinEnergy( minBIC_proton );
-  bic->SetMaxEnergy( maxBIC_proton );
-  pro->RegisterMe( bic );
-  auto hp = new G4ProtonPHPBuilder;
-  AddBuilder( hp );
-  hp->SetMaxEnergy( maxHP_proton );
-  pro->RegisterMe( hp );
-  pro->Build();
+  G4ParticleDefinition* proton = G4Proton::Proton();
+  auto inel = new G4HadronInelasticProcess( "protonInelastic", proton );
+  proton->GetProcessManager()->AddDiscreteProcess(inel);
 
-  const G4ParticleDefinition* proton = G4Proton::Proton();
-  G4HadronicProcess* inel = G4PhysListUtil::FindInelasticProcess(proton);
-  if(nullptr != inel) { 
-    if( useFactorXS ) inel->MultiplyCrossSectionBy( param->XSFactorNucleonInelastic() );
+  G4QGSPProtonBuilder qgs( QuasiElasticQGS );
+  qgs.SetMinEnergy( minQGSP_proton );
+  qgs.Build( inel );
+
+  G4FTFPProtonBuilder ftf( QuasiElasticFTF );
+  ftf.SetMinEnergy( minFTFP_proton );
+  ftf.SetMaxEnergy( maxFTFP_proton );
+  ftf.Build( inel );
+
+  if ( maxBERT_proton >  minBERT_proton ) {
+    G4BertiniProtonBuilder bert;
+    bert.SetMinEnergy( minBERT_proton );
+    bert.SetMaxEnergy( maxBERT_proton );
+    bert.Build( inel );
   }
+
+  if ( maxBIC_proton > 0.0 ) {
+    G4BinaryProtonBuilder bic;
+    bic.SetMinEnergy( minBIC_proton );
+    bic.SetMaxEnergy( maxBIC_proton );
+    bic.Build( inel );
+  }
+
+  auto xsinel = new G4ParticleInelasticXS( proton );
+  inel->AddDataSet( xsinel );
+
+  inel->AddDataSet( new G4ParticleHPInelasticData( proton ) );
+  auto mod = new G4ParticleHPInelastic( proton, "ProtonHPInelastic" );
+  mod->SetMaxEnergy( maxHP_proton );
+  inel->RegisterMe( mod );
+
+  if ( useFactorXS )
+    inel->MultiplyCrossSectionBy( param->XSFactorNucleonInelastic() );
 }

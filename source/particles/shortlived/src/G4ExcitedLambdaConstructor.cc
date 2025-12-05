@@ -30,6 +30,9 @@
 //
 //      Update mass and width following PDG 2023
 //        4 nov 2023 S.Okada
+//
+//      Update mass and width for lambda(1520) following PDG 2025
+//        4 nov 2025 S.Okada
 // ---------------------------------------------------------------
 
 #include "G4ExcitedLambdaConstructor.hh"
@@ -335,14 +338,14 @@ const char* G4ExcitedLambdaConstructor::name[] = {
 };
 
 const G4double G4ExcitedLambdaConstructor::mass[] = {
-  1.4051*GeV,1.5194*GeV, 1.600*GeV, 1.674*GeV,  1.690*GeV,
+  1.4051*GeV,1.5190*GeV, 1.600*GeV, 1.674*GeV,  1.690*GeV,
    1.800*GeV, 1.790*GeV, 1.820*GeV, 1.825*GeV,  1.890*GeV,
    2.100*GeV, 2.090*GeV
 };
 
 const G4double G4ExcitedLambdaConstructor::width[] = {
-   50.5*MeV,  15.7*MeV, 2000.0*MeV,  30.0*MeV,  70.0*MeV,
-  200.0*MeV, 110.0*MeV,  80.0*MeV,  90.0*MeV, 120.0*MeV,
+   50.5*MeV,  16.0*MeV, 2000.0*MeV,  30.0*MeV,  70.0*MeV,
+  200.0*MeV, 110.0*MeV,   80.0*MeV,  90.0*MeV, 120.0*MeV,
   200.0*MeV, 250.0*MeV
 };
 

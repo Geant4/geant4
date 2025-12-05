@@ -143,7 +143,7 @@ G4double G4BraggIonModel::ComputeCrossSectionPerAtom(
   G4double sigma = 
     Z*ComputeCrossSectionPerElectron(p,kinEnergy,cutEnergy,maxEnergy);
   if(isAlpha) {
-    sigma *= (HeEffChargeSquare(Z, kinEnergy/CLHEP::MeV)/chargeSquare);
+    sigma *= (HeEffChargeSquare(Z, kinEnergy/CLHEP::MeV)/chargeSquareRatio);
   }
   return sigma;
 }
@@ -162,7 +162,7 @@ G4double G4BraggIonModel::CrossSectionPerVolume(
   if(isAlpha) {
     const G4double zeff = material->GetTotNbOfElectPerVolume()/
       material->GetTotNbOfAtomsPerVolume();
-    sigma *= (HeEffChargeSquare(zeff, kinEnergy/CLHEP::MeV)/chargeSquare);
+    sigma *= (HeEffChargeSquare(zeff, kinEnergy/CLHEP::MeV)/chargeSquareRatio);
   }
   return sigma;
 }
@@ -213,24 +213,23 @@ G4double G4BraggIonModel::ComputeDEDXPerVolume(const G4Material* material,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4BraggIonModel::CorrectionsAlongStep(const G4MaterialCutsCouple* couple,
-                                           const G4DynamicParticle* dp,
+void G4BraggIonModel::CorrectionsAlongStep(const G4Material* mat,
+					   const G4ParticleDefinition* p,
+					   const G4double preKinEnergy,
+					   const G4double,
                                            const G4double&,
                                            G4double& eloss)
 {
   // no correction for alpha
-  if(isAlpha) { return; }
+  if (isAlpha) { return; }
 
   // no correction at a small step at the last step
-  const G4double preKinEnergy = dp->GetKineticEnergy();
   if(eloss >= preKinEnergy || eloss < preKinEnergy*0.05) { return; }
 
   // corrections only for ions
-  const G4ParticleDefinition* p = dp->GetDefinition();
   if(p != particle) { SetParticle(p); }
 
   // effective energy and charge at a step
-  const G4Material* mat = couple->GetMaterial();
   const G4double e = std::max(preKinEnergy - eloss*0.5, preKinEnergy*0.5);
   const G4double q20 = corr->EffectiveChargeSquareRatio(p, mat, preKinEnergy);
   const G4double q2 = corr->EffectiveChargeSquareRatio(p, mat, e);

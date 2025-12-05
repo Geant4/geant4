@@ -23,11 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file biasing/B03/src/B03Run.cc
+/// \file B03Run.cc
 /// \brief Implementation of the B03Run class
-//
-//
-//
 
 //=====================================================================
 //

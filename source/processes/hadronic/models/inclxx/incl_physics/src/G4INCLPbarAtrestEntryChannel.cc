@@ -161,6 +161,9 @@ namespace G4INCL {
         G4int A = theNucleus->getA(); //was modified in Cascade.cc
         A++; //restoration of original A value before annihilation
         if(isProton == true){Z++;} //restoration of original Z value before annihilation
+        if(theNucleus->getAnnihilationType()==DNbarPPbarNType || theNucleus->getAnnihilationType()==DNbarNPbarPType || 
+           theNucleus->getAnnihilationType()==DNbarNPbarNType || theNucleus->getAnnihilationType()==DNbarNPbarPType){A++;}
+        if(theNucleus->getAnnihilationType()==DNbarPPbarPType || theNucleus->getAnnihilationType()==DNbarPPbarNType){Z++;}
 
         if(A > 19) {
           G4double radius = ParticleTable::getRadiusParameter(Proton, A, Z);
@@ -202,6 +205,9 @@ namespace G4INCL {
         G4int A = theNucleus->getA(); //was modified in Cascade.cc
         A++; //restoration of original A value before annihilation
         if(isProton == true){Z++;} //restoration of original Z value before annihilation
+        if(theNucleus->getAnnihilationType()==DNbarPPbarNType || theNucleus->getAnnihilationType()==DNbarNPbarPType || 
+           theNucleus->getAnnihilationType()==DNbarNPbarNType || theNucleus->getAnnihilationType()==DNbarNPbarPType){A++;}
+        if(theNucleus->getAnnihilationType()==DNbarPPbarPType || theNucleus->getAnnihilationType()==DNbarPPbarNType){Z++;}
 
         if(A > 19) {
           G4double radius = ParticleTable::getRadiusParameter(Neutron, A, Z);
@@ -522,16 +528,19 @@ namespace G4INCL {
     }
 
     // Correction to the Q-value of the entering particle
-    G4double theCorrection1 = theParticle->getEmissionPbarQvalueCorrection(a, z, isProton);
-    G4double theCorrection2 = theParticle->getEmissionPbarQvalueCorrection(a, z, !isProton);
+    G4int stra = theNucleus->getS(); 
     G4double energyOfMesonStar;
+    if(theNucleus->isNucleusNucleusCollision()==false){//antiProton
     if(isProton == true){
-      energyOfMesonStar = theParticle->getTableMass() + ParticleTable::getTableMass(a,z,0)
-      -ParticleTable::getTableMass(a-1,z-1,0);
+      energyOfMesonStar = theParticle->getEnergy() + ParticleTable::getTableMass(a,z,stra)
+                         -ParticleTable::getTableMass(a-1,z-1,stra);
     }
     else{
-      energyOfMesonStar = theParticle->getTableMass() + ParticleTable::getTableMass(a,z,0)
-      -ParticleTable::getTableMass(a-1,z,0) + theCorrection2 - theCorrection1;
+      energyOfMesonStar = theParticle->getEnergy() + ParticleTable::getTableMass(a,z,stra)
+                         -ParticleTable::getTableMass(a-1,z-1,stra);
+      }
+    } else if(theNucleus->isNucleusNucleusCollision()==true){//antiComposite : job is done in the Antinuclei file
+          return starlist;
     }
     
     //compute energies of mesons with a phase-space model
@@ -564,12 +573,10 @@ namespace G4INCL {
   }  
    
   G4bool PbarAtrestEntryChannel::ProtonIsTheVictim(){
-    if(theNucleus->getAnnihilationType() == PType){
-      INCL_DEBUG("isProton" << '\n');
+    if(theNucleus->getAnnihilationType() == PType || theNucleus->getAnnihilationType() == DNbarNPbarPType || theNucleus->getAnnihilationType() == DNbarPPbarPType){
       return true; //proton is annihilated
     }
-    else if(theNucleus->getAnnihilationType() == NType){
-      INCL_DEBUG("isNeutron" << '\n');
+    else if(theNucleus->getAnnihilationType() == NType || theNucleus->getAnnihilationType() == DNbarNPbarNType || theNucleus->getAnnihilationType() == DNbarPPbarNType){
       return false; //neutron is annihilated
     }
     else{
@@ -604,6 +611,9 @@ namespace G4INCL {
     a++; //not before the n_ann!
 
     if(isProton == true){z++;}
+    if(theNucleus->getAnnihilationType()==DNbarPPbarNType || theNucleus->getAnnihilationType()==DNbarNPbarPType || 
+       theNucleus->getAnnihilationType()==DNbarNPbarNType || theNucleus->getAnnihilationType()==DNbarNPbarPType){a++;}
+    if(theNucleus->getAnnihilationType()==DNbarPPbarPType || theNucleus->getAnnihilationType()==DNbarPPbarNType){z++;}
     G4double Rpmax = ParticleTable::getMaximumNuclearRadius(Proton, a, z);
     G4double Rnmax = ParticleTable::getMaximumNuclearRadius(Neutron, a, z);
     G4double probabilitymax = 0.; //the max value of the probability distribution
@@ -655,7 +665,11 @@ namespace G4INCL {
     }
 
     //FINAL POSITION VECTOR
-    ThreeVector annihilationPosition(0., 0., -distance); //3D sphere of distance radius
+    //ThreeVector annihilationPosition(0., 0., -distance); //3D sphere of distance radius
+    G4double ctheta = (1.-2.*Random::shoot());
+    G4double stheta = std::sqrt(1.-ctheta*ctheta);
+    G4double phi = Math::twoPi*Random::shoot();
+    ThreeVector annihilationPosition(distance*stheta * std::cos(phi), distance*stheta * std::sin(phi), distance*ctheta); //3D sphere of distance radius
 
 
     return annihilationPosition;
@@ -670,6 +684,9 @@ namespace G4INCL {
     if(isProton == true){
       z++;
     }
+    if(theNucleus->getAnnihilationType()==DNbarPPbarNType || theNucleus->getAnnihilationType()==DNbarNPbarPType || 
+       theNucleus->getAnnihilationType()==DNbarNPbarNType || theNucleus->getAnnihilationType()==DNbarNPbarPType){a++;}
+    if(theNucleus->getAnnihilationType()==DNbarPPbarPType || theNucleus->getAnnihilationType()==DNbarPPbarNType){z++;}
     INCL_DEBUG("the original Z value is " << z << '\n');
     INCL_DEBUG("the original A value is " << a << '\n');
     G4double n_ann; //annihilation principal quantum number(interpolation from data H.Poth)

@@ -23,12 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file PhysGeoImport.hh
+/// \brief Definition of the PhysGeoImport class
+///
+/// Definition of the plasmid load methods for the geometry
+
+
 // Authors: S. Meylan and C. Villagrasa (IRSN, France)
 // Update: H. Tran (IRSN, France) :20/12/2018
 //         J. Naoki D. Kondo (UCSF, US): 10/10/2021
 //
-/// \file PhysGeoImport.hh
-/// \brief Definition of the plasmid load methods for the geometry
 
 #ifndef DNADAMAGE2_GeoImport_h
 #define DNADAMAGE2_GeoImport_h 1

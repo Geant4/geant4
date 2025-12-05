@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file radiobiology/include/VRadiobiologicalAccumulable.hh
+/// \file VRadiobiologicalAccumulable.hh
 /// \brief Definition of the RadioBio::VRadiobiologicalAccumulable class
 
 // This is a purely virtual class like G4Vaccumulable.

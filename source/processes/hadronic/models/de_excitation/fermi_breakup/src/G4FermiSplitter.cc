@@ -107,6 +107,7 @@ G4double MassFactor(const G4FermiFragmentVector& split)
     massProduct *= fragmentMass;
     massSum += fragmentMass;
   }
+  if (0.0 >= massSum) { return 1.0; }
   auto massFactor = massProduct / massSum;
   massFactor *= std::sqrt(massFactor);
   return massFactor;

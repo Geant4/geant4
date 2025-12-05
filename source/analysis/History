@@ -6,6 +6,23 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2025-11-17 I. Hrivnacova (analysis-V11-03-07)
+- Fixing a problem observed in the rdecay02 example reported in User Forum,
+  which happens when all created ntuples are inactivated, and a file is not open:
+  added a protection against a call to non-existing ntuple manager.
+
+## 2025-10-27 I. Hrivnacova (analysis-V11-03-06)
+- Fix in G4THnMessenger, improved top directory description:
+  Added fHnDir' data member: this fixes "...Title not available..."
+  description in the command tree
+
+## 2025-08-19 I. Hrivnacova (analysis-V11-03-05)
+- Coverity fix in G4VAnalysisManager::SetNtupleManager:
+  added protection against dereference of potentially null field
+
+## 2025-07-20 Ben Morgan (analysis-V11-03-04)
+- Use current non-deprecated g4tools ntuple columns interface in XML.
+
 ## 2025-05-05 I. Hrivnacova (analysis-V11-03-03)
 - New implementation of generic 'G4Analysis::GetHnType()'' and 'IsProfile()' functions
   which does not rely on the histogram/profile name position in the long

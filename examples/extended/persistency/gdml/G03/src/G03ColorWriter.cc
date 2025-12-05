@@ -23,10 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file persistency/gdml/G03/src/G03ColorWriter.cc
+/// \file G03ColorWriter.cc
 /// \brief Implementation of the G03ColorWriter class
-//
-//
+
 // --------------------------------------------------------------------
 
 #include "G03ColorWriter.hh"

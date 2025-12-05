@@ -23,6 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file StackingAction.hh
+/// \brief Definition of the StackingAction class
+///
+/// Manage the newly generated particles
+
 // This example is provided by the Geant4-DNA collaboration
 // dnadamage3 example is derived from the chem6 example
 // chem6 example authors: W. G. Shin and S. Incerti (CENBG, France)
@@ -39,9 +44,6 @@
 // Authors: J. Naoki D. Kondo (UCSF, US)
 //          J. Ramos-Mendez and B. Faddegon (UCSF, US)
 //
-/// \file StackingAction.hh
-/// \brief Definition of the StackingAction class : manage the newly
-///        generated particles
 
 #ifndef DNADAMAGE2_StackingAction_h
 #define DNADAMAGE2_StackingAction_h 1

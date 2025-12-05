@@ -243,7 +243,8 @@ ifdef GLOBALLIBS
              -lG4event \
              -lG4tracking \
              -lG4parmodels \
-             -lG4processes \
+             -lG4processes_hadronic \
+             -lG4processes_core \
              -lG4digits_hits \
              -lG4track \
              -lG4particles \

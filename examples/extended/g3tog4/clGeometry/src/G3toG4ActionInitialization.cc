@@ -23,9 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 /// \file G3toG4ActionInitialization.cc
-/// \brief Implementation of the G3toG4ActionInitialization class
+/// \brief Implementation of the Common::G3toG4ActionInitialization class
 
 #include "G3toG4ActionInitialization.hh"
 

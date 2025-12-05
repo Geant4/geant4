@@ -29,14 +29,8 @@ public:
   //          something on an empty histo (and not on a copy of the
   //          passed a_data).
   {
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
   }
   virtual ~h1d2plot_cp(){
-#ifdef TOOLS_MEM
-    mem::decrement(s_class().c_str());
-#endif
   }
 public:
   h1d2plot_cp(const h1d2plot_cp& a_from)
@@ -45,9 +39,6 @@ public:
   ,h1d2plot(m_cp)
   ,m_cp(a_from.m_cp)
   {
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
   }
   h1d2plot_cp& operator=(const h1d2plot_cp& a_from){
     h1d2plot::operator=(a_from);
@@ -76,23 +67,14 @@ public:
   :h2d2plot(m_cp)
   ,m_cp(a_data)
   {
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
   }
   virtual ~h2d2plot_cp(){
-#ifdef TOOLS_MEM
-    mem::decrement(s_class().c_str());
-#endif
   }
 public:
   h2d2plot_cp(const h2d2plot_cp& a_from)
   :plottable(a_from),bins2D(a_from),h2d2plot(m_cp)
   ,m_cp(a_from.m_cp)
   {
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
   }
   h2d2plot_cp& operator=(const h2d2plot_cp& a_from){
     h2d2plot::operator=(a_from);
@@ -118,23 +100,14 @@ public:
   :p1d2plot(m_cp)
   ,m_cp(a_data)
   {
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
   }
   virtual ~p1d2plot_cp(){
-#ifdef TOOLS_MEM
-    mem::decrement(s_class().c_str());
-#endif
   }
 public:
   p1d2plot_cp(const p1d2plot_cp& a_from)
   :plottable(a_from),bins1D(a_from),p1d2plot(m_cp)
   ,m_cp(a_from.m_cp)
   {
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
   }
   p1d2plot_cp& operator=(const p1d2plot_cp& a_from){
     p1d2plot::operator=(a_from);

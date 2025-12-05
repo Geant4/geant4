@@ -41,7 +41,7 @@
 namespace G4INCL {
 
   void Cluster::initializeParticles() {
-// assert(theA>=2);
+// assert(theA>=2 || theA<=-2);
     const ThreeVector oldPosition = thePosition;
     theParticleSampler->sampleParticlesIntoList(thePosition, particles);
 #if !defined(NDEBUG) && !defined(INCLXX_IN_GEANT4_MODE)

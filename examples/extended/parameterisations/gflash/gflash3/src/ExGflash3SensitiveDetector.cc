@@ -23,10 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 /// \file ExGflash3SensitiveDetector.cc
 /// \brief Implementation of the ExGflash3SensitiveDetector class
-//
+
 // Created by Joanna Weng 26.11.2004
 #include "ExGflash3SensitiveDetector.hh"
 

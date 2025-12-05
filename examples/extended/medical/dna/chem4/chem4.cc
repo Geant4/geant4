@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file chem4.cc
+/// \brief Main program of the dna/chem4 example
+
 // This example is provided by the Geant4-DNA collaboration
 // Any report or published results obtained using the Geant4-DNA software
 // shall cite the following Geant4-DNA collaboration publication:
@@ -31,8 +34,6 @@
 // The Geant4-DNA web site is available at http://geant4-dna.org
 //
 //
-/// \file chem4.cc
-/// \brief Chem4 example
 
 #include "ActionInitialization.hh"
 #include "CommandLineParser.hh"

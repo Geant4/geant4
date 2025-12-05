@@ -71,6 +71,7 @@
 #include "G4Lambda.hh"
 
 #include "G4VMultiFragmentation.hh"
+#include "G4StatMF.hh"
 #include "G4VFermiBreakUp.hh"
 #include "G4Element.hh"
 #include "G4ElementTable.hh"
@@ -79,21 +80,18 @@
 #include "G4VEvaporationChannel.hh"
 #include "G4Evaporation.hh"
 #include "G4PhotonEvaporation.hh"
-#include "G4StatMF.hh"
 #include "G4FermiBreakUpAN.hh"
 #include "G4FermiBreakUpVI.hh"
 #include "G4NuclearLevelData.hh"
 #include "G4PhysicsModelCatalog.hh"
 
 G4ExcitationHandler::G4ExcitationHandler()
-  : minEForMultiFrag(1.*CLHEP::TeV), minExcitation(1.*CLHEP::eV),
-    maxExcitation(100.*CLHEP::MeV)
+  : minExcitation(1.*CLHEP::eV)
 {
   thePartTable = G4ParticleTable::GetParticleTable();
   theTableOfIons = thePartTable->GetIonTable();
   nist = G4NistManager::Instance();
   
-  theMultiFragmentation = new G4StatMF();
   theFermiModel = nullptr;
   thePhotonEvaporation = new G4PhotonEvaporation();
   SetEvaporation(new G4Evaporation(thePhotonEvaporation), true);
@@ -140,9 +138,7 @@ void G4ExcitationHandler::SetParameters()
     for (auto const & elm : *table) { Zmax = std::max(Zmax, elm->GetZasInt()); }
     ndata->UploadNuclearLevelData(Zmax+1);
   }
-  minEForMultiFrag = param->GetMinExPerNucleounForMF();
   minExcitation = param->GetMinExcitation();
-  maxExcitation = param->GetPrecoHighEnergy();
 
   // allowing local debug printout 
   fVerbose = std::max(fVerbose, param->GetVerbose());
@@ -166,11 +162,6 @@ void G4ExcitationHandler::SetParameters()
       SetFermiModel(theFermiModel);
     }
     theFermiModel->Initialise();
-
-    // multi-fragmentation initialisation
-    if (nullptr == theMultiFragmentation) {
-      SetMultiFragmentation(new G4StatMF());
-    }
 
     // evaporation initialisation
     if (nullptr == theEvaporation) { 
@@ -215,13 +206,18 @@ void G4ExcitationHandler::SetEvaporation(G4VEvaporation* ptr, G4bool flag)
   }
 }
 
-void 
-G4ExcitationHandler::SetMultiFragmentation(G4VMultiFragmentation* ptr)
+void G4ExcitationHandler::SetMultiFragmentation(G4VMultiFragmentation* ptr)
 {
-  if (!isInitialised && nullptr != ptr && ptr != theMultiFragmentation) {
-    delete theMultiFragmentation;
-    theMultiFragmentation = ptr;
-  }
+  G4cout << "### G4ExcitationHandler::SetMultiFragmentation() is obsolete and "
+	 << "will be removed in the next major release" << G4endl;
+  delete theMultiFragmentation;
+  theMultiFragmentation = ptr;
+}
+
+void G4ExcitationHandler::SetMinEForMultiFrag(G4double)
+{
+  G4cout << "### G4ExcitationHandler::SetMinEForMultiFrag() is obsolete and "
+	 << "will be removed in the next major release" << G4endl;
 }
 
 void G4ExcitationHandler::SetFermiModel(G4VFermiBreakUp* ptr)
@@ -285,7 +281,9 @@ G4VEvaporation* G4ExcitationHandler::GetEvaporation()
 
 G4VMultiFragmentation* G4ExcitationHandler::GetMultiFragmentation()
 {
-  if (nullptr != theMultiFragmentation) { SetParameters(); }
+  G4cout << "### G4ExcitationHandler::GetMultiFragmentation() is obsolete and "
+	 << "will be removed in the next major release" << G4endl;
+  if (nullptr == theMultiFragmentation) { theMultiFragmentation = new G4StatMF(); }
   return theMultiFragmentation;
 }
 
@@ -297,24 +295,21 @@ G4VFermiBreakUp* G4ExcitationHandler::GetFermiModel()
 
 G4VEvaporationChannel* G4ExcitationHandler::GetPhotonEvaporation()
 {
-  if(nullptr != thePhotonEvaporation) { SetParameters(); }
+  if (nullptr != thePhotonEvaporation) { SetParameters(); }
   return thePhotonEvaporation;
 }
 
-G4ReactionProductVector * 
+G4ReactionProductVector* 
 G4ExcitationHandler::BreakItUp(const G4Fragment & theInitialState)
 {
   // Variables existing until end of method
   G4Fragment * theInitialStatePtr = new G4Fragment(theInitialState);
   if (fVerbose > 1) {
     G4cout << "@@@@@@@@@@ Start G4Excitation Handler @@@@@@@@@@@@@ " << G4endl;
-    G4cout << theInitialState << G4endl;  
+    G4cout << theInitialState << G4endl;
   }
   if (!isInitialised) { Initialise(); }
-
-  // pointer to fragment vector which receives temporal results
-  G4FragmentVector * theTempResult = nullptr;
-
+  
   theResults.clear();
   theEvapList.clear();
    
@@ -323,17 +318,6 @@ G4ExcitationHandler::BreakItUp(const G4Fragment & theInitialState)
   G4int A = theInitialState.GetA_asInt();
   G4int Z = theInitialState.GetZ_asInt();
   G4int nL = theInitialState.GetNumberOfLambdas();
-
-  // too much excitation
-  if (exEnergy > A*maxExcitation && A > 0) {
-    ++fWarnings;
-    if(fWarnings < 0) {
-      G4ExceptionDescription ed;
-      ed << "High excitation Fragment Z= " << Z << " A= " << A 
-	 << " Eex/A(MeV)= " << exEnergy/A;
-      G4Exception("G4ExcitationHandler::BreakItUp()","had0034",JustWarning,ed,"");
-    }
-  }
 
   // for hyper-nuclei subtract lambdas from the projectile fragment
   G4double lambdaF = 0.0;
@@ -409,34 +393,7 @@ G4ExcitationHandler::BreakItUp(const G4Fragment & theInitialState)
     // JMQ 150909: first step in de-excitation is treated separately 
     // Fragments after the first step are stored in theEvapList 
   } else {
-    if ((A<maxAForFermiBreakUp && Z<maxZForFermiBreakUp) 
-	|| exEnergy <= minEForMultiFrag*A) { 
-      theEvapList.push_back(theInitialStatePtr); 
-
-    // Statistical Multifragmentation will take place only once
-    } else {
-      theTempResult = theMultiFragmentation->BreakItUp(theInitialState);
-      if (nullptr == theTempResult) { 
-	theEvapList.push_back(theInitialStatePtr); 
-      } else {
-	std::size_t nsec = theTempResult->size();
-
-	// no fragmentation
-	if (0 == nsec) { 
-	  theEvapList.push_back(theInitialStatePtr); 
-
-	  // secondary are produced - sort out secondary fragments
-	} else {
-	  G4bool deletePrimary = true;
-	  for (auto const & ptr : *theTempResult) {  
-	    if (ptr == theInitialStatePtr) { deletePrimary = false; }
-	    SortSecondaryFragment(ptr);
-	  }
-	  if (deletePrimary) { delete theInitialStatePtr; }
-	}
-	delete theTempResult; // end multifragmentation
-      }
-    }
+    theEvapList.push_back(theInitialStatePtr);
   }
   if (fVerbose > 2) {
     G4cout << "## After first step of handler " << theEvapList.size() 
@@ -521,10 +478,9 @@ G4ExcitationHandler::BreakItUp(const G4Fragment & theInitialState)
   G4ReactionProductVector * theReactionProductVector = 
     new G4ReactionProductVector();
 
-  // MAC (24/07/08)
   // To optimise the storing speed, we reserve space 
   // in memory for the vector
-  theReactionProductVector->reserve( theResults.size() );
+  theReactionProductVector->reserve(theResults.size());
 
   if (fVerbose > 1) {
     G4cout << "### ExcitationHandler provides " << theResults.size() 

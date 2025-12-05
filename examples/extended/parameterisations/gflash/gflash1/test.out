@@ -16,7 +16,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-03-ref-06    (30-June-2025)
+ Geant4 version Name: geant4-11-04-ref-00    (5-December-2025)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -36,7 +36,6 @@ You have successfully registered the following graphics systems.
 Registered graphics systems are:
   ASCIITree (ATree)
   DAWNFILE (DAWNFILE)
-  G4HepRepFile (HepRepFile)
   RayTracer (RT)
   VRML2FILE (VRML2FILE)
   gMocrenFile (gMocrenFile)
@@ -49,13 +48,12 @@ Registered graphics systems are:
   OpenGLStoredX (OGLSX, OGLSQt_FALLBACK, OGLSXm_FALLBACK)
   RayTracerX (RTX)
   RayTracerQt (RTQt)
-  Qt3D (Qt3D)
   TOOLSSG_X11_GLES (TSG_X11_GLES, TSGX11, TSG_XT_GLES_FALLBACK)
   TOOLSSG_X11_ZB (TSG_X11_ZB, TSGX11ZB)
   TOOLSSG_XT_GLES (TSG_XT_GLES, TSGXt, TSG_QT_GLES_FALLBACK)
   TOOLSSG_XT_ZB (TSG_XT_ZB, TSGXtZB)
   TOOLSSG_QT_GLES (TSG_QT_GLES, TSGQt, TSG, OGL)
-  TOOLSSG_QT_ZB (TSG_QT_ZB, TSGQtZB)
+  TOOLSSG_QT_ZB (TSG_QT_ZB, TSGQtZB, TSGZB)
 You may choose a graphics system (driver) with a parameter of
 the command "/vis/open" or "/vis/sceneHandler/create",
 or you may omit the driver parameter and choose at run time:
@@ -187,7 +185,7 @@ Lowest muon/hadron kinetic energy                  1 keV
 Use ICRU90 data                                    0
 Fluctuations of dE/dx are enabled                  1
 Type of fluctuation model for leptons and hadrons  Urban
-Use built-in Birks satuaration                     0
+Use built-in Birks saturation                      0
 Build CSDA range enabled                           0
 Use cut as a final range enabled                   0
 Enable angular generator interface                 0
@@ -324,7 +322,7 @@ hBrems:  for proton  XStype:1  SubType=3
 hPairProd:  for proton  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
-      Sampling table 17x1001 from 7.50618 GeV to 100 TeV 
+      Sampling table 17x1001, from 7.50618 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
@@ -382,7 +380,7 @@ hBrems:  for anti_proton  XStype:1  SubType=3
 hPairProd:  for anti_proton  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
-      Sampling table 17x1001 from 7.50618 GeV to 100 TeV 
+      Sampling table 17x1001, from 7.50618 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
@@ -414,7 +412,7 @@ hBrems:  for kaon+  XStype:1  SubType=3
 hPairProd:  for kaon+  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
-      Sampling table 18x1001 from 3.94942 GeV to 100 TeV 
+      Sampling table 18x1001, from 3.94942 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
@@ -446,7 +444,7 @@ hBrems:  for kaon-  XStype:1  SubType=3
 hPairProd:  for kaon-  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
-      Sampling table 18x1001 from 3.94942 GeV to 100 TeV 
+      Sampling table 18x1001, from 3.94942 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
@@ -478,7 +476,7 @@ muBrems:  for mu+  XStype:1  SubType=3
 muPairProd:  for mu+  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
-      Sampling table 21x1001 from 0.85 GeV to 100 TeV 
+      Sampling table 21x1001, from 0.85 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
@@ -510,7 +508,7 @@ muBrems:  for mu-  XStype:1  SubType=3
 muPairProd:  for mu-  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
-      Sampling table 21x1001 from 0.85 GeV to 100 TeV 
+      Sampling table 21x1001, from 0.85 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
@@ -542,7 +540,7 @@ hBrems:  for pi+  XStype:1  SubType=3
 hPairProd:  for pi+  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
-      Sampling table 20x1001 from 1.11656 GeV to 100 TeV 
+      Sampling table 20x1001, from 1.11656 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
@@ -574,7 +572,7 @@ hBrems:  for pi-  XStype:1  SubType=3
 hPairProd:  for pi-  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
-      Sampling table 20x1001 from 1.11656 GeV to 100 TeV 
+      Sampling table 20x1001, from 1.11656 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
@@ -829,8 +827,8 @@ CoulombScat:  for pi- XStype:1 SubType=1 BuildTable=1
 Type of pre-compound model                          0
 Type of pre-compound inverse x-section              1
 Pre-compound model active                           1
-Pre-compound excitation low energy                  100 keV
-Pre-compound excitation high energy                 30 MeV
+Pre-compound excitation low energy                  0.1 MeV 
+Pre-compound excitation high energy                 15 MeV 
 Angular generator for pre-compound model            1
 Use NeverGoBack option for pre-compound model       0
 Use SoftCutOff option for pre-compound model        0
@@ -844,9 +842,8 @@ Type of de-excitation inverse x-section             3
 Type of de-excitation factory                       Evaporation+GEM
 Number of de-excitation channels                    68
 Type of Fermi BreakUp model                         ModelVI
-Min excitation energy                               10 eV 
-Min energy per nucleon for multifragmentation       200 GeV
-Limit excitation energy for Fermi BreakUp           20 MeV
+Min excitation energy                               0.01 keV 
+Min energy per nucleon for multifragmentation       2e+05 MeV
 Level density (1/MeV)                               0.075
 Use simple level density model                      1
 Use discrete excitation energy of the residual      0
@@ -863,158 +860,158 @@ Max 2J for sampling of angular correlations         10
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.00753893
+Internal Real Elapsed Time is: 0.00576144
 Internal System Elapsed Time: 0
 Internal GetUserElapsed Time: 0
 ******************************************
  ------ ExGflashEventAction::End of event nr. 0  -----
-  12165 hits are stored in ExGflashHitsCollection 
-   e1  12.0103   e3x3  48.3777   GeV  e5x5  48.797
-   num1  2967   num3x3  11894    num5x5  11978
- Total energy deposited in the calorimeter: 49.761 (GeV)
+  12057 hits are stored in ExGflashHitsCollection 
+   e1  11.9852   e3x3  48.2677   GeV  e5x5  48.6866
+   num1  2992   num3x3  11789    num5x5  11870
+ Total energy deposited in the calorimeter: 49.6505 (GeV)
     0 trajectories stored in this event.
  ------ Start ExGflashEventAction ----- 
  Start generating event Nr 1
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.00641362
+Internal Real Elapsed Time is: 0.00360134
 Internal System Elapsed Time: 0
 Internal GetUserElapsed Time: 0.01
 ******************************************
  ------ ExGflashEventAction::End of event nr. 1  -----
-  11984 hits are stored in ExGflashHitsCollection 
-   e1  12.1874   e3x3  48.4768   GeV  e5x5  48.9731
-   num1  2942   num3x3  11721    num5x5  11815
- Total energy deposited in the calorimeter: 49.8935 (GeV)
+  11950 hits are stored in ExGflashHitsCollection 
+   e1  12.2512   e3x3  48.2858   GeV  e5x5  48.8409
+   num1  2958   num3x3  11669    num5x5  11771
+ Total energy deposited in the calorimeter: 49.7783 (GeV)
     0 trajectories stored in this event.
  ------ Start ExGflashEventAction ----- 
  Start generating event Nr 2
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.00518322
+Internal Real Elapsed Time is: 0.00352892
 Internal System Elapsed Time: 0
 Internal GetUserElapsed Time: 0
 ******************************************
  ------ ExGflashEventAction::End of event nr. 2  -----
-  11829 hits are stored in ExGflashHitsCollection 
-   e1  12.0932   e3x3  47.6425   GeV  e5x5  48.1971
-   num1  2949   num3x3  11520    num5x5  11631
- Total energy deposited in the calorimeter: 49.1803 (GeV)
+  11970 hits are stored in ExGflashHitsCollection 
+   e1  12.3696   e3x3  48.3983   GeV  e5x5  48.9128
+   num1  2997   num3x3  11689    num5x5  11787
+ Total energy deposited in the calorimeter: 49.8827 (GeV)
     0 trajectories stored in this event.
  ------ Start ExGflashEventAction ----- 
  Start generating event Nr 3
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.00427171
+Internal Real Elapsed Time is: 0.00375509
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.01
+Internal GetUserElapsed Time: 0
 ******************************************
  ------ ExGflashEventAction::End of event nr. 3  -----
-  11977 hits are stored in ExGflashHitsCollection 
-   e1  12.107   e3x3  48.3793   GeV  e5x5  48.9216
-   num1  2920   num3x3  11691    num5x5  11790
- Total energy deposited in the calorimeter: 49.9061 (GeV)
+  11975 hits are stored in ExGflashHitsCollection 
+   e1  12.1663   e3x3  48.5473   GeV  e5x5  48.976
+   num1  2934   num3x3  11718    num5x5  11796
+ Total energy deposited in the calorimeter: 49.9169 (GeV)
     0 trajectories stored in this event.
  ------ Start ExGflashEventAction ----- 
  Start generating event Nr 4
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.00451389
+Internal Real Elapsed Time is: 0.00349014
 Internal System Elapsed Time: 0
 Internal GetUserElapsed Time: 0
 ******************************************
  ------ ExGflashEventAction::End of event nr. 4  -----
-  12044 hits are stored in ExGflashHitsCollection 
-   e1  12.0678   e3x3  48.1732   GeV  e5x5  48.7084
-   num1  2934   num3x3  11670    num5x5  11794
- Total energy deposited in the calorimeter: 49.812 (GeV)
+  11943 hits are stored in ExGflashHitsCollection 
+   e1  11.9415   e3x3  48.2375   GeV  e5x5  48.7437
+   num1  2878   num3x3  11649    num5x5  11742
+ Total energy deposited in the calorimeter: 49.7739 (GeV)
     0 trajectories stored in this event.
  ------ Start ExGflashEventAction ----- 
  Start generating event Nr 5
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.00418766
+Internal Real Elapsed Time is: 0.00382841
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.01
+Internal GetUserElapsed Time: 0
 ******************************************
  ------ ExGflashEventAction::End of event nr. 5  -----
-  11953 hits are stored in ExGflashHitsCollection 
-   e1  12.1283   e3x3  48.3729   GeV  e5x5  48.9179
-   num1  2900   num3x3  11695    num5x5  11796
- Total energy deposited in the calorimeter: 49.7809 (GeV)
+  11958 hits are stored in ExGflashHitsCollection 
+   e1  12.3115   e3x3  48.3368   GeV  e5x5  48.7828
+   num1  2960   num3x3  11657    num5x5  11747
+ Total energy deposited in the calorimeter: 49.858 (GeV)
     0 trajectories stored in this event.
  ------ Start ExGflashEventAction ----- 
  Start generating event Nr 6
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.00415901
+Internal Real Elapsed Time is: 0.00379583
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0
+Internal GetUserElapsed Time: 0.01
 ******************************************
  ------ ExGflashEventAction::End of event nr. 6  -----
-  11893 hits are stored in ExGflashHitsCollection 
-   e1  12.0413   e3x3  47.9273   GeV  e5x5  48.4202
-   num1  2901   num3x3  11565    num5x5  11658
- Total energy deposited in the calorimeter: 49.5946 (GeV)
+  11957 hits are stored in ExGflashHitsCollection 
+   e1  12.1781   e3x3  48.2825   GeV  e5x5  48.8054
+   num1  2937   num3x3  11660    num5x5  11767
+ Total energy deposited in the calorimeter: 49.8389 (GeV)
     0 trajectories stored in this event.
  ------ Start ExGflashEventAction ----- 
  Start generating event Nr 7
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.00461844
+Internal Real Elapsed Time is: 0.00384578
 Internal System Elapsed Time: 0
 Internal GetUserElapsed Time: 0
 ******************************************
  ------ ExGflashEventAction::End of event nr. 7  -----
-  11946 hits are stored in ExGflashHitsCollection 
-   e1  11.9734   e3x3  48.433   GeV  e5x5  48.9079
-   num1  2919   num3x3  11686    num5x5  11777
- Total energy deposited in the calorimeter: 49.7454 (GeV)
+  11949 hits are stored in ExGflashHitsCollection 
+   e1  12.0227   e3x3  48.2054   GeV  e5x5  48.7489
+   num1  2925   num3x3  11640    num5x5  11748
+ Total energy deposited in the calorimeter: 49.7733 (GeV)
     0 trajectories stored in this event.
  ------ Start ExGflashEventAction ----- 
  Start generating event Nr 8
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.00419817
+Internal Real Elapsed Time is: 0.00361126
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.01
+Internal GetUserElapsed Time: 0
 ******************************************
  ------ ExGflashEventAction::End of event nr. 8  -----
-  11916 hits are stored in ExGflashHitsCollection 
-   e1  12.0648   e3x3  48.2053   GeV  e5x5  48.5967
-   num1  2918   num3x3  11641    num5x5  11717
- Total energy deposited in the calorimeter: 49.6439 (GeV)
+  11968 hits are stored in ExGflashHitsCollection 
+   e1  12.1178   e3x3  48.2613   GeV  e5x5  48.7969
+   num1  2932   num3x3  11661    num5x5  11763
+ Total energy deposited in the calorimeter: 49.8492 (GeV)
     0 trajectories stored in this event.
  ------ Start ExGflashEventAction ----- 
  Start generating event Nr 9
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.00444736
+Internal Real Elapsed Time is: 0.00365096
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0
+Internal GetUserElapsed Time: 0.01
 ******************************************
  ------ ExGflashEventAction::End of event nr. 9  -----
-  11949 hits are stored in ExGflashHitsCollection 
-   e1  12.1789   e3x3  48.3863   GeV  e5x5  48.8426
-   num1  2958   num3x3  11674    num5x5  11766
- Total energy deposited in the calorimeter: 49.7708 (GeV)
+  11927 hits are stored in ExGflashHitsCollection 
+   e1  12.0475   e3x3  48.2201   GeV  e5x5  48.7494
+   num1  2931   num3x3  11657    num5x5  11756
+ Total energy deposited in the calorimeter: 49.6532 (GeV)
     0 trajectories stored in this event.
 number of event = 10
 Graphics systems deleted.
 Visualization Manager deleting...
-Internal Real Elapsed Time /event is: 0.00550356
+Internal Real Elapsed Time /event is: 0.00431879
 
 ******************************************
-Total Real Elapsed Time is: 1.69091
-Total System Elapsed Time: 0.12
-Total GetUserElapsed Time: 1.42
+Total Real Elapsed Time is: 1.57201
+Total System Elapsed Time: 0.1
+Total GetUserElapsed Time: 1.3
 ******************************************

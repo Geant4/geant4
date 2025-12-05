@@ -125,7 +125,7 @@ void G4ChemReboundTransportation::ComputeStep(const G4Track& track, const G4Step
     spaceStep = 0.;
   }
   else {
-    auto molConf = GetMolecule(track)->GetMolecularConfiguration();
+    const auto molConf = GetMolecule(track)->GetMolecularConfiguration();
     spaceStep = calculateDistanceFromTimeStep(molConf, timeStep);
   }
   State(fTransportEndPosition) =
@@ -240,7 +240,8 @@ G4double G4ChemReboundTransportation::AlongStepGetPhysicalInteractionLength(
 
   geometryStepLength = calculateDistanceFromTimeStep(molConf, State(theInteractionTimeLeft));
   State(fTransportEndPosition) =
-    geometryStepLength * track.GetMomentumDirection() + track.GetPosition();
+    BouncingAction(track.GetPosition() + geometryStepLength * G4RandomDirection());
+
   State(fTimeStepReachedLimit) = true;
   State(fCandidateEndGlobalTime) = track.GetGlobalTime() + State(theInteractionTimeLeft);
   State(fEndGlobalTimeComputed) = true;
@@ -261,29 +262,33 @@ G4VParticleChange* G4ChemReboundTransportation::AlongStepDoIt(const G4Track& tra
                                                               const G4Step& step)
 {
   if (GetIT(track)->GetTrackingInfo()->IsLeadingStep()) {
-    G4double spaceStep = DBL_MAX;
-    auto molConf = GetMolecule(track)->GetMolecularConfiguration();
-    spaceStep = calculateDistanceFromTimeStep(molConf, State(theInteractionTimeLeft));
+    // Hoang fixed: - Fixed the state update in AlongStepDoIt (G4ChemReboundTransportation) to
+    // avoid setting incorrect molecule positions (leading tracks)
+    // when the scavenger process is called.
 
-    State(fGeometryLimitedStep) = false;
-    State(fTransportEndPosition) =
-      BouncingAction(track.GetPosition() + spaceStep * G4RandomDirection());
-    State(fEndPointDistance) = spaceStep;
+    // G4double spaceStep = DBL_MAX;
+    // const auto molConf = GetMolecule(track)->GetMolecularConfiguration();
+    // spaceStep = calculateDistanceFromTimeStep(molConf, State(theInteractionTimeLeft));
+
+    // State(fGeometryLimitedStep) = false;
+    // State(fTransportEndPosition) =
+    //   BouncingAction(track.GetPosition() + spaceStep * G4RandomDirection());
+    // State(fEndPointDistance) = spaceStep;
     if (fVerboseLevel > 1)
-    // if(GetMolecule(track)->GetName() == "e_aq^-1")
-
-    {
-      G4cout << "ChemReboundTransportation::AlongStepDoIt() :" << " trackID : "
-             << track.GetTrackID()
-             << " Molecule name: " << "prePosition : " << step.GetPreStepPoint()->GetPosition()
-             << "  postPostion : " << step.GetPostStepPoint()->GetPosition() << "  "
-             << GetMolecule(track)->GetName() << " State(theInteractionTimeLeft)  : "
-             << G4BestUnit(State(theInteractionTimeLeft), "Time")
-             << "   Diffusion length : " << G4BestUnit(step.GetStepLength(), "Length")
-             << " within time step : " << G4BestUnit(step.GetDeltaTime(), "Time")
-             << "\t Current global time : " << G4BestUnit(track.GetGlobalTime(), "Time")
-             << "  track.GetMomentumDirection() : " << track.GetMomentumDirection() << G4endl;
-    }
+      //if(GetMolecule(track)->GetName() == "e_aq^-1")
+      {
+        G4cout << "G4DNABrownianTransportation::AlongStepDoIt() : IsLeadingStep " << " trackID : "
+               << track.GetTrackID()
+                << "position : "<<track.GetPosition()
+               << " Molecule name: "
+               << GetMolecule(track)->GetName()<< "State(fTransportEndPosition) : "<<State(fTransportEndPosition) << " State(theInteractionTimeLeft)  : "
+               << G4BestUnit(State(theInteractionTimeLeft), "Time")
+               << "   Diffusion length : " << G4BestUnit(step.GetStepLength(), "Length")
+               << " within time step : " << G4BestUnit(step.GetDeltaTime(), "Time")
+               << "\t Current global time : " << G4BestUnit(track.GetGlobalTime(), "Time")
+               << "  track.GetMomentumDirection() : " << track.GetMomentumDirection()<<"  GetIT(track)->GetTrackingInfo()->IsLeadingStep() : "<<GetIT(track)->GetTrackingInfo()->IsLeadingStep() << G4endl;
+      //throw;
+      }
   }
 
   G4ITTransportation::AlongStepDoIt(track, step);
@@ -353,7 +358,7 @@ G4double G4ChemReboundTransportation::calculateNextCoordinate(G4double nextPos, 
 G4double G4ChemReboundTransportation::calculateDistanceFromTimeStep(MolConf mol, G4double timeStep)
 {
   G4double diffuCoeff = mol->GetDiffusionCoefficient();
-  if (mol->GetDiffusionCoefficient() <= 0) {
+  if (mol->GetDiffusionCoefficient() < 0) {
     G4ExceptionDescription exceptionDescription;
     exceptionDescription << "GetDiffusionCoefficient is negative";
     G4Exception("ChemReboundTransportation::calculateDistanceFromTimeStep",

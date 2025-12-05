@@ -61,17 +61,18 @@
 //            The new version is several times faster, more robust and accurate
 //            compared to the earlier version (G4GoudsmitSaundersonMscModel class
 //            that use these data has been also completely replaced)
+//            [1] A.F.Bielajew, NIMB, 111 (1996) 195-208
+//            [2] I.Kawrakow, A.F.Bielajew, NIMB 134(1998) 325-336
 // 28.04.2017 M. Novak: New representation of the angular distribution data with
 //            significantly reduced data size.
 // 23.08.2017 M. Novak: Added funtionality to handle Mott-correction to the
 //            base GS angular distributions and some other factors (screening
 //            parameter, first and second moments) when Mott-correction is
 //            activated in the GS-MSC model.
+// 26.10.2025 M. Novak: added the related technical note as the proper reference.
 //
 // References:
-//   [1] A.F.Bielajew, NIMB, 111 (1996) 195-208
-//   [2] I.Kawrakow, A.F.Bielajew, NIMB 134(1998) 325-336
-//
+//   M. Novak: https://arxiv.org/abs/2410.13361
 // -----------------------------------------------------------------------------
 
 #include "G4GoudsmitSaundersonTable.hh"
@@ -640,6 +641,21 @@ void G4GoudsmitSaundersonTable::InitSCPCorrection() {
   // loop over the material-cuts and create scattering power correction data structure for each
   for (G4int imc=0; imc<(G4int)numMatCuts; ++imc) {
     const G4MaterialCutsCouple *matCut =  thePCTable->GetMaterialCutsCouple(imc);
+    // caclulate sm := \sum_i n_i Z_i and sz := \sum_i ni Z_i(Z_i + \xi_0) with \xi_0=1
+    const G4Material*      theMaterial     = matCut->GetMaterial();
+    const G4ElementVector* theElemVect     = theMaterial->GetElementVector();
+    const G4int            numelems        = (G4int)theMaterial->GetNumberOfElements();
+    const G4double*        theNbAtomsPerVolVect  = theMaterial->GetVecNbOfAtomsPerVolume();
+    G4double               theTotNbAtomsPerVol   = theMaterial->GetTotNbOfAtomsPerVolume();
+    G4double zs  = 0.0;
+    G4double sm  = 0.0;
+    for(G4int ielem = 0; ielem < numelems; ielem++) {
+      G4double zet = (*theElemVect)[ielem]->GetZ();
+      G4double ipz = theNbAtomsPerVolVect[ielem]/theTotNbAtomsPerVol;
+      zs = zs + ipz*zet*(zet + 1.0); // \xi_0 = 1
+      sm = sm + ipz*zet;
+    }
+    // ready to calculate the scattering power correction
     // get e- production cut in the current material-cuts in energy
     G4double limit;
     G4double ecut;
@@ -690,8 +706,7 @@ void G4GoudsmitSaundersonTable::InitSCPCorrection() {
          } else {
            gm = 1.;
          }
-         G4double z0 = matCut->GetMaterial()->GetIonisation()->GetZeffective();
-         scpCorr     = 1.-gm*z0/(z0*(z0+1.));
+         scpCorr = 1.0 - gm*sm/zs;
       }
       fSCPCPerMatCuts[imc]->fVSCPC[ie] = scpCorr;
     }

@@ -23,12 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file medical/fanoCavity/src/MyKleinNishinaCompton.cc
+/// \file MyKleinNishinaCompton.cc
 /// \brief Implementation of the MyKleinNishinaCompton class
-//
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "MyKleinNishinaCompton.hh"
 

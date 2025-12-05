@@ -23,13 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file medical/dna/range/include/SteppingAction.hh
+/// \file SteppingAction.hh
 /// \brief Definition of the SteppingAction class
-//
-// $Id: SteppingAction.hh 78723 2014-01-20 10:32:17Z gcosmo $
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef SteppingAction_h
 #define SteppingAction_h 1
@@ -41,19 +36,16 @@ class DetectorConstruction;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class SteppingAction : public G4UserSteppingAction
-{
-  public:
-    SteppingAction();
-    ~SteppingAction();
-
-    virtual void UserSteppingAction(const G4Step*);
-
-  private:
-    const DetectorConstruction* fpDetector;
-    G4double fRNP;
-    G4double fRAbs;
-    G4double fTrackCut;
+class SteppingAction final : public G4UserSteppingAction {
+public:
+  SteppingAction();
+  ~SteppingAction() override = default;
+  void UserSteppingAction(const G4Step *) override;
+private:
+  const DetectorConstruction *fpDetector = nullptr;
+  G4double fRNP = 0;
+  G4double fRAbs = 0;
+  G4double fTrackCut = 0;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

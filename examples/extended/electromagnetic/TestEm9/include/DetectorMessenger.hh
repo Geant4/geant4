@@ -23,14 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm9/include/DetectorMessenger.hh
+/// \file DetectorMessenger.hh
 /// \brief Definition of the DetectorMessenger class
-//
-//
-//
+
 /////////////////////////////////////////////////////////////////////////
 //
-// test26: Cut per region physics
+// TestEm9: Crystal calorimeter
 //
 // Created: 31.01.03 V.Ivanchenko
 //

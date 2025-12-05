@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file radiobiology/include/DetectorConstruction.hh
+/// \file DetectorConstruction.hh
 /// \brief Definition of the RadioBio::DetectorConstruction class
 
 #ifndef RadiobiologyDetectorConstruction_h

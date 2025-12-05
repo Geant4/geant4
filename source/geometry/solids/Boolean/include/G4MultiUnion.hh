@@ -27,13 +27,14 @@
 //
 // Class description:
 //
-//   An instance of "G4MultiUnion" constitutes a grouping of several solids.
-//   The constituent solids are stored with their respective location in an
-//   instance of "G4Node". An instance of "G4MultiUnion" is subsequently
-//   composed of one or several nodes.
+// An instance of "G4MultiUnion" constitutes a grouping of several solids.
+// The constituent solids are stored with their respective location in a node
+// instance. An instance of "G4MultiUnion" is subsequently composed of one
+// or several nodes.
 
-// 19.10.12 M.Gayer - Original implementation from USolids module
-// 06.04.17 G.Cosmo - Adapted implementation in Geant4 for VecGeom migration
+// Author: Marek Gayer (CERN), 19.10.2012 - Original implementation from USolids
+//         Gabriele Cosmo (CERN) 06.04.2017 - Adapted implementation in Geant4
+//                                            for VecGeom migration
 // --------------------------------------------------------------------
 #ifndef G4MULTIUNION_HH
 #define G4MULTIUNION_HH
@@ -50,111 +51,233 @@
 
 class G4Polyhedron;
 
+/**
+ * @brief An instance of G4MultiUnion constitutes a grouping of several solids.
+ * The constituent solids are stored with their respective location in a node
+ * instance. An instance of G4MultiUnion is subsequently composed of one or
+ * several nodes.
+ */
+
 class G4MultiUnion : public G4VSolid
 {
-    friend class G4Voxelizer;
+  friend class G4Voxelizer;
 
   public:
 
-    G4MultiUnion() : G4VSolid("") {}
-    G4MultiUnion(const G4String& name);
-    ~G4MultiUnion() override;
+    /**
+     * Empty default constructor.
+     */
+    G4MultiUnion();
 
-    // Build the multiple union by adding nodes
+
+    /**
+     * Constructor assigning a name and initialising components.
+     */
+    G4MultiUnion(const G4String& name);
+
+    /**
+     * Default destructor.
+     */
+    ~G4MultiUnion() override = default;
+
+    /**
+     * Fake default constructor for usage restricted to direct object
+     * persistency for clients requiring preallocation of memory for
+     * persistifiable objects.
+     */
+    G4MultiUnion(__void__&);
+
+    /**
+     * Methods to build the multiple union by adding nodes (by pointer or ref).
+     *  @param[in] solid The solid to be added to the structure.
+     *  @param[in] trans The 3D transformation relative to the structure.
+     */
     void AddNode(G4VSolid& solid, const G4Transform3D& trans);
     void AddNode(G4VSolid* solid, const G4Transform3D& trans);
 
+    /**
+     * Copy constructor and assignment operator.
+     */
     G4MultiUnion(const G4MultiUnion& rhs);
     G4MultiUnion& operator=(const G4MultiUnion& rhs);
 
-    // Accessors
+    /**
+     * Accessors to retrieve a transformation or a solid, given an index
+     * and the total number of solids in the structure.
+     */
     inline const G4Transform3D& GetTransformation(G4int index) const;
     inline G4VSolid* GetSolid(G4int index) const;
     inline G4int GetNumberOfSolids()const;
 
-    // Navigation methods
+    /**
+     * Returns if the given point "aPoint" is inside or not the solid.
+     */
     EInside Inside(const G4ThreeVector& aPoint) const override;
-
-    EInside InsideIterator(const G4ThreeVector& aPoint) const;
 
     // Safety methods
     G4double DistanceToIn(const G4ThreeVector& aPoint) const override;
     G4double DistanceToOut(const G4ThreeVector& aPoint) const override;
     inline void SetAccurateSafety(G4bool flag);
 
-    // Exact distance methods
+    /**
+     * Returns the distance along the normalised vector "aDirection" to the
+     * shape, from the point at offset "aPoint". If there is no intersection,
+     * return kInfinity. The first intersection resulting from leaving a
+     * surface/volume is discarded. Hence, it is tolerant of points on
+     * the surface of the shape.
+     */
     G4double DistanceToIn(const G4ThreeVector& aPoint,
                           const G4ThreeVector& aDirection) const override;
+
+    /**
+     * Computes distance from a point presumably inside the solid to the solid
+     * surface. Ignores first surface along each axis systematically (for points
+     * inside or outside. Early returns zero in case the second surface is
+     * behind the starting point.
+     * The normal vector to the crossed surface is always filled.
+     * In the case the considered point is located inside the G4MultiUnion
+     * structure, it acts as follows:
+     *  - investigation of the candidates for the passed point
+     *  - progressive moving of the point towards the surface, along the
+     *    provided direction
+     *  - processing of the normal.
+     *  @param[in] aPoint The reference point in space.
+     *  @param[in] aDirection The normalised direction.
+     *  @param[in] calcNorm Flag unused.
+     *  @param[out] validNorm Unused.
+     *  @param[out] aNormalVector The exiting outwards normal vector (undefined
+     *              Magnitude). 
+     *  @returns The distance value to exit a volume.
+     */
     G4double DistanceToOut(const G4ThreeVector& aPoint,
                            const G4ThreeVector& aDirection,
                            const G4bool calcNorm = false,
                            G4bool* validNorm = nullptr,
                            G4ThreeVector* aNormalVector = nullptr) const override;
 
+    /**
+     * Methods to compute the distance to enter/exit a volume, given point and
+     * direction, in presence of voxels-based optimisation structure or not.
+     */
     G4double DistanceToInNoVoxels(const G4ThreeVector& aPoint,
                                   const G4ThreeVector& aDirection) const;
     G4double DistanceToOutVoxels(const G4ThreeVector& aPoint,
                                  const G4ThreeVector& aDirection,
-                                 G4ThreeVector*       aNormalVector) const;
-    G4double DistanceToOutVoxelsCore(const G4ThreeVector& aPoint,
-                                     const G4ThreeVector& aDirection,
-                                     G4ThreeVector*       aNormalVector,
-                                     G4bool&           aConvex,
-                                     std::vector<G4int>& candidates) const;
+                                       G4ThreeVector* aNormalVector) const;
     G4double DistanceToOutNoVoxels(const G4ThreeVector& aPoint,
                                    const G4ThreeVector& aDirection,
-                                   G4ThreeVector*       aNormalVector) const;
+                                         G4ThreeVector* aNormalVector) const;
 
+    /**
+     * Returns the outwards pointing unit normal of the shape for the
+     * surface closest to the point at offset "aPoint".
+     */
     G4ThreeVector SurfaceNormal(const G4ThreeVector& aPoint) const override;
 
+    /**
+     * Determines the bounding box for the considered instance of G4MultiUnion.
+     *  @param[in] aAxis The axis along which computing the extent.
+     *  @param[out] aMin The minimum bounding limit point.
+     *  @param[out] aMax The maximum bounding limit point.
+     */
     void Extent(EAxis aAxis, G4double& aMin, G4double& aMax) const;
+
+    /**
+     * Computes the bounding limits of the solid.
+     *  @param[out] aMin The minimum bounding limit point.
+     *  @param[out] aMax The maximum bounding limit point.
+     */
     void BoundingLimits(G4ThreeVector& aMin, G4ThreeVector& aMax) const override;
+
+    /**
+     * Calculates the minimum and maximum extent of a solid, when under the
+     * specified transform, and within the specified limits.
+     *  @param[in] pAxis The axis along which compute the extent.
+     *  @param[in] pVoxelLimit The limiting space dictated by voxels.
+     *  @param[in] pTransform The internal transformation applied to the solid.
+     *  @param[out] pMin The minimum extent value.
+     *  @param[out] pMax The maximum extent value.
+     *  @returns True if the solid is intersected by the extent region.
+     */
     G4bool CalculateExtent(const EAxis pAxis,
                            const G4VoxelLimits& pVoxelLimit,
                            const G4AffineTransform& pTransform,
                            G4double& pMin, G4double& pMax) const override;
+
+    /**
+     * Returns an estimate of the structure capacity or surface area.
+     */
     G4double GetCubicVolume() override;
     G4double GetSurfaceArea() override;
 
+    /**
+     * Returns the number of solids part of the structure.
+     */
     G4int GetNumOfConstituents() const override;
+
+    /**
+     * Returns false if any of the solids part of the structure is not faceted.
+     */
     G4bool IsFaceted() const override;
 
+    /**
+     * Returns a new allocated clone of the multi-union structure.
+     */
     G4VSolid* Clone() const override ;
 
+    /**
+     * Returns the type ID, "G4MultiUnion" of the solid.
+     */
     G4GeometryType GetEntityType() const override { return "G4MultiUnion"; }
 
+    /**
+     * Finalises and prepares for use, creating the optimisation structure
+     * for all solids in the structure. It must be called once before
+     * navigation use.
+     */
     void Voxelize();
-      // Finalize and prepare for use. User MUST call it once before
-      // navigation use.
 
-    EInside InsideNoVoxels(const G4ThreeVector& aPoint) const;
+    /**
+     * Returns the xoxelised optimisation structure.
+     */
     inline G4Voxelizer& GetVoxels() const;
 
+    /**
+     * Streams the object contents to an output stream.
+     */
     std::ostream& StreamInfo(std::ostream& os) const override;
 
+    /**
+     * Returns a point (G4ThreeVector) randomly and uniformly generated
+     * on the surface of a solid.
+     */
     G4ThreeVector GetPointOnSurface() const override;
 
+    /**
+     * Methods for creating graphical representations (i.e. for visualisation).
+     */
     void DescribeYourselfTo ( G4VGraphicsScene& scene ) const override ;
     G4Polyhedron* CreatePolyhedron () const override ;
     G4Polyhedron* GetPolyhedron () const override;
 
-    G4MultiUnion(__void__&);
-      // Fake default constructor for usage restricted to direct object
-      // persistency for clients requiring preallocation of memory for
-      // persistifiable objects.
-
   private:
 
+    /**
+     * Utility methods for safety and distance computation.
+     */
+    EInside InsideNoVoxels(const G4ThreeVector& aPoint) const;
     EInside InsideWithExclusion(const G4ThreeVector& aPoint,
-                                G4SurfBits* bits = nullptr) const;
+                                      G4SurfBits* bits = nullptr) const;
     G4int SafetyFromOutsideNumberNode(const G4ThreeVector& aPoint,
-                                      G4double& safety) const;
+                                            G4double& safety) const;
     G4double DistanceToInCandidates(const G4ThreeVector& aPoint,
                                     const G4ThreeVector& aDirection,
-                                     std::vector<G4int>& candidates,
-                                    G4SurfBits& bits) const;
+                                          std::vector<G4int>& candidates,
+                                          G4SurfBits& bits) const;
 
-    // Conversion utilities
+    /**
+     * Conversion utilities.
+     */
     inline G4ThreeVector GetLocalPoint(const G4Transform3D& trans,
                                        const G4ThreeVector& gpoint) const;
     inline G4ThreeVector GetLocalVector(const G4Transform3D& trans,
@@ -165,6 +288,7 @@ class G4MultiUnion : public G4VSolid
                                        const G4ThreeVector& lvec) const;
     void TransformLimits(G4ThreeVector& min, G4ThreeVector& max,
                          const G4Transform3D& transformation) const;
+
   private:
 
     struct G4MultiUnionSurface
@@ -185,106 +309,6 @@ class G4MultiUnion : public G4VSolid
     mutable G4Polyhedron* fpPolyhedron = nullptr;
 };
 
-//______________________________________________________________________________
-inline G4Voxelizer& G4MultiUnion::GetVoxels() const
-{
-  return (G4Voxelizer&)fVoxels;
-}
-
-//______________________________________________________________________________
-inline const G4Transform3D& G4MultiUnion::GetTransformation(G4int index) const
-{
-  return fTransformObjs[index];
-}
-
-//______________________________________________________________________________
-inline G4VSolid* G4MultiUnion::GetSolid(G4int index) const
-{
-  return fSolids[index];
-}
-
-//______________________________________________________________________________
-inline G4int G4MultiUnion::GetNumberOfSolids() const
-{
-  return G4int(fSolids.size());
-}
-
-//______________________________________________________________________________
-inline void G4MultiUnion::SetAccurateSafety(G4bool flag)
-{
-  fAccurate = flag;
-}
-
-//______________________________________________________________________________
-inline
-G4ThreeVector G4MultiUnion::GetLocalPoint(const G4Transform3D& trans,
-                                          const G4ThreeVector& global) const
-{
-  // Returns local point coordinates converted from the global frame defined
-  // by the transformation. This is defined by multiplying the inverse
-  // transformation with the global vector.
-
-  G4double px = global.x() - trans.dx();
-  G4double py = global.y() - trans.dy();
-  G4double pz = global.z() - trans.dz();
-  G4double x = trans.xx()*px + trans.yx()*py + trans.zx()*pz;
-  G4double y = trans.xy()*px + trans.yy()*py + trans.zy()*pz;
-  G4double z = trans.xz()*px + trans.yz()*py + trans.zz()*pz;
-  return { x, y, z };
-}
-
-//______________________________________________________________________________
-inline
-G4ThreeVector G4MultiUnion::GetLocalVector(const G4Transform3D& trans,
-                                           const G4ThreeVector& global) const
-{
-  // Returns local point coordinates converted from the global frame defined
-  // by the transformation. This is defined by multiplying the inverse
-  // transformation with the global vector.
-
-  G4double vx = global.x();
-  G4double vy = global.y();
-  G4double vz = global.z();
-  G4double x = trans.xx()*vx + trans.yx()*vy + trans.zx()*vz;
-  G4double y = trans.xy()*vx + trans.yy()*vy + trans.zy()*vz;
-  G4double z = trans.xz()*vx + trans.yz()*vy + trans.zz()*vz;
-  return { x, y, z };
-}
-
-//______________________________________________________________________________
-inline
-G4ThreeVector G4MultiUnion::GetGlobalPoint(const G4Transform3D& trans,
-                                           const G4ThreeVector& local) const
-{
-  // Returns global point coordinates converted from the local frame defined
-  // by the transformation. This is defined by multiplying this transformation
-  // with the local vector.
-
-  G4double px = local.x();
-  G4double py = local.y();
-  G4double pz = local.z();
-  G4double x = trans.xx()*px + trans.xy()*py + trans.xz()*pz + trans.dx();
-  G4double y = trans.yx()*px + trans.yy()*py + trans.yz()*pz + trans.dy();
-  G4double z = trans.zx()*px + trans.zy()*py + trans.zz()*pz + trans.dz();
-  return { x, y, z };
-}
-
-//______________________________________________________________________________
-inline
-G4ThreeVector G4MultiUnion::GetGlobalVector(const G4Transform3D& trans,
-                                            const G4ThreeVector& local) const
-{
-  // Returns vector components converted from the local frame defined by the
-  // transformation to the global one. This is defined by multiplying this
-  // transformation with the local vector while ignoring the translation.
-
-  G4double vx = local.x();
-  G4double vy = local.y();
-  G4double vz = local.z();
-  G4double x = trans.xx()*vx + trans.xy()*vy + trans.xz()*vz;
-  G4double y = trans.yx()*vx + trans.yy()*vy + trans.yz()*vz;
-  G4double z = trans.zx()*vx + trans.zy()*vy + trans.zz()*vz;
-  return { x, y, z };
-}
+#include "G4MultiUnion.icc"
 
 #endif

@@ -28,13 +28,6 @@ namespace sg {
 class node {
 public:
   TOOLS_SCLASS(tools::sg::node)
-//public:
-//  static bool is_a(const std::string& a_class) {return rcmp(a_class,s_class());}
-// in a derived class:
-//  static bool is_a(const std::string& a_class) {
-//    if(rcmp(a_class,s_class())) return true;
-//    return parent::is_a(a_class);
-//  }
   virtual void* cast(const std::string& a_class) const {
     if(void* p = cmp_cast<node>(this,a_class)) return p;
     return 0;
@@ -105,21 +98,12 @@ public:
 public:
   node()
   {
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
   }
   virtual ~node(){
-#ifdef TOOLS_MEM
-    mem::decrement(s_class().c_str());
-#endif
   }
 protected:
   node(const node&)
   {
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
   }
   node& operator=(const node&){
     return *this;
@@ -128,11 +112,9 @@ protected:
   void add_field(field* a_field) {
     m_fields.push_back(a_field); //it does not take ownerhship.
   }
-  //TOOLS_CLASS_STRING(fields_end) //for write_bsg, sg::rbsg
   bool write_fields(write_action& a_action) {
 
     check_fields(a_action.out()); //costly.
-  //dump_field_descs(a_action.out());
 
     unsigned int index = 0;
     tools_vforcit(field*,m_fields,it) {
@@ -173,25 +155,6 @@ protected:
                        << " : field not found."
                        << "."
                        << std::endl;
-//#define TOOLS_NODE_DEBUG_READ_FIELD
-#ifdef TOOLS_NODE_DEBUG_READ_FIELD
-        check_fields(a_action.out()); //costly.
-        dump_field_descs(a_action.out());
-       {a_action.out() << "read field descs of node class " << s_cls() << " :" << std::endl;
-        tools_vforcit(field_desc,rndesc.fields(),itr) {
-          a_action.out() << "name " << (*itr).name()
-                << ", class " << (*itr).cls()
-                << ", offset " << (*itr).offset()
-                << std::endl;
-        }}
-       {a_action.out() << "m_fields of node class " << s_cls() << " :" << std::endl;
-        tools_vforcit(field*,m_fields,itm) {
-          a_action.out() << "field class " << (*itm)->s_cls()
-                << ", found offset " << field_offset(*itm)
-                << std::endl;
-        }}
-        ::exit(0);
-#endif
         fd = a_action.field_factory().create(fdesc.cls());
         if(!fd) {
           a_action.out() << "tools::node::read_fields :"
@@ -202,15 +165,7 @@ protected:
                          << std::endl;
           return false;
         }
-      } /*else {
-        a_action.out() << "debug : tools::node::read_fields :"
-                       << " for node class " << s_cls()
-                       << " : field desc class " << fdesc.cls()
-                       << " : field desc offset " << fdesc.offset()
-                       << " : field found."
-                       << "."
-                       << std::endl;
-      }*/
+      } 
 
       if(!fd->read(a_action.buffer())) {
         a_action.out() << "tools::node::read_fields :"
@@ -220,7 +175,6 @@ protected:
                        << std::endl;
         return false;
       }
-      //fd->dump(a_action.out());
     }
 
     //NOTE : if some current node fields had not been found
@@ -234,17 +188,7 @@ public:
     if(m_fields.empty()) return;
     m_fields.front()->touch();
   }
-/*
-  bool equal(const node& a_node) const {
-    if(m_fields.size()!=a_node.m_fields.size()) return false;
-    std::vector<field*>::iterator it = m_fields.begin();
-    std::vector<field*>::iterator ait = a_node.m_fields.begin();
-    for(;it!=m_fields.end();++it,++ait) {
-      if(!(*it)->equal(*(*ait))) return false;
-    }
-    return true;
-  }
-*/
+
 public:
   field& field_from_desc(const field_desc& a_desc) const {
     //WARNING : touchy.
@@ -265,7 +209,7 @@ public:
     //   tools::sg::back_area.color
     //   tools::sg::text.color
     const std::vector<field_desc>& fds = node_desc_fields();
-    tools_vforcrit(field_desc,fds,it) {
+    for(auto it = fds.crbegin(); it != fds.crend(); ++it) {
       if((*it).name()==a_name) {
         tools_vforcit(field*,m_fields,itf) {
           if(field_offset(*itf)==(*it).offset()) return (*itf);
@@ -285,7 +229,6 @@ protected:
     tools_vforcit(field_desc,fds,it) {
       if((*it).name()==a_rdesc.name()) {
         tools_vforcit(field*,m_fields,itf) {
-          //::printf("debug : find_field :   look : %s\n",field_name(*(*it)).c_str());
           if(field_offset(*itf)==(*it).offset()) return (*itf);
         }
       }

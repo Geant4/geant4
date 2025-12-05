@@ -23,12 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file parallel/ThreadsafeScorers/include/G4atomic_defines.hh
-/// \brief Definition of the G4atomic_defines class
-//
-//
-//
-//
+/// \file G4atomic_defines.hh
+/// \brief Definition of the atomics utilities
+///
 /// This is a functional class for G4atomic. The functions in this
 ///     file are not intended to be used outside of their implementation
 ///     in G4atomic.

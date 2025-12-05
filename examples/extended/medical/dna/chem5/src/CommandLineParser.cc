@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file CommandLineParser.cc
+/// \brief Implementation of the G4DNAPARSER::CommandLineParser class
+
 // This example is provided by the Geant4-DNA collaboration
 // Any report or published results obtained using the Geant4-DNA software
 // shall cite the following Geant4-DNA collaboration publication:
@@ -33,8 +36,6 @@
 // Author: Mathieu Karamitros
 //
 //
-/// \file CommandLineParser.cc
-/// \brief Implementation of the CommandLineParser class
 
 #include "CommandLineParser.hh"
 

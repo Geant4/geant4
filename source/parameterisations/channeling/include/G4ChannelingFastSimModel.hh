@@ -32,11 +32,8 @@
 #define G4ChannelingFastSimModel_h 1
 
 #include "G4VFastSimulationModel.hh"
-#include "G4Step.hh"
-#include "G4TouchableHandle.hh"
-#include <vector>
-#include <CLHEP/Units/SystemOfUnits.h>
-#include <CLHEP/Units/PhysicalConstants.h>
+#include "globals.hh"
+#include "G4ios.hh"
 
 #include "G4ChannelingFastSimCrystalData.hh"
 #include <unordered_map>
@@ -57,7 +54,7 @@ public:
   // Constructor, destructor
   G4ChannelingFastSimModel (const G4String&, G4Region*);
   G4ChannelingFastSimModel (const G4String&);
-  ~G4ChannelingFastSimModel ();
+  ~G4ChannelingFastSimModel () = default;
 
   /// -- IsApplicable
   G4bool IsApplicable(const G4ParticleDefinition&) override;

@@ -23,13 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file optical/wls/include/WLSSteppingActionMessenger.hh
+/// \file WLSSteppingActionMessenger.hh
 /// \brief Definition of the WLSSteppingActionMessenger class
-//
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #ifndef WLSSteppingActionMessenger_h
 #define WLSSteppingActionMessenger_h 1

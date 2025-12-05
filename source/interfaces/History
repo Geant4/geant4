@@ -5,7 +5,47 @@ which **must** added in reverse chronological order (newest at the top).
 It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
+## 2025-10-31 Andrea Barresi (interfaces-V11-03-12)
+-G4VInteractiveSession:
+  - Added UpdateDrawingStyle, UpdateProjectionStyle, UpdateTransparencySlider 
+    virtual methods to update the control widgets
+- G4UIQt:
+  - Added UpdateDrawingStyle, UpdateProjectionStyle, UpdateTransparencySlider 
+    methods to update the control widgets
+  - Moved transparency slider radio buttons to be class members
+  - Added icon for point cloud surface style 
+  - Added icon to reset target point
+  - Changed behavior of the icon "Reset camera" to avoid popup window with dedicated call back
+  - Improved picking behavior avoiding opening picking window when picking is enabled
+  - Fixed icons selection behaviour and syncronization
+  
+## 2025-10-24 Guy Barrand (interfaces-V11-03-11)
+- implementation/sources.cmake: handle "-DTOOLS_USE_GL_VERSION_3_2" in case "GEANT4_USE_VTK".
 
+## 2025-10-17 Guy Barrand (interfaces-V11-03-10)
+- G4Qt.cc: have "#ifdef TOOLS_USE_GL_VERSION_3_2" to set the "QSurfaceFormat to 3.2" if Vtk
+  did not did it first. Note that for Qt-5, we have to set the "QGLSurface" which is NOT set
+  by vtk (at I saw it on my Vtk-9.3-Qt5 on my Mac/intel and my virtual ubuntu).
+
+## 2025-09-16 John Allison (interfaces-V11-03-09)
+- G4UIQt:
+  - Fix link and add "Action" guidance table in "Useful tips".
+  - Tidy.
+
+## 2025-08-17 John Allison (interfaces-V11-03-08)
+- G4UIQt:
+  - Scene tree: simplify interaction for visibility of touchables.
+
+## 2025-08-07 John Allison (interfaces-V11-03-07)
+- G4UIQt:
+  - Intercept the case of "help" with argument:
+    - Write guidance to output window.
+    - Avoid undiagnosed crash with Qt6.
+
+## 2025-06-18 Andrea Barresi (interfaces-V11-03-06)
+- G4UIQt:
+  - Added icon to reset camera and improved base size of MainWindow
+  
 ## 2025-05-12 Andrea Barresi (interfaces-V11-03-05)
 - G4UIQt:
   - Improved pick info window size

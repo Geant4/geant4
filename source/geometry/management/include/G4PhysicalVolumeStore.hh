@@ -40,10 +40,10 @@
 // If much additional functionality is added, should consider containment
 // instead of inheritance for std::vector<T>.
 
-// 25.07.95, P.Kent, G.Cosmo - Initial version
+// Authors: Gabriele Cosmo & Paul Kent (CERN), 25.07.1995 - Initial version
 // --------------------------------------------------------------------
 #ifndef G4PHYSICALVOLUMESTORE_HH
-#define G4PHYSICALVOLUMESTORE_HH 1
+#define G4PHYSICALVOLUMESTORE_HH
 
 #include <vector>
 #include <map>
@@ -51,47 +51,91 @@
 #include "G4VPhysicalVolume.hh"
 #include "G4VStoreNotifier.hh"
 
+/**
+ * @brief G4PhysicalVolumeStore is a singleton class, acting as container
+ * for all physical volumes, with functionality derived from std::vector<T>.
+ * All physical volumes should be registered with G4PhysicalVolumeStore, and
+ * removed on their destruction. The underlying container initially has a
+ * capacity of 100. A map indexed by volume names is also recorded for fast
+ * search; pointers to volumes with same name are stored in buckets.
+*/
+
 class G4PhysicalVolumeStore : public std::vector<G4VPhysicalVolume*>
 {
   public:
 
-    static void Register(G4VPhysicalVolume* pSolid);
-      // Add the volume to the collection.
-    static void DeRegister(G4VPhysicalVolume* pSolid);
-      // Remove the volume from the collection.
-    static G4PhysicalVolumeStore* GetInstance();
-      // Get a ptr to the unique store instance, creating it if necessary.
-    static void SetNotifier(G4VStoreNotifier* pNotifier);
-      // Assign a notifier for allocation/deallocation of the physical volumes.
-    static void Clean();
-      // Delete all physical volumes from the store. Mother logical volumes
-      // are automatically notified and have their daughters de-registered.
+    /**
+     * Destructor: takes care to delete allocated physical volumes.
+     */
+    virtual ~G4PhysicalVolumeStore();
 
+    /**
+     * Copy constructor and assignment operator not allowed.
+     */
+    G4PhysicalVolumeStore(const G4PhysicalVolumeStore&) = delete;
+    G4PhysicalVolumeStore& operator=(const G4PhysicalVolumeStore&) = delete;
+
+    /**
+     * Adds the logical volume 'pVolume' to the collection.
+     */
+    static void Register(G4VPhysicalVolume* pVolume);
+
+    /**
+     * Removes the logical volume 'pVolume' from the collection.
+     */
+    static void DeRegister(G4VPhysicalVolume* pVolume);
+
+    /**
+     * Returns a pointer to the unique instance of G4PhysicalVolumeStore,
+     * creating it if necessary.
+     */
+    static G4PhysicalVolumeStore* GetInstance();
+
+    /**
+     * Assigns a notifier for allocation/deallocation of the physical volumes.
+     */
+    static void SetNotifier(G4VStoreNotifier* pNotifier);
+
+    /**
+     * Deletes all physical volumes from the store. Mother logical volumes
+     * are automatically notified and have their daughters de-registered.
+     */
+    static void Clean();
+
+    /**
+     * Returns a pointer to the first or last volume in the collection having
+     * that 'name'. Uses the internal map for fast search and warns if
+     * a volume in the collection is not unique or not found.
+     *  @param[in] name The name of the volume to search.
+     *  @param[in] verbose Flag for enabling verbosity (default true).
+     *  @param[in] reverseSearch Flag to enable inverse search (default false).
+     */
     G4VPhysicalVolume* GetVolume(const G4String& name,
                                  G4bool verbose = true,
                                  G4bool reverseSearch = false) const;
-      // Return the pointer of the first or last volume in the collection having
-      // that name. Uses the internal map for fast search and warns if
-      // a volume in the collection is not unique or not found.
 
+    /**
+     * Accessor and modifier to assess validity of the internal map.
+     */
     inline G4bool IsMapValid() const  { return mvalid; }
     inline void SetMapValid(G4bool val)  { mvalid = val; }
-      // Accessor to assess validity of the internal map.
+
+    /**
+     * Return the internal map.
+     */
     inline const std::map<G4String,
             std::vector<G4VPhysicalVolume*> >& GetMap() const { return bmap; }
-      // Return the internal map.
+
+    /**
+     * Brings contents of the internal map up to date and resets validity flag.
+     */
     void UpdateMap();
-      // Bring contents of internal map up to date and resets validity flag.
-
-    virtual ~G4PhysicalVolumeStore();
-      // Destructor: takes care to delete allocated physical volumes.
-
-    G4PhysicalVolumeStore(const G4PhysicalVolumeStore&) = delete;
-    G4PhysicalVolumeStore& operator=(const G4PhysicalVolumeStore&) = delete;
-      // Forbidden copy constructor and assignment operator
 
   protected:
 
+    /**
+     * Protected constructor.
+     */
     G4PhysicalVolumeStore();
 
   private:

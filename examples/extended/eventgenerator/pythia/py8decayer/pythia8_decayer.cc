@@ -23,9 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file eventgenerator/pythia/py8decayer/pythia8_decayer.cc
-/// \brief Main program of the pythia8_decayer example
+/// \file pythia8_decayer.cc
+/// \brief Main program of the pythia/py8decayer example
 
 #include "ActionInitialization.hh"
 #include "DetConstruction.hh"

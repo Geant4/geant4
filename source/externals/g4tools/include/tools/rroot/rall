@@ -7,13 +7,7 @@
 #include "streamers"
 #include "fac"
 #include "tree"
-#include "../words" //for annotations.
-
-#define TOOLS_RROOT_NOT_OSC
-
-#ifndef TOOLS_RROOT_NOT_OSC
-#include "osc"
-#endif
+#include "../tokenize" //for annotations.
 
 #include "THistogram"
 
@@ -24,9 +18,6 @@ inline TDirectory* find_dir(directory& a_dir,const std::string& a_name) {
   std::ostream& out = a_dir.file().out();
   key* k = a_dir.find_key(a_name);
   if(!k) {
-    //out << "tools::rroot::find_dir :"
-    //    << " " << a_name << " not a key."
-    //    << std::endl;
     return 0;
   }
 
@@ -79,10 +70,6 @@ inline bool read_key(std::ostream& a_out,ifile& a_file,key& a_key,bool a_dump){
     a_out << "tools::rroot::read_key : can't get data buffer of " << a_key.object_name() << "." << std::endl;
     return false;
   }
-
-  //a_out << "tools::rroot::read_key :"
-  //      << " get data buffer size " << sz << "."
-  //      << std::endl;
 
   buffer b(a_out,a_file.byte_swap(),sz,buf,a_key.key_length(),false);
 
@@ -186,25 +173,13 @@ inline bool read_key(std::ostream& a_out,ifile& a_file,key& a_key,bool a_dump){
 
         uint64 entries = tree.entries();
 
-       /*
-       {for(uint32 j=0;j<10;j++){ //to test memory.
-        for(uint32 i=0;i<entries;i++){
-          uint32 n;
-          if(!tree.find_entry(i,n)) {
-            a_out << " can't find entry " << i
-                  << std::endl;
-          }
-        }
-        }}
-        */
-
        {for(uint32 i=0;i<5;i++){
           if(!tree.show(a_out,i)) {
             a_out << " show failed for entry " << i
                   << std::endl;
           }
         }}
-       {for(uint64 i=mx<int64>(5,entries-5);i<entries;i++){
+       {for(uint64 i=max_of<int64>(5,entries-5);i<entries;i++){
           if(!tree.show(a_out,(uint32)i)) {
             a_out << " show failed for entry " << i
                   << std::endl;
@@ -213,63 +188,6 @@ inline bool read_key(std::ostream& a_out,ifile& a_file,key& a_key,bool a_dump){
 
       }
     }
-
-#ifndef TOOLS_RROOT_NOT_OSC
-  } else if(a_key.object_class()==osc::s_h1d()) {
-
-    histo::h1d h("",10,0,1);
-    if(!from_osc(b,osc::s_h1d(),h)) {
-      a_out << "tools::rroot::read_key :"
-            << " " << osc::s_h1d() << " streaming failed"
-            << std::endl;
-    } else {
-      if(a_dump) h.hprint(a_out);
-    }
-
-  } else if(a_key.object_class()==osc::s_h2d()) {
-
-    histo::h2d h("",10,0,1,10,0,1);
-    if(!from_osc(b,osc::s_h2d(),h)) {
-      a_out << "tools::rroot::read_key :"
-            << " " << osc::s_h2d() << " streaming failed"
-            << std::endl;
-    } else {
-      if(a_dump) h.hprint(a_out);
-    }
-
-  } else if(a_key.object_class()==osc::s_h3d()) {
-
-    histo::h3d h("",10,0,1,10,0,1,10,0,1);
-    if(!from_osc(b,osc::s_h3d(),h)) {
-      a_out << "tools::rroot::read_key :"
-            << " " << osc::s_h3d() << " streaming failed"
-            << std::endl;
-    } else {
-      if(a_dump) h.hprint(a_out);
-    }
-
-  } else if(a_key.object_class()==osc::s_p1d()) {
-
-    histo::p1d h("",10,0,1);
-    if(!from_osc(b,osc::s_p1d(),h)) {
-      a_out << "tools::rroot::read_key :"
-            << " " << osc::s_p1d() << " streaming failed"
-            << std::endl;
-    } else {
-      if(a_dump) h.hprint(a_out);
-    }
-
-  } else if(a_key.object_class()==osc::s_p2d()) {
-
-    histo::p2d h("",10,0,1,10,0,1);
-    if(!from_osc(b,osc::s_p2d(),h)) {
-      a_out << "tools::rroot::read_key :"
-            << " " << osc::s_p2d() << " streaming failed"
-            << std::endl;
-    } else {
-      if(a_dump) h.hprint(a_out);
-    }
-#endif
 
   } else if(a_key.object_class()==THistogram_cls()) { //produced with osc/AIDA through BatchLab/Rio/THistogram.
 
@@ -308,7 +226,6 @@ inline bool read_key(std::ostream& a_out,ifile& a_file,key& a_key,bool a_dump){
   return true;
 }
 
-//typedef std::map<std::string,std::string> annotations_t;
 inline bool key_to_annotations(ifile& a_file,key& a_key,std::map<std::string,std::string>& a_annotations,bool a_warn = true) {
   a_annotations.clear();
   std::ostream& out = a_key.out();

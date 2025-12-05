@@ -25,8 +25,6 @@
 //
 /// \file SAXSDetectorConstructionMessenger.cc
 /// \brief Implementation of the SAXSDetectorConstructionMessenger class
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "SAXSDetectorConstructionMessenger.hh"
 

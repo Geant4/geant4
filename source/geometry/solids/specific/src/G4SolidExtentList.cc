@@ -25,7 +25,7 @@
 //
 // G4SolidExtentList implementation; a list of (voxel) extents along one axis.
 //
-// Author: David C. Williams (davidw@scipp.ucsc.edu)
+// Author: David C. Williams (UCSC), 1998
 // --------------------------------------------------------------------
 
 #include "G4SolidExtentList.hh"
@@ -61,10 +61,6 @@ G4SolidExtentList::G4SolidExtentList( const EAxis targetAxis,
   }
 }
 
-// Destructor
-//
-G4SolidExtentList::~G4SolidExtentList() = default;
-
 // AddSurface
 //
 //
@@ -82,22 +78,22 @@ void G4SolidExtentList::AddSurface( const G4ClippablePolygon& surface )
     //
     // Nearest surface beyond maximum limit
     //
-    if (surface.InFrontOf(minAbove,axis)) minAbove = surface;
+    if (surface.InFrontOf(minAbove,axis)) { minAbove = surface; }
   }
   else if (smax < minLimit)
   {
     //
     // Nearest surface below minimum limit
     //
-    if (surface.BehindOf(maxBelow,axis)) maxBelow = surface;
+    if (surface.BehindOf(maxBelow,axis)) { maxBelow = surface; }
   }
   else
   {
     //
     // Max and min surfaces inside
     //
-    if (surface.BehindOf(maxSurface,axis)) maxSurface = surface;
-    if (surface.InFrontOf(minSurface,axis)) minSurface = surface;
+    if (surface.BehindOf(maxSurface,axis)) { maxSurface = surface; }
+    if (surface.InFrontOf(minSurface,axis)) { minSurface = surface; }
   }
 }
 
@@ -117,12 +113,12 @@ G4bool G4SolidExtentList::GetExtent( G4double& emin, G4double& emax ) const
     //
     // Nothing! Do we have anything above?
     //
-    if (minAbove.Empty()) return false;
+    if (minAbove.Empty()) { return false; }
     
     //
     // Yup. Is it facing inwards?
     //
-    if (minAbove.GetNormal().operator()(axis) < 0) return false;
+    if (minAbove.GetNormal().operator()(axis) < 0) { return false; }
     
     //
     // No. We must be entirely within the solid

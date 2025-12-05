@@ -6,15 +6,11 @@
 
 #include "plottables"
 
-#include "../words"
+#include "../tokenize"
 #include "../num2s"
 #include "../vmanip"
 #include "../mnmx"
 #include "../forit"
-
-#ifdef TOOLS_MEM
-#include "../mem"
-#endif
 
 namespace tools {
 namespace sg {
@@ -48,7 +44,7 @@ public: //plottable
       } else if((*it)=="entries") {
         if(a_sinfos.size()) a_sinfos += f_lf;
         a_sinfos += "Entries\n";
-        if(!numas<unsigned int>(mn<unsigned int>(m_x.size(),m_y.size()),a_sinfos)){}
+        if(!numas<unsigned int>(min_of<unsigned int>(m_x.size(),m_y.size()),a_sinfos)){}
 
       }
     }
@@ -60,7 +56,7 @@ public: //points2D
   virtual float y_axis_max() const {return float(m_y_max);}
 
   virtual unsigned int points() const {
-    return mn<unsigned int>(m_x.size(),m_y.size());
+    return min_of<unsigned int>(m_x.size(),m_y.size());
   }
   virtual bool ith_point(unsigned int a_index,float& a_x,float& a_y) const {
     if(a_index>=m_x.size()) {a_x = T();a_y = T();return false;}
@@ -76,9 +72,6 @@ public:
   :m_x(a_x)
   ,m_y(a_y)
   {
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
     minimum<T>(a_x,m_x_min);
     maximum<T>(a_x,m_x_max);
 
@@ -86,9 +79,6 @@ public:
     maximum<T>(a_y,m_y_max);
   }
   virtual ~xy2plot(){
-#ifdef TOOLS_MEM
-    mem::decrement(s_class().c_str());
-#endif
   }
 public:
   xy2plot(const xy2plot& a_from)
@@ -102,9 +92,6 @@ public:
   ,m_y_min(a_from.m_y_min)
   ,m_y_max(a_from.m_y_max)
   {
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
   }
   xy2plot& operator=(const xy2plot& a_from){
     m_name = a_from.m_name;

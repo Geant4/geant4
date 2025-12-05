@@ -398,14 +398,6 @@ G4double G4ICRU73QOModel::GetL2(G4double normEnergy) const
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4ICRU73QOModel::CorrectionsAlongStep(const G4MaterialCutsCouple*,
-                                           const G4DynamicParticle*,
-                                           const G4double&,
-                                           G4double&)
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void G4ICRU73QOModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
                                         const G4MaterialCutsCouple* couple,
                                         const G4DynamicParticle* dp,

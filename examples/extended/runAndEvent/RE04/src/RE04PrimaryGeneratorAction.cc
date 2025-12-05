@@ -23,10 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file runAndEvent/RE04/src/RE04PrimaryGeneratorAction.cc
+/// \file RE04PrimaryGeneratorAction.cc
 /// \brief Implementation of the RE04PrimaryGeneratorAction class
-//
-//
+
 #include "RE04PrimaryGeneratorAction.hh"
 
 #include "G4Event.hh"

@@ -43,6 +43,16 @@
 #  include <qsurfaceformat.h>
 #endif
 
+#ifdef TOOLS_USE_GL_VERSION_3_2
+#if QT_VERSION < 0x060000
+#  include <qgl.h>
+#else
+  #ifndef G4VIS_USE_VTK_QT
+    #include <qsurfaceformat.h>
+  #endif
+#endif
+#endif
+
 G4Qt* G4Qt::instance = nullptr;
 
 static G4bool QtInited = false;
@@ -112,6 +122,23 @@ G4Qt::G4Qt(int a_argn, char** a_args, char* /*a_class */
 #ifdef G4VIS_USE_VTK_QT
       QSurfaceFormat::setDefaultFormat(QVTKOpenGLNativeWidget::defaultFormat());
 #endif
+
+#ifdef TOOLS_USE_GL_VERSION_3_2
+  #if QT_VERSION < 0x060000
+      QGLFormat format = QGLFormat::defaultFormat();
+      format.setVersion(3,2);
+      format.setProfile(QGLFormat::CoreProfile);
+      QGLFormat::setDefaultFormat(format);
+  #else
+      #ifndef G4VIS_USE_VTK_QT
+        QSurfaceFormat format = QSurfaceFormat::defaultFormat();
+        format.setVersion(3,2);
+        format.setProfile(QSurfaceFormat::CoreProfile);
+        QSurfaceFormat::setDefaultFormat(format);
+      #endif
+  #endif
+#endif
+
       new QApplication(*p_argn, args);
       if (! qApp) {
         G4UImanager* UImanager = G4UImanager::GetUIpointer();

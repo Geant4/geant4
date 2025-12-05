@@ -26,11 +26,11 @@
 //
 // Description:
 //
-//  Simple methods to extract vectors from arrays in conventions of
-//  the magnetic field integration.
+// Simple methods to extract vectors from arrays in conventions of
+// the magnetic field integration.
 
-// Author: Dmitry Sorokin, Google Summer of Code 2017
-// Supervision: John Apostolakis, CERN
+// Author: Dmitry Sorokin (CERN, Google Summer of Code 2017), 13.10.2017
+// Supervision: John Apostolakis (CERN)
 // --------------------------------------------------------------------
 #ifndef G4FIELD_UTILS_HH
 #define G4FIELD_UTILS_HH
@@ -39,9 +39,13 @@
 #include "G4Types.hh"
 #include "G4ThreeVector.hh"
 
+/**
+ * @brief field_utils is a helper namespace, including simple methods to extract
+ * vectors from arrays in conventions of the magnetic field integration.
+ */
+
 namespace field_utils
 {
-
   using State = G4double[G4FieldTrack::ncompSVEC];
 
   template <unsigned int N>
@@ -108,8 +112,7 @@ namespace field_utils
 
   template <typename T>
   T clamp(T value, T lo, T hi);
-
-} // field_utils
+}
 
 #include "G4FieldUtils.icc"
 

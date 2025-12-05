@@ -5,58 +5,14 @@
 #define tools_forit
 
 #define tools_vforcit(a__T,a__v,a__it) \
-  for(std::vector< a__T >::const_iterator a__it = (a__v).begin();(a__it)!=(a__v).end();++(a__it))
-
-#define tools_vforcit_beg(a__T,a__v,a__beg,a__it) \
-  for(std::vector< a__T >::const_iterator a__it = a__beg;(a__it)!=(a__v).end();++(a__it))
+  for(auto a__it = (a__v).cbegin(); (a__it) != (a__v).cend(); ++(a__it))
 
 #define tools_vforit(a__T,a__v,a__it) \
-  for(std::vector< a__T >::iterator a__it = (a__v).begin();(a__it)!=(a__v).end();++(a__it))
+  for(auto a__it = (a__v).begin(); (a__it) != (a__v).end(); ++(a__it))
 
-#define tools_vforcrit(a__T,a__v,a__it) \
-  for(std::vector< a__T >::const_reverse_iterator a__it = (a__v).rbegin();(a__it)!=(a__v).rend();++(a__it))
+#define tools_lforcit(a__T,a__l,a__it) tools_vforcit(a__T,a__l,a__it)
 
-#define tools_vforrit(a__T,a__v,a__it) \
-  for(std::vector< a__T >::reverse_iterator a__it = (a__v).rbegin();(a__it)!=(a__v).rend();++(a__it))
-
-#define tools_vforcit_npp(a__T,a__v,a__it) \
-  for(std::vector< a__T >::const_iterator a__it = (a__v).begin();(a__it)!=(a__v).end();)
-
-#define tools_vforit_npp(a__T,a__v,a__it) \
-  for(std::vector< a__T >::iterator a__it = (a__v).begin();(a__it)!=(a__v).end();)
-
-#define tools_typename_vforcit(a__T,a__v,a__it) \
-  for(typename std::vector< a__T >::const_iterator a__it = (a__v).begin();(a__it)!=(a__v).end();++(a__it))
-
-#define tools_typename_vforit(a__T,a__v,a__it) \
-  for(typename std::vector< a__T >::iterator a__it = (a__v).begin();(a__it)!=(a__v).end();++(a__it))
-
-#define tools_sforcit(a__s,a__it) \
-  for(std::string::const_iterator a__it = (a__s).begin();(a__it)!=(a__s).end();++(a__it))
-
-#define tools_sforit(a__s,a__it) \
-  for(std::string::iterator a__it = (a__s).begin();(a__it)!=(a__s).end();++(a__it))
-
-#define tools_lforcit(a__T,a__l,a__it) \
-  for(std::list< a__T >::const_iterator a__it = (a__l).begin();(a__it)!=(a__l).end();++(a__it))
-
-#define tools_lforit(a__T,a__l,a__it) \
-  for(std::list< a__T >::iterator a__it = (a__l).begin();(a__it)!=(a__l).end();++(a__it))
-
-#define tools_lforit_npp(a__T,a__v,a__it) \
-  for(std::list< a__T >::iterator a__it = (a__v).begin();(a__it)!=(a__v).end();)
-
-#define tools_mforcit(a__K,a__V,a__m,a__it) \
-  for(std::map< a__K , a__V >::const_iterator a__it = (a__m).begin();(a__it)!=(a__m).end();++(a__it))
-
-#define tools_mforit(a__K,a__V,a__m,a__it) \
-  for(std::map< a__K , a__V >::iterator a__it = (a__m).begin();(a__it)!=(a__m).end();++(a__it))
-
-#define tools_typename_mforcit(a__K,a__V,a__m,a__it) \
-  for(typename std::map< a__K, a__V >::const_iterator a__it = (a__m).begin();(a__it)!=(a__m).end();++(a__it))
-
-#define tools_typename_mforit(a__K,a__V,a__m,a__it) \
-  for(typename std::map< a__K, a__V >::iterator a__it = (a__m).begin();(a__it)!=(a__m).end();++(a__it))
+#define tools_lforit(a__T,a__l,a__it) tools_vforit(a__T,a__l,a__it)
 
 #endif
 

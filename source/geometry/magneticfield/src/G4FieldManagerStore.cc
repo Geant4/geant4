@@ -40,6 +40,28 @@ G4ThreadLocal G4FieldManagerStore* G4FieldManagerStore::fgInstance = nullptr;
 G4ThreadLocal G4bool G4FieldManagerStore::locked = false;
 
 // ***************************************************************************
+// Return ptr to Store, setting if necessary
+// ***************************************************************************
+//
+G4FieldManagerStore* G4FieldManagerStore::GetInstance()
+{
+  if (fgInstance == nullptr)
+  {
+    fgInstance = new G4FieldManagerStore;
+  }
+  return fgInstance;
+}
+
+// ***************************************************************************
+// Return ptr to Store
+// ***************************************************************************
+//
+G4FieldManagerStore* G4FieldManagerStore::GetInstanceIfExist()
+{
+  return fgInstance;
+}
+
+// ***************************************************************************
 // Protected constructor: Construct underlying container with
 // initial size of 100 entries
 // ***************************************************************************
@@ -107,28 +129,6 @@ void G4FieldManagerStore::DeRegister(G4FieldManager* pFieldMgr)
       }
     }
   }
-}
-
-// ***************************************************************************
-// Return ptr to Store, setting if necessary
-// ***************************************************************************
-//
-G4FieldManagerStore* G4FieldManagerStore::GetInstance()
-{
-  if (fgInstance == nullptr)
-  {
-    fgInstance = new G4FieldManagerStore;
-  }
-  return fgInstance;
-}
-
-// ***************************************************************************
-// Return ptr to Store
-// ***************************************************************************
-//
-G4FieldManagerStore* G4FieldManagerStore::GetInstanceIfExist()
-{
-  return fgInstance;
 }
 
 // ***************************************************************************

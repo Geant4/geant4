@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file Par03Hit.cc
+/// \brief Implementation of the Par03Hit class
+
 #include "Par03Hit.hh"
 
 #include "G4AttDef.hh"

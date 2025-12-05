@@ -33,10 +33,10 @@
 
 
 class G4HadronPhysicsQGSP_BIC_AllHP : public G4HadronPhysicsQGSP_BIC_HP {
-  public: 
+  public:
     G4HadronPhysicsQGSP_BIC_AllHP( G4int verbose = 1 );
     G4HadronPhysicsQGSP_BIC_AllHP( const G4String& name, G4bool quasiElastic = true );
-    virtual ~G4HadronPhysicsQGSP_BIC_AllHP() {}
+    ~G4HadronPhysicsQGSP_BIC_AllHP() override = default;
 
     // copy constructor and hide assignment operator
     G4HadronPhysicsQGSP_BIC_AllHP(G4HadronPhysicsQGSP_BIC_AllHP &) = delete;
@@ -45,7 +45,9 @@ class G4HadronPhysicsQGSP_BIC_AllHP : public G4HadronPhysicsQGSP_BIC_HP {
   protected:
     void Proton() override;
 
+  private:
     G4double maxHP_proton;
+    G4double minBIC_proton;
 };
 
 #endif

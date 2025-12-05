@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file persistency/P03/src/ExTGPrimaryGeneratorAction.cc
+/// \file ExTGPrimaryGeneratorAction.cc
 /// \brief Implementation of the ExTGPrimaryGeneratorAction class
 
 #include "ExTGPrimaryGeneratorAction.hh"

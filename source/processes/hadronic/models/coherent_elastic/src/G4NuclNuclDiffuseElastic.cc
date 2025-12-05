@@ -1119,13 +1119,9 @@ G4NuclNuclDiffuseElastic:: GetScatteringAngle( G4int iMomentum, G4int iAngle, G4
 }
 
 
-
 ////////////////////////////////////////////////////////////////////////////
 //
 // Return scattering angle sampled in lab system (target at rest)
-
-
-
 G4double 
 G4NuclNuclDiffuseElastic::SampleThetaLab( const G4HadProjectile* aParticle, 
                                         G4double tmass, G4double A)
@@ -1145,15 +1141,15 @@ G4NuclNuclDiffuseElastic::SampleThetaLab( const G4HadProjectile* aParticle,
   G4double tmax    = 4.0*ptot*ptot;
   G4double t       = 0.0;
 
-
   //
   // Sample t
   //
   
   t = SampleT( theParticle, ptot, A);
+  if (t <= 0.0) { return 0.0; }
 
   // NaN finder
-  if(!(t < 0.0 || t >= 0.0)) 
+  if (t > tmax) 
   {
     if (verboseLevel > 0) 
     {
@@ -1173,22 +1169,8 @@ G4NuclNuclDiffuseElastic::SampleThetaLab( const G4HadProjectile* aParticle,
 
   G4double phi  = G4UniformRand()*twopi;
   G4double cost = 1. - 2.0*t/tmax;
-  G4double sint;
+  G4double sint = std::sqrt((1.0-cost)*(1.0+cost));
 
-  if( cost >= 1.0 ) 
-  {
-    cost = 1.0;
-    sint = 0.0;
-  }
-  else if( cost <= -1.0) 
-  {
-    cost = -1.0;
-    sint =  0.0;
-  }
-  else  
-  {
-    sint = std::sqrt((1.0-cost)*(1.0+cost));
-  }    
   if (verboseLevel>1) 
   {
     G4cout << "cos(t)=" << cost << " std::sin(t)=" << sint << G4endl;

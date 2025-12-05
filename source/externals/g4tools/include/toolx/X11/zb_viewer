@@ -133,8 +133,14 @@ public:
   void win_render() {
     if(!m_win) return;
     if(!render(get_rgbas,false)) return;
-    put_buffer(m_win,m_ww,m_wh,tools::vec_data(m_out_buffer));
+    put_buffer(m_win,m_ww,m_wh,m_out_buffer.data());
     m_out_buffer.clear();
+    m_session.sync();
+  }
+
+  void emit_win_render() {
+    if(!m_win) return;
+    m_session.post_expose(m_win);
   }
 
   bool window_size(unsigned int& a_w,unsigned int& a_h) {

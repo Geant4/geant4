@@ -6,6 +6,10 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2025-11-06 Ivana Hrivnacova (exextended-V11-03-01)
+- Updated examples macros and READMEs for removal of HepRep[File] 
+  vis drivers (thanks to John Allison) 
+
 ## 2025-05-16 Ben Morgan (exextended-V11-03-00)
 - Replace the URL root.cern.ch with canonical root.cern
   - Fixes [GitHub PR 87](https://github.com/Geant4/geant4/pull/87)

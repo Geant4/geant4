@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file DicomBeamDeviceRef.hh
+/// \brief Definition of the DicomBeamDeviceRef class
+
 #ifndef DicomBeamDevicePosRef__HH
 #define DicomBeamDevicePosRef__HH
 

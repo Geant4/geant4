@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file RunAction.cc
+/// \brief Implementation of the RunAction class
+
 // This example is provided by the Geant4-DNA collaboration
 // Any report or published results obtained using the Geant4-DNA software
 // shall cite the following Geant4-DNA collaboration publications:
@@ -34,8 +37,6 @@
 //
 // The Geant4-DNA web site is available at http://geant4-dna.org
 //
-/// \file RunAction.cc
-/// \brief Implementation of the RunAction class
 
 #include "RunAction.hh"
 #include "DetectorConstruction.hh"
@@ -108,7 +109,7 @@ void RunAction::EndOfRunAction(const G4Run*)
     G4double cumulatedDeposit = 0;
 
     // Loop on cylinders and collect dose from merged local runs
-    G4int nbCyl = fMyDetectorConstruction->GetNumberCylinders();
+    G4int nbCyl = fMyDetectorConstruction->GetCylinderNumber();
 
     for (G4int i = 0; i < nbCyl ; i++)
     {
@@ -116,7 +117,7 @@ void RunAction::EndOfRunAction(const G4Run*)
       if (cumulatedDeposit > 0.)
       {
         analysisManager->FillNtupleDColumn
-          (1,0,i*fMyDetectorConstruction->GetThicknessCylinders()/nm);
+          (1,0,i*fMyDetectorConstruction->GetCylinderThickness()/nm);
         analysisManager->FillNtupleDColumn
           (1,1,cumulatedDeposit/fRun->GetNumberOfEvent()/gray);
         analysisManager->AddNtupleRow(1);

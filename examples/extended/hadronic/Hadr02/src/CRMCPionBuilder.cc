@@ -23,10 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file hadronic/Hadr02/src/CRMCPionBuilder.cc
+/// \file CRMCPionBuilder.cc
 /// \brief Implementation of the CRMCPionBuilder class
-//
-//
+
 //---------------------------------------------------------------------------
 //
 // ClassName: CRMCPionBuilder

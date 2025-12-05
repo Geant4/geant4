@@ -50,10 +50,6 @@ protected: //G.Barrand
 	// Cleaning memory and line strips
 	virtual void CleanMemory();
 
-	// Adding segment to line strips
-	// See ccontour::ExportLine for further details
-	//void ExportLine(int iPlane,int x1, int y1, int x2, int y2);
-
 	/// debuggin
 	void DumpPlane(unsigned int iPlane) const;
 
@@ -81,10 +77,6 @@ private:
         static const char* _TT(const char* what) {return what;}
 
         static void _TRACE_(const char* /*a_fmt*/,...) {
-          //va_list args;
-          //va_start(args,a_fmt);
-          //::vprintf(s,a_fmt,args);
-          //va_end(args);
         }
         static void _PROBLEM_(const char* what) {::printf("%s",what);}
 
@@ -443,7 +435,6 @@ inline bool clist_contour::compact_strips ()
 						pos1++;
 				}
 
-				//if (!(pStrip2->front()==pStrip2->back() && pStrip2->size()==2))
 				if (pStrip2->size()!=1) 
 					m_vStripLists[i].insert(m_vStripLists[i].begin(),pStrip2 );
 				else
@@ -762,35 +753,6 @@ inline double clist_contour:: EdgeWeight(cline_strip* pLine, double R)
 	}
 	return (double)count/pLine->size();
 }
-
-/*
-inline bool clist_contour::PrintContour(std::ostream& a_out)
-{
-        std::streamsize old_prec = a_out.precision(3);
-	a_out << std::setprecision(10);
-
-	UINT i, index;
-	cline_strip* pStrip;
-	cline_strip::iterator pos2;
-	cline_strip_list::iterator pos;
-
-	for(i=0;i<get_number_of_planes();i++) {
-		for(pos = m_vStripLists[i].begin();pos!=m_vStripLists[i].end();pos++)
-		{
-			pStrip = (*pos);
-			for(pos2 = pStrip->begin();pos2!=pStrip->end();pos2++)
-			{
-			  index = (*pos2);
-  			  a_out << get_xi(index)<<"\t"<<get_yi(index)<<"\n";
-			}
-			a_out<<"\n";
-		}
-	}
-        a_out.precision(old_prec);
-	return true;
-
-}
-*/
 
 //G.Barrand : from .h to .cxx to avoid _ASSERT_ in .h
 inline cline_strip_list* clist_contour::get_lines(unsigned int iPlane)	{

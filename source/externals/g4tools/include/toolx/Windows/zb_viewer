@@ -22,11 +22,10 @@ class zb_viewer : public window, protected pixwin, public tools::sg::zb_viewer {
   typedef tools::sg::zb_viewer parent_viewer;
 protected:
   virtual void paint() {
-    //parent_viewer::m_out << "toolx::Windows::zb_viewer::paint " << parent_viewer::m_ww << " " << parent_viewer::m_wh << std::endl;
     if(!render(get_bgras,false)) return;
     HDC hDC = ::GetDC(parent_render_area::m_hwnd);
     HDC bitmap_DC = ::CreateCompatibleDC(hDC);
-    HBITMAP bitmap = ::CreateBitmap(parent_viewer::m_ww,parent_viewer::m_wh, 1, 32, tools::vec_data(m_out_buffer));
+    HBITMAP bitmap = ::CreateBitmap(parent_viewer::m_ww,parent_viewer::m_wh, 1, 32, m_out_buffer.data());
     HBITMAP old_bitmap = (HBITMAP)::SelectObject(bitmap_DC, bitmap);
     ::BitBlt(hDC,0,0,parent_viewer::m_ww,parent_viewer::m_wh,bitmap_DC,0,0,SRCCOPY);
     ::SelectObject(bitmap_DC, old_bitmap);
@@ -37,7 +36,6 @@ protected:
     m_out_buffer.clear();
   }
   virtual void resize(unsigned int a_w,unsigned int a_h){  //NOTE: it is not called at startup.
-    //parent_viewer::m_out << "toolx::Windows::zb_viewer::resize " << a_w << " " << a_h << std::endl;
     set_size(a_w,a_h);
   }
 public:  
@@ -77,7 +75,12 @@ public:
     return true;
   }
 
-  void win_render() {parent_render_area::wm_paint();}
+  void win_render() {
+    parent_render_area::wm_paint();
+    m_session.sync();
+  }
+
+  void emit_win_render() {parent_render_area::post_WM_PAINT();}
 
   bool window_size(unsigned int& a_w,unsigned int& a_h) {
     if(!parent_render_area::m_hwnd) {a_w = 0;a_h = 0;return false;}

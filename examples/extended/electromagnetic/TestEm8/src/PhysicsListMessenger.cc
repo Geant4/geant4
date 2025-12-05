@@ -23,10 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm8/src/PhysicsListMessenger.cc
+/// \file PhysicsListMessenger.cc
 /// \brief Implementation of the PhysicsListMessenger class
-//
-//
+
 //---------------------------------------------------------------------------
 //
 // ClassName:   PhysicsListMessenger

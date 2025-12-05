@@ -23,11 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file biasing/B01/src/B01DetectorConstruction.cc
+/// \file B01DetectorConstruction.cc
 /// \brief Implementation of the B01DetectorConstruction class
-//
-//
-//
 
 #include "B01DetectorConstruction.hh"
 

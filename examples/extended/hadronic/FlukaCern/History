@@ -1,8 +1,18 @@
 # Example FlukaCern History
 
 See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
-which **must** added in reverse chronological order (newest at the top). It must **not**
-be used as a substitute for writing good git commit messages!
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
+
+-------------------------------------------------------------------------------
+
+## 2025-11-10 Gabriele Cosmo (FlukaCern-V11-03-04)
+- Fixed coding conventions for long lines and tabs in source.
+
+## 2025-07-24 I. Hrivnacova (FlukaCern-V11-03-03)
+- Migration of existing README.md to Doxygen:
+  - Added Doxygen keywords to README.md files
+  - Removed .README.txt files
 
 ## 2025-03-21 Gabrielle Hugo (FlukaCern-V11-03-02)
 - Ensure compatibility with FLUKA v4-5.0: make the link time resolution of COMMON blocks 

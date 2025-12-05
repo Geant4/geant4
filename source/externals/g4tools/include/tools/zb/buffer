@@ -74,13 +74,11 @@ public:
   :m_depth_test(true)
   ,m_blend(false)
   ,m_zbuffer(0)
-  //,m_zmin(0),m_zmax(0)
   ,m_zimage(0)
   ,m_zbw(0),m_zbh(0)
   ,m_begX(0),m_begY(0),m_endX(0),m_endY(0)
   ,m_scan_pixel(0L)
   ,m_planeAC(0),m_planeBC(0),m_planeDC(0)
-  //,m_zboundPrec(10)
   {}
   virtual ~buffer(){
     cmem_free(m_zbuffer);
@@ -101,7 +99,6 @@ protected:
   }
 public:
   void set_depth_test(bool a_on) {m_depth_test = a_on;}
-  //bool depth_test() const {return m_depth_test;}
   
   void set_blend(bool a_value) {m_blend = a_value;}
 
@@ -115,7 +112,6 @@ public:
       cmem_free(m_zimage);
     }
 
-    //printf ("debug:ZBufferChangeSize:%d %d\n",a_width,a_height);
     m_zbw = a_width;
     m_zbh = a_height;
     m_zbuffer = cmem_alloc<ZReal>(m_zbw*m_zbh);
@@ -156,7 +152,6 @@ public:
   void clear_depth_buffer() {
     // Erase acoording clip region.
     ZPos row,col;
-    //printf("debug:ZBufferClearDepthBuffer: %g.\n",a_depth);
 
     for(row=m_begY;row<=m_endY;row++) {
       ZReal* zbuff = m_zbuffer + row * m_zbw + m_begX;
@@ -224,7 +219,6 @@ public:
     // Assume a_list is closed.
     if(a_number<3) return;
     if(a_C==0) return; //polygone seen from edge
-    //if(m_zboundPrec<0) m_zboundPrec = 0;
 
     m_scan_pixel   = a_pixel;
     m_planeAC      = a_A/a_C;
@@ -235,11 +229,8 @@ public:
     //to an other B than |dz| then some pixel of A could overwrite
     //pixel of B. Your have then to give a lower m_zboundPrec
 
-    //ZZ dz = m_zboundPrec * (a_zmax - a_zmin)/100.;
-    //m_zmin = (ZReal)(a_zmin - dz);
-    //m_zmax = (ZReal)(a_zmax + dz);
+    m_polygon.scan(a_number,a_list,0,WriteScanLine,this,m_zbw,m_zbh);
 
-    m_polygon.scan(a_number,a_list,0,WriteScanLine,this);
 
   }
 
@@ -304,8 +295,8 @@ protected:
     if(a_end<a_buffer.m_begX) return;
 
     // border clip :
-    int beg = mx(a_beg,(int)a_buffer.m_begX);
-    int end = mn(a_end,(int)a_buffer.m_endX);
+    int beg = max_of(a_beg,(int)a_buffer.m_begX);
+    int end = min_of(a_end,(int)a_buffer.m_endX);
 
     unsigned long offset = a_y * a_buffer.m_zbw + beg;
     ZReal* zbuff = a_buffer.m_zbuffer + offset;
@@ -319,8 +310,6 @@ protected:
                 - a_buffer.m_planeBC * a_y);
       if(a_buffer.m_depth_test) {
         if((zpoint>=(*zbuff))
-//       &&(zpoint>=a_buffer.m_zmin) //for plane quite perpandicular to screen.
-//       &&(zpoint<=a_buffer.m_zmax)
           ){
           *zbuff = zpoint;
           a_buffer.blend(*zimage,a_buffer.m_scan_pixel);
@@ -430,7 +419,6 @@ protected:
   bool         m_depth_test;
   bool         m_blend;
   ZReal*       m_zbuffer;
-//ZReal        m_zmin,m_zmax;
 
   ZPixel*      m_zimage;
 
@@ -442,7 +430,6 @@ protected:
   ZZ           m_planeAC;
   ZZ           m_planeBC;
   ZZ           m_planeDC;
-  //int          m_zboundPrec;
   polygon      m_polygon;
 };
 

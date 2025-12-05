@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file Par03ActionInitialisation.cc
+/// \brief Implementation of the Par03ActionInitialisation class
+
 #include "Par03ActionInitialisation.hh"
 
 #include "Par03EventAction.hh"

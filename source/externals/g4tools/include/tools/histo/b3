@@ -162,10 +162,8 @@ public:
     TO joffset = ibin;
     TN _entries = 0;
     for(jbin=0;jbin<ybins;jbin++) {
-      //joffset = ibin + jbin * parent::m_axes[1].m_offset;
       offset = joffset;
       for(kbin=0;kbin<zbins;kbin++) {
-        //offset = joffset + kbin * parent::m_axes[2].m_offset;
         _entries += parent::m_bin_entries[offset];
         offset += zoffset;
       }
@@ -187,10 +185,8 @@ public:
     TO joffset = jbin * yoffset;
     TN _entries = 0;
     for(ibin=0;ibin<xbins;ibin++) {
-      //joffset = ibin + jbin * parent::m_axes[1].m_offset;
       offset = joffset;
       for(kbin=0;kbin<zbins;kbin++) {
-        //offset = joffset + kbin * parent::m_axes[2].m_offset;
         _entries += parent::m_bin_entries[offset];
         offset += zoffset;
       }
@@ -212,10 +208,8 @@ public:
     TO koffset = kbin * zoffset;
     TN _entries = 0;
     for(ibin=0;ibin<xbins;ibin++) {
-      //koffset = ibin + kbin * parent::m_axes[2].m_offset;
       offset = koffset;
       for(jbin=0;jbin<ybins;jbin++) {
-        //offset = koffset + jbin * parent::m_axes[1].m_offset;
         _entries += parent::m_bin_entries[offset];
         offset += yoffset;
       }
@@ -236,10 +230,8 @@ public:
     TO joffset = ibin;
     TW sw = 0;
     for(bn_t jbin=0;jbin<ybins;jbin++) {
-      //joffset = ibin + jbin * parent::m_axes[1].m_offset;
       TO offset = joffset;
       for(bn_t kbin=0;kbin<zbins;kbin++) {
-        //offset = joffset + kbin * parent::m_axes[2].m_offset;
         sw += this->get_bin_height(offset);
         offset += zoffset;
       }
@@ -259,10 +251,8 @@ public:
     TO joffset = jbin * yoffset;
     TW sw = 0;
     for(bn_t ibin=0;ibin<xbins;ibin++) {
-      //joffset = ibin + jbin * parent::m_axes[1].m_offset;
       TO offset = joffset;
       for(bn_t kbin=0;kbin<zbins;kbin++) {
-        //offset = joffset + kbin * parent::m_axes[2].m_offset;
         sw += this->get_bin_height(offset);
         offset += zoffset;
       }
@@ -282,10 +272,8 @@ public:
     TO koffset = kbin * zoffset;
     TW sw = 0;
     for(bn_t ibin=0;ibin<xbins;ibin++) {
-      //koffset = ibin + kbin * parent::m_axes[2].m_offset;
       TO offset = koffset;
       for(bn_t jbin=0;jbin<ybins;jbin++) {
-        //offset = koffset + jbin * parent::m_axes[1].m_offset;
         sw += this->get_bin_height(offset);
         offset += yoffset;
       }

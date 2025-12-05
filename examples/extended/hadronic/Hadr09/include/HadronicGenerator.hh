@@ -25,7 +25,7 @@
 //
 /// \file HadronicGenerator.hh
 /// \brief Definition of the HadronicGenerator class
-//
+
 //------------------------------------------------------------------------
 // Class: HadronicGenerator
 // Author: Alberto Ribon (CERN EP/SFT)

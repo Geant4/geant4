@@ -23,12 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file parallel/ThreadsafeScorers/include/G4atomic.hh
+/// \file G4atomic.hh
 /// \brief Definition of the G4atomic class
-//
-//
-//
-//
+///
 /// This is an friendly implementation of the STL atomic class.
 ///     This class has the same interface as the STL atomic but can be used
 ///     in an extremely similar fashion to plain old data (POD) types.
@@ -41,6 +38,7 @@
 ///     only used as a RHS term outside of the multithreaded operations on it.
 ///
 /// FOR EXAMPLE:
+/// ```
 ///     Proper use:
 ///         Goal: sum energy deposited in run
 ///         Impl: Is a member variable of derived
@@ -59,6 +57,7 @@
 ///              sum, sum_sq, and counts are updated by another thread
 ///              while error is being calculated, i.e. they are used as
 ///              RHS terms
+/// ```
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

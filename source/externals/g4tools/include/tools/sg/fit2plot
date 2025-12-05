@@ -6,12 +6,8 @@
 
 #include "plottables"
 
-#include "../words"
+#include "../tokenize"
 #include "../num2s"
-
-#ifdef TOOLS_MEM
-#include "../mem"
-#endif
 
 namespace tools {
 namespace sg {
@@ -104,9 +100,6 @@ public:
   :m_names(a_names)
   ,m_output(a_output)
   {
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
     size_t nparam = (m_output.size()-2)/4;
     if(m_names.size()!=nparam) {
       //should issue a warning.
@@ -115,9 +108,6 @@ public:
     }
   }
   virtual ~fit2plot(){
-#ifdef TOOLS_MEM
-    mem::decrement(s_class().c_str());
-#endif
   }
 public:
   fit2plot(const fit2plot& a_from)
@@ -127,9 +117,6 @@ public:
   ,m_name(a_from.m_name)
   ,m_legend(a_from.m_legend)
   {
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
   }
   fit2plot& operator=(const fit2plot& a_from){
     m_names = a_from.m_names;

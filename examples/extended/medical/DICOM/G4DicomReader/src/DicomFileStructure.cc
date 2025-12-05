@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file DicomFileStructure.cc
+/// \brief Implementation of the DicomFileStructure class
+
 #include "DicomFileStructure.hh"
 
 #include "dcmtk/config/osconfig.h"  // make sure OS specific configuration is included

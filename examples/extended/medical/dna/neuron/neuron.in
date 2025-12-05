@@ -6,23 +6,27 @@
 /process/em/auger true
 /process/em/augerCascade true
 /process/em/deexcitationIgnoreCut true 
+# Geant4-DNA and Geant4 EM Physics inside and outside the neuron volume
+#/process/em/AddDNARegion Soma DNA_Opt2
+#/process/em/AddDNARegion Dendrites DNA_Opt2
+#/process/em/AddDNARegion Axon DNA_Opt2
+# Run initialization
+/run/initialize
 # Particle direction and position
 #/gun/direction 0 0 1 
 #/gun/position 0 0 0 um
-
+#
 # Particle name and energy
-/gun/particle proton
-/gun/energy 30 MeV
+#/gun/particle proton
+#/gun/energy 30 MeV
 /gun/particle ion
 /gun/ion 6 12 6
 /gun/energy 3480 MeV
-
+#
 #/particle/property/dump
 #/particle/list
 #/process/list
 #/particle/process/dump
 #/run/printProgress 100
-
-/run/initialize
-
+# Beam on
 /run/beamOn 2

@@ -60,10 +60,9 @@
 //  ySemiAxis = (Dy-dy)/(2*zTopCut)
 //    zheight = (Dx+dx)/(2*xSemiAxis)
 
-// Author: Dionysios Anninos, 8.9.2005
-// Revisions:
-//   Lukas Lindroos, Tatiana Nikitina, 20.08.2007
-//   Evgueni Tcherniaev, 20.07.2017
+// Author: Dionysios Anninos (CERN), 08.09.2005 - Created
+//         Lukas Lindroos, Tatiana Nikitina (CERN), 20.08.2007 - Revised
+//         Evgueni Tcherniaev (CERN), 20.07.2017 - New revision
 // --------------------------------------------------------------------
 #ifndef G4ELLIPTICALCONE_HH
 #define G4ELLIPTICALCONE_HH
@@ -84,19 +83,38 @@
 #include "G4VSolid.hh"
 #include "G4Polyhedron.hh"
 
+/**
+ * @brief G4EllipticalCone is a full cone with elliptical base which
+ * can be cut in Z. The height in Z corresponds to where the elliptical
+ * cone hits the Z-axis if it had no Z cut.
+ */
+
 class G4EllipticalCone : public G4VSolid
 {
   public:
 
+    /**
+     * Constructs an elliptical cone, with cut in Z.
+     *  @param[in] name The solid name.
+     *  @param[in] pxSemiAxis Scalar value, defining the scaling along X-axis.
+     *  @param[in] pySemiAxis Scalar value, defining the scaling along Y-axis.
+     *  @param[in] zMax The Z-coordinate at the apex.
+     *  @param[in] pzTopCut Upper cut plane level.
+     */
     G4EllipticalCone(const G4String& pName,
                            G4double  pxSemiAxis,
                            G4double  pySemiAxis,
                            G4double  zMax,
                            G4double  pzTopCut);
 
+    /**
+     * Destructor.
+     */
     ~G4EllipticalCone() override;
 
-    // Access functions
+    /**
+     * Accessors.
+     */
     inline G4double GetSemiAxisMin () const;
     inline G4double GetSemiAxisMax () const;
     inline G4double GetSemiAxisX () const;
@@ -104,58 +122,97 @@ class G4EllipticalCone : public G4VSolid
     inline G4double GetZMax() const;
     inline G4double GetZTopCut() const;
 
-    // Modifiers
+    /**
+     * Modifiers.
+     */
     void SetSemiAxis (G4double x, G4double y, G4double z);
     void SetZCut (G4double newzTopCut);
 
-    // Solid standard methods
+    /**
+     * Returning an estimation of the solid volume (capacity) and
+     * surface area, in internal units.
+     */
     G4double GetCubicVolume() override;
     G4double GetSurfaceArea() override;
 
+    /**
+     * Computes the bounding limits of the solid.
+     *  @param[out] pMin The minimum bounding limit point.
+     *  @param[out] pMax The maximum bounding limit point.
+     */
     void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const override;
 
+    /**
+     * Calculates the minimum and maximum extent of the solid, when under the
+     * specified transform, and within the specified limits.
+     *  @param[in] pAxis The axis along which compute the extent.
+     *  @param[in] pVoxelLimit The limiting space dictated by voxels.
+     *  @param[in] pTransform The internal transformation applied to the solid.
+     *  @param[out] pMin The minimum extent value.
+     *  @param[out] pMax The maximum extent value.
+     *  @returns True if the solid is intersected by the extent region.
+     */
     G4bool CalculateExtent(const EAxis pAxis,
                            const G4VoxelLimits& pVoxelLimit,
                            const G4AffineTransform& pTransform,
                                  G4double& pMin, G4double& pMax) const override;
 
+    /**
+     * Concrete implementations of the expected query interfaces for
+     * solids, as defined in the base class G4VSolid.
+     */
     EInside Inside(const G4ThreeVector& p) const override;
-
     G4ThreeVector SurfaceNormal(const G4ThreeVector& p) const override;
-
     G4double DistanceToIn(const G4ThreeVector& p,
                           const G4ThreeVector& v) const override;
-
     G4double DistanceToIn(const G4ThreeVector& p) const override;
-
     G4double DistanceToOut(const G4ThreeVector& p,
                            const G4ThreeVector& v,
                            const G4bool calcNorm = false,
                                  G4bool* validNorm = nullptr,
                                  G4ThreeVector* n = nullptr) const override;
-
     G4double DistanceToOut(const G4ThreeVector& p) const override;
 
+    /**
+     * Returns the type ID, "G4EllipticalCone" of the solid.
+     */
     G4GeometryType GetEntityType() const override;
 
+    /**
+     * Makes a clone of the object for use in multi-treading.
+     *  @returns A pointer to the new cloned allocated solid.
+     */
     G4VSolid* Clone() const override;
 
+    /**
+     * Returns a random point located and uniformly distributed on the
+     * surface of the solid.
+     */
     G4ThreeVector GetPointOnSurface() const override;
 
+    /**
+     * Streams the object contents to an output stream.
+     */
     std::ostream& StreamInfo(std::ostream& os) const override;
 
-    // Visualisation functions
-    G4Polyhedron* GetPolyhedron () const override;
+    /**
+     * Methods for creating graphical representations (i.e. for visualisation).
+     */
+    G4Polyhedron* GetPolyhedron() const override;
     void DescribeYourselfTo(G4VGraphicsScene& scene) const override;
-    G4VisExtent   GetExtent() const override;
+    G4VisExtent GetExtent() const override;
     G4Polyhedron* CreatePolyhedron() const override;
 
-    // Fake default constructor for usage restricted to direct object
-    // persistency for clients requiring preallocation of memory for
-    // persistifiable objects.
+    /**
+     * Fake default constructor for usage restricted to direct object
+     * persistency for clients requiring preallocation of memory for
+     * persistifiable objects.
+     */
     G4EllipticalCone(__void__&);
 
-    // Copy constructor and assignment operator
+    /**
+     * Copy constructor and assignment operator.
+     */
     G4EllipticalCone(const G4EllipticalCone& rhs);
     G4EllipticalCone& operator=(const G4EllipticalCone& rhs);
 
@@ -166,8 +223,10 @@ class G4EllipticalCone : public G4VSolid
 
   private:
 
-    // Algorithm for SurfaceNormal() following the original
-    // specification for points not on the surface
+    /**
+     * Algorithm for SurfaceNormal() following the original
+     * specification for points not on the surface.
+     */
     G4ThreeVector ApproxSurfaceNormal(const G4ThreeVector& p) const;
 
   private:

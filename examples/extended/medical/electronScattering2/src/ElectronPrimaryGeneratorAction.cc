@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file medical/electronScattering2/src/ElectronPrimaryGeneratorAction.cc
+/// \file ElectronPrimaryGeneratorAction.cc
 /// \brief Implementation of the ElectronPrimaryGeneratorAction class
 
 #include "ElectronPrimaryGeneratorAction.hh"

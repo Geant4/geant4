@@ -23,11 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file biasing/ReverseMC01/include/RMC01DetectorMessenger.hh
+/// \file RMC01DetectorMessenger.hh
 /// \brief Definition of the RMC01DetectorMessenger class
-//
-//
-//////////////////////////////////////////////////////////////
+
 //  Class Name:            RMC01DetectorMessenger
 //        Author:               L. Desorgher
 //        Organisation:         SpaceIT GmbH

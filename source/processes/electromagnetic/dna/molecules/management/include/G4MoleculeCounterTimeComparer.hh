@@ -26,7 +26,7 @@
 #ifndef G4MOLECULECOUNTERTIMECOMPARER_HH
 #define G4MOLECULECOUNTERTIMECOMPARER_HH 1
 
-#include "G4SystemOfUnits.hh"
+#include <CLHEP/Units/PhysicalConstants.h>
 #include "G4Types.hh"
 
 #include <map>
@@ -58,7 +58,7 @@ class G4MoleculeCounterTimeComparer
 
   private:
     TimeComparerType fType;
-    G4double fPrecision{1 * picosecond};
+    G4double fPrecision{1 * CLHEP::picosecond};
     std::map<G4double, G4double> fVariablePrecision{};
 
   public:  // Factory

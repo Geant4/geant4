@@ -23,11 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file PhysGeoImport.cc
+/// \brief Implementation of the PhysGeoImport class
+///
+/// Implementation of the plasmid load methods for the geometry
+
 // Authors: J. Naoki D. Kondo (UCSF, US) : 10/10/2021
 //          J. Ramos-Mendez and B. Faddegon (UCSF, US)
 //
-/// \file PhysGeoImport.cc
-/// \brief Implementation of the plasmid load methods for the geometry
 
 #include "PhysGeoImport.hh"
 

@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file Par04Hit.cc
+/// \brief Implementation of the Par04Hit class
+
 #include "Par04Hit.hh"
 
 #include "G4AttDef.hh"  // for G4AttDef
@@ -167,6 +170,6 @@ std::vector<G4AttValue>* Par04Hit::CreateAttValues() const
 void Par04Hit::Print()
 {
   G4cout << "\tHit " << fEdep / MeV << " MeV from " << fNdep << " deposits at " << fPos / cm
-	 << " cm with rotation " << fRot << " (R,phi,z)= (" << fRhoId << ", " << fPhiId << ", "
-	 << fZId << "), " << fTime << " ns" << G4endl;
+         << " cm with rotation " << fRot << " (R,phi,z)= (" << fRhoId << ", " << fPhiId << ", "
+         << fZId << "), " << fTime << " ns" << G4endl;
 }

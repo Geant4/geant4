@@ -24,9 +24,7 @@
 // ********************************************************************
 //
 /// \file SAXSDetectorConstruction.hh
-/// \brief Implementation of the SAXSDetectorConstruction class
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// \brief Definition of the SAXSDetectorConstruction class
 
 #ifndef SAXSDetectorConstruction_h
 #  define SAXSDetectorConstruction_h 1

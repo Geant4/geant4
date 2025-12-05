@@ -25,12 +25,10 @@
 //
 // Implementation of G4PolyconeHistorical, polycone data
 //
-// Author: David C. Williams (davidw@scipp.ucsc.edu)
+// Author: David C. Williams (UCSC), 1998
 // --------------------------------------------------------------------
 
 #include "G4PolyconeHistorical.hh"
-
-G4PolyconeHistorical::G4PolyconeHistorical() = default;
 
 G4PolyconeHistorical::
 G4PolyconeHistorical( G4int z_planes )
@@ -77,7 +75,7 @@ G4PolyconeHistorical( const G4PolyconeHistorical& source )
 G4PolyconeHistorical&
 G4PolyconeHistorical::operator=( const G4PolyconeHistorical& right )
 {
-  if ( &right == this ) return *this;
+  if ( &right == this ) { return *this; }
 
   Start_angle   = right.Start_angle;
   Opening_angle = right.Opening_angle;

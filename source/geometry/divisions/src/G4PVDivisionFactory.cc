@@ -117,16 +117,14 @@ G4PVDivisionFactory::CreatePVDivision(const G4String& pName,
                 "Unexpected parameterisation type!");
     return nullptr;
   }
-  else
-  {
-    EAxis axis = divParam->GetAxis();
-    G4int nofDivisions = divParam->GetNoDiv();
-    G4double width = divParam->GetWidth();
-    G4double offset = divParam->GetOffset();
+  
+  EAxis axis = divParam->GetAxis();
+  G4int nofDivisions = divParam->GetNoDiv();
+  G4double width = divParam->GetWidth();
+  G4double offset = divParam->GetOffset();
 
-    return new G4PVDivision(pName, pLogical, pMotherLogical, 
-                            axis, nofDivisions, width, offset);
-  }
+  return new G4PVDivision(pName, pLogical, pMotherLogical, 
+                          axis, nofDivisions, width, offset);
 }    
 
 //_____________________________________________________________________________

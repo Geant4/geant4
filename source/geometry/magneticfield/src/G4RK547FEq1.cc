@@ -38,8 +38,8 @@
 //             1/12      0          27/32     -4/3     125/96    5/48    0
 //             2/15      0          27/80     -2/15    25/48     1/24    1/10
 //
-// Author: Dmitry Sorokin, Google Summer of Code 2017
-// Supervision: John Apostolakis, CERN
+// Author: Dmitry Sorokin (CERN, Google Summer of Code 2017), 02.11.2017
+// Supervision: John Apostolakis (CERN)
 // --------------------------------------------------------------------
 
 #include "G4RK547FEq1.hh"

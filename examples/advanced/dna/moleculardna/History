@@ -6,6 +6,32 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2025-11-02 B. Munkhbaatar, S. Incerti, D. Sakata, H. Tran,  (molecularDNA-V11-03-15)
+- Fixed the wrong gap: a gap (distance between 2 hits) can be 0 (bugzilla #2681)
+- Added protection for over counting damage
+- Fixed the printed info by Batmunkh
+- Updated of ROOT macros for statistical analysis of errors
+- Updated of absorbed dose calculation in ROOT macros to avoid double counting of
+energy deposition in DNA geometry, and inclusion of error on the dose
+
+## 2025-10-09 K. Chatzipapas, S. Incerti (molecularDNA-V11-03-14)
+- Fixed cell geometry in human_cell_chromosomes.mac.
+
+## 2025-09-17 Le Tuan Anh (molecularDNA-V11-03-13)
+- Commented out "system ("hadd -O -f molecular-dna.root molecular-dna_t*.root")"  
+  in all ROOT analysis macros.
+
+## 2025-08-26 H. Tran (molecularDNA-V11-03-12)
+- restored the Maximum Time Step parameter in the chemistry
+- merged the output files from different threads to a single file
+- fixed the memory leak in the PrimaryGeneratorAction for phase_space
+
+## 2025-07-22 S. Incerti (molecularDNA-V11-03-11)
+- added /scheduler/verbose 0 to all human* macros
+
+## 2025-07-17 S. Incerti (molecularDNA-V11-03-10)
+- fixed phase_space_test.mac.
+
 ## 2025-06-03 H. Tran (molecularDNA-V11-03-09)
 - fixed updated reaction list for each DNA reactions.
 

@@ -10,10 +10,6 @@
 #include <string>
 #include "../mnmx"
 
-#ifdef TOOLS_MEM
-#include "../mem"
-#endif
-
 namespace tools {
 namespace histo {
 
@@ -24,23 +20,14 @@ class measurement {
   }
 public:
   measurement():m_value(0),m_error_plus(0),m_error_minus(0){
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
   }
   measurement(double a_value,double a_error_plus,double a_error_minus)
   :m_value(a_value)
   ,m_error_plus(a_error_plus)
   ,m_error_minus(a_error_minus)
   {
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
   }
   virtual ~measurement(){
-#ifdef TOOLS_MEM
-    mem::decrement(s_class().c_str());
-#endif
   }
 public:
   measurement(const measurement& a_from)
@@ -48,9 +35,6 @@ public:
   ,m_error_plus(a_from.m_error_plus)
   ,m_error_minus(a_from.m_error_minus)
   {
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
   }
   measurement& operator=(const measurement& a_from) {
     if(&a_from==this) return *this;
@@ -79,22 +63,13 @@ class data_point {
   }
 public:
   data_point(unsigned int a_dim):m_measurements(a_dim){
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
   }
   virtual ~data_point() {
-#ifdef TOOLS_MEM
-    mem::decrement(s_class().c_str());
-#endif
   }
 public:
   data_point(const data_point& a_from)
   :m_measurements(a_from.m_measurements)
   {
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
   }
   data_point& operator=(const data_point& a_from) {
     if(&a_from==this) return *this;
@@ -186,7 +161,7 @@ public:
     a_value = (*it).coordinate(a_coord).value();
     ++it;
     for(;it!=m_points.end();++it) {
-      a_value = mn<double>(a_value,(*it).coordinate(a_coord).value());
+      a_value = min_of<double>(a_value,(*it).coordinate(a_coord).value());
     }
     return true;
   }
@@ -200,7 +175,7 @@ public:
     a_value = (*it).coordinate(a_coord).value();
     ++it;
     for(;it!=m_points.end();++it) {
-      a_value = mx<double>(a_value,(*it).coordinate(a_coord).value());
+      a_value = max_of<double>(a_value,(*it).coordinate(a_coord).value());
     }
     return true;
   }

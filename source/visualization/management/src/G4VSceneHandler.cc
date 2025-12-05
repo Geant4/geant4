@@ -637,7 +637,6 @@ void G4VSceneHandler::RequestPrimitives (const G4VSolid& solid)
       // entry, something we would want to avoid.
       dots.SetVisAttributes(fpVisAttribs);
       dots.SetMarkerType(G4Polymarker::dots);
-      dots.SetSize(G4VMarker::screen,1.);
       G4int numberOfCloudPoints = GetNumberOfCloudPoints(fpVisAttribs);
       if (numberOfCloudPoints <= 0) numberOfCloudPoints = vp.GetNumberOfCloudPoints();
       for (G4int i = 0; i < numberOfCloudPoints; ++i) {
@@ -1289,6 +1288,17 @@ G4double G4VSceneHandler::GetMarkerSize
 (const G4VMarker& marker, 
  G4VSceneHandler::MarkerSizeType& markerSizeType)
 {
+  // Deal with G4Polymarker::dots
+  const auto& vp = fpViewer->GetViewParameters();
+  try {
+    const auto& polymarker = dynamic_cast<const G4Polymarker&>(marker);
+    if (polymarker.GetMarkerType() == G4Polymarker::dots) {
+      return vp.GetDotsSize();
+    }
+  }
+  catch (const std::bad_cast&) {}  // Continue
+
+  // Other markers
   G4bool userSpecified = marker.GetWorldSize() || marker.GetScreenSize();
   const G4VMarker& defaultMarker =
     fpViewer -> GetViewParameters().GetDefaultMarker();
@@ -1533,7 +1543,6 @@ void G4VSceneHandler::Draw3DRectMeshAsDots(const G4Mesh& mesh)
       dots.SetInfo(name);
       dots.SetVisAttributes(visAtts);
       dots.SetMarkerType(G4Polymarker::dots);
-      dots.SetSize(G4VMarker::screen,1.);
       // Enter empty polymarker into the map
       dotsByMaterial[material] = dots;
       // Now fill it in situ
@@ -1815,7 +1824,6 @@ void G4VSceneHandler::DrawTetMeshAsDots(const G4Mesh& mesh)
       G4Polymarker dots;
       dots.SetVisAttributes(visAtts);
       dots.SetMarkerType(G4Polymarker::dots);
-      dots.SetSize(G4VMarker::screen,1.);
       dots.SetInfo(name);
       // Enter empty polymarker into the map
       dotsByMaterial[material] = dots;

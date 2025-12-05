@@ -231,18 +231,18 @@ LUPI_HOST_DEVICE int MCGIDI_strncmp( const char * s1, const char * s2, size_t n 
       if ( pos >= size_ ) // user must not remove trailing 0
         LUPI_THROW("MCGIDI::String::erase: pos index out_of_range");
 
-      long s2 = size_;
-      long remain = s2 - (long) pos - len;
+      long s2 = (long) size_;
+      long remain = s2 - (long) ( pos - len );
 
       if (remain > 0) {
         // erase by overwriting
-        MCGIDI_memmove(p + pos, p + pos + len, remain);
+        MCGIDI_memmove(p + pos, p + pos + len, (size_t) remain);
       }
 
       if ( remain < 0 ) remain = 0;
 
       // remove unused space
-      this->resize( pos+remain );
+      this->resize( pos + (size_t) remain );
 
     }
     return *this;
@@ -296,7 +296,7 @@ LUPI_HOST_DEVICE int MCGIDI_strncmp( const char * s1, const char * s2, size_t n 
   LUPI_HOST_DEVICE void String::my_realloc( size_type n, char ** address) {
     if (address != nullptr && *address != nullptr) {
         p = *address;
-        long delta = sizeof(char) * n;
+        long delta = (long) ( sizeof(char) * n );
         long sub = delta % 8;
         if (sub != 0) delta += (8-sub);
         *address += delta;

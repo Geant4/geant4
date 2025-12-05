@@ -299,7 +299,7 @@ G4double G4BigBanger::xProbability(G4double x, G4int a) const {
   G4Pow* theG4Pow = G4Pow::GetInstance();	// For convenience
 
   G4double ekpr = 0.0;
-  if(x < 1.0 || x > 0.0) {
+  if (x < 1.0 && x > 0.0) {
     ekpr = x * x;
 
     if (a%2 == 0) { // even A

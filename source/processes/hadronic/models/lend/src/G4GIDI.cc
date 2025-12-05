@@ -362,7 +362,7 @@ G4GIDI_target *G4GIDI::readTarget( std::string const &a_lib_name, std::string co
             MC.setThrowOnError( false );
             MC.setSampleNonTransportingParticles( true );
             MCGIDI::DomainHash domainHash( 4000, 1e-8, 10 );
-            std::set<int> reactionsToExclude;
+            std::set<size_t> reactionsToExclude;
 
             GIDI::Transporting::Particles particles;
             GIDI::Transporting::Particle neutron( PoPI::IDs::neutron );
@@ -372,7 +372,7 @@ G4GIDI_target *G4GIDI::readTarget( std::string const &a_lib_name, std::string co
             temperatures1.push_back( temperatures[0] );
             MCGIDI::Protare *MCGIDI_protare = MCGIDI::protareFromGIDIProtare( smr, *GIDI_protare, G4GIDI_pops, MC, particles, domainHash, 
                     temperatures1, reactionsToExclude );
-            if( !smr.isOk( ) ) throw LUPI::Exception( smr.constructFullMessage( "G4GIDI::readTarget:" ) );
+            //if( !smr.isOk( ) ) throw LUPI::Exception( smr.constructFullMessage( "G4GIDI::readTarget:" ) );
 
             G4GIDI_target *protare = new G4GIDI_target( G4GIDI_pops, domainHash, *GIDI_protare, MCGIDI_protare );
             delete GIDI_protare;

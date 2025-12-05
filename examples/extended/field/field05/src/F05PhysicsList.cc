@@ -23,11 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file field/field05/src/F05PhysicsList.cc
+/// \file F05PhysicsList.cc
 /// \brief Implementation of the F05PhysicsList class
-//
-//
+
 #include "F05PhysicsList.hh"
 
 #include "G4SpinDecayPhysics.hh"

@@ -44,16 +44,18 @@
 #include "G4Pow.hh"
 
 #include "G4PionZero.hh"
+#include "G4PionPlus.hh"
 #include "G4Eta.hh"
 #include "G4KaonZeroLong.hh"
 #include "G4KaonZeroShort.hh"
 #include "G4KaonPlus.hh"
 #include "G4KaonMinus.hh"
 #include "G4ParticleTable.hh"
+#include "G4ThreeVector.hh"
 
 namespace {
   // V. Lyubovitsky parameterisation
-  const G4double piA[5] = {122., 78.8, 59.4,  24.0, 213.5};  // A
+  const G4double piA[5] = {122., 78.8, 59.4,  24.0, 213.5};// A
   const G4double pAP[5] = {1.23, 1.53, 1.35,  0.94, 0.94}; // 2 - 2alphaP
   const G4double pC0[5] = {12.7, 6.0,  6.84,  6.5,  8.0};  // c0
   const G4double pC1[5] = {1.57, 1.6,  1.7,   1.23, 2.6};  // c1
@@ -63,8 +65,9 @@ namespace {
   // parameterisation of intranuclear absorption
   const G4double beta_prime_pi = 0.0036;
 
-  // For unit conversion 
-  const G4double inv1e7 = 0.1/(CLHEP::GeV*CLHEP::GeV);
+  // For unit conversion
+  const G4double GeV2 = (CLHEP::GeV*CLHEP::GeV);
+  const G4double inv1e7 = 0.1/GeV2;
   const G4double fact = 1e-30*CLHEP::cm2;
   const G4double pfact = 0.1/CLHEP::GeV;
   const G4double kfact = 56.3*fact;
@@ -76,6 +79,7 @@ G4ChargeExchangeXS::G4ChargeExchangeXS()
   if (verboseLevel > 1) {
     G4cout  << "G4ChargeExchangeXS::G4ChargeExchangeXS" << G4endl;
   }
+  fMassPi = G4PionPlus::PionPlus()->GetPDGMass();
   g4calc = G4Pow::GetInstance();
   auto table = G4ParticleTable::GetParticleTable();
   const G4String nam[5] = {"pi0", "eta", "eta_prime", "omega", "f2(1270)"};
@@ -123,6 +127,7 @@ G4double G4ChargeExchangeXS::GetCrossSection(const G4ParticleDefinition* part,
   G4double tM = CLHEP::proton_mass_c2;
   G4double pM = part->GetPDGMass();
   G4double lorentz_s = tM*tM + 2*tM*pEtot +  pM*pM;
+  
   if (lorentz_s <= (tM + pM)*(tM + pM)) { return result; }
 
   const G4int Z = std::min(ZZ, ZMAXNUCLEARDATA);
@@ -131,10 +136,8 @@ G4double G4ChargeExchangeXS::GetCrossSection(const G4ParticleDefinition* part,
   if (verboseLevel > 1) {
     G4cout << "### G4ChargeExchangeXS: " << part->GetParticleName()
 	   << " Z=" << Z << " A=" << A << " Etot(GeV)=" << pEtot/CLHEP::GeV
-	   << " s(GeV^2)=" << lorentz_s/(CLHEP::GeV*CLHEP::GeV) << G4endl;
+	   << " s(GeV^2)=" << lorentz_s/GeV2 << G4endl;
   }
-
-
 
   // The approximation of Glauber-Gribov formula -> extend it from interaction with 
   // proton to nuclei Z^(2/3). The factor g4calc->powA(A,-beta_prime_pi*G4Log(A))
@@ -218,19 +221,21 @@ G4ChargeExchangeXS::SampleSecondaryType(const G4ParticleDefinition* part,
 					const G4Material* mat,
                                         G4int Z, G4int A, G4double etot)
 {
+  // index of pion partial x-section
+  findex = -1;
   // recompute x-section for the element in complex material
   GetCrossSection(part, mat, Z, etot);
   
   const G4ParticleDefinition* pd = nullptr;
   G4int pdg = std::abs(part->GetPDGEncoding());  
-
+  G4cout << pdg << G4endl;
   // pi- + p /  pi+ + n  
   if (pdg == 211) {
     pd = fPionSecPD[0];
     G4double x = fXSecPion[4]*G4UniformRand();
-    for (G4int i=0; i<5; ++i) {
-      if (x <= fXSecPion[i]) {
-        pd = fPionSecPD[i];
+    for (findex = 0; findex < 5; ++findex) {
+      if (x <= fXSecPion[findex]) {
+        pd = fPionSecPD[findex];
 	break;
       }
     }
@@ -257,12 +262,39 @@ G4ChargeExchangeXS::SampleSecondaryType(const G4ParticleDefinition* part,
       pd = G4KaonPlus::KaonPlus();
     }
   }
-
+  if (verboseLevel > 1) {
+    G4cout << "G4ChargeExchangeXS::SampleSecondaryType for "
+	   << pd->GetParticleName() << "  findex=" << findex
+	   << G4endl;
+  }
   return pd;
 } 
 
+G4double G4ChargeExchangeXS::SampleTforPion(const G4double etot,
+					    const G4double ltmax) const 
+{
+  G4double tmax = ltmax/GeV2;
+  G4double tM = CLHEP::proton_mass_c2;
+  G4double logX = G4Log((tM*tM + 2*tM*etot +  fMassPi*fMassPi)*inv1e7);
+
+  G4double gl = pG0[findex] + pG1[findex]*logX;
+  G4double cl = pC0[findex] + pC1[findex]*logX;
+  G4double gc = gl*cl;
+
+  G4double t{0};
+  G4double sigmaMax = (gc > 0.0) ? gl*G4Exp(-(gl - 1.0)/gl) : 1.0;
+  for (G4int i = 0; i < 100000; ++i) {
+    t = tmax*G4UniformRand();
+    G4double sigma = (1.0 + gc*t)*G4Exp(-cl*t);
+    if (G4UniformRand()*sigmaMax <= sigma) {
+      return t*GeV2;
+    }
+  }
+  return 0.0;
+}
+
 G4double
-G4ChargeExchangeXS::ComputeDeuteronFraction(const G4Material* mat)
+G4ChargeExchangeXS::ComputeDeuteronFraction(const G4Material* mat) const
 {
   for (auto const & elm : *mat->GetElementVector()) {
     if (1 == elm->GetZasInt()) {
@@ -279,7 +311,7 @@ G4ChargeExchangeXS::ComputeDeuteronFraction(const G4Material* mat)
   return 0.0;
 }
 
-G4double G4ChargeExchangeXS::GetPartialPionXS(G4int idx)
+G4double G4ChargeExchangeXS::GetPartialPionXS(G4int idx) const
 {
   G4double res = 0.0;
   if (0 == idx) { res = fXSecPion[0]; }
@@ -287,17 +319,4 @@ G4double G4ChargeExchangeXS::GetPartialPionXS(G4int idx)
     res = fXSecPion[idx] - fXSecPion[idx - 1];
   }
   return res;
-}
-
-G4double G4ChargeExchangeXS::GetPionTFactor(G4int idx,
-					    const G4ParticleDefinition* p,
-                                            G4double pEtot)
-{
-  if (idx < 0 || idx > 4) { return 0.0; }
-  G4double tM = CLHEP::proton_mass_c2;
-  G4double pM = p->GetPDGMass();
-  G4double logX = G4Log((tM*tM + 2*tM*pEtot + pM*pM)*inv1e7);
-  G4double xg = std::max(pG0[idx] + pG1[idx]*logX, -1.0);
-  G4double xc = std::max(pC0[idx] + pC1[idx]*logX, 0.0);
-  return xc*xg;
 }

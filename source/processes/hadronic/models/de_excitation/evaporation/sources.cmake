@@ -11,6 +11,7 @@ geant4_add_module(G4hadronic_deex_evaporation
     G4EvaporationChannel.hh
     G4EvaporationDefaultGEMFactory.hh
     G4EvaporationFactory.hh
+    G4EvaporationGEMFactoryVI.hh
     G4EvaporationProbability.hh
     G4He3EvaporationChannel.hh
     G4He3EvaporationProbability.hh
@@ -31,6 +32,7 @@ geant4_add_module(G4hadronic_deex_evaporation
     G4EvaporationChannel.cc
     G4EvaporationDefaultGEMFactory.cc
     G4EvaporationFactory.cc
+    G4EvaporationGEMFactoryVI.cc
     G4EvaporationProbability.cc
     G4He3EvaporationChannel.cc
     G4He3EvaporationProbability.cc

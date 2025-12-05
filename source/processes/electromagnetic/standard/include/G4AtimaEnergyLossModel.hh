@@ -101,9 +101,11 @@ public:
 			     const G4Material* mat,
 			     G4double kineticEnergy) override;
 
-  void CorrectionsAlongStep(const G4MaterialCutsCouple*,
-			    const G4DynamicParticle*,
-			    const G4double&,
+  void CorrectionsAlongStep(const G4Material*,
+			    const G4ParticleDefinition*,
+			    const G4double kinEnergy,
+			    const G4double cutEnergy,
+			    const G4double& length,
 			    G4double&) override;
 
   void SampleSecondaries(std::vector<G4DynamicParticle*>*,

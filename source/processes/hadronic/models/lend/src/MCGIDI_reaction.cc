@@ -21,8 +21,8 @@ namespace MCGIDI {
 
 LUPI_HOST_DEVICE Reaction::Reaction( ) :
         m_protareSingle( nullptr ),
-        m_reactionIndex( -1 ),
-        m_GIDI_reactionIndex( -1 ),
+        m_reactionIndex( MCGIDI_nullReaction ),
+        m_GIDI_reactionIndex( MCGIDI_nullReaction ),
         m_label( ),
         m_ENDF_MT( 0 ),
         m_ENDL_C( 0 ),
@@ -34,13 +34,13 @@ LUPI_HOST_DEVICE Reaction::Reaction( ) :
         m_targetMass( 0.0 ),
         m_crossSectionThreshold( 0.0 ),
         m_twoBodyThreshold( 0.0 ),
-        m_upscatterModelASupported( false ),
         m_hasFinalStatePhotons( false ),
         m_fissionResiduaIntid( -1 ),
         m_fissionResiduaIndex( -1 ),
         m_fissionResiduaUserIndex( -1 ),
         m_fissionResiduals( GIDI::Construction::FissionResiduals::none ),
         m_fissionResidualMass( 0.0 ),
+        m_totalDelayedNeutronMultiplicity( nullptr ),
 #ifdef MCGIDI_USE_OUTPUT_CHANNEL
         m_outputChannel( nullptr ),
 #endif
@@ -64,7 +64,7 @@ LUPI_HOST_DEVICE Reaction::Reaction( ) :
 LUPI_HOST Reaction::Reaction( GIDI::Reaction const &a_reaction, SetupInfo &a_setupInfo, Transporting::MC const &a_settings, 
                 GIDI::Transporting::Particles const &a_particles, LUPI_maybeUnused GIDI::Styles::TemperatureInfos const &a_temperatureInfos ) :
         m_protareSingle( nullptr ),
-        m_reactionIndex( -1 ),
+        m_reactionIndex( MCGIDI_nullReaction ),
         m_GIDI_reactionIndex( a_reaction.reactionIndex( ) ),
         m_label( a_reaction.label( ).c_str( ) ),
         m_ENDF_MT( a_reaction.ENDF_MT( ) ),
@@ -77,9 +77,6 @@ LUPI_HOST Reaction::Reaction( GIDI::Reaction const &a_reaction, SetupInfo &a_set
         m_targetMass( a_setupInfo.m_protare.targetMass( ) ),
         m_crossSectionThreshold( a_reaction.crossSectionThreshold( ) ),
         m_twoBodyThreshold( a_reaction.twoBodyThreshold( ) ),
-        m_upscatterModelASupported( ( a_setupInfo.m_protare.projectileIntid( ) != PoPI::Intids::photon ) &&
-                                    ( a_setupInfo.m_protare.projectileIntid( ) != PoPI::Intids::electron ) &&
-                                    ( a_setupInfo.m_reactionType == Transporting::Reaction::Type::Reactions ) ),
         m_fissionResiduaIntid( -1 ),
         m_fissionResiduaIndex( -1 ),
         m_fissionResiduaUserIndex( -1 ),
@@ -108,7 +105,7 @@ LUPI_HOST Reaction::Reaction( GIDI::Reaction const &a_reaction, SetupInfo &a_set
     m_productMultiplicities.reserve( product_ids.size( ) );
     for( std::set<std::string>::iterator iter = product_ids.begin( ); iter != product_ids.end( ); ++iter ) {
         m_productIntids.push_back( MCGIDI_popsIntid( a_setupInfo.m_pops, *iter ) );
-        m_productIndices.push_back( a_setupInfo.m_popsUser[*iter] );
+        m_productIndices.push_back( static_cast<int>( a_setupInfo.m_popsUser[*iter] ) );
         m_userProductIndices.push_back( -1 );
         m_productMultiplicities.push_back( a_reaction.productMultiplicity( *iter ) );
     }
@@ -120,14 +117,8 @@ LUPI_HOST Reaction::Reaction( GIDI::Reaction const &a_reaction, SetupInfo &a_set
     m_userProductIndicesTransportable.reserve( product_ids.size( ) );
     for( std::set<std::string>::iterator iter = product_ids.begin( ); iter != product_ids.end( ); ++iter ) {
         m_productIntidsTransportable.push_back( MCGIDI_popsIntid( a_setupInfo.m_pops, *iter ) );
-        m_productIndicesTransportable.push_back( a_setupInfo.m_popsUser[*iter] );
+        m_productIndicesTransportable.push_back( static_cast<int>( a_setupInfo.m_popsUser[*iter] ) );
         m_userProductIndicesTransportable.push_back( -1 );
-    }
-
-    if( m_upscatterModelASupported && ( a_settings.upscatterModel( ) == Sampling::Upscatter::Model::A ) ) {
-        GIDI::Vector const &l_upscatterModelACrossSection = a_reaction.crossSection( ).get<GIDI::Functions::Gridded1d>( a_settings.upscatterModelALabel( ) )->data( );
-        m_upscatterModelACrossSection.resize( l_upscatterModelACrossSection.size( ) );
-        for( std::size_t i1 = 0; i1 < l_upscatterModelACrossSection.size( ); ++i1 ) m_upscatterModelACrossSection[i1] = l_upscatterModelACrossSection[i1];
     }
 
     m_hasFinalStatePhotons = a_setupInfo.m_hasFinalStatePhotons;
@@ -225,7 +216,7 @@ LUPI_HOST_DEVICE double Reaction::finalQ( double a_energy ) const {
  * @param a_energy_in           [in]    The energy of the projectile.
  ***********************************************************************************************************/
 
-LUPI_HOST_DEVICE double Reaction::crossSection( URR_protareInfos const &a_URR_protareInfos, int a_hashIndex, double a_temperature, double a_energy_in ) const {
+LUPI_HOST_DEVICE double Reaction::crossSection( URR_protareInfos const &a_URR_protareInfos, std::size_t a_hashIndex, double a_temperature, double a_energy_in ) const {
 
     return( m_protareSingle->reactionCrossSection( m_reactionIndex, a_URR_protareInfos, a_hashIndex, a_temperature, a_energy_in, false ) );
 }
@@ -265,7 +256,7 @@ LUPI_HOST GIDI::Functions::XYs1d Reaction::crossSectionAsGIDI_XYs1d( double a_te
 
 LUPI_HOST_DEVICE int Reaction::productMultiplicity( int a_index ) const {
 
-    int i1 = 0;
+    std::size_t i1 = 0;
 
     for( Vector<int>::iterator iter = m_productIndices.begin( ); iter != m_productIndices.end( ); ++iter, ++i1 ) {
         if( *iter == a_index ) return( m_productMultiplicities[i1] );
@@ -284,7 +275,7 @@ LUPI_HOST_DEVICE int Reaction::productMultiplicity( int a_index ) const {
 
 LUPI_HOST_DEVICE int Reaction::productMultiplicityViaIntid( int a_intid ) const {
 
-    int i1 = 0;
+    std::size_t i1 = 0;
 
     for( Vector<int>::iterator iter = m_productIntids.begin( ); iter != m_productIntids.end( ); ++iter, ++i1 ) {
         if( *iter == a_intid ) return( m_productMultiplicities[i1] );
@@ -309,7 +300,7 @@ LUPI_HOST_DEVICE double Reaction::productAverageMultiplicity( int a_index, doubl
 
     if( m_crossSectionThreshold > a_projectileEnergy ) return( multiplicity );
 
-    int i1 = 0;
+    std::size_t i1 = 0;
     for( Vector<int>::iterator iter = m_productIndices.begin( ); iter != m_productIndices.end( ); ++iter, ++i1 ) {
         if( *iter == a_index ) {
             multiplicity = m_productMultiplicities[i1];
@@ -351,7 +342,7 @@ LUPI_HOST_DEVICE double Reaction::productAverageMultiplicityViaIntid( int a_inti
 
     if( m_crossSectionThreshold > a_projectileEnergy ) return( multiplicity );
 
-    int i1 = 0;
+    std::size_t i1 = 0;
     for( Vector<int>::iterator iter = m_productIntids.begin( ); iter != m_productIntids.end( ); ++iter, ++i1 ) {
         if( *iter == a_intid ) {
             multiplicity = m_productMultiplicities[i1];
@@ -516,7 +507,7 @@ LUPI_HOST_DEVICE void Reaction::addOrphanProductToProductList( Vector<Reaction *
  * @param a_associatedOrphanProducts        [in]    The list of pointers to the associated orphan products.
  ***********************************************************************************************************/
 
-LUPI_HOST void Reaction::setOrphanProductData( std::vector<int> const &a_associatedOrphanProductIndcies,
+LUPI_HOST void Reaction::setOrphanProductData( std::vector<std::size_t> const &a_associatedOrphanProductIndcies,
                 std::vector<Product *> const &a_associatedOrphanProducts ) {
 
     m_associatedOrphanProductIndices.reserve( a_associatedOrphanProductIndcies.size( ) );
@@ -538,7 +529,7 @@ LUPI_HOST void Reaction::setOrphanProductData( std::vector<int> const &a_associa
 
 LUPI_HOST_DEVICE void Reaction::serialize( LUPI::DataBuffer &a_buffer, LUPI::DataBuffer::Mode a_mode ) {
     
-    DATA_MEMBER_INT( m_GIDI_reactionIndex, a_buffer, a_mode );
+    DATA_MEMBER_SIZE_T( m_GIDI_reactionIndex, a_buffer, a_mode );
     DATA_MEMBER_STRING( m_label, a_buffer, a_mode );
     DATA_MEMBER_INT( m_ENDF_MT, a_buffer, a_mode );
     DATA_MEMBER_INT( m_ENDL_C, a_buffer, a_mode );
@@ -550,14 +541,12 @@ LUPI_HOST_DEVICE void Reaction::serialize( LUPI::DataBuffer &a_buffer, LUPI::Dat
     DATA_MEMBER_DOUBLE( m_targetMass, a_buffer, a_mode );
     DATA_MEMBER_DOUBLE( m_crossSectionThreshold, a_buffer, a_mode );
     DATA_MEMBER_DOUBLE( m_twoBodyThreshold, a_buffer, a_mode );
-    DATA_MEMBER_CAST( m_upscatterModelASupported, a_buffer, a_mode, bool );
     DATA_MEMBER_CAST( m_hasFinalStatePhotons, a_buffer, a_mode, bool );
     DATA_MEMBER_INT( m_fissionResiduaIntid, a_buffer, a_mode );
     DATA_MEMBER_INT( m_fissionResiduaIndex, a_buffer, a_mode );
     DATA_MEMBER_INT( m_fissionResiduaUserIndex, a_buffer, a_mode );
     serializeFissionResiduals( m_fissionResiduals, a_buffer, a_mode );
     DATA_MEMBER_DOUBLE( m_fissionResidualMass, a_buffer, a_mode );
-    DATA_MEMBER_VECTOR_DOUBLE( m_upscatterModelACrossSection, a_buffer, a_mode );
 
     DATA_MEMBER_VECTOR_INT( m_productIntids, a_buffer, a_mode );
     DATA_MEMBER_VECTOR_INT( m_productIndices, a_buffer, a_mode );
@@ -591,7 +580,7 @@ LUPI_HOST_DEVICE void Reaction::serialize( LUPI::DataBuffer &a_buffer, LUPI::Dat
     serializeDelayedNeutrons( a_buffer, a_mode, m_delayedNeutrons );
 #endif
 
-    DATA_MEMBER_VECTOR_INT( m_associatedOrphanProductIndices, a_buffer, a_mode );
+    DATA_MEMBER_VECTOR_SIZE_T( m_associatedOrphanProductIndices, a_buffer, a_mode );
 
     std::size_t vectorSize = m_associatedOrphanProducts.size( );
     int vectorSizeInt = (int) vectorSize;
@@ -605,7 +594,7 @@ LUPI_HOST_DEVICE void Reaction::serialize( LUPI::DataBuffer &a_buffer, LUPI::Dat
 
     if( a_mode == LUPI::DataBuffer::Mode::Unpack ) {
         m_protareSingle = nullptr;
-        m_reactionIndex = -1;
+        m_reactionIndex = MCGIDI_nullReaction;
     }
 
     DATA_MEMBER_CAST( m_GRIN_specialSampleProducts, a_buffer, a_mode, bool );

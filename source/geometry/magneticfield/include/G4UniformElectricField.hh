@@ -29,7 +29,7 @@
 //
 // Class for creation of Uniform electric Magnetic Field.
 
-// Created: V.Grichine, 30.01.1997
+// Author: Vladimir Grichine (CERN), 30.01.1997
 // -------------------------------------------------------------------
 #ifndef G4UNIFORMELECTRICFIELD_HH
 #define G4UNIFORMELECTRICFIELD_HH
@@ -38,25 +38,51 @@
 #include "G4ThreeVector.hh"
 #include "G4ElectricField.hh"
 
+/**
+ * @brief G4UniformElectricField is class defining a uniform
+ * electric magnetic field.
+ */
+
 class G4UniformElectricField : public G4ElectricField
 {
   public:
 
+    /**
+     * Constructor for G4UniformElectricField, a field with value equal
+     * to 'FieldVector'.
+     *  @param[in] FieldVector The field vector value.
+     */
     G4UniformElectricField(const G4ThreeVector& FieldVector);
-      // A field with value equal to FieldVector.
 
+    /**
+     * Alternative constructor for G4UniformElectricField.
+     *  @param[in] vField The field component.
+     *  @param[in] vTheta The Theta component.
+     *  @param[in] vPhi The Phi component.
+     */
     G4UniformElectricField(G4double vField,
                            G4double vTheta,
                            G4double vPhi);
 
-   ~G4UniformElectricField() override;
+    /**
+     * Default Destructor.
+     */
+    ~G4UniformElectricField() override = default;
 
+    /**
+     * Copy constructor and assignment operator.
+     */
     G4UniformElectricField(const G4UniformElectricField &p);
     G4UniformElectricField& operator = (const G4UniformElectricField &p);
-      // Copy constructor and assignment operator
 
+    /**
+     * Returns the field value 'field' on given time 'pos'.
+     */
     void GetFieldValue(const G4double pos[4], G4double* field) const override;
 
+    /**
+     * Returns a pointer to a new allocated clone of this object.
+     */
     G4Field* Clone() const override;
 
   private:

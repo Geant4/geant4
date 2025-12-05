@@ -27,19 +27,18 @@
 //
 // Class description:
 //
-//   A G4Ellipsoid is an ellipsoidal solid, optionally cut at a given z
+// A G4Ellipsoid is an ellipsoidal solid, optionally cut at a given z.
 //
-//   Member Data:
-//
+// Member Data:
 //     xSemiAxis   semi-axis, X
 //     ySemiAxis   semi-axis, Y
 //     zSemiAxis   semi-axis, Z
 //     zBottomCut  lower cut in Z (solid lies above this plane)
 //     zTopCut     upper cut in Z (solid lies below this plane)
 
-// 10.11.1999  G.Horton-Smith (Caltech, USA) - First implementation
-// 10.02.2005  G.Guerrieri (INFN Genova, Italy) - Revision
-// 15.12.2019  E.Tcherniaev - Complete revision
+// Author: G.Horton-Smith (Caltech, USA), 10.11.1999 - First implementation
+//         G.Guerrieri (INFN Genova, Italy), 10.02.2005 - Revision
+//         E.Tcherniaev (CERN), 15.12.2019 - Complete revision
 // --------------------------------------------------------------------
 #ifndef G4ELLIPSOID_HH
 #define G4ELLIPSOID_HH
@@ -60,20 +59,38 @@
 #include "G4VSolid.hh"
 #include "G4Polyhedron.hh"
 
+/**
+ * @brief G4Ellipsoid is an ellipsoidal solid, optionally cut at a given Z.
+ */
+
 class G4Ellipsoid : public G4VSolid
 {
   public:
 
+    /**
+     * Constructs an ellipsoid, given its input parameters.
+     *  @param[in] name The solid name.
+     *  @param[in] xSemiAxis Semiaxis in X.
+     *  @param[in] ySemiAxis Semiaxis in Y.
+     *  @param[in] zSemiAxis Semiaxis in Z.
+     *  @param[in] zBottomCut Optional lower cut plane level in Z.
+     *  @param[in] zTopCut Optional upper cut plane level in Z.
+     */
     G4Ellipsoid(const G4String& name,
-                      G4double  xSemiAxis,
-                      G4double  ySemiAxis,
-                      G4double  zSemiAxis,
-                      G4double  zBottomCut = 0.,
-                      G4double  zTopCut = 0.);
+                      G4double xSemiAxis,
+                      G4double ySemiAxis,
+                      G4double zSemiAxis,
+                      G4double zBottomCut = 0.,
+                      G4double zTopCut = 0.);
 
+    /**
+     * Destructor.
+     */
     ~G4Ellipsoid() override;
 
-    // Accessors
+    /**
+     * Accessors.
+     */
     inline G4double GetDx() const;
     inline G4double GetDy() const;
     inline G4double GetDz() const;
@@ -81,21 +98,46 @@ class G4Ellipsoid : public G4VSolid
     inline G4double GetZBottomCut() const;
     inline G4double GetZTopCut() const;
 
-    // Modifiers
+    /**
+     * Modifiers.
+     */
     inline void SetSemiAxis (G4double x, G4double y, G4double z);
     inline void SetZCuts (G4double newzBottomCut, G4double newzTopCut);
 
-    // Standard methods
+    /**
+     * Dispatch method for parameterisation replication mechanism and
+     * dimension computation.
+     */
     void ComputeDimensions(G4VPVParameterisation* p,
                            const G4int n,
                            const G4VPhysicalVolume* pRep) override;
 
+    /**
+     * Computes the bounding limits of the solid.
+     *  @param[out] pMin The minimum bounding limit point.
+     *  @param[out] pMax The maximum bounding limit point.
+     */
     void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const override;
+
+    /**
+     * Calculates the minimum and maximum extent of the solid, when under the
+     * specified transform, and within the specified limits.
+     *  @param[in] pAxis The axis along which compute the extent.
+     *  @param[in] pVoxelLimit The limiting space dictated by voxels.
+     *  @param[in] pTransform The internal transformation applied to the solid.
+     *  @param[out] pMin The minimum extent value.
+     *  @param[out] pMax The maximum extent value.
+     *  @returns True if the solid is intersected by the extent region.
+     */
     G4bool CalculateExtent(const EAxis pAxis,
                            const G4VoxelLimits& pVoxelLimit,
                            const G4AffineTransform& pTransform,
                                  G4double& pmin, G4double& pmax) const override;
 
+    /**
+     * Concrete implementations of the expected query interfaces for
+     * solids, as defined in the base class G4VSolid.
+     */
     EInside Inside(const G4ThreeVector& p) const override;
     G4ThreeVector SurfaceNormal(const G4ThreeVector& p) const override;
     G4double DistanceToIn(const G4ThreeVector& p,
@@ -108,55 +150,84 @@ class G4Ellipsoid : public G4VSolid
                                  G4ThreeVector* n = nullptr) const override;
     G4double DistanceToOut(const G4ThreeVector& p) const override;
 
+    /**
+     * Returns the type ID, "G4Ellipsoid" of the solid.
+     */
     G4GeometryType GetEntityType() const override;
 
+    /**
+     * Makes a clone of the object for use in multi-treading.
+     *  @returns A pointer to the new cloned allocated solid.
+     */
     G4VSolid* Clone() const override;
 
+    /**
+     * Streams the object contents to an output stream.
+     */
     std::ostream& StreamInfo(std::ostream& os) const override;
 
+    /**
+     * Returning an estimation of the solid volume (capacity) and
+     * surface area, in internal units.
+     */
     G4double GetCubicVolume() override;
     G4double GetSurfaceArea() override;
 
+    /**
+     * Returns a random point located and uniformly distributed on the
+     * surface of the solid.
+     */
     G4ThreeVector GetPointOnSurface() const override;
 
-    // Visualisation methods
+    /**
+     * Methods for creating graphical representations (i.e. for visualisation).
+     */
     void DescribeYourselfTo(G4VGraphicsScene& scene) const override;
     G4VisExtent GetExtent() const override;
     G4Polyhedron* CreatePolyhedron() const override;
-    G4Polyhedron* GetPolyhedron () const override;
+    G4Polyhedron* GetPolyhedron() const override;
 
-    // Fake default constructor for usage restricted to direct object
-    // persistency for clients requiring preallocation of memory for
-    // persistifiable objects
+    /**
+     * Fake default constructor for usage restricted to direct object
+     * persistency for clients requiring preallocation of memory for
+     * persistifiable objects.
+     */
     G4Ellipsoid(__void__&);
 
-    // Copy constructorassignment operator
+    /**
+     * Copy constructor and assignment operator.
+     */
     G4Ellipsoid(const G4Ellipsoid& rhs);
-
-    // Assignment
     G4Ellipsoid& operator=(const G4Ellipsoid& rhs);
 
   private:
 
-    // Check parameters and set cached values
+    /**
+     * Checks parameters and sets cached values.
+     */
     void CheckParameters();
 
-    // Return normal to surface closest to p
+    /**
+     * Algorithm for SurfaceNormal() following the original specification
+     * for points not on the surface.
+     */
     G4ThreeVector ApproxSurfaceNormal(const G4ThreeVector& p) const;
 
-    // Calculate area of lateral surface
+    /**
+     * Calculates the area of lateral surface.
+     */
     G4double LateralSurfaceArea() const;
 
   private:
 
-    // Ellipsoid parameters
+    /** Ellipsoid parameters. */
     G4double fDx;         // X semi-axis
     G4double fDy;         // Y semi-axis
     G4double fDz;         // Z semi-axis
     G4double fZBottomCut; // Bottom cut in Z
     G4double fZTopCut;    // Top cut in Z
 
-    // Precalculated cached values
+    /** Precalculated cached values. */
     G4double halfTolerance; // Surface tolerance
     G4double fXmax;         // X extent
     G4double fYmax;         // Y extent

@@ -6,10 +6,13 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
-## 2025-03-21 S. Johnson (VecGeomNavigation-V11-03-01)
+## 2025-11-10 Gabriele Cosmo (VecGeomNavigation-V11-03-02)
+- Fixed coding conventions for long lines in VG01DetectorConstruction source.
+
+## 2025-03-21 Seth Johnson (VecGeomNavigation-V11-03-01)
 - Use G4cout for VecGeom logger output
 
-## 2023-11-10 I. Hrivnacova (VecGeomNavigation-V11-01-01)
+## 2023-11-10 Ivana Hrivnacova (VecGeomNavigation-V11-01-01)
 - Coding guidelines: split long lines, added separators in
   VG01ActionInitialization.cc
 - Remove run-ntst.mac
@@ -19,7 +22,7 @@ It must **not** be used as a substitute for writing good git commit messages!
   scope version to ease use of Geant4 as a CMake subproject. 
   - Fixes [GitHub PR #52](https://github.com/Geant4/geant4/pull/52)
 
-## 2022-11-04  I. Hrivnacova (VecGeomNavigation-V11-00-03)
+## 2022-11-04  Ivana Hrivnacova (VecGeomNavigation-V11-00-03)
 - Fixed Doxygen file descriptions
 
 ## 2022-04-07 Ben Morgan (VecGeomNavigation-V11-00-02)

@@ -4,5 +4,9 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
+## 2025-07-09 Sebastien Incerti (radial-V11-03-01)
+- Added geometrical offset in front of cylinders
+- Renamed variables and UI commands
+
 ## 2025-03-17 Sebastien Incerti (radial-V11-03-00)
 - Created

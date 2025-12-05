@@ -23,10 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file runAndEvent/RE01/src/RE01TrackerParametrisation.cc
+/// \file RE01TrackerParametrisation.cc
 /// \brief Implementation of the RE01TrackerParametrisation class
-//
-//
 
 #include "RE01TrackerParametrisation.hh"
 

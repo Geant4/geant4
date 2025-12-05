@@ -34,7 +34,7 @@
 // Take the output and its derivative. Add the mean of both derivatives
 // to form the final output.
 //
-// Author: W. Wander <wwc@mit.edu>, 12.09.1997
+// Author: W.Wander (MIT), 12.09.1997
 // --------------------------------------------------------------------
 
 #include "G4ImplicitEuler.hh"

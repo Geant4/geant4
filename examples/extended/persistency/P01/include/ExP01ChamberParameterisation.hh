@@ -23,12 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file persistency/P01/include/ExP01ChamberParameterisation.hh
+/// \file ExP01ChamberParameterisation.hh
 /// \brief Definition of the ExP01ChamberParameterisation class
-//
-//
-//
-//
+
 //  A parameterisation that describes a series of boxes along Z
 //    The boxes have equal width, & their lengths are a linear equation.
 //    They are spaced an equal distance apart, starting from given location.

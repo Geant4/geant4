@@ -23,10 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file runAndEvent/RE01/include/RE01SteppingAction.hh
+/// \file RE01SteppingAction.hh
 /// \brief Definition of the RE01SteppingAction class
-//
-//
 
 #ifndef RE01SteppingAction_H
 #define RE01SteppingAction_H 1

@@ -23,12 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file field/BlineTracer/src/G4BlineSteppingAction.cc
+/// \file G4BlineSteppingAction.cc
 /// \brief Implementation of the G4BlineSteppingAction class
-//
-//
-//
-//
+
 // --------------------------------------------------------------------
 //
 // G4BlineSteppingAction implementation

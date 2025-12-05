@@ -23,16 +23,19 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// TrackingManagerHelper
-//
-// Class description:
-//
-// Helper class for reducing the effort required to implement a custom tracking
-// manager. It implements a stepping loop that calls user actions as the generic
-// tracking and stepping managers do, and it implements navigation for charged
-// particles in energy-preserving fields and for neutral particles.
-//
-// Original author: Jonas Hahnfeld, 2021
+/// \file TrackingManagerHelper.hh
+/// \brief Definition of the TrackingManagerHelper class
+
+/// \class TrackingManagerHelper
+///
+/// Class description:
+///
+/// Helper class for reducing the effort required to implement a custom tracking
+/// manager. It implements a stepping loop that calls user actions as the generic
+/// tracking and stepping managers do, and it implements navigation for charged
+/// particles in energy-preserving fields and for neutral particles.
+///
+/// Original author: Jonas Hahnfeld, 2021
 
 #ifndef TrackingManagerHelper_hh
 #define TrackingManagerHelper_hh 1

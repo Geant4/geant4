@@ -29,8 +29,6 @@ inline bool to(const std::string& a_string,bool& a_value,bool a_def = false){
   }
 }
 
-inline bool tob(const std::string& a_string,bool& a_value,bool a_def = false) {return to(a_string,a_value,a_def);}
-
 }
 
 #include <sstream>
@@ -44,63 +42,6 @@ inline bool to(const std::string& a_s,T& a_v,const T& a_def = T()) {
   strm >> a_v;
   if(strm.fail()) {a_v = a_def;return false;}
   return strm.eof();
-}
-
-template <class T>
-inline bool to(T& a_field,const std::string& a_s,bool& a_changed){
-  T old = a_field;
-  //if(!tools::to(a_s,a_field)) {a_field = old;a_changed=false;return false;}
-  if(!to(a_s,a_field)) {a_field = old;a_changed=false;return false;}
-  a_changed = a_field==old?false:true;
-  return true;
-}
-
-}
-
-#include <ostream>
-
-namespace tools {
-
-template <class T>
-inline bool to(std::ostream& a_out,const std::string& a_string,T& a_value){
-  if(!to<T>(a_string,a_value)) {
-    a_out << "Passed value \"" << a_string << "\""
-          << " is of bad type."
-          << std::endl;
-    return false;
-  }
-  return true;
-}
-
-inline bool to(std::ostream& a_out,const std::string& a_string,bool& a_value){
-  if(!to(a_string,a_value)) {
-    a_out << "Passed value \"" << a_string << "\""
-          << " is not a boolean."
-          << std::endl;
-    return false;
-  }
-  return true;
-}
-
-}
-
-#include "typedefs"
-#include <cstddef> //size_t
-
-namespace tools {
-
-inline bool to_size_t(const std::string& a_string,size_t& a_value,const size_t& a_def = 0){
-  if(sizeof(size_t)==8) {
-    uint64 v;
-    bool status = to<uint64>(a_string,v,a_def);
-    a_value = v;
-    return status;
-  } else { //assume 4 :
-    uint32 v;
-    bool status = to<uint32>(a_string,v,(uint32)a_def);
-    a_value = v;
-    return status;
-  }
 }
 
 }

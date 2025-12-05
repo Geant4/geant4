@@ -23,11 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file Par01/src/Par01PiModel.cc
+/// \file Par01PiModel.cc
 /// \brief Implementation of the Par01PiModel class
-//
-//
-//
+
 #include "Par01PiModel.hh"
 
 #include "G4Gamma.hh"

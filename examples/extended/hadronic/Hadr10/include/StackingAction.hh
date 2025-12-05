@@ -25,11 +25,6 @@
 //
 /// \file StackingAction.hh
 /// \brief Definition of the StackingAction class
-//
-//
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef StackingAction_H
 #define StackingAction_H 1

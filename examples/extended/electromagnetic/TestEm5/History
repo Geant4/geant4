@@ -1,8 +1,14 @@
 # Example TestEm5 History
 
 See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
-which **must** added in reverse chronological order (newest at the top). It must **not**
-be used as a substitute for writing good git commit messages!
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
+
+-------------------------------------------------------------------------------
+
+## 2025-08-21 Dmitri Konstantinov (testem5-V11-03-00)
+- TrackingAction: fixed reflect condition for negative X beam.
+  Use position.x() >= fXendAbs when fDirX < 0 (was <=)
 
 ## 2024-04-06 Michel Maire (testem5-V11-02-02)
 - remove subcut.mac

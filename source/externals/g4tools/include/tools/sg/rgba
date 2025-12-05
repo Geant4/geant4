@@ -31,19 +31,6 @@ private:
   }
 public:
   virtual void render(render_action& a_action) {
-    // GL-ES : ::glMaterialfv does not work. We then use :
-    //         ::glEnable(GL_COLOR_MATERIAL) and ::glColor.
-
-    //if(a_action.state().m_GL_LIGHTING) {
-    //  float params[4];
-    //  params[0] = rgb.value().r();
-    //  params[1] = rgb.value().g();
-    //  params[2] = rgb.value().b();
-    //  params[3] = rgb.value().a();
-    //  ::glMaterialfv(GL_FRONT,GL_DIFFUSE,params);
-    //} else {
-    //}
-
     state& state = a_action.state();
     state.m_color = color.value();
     a_action.color4f(state.m_color);

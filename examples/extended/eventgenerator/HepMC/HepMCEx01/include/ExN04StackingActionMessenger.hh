@@ -23,10 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file eventgenerator/HepMC/HepMCEx01/include/ExN04StackingActionMessenger.hh
+/// \file ExN04StackingActionMessenger.hh
 /// \brief Definition of the ExN04StackingActionMessenger class
-//
-//
 
 #ifndef ExN04StackingActionMessenger_h
 #define ExN04StackingActionMessenger_h 1

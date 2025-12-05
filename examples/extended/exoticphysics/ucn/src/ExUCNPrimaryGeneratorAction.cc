@@ -23,13 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file exoticphysics/ucn/src/ExUCNPrimaryGeneratorAction.cc
+/// \file ExUCNPrimaryGeneratorAction.cc
 /// \brief Implementation of the ExUCNPrimaryGeneratorAction class
-//
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "ExUCNPrimaryGeneratorAction.hh"
 

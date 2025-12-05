@@ -23,10 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file runAndEvent/RE01/include/RE01TrackerSD.hh
+/// \file RE01TrackerSD.hh
 /// \brief Definition of the RE01TrackerSD class
-//
-//
 
 #ifndef RE01TrackerSD_h
 #define RE01TrackerSD_h 1

@@ -1,0 +1,45 @@
+#Positron Source type
+/det/isHybridSource true
+
+#Radiator Crystal settings
+/crystal/setCrystalMaterial W
+/crystal/setCrystalSize 20 20 2 mm
+/crystal/setCrystalLattice <111>
+
+#Converter/Target t (amorphous) settings
+/det/setRadiatorConverterSepDistance 0 cm
+/det/setConverterSize 100 100 12.0 mm       
+/det/setGranularConverter true
+/det/setSphereRadius 1.1 mm
+
+/run/initialize
+
+/run/verbose 1
+
+/run/setfilenamesave output/output_2.86GeV_W2.0mm_D0cm_GT12mm_spheres1.1mm.root
+
+/control/execute macros/setPrimaryBeam.mac            
+
+/score/create/boxMesh boxMesh1                
+/score/mesh/boxSize 50 50 6.0 mm #converter
+/score/mesh/nBin 201 201 25 #converter
+/score/mesh/translate/xyz 0 0 6.03 mm #converter
+/score/quantity/energyDeposit Edep #[MeV]        
+/score/close
+/score/list    
+
+/score/create/boxMesh boxMesh2                
+/score/mesh/boxSize 10 10 1.0 mm #radiator
+/score/mesh/nBin 41 41 5 #radiator
+/score/mesh/translate/xyz 0 0 -1.0 mm #radiator
+/score/quantity/energyDeposit Edep #[MeV]        
+/score/close
+/score/list            
+
+#statistics
+/run/printProgress 100
+/run/beamOn 10000
+
+/score/dumpQuantityToFile boxMesh1 Edep output/Edep_2.86GeV_W2.0mm_D0cm_GT12mm_spheres1.1mm.txt
+/score/dumpQuantityToFile boxMesh2 Edep output/Edep_2.86GeV_W2.0mm_D0cm_GT12mm_spheres1.1mm_rad.txt
+

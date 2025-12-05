@@ -23,11 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file GB06/include/GB06ParallelWorldForSlices.hh
+/// \file GB06ParallelWorldForSlices.hh
 /// \brief Definition of the GB06ParallelWorldForSlices class
-//
-//
-//
+
 #ifndef GB06ParallelWorldForSlices_hh
 #define GB06ParallelWorldForSlices_hh
 

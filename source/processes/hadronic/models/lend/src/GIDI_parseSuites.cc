@@ -216,7 +216,7 @@ Form *parseReactionType( std::string const &a_moniker, Construction::Settings co
     Form *form = nullptr;
 
     if( a_name == a_moniker ) {
-        Protare const &protare( *dynamic_cast<Protare const *>( a_parent->root( ) ) );
+        Protare const &protare( *static_cast<Protare const *>( a_parent->root( ) ) );
         form = new Reaction( a_construction, a_node, a_setupInfo, a_pops, a_internalPoPs, protare, a_styles ); }
     else {                                  // This should never happend.
         std::cout << "parseReactionType: Ignoring '" << a_moniker << "' unsupported form '" << a_name << "'." << std::endl;

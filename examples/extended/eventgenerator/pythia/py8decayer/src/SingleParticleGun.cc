@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file eventgenerator/pythia/pythia8decayer/src/SingleParticleGun.cc
+/// \file SingleParticleGun.cc
 /// \brief Implementation of the SingleParticleGun class
 ///
 /// \author J. Yarba; FNAL

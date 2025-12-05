@@ -23,10 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file RE05/include/RE05EventAction.hh
+/// \file RE05EventAction.hh
 /// \brief Definition of the RE05EventAction class
-//
 
 #ifndef RE05EventAction_h
 #define RE05EventAction_h 1

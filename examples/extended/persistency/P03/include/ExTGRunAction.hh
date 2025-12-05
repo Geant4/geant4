@@ -23,9 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file persistency/P03/include/ExTGRunAction.hh
+/// \file ExTGRunAction.hh
 /// \brief Definition of the ExTGRunAction class
-//
 
 #ifndef ExTGRunAction_h
 #define ExTGRunAction_h 1

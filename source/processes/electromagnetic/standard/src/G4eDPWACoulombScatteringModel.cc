@@ -59,11 +59,11 @@
 #include "G4ThreeVector.hh"
 
 
-G4eDPWACoulombScatteringModel::G4eDPWACoulombScatteringModel(G4bool ismixed, G4bool isscpcor, G4double mumin)
+G4eDPWACoulombScatteringModel::G4eDPWACoulombScatteringModel(G4bool ismixed, G4bool isscpcor)
 : G4VEmModel("eDPWACoulombScattering"),
   fIsMixedModel(ismixed),
   fIsScpCorrection(isscpcor),
-  fMuMin(mumin),
+  fMuMin(0.0),
   fTheDCS(nullptr),
   fParticleChange(nullptr)
 {
@@ -86,8 +86,10 @@ void G4eDPWACoulombScatteringModel::Initialise(const G4ParticleDefinition* pdef,
   if(!fParticleChange) {
     fParticleChange = GetParticleChangeForGamma();
   }
-  fMuMin        = 0.5*(1.0-std::cos(PolarAngleLimit()));
-  fIsMixedModel = (fMuMin > 0.0);
+  if (fIsMixedModel) {
+    fMuMin        = 0.5*(1.0-std::cos(PolarAngleLimit()));
+    fIsMixedModel = (fMuMin > 0.0);
+  }
   if(IsMaster()) {
     // clean the G4eDPWAElasticDCS object if any
     delete fTheDCS;
@@ -174,7 +176,7 @@ G4eDPWACoulombScatteringModel::SampleSecondaries(std::vector<G4DynamicParticle*>
     const G4double costMin = -1.0;
     G4double rndm[2];
     rndmEngine->flatArray(2, rndm);
-    cost = fTheDCS->SampleCosineThetaRestricted(izet, lekin, rndm[0], rndm[1], costMin, costMax);
+    cost = fTheDCS->SampleCosineThetaRestricted(izet, lekin, rndm[0], rndm[1], costMax, costMin);
   }
   // compute the new direction in the scattering frame
   const G4double sint = std::sqrt((1.0-cost)*(1.0+cost));
@@ -187,7 +189,5 @@ G4eDPWACoulombScatteringModel::SampleSecondaries(std::vector<G4DynamicParticle*>
   fParticleChange->ProposeMomentumDirection(theNewDirection);
 }
 
-
-
-
-
+G4double G4eDPWACoulombScatteringModel::MinPrimaryEnergy(const G4Material*,
+    const G4ParticleDefinition*,G4double) { return 10.0*CLHEP::eV; }

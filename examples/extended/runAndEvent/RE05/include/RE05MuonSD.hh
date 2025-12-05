@@ -23,10 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file RE05/include/RE05MuonSD.hh
+/// \file RE05MuonSD.hh
 /// \brief Definition of the RE05MuonSD class
-//
 
 #ifndef RE05MuonSD_h
 #define RE05MuonSD_h 1

@@ -18,14 +18,12 @@
   }
 
   tools::sg::plottable* plot(const tools::histo::h1d& a_histo) {
-  //tools::sg::plottable* p = new tools::sg::h1d2plot<tools::histo::h1d>(a_histo);
     tools::sg::plottable* p = new tools::sg::h1d2plot(a_histo);
     m_plots.current_plotter().add_plottable(p); //it takes ownership.
     return p;
   }
 
   tools::sg::plottable* plot(const tools::histo::h2d& a_histo) {
-  //tools::sg::plottable* p = new tools::sg::h2d2plot<tools::histo::h2d>(a_histo);
     tools::sg::plottable* p = new tools::sg::h2d2plot(a_histo);
     m_plots.current_plotter().add_plottable(p); //it takes ownership.
     return p;
@@ -50,14 +48,12 @@
   }
 
   tools::sg::plottable* plot_cp(const tools::histo::h1d& a_histo) {
-  //tools::sg::plottable* p = new tools::sg::h1d2plot_cp<tools::histo::h1d>(a_histo);
     tools::sg::plottable* p = new tools::sg::h1d2plot_cp(a_histo);
     m_plots.current_plotter().add_plottable(p); //it takes ownership.
     return p;
   }
 
   tools::sg::plottable* plot_cp(const tools::histo::h2d& a_histo) {
-  //tools::sg::plottable* p = new tools::sg::h2d2plot_cp<tools::histo::h2d>(a_histo);
     tools::sg::plottable* p = new tools::sg::h2d2plot_cp(a_histo);
     m_plots.current_plotter().add_plottable(p); //it takes ownership.
     return p;
@@ -68,13 +64,6 @@
     m_plots.current_plotter().add_plottable(p); //it takes ownership.
     return p;
   }
-
-
-  //tools::sg::plottable* plot(const tools::histo::p2d& a_histo) {
-  //  tools::sg::plottable* p = new tools::sg::p2d2plot(a_histo);
-  //  m_plots.current_plotter().add_plottable(p); //it takes ownership.
-  //  return p;
-  //}
 
   tools::sg::plottable* plot_cp(const tools::histo::c2d& a_cloud) {
     tools::sg::plottable* p = new tools::sg::c2d2plot_cp(a_cloud);

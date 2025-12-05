@@ -61,8 +61,16 @@ FlashApplicator::~FlashApplicator() {}
 void FlashApplicator::ConstructCollimator(G4VPhysicalVolume *) {
   // Sets default geometry and materials
   SetDefaultDimensions();
-   SetOuterRadius(55*mm);
-   SetApplicatorLength(365*mm);
+
+  // DEFAULT APPLICATOR LENGTH AND RADIUS - UNIFORM FLASH CONFIGURATION
+  SetOuterRadius(55*mm);
+  SetApplicatorLength(365*mm);
+   
+  //SET THE FOLLOWING APPLICATOR RADIUS AND LENGTH FOR MINIBEAM CONFIGURATION
+
+  // SetOuterRadius(25*mm);
+  // SetApplicatorLength(173.5*mm);
+   
   // Construct the whole Applicator Beam Line
   ConstructApplicator();
 }
@@ -101,8 +109,9 @@ void FlashApplicator::SetDefaultDimensions() {
   magenta->SetVisibility(true);
 
   
-  fInitial_pos = -113*cm; //set the same position in FlashPrimaryGeneratorAction.cc
-  // Geometry  APPLICATOR DEFAULTS
+  fInitial_pos = -113*cm; //set the same position in FlashPrimaryGeneratorAction.cc for DEFAULT CONFIGURATION - 100 MM DIAMETER APPLICATOR
+  // fInitial_pos=-74.70005*cm; ////// Set this for MINIBEAM configuration
+  // Geometry  APPLICATOR DEFAULTS 
 
  
 

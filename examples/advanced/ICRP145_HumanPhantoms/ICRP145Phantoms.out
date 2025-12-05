@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-03-ref-06    (30-June-2025)
+ Geant4 version Name: geant4-11-04-ref-00    (5-December-2025)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -233,7 +233,6 @@ You have successfully registered the following graphics systems.
 Registered graphics systems are:
   ASCIITree (ATree)
   DAWNFILE (DAWNFILE)
-  G4HepRepFile (HepRepFile)
   RayTracer (RT)
   VRML2FILE (VRML2FILE)
   gMocrenFile (gMocrenFile)
@@ -246,13 +245,12 @@ Registered graphics systems are:
   OpenGLStoredX (OGLSX, OGLSQt_FALLBACK, OGLSXm_FALLBACK)
   RayTracerX (RTX)
   RayTracerQt (RTQt)
-  Qt3D (Qt3D)
   TOOLSSG_X11_GLES (TSG_X11_GLES, TSGX11, TSG_XT_GLES_FALLBACK)
   TOOLSSG_X11_ZB (TSG_X11_ZB, TSGX11ZB)
   TOOLSSG_XT_GLES (TSG_XT_GLES, TSGXt, TSG_QT_GLES_FALLBACK)
   TOOLSSG_XT_ZB (TSG_XT_ZB, TSGXtZB)
   TOOLSSG_QT_GLES (TSG_QT_GLES, TSGQt, TSG, OGL)
-  TOOLSSG_QT_ZB (TSG_QT_ZB, TSGQtZB)
+  TOOLSSG_QT_ZB (TSG_QT_ZB, TSGQtZB, TSGZB)
 You may choose a graphics system (driver) with a parameter of
 the command "/vis/open" or "/vis/sceneHandler/create",
 or you may omit the driver parameter and choose at run time:
@@ -302,6 +300,12 @@ Some /vis commands (optionally) take a string to specify colour.
    Phantom box position (max) 270.750 mm, 155.232 mm, 881.445 mm
    Number of tetrahedrons     8233413
 
+
+ hInelastic QGSP_BIC_HP  Thresholds: 
+    0) between BIC and BERT for p, n over the interval 1.000 to 1.500 GeV. 
+    1) between BERT  and FTF/P over the interval 3.000 to 6.000 GeV. 
+    2) between FTF/P and QGS/P over the interval 12.000 to 25.000 GeV. 
+  -- quasiElastic: 1 for QGS  and 0 for FTF
 @@@ G4ParticleHPInelasticData instantiated for particle neutron data directory variable is G4NEUTRONHPDATA pointing to /cvmfs/geant4.cern.ch/share/data/G4NDL4.7.1
 =======================================================================
 ======                 Electromagnetic Physics Parameters      ========
@@ -344,7 +348,7 @@ Lowest muon/hadron kinetic energy                  1.00000 keV
 Use ICRU90 data                                    1
 Fluctuations of dE/dx are enabled                  1
 Type of fluctuation model for leptons and hadrons  Urban
-Use built-in Birks satuaration                     0
+Use built-in Birks saturation                      0
 Build CSDA range enabled                           0
 Use cut as a final range enabled                   0
 Enable angular generator interface                 1
@@ -513,7 +517,7 @@ hBrems:  for proton  XStype:1  SubType=3
 hPairProd:  for proton  XStype:1  SubType=4
       dE/dx and range tables from 100.000000 eV  to 100.000000 TeV in 240 bins
       Lambda tables from threshold to 100.000000 TeV, 20 bins/decade, spline: 1
-      Sampling table 17x1001 from 7.506176 GeV to 100.000000 TeV 
+      Sampling table 17x1001, from 7.506176 GeV to 100.000000 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=0.000000 eV  Emax=100.000000 TeV  ModifiedMephi
 
@@ -599,7 +603,7 @@ hBrems:  for anti_proton  XStype:1  SubType=3
 hPairProd:  for anti_proton  XStype:1  SubType=4
       dE/dx and range tables from 100.000000 eV  to 100.000000 TeV in 240 bins
       Lambda tables from threshold to 100.000000 TeV, 20 bins/decade, spline: 1
-      Sampling table 17x1001 from 7.506176 GeV to 100.000000 TeV 
+      Sampling table 17x1001, from 7.506176 GeV to 100.000000 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=0.000000 eV  Emax=100.000000 TeV  ModifiedMephi
 
@@ -631,7 +635,7 @@ hBrems:  for kaon+  XStype:1  SubType=3
 hPairProd:  for kaon+  XStype:1  SubType=4
       dE/dx and range tables from 100.000000 eV  to 100.000000 TeV in 240 bins
       Lambda tables from threshold to 100.000000 TeV, 20 bins/decade, spline: 1
-      Sampling table 18x1001 from 3.949416 GeV to 100.000000 TeV 
+      Sampling table 18x1001, from 3.949416 GeV to 100.000000 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=0.000000 eV  Emax=100.000000 TeV  ModifiedMephi
 
@@ -663,7 +667,7 @@ hBrems:  for kaon-  XStype:1  SubType=3
 hPairProd:  for kaon-  XStype:1  SubType=4
       dE/dx and range tables from 100.000000 eV  to 100.000000 TeV in 240 bins
       Lambda tables from threshold to 100.000000 TeV, 20 bins/decade, spline: 1
-      Sampling table 18x1001 from 3.949416 GeV to 100.000000 TeV 
+      Sampling table 18x1001, from 3.949416 GeV to 100.000000 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=0.000000 eV  Emax=100.000000 TeV  ModifiedMephi
 
@@ -695,7 +699,7 @@ muBrems:  for mu+  XStype:1  SubType=3
 muPairProd:  for mu+  XStype:1  SubType=4
       dE/dx and range tables from 100.000000 eV  to 100.000000 TeV in 240 bins
       Lambda tables from threshold to 100.000000 TeV, 20 bins/decade, spline: 1
-      Sampling table 21x1001 from 0.850000 GeV to 100.000000 TeV 
+      Sampling table 21x1001, from 0.850000 GeV to 100.000000 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd : Emin=0.000000 eV  Emax=100.000000 TeV  ModifiedMephi
 
@@ -727,7 +731,7 @@ muBrems:  for mu-  XStype:1  SubType=3
 muPairProd:  for mu-  XStype:1  SubType=4
       dE/dx and range tables from 100.000000 eV  to 100.000000 TeV in 240 bins
       Lambda tables from threshold to 100.000000 TeV, 20 bins/decade, spline: 1
-      Sampling table 21x1001 from 0.850000 GeV to 100.000000 TeV 
+      Sampling table 21x1001, from 0.850000 GeV to 100.000000 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd : Emin=0.000000 eV  Emax=100.000000 TeV  ModifiedMephi
 
@@ -779,7 +783,7 @@ hBrems:  for pi+  XStype:1  SubType=3
 hPairProd:  for pi+  XStype:1  SubType=4
       dE/dx and range tables from 100.000000 eV  to 100.000000 TeV in 240 bins
       Lambda tables from threshold to 100.000000 TeV, 20 bins/decade, spline: 1
-      Sampling table 20x1001 from 1.116561 GeV to 100.000000 TeV 
+      Sampling table 20x1001, from 1.116561 GeV to 100.000000 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=0.000000 eV  Emax=100.000000 TeV  ModifiedMephi
 
@@ -811,7 +815,7 @@ hBrems:  for pi-  XStype:1  SubType=3
 hPairProd:  for pi-  XStype:1  SubType=4
       dE/dx and range tables from 100.000000 eV  to 100.000000 TeV in 240 bins
       Lambda tables from threshold to 100.000000 TeV, 20 bins/decade, spline: 1
-      Sampling table 20x1001 from 1.116561 GeV to 100.000000 TeV 
+      Sampling table 20x1001, from 1.116561 GeV to 100.000000 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=0.000000 eV  Emax=100.000000 TeV  ModifiedMephi
 
@@ -1002,18 +1006,17 @@ CoulombScat:  for pi- XStype:1 SubType=1 BuildTable=1
   Process: neutronInelastic
         Model:                      QGSP: 12.000000 GeV ---> 100.000000 TeV
         Model:                      FTFP: 3.000000 GeV ---> 25.000000 GeV
-        Model:            Binary Cascade: 19.900000 MeV ---> 6.000000 GeV
+        Model:            BertiniCascade: 1.000000 GeV ---> 6.000000 GeV
+        Model:            Binary Cascade: 19.900000 MeV ---> 1.500000 GeV
         Model:        NeutronHPInelastic: 0.000000 eV  ---> 20.000000 MeV
      Cr_sctns:      NeutronHPInelasticXS: 0.000000 eV  ---> 20.000000 MeV
      Cr_sctns:      G4NeutronInelasticXS: 0.000000 eV  ---> 100.000000 TeV
-  Process: nCapture
-        Model:             nRadCaptureHP: 0.000000 eV  ---> 20.000000 MeV
-        Model:               nRadCapture: 19.900000 MeV ---> 100.000000 TeV
+  Process: nCaptureHP
+        Model:             nRadCaptureHP: 0.000000 eV  ---> 100.000000 TeV
      Cr_sctns:        NeutronHPCaptureXS: 0.000000 eV  ---> 100.000000 TeV
      Cr_sctns:        G4NeutronCaptureXS: 0.000000 eV  ---> 100.000000 TeV
-  Process: nFission
+  Process: nFissionHP
         Model:          NeutronHPFission: 0.000000 eV  ---> 20.000000 MeV
-        Model:                G4LFission: 19.900000 MeV ---> 100.000000 TeV
      Cr_sctns:        NeutronHPFissionXS: 0.000000 eV  ---> 20.000000 MeV
      Cr_sctns:                    ZeroXS: 0.000000 eV  ---> 100.000000 TeV
 -----------------------------------------------------------------------
@@ -1045,7 +1048,8 @@ CoulombScat:  for pi- XStype:1 SubType=1 BuildTable=1
   Process: protonInelastic
         Model:                      QGSP: 12.000000 GeV ---> 100.000000 TeV
         Model:                      FTFP: 3.000000 GeV ---> 25.000000 GeV
-        Model:            Binary Cascade: 0.000000 eV  ---> 6.000000 GeV
+        Model:            BertiniCascade: 1.000000 GeV ---> 6.000000 GeV
+        Model:            Binary Cascade: 0.000000 eV  ---> 1.500000 GeV
      Cr_sctns:  BarashenkovGlauberGribov: 0.000000 eV  ---> 100.000000 TeV
 -----------------------------------------------------------------------
                            Hadronic Processes for sigma-
@@ -1074,8 +1078,8 @@ CoulombScat:  for pi- XStype:1 SubType=1 BuildTable=1
 Type of pre-compound model                          0
 Type of pre-compound inverse x-section              1
 Pre-compound model active                           1
-Pre-compound excitation low energy                  100.00000 keV
-Pre-compound excitation high energy                 30.00000 MeV
+Pre-compound excitation low energy                  0.10000 MeV 
+Pre-compound excitation high energy                 15.00000 MeV 
 Angular generator for pre-compound model            1
 Use NeverGoBack option for pre-compound model       0
 Use SoftCutOff option for pre-compound model        0
@@ -1089,13 +1093,12 @@ Type of de-excitation inverse x-section             3
 Type of de-excitation factory                       Evaporation+GEM
 Number of de-excitation channels                    68
 Type of Fermi BreakUp model                         ModelVI
-Min excitation energy                               10.00000 eV 
-Min energy per nucleon for multifragmentation       200.00000 GeV
-Limit excitation energy for Fermi BreakUp           20.00000 MeV
+Min excitation energy                               0.01000 keV 
+Min energy per nucleon for multifragmentation       200000.00000 MeV
 Level density (1/MeV)                               0.07500
 Use simple level density model                      1
 Use discrete excitation energy of the residual      0
-Time limit for long lived isomeres                  1000.00000 ps 
+Time limit for long lived isomeres                  1.00000 ns 
 Isomer production flag                              1
 Internal e- conversion flag                         1
 Store e- internal conversion data                   1
@@ -1117,193 +1120,193 @@ Max 2J for sampling of angular correlations         10
  Run #0 / Number of event processed : 1000000
 =====================================================================
 organ ID|      Organ Mass (g)   Dose (Gy/source)     Relative Error
-     100|               8.683          4.240e-17              0.487
-     200|               8.683          5.539e-18              0.704
-     300|               0.022          0.000e+00              1.000
-     301|               0.090          0.000e+00              1.000
-     302|               0.028          0.000e+00              1.000
-     303|              11.291          5.241e-17              0.361
-     400|               0.141          2.948e-17              0.632
-     401|               0.390          3.898e-17              0.661
-     402|               0.098          2.628e-17              0.741
-     403|               0.049          2.780e-17              0.782
-     404|               0.098          5.697e-17              0.772
-     405|              28.808          3.438e-17              0.269
-     500|               0.086          0.000e+00              1.000
+     100|               8.683          1.815e-17              0.655
+     200|               8.683          2.920e-19              0.974
+     300|               0.022          2.785e-17              1.000
+     301|               0.090          1.017e-16              1.000
+     302|               0.028          4.724e-17              1.000
+     303|              11.291          3.357e-17              0.475
+     400|               0.141          6.315e-18              1.000
+     401|               0.390          8.703e-18              0.928
+     402|               0.098          3.636e-17              0.741
+     403|               0.049          8.090e-18              0.852
+     404|               0.098          2.558e-17              1.000
+     405|              28.808          3.165e-17              0.315
+     500|               0.086          2.030e-18              1.000
      501|               0.024          0.000e+00              1.000
-     600|               0.023          8.912e-17              0.786
-     700|              10.364          9.615e-18              0.774
-     800|               0.025          0.000e+00              1.000
-     801|               0.031          0.000e+00              1.000
-     802|               0.052          0.000e+00              1.000
-     803|               0.130          0.000e+00              1.000
-     804|               0.026          0.000e+00              1.000
-     805|               0.052          0.000e+00              1.000
-     806|               0.052          0.000e+00              1.000
-     807|               0.053          0.000e+00              1.000
-     808|               2.777          8.212e-18              0.792
+     600|               0.023          0.000e+00              1.000
+     700|              10.364          3.185e-18              0.692
+     800|               0.025          3.196e-17              0.765
+     801|               0.031          3.209e-17              0.783
+     802|               0.052          3.422e-17              0.765
+     803|               0.130          9.315e-17              0.670
+     804|               0.026          3.052e-16              0.891
+     805|               0.052          3.372e-17              0.723
+     806|               0.052          2.978e-17              0.727
+     807|               0.053          3.834e-17              0.717
+     808|               2.777          3.503e-17              0.725
      900|               1.504          0.000e+00              1.000
-     910|               6.944          5.052e-18              0.733
-    1000|             193.197          2.944e-17              0.114
-    1010|             444.035          3.343e-17              0.072
-    1100|              32.463          2.325e-17              0.320
-    1110|             167.269          2.792e-17              0.131
-    1200|             108.832          2.982e-17              0.156
-    1210|             389.741          2.462e-17              0.090
-    1300|             159.196          2.676e-17              0.140
-    1400|             145.689          2.981e-17              0.141
-    1500|              34.244          3.955e-17              0.245
-    1600|             106.720          3.229e-17              0.153
-    1700|              50.890          3.007e-17              0.218
-    1800|              37.397          2.285e-17              0.308
-    1900|             273.409          3.296e-17              0.096
-    2000|             154.981          3.259e-17              0.128
-    2100|              22.996          5.044e-17              0.292
-    2200|             181.529          2.974e-17              0.123
-    2300|             118.927          3.104e-17              0.148
-    2400|              48.252          3.587e-17              0.212
-    2500|              45.057          2.751e-17              0.229
-    2600|             568.469          1.351e-17              0.099
-    2700|             382.073          1.800e-17              0.113
-    2800|             253.548          2.999e-17              0.103
-    2900|             413.232          2.968e-17              0.082
-    3000|              26.045          3.625e-17              0.305
-    3100|             307.761          3.063e-17              0.091
-    3200|             373.652          2.999e-17              0.089
-    3300|              82.179          3.282e-17              0.176
-    3400|             536.651          2.577e-17              0.076
-    3500|             621.408          2.688e-17              0.073
-    3600|              79.815          2.992e-17              0.182
-    3700|             234.882          2.045e-17              0.131
-    3800|             432.615          1.984e-17              0.100
-    3900|              76.877          2.371e-17              0.204
-    4000|              56.287          1.905e-17              0.267
-    4100|             402.595          3.094e-17              0.074
-    4200|             619.672          3.249e-17              0.063
-    4300|             368.797          1.863e-17              0.085
-    4400|             457.351          2.139e-17              0.088
-    4500|             223.333          1.821e-17              0.125
-    4600|             156.670          1.967e-17              0.159
-    4700|             103.943          1.895e-17              0.177
-    4800|              78.915          2.624e-17              0.204
-    4900|             289.440          1.554e-17              0.113
-    5000|             345.222          2.017e-17              0.102
-    5100|             188.047          2.375e-17              0.124
-    5200|             291.584          2.630e-17              0.101
-    5300|             110.320          2.339e-17              0.151
-    5400|             192.224          2.621e-17              0.123
-    5500|               9.991          3.959e-17              0.343
-    5600|              61.420          3.807e-17              0.183
-    5700|              56.331          3.602e-17              0.196
-    5800|              82.063          2.358e-17              0.181
-    6100|            1517.390          1.477e-17              0.066
-    6200|               7.769          3.690e-17              0.504
-    6300|               5.180          5.758e-17              0.559
-    6400|               7.769          6.376e-17              0.459
-    6500|               5.180          2.058e-17              0.688
+     910|               6.944          1.807e-17              0.551
+    1000|             193.197          3.161e-17              0.108
+    1010|             444.035          3.546e-17              0.070
+    1100|              32.463          2.724e-17              0.286
+    1110|             167.269          3.495e-17              0.120
+    1200|             108.832          2.860e-17              0.150
+    1210|             389.741          2.685e-17              0.088
+    1300|             159.196          2.431e-17              0.141
+    1400|             145.689          2.299e-17              0.157
+    1500|              34.244          3.168e-17              0.287
+    1600|             106.720          2.813e-17              0.162
+    1700|              50.890          3.996e-17              0.202
+    1800|              37.397          2.210e-17              0.295
+    1900|             273.409          3.196e-17              0.093
+    2000|             154.981          3.546e-17              0.125
+    2100|              22.996          3.912e-17              0.311
+    2200|             181.529          2.987e-17              0.121
+    2300|             118.927          2.614e-17              0.158
+    2400|              48.252          1.762e-17              0.261
+    2500|              45.057          2.701e-17              0.260
+    2600|             568.469          1.596e-17              0.093
+    2700|             382.073          1.726e-17              0.110
+    2800|             253.548          3.319e-17              0.094
+    2900|             413.232          3.108e-17              0.080
+    3000|              26.045          2.848e-17              0.303
+    3100|             307.761          2.912e-17              0.095
+    3200|             373.652          2.555e-17              0.096
+    3300|              82.179          3.213e-17              0.166
+    3400|             536.651          2.629e-17              0.077
+    3500|             621.408          2.515e-17              0.075
+    3600|              79.815          3.193e-17              0.193
+    3700|             234.882          1.619e-17              0.134
+    3800|             432.615          2.188e-17              0.095
+    3900|              76.877          2.170e-17              0.221
+    4000|              56.287          3.728e-17              0.204
+    4100|             402.595          3.241e-17              0.072
+    4200|             619.672          2.902e-17              0.064
+    4300|             368.797          2.021e-17              0.089
+    4400|             457.351          2.150e-17              0.088
+    4500|             223.333          1.291e-17              0.145
+    4600|             156.670          1.930e-17              0.155
+    4700|             103.943          2.144e-17              0.179
+    4800|              78.915          2.812e-17              0.185
+    4900|             289.440          1.590e-17              0.119
+    5000|             345.222          1.589e-17              0.119
+    5100|             188.047          2.155e-17              0.121
+    5200|             291.584          2.513e-17              0.102
+    5300|             110.320          2.454e-17              0.158
+    5400|             192.224          2.702e-17              0.121
+    5500|               9.991          2.708e-17              0.478
+    5600|              61.420          3.330e-17              0.197
+    5700|              56.331          4.198e-17              0.189
+    5800|              82.063          2.339e-17              0.184
+    6100|            1517.390          1.553e-17              0.064
+    6200|               7.769          7.508e-18              0.497
+    6300|               5.180          4.198e-17              0.614
+    6400|               7.769          4.215e-17              0.488
+    6500|               5.180          2.677e-17              0.607
     6600|               0.039          0.000e+00              1.000
     6601|               0.189          0.000e+00              1.000
-    6700|               1.113          5.809e-17              1.000
+    6700|               1.113          1.409e-17              1.000
     6701|               0.308          0.000e+00              1.000
-    6702|               6.122          4.283e-17              0.591
+    6702|               6.122          4.175e-17              0.599
     6800|               0.039          0.000e+00              1.000
-    6801|               0.189          0.000e+00              1.000
-    6900|               1.113          6.459e-17              0.772
+    6801|               0.189          6.528e-16              0.811
+    6900|               1.113          1.607e-18              1.000
     6901|               0.308          0.000e+00              1.000
-    6902|               6.122          3.014e-17              0.555
-    7000|              10.364          2.634e-17              0.377
-    7100|              58.000          3.245e-17              0.211
-    7200|               1.784          4.854e-17              0.423
-    7201|               1.193          3.482e-17              0.329
-    7202|               6.008          3.263e-17              0.313
-    7203|             185.286          3.641e-17              0.109
-    7300|             250.000          3.120e-17              0.102
-    7400|              14.547          3.062e-17              0.225
-    7401|               2.264          3.725e-17              0.257
-    7402|               5.692          3.531e-17              0.229
-    7403|             840.096          3.449e-17              0.052
-    7500|              53.337          3.657e-17              0.144
-    7501|             296.663          3.660e-17              0.082
-    7600|               3.071          4.957e-18              1.000
-    7601|               0.223          4.611e-18              1.000
-    7602|             116.634          2.711e-17              0.158
-    7700|              55.000          3.043e-17              0.216
-    7800|               3.993          2.107e-17              0.546
-    7801|               0.289          1.109e-17              0.513
-    7802|              75.671          2.953e-17              0.180
-    7900|              95.000          3.380e-17              0.157
-    8000|               2.824          1.259e-17              0.556
-    8001|               0.205          1.417e-17              0.679
-    8002|              76.924          3.222e-17              0.167
-    8100|              40.000          4.300e-17              0.222
-    8200|               2.779          4.069e-17              0.559
-    8201|               0.203          4.342e-17              0.653
-    8202|             116.946          3.931e-17              0.129
-    8300|              35.000          2.635e-17              0.291
-    8400|               4.451          2.109e-17              0.529
-    8401|               0.324          2.993e-17              0.677
-    8402|              48.524          4.097e-17              0.191
-    8500|              75.000          4.285e-17              0.161
-    8600|              39.976          3.327e-17              0.233
-    8700|             385.839          2.747e-17              0.088
-    8800|             510.000          2.351e-17              0.084
-    8900|             162.338          2.166e-17              0.154
-    9000|              38.359          3.398e-17              0.247
-    9100|               7.652          3.048e-17              0.499
-    9200|             166.542          2.312e-17              0.132
-    9300|              39.362          1.807e-17              0.292
-    9400|               7.892          2.579e-17              0.652
-    9500|            2360.000          2.780e-17              0.038
-    9700|             545.877          2.450e-17              0.078
-    9900|             652.861          2.872e-17              0.066
-   10000|              15.949          1.800e-17              0.528
-   10100|              15.949          9.181e-18              0.413
-   10200|               5.510          6.634e-17              0.493
-   10300|             130.204          3.902e-17              0.123
-   10400|              11.019          4.496e-17              0.435
-   10500|              11.019          3.310e-17              0.463
-   10600|            1200.828          2.150e-17              0.059
-   10700|           14844.730          2.689e-17              0.015
-   10800|            2843.507          3.005e-17              0.032
-   10900|           10887.729          2.824e-17              0.018
-   11000|               1.919          2.190e-17              0.461
-   11001|               0.103          8.685e-18              0.615
-   11002|              49.783          2.967e-17              0.234
-   11003|              22.870          1.990e-17              0.383
-   11300|             173.631          3.738e-17              0.112
-   11400|               0.622          1.928e-17              1.000
-   11500|              17.618          3.675e-17              0.320
-   11600|             975.622          2.198e-17              0.063
-   11700|           11176.900          2.934e-17              0.017
-   11800|            1549.842          3.191e-17              0.041
-   11900|            4510.134          2.785e-17              0.026
-   12000|              44.045          2.755e-17              0.265
-   12100|              44.045          1.929e-17              0.300
-   12200|             259.230          1.705e-17              0.126
-   12201|               8.470          1.146e-17              0.312
-   12300|            1271.006          2.166e-17              0.049
-   12301|              38.418          1.925e-17              0.163
-   12400|             575.709          2.520e-17              0.070
-   12401|              18.843          2.245e-17              0.191
-   12500|            1259.982          2.337e-17              0.049
-   12501|              37.790          1.449e-17              0.155
-   12600|              37.952          1.906e-17              0.315
-   12700|             228.400          1.369e-17              0.161
-   12800|              50.727          2.408e-17              0.259
-   12801|               0.043          4.337e-17              0.784
-   12900|              18.617          3.190e-17              0.382
-   13000|              18.617          2.434e-17              0.370
-   13100|              25.909          2.885e-17              0.360
-   13200|              23.351          3.294e-17              0.331
-   13300|              20.993          1.072e-17              0.594
-   13301|              54.552          2.224e-17              0.271
-   13400|               3.109          0.000e+00              1.000
-   13500|               8.809          4.102e-17              0.469
-   13600|               7.773          5.416e-17              0.409
-   13700|              49.781          3.712e-17              0.187
-   13701|               1.318          3.656e-17              0.381
-   13800|             200.000          4.324e-17              0.099
-   14000|               0.140          1.798e-17              0.536
+    6902|               6.122          4.851e-17              0.482
+    7000|              10.364          3.095e-17              0.382
+    7100|              58.000          3.412e-17              0.195
+    7200|               1.784          1.796e-17              0.517
+    7201|               1.193          9.860e-18              0.437
+    7202|               6.008          3.557e-17              0.371
+    7203|             185.286          3.053e-17              0.117
+    7300|             250.000          3.154e-17              0.104
+    7400|              14.547          1.840e-17              0.221
+    7401|               2.264          3.024e-17              0.299
+    7402|               5.692          3.102e-17              0.240
+    7403|             840.096          3.583e-17              0.052
+    7500|              53.337          1.728e-17              0.184
+    7501|             296.663          2.890e-17              0.093
+    7600|               3.071          2.829e-17              0.548
+    7601|               0.223          1.421e-17              0.646
+    7602|             116.634          3.193e-17              0.145
+    7700|              55.000          3.328e-17              0.200
+    7800|               3.993          4.093e-17              0.750
+    7801|               0.289          6.051e-17              0.673
+    7802|              75.671          3.230e-17              0.184
+    7900|              95.000          4.228e-17              0.148
+    8000|               2.824          2.248e-17              0.459
+    8001|               0.205          5.063e-17              0.632
+    8002|              76.924          3.826e-17              0.165
+    8100|              40.000          3.800e-17              0.226
+    8200|               2.779          1.395e-17              0.550
+    8201|               0.203          7.411e-17              0.822
+    8202|             116.946          3.139e-17              0.147
+    8300|              35.000          1.719e-17              0.347
+    8400|               4.451          3.037e-17              0.421
+    8401|               0.324          1.083e-17              0.613
+    8402|              48.524          3.561e-17              0.199
+    8500|              75.000          3.512e-17              0.175
+    8600|              39.976          3.260e-17              0.238
+    8700|             385.839          2.613e-17              0.090
+    8800|             510.000          2.455e-17              0.084
+    8900|             162.338          2.102e-17              0.144
+    9000|              38.359          5.927e-18              0.487
+    9100|               7.652          2.576e-17              0.644
+    9200|             166.542          2.498e-17              0.140
+    9300|              39.362          2.297e-17              0.282
+    9400|               7.892          1.225e-17              0.442
+    9500|            2360.000          2.958e-17              0.038
+    9700|             545.877          2.602e-17              0.077
+    9900|             652.861          2.408e-17              0.073
+   10000|              15.949          1.251e-17              0.597
+   10100|              15.949          1.787e-17              0.322
+   10200|               5.510          2.417e-17              0.674
+   10300|             130.204          3.920e-17              0.119
+   10400|              11.019          2.259e-17              0.504
+   10500|              11.019          3.215e-17              0.495
+   10600|            1200.828          1.948e-17              0.061
+   10700|           14844.730          2.636e-17              0.016
+   10800|            2843.507          2.833e-17              0.033
+   10900|           10887.729          2.631e-17              0.019
+   11000|               1.919          0.000e+00              1.000
+   11001|               0.103          0.000e+00              1.000
+   11002|              49.783          2.186e-17              0.238
+   11003|              22.870          1.669e-17              0.420
+   11300|             173.631          2.985e-17              0.123
+   11400|               0.622          0.000e+00              1.000
+   11500|              17.618          5.075e-17              0.276
+   11600|             975.622          2.069e-17              0.063
+   11700|           11176.900          2.866e-17              0.017
+   11800|            1549.842          3.025e-17              0.042
+   11900|            4510.134          2.847e-17              0.026
+   12000|              44.045          1.658e-17              0.314
+   12100|              44.045          1.934e-17              0.325
+   12200|             259.230          2.012e-17              0.115
+   12201|               8.470          1.109e-17              0.298
+   12300|            1271.006          2.415e-17              0.047
+   12301|              38.418          1.162e-17              0.139
+   12400|             575.709          2.901e-17              0.066
+   12401|              18.843          2.741e-17              0.171
+   12500|            1259.982          2.338e-17              0.049
+   12501|              37.790          1.777e-17              0.154
+   12600|              37.952          1.681e-17              0.312
+   12700|             228.400          1.800e-17              0.144
+   12800|              50.727          2.129e-17              0.279
+   12801|               0.043          2.139e-17              1.000
+   12900|              18.617          3.652e-17              0.338
+   13000|              18.617          4.322e-17              0.319
+   13100|              25.909          2.989e-17              0.336
+   13200|              23.351          1.550e-17              0.408
+   13300|              20.993          1.723e-17              0.543
+   13301|              54.552          1.673e-17              0.304
+   13400|               3.109          6.049e-17              0.629
+   13500|               8.809          3.918e-17              0.437
+   13600|               7.773          1.428e-17              0.392
+   13700|              49.781          4.413e-17              0.173
+   13701|               1.318          1.911e-17              0.497
+   13800|             200.000          3.297e-17              0.112
+   14000|               0.140          4.621e-17              0.481
 =====================================================================
 
 Graphics systems deleted.

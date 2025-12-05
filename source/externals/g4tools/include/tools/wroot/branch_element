@@ -16,12 +16,6 @@ inline const std::string& branch_element_store_class() {
 
 class branch_element : public branch {
   typedef branch parent;
-#ifdef TOOLS_MEM
-  static const std::string& s_class() {
-    static const std::string s_v("tools::wroot::branch_element");
-    return s_v;
-  }
-#endif
 public: //ibo
   virtual const std::string& store_cls() const {return branch_element_store_class();}
   virtual bool stream(buffer& a_buffer) const {
@@ -48,14 +42,8 @@ public:
   ,fType(0)
   ,fStreamerType(-1)
   {
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
   }
   virtual ~branch_element(){
-#ifdef TOOLS_MEM
-    mem::decrement(s_class().c_str());
-#endif
   }
 protected:
   branch_element(const branch_element& a_from):ibo(a_from),parent(a_from) {}
@@ -79,12 +67,6 @@ protected:
 template <class T>
 class std_vector_be_ref : public branch_element {
   typedef branch_element parent;
-#ifdef TOOLS_MEM
-  static const std::string& s_class() {
-    static const std::string s_v("tools::wroot::std_vector_be_ref");
-    return s_v;
-  }
-#endif
 public:
   std_vector_be_ref(std::ostream& a_out,bool a_byte_swap,uint32 a_compression,
                     seek a_seek_directory,
@@ -92,9 +74,6 @@ public:
   :parent(a_out,a_byte_swap,a_compression,a_seek_directory,a_name,a_title,a_verbose)
   ,m_ref(a_ref)
   {
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
     fClassName = "vector<"+stype(T())+">";
     fClassVersion = 0;
     fID = -1;
@@ -102,9 +81,6 @@ public:
     fStreamerType  = -1; // TStreamerInfo::kSTLp;
   }
   virtual ~std_vector_be_ref(){
-#ifdef TOOLS_MEM
-    mem::decrement(s_class().c_str());
-#endif
   }
 protected:
   std_vector_be_ref(const std_vector_be_ref& a_from)
@@ -139,12 +115,6 @@ protected:
 template <class T>
 class std_vector_be : public std_vector_be_ref<T> {
   typedef std_vector_be_ref<T> parent;
-#ifdef TOOLS_MEM
-  static const std::string& s_class() {
-    static const std::string s_v("tools::wroot::std_vector_be");
-    return s_v;
-  }
-#endif
 public:
   std_vector_be(std::ostream& a_out,bool a_byte_swap,uint32 a_compression,
                 seek a_seek_directory,
@@ -152,14 +122,8 @@ public:
   :parent(a_out,a_byte_swap,a_compression,a_seek_directory,a_name,a_title,m_value,a_verbose)
   ,m_def(a_def),m_value(a_def)
   {
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
   }
   virtual ~std_vector_be(){
-#ifdef TOOLS_MEM
-    mem::decrement(s_class().c_str());
-#endif
   }
 protected:
   std_vector_be(const std_vector_be& a_from)
@@ -182,12 +146,6 @@ protected:
 template <class T>
 class std_vector_be_pointer : public branch_element {
   typedef branch_element parent;
-#ifdef TOOLS_MEM
-  static const std::string& s_class() {
-    static const std::string s_v("tools::wroot::std_vector_be_pointer");
-    return s_v;
-  }
-#endif
 public:
   std_vector_be_pointer(std::ostream& a_out,bool a_byte_swap,uint32 a_compression,
                     seek a_seek_directory,
@@ -195,9 +153,6 @@ public:
   :parent(a_out,a_byte_swap,a_compression,a_seek_directory,a_name,a_title,a_verbose)
   ,m_pointer(a_pointer)
   {
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
     fClassName = "vector<"+stype(T())+">";
     fClassVersion = 0;
     fID = -1;
@@ -205,9 +160,6 @@ public:
     fStreamerType  = -1; // TStreamerInfo::kSTLp;
   }
   virtual ~std_vector_be_pointer(){
-#ifdef TOOLS_MEM
-    mem::decrement(s_class().c_str());
-#endif
   }
 protected:
   std_vector_be_pointer(const std_vector_be_pointer& a_from)

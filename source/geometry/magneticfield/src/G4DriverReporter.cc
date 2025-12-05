@@ -25,10 +25,7 @@
 //
 // G4DriverReporter
 //
-// Implementation
-//
-//
-// Authors: J.Apostolakis        -   January/March 2020
+// Author: John Apostolakis (CERN), January/March 2020
 // -------------------------------------------------------------------
 
 #include "G4DriverReporter.hh"
@@ -40,9 +37,8 @@ void G4DriverReporter::PrintStatus( const G4double* StartArr,
                                     const G4double* CurrentArr, 
                                           G4double  xcurrent,
                                           G4double  requestStep, 
-                                    unsigned int    subStepNo,
-                                    unsigned int    noIntegrationVariables
-   )
+                                    unsigned int subStepNo,
+                                    unsigned int noIntegrationVariables )
   // Potentially add as arguments:  
   //                                 <dydx>           - as Initial Force
   //                                 stepTaken(hdid)  - last step taken
@@ -61,24 +57,24 @@ void G4DriverReporter::PrintStatus( const G4double* StartArr,
 }
 
 // ---------------------------------------------------------------------------
-const G4int noPrecision = 8;
-const G4int prec7= noPrecision+2;
-const G4int prec8= noPrecision+3;    
-const G4int prec9= noPrecision+4;
 
 void G4DriverReporter::PrintStatus(const G4FieldTrack& StartFT,
                                    const G4FieldTrack& CurrentFT, 
                                          G4double      requestStep, 
                                    unsigned int        subStepNo)
 {
-    G4int verboseLevel= 2; // fVerboseLevel;
-    G4long oldPrec= G4cout.precision(noPrecision);
-    // G4cout.setf(ios_base::fixed,ios_base::floatfield);
-        
+    const G4int noPrecision = 8;
+    const G4int prec7 = noPrecision+2;
+    const G4int prec8 = noPrecision+3;    
+    const G4int prec9 = noPrecision+4;
+
     const G4ThreeVector StartPosition=       StartFT.GetPosition();
     const G4ThreeVector StartUnitVelocity=   StartFT.GetMomentumDir();
     const G4ThreeVector CurrentPosition=     CurrentFT.GetPosition();
     const G4ThreeVector CurrentUnitVelocity= CurrentFT.GetMomentumDir();
+
+    G4int verboseLevel= 2; // fVerboseLevel;
+    G4long oldPrec= G4cout.precision(noPrecision);
 
     G4double  DotStartCurrentVeloc= StartUnitVelocity.dot(CurrentUnitVelocity);
 
@@ -134,12 +130,17 @@ void G4DriverReporter::PrintStatus(const G4FieldTrack& StartFT,
 // ---------------------------------------------------------------------------
 
 void G4DriverReporter::PrintStat_Aux(const G4FieldTrack& aFieldTrack,
-                                          G4double      requestStep, 
-                                          G4double      step_len,
-                                          G4int         subStepNo,
-                                          G4double      subStepSize,
-                                          G4double      dotVeloc_StartCurr)
+                                           G4double      requestStep, 
+                                           G4double      step_len,
+                                           G4int         subStepNo,
+                                           G4double      subStepSize,
+                                           G4double      dotVeloc_StartCurr)
 {
+    const G4int noPrecision = 8;
+    const G4int prec7 = noPrecision+2;
+    const G4int prec8 = noPrecision+3;    
+    const G4int prec9 = noPrecision+4;
+
     const G4ThreeVector Position = aFieldTrack.GetPosition();
     const G4ThreeVector UnitVelocity = aFieldTrack.GetMomentumDir();
 

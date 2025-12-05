@@ -54,10 +54,14 @@ namespace G4INCL {
       G4double piNToEtaN(Particle const * const p1, Particle const * const p2);
       G4double piNToOmegaN(Particle const * const p1, Particle const * const p2);
       G4double piNToEtaPrimeN(Particle const * const p1, Particle const * const p2);
-	  G4double etaNToPiN(Particle const * const p1, Particle const * const p2);
-	  G4double etaNToPiPiN(Particle const * const p1, Particle const * const p2);
+	    G4double etaNToPiN(Particle const * const p1, Particle const * const p2);
+	    G4double etaNToPiPiN(Particle const * const p1, Particle const * const p2);
+      G4double etaNToLK(Particle const * const p1, Particle const * const p2);
+      G4double etaNToSK(Particle const * const p1, Particle const * const p2);
       G4double omegaNToPiN(Particle const * const p1, Particle const * const p2);
       G4double omegaNToPiPiN(Particle const * const p1, Particle const * const p2);
+      G4double omegaNToLK(Particle const * const p1, Particle const * const p2);
+      G4double omegaNToSK(Particle const * const p1, Particle const * const p2);
       G4double etaPrimeNToPiN(Particle const * const p1, Particle const * const p2);
 
       G4double NNToNNEta(Particle const * const p1, Particle const * const p2);
@@ -143,7 +147,8 @@ namespace G4INCL {
        * \return the interaction distance
        */
       G4double interactionDistanceNN(const ParticleSpecies &aSpecies, const G4double kineticEnergy);
-
+      G4double interactionDistanceNbarN(const ParticleSpecies &aSpecies, const G4double kineticEnergy);
+      G4double interactionDistancenbarN(const ParticleSpecies &aSpecies, const G4double kineticEnergy);
       /** \brief Compute the "interaction distance".
        *
        * Defined on the basis of the average value of the pi-N cross sections at

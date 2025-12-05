@@ -7,12 +7,11 @@
 # <<END-copyright>>
 */
 
-#include "PoPI.hpp"
+#include <PoPI.hpp>
 
 namespace PoPI {
 
 #define PoPI_A_Chars "A"
-#define PoPI_isotopeChars "isotope"
 
 /*! \class Isotope
  * This class represents **PoPs** isotope instance.
@@ -91,11 +90,11 @@ void Isotope::toXMLList( std::vector<std::string> &a_XMLList, std::string const 
     std::string AStr = LUPI::Misc::argumentsToString( "%d", m_A );
 
     std::string header = a_indent1 + "<isotope symbol=\"" + symbol( ) + "\" A=\"" + AStr + "\">";
-    a_XMLList.push_back( header );
+    a_XMLList.push_back( std::move( header ) );
 
     std::string indent2 = a_indent1 + "  ";
     std::string nuclideSuite = indent2 + "<" + PoPI_nuclidesChars + ">";
-    a_XMLList.push_back( nuclideSuite );
+    a_XMLList.push_back( std::move( nuclideSuite ) );
 
     std::string indent3 = indent2 + "  ";
     for( std::string::size_type i1 = 0; i1 < size; ++i1 ) m_nuclides[i1].toXMLList( a_XMLList, indent3 );

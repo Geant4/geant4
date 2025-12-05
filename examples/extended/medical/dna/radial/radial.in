@@ -6,19 +6,21 @@
 # MT
 /run/numberOfThreads 10
 #
-# Material
-/radial/setMat G4_WATER
-#
 # Sizes of World and cylinders
 #
 # -> RADIUS: from the range of secondary electrons having the maximum kinetic energy
 /radial/setWorldRadius 300 nm
 #
 # -> LENGTH: example for 1 MeV protons to get about 1000 proton steps
-/radial/setWorldLength 2.5 um
+/radial/setCylinderLength 2.5 um
+#
+# -> LENGTH OFFSET: add a space of specified length before/after cylinders entrance/exit
+# Particles will be shot from the entrance of the space
+/radial/setWorldOffsetLength 0. um
+#/radial/setWorldOffsetLength 0.5 um
 #
 # -> THICKNESS: default set to 1 nm
-/radial/setThicknessCylinders 1 nm
+/radial/setCylinderThickness 1 nm
 #
 # Atomic deexcitation
 /process/em/fluo true
@@ -47,7 +49,7 @@
 /gun/particle proton
 #
 ##########################################################
-# PROTON IONISATION SETTINGS
+# PROTON IONISATION ONLY SETTINGS
 ##########################################################
 /process/inactivate proton_G4DNAExcitation
 /process/inactivate proton_G4DNAElastic

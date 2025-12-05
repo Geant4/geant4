@@ -23,10 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 /// \file ExGflash2SensitiveDetector.hh
 /// \brief Definition of the ExGflash2SensitiveDetector class
-//
+
 #ifndef EXGFLASH2SENSITIVEDETECTOR_H
 #define EXGFLASH2SENSITIVEDETECTOR_H
 

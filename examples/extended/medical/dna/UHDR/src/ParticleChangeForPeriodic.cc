@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file ParticleChangeForPeriodic.cc
+/// \brief Implementation of the ParticleChangeForPeriodic class
+
 /*
  * Based on 'G4pbc'.
  * Copyright (c) 2020 Amentum Pty Ltd

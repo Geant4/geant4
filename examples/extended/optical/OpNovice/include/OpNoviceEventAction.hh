@@ -23,12 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file optical/OpNovice/include/OpNoviceEventAction.hh
+/// \file OpNoviceEventAction.hh
 /// \brief Definition of the OpNoviceEventAction class
-//
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef OpNoviceEventAction_h
 #define OpNoviceEventAction_h 1

@@ -1,11 +1,5 @@
 //  Created by Laurent Garnier on Fri Jan 30 2004.
 
-//#define TOOLS_HATCHER_DEBUG
-
-#ifdef TOOLS_HATCHER_DEBUG
-#include <cstdio>
-#endif
-
 namespace tools {
 
 //////////////////////////////////////////////////////////////////////////////
@@ -31,9 +25,6 @@ inline bool hatcher::check_polyline(vec3f* listPoints,unsigned int aNumber){
   }
 
   if ((int)aNumber-firstOffset <3) {
-#ifdef TOOLS_HATCHER_DEBUG
-    ::printf("hatcher::check_polyline : ERROR the polygone you give have not enought points!\n\n");
-#endif
     return false;
   }
 
@@ -60,11 +51,6 @@ inline bool hatcher::check_polyline(vec3f* listPoints,unsigned int aNumber){
                    vec3f(.0f,.0f,.0f));
   }
   if (fResolveResult == RESOLVE_COLINEAR) {
-#ifdef TOOLS_HATCHER_DEBUG
-    ::printf("hatcher::check_polyline : ERROR all the point you give are colinear!\n\n");
-    for (unsigned int a =0;a<aNumber;a++) {
-      printf(" %f %f %f \n",listPoints[a][0],listPoints[a][1],listPoints[a][2]);  }
-#endif
     return false;
   }
 
@@ -85,9 +71,6 @@ inline bool hatcher::check_polyline(vec3f* listPoints,unsigned int aNumber){
   }
 
   if (falsePoints !=0) {
-#ifdef TOOLS_HATCHER_DEBUG
-    ::printf("hatcher::check_polyline : ERROR there is %d points on the polyline witch are not on the same plan!\n\n",falsePoints);
-#endif
     return false;
   }
 
@@ -97,9 +80,6 @@ inline bool hatcher::check_polyline(vec3f* listPoints,unsigned int aNumber){
                      AC,
                      fOffset-listPoints[0]);
       if (fResolveResult != 0) {
-#ifdef TOOLS_HATCHER_DEBUG
-        ::printf("hatcher::check_polyline : ERROR Offset vector has to be on the same plan!\n\n");
-#endif
         return false;
       }
     }
@@ -272,9 +252,6 @@ inline bool hatcher::compute_polyline (vec3f* tabPoints,unsigned int aNumber) {
     specialCase =7;
     return true;
   } else {
-#ifdef TOOLS_HATCHER_DEBUG
-    ::printf("hatcher::drawStripPolyline : WARNING there is a case witch was not done in the algotithm...possibly some drawing problems.\n\n");
-#endif
 
   }
 
@@ -503,9 +480,6 @@ inline bool hatcher::compute_polyline (vec3f* tabPoints,unsigned int aNumber) {
         //      } // if result
     } // while result
     for (unsigned int a =0;a<fVertices.size();a++){
-#ifdef TOOLS_HATCHER_DEBUG
-      if (fVertices[a] <4) ::printf("hatcher::drawStripPolyline : WARNING A strip polyline has been compute with less than 3 points, it could be an error in the algorithm or a special case.\n\n");
-#endif
     }
 
     firstPointTabInd += firstComputeConflictNumHatchLineTab[indHatch].size();
@@ -575,11 +549,6 @@ inline bool hatcher::compute_single_polyline (vec3f* tabPoints,unsigned int aNum
                    vec3f(.0f,.0f,.0f));
   }
   if (fResolveResult == RESOLVE_COLINEAR) {
-#ifdef TOOLS_HATCHER_DEBUG
-    ::printf("hatcher::drawPolyline : ERROR all the point you give are colinear!\n\n");
-    for (unsigned int a =0;a<aNumber;a++) {
-      printf(" %f %f %f \n",listPoints[a][0],listPoints[a][1],listPoints[a][2]);  }
-#endif
     delete [] listPoints;
     return false;
   }
@@ -616,9 +585,6 @@ inline bool hatcher::compute_single_polyline (vec3f* tabPoints,unsigned int aNum
     float j = std::tan(fDirAngle)*normAB/normABPerpVector;
 
     if (normABPerpVector == 0){  // never done (should be test before)
-#ifdef TOOLS_HATCHER_DEBUG
-      ::printf("hatcher::drawPolyline : ERROR Impossible to compute the dir vector for hatch. Normal for this plan is null (normal for : point[0],point[1],lastPoint) point[0], point[1], last point are probably aligned\n\n");
-#endif
       delete [] listPoints;
       return false;
     }
@@ -691,9 +657,6 @@ inline bool hatcher::compute_single_polyline (vec3f* tabPoints,unsigned int aNum
          }
     }
     else {  // never done (should be test before)
-#ifdef TOOLS_HATCHER_DEBUG
-      ::printf("hatcher::drawPolyline : ERROR one or more of your polyline points are not on the same plan ! Testing point %d/%d error:%d\n\n",a,numberOfPolylinePoints,fResolveResult);
-#endif
       delete [] listPoints;
       return false;
     }
@@ -737,15 +700,11 @@ inline bool hatcher::compute_single_polyline (vec3f* tabPoints,unsigned int aNum
                                        ));
     }
     else  if (fResolveResult == RESOLVE_Z_ERROR ) {  // never done (should be test before)
-#ifdef TOOLS_HATCHER_DEBUG
-      ::printf("hatcher::drawPolyline : ERROR one or more of your polyline points are not on the same plan !\n\n");
-#endif
       delete [] listPoints;
       return false;
     }
     else{
       listNormalVec.push_back(vec3f(FLT_MAX,FLT_MAX,FLT_MAX));
-      //      listNormalVec.append(new vec3f(FLT_MAX,FLT_MAX,FLT_MAX));
     }
  }
 
@@ -878,9 +837,6 @@ inline bool hatcher::compute_single_polyline (vec3f* tabPoints,unsigned int aNum
             listConflictPoints.push_back(vec3f(listPoints[fConflictNumHatchLineTab[hatchNumber][conflictLineNumber]]+ABVec*res[1]));
           }
           else if (fResolveResult != RESOLVE_COLINEAR){
-#ifdef TOOLS_HATCHER_DEBUG
-            printf("hatcher : Precision error during compute on hatch number%d\n\n",hatchNumber);
-#endif
             precisionError++;
           } else {
             toRemove.push_back(conflictLineNumber);
@@ -1105,9 +1061,6 @@ inline bool hatcher::compute_single_polyline (vec3f* tabPoints,unsigned int aNum
         } // end while
         if (drawEnabled) {
           fPoints.push_back(fPoints[fPoints.size()-1]);
-#ifdef TOOLS_HATCHER_DEBUG
-          printf("hatcher : Probably a error during conflict resolution on hatch number %d :\nWe have close this line by putting two times the same point.\n\n",hatchNumber);
-#endif
         }
         //re put the order conflictNumHatchLineTab witch could be use by stripWidth
         fConflictNumHatchLineTab[hatchNumber].clear();
@@ -1126,9 +1079,6 @@ inline bool hatcher::compute_single_polyline (vec3f* tabPoints,unsigned int aNum
       return true;
     }
     else {
-#ifdef TOOLS_HATCHER_DEBUG
-      printf("hatcher : Exit with %d precision error during compute\n\n",precisionError);
-#endif
       delete [] listPoints;
       return false;
     }
@@ -1240,19 +1190,12 @@ inline vec2f hatcher::resolve_system(const vec3f& A,const vec3f& B,const vec3f& 
     }
     else {
       if (bid>100*minBoxValue) {
-#ifdef TOOLS_HATCHER_DEBUG
-        printf("hatcher : ***** PRECISON ERROR ON Z  ******* compare %f > %f res :%f %f test %f %f bDiv %e\n\n",bid,100*minBoxValue,a,b,a*Ax+b*Bx-Cx,a*Ay+b*By-Cy,bDiv);
-#endif
         fResolveResult = RESOLVE_Z_ERROR;
       }
       else
         {
-#ifdef TOOLS_HATCHER_DEBUG
-          printf("hatcher : ***** PRECISON ERROR  ******* compare %f > %f res :%f %f test %f %f bDiv %e\n\n",bid,100*minBoxValue,a,b,a*Ax+b*Bx-Cx,a*Ay+b*By-Cy,bDiv);
-#endif
           fResolveResult = RESOLVE_PRECISION_ERROR;
         }
-      //return vec2f(0,0); //G.Barrand : commented out to quiet Coverity.
     }
   }
   return vec2f(0,0);
@@ -1260,4 +1203,3 @@ inline vec2f hatcher::resolve_system(const vec3f& A,const vec3f& B,const vec3f& 
 
 }
 
-//#undef TOOLS_HATCHER_DEBUG

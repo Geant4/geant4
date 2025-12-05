@@ -61,12 +61,17 @@ public:
   explicit G4BraggIonGasModel(const G4ParticleDefinition* p = nullptr,
 			      const G4String& nam = "BraggIonGas");
 
-  ~G4BraggIonGasModel() override;
+  ~G4BraggIonGasModel() override = default;
 
-  // Access ion effective charge square ratio to unit charge
+  // define current dynamic
   G4double ChargeSquareRatio(const G4Track&) final;
 
-  // Access ion effective charge 
+  // access current dynamic charge
+  G4double GetChargeSquareRatio(const G4ParticleDefinition* p,
+                                const G4Material* mat,
+				G4double kineticEnergy) final;
+
+  // Access dynamic charge 
   G4double GetParticleCharge(const G4ParticleDefinition*,
 			     const G4Material* mat,
 			     G4double kineticEnergy) final;

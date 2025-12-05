@@ -47,6 +47,7 @@ geant4_add_module(G4globman
     G4Exception.hh
     G4ExceptionSeverity.hh
     G4Exp.hh
+    G4ExtendedPhysicsVector.hh
     G4FastVector.hh
     G4FilecoutDestination.hh
     G4Filesystem.hh
@@ -127,6 +128,7 @@ geant4_add_module(G4globman
     G4DataVector.cc
     G4ErrorPropagatorData.cc
     G4Exception.cc
+    G4ExtendedPhysicsVector.cc
     G4FilecoutDestination.cc
     G4FindDataDir.cc
     G4GeometryTolerance.cc

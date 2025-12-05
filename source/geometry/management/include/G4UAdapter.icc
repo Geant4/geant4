@@ -1,0 +1,343 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+// G4UAdapter inline implementation.
+//
+// Author: Gabriele Cosmo (CERN), 17.05.2017
+// --------------------------------------------------------------------
+
+template <class UnplacedVolume_t>
+G4UAdapter<UnplacedVolume_t>::G4UAdapter(const G4String& name)
+  : G4VSolid(name)
+{
+  kHalfTolerance = 0.5*kCarTolerance;
+}
+
+template <class UnplacedVolume_t>
+template <typename... T>
+G4UAdapter<UnplacedVolume_t>::G4UAdapter(const G4String& name,
+                                         const T &... params)
+  : G4VSolid(name), UnplacedVolume_t(params...)
+{
+  kHalfTolerance = 0.5*kCarTolerance;
+}
+
+template <class UnplacedVolume_t>
+G4UAdapter<UnplacedVolume_t>::~G4UAdapter()
+{
+  delete fPolyhedron; fPolyhedron = nullptr;
+}
+
+template <class UnplacedVolume_t>
+G4bool G4UAdapter<UnplacedVolume_t>::
+operator==(const G4UAdapter& rhs) const
+{
+  return (this == &rhs) ? true : false;
+}
+
+template <class UnplacedVolume_t>
+G4UAdapter<UnplacedVolume_t>::
+G4UAdapter(const G4UAdapter& rhs)
+  : G4VSolid(rhs), UnplacedVolume_t(rhs)
+{
+  kHalfTolerance = 0.5*kCarTolerance;
+}
+
+template <class UnplacedVolume_t>
+G4UAdapter<UnplacedVolume_t>& G4UAdapter<UnplacedVolume_t>::
+operator=(const G4UAdapter& rhs)
+{
+  // Check assignment to self
+  //
+  if (this == &rhs)
+  {
+    return *this;
+  }
+
+  // Copy base class data
+  //
+  G4VSolid::operator=(rhs);
+  UnplacedVolume_t::operator=(rhs);
+
+  // Copy data
+  //
+  fRebuildPolyhedron = false;
+  delete fPolyhedron; fPolyhedron = nullptr;
+  kHalfTolerance = 0.5*kCarTolerance;
+
+  return *this;
+}
+
+template <class UnplacedVolume_t>
+EInside G4UAdapter<UnplacedVolume_t>::
+Inside(const G4ThreeVector& p) const
+{
+  U3Vector pt(p.x(), p.y(), p.z());
+  vecgeom::EnumInside in_temp;
+  EInside in = kOutside;
+
+  in_temp = UnplacedVolume_t::Inside(pt);
+
+  if (in_temp == vecgeom::EnumInside::eInside) in = kInside;
+  else if (in_temp == vecgeom::EnumInside::eSurface) in = kSurface;
+
+  return in;
+}
+
+template <class UnplacedVolume_t>
+G4ThreeVector G4UAdapter<UnplacedVolume_t>::
+SurfaceNormal(const G4ThreeVector& pt) const
+{
+  U3Vector p(pt.x(), pt.y(), pt.z());
+  U3Vector n;
+  UnplacedVolume_t::Normal(p, n);
+  return G4ThreeVector(n.x(), n.y(), n.z());
+}
+
+template <class UnplacedVolume_t>
+G4double G4UAdapter<UnplacedVolume_t>::
+DistanceToIn(const G4ThreeVector& pt, const G4ThreeVector& d) const
+{
+  U3Vector p(pt.x(), pt.y(), pt.z());
+  U3Vector v(d.x(), d.y(), d.z());
+  G4double dist = UnplacedVolume_t::DistanceToIn(p, v, kInfinity);
+
+  // apply Geant4 distance conventions
+  //
+  if (dist < kHalfTolerance)  return 0.0;
+  return (dist > kInfinity) ? kInfinity : dist;
+}
+
+template <class UnplacedVolume_t>
+G4double G4UAdapter<UnplacedVolume_t>::
+DistanceToIn(const G4ThreeVector& pt) const
+{
+  U3Vector p(pt.x(), pt.y(), pt.z());
+  G4double dist = UnplacedVolume_t::SafetyToIn(p);
+
+  // Apply Geant4 convention: convert negative values to zero
+  //
+  if (dist < kHalfTolerance)  return 0.0;
+  return (dist > kInfinity) ? kInfinity : dist;
+}
+
+template <class UnplacedVolume_t>
+G4double G4UAdapter<UnplacedVolume_t>::
+DistanceToOut(const G4ThreeVector& pt, const G4ThreeVector& d,
+              const G4bool calcNorm, G4bool* validNorm,
+                    G4ThreeVector* norm) const
+{
+  U3Vector p(pt.x(), pt.y(), pt.z());
+  U3Vector v(d.x(), d.y(), d.z());
+
+  G4double dist = UnplacedVolume_t::DistanceToOut(p, v, kInfinity);
+  if(calcNorm)
+  {
+    *validNorm = UnplacedVolume_t::IsConvex();
+    U3Vector n, hitpoint = p + dist * v;
+    UnplacedVolume_t::Normal(hitpoint, n);
+    norm->set(n.x(), n.y(), n.z());
+  }
+
+  // Apply Geant4 distance conventions
+  //
+  if (dist < kHalfTolerance)  return 0.0;
+  return (dist > kInfinity) ? kInfinity : dist;
+}
+
+template <class UnplacedVolume_t>
+G4double G4UAdapter<UnplacedVolume_t>::
+DistanceToOut(const G4ThreeVector& pt) const
+{
+  U3Vector p(pt.x(), pt.y(), pt.z());
+  G4double dist = UnplacedVolume_t::SafetyToOut(p);
+
+  // Apply Geant4 convention: convert negative values to zero
+  //
+  if (dist < kHalfTolerance)  return 0.0;
+  return (dist > kInfinity) ? kInfinity : dist;
+}
+
+template <class UnplacedVolume_t>
+G4double G4UAdapter<UnplacedVolume_t>::GetCubicVolume()
+{
+  return UnplacedVolume_t::Capacity();
+}
+
+template <class UnplacedVolume_t>
+G4double G4UAdapter<UnplacedVolume_t>::GetSurfaceArea()
+{
+  return UnplacedVolume_t::SurfaceArea();
+}
+
+template <class UnplacedVolume_t>
+G4ThreeVector G4UAdapter<UnplacedVolume_t>::GetPointOnSurface() const
+{
+  U3Vector p = UnplacedVolume_t::SamplePointOnSurface();
+  return G4ThreeVector(p.x(), p.y(), p.z());
+}
+
+template <class UnplacedVolume_t>
+G4int G4UAdapter<UnplacedVolume_t>::GetNumOfConstituents() const
+{
+  return 1;
+}
+
+template <class UnplacedVolume_t>
+G4bool G4UAdapter<UnplacedVolume_t>::IsFaceted() const
+{
+  return false;
+}
+
+// Inline visualization adapters
+
+namespace
+{
+  G4Mutex pMutex = G4MUTEX_INITIALIZER;
+}
+
+// Free function to enable ostream output
+template <class UnplacedVolume_t>
+std::ostream&
+operator<<(std::ostream& os, const G4UAdapter<UnplacedVolume_t>& uAdapted)
+{
+  return uAdapted.StreamInfo(os);
+}
+
+template <class UnplacedVolume_t>
+void G4UAdapter<UnplacedVolume_t>::
+ComputeDimensions(G4VPVParameterisation*, const G4int,
+                                          const G4VPhysicalVolume*)
+{
+    std::ostringstream message;
+    message << "Illegal call to G4UAdapter::ComputeDimensions()" << G4endl
+            << "Method not overloaded by derived class !";
+    G4Exception("G4UAdapter::ComputeDimensions()", "GeomSolids0003",
+                FatalException, message);
+}
+
+template <class UnplacedVolume_t>
+void G4UAdapter<UnplacedVolume_t>::
+DescribeYourselfTo(G4VGraphicsScene& scene) const
+{
+  scene.AddSolid(*this);
+}
+
+template <class UnplacedVolume_t>
+G4GeometryType G4UAdapter<UnplacedVolume_t>::
+GetEntityType() const
+{
+
+  G4String string = "VSolid"; // UnplacedVolume_t::GetEntityType();
+  return "G4" + string;
+}
+
+template <class UnplacedVolume_t>
+std::ostream& G4UAdapter<UnplacedVolume_t>::
+StreamInfo(std::ostream& os) const
+{
+  UnplacedVolume_t::Print(os);
+  return os;
+}
+
+template <class UnplacedVolume_t>
+G4VSolid* G4UAdapter<UnplacedVolume_t>::Clone() const
+{
+  std::ostringstream message;
+  message << "Clone() method not implemented for type: "
+          << GetEntityType() << "!" << G4endl
+          << "Returning NULL pointer!";
+  G4Exception("G4UAdapter::Clone()", "GeomSolids1001", JustWarning, message);
+  return nullptr;
+}
+
+template <class UnplacedVolume_t>
+G4bool G4UAdapter<UnplacedVolume_t>::CalculateExtent(const EAxis pAxis,
+                                   const G4VoxelLimits& pVoxelLimit,
+                                   const G4AffineTransform& pTransform,
+                                   G4double& pMin, G4double& pMax) const
+{
+  U3Vector vmin, vmax;
+  UnplacedVolume_t::Extent(vmin,vmax);
+  G4ThreeVector bmin(vmin.x(),vmin.y(),vmin.z());
+  G4ThreeVector bmax(vmax.x(),vmax.y(),vmax.z());
+
+  // Check correctness of the bounding box
+  //
+  if (bmin.x() >= bmax.x() || bmin.y() >= bmax.y() || bmin.z() >= bmax.z())
+  {
+    std::ostringstream message;
+    message << "Bad bounding box (min >= max) for solid: "
+            << GetName() << " - " << GetEntityType() << " !"
+            << "\nmin = " << bmin
+            << "\nmax = " << bmax;
+    G4Exception("G4UAdapter::CalculateExtent()", "GeomMgt0001",
+                JustWarning, message);
+    StreamInfo(G4cout);
+  }
+
+  G4BoundingEnvelope bbox(bmin,bmax);
+  return bbox.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);
+}
+
+template <class UnplacedVolume_t>
+G4Polyhedron* G4UAdapter<UnplacedVolume_t>::CreatePolyhedron() const
+{
+  // Must be implemented in concrete wrappers...
+
+  std::ostringstream message;
+  message << "Visualization not supported for USolid shape "
+          << GetEntityType() << "... Sorry!" << G4endl;
+  G4Exception("G4UAdapter::CreatePolyhedron()", "GeomSolids0003",
+              FatalException, message);
+  return nullptr;
+}
+
+template <class UnplacedVolume_t>
+G4Polyhedron* G4UAdapter<UnplacedVolume_t>::GetPolyhedron() const
+{
+  if (!fPolyhedron ||
+      fRebuildPolyhedron ||
+      fPolyhedron->GetNumberOfRotationStepsAtTimeOfCreation() !=
+      fPolyhedron->GetNumberOfRotationSteps())
+  {
+    G4AutoLock l(&pMutex);
+    delete fPolyhedron;
+    fPolyhedron = CreatePolyhedron();
+    fRebuildPolyhedron = false;
+    l.unlock();
+  }
+  return fPolyhedron;
+}
+
+template <class UnplacedVolume_t>
+G4VisExtent G4UAdapter<UnplacedVolume_t>::GetExtent() const
+{
+  U3Vector vmin, vmax;
+  UnplacedVolume_t::Extent(vmin,vmax);
+  return G4VisExtent(vmin.x(),vmax.x(),
+                     vmin.y(),vmax.y(),
+                     vmin.z(),vmax.z());
+}

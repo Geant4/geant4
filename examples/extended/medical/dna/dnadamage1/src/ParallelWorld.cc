@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
+/// \file ParallelWorld.cc
+/// \brief Implementation of the ParallelWorld class
 
 #include "ParallelWorld.hh"
 
@@ -37,10 +37,6 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ParallelWorld::ParallelWorld(G4String worldName) : G4VUserParallelWorld(worldName) {}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-ParallelWorld::~ParallelWorld() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

@@ -73,7 +73,7 @@ class G4THnMessenger : public G4UImessenger
     G4String GetTVectorAddress() const;
 
     // Functions to create commands
-    void CreateDirectory() const;
+    void CreateDirectory();
     void CreateCmd();
     void SetCmd();
     void DeleteCmd();
@@ -100,6 +100,7 @@ class G4THnMessenger : public G4UImessenger
     // Data members
     G4THnToolsManager<DIM,HT>* fManager { nullptr }; ///< Associated class
 
+    std::unique_ptr<G4UIdirectory>  fHnDir;
     std::unique_ptr<G4UIcommand>  fCreateCmd;
     std::unique_ptr<G4UIcommand>  fSetCmd;
     std::unique_ptr<G4UIcommand>  fDeleteCmd;

@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file B4/B4c/src/EventAction.cc
+/// \file EventAction.cc
 /// \brief Implementation of the B4c::EventAction class
 
 #include "EventAction.hh"

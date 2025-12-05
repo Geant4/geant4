@@ -115,7 +115,11 @@ nfu_status nf_Legendre_reallocateCls( statusMessageReporting *smr, nf_Legendre *
         }
         Legendre->allocated = size;
     }
-    for( i1 = Legendre->maxOrder + 1; i1 < size; ++i1 ) Legendre->Cls[i1] = 0;
+
+    if( Legendre->Cls != NULL ) {
+        for( i1 = Legendre->maxOrder + 1; i1 < size; ++i1 ) Legendre->Cls[i1] = 0;
+    }
+
     return( Legendre->status );
 }
 /*

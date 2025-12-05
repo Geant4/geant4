@@ -120,18 +120,6 @@ public:
     m_light_on = _state.m_GL_LIGHTING;
     m_DEPTH_TEST = _state.m_GL_DEPTH_TEST;
     m_blend = _state.m_GL_BLEND;
-
-/*
-    if(_state.m_GL_TEXTURE_2D) ::glEnable(GL_TEXTURE_2D);
-    else                       ::glDisable(GL_TEXTURE_2D);
-
-    // The "return of separator" state had ret_num_light.
-    // The restored state has m_light.
-    // We have to glDisable lights with index in [m_light,ret_num_light-1]
-    for(unsigned int index=_state.m_light;index<a_ret_num_light;index++) {
-      ::glDisable(GL_LIGHT0+index);
-    }
-*/
   }
 
   /////////////////////////////////////////////////////////////////
@@ -139,7 +127,6 @@ public:
   /////////////////////////////////////////////////////////////////
   virtual void draw_vertex_array_texture(gl::mode_t,size_t a_xyzn,const float* a_xyzs,
                                          gstoid a_id,const float* a_tcs) {
-    //::printf("debug : zb_action : 000 : %d\n",a_id);
     img_byte img;
     if(!m_mgr.find(a_id,img)) return;
     m_pv.add_texture(m_out,a_xyzn,a_xyzs,img,a_tcs);
@@ -190,8 +177,6 @@ public:
     m_vp_mtx.mul_scale(float(m_ww)/2,float(m_wh)/2,1);
 
     m_zb.change_size(a_ww,a_wh);
-  //m_zb.clear_color_buffer(0);
-  //m_zb.clear_depth_buffer();
 
     m_proj.set_identity();
     m_model.set_identity();
@@ -272,7 +257,7 @@ public:
     if(!m_ww || !m_wh) return false;
     size_t sz = 3 * m_ww * m_wh;
     a_buffer.resize(sz);
-    uchar* pos = vec_data(a_buffer);
+    uchar* pos = a_buffer.data();
     zb::buffer::ZPixel pix;
     uchar* _pix = 0;
     for(unsigned int row=0;row<m_wh;row++) {
@@ -299,12 +284,12 @@ public:
     size_t sz = 4 * m_ww * m_wh;
     a_buffer.resize(sz);
     if(a_top_to_bottom) {
-      ::memcpy(vec_data(a_buffer),m_zb.zimage(),sz);
+      ::memcpy(a_buffer.data(),m_zb.zimage(),sz);
       return true;
     }
     size_t stride = m_ww*4;
     uchar* zpos = ((uchar*)m_zb.zimage())+sz-stride;
-    uchar* pos = vec_data(a_buffer);
+    uchar* pos = a_buffer.data();
     for(unsigned int row=0;row<m_wh;row++,pos+=stride,zpos-=stride) ::memcpy(pos,zpos,stride);
     return true;
   }
@@ -315,7 +300,7 @@ public:
     size_t bpp = 4;
     a_buffer.resize(a_factor* m_ww * a_factor * m_wh * bpp);
     uchar* zbuffer = (uchar*)m_zb.zimage();
-    uchar* abuffer = vec_data(a_buffer);
+    uchar* abuffer = a_buffer.data();
     size_t zstride = m_ww*bpp;
     size_t astride = a_factor*m_ww*bpp;
     size_t i,j,ar,ac,ipix;
@@ -347,7 +332,7 @@ public:
     size_t sz = 4 * m_ww * m_wh;
     a_buffer.resize(sz);
     if(a_top_to_bottom) {
-      uchar* pos = vec_data(a_buffer);
+      uchar* pos = a_buffer.data();
       uchar* zpos = ((uchar*)m_zb.zimage());
       for(size_t count=0;count<sz;count+=4,pos+=4,zpos+=4) {
         *(pos+0) = *(zpos+2);
@@ -357,7 +342,7 @@ public:
       }
     } else {
       size_t stride = m_ww*4;
-      uchar* pos_line = vec_data(a_buffer);
+      uchar* pos_line = a_buffer.data();
       uchar* zpos_line = ((uchar*)m_zb.zimage())+sz-stride;
       uchar* pos;
       uchar* zpos;
@@ -411,11 +396,6 @@ protected:
     a_z /= a_w;
     return true;
   }
-//  bool project_normal(float& a_x,float& a_y,float& a_z) {
-//    m_model.mul_dir_3f(a_x,a_y,a_z);
-//    m_proj.mul_dir_3f(a_x,a_y,a_z);
-//    return true;
-//  }
 
   class primvis : public primitive_visitor {
   protected:
@@ -528,7 +508,6 @@ protected:
     }
 
     virtual bool project_normal(float&,float&,float&) {
-      //return m_this.project_normal(a_x,a_y,a_z);
       return true;
     }
     virtual bool add_point_normal(float a_x,float a_y,float a_z,float a_w,
@@ -688,9 +667,6 @@ protected:
       );
       if(!pn.is_valid()) return true;
 
-      // norm[0]*x+norm[1]*y+norm[2]*z = dist
-      // A*x+B*y+C*z+D = 0
-
       ZZ C = pn.normal()[2];
 
       if(m_this.m_CULL_FACE){
@@ -704,9 +680,6 @@ protected:
       ZZ A = pn.normal()[0];
       ZZ B = pn.normal()[1];
       ZZ D = -pn.distance_from_origin();
-
-      //ZZ zmn = mn<ZZ>(mn<ZZ>(p1z,p2z),p3z);
-      //ZZ zmx = mx<ZZ>(mx<ZZ>(p1z,p2z),p3z);
 
       zb::point list[3];
       zinit(list[0],p1x,p1y,p1z);
@@ -735,7 +708,6 @@ protected:
 
           colorf _tmp = m_this.m_light_color;
           _tmp *= _dot;
-//        _tmp *= 1.4f;  //to have same intensity as GL on desktops.
           _tmp += m_this.m_light_ambient;
 
           frag_color *= _tmp;

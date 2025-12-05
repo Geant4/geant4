@@ -84,6 +84,10 @@ G4VInteractiveSession::GetOutputStyles() const
   return fOutputStyles;
 }
 
+void G4VInteractiveSession::UpdateDrawingStyle(G4int) {}
+void G4VInteractiveSession::UpdateProjectionStyle(G4int) {}
+void G4VInteractiveSession::UpdateTransparencySlider(G4double, G4int) {}
+
 void G4VInteractiveSession::SetStyleUtility(const G4String& destination, const G4String& style)
 {
   G4String destinationG4(destination);

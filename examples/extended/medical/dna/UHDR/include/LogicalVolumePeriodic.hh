@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file LogicalVolumePeriodic.hh
+/// \brief Definition of the LogicalVolumePeriodic class
+
 #ifndef LogicalVolumePeriodic_hh
 #  define LogicalVolumePeriodic_hh 1
 

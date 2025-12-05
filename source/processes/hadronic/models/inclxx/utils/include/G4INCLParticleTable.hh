@@ -188,12 +188,30 @@ namespace G4INCL {
 
     /// \brief Getter for neutronSeparationEnergy
     G4double getNeutronSeparationEnergy();
+ 
+    /// \brief Getter for antiprotonSeparationEnergy
+    G4double getantiProtonSeparationEnergy();
+
+    /// \brief Getter for antineutronSeparationEnergy
+    G4double getantiNeutronSeparationEnergy();
+
+     /// \brief Getter for antilambdaSeparationEnergy
+    G4double getantiLambdaSeparationEnergy();
+
+     /// \brief Getter for lambdaSeparationEnergy
+    G4double getLambdaSeparationEnergy();
 
     /// \brief Setter for protonSeparationEnergy
     void setProtonSeparationEnergy(const G4double s);
 
     /// \brief Setter for protonSeparationEnergy
     void setNeutronSeparationEnergy(const G4double s);
+ 
+     /// \brief Setter for lambdaSeparationEnergy
+    void setLambdaSeparationEnergy(const G4double s);
+
+    /// \brief Setter for antilambdaSeparationEnergy
+    void setantiLambdaSeparationEnergy(const G4double s);
 
     /// \brief Get the name of the element from the atomic number
     std::string getElementName(const G4int Z);
@@ -268,6 +286,12 @@ namespace G4INCL {
      * \return the value of the r-p correlation coefficient
      */
     G4double getRPCorrelationCoefficient(const ParticleType t);
+ 
+    /// \brief Get the configuration of src-pair correlations
+    G4bool getsrcPairConfig();
+    
+    /// \brief Get the distance between src nucleons
+    G4float getsrcPairDistance();
 
     /// \brief Get the thickness of the neutron skin
     G4double getNeutronSkin();

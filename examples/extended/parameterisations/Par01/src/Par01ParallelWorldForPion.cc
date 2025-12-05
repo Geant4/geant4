@@ -23,10 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file Par01/src/Par01ParallelWorldForPion.cc
+/// \file Par01ParallelWorldForPion.cc
 /// \brief Implementation of the Par01ParallelWorldForPion class
-//
-//
+
 #include "Par01ParallelWorldForPion.hh"
 
 #include "Par01PionShowerModel.hh"

@@ -131,7 +131,6 @@ void G4MicroElecSurface::Initialise()
 
 void G4MicroElecSurface::BuildPhysicsTable(const G4ParticleDefinition&)
 {
-  if (isInitialised) { return; }
   
   G4ProductionCutsTable* theCoupleTable =
     G4ProductionCutsTable::GetProductionCutsTable();
@@ -183,7 +182,6 @@ G4VParticleChange* G4MicroElecSurface::PostStepDoIt(const G4Track& aTrack, const
   theParticleMomentum = aParticle->GetTotalMomentum();
   previousMomentum = oldMomentum;
   oldMomentum = aParticle->GetMomentumDirection(); 
-
 	
   // Fisrt case: not a boundary
   if (pPostStepPoint->GetStepStatus() != fGeomBoundary
@@ -368,15 +366,18 @@ G4VParticleChange* G4MicroElecSurface::PostStepDoIt(const G4Track& aTrack, const
   ekint=aStep.GetPostStepPoint()->GetKineticEnergy();
   thetat= GetIncidentAngle(); //angle d'incidence
   G4double ekinNormalt=ekint*std::cos(thetat)*std::cos(thetat); 
-	
-  thetaft=std::asin(std::sqrt(ekint/(ekint+energyThreshold))*std::sin(thetat));//Angle de refraction
-  if(std::sqrt(ekint/(ekint+energyThreshold))*std::sin(thetat)>1.0) 
-  {
-    thetaft=std::asin(1.0);
+  G4double sin_thetaft = std::sqrt(ekint/(ekint+energyThreshold))*std::sin(thetat);
+  G4double cos_thetaft = 0.0;
+  //Refraction angle
+  
+  if (1.0-sin_thetaft*sin_thetaft>0) {
+    cos_thetaft = std::sqrt(1.0-sin_thetaft*sin_thetaft);
   }
+  else {
+    cos_thetaft = 0.0;
+  }  
 	
   G4double aleat=G4UniformRand(); 	
-
   G4double waveVectort=std::sqrt(2*9.1093826E-31*1.602176487E-19)/(6.6260755E-34/(2.0*pi));
 
   // Parameter for an exponential barrier of potential (Thesis P68)
@@ -384,7 +385,7 @@ G4VParticleChange* G4MicroElecSurface::PostStepDoIt(const G4Track& aTrack, const
 
   crossingProbability=0;
 	
-  G4double kft=waveVectort*std::sqrt(ekint+energyThreshold)*std::cos(thetaft);
+  G4double kft=waveVectort*std::sqrt(ekint+energyThreshold)*cos_thetaft;
   G4double kit=waveVectort*std::sqrt(ekinNormalt); 
 
   crossingProbability=1-(std::pow(std::sinh(pi*at*(kit-kft)), 2.0)/std::pow(std::sinh(pi*at*(kit+kft)), 2.0));
@@ -399,16 +400,17 @@ G4VParticleChange* G4MicroElecSurface::PostStepDoIt(const G4Track& aTrack, const
       flag_franchissement_surface = true;
     }
 
-    thetaft=std::abs(thetaft-thetat);
+    // calculation of cos_thetaft for thetaft=std::abs(thetaft-thetat);
+	cos_thetaft = cos_thetaft*std::cos(thetat)+sin_thetaft*std::sin(thetat);
 
     G4ThreeVector zVerst = aStep.GetPostStepPoint()->GetMomentumDirection();
     G4ThreeVector xVerst = zVerst.orthogonal();
     G4ThreeVector yVerst = zVerst.cross(xVerst);
 
-    G4double xDirt = std::sqrt(1. - std::cos(thetaft)*std::cos(thetaft));
+    G4double xDirt = std::sqrt(1. - cos_thetaft*cos_thetaft);
     G4double yDirt = xDirt;
 
-    G4ThreeVector zPrimeVerst=((xDirt*xVerst + yDirt*yVerst + std::cos(thetaft)*zVerst));
+    G4ThreeVector zPrimeVerst=((xDirt*xVerst + yDirt*yVerst + cos_thetaft*zVerst));
 		
     aParticleChange.ProposeMomentumDirection(zPrimeVerst.unit());
   }

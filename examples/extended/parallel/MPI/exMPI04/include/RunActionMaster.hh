@@ -23,9 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// @file RunActionMaster.hh
-/// @brief Describe run actions
+/// \file RunActionMaster.hh
+/// \brief Definition of the RunActionMaster class
+///
+/// Describe run actions
 
 #ifndef RUN_ACTIONMASTER_H
 #define RUN_ACTIONMASTER_H

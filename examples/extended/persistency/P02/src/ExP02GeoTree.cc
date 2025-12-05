@@ -23,9 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file persistency/P02/src/ExP02GeoTree.cc
+/// \file ExP02GeoTree.cc
 /// \brief Implementation of the ExP02GeoTree class
-//
+
 // Include files
 
 // local

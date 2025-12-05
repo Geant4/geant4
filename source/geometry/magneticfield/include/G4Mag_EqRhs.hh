@@ -32,7 +32,7 @@
 //     i) is when using a moving reference frame ... or
 //    ii) extending for other forces, e.g. an electric field
 
-// Created: J.Apostolakis, CERN - 13.01.1997
+// Author: John Apostolakis (CERN), 13.01.1997
 // --------------------------------------------------------------------
 #ifndef G4MAG_EQRHS_HH
 #define G4MAG_EQRHS_HH
@@ -43,36 +43,53 @@
 
 class G4MagneticField;
 
+/**
+ * @brief G4Mag_EqRhs is the "standard" equation of motion of a particle
+ * in a pure magnetic field.
+ */
+
 class G4Mag_EqRhs : public G4EquationOfMotion
 {
   public:
 
+    /**
+     * Constructor for G4Mag_EqRhs.
+     *  @param[in] magField Pointer to the associated magnetic field.
+     */
     G4Mag_EqRhs(G4MagneticField* magField);
-   ~G4Mag_EqRhs() override;
-      // Constructor and destructor. No actions.
 
+    /**
+     * Default Destructor.
+     */
+    ~G4Mag_EqRhs() override = default;
+
+    /**
+     * Calculates the value of the derivative, given the value of the field.
+     *  @param[in] y Coefficients array.
+     *  @param[in] B Field value.
+     *  @param[out] dydx Derivatives array.
+     */
     void EvaluateRhsGivenB( const G4double y[],
                             const G4double B[3],
                                   G4double dydx[] ) const override = 0;
-      // Given the value of the  field "B", this function 
-      // calculates the value of the derivative dydx.
-      // This is the _only_ function a subclass must define.
-      // The other two functions use Rhs_givenB.
 
+    /**
+     * Returns and sets the charge momentum mass value.
+     */
     inline G4double FCof() const { return fCof_val; }
-
     void SetChargeMomentumMass( G4ChargeState particleCharge,
                                 G4double MomentumXc,
                                 G4double mass ) override;
   private:
 
+    /** Charge momentum mass. */
     G4double fCof_val = 0.0;
 
+    /** Coefficient in the Lorentz motion equation (Lorentz force), if the
+        magnetic field B is in Tesla, the particle charge in units of the 
+        elementary charge, the momentum P in MeV/c, and the space coordinates
+        and path along the trajectory in mm. */
     static const G4double fUnitConstant;     // Set to 0.299792458
-      // Coefficient in the Lorentz motion equation (Lorentz force), if the
-      // magnetic field B is in Tesla, the particle charge in units of the 
-      // elementary (positron?) charge, the momentum P in MeV/c, and the
-      // space coordinates and path along the trajectory in mm.
 };
 
 #endif

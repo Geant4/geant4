@@ -1,3 +1,5 @@
+\page refPar04training_calodit Module training_calodit
+
 ## CaloDiT-2
 
 CaloDiT-2 is transformer-based diffusion model, which can be easily adapted to a new detector geometry.

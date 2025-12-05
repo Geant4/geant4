@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file ScoreLET.hh
+/// \brief Definition of the ScoreLET class
+
 // This example is provided by the Geant4-DNA collaboration
 // chem6 example is derived from chem4 and chem5 examples
 //
@@ -38,11 +41,6 @@
 // Authors: J. Naoki D. Kondo (UCSF, US)
 //          J. Ramos-Mendez and B. Faddegon (UCSF, US)
 //          W. G. Shin and S. Incerti (CENBG, France)
-//
-// $Id$
-//
-/// \file ScoreLET.hh
-/// \brief Definition of the ScoreLET class
 
 #ifndef DNADAMAGE2_ScoreLET_h
 #define DNADAMAGE2_ScoreLET_h 1

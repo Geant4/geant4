@@ -33,6 +33,7 @@
 //  New impelemenataion as an utility class  M.Asai, 26 July 2004
 // ----------------------------------------------------------------------
 //      Update mass (PDG2006)              Oct. 11 2006 H.Kurashige
+//      Update width(PDG2025)              Nov.  4 2025 S.Okada
 //
 
 #include "G4Eta.hh"
@@ -67,7 +68,7 @@ G4Eta* G4Eta::Definition()
 
     // clang-format off
    anInstance = new G4ParticleDefinition(
-                 name,    0.547862*GeV,      1.31*keV,         0.0,
+                 name,    0.547862*GeV,     1.308*keV,         0.0,
                     0,              -1,            +1,
                     0,               0,            +1,
               "meson",               0,             0,         221,

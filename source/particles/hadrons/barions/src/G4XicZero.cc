@@ -31,6 +31,7 @@
 // **********************************************************************
 //  New impelemenataion as an utility class             M.Asai, 26 July 2004
 //  Updated mass, width and lifetime following PDG 2023 S.Okada, 5 November 2023
+//  Updated width and lifetime following PDG 2025       S.Okada, 4 November 2025
 // ----------------------------------------------------------------------
 
 #include "G4XicZero.hh"
@@ -61,11 +62,11 @@ G4XicZero* G4XicZero::Definition()
 
     // clang-format off
    anInstance = new G4ParticleDefinition(
-                 name,     2.47044*GeV,   4.33e-9*MeV,         0.0,
+                 name,     2.47044*GeV,   4.38e-9*MeV,         0.0,
                     1,              +1,             0,
                     1,              -1,             0,
              "baryon",               0,            +1,        4132,
-                false,      1.52e-4*ns,       nullptr,
+                false,      1.50e-4*ns,       nullptr,
                 false,       "xi_c");
     // clang-format on
   }

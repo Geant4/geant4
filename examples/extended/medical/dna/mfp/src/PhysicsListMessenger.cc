@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file PhysicsListMessenger.cc
+/// \brief Implementation of the PhysicsListMessenger class
+
 // This example is provided by the Geant4-DNA collaboration
 // Any report or published results obtained using the Geant4-DNA software
 // shall cite the following Geant4-DNA collaboration publications:
@@ -33,8 +36,6 @@
 //
 // The Geant4-DNA web site is available at http://geant4-dna.org
 //
-/// \file PhysicsListMessenger.cc
-/// \brief Implementation of the PhysicsListMessenger class
 
 #include "PhysicsListMessenger.hh"
 

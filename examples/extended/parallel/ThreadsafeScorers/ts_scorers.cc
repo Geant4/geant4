@@ -23,12 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file parallel/ThreadsafeScorers/ts_scorers.cc
-/// \brief Main of the ThreadsafeScorers example
-//
-//
-//
-//
+/// \file ts_scorers.cc
+/// \brief Main program of the parallel/ThreadsafeScorers example
+///
 /// ts_scorers example shows how to use global scorers. The benefit of using
 ///     global scorers in memory-savings for problems with very large amounts
 ///     of scoring volumes. Additionally, the global scorers are more precise

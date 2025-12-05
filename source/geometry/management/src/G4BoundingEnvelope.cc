@@ -25,7 +25,7 @@
 //
 // Implementation of G4BoundingEnvelope
 //
-// 2016.05.25, E.Tcherniaev - initial version
+// Author: Evgueni Tcherniaev (CERN), 25.05.2016 - Initial version
 // --------------------------------------------------------------------
 
 #include <cmath>
@@ -642,9 +642,9 @@ TransformVertices(const G4Transform3D& pTransform3D,
     G4ThreeVector offset = pTransform3D.getTranslation();
     for (auto i = ia; i != iaend; ++i)
     {
-      for (auto k = (*i)->cbegin(); k != (*i)->cend(); ++k)
+      for (const auto & k : **i)
       {
-        pVertices.emplace_back((*k) + offset);
+        pVertices.emplace_back(k + offset);
       }
     }
   }
@@ -652,9 +652,9 @@ TransformVertices(const G4Transform3D& pTransform3D,
   {
     for (auto i = ia; i != iaend; ++i)
     {
-      for (auto k = (*i)->cbegin(); k != (*i)->cend(); ++k)
+      for (const auto & k : **i)
       {
-        pVertices.push_back(pTransform3D*G4Point3D(*k));
+        pVertices.push_back(pTransform3D*G4Point3D(k));
       }
     }
   }

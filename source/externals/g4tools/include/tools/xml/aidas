@@ -91,10 +91,6 @@ protected:
   TOOLS_CLASS_STRING(entries3d)
   TOOLS_CLASS_STRING(dataPointSet)
   TOOLS_CLASS_STRING(dataPoint)
-  //TOOLS_CLASS_STRING(function)
-  //TOOLS_CLASS_STRING(arguments)
-  //TOOLS_CLASS_STRING(argument)
-  //TOOLS_CLASS_STRING(parameters)
 
   TOOLS_CLASS_STRING(type)
   TOOLS_CLASS_STRING(name)
@@ -165,10 +161,6 @@ protected:
     a_tags.push_back(s_entries3d());
     a_tags.push_back(s_dataPointSet());
     a_tags.push_back(s_dataPoint());
-  //a_tags.push_back(s_function());
-  //a_tags.push_back(s_arguments());
-  //a_tags.push_back(s_argument());
-  //a_tags.push_back(s_parameters());
   }
 
   void add_default_readers(){
@@ -182,7 +174,6 @@ protected:
     add_reader(s_cloud3d(),read_cloud3d);
     add_reader(s_tuple(),read_ntu);
     add_reader(s_dataPointSet(),read_dps);
-  //add_reader(s_function(),read_Function);
   }
   static raxml_out read_h1d(tree& a_tree,std::ostream& a_out,bool a_verbose,void*) {
     return read_histo(a_tree,a_out,a_verbose,1,false);
@@ -657,9 +648,6 @@ protected:
     } else if(tagName=="statistics") {
 
       if(!a_tree.attribute_value(s_entries(),svalue)) return false;
-      //unsigned int ival;
-      //if(!to<unsigned int>(svalue,ival)) return false;
-      // aData.fEntries = ival;
 
       unsigned int found = 0;
 
@@ -677,9 +665,6 @@ protected:
           if(!_elem->attribute_value(s_direction(),svalue)) return false;
           int iaxis;
           if(!axis_index(aData.m_dimension,svalue,iaxis)) return false;
-
-          //aData.m_axes[iaxis].fSxw = mean; //Temporarily put mean on fSxw.
-          //aData.m_axes[iaxis].fSx2w = rms; //Temporarily put mean on fSx2w.
 
           found++;
         }

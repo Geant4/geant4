@@ -44,8 +44,8 @@
 //    G4double flFactor;     // factor for conversion to local frame
 //    G4double fgFactor;     // factor for conversion to global frame
 
-// E.Tcherniaev, 11 Mar 2016 - added transformations for normal
-// G.Cosmo,      18 Feb 2016 - initial version
+// Author: Gabriele Cosmo (CERN), 18.02.2016 - Initial version
+//         Evgueni Tcherniaev (CERN), 11.03.2016 - Added normals transforms
 // --------------------------------------------------------------------
 #ifndef G4SCALETRANSFORM_HH
 #define G4SCALETRANSFORM_HH
@@ -54,90 +54,131 @@
 #include "G4ThreeVector.hh"
 #include "G4Transform3D.hh"
 
+/**
+ * @brief G4ScaleTransform is a class for geometric scaling transformations.
+ * It supports efficient arbitrary transformation of points, vectors and
+ * normals and the computation of compound and inverse transformations.
+ */
+
 class G4ScaleTransform
 {
-
   public:
 
+    /**
+     * Default Constructor.
+     */
     inline G4ScaleTransform();
-      // Default constructor
     
+    /**
+     * Constructor with scale parameters on each axis.
+     *  @param[in] sx Scaling in X.
+     *  @param[in] sy Scaling in Y.
+     *  @param[in] sz Scaling in Z.
+     */
     inline G4ScaleTransform(G4double sx, G4double sy, G4double sz);
-      // Constructor with scale parameters on each axis
 
+    /**
+     * Constructor taking a 3-vector.
+     *  @param[in] scale Scaling transformation.
+     */
     inline G4ScaleTransform(const G4ThreeVector& scale);
-      // Constructor taking a 3-vector
 
+    /**
+     * Constructor taking a Scale3D.
+     *  @param[in] scale Scaling transformation.
+     */
     inline G4ScaleTransform(const G4Scale3D& scale);
-      // Constructor taking a Scale3D
         
+    /**
+     * Copy constructor and assignment operator.
+     */
     inline G4ScaleTransform(const G4ScaleTransform& right);
-      // Copy constructor
-
     inline G4ScaleTransform& operator=(const G4ScaleTransform& right);
-      // Assignment operator
 
+    /**
+     * Updates the backed-up inverse scale and special conversion factors
+     * based on the values of the scale. Needed at initialisation and
+     * whenever the scale has changed value.
+     */
     inline void Init();
-      // Update the backed-up inverse scale and special conversion factors
-      // based on the values of the scale. Needed at initialisation and
-      // whenever the scale has changed value
 
+    /**
+     * Accessors returning a reference to the scale and inverse scale
+     * transformations.
+     */
     inline const G4ThreeVector& GetScale() const;
     inline const G4ThreeVector& GetInvScale() const;
-      // Get reference to the inverse scale transformation
  
+    /**
+     * Modifiers for the scale transformation.
+     */
     inline void SetScale(const G4ThreeVector& scale);
-      // Set scale based on vector
     inline void SetScale(const G4Scale3D& scale);
-      // Set scale based on a G4Scale3D transformation
     inline void SetScale(G4double sx, G4double sy, G4double sz);
-      // Set scale based on values
 
+    /**
+     * Methods to transform a point from global to local frame.
+     */
     inline void Transform(const G4ThreeVector& global,
                                 G4ThreeVector& local) const;  
     inline G4ThreeVector Transform(const G4ThreeVector& global) const;
-      // Transform point from global to local frame
 
+    /**
+     * Methods to transform a point from local to global frame.
+     */
     inline void InverseTransform(const G4ThreeVector& local, 
                                        G4ThreeVector& global) const;
     inline G4ThreeVector InverseTransform(const G4ThreeVector& local) const;
-      // Transform point from local to global frame
 
+    /**
+     * Methods to transform a normal from global to local frame.
+     */
     inline void TransformNormal(const G4ThreeVector& global,
                                       G4ThreeVector& local) const;  
     inline G4ThreeVector TransformNormal(const G4ThreeVector& global) const;
-      // Transform normal from global to local frame
 
+    /**
+     * Methods to transform a normal from local to global frame.
+     */
     inline void InverseTransformNormal(const G4ThreeVector& local, 
                                              G4ThreeVector& global) const;
     inline G4ThreeVector InverseTransformNormal(const G4ThreeVector& local) const;
-      // Transform normal from local to global frame
 
+    /**
+     * Transforms a distance 'dist' along a given direction 'dir'
+     * from global to local frame.
+     */
     inline G4double TransformDistance(G4double dist,
                                       const G4ThreeVector& dir) const;
-      // Transform distance along given direction from global to local frame
 
+    /**
+     * Transforms a 'safety' distance from global to local frame (conservative).
+     */
     inline G4double TransformDistance(G4double safety) const;
-      // Transform distance from global to local frame (conservative)
 
+    /**
+     * Transforms a distance 'dist' along a given direction 'dir'
+     * from local to global frame.
+     */
     inline G4double InverseTransformDistance(G4double dist,
                                              const G4ThreeVector& dir) const;
-      // Transform distance along given direction from local to global frame
 
+    /**
+     * Transforms a 'safety' distance from local to global frame (conservative).
+     */
     inline G4double InverseTransformDistance(G4double safety) const;
-      // Transform distance from local to global frame (conservative)
 
   private:
 
     G4ThreeVector fScale;  // scale transformation 
     G4ThreeVector fIScale; // inverse scale (avoid divisions)
-    G4double flFactor = 1.0, fgFactor = 1.0;
-      // conversion factors to local/global frames
 
-}; // End class G4ScaleTransform
+    /** Conversion factors to local/global frames. */
+    G4double flFactor = 1.0, fgFactor = 1.0;
+};
 
 std::ostream& operator<<(std::ostream& os, const G4ScaleTransform& scale);
 
 #include "G4ScaleTransform.icc"
 
-#endif // G4SCALETRANSFORM_HH
+#endif

@@ -23,10 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file field/field04/src/F04TrackingAction.cc
+/// \file F04TrackingAction.cc
 /// \brief Implementation of the F04TrackingAction class
-//
 
 #include "F04TrackingAction.hh"
 

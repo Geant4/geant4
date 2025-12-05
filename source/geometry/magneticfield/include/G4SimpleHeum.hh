@@ -34,27 +34,63 @@
 //
 // Third order solver.
 
-// Created: W.Wander <wwc@mit.edu>, 12/09/1997
+// Author: W.Wander (MIT), 12.09.1997
 // -------------------------------------------------------------------
 #ifndef G4SIMPLEHEUM_HH
 #define G4SIMPLEHEUM_HH
 
 #include "G4MagErrorStepper.hh"
 
+/**
+ * @brief G4SimpleHeum implements a simple Heum stepper for magnetic field
+ * with 3rd order solver.
+ */
+
 class G4SimpleHeum : public G4MagErrorStepper
 {
   public:
 
-    G4SimpleHeum(G4EquationOfMotion* EqRhs, G4int num_variables = 6);
-   ~G4SimpleHeum() override;
-      // Constructor and destructor.
+    /**
+     * Constructor for G4SimpleHeum.
+     *  @param[in] EqRhs Pointer to the provided equation of motion.
+     *  @param[in] num_variables The number of integration variables.
+     */
+    G4SimpleHeum(G4EquationOfMotion* EqRhs,
+                 G4int num_variables = 6);
 
+    /**
+     * Destructor.
+     */
+    ~G4SimpleHeum() override;
+
+    /**
+     * Copy constructor and assignment operator not allowed.
+     */
+    G4SimpleHeum(const G4SimpleHeum&) = delete;
+    G4SimpleHeum& operator=(const G4SimpleHeum&) = delete;
+
+    /**
+     * The stepper for the Runge Kutta integration, but performing a 'dump' step
+     * without error calculation.
+     *  @param[in] y Starting values array of integration variables.
+     *  @param[in] dydx Derivatives array.
+     *  @param[in] h The given step size.
+     *  @param[out] yout Integration output.
+     */
     void DumbStepper( const G4double y[],
                       const G4double dydx[],
                             G4double h,
                             G4double yout[] ) override;
   
+    /**
+     * Returns the order, 3, of integration.
+     */
     inline G4int IntegratorOrder() const override { return 3; }
+
+    /**
+     * Returns the stepper type-ID, "kSimpleHeum".
+     */
+    inline G4StepperType StepperType() const override { return kSimpleHeum; }
 
   private:
 

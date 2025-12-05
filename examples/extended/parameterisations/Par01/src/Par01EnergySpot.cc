@@ -23,11 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file Par01/src/Par01EnergySpot.cc
+/// \file Par01EnergySpot.cc
 /// \brief Implementation of the Par01EnergySpot class
-//
-//
-//
+
 #include "Par01EnergySpot.hh"
 
 #include "G4Colour.hh"

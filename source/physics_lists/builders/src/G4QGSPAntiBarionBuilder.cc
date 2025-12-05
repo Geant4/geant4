@@ -32,6 +32,7 @@
 //---------------------------------------------------------------------------
 
 #include "G4QGSPAntiBarionBuilder.hh"
+#include "G4HadronInelasticProcess.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"

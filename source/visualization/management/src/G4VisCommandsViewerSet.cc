@@ -180,6 +180,21 @@ fViewpointVector (G4ThreeVector(0.,0.,1.))
   parameter -> SetDefaultValue (1.);
   fpCommandDefaultTextColour -> SetParameter (parameter);
 
+  fpCommandDotsSize = new G4UIcmdWithADouble("/vis/viewer/set/dotsSize", this);
+  fpCommandDotsSize->SetGuidance("Set dots size.");
+  fpCommandDotsSize->SetParameterName("dots-size", omitable=true);
+  fpCommandDotsSize->SetDefaultValue(1.);
+
+  fpCommandDotsSmooth = new G4UIcmdWithABool("/vis/viewer/set/dotsSmooth", this);
+  fpCommandDotsSmooth->SetGuidance("True/false to enable/disable smooth dots (if available).");
+  fpCommandDotsSmooth->SetGuidance
+  ("\"Smooth\" typically means rounded, i.e., dots drawn as filled circles."
+   "\nThe vis system is configured by default to draw smooth dots. This may"
+   "\nbe switched off with \"/vis/viewer/set/dotsSmooth false\" - typically"
+   "\nthis will result in square dots.");
+  fpCommandDotsSmooth->SetParameterName("dots-smooth-enabled", omitable = true);
+  fpCommandDotsSmooth->SetDefaultValue(true);
+
   fpCommandEdge = new G4UIcmdWithABool("/vis/viewer/set/edge",this);
   fpCommandEdge->SetGuidance
   ("Edges become visible/invisible in surface mode.");
@@ -652,9 +667,15 @@ fViewpointVector (G4ThreeVector(0.,0.,1.))
   parameter = new G4UIparameter ("time-range-unit", 's', omitable = true);
   parameter->SetDefaultValue("ns");
   fpCommandTimeWindowStartTime->SetParameter(parameter);
+
+  fpCommandZoomToCursor = new G4UIcmdWithABool("/vis/viewer/set/zoomToCursor", this);
+  fpCommandZoomToCursor->SetGuidance("True/false to enable/disable zoom to cursor with mouse wheel");
+  fpCommandZoomToCursor->SetParameterName("zoomToCursor-enabled", omitable = true);
+  fpCommandZoomToCursor->SetDefaultValue(true);
 }
 
 G4VisCommandsViewerSet::~G4VisCommandsViewerSet() {
+  delete fpCommandZoomToCursor;
   delete fpCommandTimeWindowStartTime;
   delete fpCommandTimeWindowFadeFactor;
   delete fpCommandTimeWindowEndTime;
@@ -685,6 +706,8 @@ G4VisCommandsViewerSet::~G4VisCommandsViewerSet() {
   delete fpCommandHiddenEdge;
   delete fpCommandGlobalMarkerScale;
   delete fpCommandGlobalLineWidthScale;
+  delete fpCommandDotsSmooth;
+  delete fpCommandDotsSize;
   delete fpCommandExplodeFactor;
   delete fpCommandEdge;
   delete fpCommandDefaultTextColour;
@@ -714,8 +737,8 @@ G4String G4VisCommandsViewerSet::GetCurrentValue(G4UIcommand* command) {
   }
 
   else {
-    return "";
-  }
+  return "";
+}
 }
 
 void G4VisCommandsViewerSet::SetNewValue
@@ -965,6 +988,21 @@ void G4VisCommandsViewerSet::SetNewValue
       << vp.GetDefaultTextVisAttributes()->GetColour()
       << " requested."
       << G4endl;
+    }
+  }
+
+  else if (command == fpCommandDotsSize) {
+    G4double dotsSize = fpCommandDotsSize->GetNewDoubleValue(newValue);
+    vp.SetDotsSize(dotsSize);
+    if (verbosity >= G4VisManager::confirmations) {
+      G4cout << "Dots size changed to " << vp.GetDotsSize() << G4endl;
+    }
+  }
+
+  else if (command == fpCommandDotsSmooth) {
+    vp.SetDotsSmooth(command->ConvertToBool(newValue));
+    if (verbosity >= G4VisManager::confirmations) {
+      G4cout << "DotsSmooth mode changed to " << vp.IsDotsSmooth() << G4endl;
     }
   }
 
@@ -1608,17 +1646,17 @@ void G4VisCommandsViewerSet::SetNewValue
   else if (command == fpCommandTimeWindowEndTime)
   {
   G4String end_time_string, end_time_unit, time_range_string, time_range_unit;
-  std::istringstream iss(newValue);
+    std::istringstream iss(newValue);
   iss >> end_time_string >> end_time_unit >> time_range_string >> time_range_unit;
   auto endTime = command->ConvertToDimensionedDouble
   (G4String(end_time_string + ' ' + end_time_unit));
   auto timeRange = command->ConvertToDimensionedDouble
-  (G4String(time_range_string + ' ' + time_range_unit));
+    (G4String(time_range_string + ' ' + time_range_unit));
   auto timeParameters = vp.GetTimeParameters();
   timeParameters.fEndTime = endTime;
-  if (timeRange > 0.) {
+    if (timeRange > 0.) {
     timeParameters.fStartTime = endTime - timeRange;
-  }
+    }
   vp.SetTimeParameters(timeParameters);
     if (verbosity >= G4VisManager::confirmations) {
       G4cout
@@ -1664,6 +1702,13 @@ void G4VisCommandsViewerSet::SetNewValue
         G4cout << "\n  (time range: " << timeRange/ns << " ns)";
       }
       G4cout << G4endl;
+    }
+  }
+
+  else if (command == fpCommandZoomToCursor) {
+    vp.SetZoomToCursor(command->ConvertToBool(newValue));
+    if (verbosity >= G4VisManager::confirmations) {
+      G4cout << "ZoomToCursor mode changed to " << vp.IsZoomToCursor() << G4endl;
     }
   }
 

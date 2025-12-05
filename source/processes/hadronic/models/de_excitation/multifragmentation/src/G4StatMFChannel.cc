@@ -420,8 +420,8 @@ void G4StatMFChannel::SolveEqOfMotion(G4int anA, G4int anZ, G4double T)
   return;
 }
 
-G4ThreeVector G4StatMFChannel::RotateMomentum(G4ThreeVector Pa,
-					      G4ThreeVector V, G4ThreeVector P)
+G4ThreeVector G4StatMFChannel::RotateMomentum(G4ThreeVector& Pa,
+					      G4ThreeVector& V, G4ThreeVector& P)
     // Rotates a 3-vector P to close momentum triangle Pa + V + P = 0
 {
   G4ThreeVector U = Pa.unit();

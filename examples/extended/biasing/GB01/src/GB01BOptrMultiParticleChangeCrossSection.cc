@@ -23,9 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file GB01/src/GB01BOptrMultiParticleChangeCrossSection.cc
+/// \file GB01BOptrMultiParticleChangeCrossSection.cc
 /// \brief Implementation of the GB01BOptrMultiParticleChangeCrossSection class
-//
+
 #include "GB01BOptrMultiParticleChangeCrossSection.hh"
 
 #include "GB01BOptrChangeCrossSection.hh"

@@ -25,8 +25,8 @@
 //
 // G4TwistTubsFlatSide implementation
 //
-// 01-Aug-2002 - Kotoyo Hoshina (hoshina@hepburn.s.chiba-u.ac.jp), created.
-// 13-Nov-2003 - O.Link (Oliver.Link@cern.ch), Integration in Geant4
+// Author: Kotoyo Hoshina (Chiba University), 01.08.2002 - Created.
+//         Oliver Link (CERN), 13.11.2003 - Integration in Geant4
 //               from original version in Jupiter-2.5.02 application.
 // --------------------------------------------------------------------
 
@@ -105,11 +105,6 @@ G4TwistTubsFlatSide::G4TwistTubsFlatSide( __void__& a )
 }
 
 //=====================================================================
-//* destructor --------------------------------------------------------
-
-G4TwistTubsFlatSide::~G4TwistTubsFlatSide() = default;
-
-//=====================================================================
 //* GetNormal ---------------------------------------------------------
 
 G4ThreeVector G4TwistTubsFlatSide::GetNormal(const G4ThreeVector& /* xx */ , 
@@ -119,10 +114,7 @@ G4ThreeVector G4TwistTubsFlatSide::GetNormal(const G4ThreeVector& /* xx */ ,
    {
       return ComputeGlobalDirection(fCurrentNormal.normal);
    }
-   else
-   {
-      return fCurrentNormal.normal;
-   }
+   return fCurrentNormal.normal;
 }
 
 //=====================================================================
@@ -149,15 +141,14 @@ G4int G4TwistTubsFlatSide::DistanceToSurface(const G4ThreeVector& gp,
       }
       return fCurStatWithV.GetNXX();
    }
-   else  // initialize
+
+   // initialize
+   for (G4int i=0; i<2; ++i)
    {
-      for (G4int i=0; i<2; ++i)
-      {
-         distance[i] = kInfinity;
-         areacode[i] = sOutside;
-         isvalid[i]  = false;
-         gxx[i].set(kInfinity, kInfinity, kInfinity);
-      }
+      distance[i] = kInfinity;
+      areacode[i] = sOutside;
+      isvalid[i]  = false;
+      gxx[i].set(kInfinity, kInfinity, kInfinity);
    }
 
    G4ThreeVector p = ComputeLocalPoint(gp);
@@ -218,7 +209,7 @@ G4int G4TwistTubsFlatSide::DistanceToSurface(const G4ThreeVector& gp,
       areacode[0] = GetAreaCode(xx);
       if (!IsOutside(areacode[0]))
       {
-         if (distance[0] >= 0) isvalid[0] = true;
+         if (distance[0] >= 0) { isvalid[0] = true; }
       }
    }
    else if (validate == kValidateWithoutTol)
@@ -226,13 +217,13 @@ G4int G4TwistTubsFlatSide::DistanceToSurface(const G4ThreeVector& gp,
       areacode[0] = GetAreaCode(xx, false);
       if (IsInside(areacode[0]))
       {
-         if (distance[0] >= 0) isvalid[0] = true;
+         if (distance[0] >= 0) { isvalid[0] = true; }
       }
    }
    else  // kDontValidate
    {
       areacode[0] = sInside;
-         if (distance[0] >= 0) isvalid[0] = true;
+      if (distance[0] >= 0) { isvalid[0] = true; }
    }
 
    fCurStatWithV.SetCurrentStatus(0, gxx[0], distance[0], areacode[0],
@@ -274,16 +265,15 @@ G4int G4TwistTubsFlatSide::DistanceToSurface(const G4ThreeVector& gp,
       }
       return fCurStat.GetNXX();
    }
-   else   // initialize
+
+   // initialize
+   for (auto i=0; i<2; ++i)
    {
-      for (auto i=0; i<2; ++i)
-      {
-         distance[i] = kInfinity;
-         areacode[i] = sOutside;
-         gxx[i].set(kInfinity, kInfinity, kInfinity);
-      }
+      distance[i] = kInfinity;
+      areacode[i] = sOutside;
+      gxx[i].set(kInfinity, kInfinity, kInfinity);
    }
-   
+
    G4ThreeVector p = ComputeLocalPoint(gp);
    G4ThreeVector xx;
 
@@ -292,12 +282,12 @@ G4int G4TwistTubsFlatSide::DistanceToSurface(const G4ThreeVector& gp,
    if (std::fabs(p.z()) <= 0.5 * kCarTolerance) // if p is on plane, return 1
    {
      distance[0] = 0;
-      xx = p;
+     xx = p;
    }
    else
    {
-      distance[0] = std::fabs(p.z());
-      xx.set(p.x(), p.y(), 0);  
+     distance[0] = std::fabs(p.z());
+     xx.set(p.x(), p.y(), 0);  
    }
 
    gxx[0] = ComputeGlobalPoint(xx);
@@ -336,34 +326,42 @@ G4int G4TwistTubsFlatSide::GetAreaCode(const G4ThreeVector &xx,
 
          if (xx.getRho() <= fAxisMin[rhoaxis] + rtol)
          {
-            areacode |= (sAxis0 & (sAxisRho|sAxisMin)) | sBoundary; // rho-min
-            if (xx.getRho() < fAxisMin[rhoaxis] - rtol) isoutside = true; 
-            
+           areacode |= (sAxis0 & (sAxisRho|sAxisMin)) | sBoundary; // rho-min
+           if (xx.getRho() < fAxisMin[rhoaxis] - rtol) { isoutside = true; }
          }
          else if (xx.getRho() >= fAxisMax[rhoaxis] - rtol)
          {
-            areacode |= (sAxis0 & (sAxisRho|sAxisMax)) | sBoundary; // rho-max
-            if (xx.getRho() > fAxisMax[rhoaxis] + rtol) isoutside = true;
+           areacode |= (sAxis0 & (sAxisRho|sAxisMax)) | sBoundary; // rho-max
+           if (xx.getRho() > fAxisMax[rhoaxis] + rtol) { isoutside = true; }
          }         
          
          // test boundary of phi-axis
 
          if (AmIOnLeftSide(xx, dphimin) >= 0)            // xx is on dphimin
          {
-            areacode |= (sAxis1 & (sAxisPhi | sAxisMin)); 
-            if   ((areacode & sBoundary) != 0) areacode |= sCorner;  // xx is on corner.
-            else                        areacode |= sBoundary;
-
-            if (AmIOnLeftSide(xx, dphimin) > 0) isoutside = true; 
-
+           areacode |= (sAxis1 & (sAxisPhi | sAxisMin)); 
+           if ((areacode & sBoundary) != 0)
+           {
+             areacode |= sCorner;  // xx is on corner.
+           }
+           else
+           { 
+             areacode |= sBoundary;
+           }
+            if (AmIOnLeftSide(xx, dphimin) > 0) { isoutside = true; }
          }
          else if (AmIOnLeftSide(xx, dphimax) <= 0)       // xx is on dphimax
          {
-            areacode |= (sAxis1 & (sAxisPhi | sAxisMax)); 
-            if   ((areacode & sBoundary) != 0) areacode |= sCorner;  // xx is on corner.
-            else                        areacode |= sBoundary;
-
-            if (AmIOnLeftSide(xx, dphimax) < 0) isoutside = true;
+           areacode |= (sAxis1 & (sAxisPhi | sAxisMax)); 
+           if ((areacode & sBoundary) != 0)
+           {
+             areacode |= sCorner;  // xx is on corner.
+           }
+           else
+           {
+             areacode |= sBoundary;
+           }
+           if (AmIOnLeftSide(xx, dphimax) < 0) { isoutside = true; }
          }
          
          // if isoutside = true, clear inside bit.
@@ -371,12 +369,12 @@ G4int G4TwistTubsFlatSide::GetAreaCode(const G4ThreeVector &xx,
 
          if (isoutside)
          {
-            G4int tmpareacode = areacode & (~sInside);
-            areacode = tmpareacode;
+           G4int tmpareacode = areacode & (~sInside);
+           areacode = tmpareacode;
          }
          else if ((areacode & sBoundary) != sBoundary)
          {
-            areacode |= (sAxis0 & sAxisRho) | (sAxis1 & sAxisPhi);
+           areacode |= (sAxis0 & sAxisRho) | (sAxis1 & sAxisPhi);
          }
 
       }
@@ -386,11 +384,11 @@ G4int G4TwistTubsFlatSide::GetAreaCode(const G4ThreeVector &xx,
 
          if (xx.getRho() < fAxisMin[rhoaxis])
          {
-            areacode |= (sAxis0 & (sAxisRho | sAxisMin)) | sBoundary;
+           areacode |= (sAxis0 & (sAxisRho | sAxisMin)) | sBoundary;
          }
          else if (xx.getRho() > fAxisMax[rhoaxis])
          {
-            areacode |= (sAxis0 & (sAxisRho | sAxisMax)) | sBoundary;
+           areacode |= (sAxis0 & (sAxisRho | sAxisMax)) | sBoundary;
          }
          
          // out of boundary of phi-axis
@@ -398,16 +396,26 @@ G4int G4TwistTubsFlatSide::GetAreaCode(const G4ThreeVector &xx,
          if (AmIOnLeftSide(xx, dphimin, false) >= 0)  // xx is leftside or
          {
            areacode |= (sAxis1 & (sAxisPhi | sAxisMin)) ; // boundary of dphimin
-           if   ((areacode & sBoundary) != 0) areacode |= sCorner; // xx is on corner
-           else                        areacode |= sBoundary;
-
+           if ((areacode & sBoundary) != 0)
+           {
+             areacode |= sCorner; // xx is on corner
+           }
+           else
+           {
+             areacode |= sBoundary;
+           }
          }
          else if (AmIOnLeftSide(xx, dphimax, false) <= 0) // xx is rightside or
          {
            areacode |= (sAxis1 & (sAxisPhi | sAxisMax)); // boundary of dphimax
-           if   ((areacode & sBoundary) != 0) areacode |= sCorner;  // xx is on corner
-           else                        areacode |= sBoundary;
-           
+           if ((areacode & sBoundary) != 0)
+           {
+             areacode |= sCorner;  // xx is on corner
+           }
+           else
+           {
+             areacode |= sBoundary;
+           }
          }
 
          if ((areacode & sBoundary) != sBoundary) {

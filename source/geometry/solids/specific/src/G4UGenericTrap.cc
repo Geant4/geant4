@@ -56,13 +56,6 @@ G4UGenericTrap::G4UGenericTrap(const G4String& name, G4double halfZ,
 
 //////////////////////////////////////////////////////////////////////////
 //
-// Destructor
-//
-G4UGenericTrap::~G4UGenericTrap() = default;
-
-
-//////////////////////////////////////////////////////////////////////////
-//
 // Copy constructor
 //
 G4UGenericTrap::G4UGenericTrap(const G4UGenericTrap& source)
@@ -102,7 +95,7 @@ G4int G4UGenericTrap::GetNofVertices() const
 }
 G4TwoVector G4UGenericTrap::GetVertex(G4int index) const
 {
-  return { GetVerticesX()[index], GetVerticesY()[index] };
+  return { vecgeom::UnplacedGenTrap::GetVertex(index).x(), vecgeom::UnplacedGenTrap::GetVertex(index).y() };
 }
 const std::vector<G4TwoVector>& G4UGenericTrap::GetVertices() const
 {

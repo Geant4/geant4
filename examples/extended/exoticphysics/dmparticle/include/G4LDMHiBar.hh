@@ -23,10 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file exoticphysics/dmparticle/include/G4LDMHiBar.hh
+/// \file G4LDMHiBar.hh
 /// \brief Definition of the G4LDMHiBar class
-//
-//
 
 #ifndef G4LDMHiBar_h
 #define G4LDMHiBar_h 1

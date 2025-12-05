@@ -25,26 +25,25 @@
 //
 // Voxel Optimisation Constants
 
-// 12.02.99, S.Giani - Made numerical values consistent with Geant3.21
-// 13.08.95, P.Kent - Created separate file
+// Author: Paul Kent (CERN), 13.08.1995
 // --------------------------------------------------------------------
 #ifndef VOXELDEFS_HH
 #define VOXELDEFS_HH
 
 #include "G4Types.hh"
 
+/** Hard limit on the number of voxel nodes per given header. */
 const G4int kMaxVoxelNodes = 1000;  // PK chose 2000, Geant 3.21 used 1000
-  // Hard limit on no. voxel nodes per given header
 
+/** Only begin to make voxels if greater or equal to this number of daughters. */
 const G4int kMinVoxelVolumesLevel1 = 2;
-  // Only begin to make voxels if >= this no of daughters
 
+/** Only make second level of refinement if greater or equal to this number of
+    volumes in the first level node. */
 const G4int kMinVoxelVolumesLevel2 = 3;
-  // Only make second level of refinement if >= this no of
-  // volumes in 1st level node
 
+/** Only make third level of refinement if greater or equal to this number of
+    volumes in the second level node. */
 const G4int kMinVoxelVolumesLevel3 = 4;
-  // Only make third level of refinement if >= this no of
-  // volumes in 2nd level node
 
 #endif

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 /**
- *  \file electromagnetic/TestEm7/include/c2_function.hh
+ *  \file c2_function.hh
  *  \brief Provides the headers for the general c2_function algebra which
  *  fast, flexible operations on piecewise-twice-differentiable functions
  *

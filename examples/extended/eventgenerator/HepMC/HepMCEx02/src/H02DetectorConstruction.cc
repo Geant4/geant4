@@ -23,9 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file eventgenerator/HepMC/HepMCEx02/src/H02DetectorConstruction.cc
+/// \file H02DetectorConstruction.cc
 /// \brief Implementation of the H02DetectorConstruction class
-//
 
 #include "H02DetectorConstruction.hh"
 

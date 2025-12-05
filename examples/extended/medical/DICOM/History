@@ -6,6 +6,9 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2025-07-25 I. Hrivnacova (DICOM-V11-03-01)
+- Fixed Doxygen pages tags
+
 ## 2025-04-24 Ben Morgan (DICOM-V11-03-00)
 - Refactor DICOM examples into single project
   - Build everything together for ease of use and demonstration

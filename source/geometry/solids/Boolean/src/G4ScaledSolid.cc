@@ -37,6 +37,12 @@
 
 #include "G4VGraphicsScene.hh"
 #include "G4Polyhedron.hh"
+#include "G4AutoLock.hh"
+
+namespace
+{
+  G4RecursiveMutex scaledMutex = G4MUTEX_INITIALIZER;
+}
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -381,10 +387,12 @@ G4double G4ScaledSolid::GetCubicVolume()
 {
   if(fCubicVolume < 0.)
   {
+    G4RecursiveAutoLock l(&scaledMutex);
     fCubicVolume = fPtrSolid->GetCubicVolume() *
                    fScale->GetScale().x() *
                    fScale->GetScale().y() *
                    fScale->GetScale().z();
+    l.unlock();
   }
   return fCubicVolume;
 }
@@ -397,7 +405,9 @@ G4double G4ScaledSolid::GetSurfaceArea()
 {
   if(fSurfaceArea < 0.)
   {
+    G4RecursiveAutoLock l(&scaledMutex);
     fSurfaceArea = G4VSolid::GetSurfaceArea();
+    l.unlock();
   }
   return fSurfaceArea;
 }

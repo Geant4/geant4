@@ -7,6 +7,7 @@
 #/geometrySetup/selectDetector SiliconBridge
 #/geometrySetup/selectDetector DiamondTelescope
 #/geometrySetup/selectDetector SiCDetector
+#/geometrySetup/selectDetector TEPC
 
 # Uncomment to change the detector's width and/or thickness
 # Otherwise default values are used

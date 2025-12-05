@@ -56,6 +56,7 @@
 
 class G4MicroElecLOPhononModel : public G4VEmModel
 {
+	
   public:
 
     explicit G4MicroElecLOPhononModel(const G4ParticleDefinition* p = nullptr,

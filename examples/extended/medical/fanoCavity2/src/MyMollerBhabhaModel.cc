@@ -23,12 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file medical/fanoCavity2/src/MyMollerBhabhaModel.cc
+/// \file MyMollerBhabhaModel.cc
 /// \brief Implementation of the MyMollerBhabhaModel class
-//
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "MyMollerBhabhaModel.hh"
 

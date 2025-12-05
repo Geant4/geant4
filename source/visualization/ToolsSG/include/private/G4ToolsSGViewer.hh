@@ -41,6 +41,7 @@
 #include <tools/sg/separator>
 #include <tools/sg/ortho>
 #include <tools/sg/perspective>
+#include <tools/sg/shade_model>
 #include <tools/sg/torche>
 #include <tools/sg/blend>
 #include <tools/sg/noderef>
@@ -49,9 +50,21 @@
 #include <tools/tokenize>
 #include <tools/sg/write_paper>
 
+class G4ToolsSG_viewer {
+public:
+  G4ToolsSG_viewer() {}
+  virtual ~G4ToolsSG_viewer() {}
+protected:
+  G4ToolsSG_viewer(const G4ToolsSG_viewer&){}
+  G4ToolsSG_viewer& operator=(const G4ToolsSG_viewer&){return *this;}
+public:
+  virtual void EmitWindowRender() {}
+};
+
 template <class SG_SESSION,class SG_VIEWER>
-class G4ToolsSGViewer : public G4VViewer, tools::sg::device_interactor {
+class G4ToolsSGViewer : public G4VViewer, public G4ToolsSG_viewer, tools::sg::device_interactor {
   typedef G4VViewer parent;
+  typedef G4ToolsSG_viewer parent_viewer;
   typedef tools::sg::device_interactor parent_interactor;
 public: //tools::sg::device_interactor interface.
   virtual void key_press(const tools::sg::key_down_event&) {}
@@ -103,14 +116,9 @@ public: //tools::sg::device_interactor interface.
     DrawView();
   }
   virtual void wheel_rotate(const tools::sg::wheel_rotate_event& a_event) {
-    const G4double angleY = a_event.angle();
-    if (fVP.GetFieldHalfAngle() == 0.) {  // Orthographic projection
-      const G4double scale = 500;  // Empirically chosen
-      fVP.MultiplyZoomFactor(1.+angleY/scale);
-    } else {                              // Perspective projection
-      const G4double delta = fSceneHandler.GetExtent().GetExtentRadius()/200.;  // Empirical
-      fVP.SetDolly(fVP.GetDolly()+angleY*delta);
-    }
+
+    ZoomFromMouseWheel(a_event.angle(), a_event.shift_modifier(), a_event.x(), a_event.y());
+
     SetView();
     DrawView();
   }
@@ -124,7 +132,6 @@ public:
   ,fMousePressedX(0)
   ,fMousePressedY(0)
   {
-    //::printf("debug : G4ToolsSGViewer::G4ToolsSGViewer: %lu, %s\n",this,a_name.c_str());
     Messenger::Create();
   }
 
@@ -138,6 +145,7 @@ public:
 protected:
   G4ToolsSGViewer(const G4ToolsSGViewer& a_from)
   :parent(a_from)
+  ,parent_viewer(a_from)
   ,parent_interactor(a_from)
   ,fSGSession(a_from.fSGSession)
   ,fSGSceneHandler(a_from.fSGSceneHandler)
@@ -253,14 +261,14 @@ public:
     } else {
       //G4cout << "debug : camera : perspec : heightAngle " << float(2*fVP.GetFieldHalfAngle()) << std::endl;
       tools::sg::perspective* perspective_camera = new tools::sg::perspective;
-      perspective_camera->height_angle.value(float(2*fVP.GetFieldHalfAngle()));
+      perspective_camera->height_angle.value(2 * std::atan(std::tan(fVP.GetFieldHalfAngle()) / fVP.GetZoomFactor()));
       _camera = perspective_camera;
     }
     
     _camera->position.value
       (tools::vec3f(float(cameraPosition.x()),
-		    float(cameraPosition.y()),
-		    float(cameraPosition.z())));
+            float(cameraPosition.y()),
+            float(cameraPosition.z())));
     _camera->znear.value(float(pnear));
     _camera->zfar.value(float(pfar));
 
@@ -272,7 +280,7 @@ public:
     const G4Vector3D& actualLightDirection = fVP.GetActualLightpointDirection();
     G4cout << "debug : actualLightDirection : " << actualLightDirection.x() << " " << actualLightDirection.y() << " " << actualLightDirection.z() << std::endl;
     */
-
+    
     CreateSG(_camera,fVP.GetActualLightpointDirection());
     
    {G4Color background = fVP.GetBackgroundColour ();
@@ -308,21 +316,26 @@ public:
       fSGSceneHandler.TouchPlotters(fSGViewer->sg());
       fSGViewer->show();
       fSGViewer->win_render();
-      fSGSession.sync();
     }
   }
 
 public:
   G4bool GetWindowSize(unsigned int& a_w,unsigned int& a_h) {
-    if(!fSGViewer) {a_w = 0;a_h = 0;return false;}
+    if(!fSGViewer) {a_w = 0; a_h = 0; return false;}
     return fSGViewer->window_size(a_w,a_h);
   }
-  G4bool GetRenderAreaSize(unsigned int& a_w,unsigned int& a_h) {
-    if(!fSGViewer) {a_w = 0;a_h = 0;return false;}
-    fSGViewer->render_area_size(a_w,a_h);
+  G4bool GetRenderAreaSize(unsigned int& a_w, unsigned int& a_h) {
+    if (!fSGViewer) {a_w = 0; a_h = 0; return false;}
+    fSGViewer->render_area_size(a_w, a_h);
     return true;
   }
   //SG_VIEWER* sg_viewer() {return fSGViewer;}
+
+  virtual void EmitWindowRender() {
+    if(!fSGViewer) return;
+    fSGViewer->emit_win_render();
+  }
+
 protected:
   void KernelVisitDecision () {
     if (CompareForKernelVisit(fLastVP)) {
@@ -367,7 +380,9 @@ protected:
        (vp.GetVisAttributesModifiers()    != fVP.GetVisAttributesModifiers())    ||
        (vp.IsSpecialMeshRendering()       != fVP.IsSpecialMeshRendering())       ||
        (vp.GetSpecialMeshRenderingOption()!= fVP.GetSpecialMeshRenderingOption())||
-       (vp.GetTransparencyByDepth()       != fVP.GetTransparencyByDepth())
+       (vp.GetTransparencyByDepth() != fVP.GetTransparencyByDepth()) ||
+       (vp.IsDotsSmooth()        != fVP.IsDotsSmooth())        ||
+       (vp.GetDotsSize()         != fVP.GetDotsSize())
        )
     return true;
 
@@ -436,6 +451,10 @@ protected:
   
     scene_3D->add(a_camera);
   
+   {tools::sg::shade_model* shade_model = new tools::sg::shade_model;
+    shade_model->model = tools::sg::shade_smooth;
+    scene_3D->add(shade_model);}
+
    {tools::sg::torche* light = new tools::sg::torche;
     light->on = true;
     light->direction = tools::vec3f(-a_light_dir.x(),-a_light_dir.y(),-a_light_dir.z());
@@ -465,6 +484,27 @@ protected:
     }
   }
 
+  G4double GetSceneNearWidth() {
+    if (!fSGSceneHandler.GetScene()) {
+      return 0;
+    }
+    const G4Point3D targetPoint =
+      fSGSceneHandler.GetScene()->GetStandardTargetPoint() + fVP.GetCurrentTargetPoint();
+    G4double radius = fSGSceneHandler.GetScene()->GetExtent().GetExtentRadius();
+    if (radius <= 0.) radius = 1.;
+    const G4double cameraDistance = fVP.GetCameraDistance(radius);
+    const G4double pnear = fVP.GetNearDistance(cameraDistance, radius);
+    
+    G4double frontHalfHeight;
+    if (fVP.GetFieldHalfAngle() == 0.) {
+      frontHalfHeight = radius / fVP.GetZoomFactor();
+    } else {
+      // Code from G4ViewParameters adapted to the different zoom behavior in TSG (angle)
+      frontHalfHeight = pnear * std::tan(fVP.GetFieldHalfAngle() / fVP.GetZoomFactor());
+    }
+    return 2 * frontHalfHeight;
+  }
+
 protected:  
   class Messenger: public G4VVisCommand {
   public:  
@@ -473,6 +513,7 @@ protected:
     Messenger() {
       G4UIparameter* parameter;
       //////////////////////////////////////////////////////////
+      /// /vis/tsg/export : ////////////////////////////////////
       //////////////////////////////////////////////////////////
       write_scene = new G4UIcommand("/vis/tsg/export", this);
       write_scene->SetGuidance("Write the content of the current viewer in a file at various formats.");
@@ -490,15 +531,15 @@ protected:
 
       parameter = new G4UIparameter("format",'s',true);
       parameter->SetDefaultValue("gl2ps_eps");
-      write_scene->SetParameter (parameter);
+      write_scene->SetParameter(parameter);
 
       parameter = new G4UIparameter("file",'s',true);
       parameter->SetDefaultValue("out.eps");
-      write_scene->SetParameter (parameter);
+      write_scene->SetParameter(parameter);
 
       parameter =  new G4UIparameter ("do_transparency", 'b', true);
-      parameter->SetDefaultValue  ("true");
-      write_scene->SetParameter (parameter);
+      parameter->SetDefaultValue("true");
+      write_scene->SetParameter(parameter);
 
     }
     virtual ~Messenger() {
@@ -514,7 +555,7 @@ protected:
       }
       G4ToolsSGViewer* tsg_viewer = dynamic_cast<G4ToolsSGViewer*>(viewer);
       if(!tsg_viewer) {
-        G4cout << "G4ToolsSGViewer::SetNewValue:"
+        G4cout << "G4ToolsSGViewer::Messenger::SetNewValue:"
                << " current viewer is not a G4ToolsSGViewer." << G4endl;
         return;
       }

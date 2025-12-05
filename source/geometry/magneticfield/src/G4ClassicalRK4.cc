@@ -25,7 +25,7 @@
 //
 // G4ClassicalRK4 implementation
 //
-// Created: J.Apostolakis, V.Grichine - 30.01.1997
+// Authors: J.Apostolakis, V.Grichine (CERN), 30.01.1997
 // -------------------------------------------------------------------
 
 #include "G4ClassicalRK4.hh"
@@ -109,22 +109,3 @@ G4ClassicalRK4::DumbStepper( const G4double yIn[],
   if ( nvar == 12 )  { NormalisePolarizationVector ( yOut ); }
   
 }  // end of DumbStepper ....................................................
-
-////////////////////////////////////////////////////////////////////
-//
-// StepWithEst
-
-void
-G4ClassicalRK4::StepWithEst( const G4double*,
-                             const G4double*,
-                                   G4double,
-                                   G4double*,
-                                   G4double&,
-                                   G4double&,
-                             const G4double*,
-                                   G4double*  ) 
-{
-  G4Exception("G4ClassicalRK4::StepWithEst()", "GeomField0001",
-              FatalException, "Method no longer used.");
-
-}  // end of StepWithEst ......................................................

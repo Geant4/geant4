@@ -8,15 +8,9 @@
 
 #include "plottables"
 
-//#include "../func"
-
-#include "../words"
+#include "../tokenize"
 #include "../S_STRING"
 #include "../forit"
-
-#ifdef TOOLS_MEM
-#include "../mem"
-#endif
 
 namespace tools {
 namespace sg {
@@ -64,14 +58,8 @@ public: //func1D
 
 public:
   f1d2plot(const T& a_data):m_data(a_data){
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
   }
   virtual ~f1d2plot(){
-#ifdef TOOLS_MEM
-    mem::decrement(s_class().c_str());
-#endif
   }
 public:
   f1d2plot(const f1d2plot& a_from)
@@ -81,9 +69,6 @@ public:
   ,m_legend(a_from.m_legend)
   ,m_title(a_from.m_title)
   {
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
   }
   f1d2plot& operator=(const f1d2plot& a_from){
     m_name = a_from.m_name;
@@ -175,14 +160,8 @@ public: //func2D
   virtual float y_max() const {return m_data.ydomain_max();}
 public:
   f2d2plot(const T& a_data):m_data(a_data){
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
   }
   virtual ~f2d2plot(){
-#ifdef TOOLS_MEM
-    mem::decrement(s_class().c_str());
-#endif
   }
 public:
   f2d2plot(const f2d2plot& a_from)
@@ -192,9 +171,6 @@ public:
   ,m_legend(a_from.m_legend)
   ,m_title(a_from.m_title)
   {
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
   }
   f2d2plot& operator=(const f2d2plot& a_from){
     m_name = a_from.m_name;

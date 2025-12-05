@@ -23,11 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file persistency/gdml/G04/src/G04SensitiveDetector.cc
+/// \file G04SensitiveDetector.cc
 /// \brief Implementation of the G04SensitiveDetector class
-//
-//
-//
 
 #include "G04SensitiveDetector.hh"
 

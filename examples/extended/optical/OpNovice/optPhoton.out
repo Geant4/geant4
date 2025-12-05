@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-03-ref-06    (30-June-2025)
+ Geant4 version Name: geant4-11-04-ref-00    (5-December-2025)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -356,6 +356,7 @@ OpMieHG is created
 OpBoundary is created 
 OpWLS is created 
 OpWLS2 is created 
+Cerenkov is created.
 ### Birks coefficients used in run time
    Water     0.126 mm/MeV     0.0126 g/cm^2/MeV  massFactor=  640.135 effCharge= 22
 #
@@ -406,7 +407,7 @@ Lowest muon/hadron kinetic energy                  1 keV
 Use ICRU90 data                                    1
 Fluctuations of dE/dx are enabled                  1
 Type of fluctuation model for leptons and hadrons  Urban
-Use built-in Birks satuaration                     1
+Use built-in Birks saturation                      1
 Build CSDA range enabled                           0
 Use cut as a final range enabled                   0
 Enable angular generator interface                 1
@@ -574,7 +575,7 @@ hBrems:  for proton  XStype:1  SubType=3
 hPairProd:  for proton  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
-      Sampling table 17x1001 from 7.50618 GeV to 100 TeV 
+      Sampling table 17x1001, from 7.50618 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
@@ -643,7 +644,7 @@ hBrems:  for anti_proton  XStype:1  SubType=3
 hPairProd:  for anti_proton  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
-      Sampling table 17x1001 from 7.50618 GeV to 100 TeV 
+      Sampling table 17x1001, from 7.50618 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
@@ -675,7 +676,7 @@ hBrems:  for kaon+  XStype:1  SubType=3
 hPairProd:  for kaon+  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
-      Sampling table 18x1001 from 3.94942 GeV to 100 TeV 
+      Sampling table 18x1001, from 3.94942 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
@@ -707,7 +708,7 @@ hBrems:  for kaon-  XStype:1  SubType=3
 hPairProd:  for kaon-  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
-      Sampling table 18x1001 from 3.94942 GeV to 100 TeV 
+      Sampling table 18x1001, from 3.94942 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
@@ -739,7 +740,7 @@ muBrems:  for mu+  XStype:1  SubType=3
 muPairProd:  for mu+  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
-      Sampling table 21x1001 from 0.85 GeV to 100 TeV 
+      Sampling table 21x1001, from 0.85 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
@@ -771,7 +772,7 @@ muBrems:  for mu-  XStype:1  SubType=3
 muPairProd:  for mu-  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
-      Sampling table 21x1001 from 0.85 GeV to 100 TeV 
+      Sampling table 21x1001, from 0.85 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
@@ -835,7 +836,7 @@ hBrems:  for pi+  XStype:1  SubType=3
 hPairProd:  for pi+  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
-      Sampling table 20x1001 from 1.11656 GeV to 100 TeV 
+      Sampling table 20x1001, from 1.11656 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
@@ -867,7 +868,7 @@ hBrems:  for pi-  XStype:1  SubType=3
 hPairProd:  for pi-  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
-      Sampling table 20x1001 from 1.11656 GeV to 100 TeV 
+      Sampling table 20x1001, from 1.11656 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
@@ -1122,8 +1123,8 @@ CoulombScat:  for pi- XStype:1 SubType=1 BuildTable=1
 Type of pre-compound model                          0
 Type of pre-compound inverse x-section              1
 Pre-compound model active                           1
-Pre-compound excitation low energy                  100 keV
-Pre-compound excitation high energy                 30 MeV
+Pre-compound excitation low energy                  0.1 MeV 
+Pre-compound excitation high energy                 15 MeV 
 Angular generator for pre-compound model            1
 Use NeverGoBack option for pre-compound model       0
 Use SoftCutOff option for pre-compound model        0
@@ -1137,9 +1138,8 @@ Type of de-excitation inverse x-section             3
 Type of de-excitation factory                       Evaporation+GEM
 Number of de-excitation channels                    68
 Type of Fermi BreakUp model                         ModelVI
-Min excitation energy                               10 eV 
-Min energy per nucleon for multifragmentation       200 GeV
-Limit excitation energy for Fermi BreakUp           20 MeV
+Min excitation energy                               0.01 keV 
+Min energy per nucleon for multifragmentation       2e+05 MeV
 Level density (1/MeV)                               0.075
 Use simple level density model                      1
 Use discrete excitation energy of the residual      0
@@ -1178,10 +1178,8 @@ Index : 1     used in the geometry : Yes
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0     3e-06        0        0         0        Tank initStep
     1    5e+03   -3e+03        0     3e-06        0 5.83e+03  5.83e+03     expHall Transportation
-    2    5e+03   -3e+03        0     3e-06        0        0  5.83e+03        Tank Transportation
-    3  2.6e+03   -5e+03  1.4e+03     3e-06        0 3.42e+03  9.25e+03     expHall Transportation
-    4   -1e+04 -8.74e+03 6.25e+03     3e-06        0  1.4e+04  2.33e+04       world Transportation
-    5 -1.5e+04 -1.02e+04 8.17e+03     3e-06        0 5.56e+03  2.88e+04  OutOfWorld Transportation
+    2    1e+04 -5.89e+03      223     3e-06        0 5.78e+03  1.16e+04       world Transportation
+    3  1.5e+04 -8.78e+03      446     3e-06        0 5.78e+03  1.74e+04  OutOfWorld Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = opticalphoton,   Track ID = 1,   Parent ID = 0
@@ -1190,8 +1188,19 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0     3e-06        0        0         0        Tank initStep
     1    5e+03   -3e+03        0     3e-06        0 5.83e+03  5.83e+03     expHall Transportation
-    2    1e+04 -7.85e+03     -800     3e-06        0 7.01e+03  1.28e+04       world Transportation
-    3  1.5e+04 -1.27e+04 -1.6e+03     3e-06        0 7.01e+03  1.99e+04  OutOfWorld Transportation
+    2    1e+04 -5.68e+03 1.01e+03     3e-06        0 5.76e+03  1.16e+04       world Transportation
+    3  1.5e+04 -8.35e+03 2.03e+03     3e-06        0 5.76e+03  1.74e+04  OutOfWorld Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = opticalphoton,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0        0        0        0     3e-06        0        0         0        Tank initStep
+    1 2.88e+03 -1.73e+03        0     3e-06        0 3.35e+03  3.35e+03        Tank OpRayleigh
+    2    5e+03 -2.67e+03     -995     3e-06        0 2.53e+03  5.88e+03     expHall Transportation
+    3 9.58e+03 -8.07e+03   -1e+04     3e-06        0 1.15e+04  1.73e+04       world Transportation
+    4 1.21e+04 -1.11e+04 -1.5e+04     3e-06        0 6.36e+03  2.37e+04  OutOfWorld Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = opticalphoton,   Track ID = 1,   Parent ID = 0
@@ -1200,23 +1209,8 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0     3e-06        0        0         0        Tank initStep
     1    5e+03   -3e+03        0     3e-06        0 5.83e+03  5.83e+03     expHall Transportation
-    2    1e+04 -8.66e+03 -2.2e+03     3e-06        0 7.87e+03  1.37e+04       world Transportation
-    3  1.5e+04 -1.43e+04 -4.39e+03     3e-06        0 7.87e+03  2.16e+04  OutOfWorld Transportation
-
-*********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 1,   Parent ID = 0
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0        0     3e-06        0        0         0        Tank initStep
-    1    5e+03   -3e+03        0     3e-06        0 5.83e+03  5.83e+03     expHall Transportation
-    2    5e+03   -3e+03        0     3e-06        0        0  5.83e+03        Tank Transportation
-    3 3.67e+03   -5e+03     31.7     3e-06        0  2.4e+03  8.23e+03     expHall Transportation
-    4 3.67e+03   -5e+03     31.7     3e-06        0        0  8.23e+03        Tank Transportation
-    5 -1.61e+03 1.49e+03 3.73e+03     3e-06        0 9.14e+03  1.74e+04        Tank OpRayleigh
-    6   -5e+03 1.94e+03  3.7e+03     3e-06        0 3.42e+03  2.08e+04     expHall Transportation
-    7   -1e+04 3.83e+03 2.47e+03     3e-06        0 5.49e+03  2.63e+04       world Transportation
-    8 -1.5e+04 5.73e+03 1.23e+03     3e-06        0 5.49e+03  3.18e+04  OutOfWorld Transportation
+    2    1e+04 -7.71e+03      -92     3e-06        0 6.87e+03  1.27e+04       world Transportation
+    3  1.5e+04 -1.24e+04     -184     3e-06        0 6.87e+03  1.96e+04  OutOfWorld Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = opticalphoton,   Track ID = 1,   Parent ID = 0
@@ -1227,8 +1221,38 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     1    5e+03   -3e+03        0     3e-06        0 5.83e+03  5.83e+03     expHall Transportation
     2    5e+03   -3e+03        0     3e-06        0        0  5.83e+03        Tank Transportation
     3 3.88e+03 -4.75e+03   -5e+03     3e-06        0 5.41e+03  1.12e+04     expHall Transportation
-    4 5.86e+03   -1e+04 -8.61e+03     3e-06        0 6.67e+03  1.79e+04       world Transportation
-    5 7.74e+03 -1.5e+04 -1.2e+04     3e-06        0 6.35e+03  2.43e+04  OutOfWorld Transportation
+    4    2e+03 -9.16e+03   -1e+04     3e-06        0 6.93e+03  1.82e+04       world Transportation
+    5      122 -1.36e+04 -1.5e+04     3e-06        0 6.93e+03  2.51e+04  OutOfWorld Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = opticalphoton,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0        0        0        0     3e-06        0        0         0        Tank initStep
+    1    5e+03   -3e+03        0     3e-06        0 5.83e+03  5.83e+03     expHall Transportation
+    2    1e+04 -7.67e+03      897     3e-06        0  6.9e+03  1.27e+04       world Transportation
+    3  1.5e+04 -1.23e+04 1.79e+03     3e-06        0  6.9e+03  1.96e+04  OutOfWorld Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = opticalphoton,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0        0        0        0     3e-06        0        0         0        Tank initStep
+    1    5e+03   -3e+03        0     3e-06        0 5.83e+03  5.83e+03     expHall Transportation
+    2    1e+04 -7.41e+03     19.7     3e-06        0 6.67e+03  1.25e+04       world Transportation
+    3  1.5e+04 -1.18e+04     39.4     3e-06        0 6.67e+03  1.92e+04  OutOfWorld Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = opticalphoton,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0        0        0        0     3e-06        0        0         0        Tank initStep
+    1    5e+03   -3e+03        0     3e-06        0 5.83e+03  5.83e+03     expHall Transportation
+    2    1e+04 -7.26e+03 -1.53e+03     3e-06        0 6.75e+03  1.26e+04       world Transportation
+    3  1.5e+04 -1.15e+04 -3.05e+03     3e-06        0 6.75e+03  1.93e+04  OutOfWorld Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = opticalphoton,   Track ID = 1,   Parent ID = 0
@@ -1238,31 +1262,9 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     0        0        0        0     3e-06        0        0         0        Tank initStep
     1    5e+03   -3e+03        0     3e-06        0 5.83e+03  5.83e+03     expHall Transportation
     2    5e+03   -3e+03        0     3e-06        0        0  5.83e+03        Tank Transportation
-    3    -63.4   -5e+03 -1.75e+03     3e-06        0 5.72e+03  1.16e+04     expHall Transportation
-    4    -63.4   -5e+03 -1.75e+03     3e-06        0        0  1.16e+04        Tank Transportation
-    5 -3.89e+03 -2.19e+03   -5e+03     3e-06        0 5.75e+03  1.73e+04     expHall Transportation
-    6 -3.89e+03 -2.19e+03   -5e+03     3e-06        0        0  1.73e+04        Tank Transportation
-    7   -5e+03     -699 -4.16e+03     3e-06        0 2.04e+03  1.93e+04     expHall Transportation
-    8   -5e+03     -699 -4.16e+03     3e-06        0        0  1.93e+04        Tank Transportation
-    9 -2.05e+03    5e+03     -452     3e-06        0 7.41e+03  2.68e+04     expHall Transportation
-   10 -2.05e+03    5e+03     -452     3e-06        0        0  2.68e+04        Tank Transportation
-   11 2.12e+03 2.75e+03 1.83e+03     3e-06        0 5.26e+03   3.2e+04        Tank OpRayleigh
-   12 -1.65e+03    5e+03      759     3e-06        0 4.52e+03  3.65e+04     expHall Transportation
-   13 -1.65e+03    5e+03      759     3e-06        0        0  3.65e+04        Tank Transportation
-   14   -5e+03     -400      341     3e-06        0 6.37e+03  4.29e+04     expHall Transportation
-   15   -5e+03     -400      341     3e-06        0        0  4.29e+04        Tank Transportation
-   16 -3.99e+03 -1.38e+03     58.4     3e-06        0 1.44e+03  4.43e+04        Tank OpRayleigh
-   17   -5e+03 -1.6e+03 -1.15e+03     3e-06        0 1.59e+03  4.59e+04     expHall Transportation
-   18   -5e+03 -1.6e+03 -1.15e+03     3e-06        0        0  4.59e+04        Tank Transportation
-   19 -1.84e+03 -4.38e+03   -5e+03     3e-06        0  5.7e+03  5.16e+04     expHall Transportation
-   20 -1.84e+03 -4.38e+03   -5e+03     3e-06        0        0  5.16e+04        Tank Transportation
-   21 -1.74e+03   -5e+03 -4.58e+03     3e-06        0      756  5.24e+04     expHall Transportation
-   22 -1.74e+03   -5e+03 -4.58e+03     3e-06        0        0  5.24e+04        Tank Transportation
-   23    5e+03  1.9e+03 -1.39e+03     3e-06        0 1.02e+04  6.25e+04     expHall Transportation
-   24    5e+03  1.9e+03 -1.39e+03     3e-06        0        0  6.25e+04        Tank Transportation
-   25      776 4.67e+03    5e+03     3e-06        0 8.15e+03  7.07e+04     expHall Transportation
-   26 -4.28e+03 7.47e+03    1e+04     3e-06        0 7.64e+03  7.83e+04       world Transportation
-   27 -9.34e+03 1.03e+04  1.5e+04     3e-06        0 7.64e+03   8.6e+04  OutOfWorld Transportation
+    3 4.38e+03   -5e+03    -37.7     3e-06        0 2.09e+03  7.92e+03     expHall Transportation
+    4     -753   -1e+04     -473     3e-06        0 7.18e+03  1.51e+04       world Transportation
+    5 -5.89e+03 -1.5e+04     -908     3e-06        0 7.18e+03  2.23e+04  OutOfWorld Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = opticalphoton,   Track ID = 1,   Parent ID = 0
@@ -1271,61 +1273,22 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0     3e-06        0        0         0        Tank initStep
     1    5e+03   -3e+03        0     3e-06        0 5.83e+03  5.83e+03     expHall Transportation
-    2    5e+03   -3e+03        0     3e-06        0        0  5.83e+03        Tank Transportation
-    3 4.02e+03 -4.84e+03   -5e+03     3e-06        0 5.42e+03  1.12e+04     expHall Transportation
-    4  3.2e+03 -6.63e+03   -1e+04     3e-06        0 5.38e+03  1.66e+04       world Transportation
-    5 2.37e+03 -8.43e+03 -1.5e+04     3e-06        0 5.38e+03   2.2e+04  OutOfWorld Transportation
-
-*********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 1,   Parent ID = 0
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0        0     3e-06        0        0         0        Tank initStep
-    1 4.35e+03 -2.61e+03        0     3e-06        0 5.07e+03  5.07e+03        Tank OpRayleigh
-    2  3.6e+03 -2.79e+03 1.28e+03     3e-06    3e-06  1.5e+03  6.57e+03        Tank OpAbsorption
-
-*********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 1,   Parent ID = 0
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0        0     3e-06        0        0         0        Tank initStep
-    1    5e+03   -3e+03        0     3e-06        0 5.83e+03  5.83e+03     expHall Transportation
-    2    5e+03   -3e+03        0     3e-06        0        0  5.83e+03        Tank Transportation
-    3  3.2e+03   -5e+03     -417     3e-06        0 2.72e+03  8.55e+03     expHall Transportation
-    4  3.2e+03   -5e+03     -417     3e-06        0        0  8.55e+03        Tank Transportation
-    5 -3.93e+03      289    5e+03     3e-06        0 1.04e+04   1.9e+04     expHall Transportation
-    6 -3.93e+03      289    5e+03     3e-06        0        0   1.9e+04        Tank Transportation
-    7   -5e+03 1.68e+03  4.7e+03     3e-06        0 1.78e+03  2.07e+04     expHall Transportation
-    8   -5e+03 1.68e+03  4.7e+03     3e-06        0        0  2.07e+04        Tank Transportation
-    9 -3.45e+03    5e+03  4.5e+03     3e-06        0 3.67e+03  2.44e+04     expHall Transportation
-   10 -3.45e+03    5e+03  4.5e+03     3e-06        0        0  2.44e+04        Tank Transportation
-   11     -971  2.6e+03 3.34e+03     3e-06    3e-06 3.64e+03   2.8e+04        Tank OpAbsorption
-
-*********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 1,   Parent ID = 0
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0        0     3e-06        0        0         0        Tank initStep
-    1    5e+03   -3e+03        0     3e-06        0 5.83e+03  5.83e+03     expHall Transportation
-    2 9.19e+03   -1e+04 1.11e+03     3e-06        0 8.23e+03  1.41e+04       world Transportation
-    3 1.22e+04 -1.5e+04  1.9e+03     3e-06        0 5.88e+03  1.99e+04  OutOfWorld Transportation
+    2 6.52e+03   -1e+04 1.54e+03     3e-06        0 7.33e+03  1.32e+04       world Transportation
+    3 7.61e+03 -1.5e+04 2.63e+03     3e-06        0 5.23e+03  1.84e+04  OutOfWorld Transportation
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.000872s Sys=0.000000s
+  User=0.000000s Real=0.000909s Sys=0.000000s
 
  ======================== run summary ======================
 Primary particle was: opticalphoton with energy 3 eV .
 Number of events: 10
 Average number of Cerenkov photons created per event: 0 +- 0
 Average number of scintillation photons created per event: 0 +- 0
-Average number of optical Rayleigh interactions per event: 0.4 +- 0.663
-Average number of optical absorption interactions per event: 0.2 +- 0.4
+Average number of optical Rayleigh interactions per event: 0.1 +- 0.3
+Average number of optical absorption interactions per event: 0 +- 0
 Average number of optical Mie interactions per event: 0 +- 0
-Average number of optical boundary interactions per event: 3.7 +- 3.35
+Average number of optical boundary interactions per event: 2.2 +- 0.4
 
 #
 /tracking/verbose 0
@@ -1355,17 +1318,17 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.090000s Real=0.085259s Sys=0.000000s
+  User=0.090000s Real=0.093072s Sys=0.000000s
 
  ======================== run summary ======================
 Primary particle was: opticalphoton with energy 3 eV .
 Number of events: 10000
 Average number of Cerenkov photons created per event: 0 +- 0
 Average number of scintillation photons created per event: 0 +- 0
-Average number of optical Rayleigh interactions per event: 0.113 +- 0.346
-Average number of optical absorption interactions per event: 0.408 +- 0.491
-Average number of optical Mie interactions per event: 0.0017 +- 0.0412
-Average number of optical boundary interactions per event: 3.98 +- 2.85
+Average number of optical Rayleigh interactions per event: 0.113 +- 0.345
+Average number of optical absorption interactions per event: 0.415 +- 0.493
+Average number of optical Mie interactions per event: 0.0019 +- 0.0435
+Average number of optical boundary interactions per event: 4 +- 2.88
 
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 9 of which, static: 0

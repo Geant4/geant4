@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file medical/electronScattering2/src/ElectronRun.cc
+/// \file ElectronRun.cc
 /// \brief Implementation of the ElectronRun class
 
 #include "ElectronRun.hh"

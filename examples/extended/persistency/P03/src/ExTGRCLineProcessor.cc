@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file persistency/P03/src/ExTGRCLineProcessor.cc
+/// \file ExTGRCLineProcessor.cc
 /// \brief Implementation of the ExTGRCLineProcessor class
 
 #include "ExTGRCLineProcessor.hh"

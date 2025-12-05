@@ -290,6 +290,9 @@ void G4FTFModel::Init( const G4Nucleus& aNucleus, const G4DynamicParticle& aProj
        aNucleus.GetA_asInt() < 2 ) theParameters->SetProbabilityOfElasticScatt( 0.0 );
 
   if ( SampleBinInterval() ) theParticipants.SetBminBmax( GetBmin(), GetBmax() );
+
+  fIsQuasiElasticInteraction = false;
+  fIsDiffractiveInteraction = false;
 }
 
 
@@ -335,8 +338,8 @@ G4ExcitedStringVector* G4FTFModel::GetStrings() {
   G4cout << "FTF ExciteParticipants Success? " << Success << G4endl;
   #endif
 
-  if ( Success ) {       
-
+  if ( Success ) {
+ 
     #ifdef debugFTFmodel
     G4cout << "FTF BuildStrings ";
     #endif
@@ -850,6 +853,14 @@ G4bool G4FTFModel::ExciteParticipants() {
   G4cout << "G4FTFModel::ExciteParticipants() " << G4endl;
   #endif
 
+  // The quasi-elastic boolean flag is set "true" below because it makese easier to
+  // check whether the interaction is quasi-elastic - i.e. all the hadron projectile
+  // interactions with the target nucleons must be of elastic type - : it would be
+  // enough to have one hadron projectile - target nucleon interaction of non-elastic
+  // type to conclude that the interaction is not quasi-elastic.
+  fIsQuasiElasticInteraction = true;
+  fIsDiffractiveInteraction = false;
+  
   G4bool Success( false );
   G4int MaxNumOfInelCollisions = G4int( theParameters->GetMaxNumberOfCollisions() );
   if ( MaxNumOfInelCollisions > 0 ) {  //  Plab > Pbound, normal application of FTF is possible
@@ -923,7 +934,7 @@ G4bool G4FTFModel::ExciteParticipants() {
           //                                  TargetNucleon, Annihilation );
           //  if ( ! Result ) continue;
           //} 
-          if ( theExcitation->ExciteParticipants( projectile, target, theParameters, theElastic ) ) {
+          if ( theExcitation->ExciteParticipants( projectile, target, theParameters, theElastic, fIsDiffractiveInteraction ) ) {
             InnerSuccess = true;
             NumberOfNNcollisions++;
             #ifdef debugBuildString
@@ -933,6 +944,7 @@ G4bool G4FTFModel::ExciteParticipants() {
             //        << "After  tar " << target->Get4Momentum() << " "
             //        << target->Get4Momentum().mag() << G4endl;
             #endif
+            fIsQuasiElasticInteraction = false;
           } else {
             InnerSuccess = theElastic->ElasticScattering( projectile, target, theParameters );
             #ifdef debugBuildString
@@ -969,6 +981,7 @@ G4bool G4FTFModel::ExciteParticipants() {
         G4VSplitableHadron* AdditionalString = 0;
         if ( theAnnihilation->Annihilate( projectile, target, AdditionalString, theParameters ) ) {
           InnerSuccess = true;
+	  fIsQuasiElasticInteraction = false;
           #ifdef debugBuildString
           G4cout << "Annihilation successfull. " << "*AdditionalString " 
                  << AdditionalString << G4endl;
@@ -993,7 +1006,7 @@ G4bool G4FTFModel::ExciteParticipants() {
           // Continue the interactions
           theParticipants.StartLoop(); 
           for ( G4int i = 0; i < CurrentInteraction; ++i ) theParticipants.Next();
-	  
+ 
           /*
           if ( target->GetStatus() == 4 ) {
             // Skipping possible interactions of the annihilated nucleons 

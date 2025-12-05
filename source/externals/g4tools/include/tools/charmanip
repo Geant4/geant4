@@ -12,6 +12,8 @@ namespace tools {
 // \r = CR : 13
 // \t = HT : 9
 // ,       : 44
+inline char LF() {return 10;}
+inline char CR() {return 13;}
 
 inline bool is_upper(char a_char) {
   // do it myself: due to problem with ctype.h and
@@ -97,14 +99,6 @@ inline bool is_digit(char a_char) {
   }
   return false;
 }
-
-inline bool is_letter(char a_char) {
-  return (is_lower(a_char)||is_upper(a_char)) ? true : false;
-}
-
-//inline bool is_alpha(char a_char) {
-//  return (is_lower(a_char)||is_upper(a_char)||is_digit(a_char)) ? true : false;
-//}
 
 inline bool is_printable(char a_char) {
   if(is_lower(a_char)||is_upper(a_char)||is_digit(a_char)) return true;

@@ -23,10 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file persistency/P02/src/ExP02DetConstrReader.cc
+/// \file ExP02DetConstrReader.cc
 /// \brief Implementation of the ExP02DetConstrReader class
-//
-//
+
 // ROOT
 #include "TFile.h"
 #include "TROOT.h"

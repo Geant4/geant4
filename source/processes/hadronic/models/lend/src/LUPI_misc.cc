@@ -147,6 +147,54 @@ std::vector<std::string> splitString( std::string const &a_string, std::string c
 }
 
 /* *********************************************************************************************************//**
+ * This function adds together the strings in *a_strings* with *a_sep* between the strings in **a_strings**.
+ *
+ * @param a_delimiter   [in]    The delimiter string.
+ * @param a_strings     [in]    The string to split.
+ *
+ * @return                      A **std::string**.
+ ***********************************************************************************************************/
+
+std::string joinStrings( std::string const &a_sep, std::vector<std::string> a_strings ) {
+
+    std::string string;
+    std::string sep = "";
+    std::string const *sepPointer = &sep;
+
+    for( auto iter = a_strings.begin( ); iter != a_strings.end( ); ++iter ) {
+        string += *sepPointer + *iter;
+        sepPointer = &a_sep;
+    }
+
+    return( string );
+}
+
+/* *********************************************************************************************************//**
+ * This function replace one (or all if *a_all* is true) occurrence(s) of *a_old* in *a_string* with *a_new*.
+ *
+ * @param a_string      [in]    The string to split.
+ * @param a_old         [in]    The current sub-string in *a_string* that is replaced by *a_new*.
+ * @param a_new         [in]    The new sub-string that replace *a_old*..
+ * @param a_all         [in]    If **true** all occurrence of *a_old* are replaced by *a_new*; otherwise, only the first occurrence is replaced.
+ *
+ * @return                      A **std::string**.
+ ***********************************************************************************************************/
+
+std::string replaceString( std::string const &a_string, std::string const &a_old, std::string const &a_new, bool a_all ) {
+
+    std::string string( a_string );
+
+    while( true ) {
+        std::size_t index = string.find( a_old );
+        if( index == std::string::npos ) break;
+        string.replace( index, a_old.size( ), a_new );
+        if( !a_all ) break;
+    }
+
+    return( string );
+}
+
+/* *********************************************************************************************************//**
  * This function splits that string *a_string* into separate strings using the delimiter character "/" as 
  * for a XLink. The delimiter character "/"'s in each quoted region of the string is not split.
  *
@@ -185,7 +233,7 @@ std::vector<std::string> splitXLinkString( std::string const &a_XLink ) {
 
         if( current == '/' ) {
             std::string element = a_XLink.substr( start, end - start );
-            elements.push_back( element );
+            elements.push_back( std::move( element ) );
             while( a_XLink[end] == '/' ) ++end;
             start = end;
             if( end == size ) break;                            // Happens when XLink ends with '/'.
@@ -220,6 +268,29 @@ bool stringToInt( std::string const &a_string, int &a_value ) {
     if( ( value < INT_MIN ) || ( value > INT_MAX ) ) return( false );
 
     a_value = static_cast<int>( value );
+    return( true );
+}
+
+/* *********************************************************************************************************//**
+ * Converts a string to an integer. All characteros of the string must be valid int characters except for the trailing 0.
+ *
+ * @param a_string              [in]        The string to convert to an int.
+ * @param a_value               [in]        The converted int value.
+ *
+ * @return                                  true if successful and false otherwise.
+  ***********************************************************************************************************/
+
+bool stringToSize_t( std::string const &a_string, std::size_t &a_value ) {
+
+    char const *digits = a_string.c_str( );
+    char *nonDigit;
+    long value = strtol( digits, &nonDigit, 10 );
+
+    if( digits == nonDigit ) return( false );
+    if( *nonDigit != 0 ) return( false );
+    if( ( value < 0 ) || ( value > LONG_MAX ) ) return( false );
+
+    a_value = static_cast<std::size_t>( value );
     return( true );
 }
 

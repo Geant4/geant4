@@ -23,10 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file exoticphysics/monopole/src/G4MonopolePhysics.cc
+/// \file G4MonopolePhysics.cc
 /// \brief Implementation of the G4MonopolePhysics class
-//
-//
+
 //---------------------------------------------------------------------------
 //
 // ClassName:   G4MonopolePhysics

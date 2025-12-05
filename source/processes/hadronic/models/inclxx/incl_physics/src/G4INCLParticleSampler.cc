@@ -112,10 +112,14 @@ namespace G4INCL {
       thePCDFTable[Neutron] = NuclearDensityFactory::createPCDFTable(Neutron, theA, theZ);
       theRCDFTable[Lambda] = NuclearDensityFactory::createRCDFTable(Lambda, theA, theZ);
       thePCDFTable[Lambda] = NuclearDensityFactory::createPCDFTable(Lambda, theA, theZ);
+      theRCDFTable[antiProton] = NuclearDensityFactory::createRCDFTable(antiProton, theA, theZ);
+      thePCDFTable[antiProton] = NuclearDensityFactory::createPCDFTable(antiProton, theA, theZ);
+      theRCDFTable[antiNeutron] = NuclearDensityFactory::createRCDFTable(antiNeutron, theA, theZ);
+      thePCDFTable[antiNeutron] = NuclearDensityFactory::createPCDFTable(antiNeutron, theA, theZ);
     }
 
-    theList.resize(theA);
     if(theA > 2) {
+      theList.resize(theA);
       ParticleType type = Proton;
       ParticleSamplerMethod sampleOneParticle = sampleOneProton;
       for(G4int i = 0; i < theA; ++i) {
@@ -128,7 +132,15 @@ namespace G4INCL {
         p->setPosition(position + p->getPosition());
         theList[i] = p;
       }
-    } else {
+    }else if(theA == -2) {//antideuteron
+      theList.resize(-theA);
+      Particle *anantiProton = (this->*(this->sampleOneProton))(antiProton);
+      Particle *anantiNeutron = new Particle(antiNeutron, -anantiProton->getMomentum(), position - anantiProton->getPosition());
+      anantiProton->setPosition(position + anantiProton->getPosition());
+      theList[0] = anantiProton;
+      theList[1] = anantiNeutron;
+    }else { //deuteron
+      theList.resize(theA);
       // For deuterons, only sample the proton position and momentum. The
       // neutron position and momenta are determined by the conditions of
       // vanishing CM position and total momentum.

@@ -23,10 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file visualization/standalone/src/StandaloneVisAction.cc
+/// \file StandaloneVisAction.cc
 /// \brief Implementation of the StandaloneVisAction class
-//
-//
 
 #include "StandaloneVisAction.hh"
 

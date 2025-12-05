@@ -23,10 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file persistency/gdml/G03/src/G03ColorReader.cc
+/// \file G03ColorReader.cc
 /// \brief Implementation of the G03ColorReader class
-//
-//
+
 // --------------------------------------------------------------------
 
 #include "G03ColorReader.hh"

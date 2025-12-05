@@ -119,7 +119,7 @@ double XYs2d::evaluate( double a_x2, double a_x1 ) const {
     }
 
 // Currently does not interpolate;
-    return( m_function1ds[iX2]->evaluate( a_x1 ) );
+    return( m_function1ds[static_cast<std::size_t>( iX2 )]->evaluate( a_x1 ) );
 }
 
 /* *********************************************************************************************************//**

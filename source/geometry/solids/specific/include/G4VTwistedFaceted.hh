@@ -27,10 +27,10 @@
 //
 // Class description:
 //
-//  G4VTwistedFaceted is an abstract base class for twisted boxoids:
-//  G4TwistedTrd, G4TwistedTrap and G4TwistedBox
+// G4VTwistedFaceted is a base class for twisted boxoids:
+// G4TwistedTrd, G4TwistedTrap and G4TwistedBox
 
-// Author: 27-Oct-2004 - O.Link (CERN)
+// Author: Oliver Link (CERN), 27.10.2004 - Created
 // --------------------------------------------------------------------
 #ifndef G4VTWISTEDFACETED_HH
 #define G4VTWISTEDFACETED_HH 1
@@ -45,10 +45,32 @@
 class G4SolidExtentList;
 class G4ClippablePolygon;
 
+/**
+ * @brief G4VTwistedFaceted is a base class for twisted boxoids:
+ * G4TwistedTrd, G4TwistedTrap and G4TwistedBox.
+ */
+
 class G4VTwistedFaceted: public G4VSolid
 {
   public:
 
+    /**
+     * Constructs a faceted solid, given its parameters.
+     *  @param[in] pName The solid name.
+     *  @param[in] pPhiTwist Twist angle.
+     *  @param[in] pDz Half-length along Z axis.
+     *  @param[in] pTheta Polar angle of the line joining the centres of the
+     *             faces at -/+pDz.
+     *  @param[in] pPhi Azimuthal angle of the line joining the centres of the
+     *             faces at -/+pDz.
+     *  @param[in] pDy1 Half Y length at -pDz.
+     *  @param[in] pDx1 Half X length at -pDz, y=-pDy1.
+     *  @param[in] pDx2 Half X length at -pDz, y=+pDy1.
+     *  @param[in] pDy2 Half Y length at +pDz.
+     *  @param[in] pDx3 Half X length at +pDz, y=-pDy2.
+     *  @param[in] pDx4 Half X length at +pDz, y=+pDy2.
+     *  @param[in] pAlph Angle with respect to the Y axis from centre of side.
+     */
     G4VTwistedFaceted(const G4String& pname,    // Name of instance
                             G4double PhiTwist,  // twist angle
                             G4double pDz,       // half z lenght
@@ -60,56 +82,90 @@ class G4VTwistedFaceted: public G4VSolid
                             G4double pDy2,    // half y length at +pDz
                             G4double pDx3,    // half x length at +pDz,-pDy
                             G4double pDx4,    // half x length at +pDz,+pDy
-                            G4double pAlph    // tilt angle at +pDz
-                     );
+                            G4double pAlph ); // tilt angle at +pDz
 
+    /**
+     * Destructor.
+     */
     ~G4VTwistedFaceted() override;
 
-    void ComputeDimensions(      G4VPVParameterisation*,
+    /**
+     * Dispatch method for parameterisation replication mechanism and
+     * dimension computation.
+     */
+    void ComputeDimensions(G4VPVParameterisation*,
                            const G4int,
                            const G4VPhysicalVolume*  ) override;
 
+    /**
+     * Computes the bounding limits of the solid.
+     *  @param[out] pMin The minimum bounding limit point.
+     *  @param[out] pMax The maximum bounding limit point.
+     */
     void BoundingLimits(G4ThreeVector &pMin, G4ThreeVector &pMax) const override;
 
+    /**
+     * Calculates the minimum and maximum extent of the solid, when under the
+     * specified transform, and within the specified limits.
+     *  @param[in] pAxis The axis along which compute the extent.
+     *  @param[in] pVoxelLimit The limiting space dictated by voxels.
+     *  @param[in] pTransform The internal transformation applied to the solid.
+     *  @param[out] pMin The minimum extent value.
+     *  @param[out] pMax The maximum extent value.
+     *  @returns True if the solid is intersected by the extent region.
+     */
     G4bool CalculateExtent(const EAxis              pAxis,
                            const G4VoxelLimits&     pVoxelLimit,
                            const G4AffineTransform& pTransform,
                                  G4double&          pMin,
                                  G4double&          pMax ) const override;
 
+    /**
+     * Concrete implementations of the expected query interfaces for
+     * solids, as defined in the base class G4VSolid.
+     */
     G4double DistanceToIn (const G4ThreeVector& p,
                            const G4ThreeVector& v ) const override;
-
     G4double DistanceToIn (const G4ThreeVector& p ) const override;
-
     G4double DistanceToOut(const G4ThreeVector& p,
                            const G4ThreeVector& v,
                            const G4bool         calcnorm  = false,
                                  G4bool* validnorm = nullptr,
                                  G4ThreeVector*  n = nullptr ) const override;
-
     G4double DistanceToOut(const G4ThreeVector& p) const override;
-
     EInside Inside (const G4ThreeVector& p) const override;
-
     G4ThreeVector SurfaceNormal(const G4ThreeVector& p) const override;
 
+    /**
+     * Returns a random point located and uniformly distributed on the
+     * surface of the solid.
+     */
     G4ThreeVector GetPointOnSurface() const override;
-    G4ThreeVector GetPointInSolid(G4double z) const;
 
+    /**
+     * Returning an estimation of the solid volume (capacity) and
+     * surface area, in internal units.
+     */
     G4double GetCubicVolume() override;
     G4double GetSurfaceArea() override;
 
+    /**
+     * Methods for creating graphical representations (i.e. for visualisation).
+     */
     void DescribeYourselfTo (G4VGraphicsScene& scene) const override;
-    G4Polyhedron* CreatePolyhedron   () const override;
-    G4Polyhedron* GetPolyhedron      () const override;
+    G4Polyhedron* CreatePolyhedron () const override;
+    G4Polyhedron* GetPolyhedron () const override;
+    G4VisExtent GetExtent () const override;
 
-    std::ostream &StreamInfo(std::ostream& os) const override;
+    /**
+     * Streams the object contents to an output stream.
+     */
+    std::ostream& StreamInfo(std::ostream& os) const override;
 
-    // accessors
-
+    /**
+     * Accessors.
+     */
     inline G4double GetTwistAngle() const { return fPhiTwist; }
-
     inline G4double GetDx1   () const { return fDx1   ; }
     inline G4double GetDx2   () const { return fDx2   ; }
     inline G4double GetDx3   () const { return fDx3   ; }
@@ -120,25 +176,28 @@ class G4VTwistedFaceted: public G4VSolid
     inline G4double GetPhi   () const { return fPhi   ; }
     inline G4double GetTheta () const { return fTheta ; }
     inline G4double GetAlpha () const { return fAlph  ; }
-
     inline G4double Xcoef(G4double u, G4double phi, G4double ftg) const;
-      // For calculating the w(u) function
-
     inline G4double GetValueA(G4double phi) const;
     inline G4double GetValueB(G4double phi) const;
     inline G4double GetValueD(G4double phi) const;
 
-    G4VisExtent     GetExtent    () const override;
-    G4GeometryType  GetEntityType() const override;
+    /**
+     * Returns the type ID, "G4VTwistedFaceted" of the solid.
+     */
+    G4GeometryType GetEntityType() const override;
 
+    /**
+     * Fake default constructor for usage restricted to direct object
+     * persistency for clients requiring preallocation of memory for
+     * persistifiable objects.
+     */
     G4VTwistedFaceted(__void__&);
-      // Fake default constructor for usage restricted to direct object
-      // persistency for clients requiring preallocation of memory for
-      // persistifiable objects.
 
+    /**
+     * Copy constructor and assignment operator.
+     */
     G4VTwistedFaceted(const G4VTwistedFaceted& rhs);
     G4VTwistedFaceted& operator=(const G4VTwistedFaceted& rhs);
-      // Copy constructor and assignment operator.
 
   protected:
 
@@ -150,10 +209,17 @@ class G4VTwistedFaceted: public G4VSolid
 
   private:
 
-    double GetLateralFaceArea(const G4TwoVector& p1,
-                              const G4TwoVector& p2,
-                              const G4TwoVector& p3,
-                              const G4TwoVector& p4) const;
+    /**
+     * Utility used for computing the surface area.
+     */
+    G4double GetLateralFaceArea(const G4TwoVector& p1,
+                                const G4TwoVector& p2,
+                                const G4TwoVector& p3,
+                                const G4TwoVector& p4) const;
+
+    /**
+     * Utility used in constructor for creating the surfaces.
+     */
     void CreateSurfaces();
 
   private:

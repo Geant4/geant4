@@ -20,6 +20,9 @@
 # Chemistry: selection of IRT_syn
 /process/chem/TimeStepModel IRT_syn
 
+# Chemistry: verbosity
+/scheduler/verbose 0
+
 # Chemistry: end time of chemistry stage
 /scheduler/endTime 5.0 ns
 

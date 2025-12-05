@@ -194,7 +194,9 @@ void G4ParticleHPChannel::Harmonise(G4ParticleHPVector*& theStore,
       m_tmp++;
       a++;
       G4double xp = aPassive->GetEnergy(p);
-      if (std::abs(std::abs(xp - xa) / xa) < 0.001) {
+      xa = std::max(xa, 0.0);
+      xp = std::max(xp, 0.0);
+      if (std::abs(xp - xa) < 0.001*xa) {
         ++p;
       }
     }

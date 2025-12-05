@@ -53,9 +53,9 @@ GRIN_continuumGammas::GRIN_continuumGammas( Construction::Settings const &a_cons
     PoPI::Nuclide const &target = a_pops.get<PoPI::Nuclide>( a_setupInfo.m_protare->target( ).pid( ) );
     std::string captureResidualId = target.isotope( )->chemicalElement( )->symbol( ) + std::to_string( target.A( ) + 1 );
     PoPI::Nuclide const &captureResidual = a_pops.get<PoPI::Nuclide>( captureResidualId );
-    m_captureResidualId = captureResidualId;
+    m_captureResidualId = std::move( captureResidualId );
     m_captureResidualIntid = captureResidual.intid( );
-    m_captureResidualIndex = captureResidual.index( );
+    m_captureResidualIndex = static_cast<int>( captureResidual.index( ) );
     m_captureResidualMass = captureResidual.massValue( "MeV/c**2" );
 }
 

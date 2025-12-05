@@ -22,16 +22,22 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
+//
+// G4FieldSetup
+//
+// Class description:
+//
+// The class for constructing magnetic, electromagnetic and gravity
+// fields which strength is defined via G4Field.
+//
+// The equation of motion of a particle in a field and the
+// integration method are set according to the selection in
+// G4FieldParameters, as well as other accuracy parameters.
+// The default values in G4FieldParameters correspond to defaults
+// set in Geant4.
 
-/// \file G4FieldSetup.h
-/// \brief Definition of the G4FieldSetup class
-///
-/// This code was initially developed in Geant4 VMC package
-/// (https://github.com/vmc-project)
-/// and adapted to Geant4.
-///
-/// \author I. Hrivnacova; IJCLab, Orsay
-
+// Author: Ivana Hrivnacova (IJClab, Orsay), 2024.
+// --------------------------------------------------------------------
 #ifndef G4FIELDSETUP_HH
 #define G4FIELDSETUP_HH
 
@@ -49,148 +55,160 @@ class G4MagIntegratorStepper;
 class G4LogicalVolume;
 class G4VIntegrationDriver;
 
-class TVirtualMagField;
-
-/// \ingroup geometry
-/// \brief The class for constructing magnetic, electromagnetic and gravity
-/// fields which strength is defined via G4Field.
-///
-/// The equation of motion of a particle in a field and the
-/// integration method is set according to the selection in
-/// G4FieldParameters, as well as other accuracy parameters.
-/// The default values in G4FieldParameters correspond to defaults
-/// set in Geant4 (taken from Geant4 9.3 release.)
-/// As Geant4 classes to not provide access methods for these defaults,
-/// the defaults have to be checked with each new Geant4 release.
-/// TO DO: unify defaults in G4 classes and G4 parameters
-///
-/// \author I. Hrivnacova; IJClab, Orsay
+/**
+ * @brief G4FieldSetup is a class for constructing magnetic, electromagnetic
+ * and gravity fields which strength is defined via G4Field.
+ * The equation of motion of a particle in a field and the integration method
+ * are set according to the selection in G4FieldParameters, as well as other
+ * accuracy parameters.
+ */
 
 class G4FieldSetup
 {
- public:
-  /// Standard constructor
-  G4FieldSetup(const G4FieldParameters& parameters, G4Field* field,
-    G4LogicalVolume* lv = nullptr);
-  /// Destructor
-  ~G4FieldSetup();
+  public:
 
-  // Methods
+    /**
+     * Standard constructor for G4FieldSetup.
+     *  @param[in] parameters The field parameters.
+     *  @param[in] field Pointer to the field object.
+     *  @param[in] lv Optional logical volume where field applies; if
+     *             null, global field applies.
+     */
+    G4FieldSetup(const G4FieldParameters& parameters,
+                       G4Field* field,
+                       G4LogicalVolume* lv = nullptr);
 
-  /// Clear previously created setup
-  void Clear();
-  /// Update field setup with new field parameters
-  void Update();
-  /// Print information
-  void PrintInfo(G4int verboseLevel, const G4String about = "created");
+    /**
+     * Default Destructor.
+     */
+    ~G4FieldSetup();
 
-  // Set methods
+    /**
+     * Default constructor, copy constructor and assignment operator not allowed.
+     */
+    G4FieldSetup() = delete;
+    G4FieldSetup(const G4FieldSetup& right) = delete;
+    G4FieldSetup& operator=(const G4FieldSetup& right) = delete;
 
-  /// Set G4 field
-  void SetG4Field(G4Field* field);
+    /**
+     * Clears previously created setup.
+     */
+    void Clear();
 
-  // Access to field setting
+    /**
+     * Updates the field setup with new field parameters.
+     */
+    void Update();
 
-  /// Return the instantiated field
-  G4Field* GetG4Field() const;
-  /// Return the logical vol;ume
-  G4LogicalVolume* GetLogicalVolume() const;
-  /// Return the equation of motion
-  G4EquationOfMotion* GetEquation() const;
-  /// Return the magnetic integrator stepper
-  G4MagIntegratorStepper* GetStepper() const;
-  /// Return the magnetic integrator driver
-  G4VIntegrationDriver* GetIntegrationDriver() const;
+    /**
+     * Prints information.
+     *  @param[in] verboseLevel Verbosity level; if greater than 1, parameters
+     *             are also printed out to standard output.
+     *  @param[in] about Optional string.
+     */
+    void PrintInfo(G4int verboseLevel, const G4String& about = "created");
 
- private:
-  /// Not implemented
-  G4FieldSetup() = delete;
-  /// Not implemented
-  G4FieldSetup(const G4FieldSetup& right) = delete;
-  /// Not implemented
-  G4FieldSetup& operator=(const G4FieldSetup& right) = delete;
+    /**
+     * Setter for the field object.
+     */
+    inline void SetG4Field(G4Field* field) { fG4Field = field; }
 
-  // Methods
+    /**
+     * Accessors.
+     */
+    inline G4Field* GetG4Field() const { return fG4Field; }
+    inline G4LogicalVolume* GetLogicalVolume() const { return fLogicalVolume; }
+    inline G4EquationOfMotion* GetEquation() const { return fEquation; }
+    inline G4MagIntegratorStepper* GetStepper() const { return fStepper; }
 
-  // Create cached magnetic field if const distance is set > 0.
-  // and field is of G4MagneticField.
-  // Return the input field otherwise.
-  G4Field* CreateCachedField(
-    const G4FieldParameters& parameters, G4Field* field);
+  private:
 
-  /// Set the equation of motion of a particle in a field
-  G4EquationOfMotion* CreateEquation(G4EquationType equation);
+    /**
+     * Creates cached magnetic field if const distance is set greater than zero.
+     *  @param[in] parameters The field parameters.
+     *  @param[in] field Pointer to the field in input.
+     *  @returns The pointer to the cached field or the input field otherwise.
+     */
+    G4Field* CreateCachedField( const G4FieldParameters& parameters,
+                                      G4Field* field);
 
-  /// Set the integrator of particle's equation of motion
-  G4MagIntegratorStepper* CreateStepper(
-    G4EquationOfMotion* equation, G4StepperType stepper);
+    /**
+     * Creates and sets the equation of motion of a particle in a field.
+     *  @param[in] equation The equation type.
+     *  @returns The pointer to the created equation of motion.
+     */
+    G4EquationOfMotion* CreateEquation(G4EquationType equation);
 
-  /// Set the FSAL integrator of particle's equation of motion
-  G4VIntegrationDriver* CreateFSALStepperAndDriver(
-    G4EquationOfMotion* equation, G4StepperType stepper, G4double minStep);
+    /**
+     * Creates and sets the field integration stepper.
+     *  @param[in] equation Pointer to the equation of motion.
+     *  @param[in] stepper The stepper type.
+     *  @returns The pointer to the created integration stepper.
+     */
+    G4MagIntegratorStepper* CreateStepper(G4EquationOfMotion* equation,
+                                          G4StepperType stepper);
 
-  // methods to update field setup step by step
-  /// Create cached field (if ConstDistance is set)
-  void CreateCachedField();
-  /// Create cached field (if ConstDistance is set)
-  void CreateStepper();
-  /// Create chord finder
-  void CreateChordFinder();
-  /// Update field manager
-  void UpdateFieldManager();
+    /**
+     * Creates and sets the FSAL field integration driver.
+     *  @param[in] equation Pointer to the equation of motion.
+     *  @param[in] stepper The stepper type.
+     *  @param[in] minStep The minimum allowed step.
+     *  @returns The pointer to the created FSAL integration driver.
+     */
+    G4VIntegrationDriver*
+    CreateFSALStepperAndDriver(G4EquationOfMotion* equation,
+                               G4StepperType stepper, G4double minStep);
 
-  // Data members
+    // Methods to update field setup step by step
 
-  /// Messenger for this class
-  G4FieldSetupMessenger* fMessenger = nullptr;
-  /// Parameters
-  const G4FieldParameters& fParameters;
-  /// Geant4 field manager
-  G4FieldManager* fFieldManager = nullptr;
-  /// Geant4 field
-  G4Field* fG4Field = nullptr;
-  /// The associated ROOT volume (if local field)
-  G4LogicalVolume* fLogicalVolume = nullptr;
-  /// The equation of motion
-  G4EquationOfMotion* fEquation = nullptr;
-  /// The magnetic integrator stepper
-  G4MagIntegratorStepper* fStepper = nullptr;
-  /// The magnetic integrator driver
-  G4VIntegrationDriver* fDriver = nullptr;
-  /// Chord finder
-  G4ChordFinder* fChordFinder = nullptr;
+    /**
+     * Creates cached field (if ConstDistance is set).
+     */
+    void CreateCachedField();
+
+    /**
+     * Creates the stepper.
+     */
+    void CreateStepper();
+
+    /**
+     * Creates the chord finder.
+     */
+    void CreateChordFinder();
+
+    /**
+     * Updates the field manager.
+     */
+    void UpdateFieldManager();
+
+  private:  // data members
+
+    /** Messenger for this class. */
+    G4FieldSetupMessenger* fMessenger = nullptr;
+
+    /** Field parameters. */
+    const G4FieldParameters& fParameters;
+
+    /** The field manager. */
+    G4FieldManager* fFieldManager = nullptr;
+
+    /** The field class object. */
+    G4Field* fG4Field = nullptr;
+
+    /** The associated volume (if local field). */
+    G4LogicalVolume* fLogicalVolume = nullptr;
+
+    /** The equation of motion. */
+    G4EquationOfMotion* fEquation = nullptr;
+
+    /** The magnetic integrator stepper. */
+    G4MagIntegratorStepper* fStepper = nullptr;
+
+    /** The magnetic integrator driver. */
+    G4VIntegrationDriver* fDriver = nullptr;
+
+    /** Chord finder. */
+    G4ChordFinder* fChordFinder = nullptr;
 };
 
-// inline functions
-
-inline void G4FieldSetup::SetG4Field(G4Field* field)
-{
-  // Set G4 field
-  fG4Field = field;
-}
-
-inline G4Field* G4FieldSetup::GetG4Field() const
-{
-  // Return the instantiated field
-  return fG4Field;
-}
-
-inline G4LogicalVolume* G4FieldSetup::GetLogicalVolume() const
-{
-  // Return the logical vol;ume
-  return fLogicalVolume;
-}
-
-inline G4EquationOfMotion* G4FieldSetup::GetEquation() const
-{
-  // Return the equation of motion
-  return fEquation;
-}
-
-inline G4MagIntegratorStepper* G4FieldSetup::GetStepper() const
-{
-  // Return the magnetic integrator stepper
-  return fStepper;
-}
-
-#endif // G4FIELDSETUP_HH
+#endif

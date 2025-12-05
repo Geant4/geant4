@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-03-ref-06    (30-June-2025)
+ Geant4 version Name: geant4-11-04-ref-00    (5-December-2025)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -23,31 +23,6 @@ NeuronLoadDataFile::SingleNeuronSWCfile: number of strings=2922 in file GranuleC
  Total number of compartments into Neuron : 2914
 
 Livermore + DNAphysics is activated!
- ---- Begin of Neuron Construction! ---- 
- ==========================================================
- Side length of word volume is calculated : 407.347 um
- Radius of homogeneous medium is calculated : 203.674 um
- Overall dimensions (um) of neuron morphology : 
-	 width = 250.225 height = 315.035 depth = 63.8148
- Volume (um3), surface (um2) and mass (ug) of Bounding Slice are calculated : 
-	5.03049e+06 	229803 	5.03049
- 
- Volume (um3), surface (um2) and mass(ug) of Neuron are calculated : 
-	12100 	30379.7 	0.0121
- Total number of compartments into Neuron : 2914
- Shift values (um) for Neuron translation are calculated : 
-	 shiftX = 35.13 shiftY = 99.995 shiftZ = 2.025
- ---- Soma for construction: ---- 
- Total number of compartments into Soma : 3
- ---- Dendrites for construction: ---- 
- Total number of compartments into Dendrites: 2775
- ---- Axon for construction: ---- 
- Total number of compartments into Axon : 136
- ---- Spines not found! ---- 
-
- ---- End of Neuron Construction! ---- 
- ========================================================== 
-
 Visualization Manager instantiating with verbosity "warnings (3)"...
 Visualization Manager initialising...
 Registering graphics systems...
@@ -56,7 +31,6 @@ You have successfully registered the following graphics systems.
 Registered graphics systems are:
   ASCIITree (ATree)
   DAWNFILE (DAWNFILE)
-  G4HepRepFile (HepRepFile)
   RayTracer (RT)
   VRML2FILE (VRML2FILE)
   gMocrenFile (gMocrenFile)
@@ -69,13 +43,12 @@ Registered graphics systems are:
   OpenGLStoredX (OGLSX, OGLSQt_FALLBACK, OGLSXm_FALLBACK)
   RayTracerX (RTX)
   RayTracerQt (RTQt)
-  Qt3D (Qt3D)
   TOOLSSG_X11_GLES (TSG_X11_GLES, TSGX11, TSG_XT_GLES_FALLBACK)
   TOOLSSG_X11_ZB (TSG_X11_ZB, TSGX11ZB)
   TOOLSSG_XT_GLES (TSG_XT_GLES, TSGXt, TSG_QT_GLES_FALLBACK)
   TOOLSSG_XT_ZB (TSG_XT_ZB, TSGXtZB)
   TOOLSSG_QT_GLES (TSG_QT_GLES, TSGQt, TSG, OGL)
-  TOOLSSG_QT_ZB (TSG_QT_ZB, TSGQtZB)
+  TOOLSSG_QT_ZB (TSG_QT_ZB, TSGQtZB, TSGZB)
 You may choose a graphics system (driver) with a parameter of
 the command "/vis/open" or "/vis/sceneHandler/create",
 or you may omit the driver parameter and choose at run time:
@@ -118,6 +91,31 @@ End of Run User Vis Actions: none
 
 Some /vis commands (optionally) take a string to specify colour.
 "/vis/list" to see available colours.
+ ---- Begin of Neuron Construction! ---- 
+ ==========================================================
+ Side length of word volume is calculated : 407.347 um
+ Radius of homogeneous medium is calculated : 203.674 um
+ Overall dimensions (um) of neuron morphology : 
+	 width = 250.225 height = 315.035 depth = 63.8148
+ Volume (um3), surface (um2) and mass (ug) of Bounding Slice are calculated : 
+	5.03049e+06 	229803 	5.03049
+ 
+ Volume (um3), surface (um2) and mass(ug) of Neuron are calculated : 
+	12100 	30379.7 	0.0121
+ Total number of compartments into Neuron : 2914
+ Shift values (um) for Neuron translation are calculated : 
+	 shiftX = 35.13 shiftY = 99.995 shiftZ = 2.025
+ ---- Soma for construction: ---- 
+ Total number of compartments into Soma : 3
+ ---- Dendrites for construction: ---- 
+ Total number of compartments into Dendrites: 2775
+ ---- Axon for construction: ---- 
+ Total number of compartments into Axon : 136
+ ---- Spines not found! ---- 
+
+ ---- End of Neuron Construction! ---- 
+ ========================================================== 
+
 =======================================================================
 ======                 Electromagnetic Physics Parameters      ========
 =======================================================================
@@ -159,7 +157,7 @@ Lowest muon/hadron kinetic energy                  1 keV
 Use ICRU90 data                                    1
 Fluctuations of dE/dx are enabled                  1
 Type of fluctuation model for leptons and hadrons  Urban
-Use built-in Birks satuaration                     0
+Use built-in Birks saturation                      0
 Build CSDA range enabled                           0
 Use cut as a final range enabled                   0
 Enable angular generator interface                 1
@@ -203,6 +201,8 @@ Type of PIXE cross section for e+-                 Livermore
 =======================================================================
 ======                 DNA Physics Parameters                  ========
 =======================================================================
+Max DNA electron energy                            1 MeV
+Max DNA ion energy                                 300 MeV
 Use fast sampling in DNA models                    0
 Use Stationary option in DNA models                0
 Use DNA with multiple scattering of e-             0
@@ -338,7 +338,7 @@ hBrems:  for proton  XStype:1  SubType=3
 hPairProd:  for proton  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
-      Sampling table 17x1001 from 7.50618 GeV to 100 TeV 
+      Sampling table 17x1001, from 7.50618 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
@@ -408,7 +408,7 @@ hBrems:  for anti_proton  XStype:1  SubType=3
 hPairProd:  for anti_proton  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
-      Sampling table 17x1001 from 7.50618 GeV to 100 TeV 
+      Sampling table 17x1001, from 7.50618 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
@@ -441,7 +441,7 @@ hBrems:  for kaon+  XStype:1  SubType=3
 hPairProd:  for kaon+  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
-      Sampling table 18x1001 from 3.94942 GeV to 100 TeV 
+      Sampling table 18x1001, from 3.94942 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
@@ -474,7 +474,7 @@ hBrems:  for kaon-  XStype:1  SubType=3
 hPairProd:  for kaon-  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
-      Sampling table 18x1001 from 3.94942 GeV to 100 TeV 
+      Sampling table 18x1001, from 3.94942 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
@@ -507,7 +507,7 @@ muBrems:  for mu+  XStype:1  SubType=3
 muPairProd:  for mu+  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
-      Sampling table 21x1001 from 0.85 GeV to 100 TeV 
+      Sampling table 21x1001, from 0.85 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
@@ -540,7 +540,7 @@ muBrems:  for mu-  XStype:1  SubType=3
 muPairProd:  for mu-  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
-      Sampling table 21x1001 from 0.85 GeV to 100 TeV 
+      Sampling table 21x1001, from 0.85 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
@@ -573,7 +573,7 @@ hBrems:  for pi+  XStype:1  SubType=3
 hPairProd:  for pi+  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
-      Sampling table 20x1001 from 1.11656 GeV to 100 TeV 
+      Sampling table 20x1001, from 1.11656 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
@@ -606,7 +606,7 @@ hBrems:  for pi-  XStype:1  SubType=3
 hPairProd:  for pi-  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
-      Sampling table 20x1001 from 1.11656 GeV to 100 TeV 
+      Sampling table 20x1001, from 1.11656 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
@@ -617,7 +617,7 @@ CoulombScat:  for pi- XStype:1 SubType=1 BuildTable=1
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 End of tracking primary particle, its final energy is :3.47476 GeV
 Physics stage ends
-End of tracking primary particle, its final energy is :3.47537 GeV
+End of tracking primary particle, its final energy is :3.47513 GeV
 Physics stage ends
 
  ======= The summary of simulation results 'neuron' ========
@@ -626,38 +626,38 @@ Physics stage ends
   Kinetic energy of beam         = 3480 A*MeV
   Particle traversals the neuron = 1 of 2
   Full LET of beam as formulas   = 12.827 keV/um
-  Mean LET of beam as simulation = 10.892 +- 0.31423 keV/um
-  Mean track length of beam      = 399.22 +- 0.0029698 um
+  Mean LET of beam as simulation = 11.42 +- 0.45547 keV/um
+  Mean track length of beam      = 406.78 +- 0.010536 um
   Particle fluence               = 383.66 particles/cm^2
   Fluence dose (full)            = 7.8848e-06 Gy
   Fluence dose ber beam          = 3.9424e-06 Gy
 
  List of generated physical process:
-                eIoni=   3986
-              ionIoni=   2469
-                  msc=   5330
+                eIoni=   4366
+              ionIoni=   2662
+                  msc=    723
 
 
  List of generated particles outside neuron structure:
-             e- :    2997  Emean =  1.7843 keV	( 242.23 eV  --> 434.14 keV) 	Eflow/event = 2.6738 MeV
+             e- :    3245  Emean =  1.6075 keV	( 242.31 eV  --> 424.07 keV) 	Eflow/event = 2.6082 MeV
 
  Number of secondary particles inside neuron structure:
-             e- :      14
+             e- :       1
 
  Number of molecular products inside neuron structure:
     time: 1 ps - 10 ps 
 
  Total energy (MeV) deposition :
-  All volume:   8.6967
-   Bounding slice:  2.5219
-      Neuron:   0.014207
+  All volume:   9.2907
+   Bounding slice:  3.5625
+      Neuron:   0.00036408
         Soma:         0
-    Dendrites:  0.014207
+    Dendrites:  0.00036408
         Axon:         0
 
  Number of compartments traversed by particle tracks :
         Soma:        0 of total: 3
-     Dendrites:       3 of total: 2775
+     Dendrites:       1 of total: 2775
           Axon:       0 of total: 136
  
 
@@ -666,7 +666,7 @@ Physics stage ends
  Dend3DEdep.out, Axon3DEdep.out, Soma3DEdep.out
  Outputs of energy deposition per event written in data file:
  OutputPerEvent.out
- Calculation time                      = 1.12602 s 
+ Calculation time                      = 1.09274 s 
 
 Graphics systems deleted.
 Visualization Manager deleting...

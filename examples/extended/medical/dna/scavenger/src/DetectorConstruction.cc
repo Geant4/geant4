@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file scavenger/src/DetectorConstruction.cc
+/// \file DetectorConstruction.cc
 /// \brief Implementation of the scavenger::DetectorConstruction class
 
 #include "DetectorConstruction.hh"

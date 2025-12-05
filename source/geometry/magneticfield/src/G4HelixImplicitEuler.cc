@@ -33,7 +33,7 @@
 //  Take the output and its derivative. Add the mean of both derivatives
 //  to form the final output
 //
-// Author: W.Wander <wwc@mit.edu>, 03/11/1998
+// Author: W.Wander (MIT), 03.11.1998
 // -------------------------------------------------------------------------
 
 #include "G4HelixImplicitEuler.hh"
@@ -44,8 +44,6 @@ G4HelixImplicitEuler::G4HelixImplicitEuler(G4Mag_EqRhs *EqRhs)
 {
 }
 
-G4HelixImplicitEuler::~G4HelixImplicitEuler() = default;
-  
 void
 G4HelixImplicitEuler::DumbStepper( const G4double yIn[],
                                    G4ThreeVector  Bfld,

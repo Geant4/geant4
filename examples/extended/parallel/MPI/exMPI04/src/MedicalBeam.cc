@@ -23,9 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// @file MedicalBeam.cc
-/// @brief Define beam profile as primary generator
+/// \file MedicalBeam.cc
+/// \brief Implementation of the CLHEP::MedicalBeam class
+///
+/// Define beam profile as primary generator
 
 #include "MedicalBeam.hh"
 

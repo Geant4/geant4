@@ -77,9 +77,9 @@ void Suite::parse( HAPI::Node const &a_node, GUPI_parseSuite a_parseSuite ) {
  * @return                      [in]    The index of the node with keyValue *a_keyValue* in *this*.
  ***********************************************************************************************************/
 
-int Suite::operator[]( std::string const &a_keyValue ) const {
+std::size_t Suite::operator[]( std::string const &a_keyValue ) const {
 
-    std::map<std::string, int>::const_iterator iter = m_map.find( a_keyValue );
+    auto const iter = m_map.find( a_keyValue );
     if( iter == m_map.end( ) ) {
         throw LUPI::Exception( "form '" + a_keyValue + "' not in database." );
     }
@@ -95,7 +95,7 @@ int Suite::operator[]( std::string const &a_keyValue ) const {
 
 void Suite::add( Entry *a_form ) {
 
-    int i1 = 0;
+    std::size_t i1 = 0;
 
     for( Suite::iterator iter = m_entries.begin( ); iter != m_entries.end( ); ++iter, ++i1 ) {
         if( (*iter)->keyValue( ) == a_form->keyValue( ) ) {
@@ -104,7 +104,7 @@ void Suite::add( Entry *a_form ) {
             return;
         }
     }
-    m_map[a_form->keyValue( )] = (int) m_entries.size( );
+    m_map[a_form->keyValue( )] = m_entries.size( );
     m_entries.push_back( a_form );
     a_form->setAncestor( this );
 }

@@ -33,17 +33,14 @@ inline void box_3f_extend_by(float& a_mn_x,float& a_mn_y,float& a_mn_z,
     a_mx_y = a_y;
     a_mx_z = a_z;
   } else {
-    a_mn_x = mn<float>(a_x,a_mn_x);
-    a_mn_y = mn<float>(a_y,a_mn_y);
-    a_mn_z = mn<float>(a_z,a_mn_z);
+    a_mn_x = min_of<float>(a_x,a_mn_x);
+    a_mn_y = min_of<float>(a_y,a_mn_y);
+    a_mn_z = min_of<float>(a_z,a_mn_z);
 
-    a_mx_x = mx<float>(a_x,a_mx_x);
-    a_mx_y = mx<float>(a_y,a_mx_y);
-    a_mx_z = mx<float>(a_z,a_mx_z);
+    a_mx_x = max_of<float>(a_x,a_mx_x);
+    a_mx_y = max_of<float>(a_y,a_mx_y);
+    a_mx_z = max_of<float>(a_z,a_mx_z);
   }
-}
-inline bool box_3f_is_empty(float a_mn_x,float a_mx_x) {
-  return a_mx_x < a_mn_x;
 }
 
 }

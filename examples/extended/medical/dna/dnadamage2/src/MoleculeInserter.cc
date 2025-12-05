@@ -23,14 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
+/// \file MoleculeInserter.cc
+/// \brief Implementation of the MoleculeInserter class
+///
+/// Implementation of the DNA chemical species inserter for IRT
+
 // MoleculeInserter.cc
 //
 // Authors: J. Naoki D. Kondo (UCSF, US)
 //          J. Ramos-Mendez and B. Faddegon (UCSF, US)
 //
-/// \file MoleculeInserter.cc
-/// \brief Implementation of the DNA chemical species inserter for IRT
 
 #include "MoleculeInserter.hh"
 

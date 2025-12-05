@@ -23,10 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 /// \file ExGflasha.cc
-/// \brief Main program of the parameterisations/gflash/gflasha example
-//
+/// \brief Main program of the gflash/gflasha example
 
 // G4 includes
 #include "G4PhysListFactory.hh"

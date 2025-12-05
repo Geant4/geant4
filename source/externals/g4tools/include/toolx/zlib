@@ -52,9 +52,6 @@ inline bool compress_buffer(std::ostream& a_out,
 
   deflateEnd(&stream);
 
-  //a_out << "toolx::compress_buffer : ok "
-  //      << stream.total_out << std::endl;
-
   a_irep = (unsigned)stream.total_out;
 
   return true;
@@ -94,9 +91,6 @@ inline bool decompress_buffer(std::ostream& a_out,
 
   inflateEnd(&stream);
 
-  //a_out << "toolx::decompress_buffer : zlib : ok "
-  //      << stream.total_out << std::endl;
-
   a_irep = (unsigned)stream.total_out;
 
   return true;
@@ -129,17 +123,6 @@ inline int gunzip_check_header(char*& a_buffer) {
     /* Check the gzip magic header */
     for (len = 0; len < 2; len++) {
         c = gunzip_get_byte(a_buffer);
-/*
-	if (c != gz_magic[len]) {
-	    if (len != 0) s->stream.avail_in++, s->stream.next_in--;
-	    if (c != EOF) {
-		s->stream.avail_in++, s->stream.next_in--;
-		s->transparent = 1;
-	    }
-	    s->z_err = s->stream.avail_in != 0 ? Z_OK : Z_STREAM_END;
-	    return;
-	}
-*/
     }
     int method = gunzip_get_byte(a_buffer);
     int flags = gunzip_get_byte(a_buffer);

@@ -23,8 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: ActionInitialization.cc 68058 2013-03-13 14:47:43Z gcosmo $
-//
 /// \file ActionInitialization.cc
 /// \brief Implementation of the ActionInitialization class
 
@@ -35,7 +33,6 @@
 #include "RunAction.hh"
 #include "StackingAction.hh"
 #include "SteppingAction.hh"
-#include "SteppingVerbose.hh"
 #include "TimeStepAction.hh"
 #include "TrackingAction.hh"
 
@@ -47,49 +44,24 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ActionInitialization::ActionInitialization() : G4VUserActionInitialization() {}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-ActionInitialization::~ActionInitialization() {}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void ActionInitialization::BuildForMaster() const
-{
+void ActionInitialization::BuildForMaster() const {
   SetUserAction(new RunAction());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void ActionInitialization::Build() const
-{
-  PrimaryGeneratorAction* primary = new PrimaryGeneratorAction();
+void ActionInitialization::Build() const {
+  const auto primary = new PrimaryGeneratorAction();
   SetUserAction(primary);
-
   SetUserAction(new RunAction());
-
   SetUserAction(new EventAction());
-
-  SetUserAction(new TrackingAction(primary));
-
+  SetUserAction(new TrackingAction());
   SetUserAction(new SteppingAction());
-
   SetUserAction(new StackingAction());
-
   // chemistry part
   if (G4DNAChemistryManager::IsActivated()) {
     G4Scheduler::Instance()->SetUserAction(new TimeStepAction());
-    G4VScheduler::Instance()->SetEndTime(1e6 * picosecond);
-    G4VScheduler::Instance()->SetVerbose(0);
   }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4VSteppingVerbose* ActionInitialization::InitializeSteppingVerbose() const
-{
-  return new SteppingVerbose();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

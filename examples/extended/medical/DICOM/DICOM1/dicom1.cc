@@ -23,10 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file medical/DICOM/DICOM.cc
-/// \brief Main program of the medical/DICOM example
-//
+/// \file dicom1.cc
+/// \brief Main program of the DICOM/DICOM1 example
+
 // The code was written by :
 //        *Louis Archambault louis.archambault@phy.ulaval.ca,
 //      *Luc Beaulieu beaulieu@phy.ulaval.ca

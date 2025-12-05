@@ -110,6 +110,7 @@ namespace G4INCL {
     crossSectionsString = "antiparticles";
     crossSectionsType = AntiparticlesCrossSections;
     hadronizationTime = 0.;
+    srcPairCorrelations = false;
 #ifdef INCL_ROOT_USE
     conciseROOTTree = false;
 #endif
@@ -117,6 +118,8 @@ namespace G4INCL {
     decayTimeThreshold = 1.e-20;
     bias = 1.;
     atrestThreshold = 200.;
+    nbatrestThreshold = 14;
+    dbatrestThreshold = 200.;
   }
 
   std::string Config::summary() {

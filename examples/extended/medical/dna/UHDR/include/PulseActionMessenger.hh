@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file PulseActionMessenger.hh
+/// \brief Definition of the PulseActionMessenger class
+
 // author: hoang tran
 
 #ifndef PULSEACTIONMESSENGER_H

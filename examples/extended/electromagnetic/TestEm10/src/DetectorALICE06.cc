@@ -23,12 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm10/src/DetectorALICE06.cc
+/// \file DetectorALICE06.cc
 /// \brief Implementation of the DetectorALICE06 class
-//
-//
-//
-//
 
 #include "DetectorALICE06.hh"
 

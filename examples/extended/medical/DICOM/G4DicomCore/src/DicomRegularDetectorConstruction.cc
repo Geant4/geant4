@@ -23,10 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 /// \file DicomRegularDetectorConstruction.cc
-/// \brief Implementation of the DicomRegularDetectorConstruction clas
-//
+/// \brief Implementation of the DicomRegularDetectorConstruction class
+
 // History:
 //        Pedro Arce
 //

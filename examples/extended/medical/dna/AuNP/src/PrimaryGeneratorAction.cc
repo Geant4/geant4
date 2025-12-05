@@ -23,13 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file medical/dna/range/src/PrimaryGeneratorAction.cc
+/// \file PrimaryGeneratorAction.cc
 /// \brief Implementation of the PrimaryGeneratorAction class
-//
-// $Id: PrimaryGeneratorAction.cc 73024 2013-08-15 09:11:40Z gcosmo $
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "PrimaryGeneratorAction.hh"
 
@@ -50,34 +45,28 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PrimaryGeneratorAction::PrimaryGeneratorAction()
-  : G4VUserPrimaryGeneratorAction(), G4VStateDependent(), fParticleGun(0), fDetector(0)
-{
-  fDetector = dynamic_cast<const DetectorConstruction*>(
+PrimaryGeneratorAction::PrimaryGeneratorAction() {
+  fDetector = dynamic_cast<const DetectorConstruction *>(
     G4RunManager::GetRunManager()->GetUserDetectorConstruction());
-  G4int n_particle = 1;
-  fParticleGun = new G4ParticleGun(n_particle);
+  fParticleGun = std::make_unique<G4ParticleGun>(1);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PrimaryGeneratorAction::~PrimaryGeneratorAction()
-{
+PrimaryGeneratorAction::~PrimaryGeneratorAction() {
   G4StateManager::GetStateManager()->DeregisterDependent(this);
-  if (fParticleGun) delete fParticleGun;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
-{
-  G4double R = fDetector->GetNPRadius();
+void PrimaryGeneratorAction::GeneratePrimaries(G4Event *anEvent) {
+  const G4double R = fDetector->GetNPRadius();
   G4double Ryz = 9999;
 
   // G4ParticleDefinition *particle = G4Electron::ElectronDefinition();
   // fParticleGun->SetParticleDefinition(particle);
 
-  G4double scale = 1.;
+  constexpr G4double scale = 1.;
 
   G4double xpos = 0, ypos = 0, zpos = 0;
   while (!(Ryz < R)) {
@@ -86,7 +75,9 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     Ryz = std::sqrt(ypos * ypos + zpos * zpos);
   }
   xpos = std::sqrt(R * R - (ypos * ypos + zpos * zpos));
-  fParticleGun->SetParticlePosition(G4ThreeVector(-xpos * scale, ypos * scale, zpos * scale));
+  fParticleGun->SetParticlePosition(G4ThreeVector(-xpos * scale,
+                                                  ypos * scale,
+                                                  zpos * scale));
   fParticleGun->SetParticleMomentumDirection(G4ThreeVector(1, 0, 0));
 
   fParticleGun->GeneratePrimaryVertex(anEvent);
@@ -94,13 +85,11 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4bool PrimaryGeneratorAction::Notify(G4ApplicationState requestedState)
-{
+G4bool PrimaryGeneratorAction::Notify(G4ApplicationState requestedState) {
   if (requestedState == G4State_Idle) {
-    if (fParticleGun != 0) return true;
-    G4double R = fDetector->GetNPRadius();
+    if (fParticleGun != nullptr) return true;
+    const G4double R = fDetector->GetNPRadius();
     G4double Ryz = 9999;
-    ;
 
     // G4ParticleDefinition *particle = G4Electron::ElectronDefinition();
     // fParticleGun->SetParticleDefinition(particle);
@@ -108,10 +97,10 @@ G4bool PrimaryGeneratorAction::Notify(G4ApplicationState requestedState)
     fParticleGun->SetParticleMomentumDirection(G4ThreeVector(-1, 0, 0));
 
     while (!(Ryz < R)) {
-      G4double ypos = (2. * G4UniformRand() - 1.) * R;
-      G4double zpos = (2. * G4UniformRand() - 1.) * R;
+      const G4double ypos = (2. * G4UniformRand() - 1.) * R;
+      const G4double zpos = (2. * G4UniformRand() - 1.) * R;
       Ryz = std::sqrt(ypos * ypos + zpos * zpos);
-      G4double xpos = std::sqrt(R * R - (ypos * ypos + zpos * zpos));
+      const G4double xpos = std::sqrt(R * R - (ypos * ypos + zpos * zpos));
       fParticleGun->SetParticlePosition(G4ThreeVector(-xpos, ypos, zpos));
     }
     // fParticleGun->SetParticlePosition(G4ThreeVector(-Xposition,0,0));

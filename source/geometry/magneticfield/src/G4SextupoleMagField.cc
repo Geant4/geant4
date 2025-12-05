@@ -24,7 +24,8 @@
 // ********************************************************************
 //
 // G4SextupoleMagField implementation
-//   by H. Burkhardt 23/10/2019
+//
+// Author: Helmut Burkhardt (CERN), 23.10.2019
 // -------------------------------------------------------------------
 
 #include "G4SextupoleMagField.hh"
@@ -58,8 +59,6 @@ G4Field* G4SextupoleMagField::Clone() const
 }
 
 // -------------------------------------------------------------------
-
-G4SextupoleMagField::~G4SextupoleMagField() = default;
 
 void G4SextupoleMagField::GetFieldValue( const G4double y[],         // [4]
                                                G4double B[]  ) const // [3]

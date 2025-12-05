@@ -25,10 +25,6 @@
 //
 /// \file HistoManager.cc
 /// \brief Implementation of the HistoManager class
-//
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "HistoManager.hh"
 

@@ -43,8 +43,8 @@
 
 void ActionInitialization::BuildForMaster() const
 {
-  auto man = new AnalysisManager();
-  auto runAction = new RunAction(man);
+  const auto man = new AnalysisManager();
+  const auto runAction = new RunAction(man);
   SetUserAction(runAction);
 }
 
@@ -52,24 +52,24 @@ void ActionInitialization::BuildForMaster() const
 
 void ActionInitialization::Build() const
 {
-  auto man = new AnalysisManager();
-  auto runAction = new RunAction(man);
+  const auto man = new AnalysisManager();
+  const auto runAction = new RunAction(man);
   SetUserAction(runAction);
 
-  auto eventAction = new EventAction(man);
+  const auto eventAction = new EventAction(man);
   SetUserAction(eventAction);
 
-  auto stepAction = new SteppingAction(eventAction);
+  const auto stepAction = new SteppingAction(eventAction);
   SetUserAction(stepAction);
 
-  auto generatorAction = new PrimaryGeneratorAction();
+  const auto generatorAction = new PrimaryGeneratorAction();
   SetUserAction(generatorAction);
 
   //--- CHEMISTRY ----
-  auto stackingAction = new StackingAction();
+  const auto stackingAction = new StackingAction();
   SetUserAction(stackingAction);
 
-  auto timeStepAction = new TimeStepAction(eventAction);
+  const auto timeStepAction = new TimeStepAction(eventAction);
   G4Scheduler::Instance()->SetUserAction(timeStepAction);
 }
 

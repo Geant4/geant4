@@ -88,7 +88,10 @@ G4ViewParameters::G4ViewParameters ():
   fSpecialMeshRendering(false),
   fSpecialMeshRenderingOption(meshAsDefault),
   fTransparencyByDepth(0.),
-  fTransparencyByDepthOption(1)
+  fTransparencyByDepthOption(1),
+  fZoomToCursor(false),
+  fDotsSmooth(true),
+  fDotsSize(1.)
 {
   // Pick up default no of sides from G4Polyhedron.
   // Note that this parameter is variously called:
@@ -454,6 +457,22 @@ G4String G4ViewParameters::DrawingStyleCommands() const
     oss << ' ' << volume.GetName() << ' ' << volume.GetCopyNo();
   }
 
+  oss << "\n/vis/viewer/set/zoomToCursor ";
+  if (fZoomToCursor) {
+    oss << "true";
+  } else {
+    oss << "false";
+  }
+  
+  oss << "\n/vis/viewer/set/dotsSmooth ";
+  if (fDotsSmooth) {
+    oss << "true";
+  } else {
+    oss << "false";
+  }
+
+  oss << "\n/vis/viewer/set/dotsSize " << fDotsSize;
+
   oss << std::endl;
   
   return oss.str();
@@ -785,7 +804,10 @@ void G4ViewParameters::PrintDifferences (const G4ViewParameters& v) const {
       (fPicking              != v.fPicking)              ||
       (fRotationStyle        != v.fRotationStyle)        ||
       (fTransparencyByDepth  != v.fTransparencyByDepth)  ||
-      (fTransparencyByDepthOption != v.fTransparencyByDepthOption)
+      (fTransparencyByDepthOption != v.fTransparencyByDepthOption) ||
+      (fZoomToCursor         != v.fZoomToCursor)         ||
+      (fDotsSmooth           != v.fDotsSmooth)           ||
+      (fDotsSize             != v.fDotsSize)
       )
     G4cout << "Difference in 1st batch." << G4endl;
 
@@ -1089,6 +1111,16 @@ std::ostream& operator << (std::ostream& os, const G4ViewParameters& v) {
   os << "\nTransparency by depth: " << v.fTransparencyByDepth
   << ", option: " << v.fTransparencyByDepthOption;
 
+  os << "\nZoom to cursor requested: ";
+  if (v.fZoomToCursor) os << "true";
+  else os << "false";
+
+  os << "\nSmooth dots requested: ";
+  if (v.fDotsSmooth) os << "true";
+  else os << "false";
+
+  os << "\nDots size: " << v.fDotsSize;
+
   return os;
 }
 
@@ -1137,7 +1169,10 @@ G4bool G4ViewParameters::operator != (const G4ViewParameters& v) const {
       (fSpecialMeshRendering != v.fSpecialMeshRendering) ||
       (fSpecialMeshRenderingOption != v.fSpecialMeshRenderingOption) ||
       (fTransparencyByDepth  != v.fTransparencyByDepth)  ||
-      (fTransparencyByDepthOption != v.fTransparencyByDepthOption)
+      (fTransparencyByDepthOption != v.fTransparencyByDepthOption) ||
+      (fZoomToCursor         != v.fZoomToCursor)         ||
+      (fDotsSmooth           != v.fDotsSmooth)           ||
+      (fDotsSize             != v.fDotsSize)
       )
     return true;
 

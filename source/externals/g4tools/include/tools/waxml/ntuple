@@ -7,7 +7,6 @@
 // A ntuple class to write at the aida tuple format.
 // Each add_row() write a row at the aida tuple format.
 
-#include "../vfind"
 #include "../vmanip"
 #include "../sout"
 #include "../srep"
@@ -431,7 +430,6 @@ public:
         m_writer << m_spaces << "      <column"
                  << " name=" << sout(to_xml((*it)->name()))
                  << " type=" << sout((*it)->aida_type())
-               //<< " default=" << sout(lf->s_def()) //not understood by jas3
                  << "/>" << std::endl;
       }
     }
@@ -505,9 +503,6 @@ protected:
 
 protected:
   std::ostream& m_writer;
-  //std::string m_path;
-  //std::string m_name;
-  //std::string m_title;
   std::string m_spaces;
   std::vector<iobj*> m_cols;
 };

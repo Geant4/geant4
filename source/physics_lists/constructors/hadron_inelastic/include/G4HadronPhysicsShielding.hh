@@ -57,9 +57,7 @@ class G4HadronPhysicsShielding : public G4HadronPhysicsFTFP_BERT
                                       G4double minFTFPEnergy, 
                                       G4double maxBertiniEnergy);
 
-    virtual ~G4HadronPhysicsShielding();
-
-    void ConstructProcess() override;
+    ~G4HadronPhysicsShielding() override = default;
 
     void UseLEND( const G4String& ss="" ){ useLEND_=true; evaluation_=ss; };
     void UnuseLEND(){ useLEND_=false; };
@@ -73,7 +71,7 @@ class G4HadronPhysicsShielding : public G4HadronPhysicsFTFP_BERT
     //Modify the minimum needed
     void Neutron() override;
 
-    G4bool useLEND_;
+    G4bool useLEND_{false};
     G4String evaluation_;
 };
 

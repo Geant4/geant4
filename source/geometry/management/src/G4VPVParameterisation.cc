@@ -26,7 +26,7 @@
 // Default implementations for Parameterisations that do not
 // parameterise solid and/or material.
 //
-// 25.07.96, P.Kent - Initial stub version
+// Author: Paul Kent (CERN), 25.07.1996, P.Kent - Initial stub version
 // --------------------------------------------------------------------
 
 #include "G4VPVParameterisation.hh"

@@ -43,22 +43,12 @@
 #include <cstdlib>
 #include <cmath>
 
-#ifdef TOOLS_MEM
-#include "mem"
-#endif
-
 #include "mnmx"
 
 namespace tools {
 
 class ccontour
 {
-#ifdef TOOLS_MEM
-    static const std::string& s_class() {
-      static const std::string s_v("tools::ccontour");
-      return s_v;
-    }
-#endif
 protected:
         // plots a line from (x1,y1) to (x2,y2)
 	virtual void ExportLine(int iPlane,int x1,int y1,int x2,int y2) = 0;
@@ -67,9 +57,6 @@ public:
 	ccontour();
 	virtual ~ccontour(){
 	  CleanMemory();
-#ifdef TOOLS_MEM
-          mem::decrement(s_class().c_str());
-#endif
         }
 protected: //G.Barrand
         ccontour(const ccontour&){}
@@ -122,33 +109,11 @@ protected: //G.Barrand
 	int GetRowSec() const		{	return m_iRowSec;};
 
 private:
-  // A structure used internally by ccontour
-  /*G.Barrand :
-  struct CFnStr {
-    double m_dFnVal;
-    short m_sLeftLen;
-    short m_sRightLen;
-    short m_sTopLen;
-    short m_sBotLen;
-  };
-  */
   class CFnStr {
-#ifdef TOOLS_MEM
-    static const std::string& s_class() {
-      static const std::string s_v("tools::ccontour::CFnStr");
-      return s_v;
-    }
-#endif
   public:
     CFnStr():m_dFnVal(0),m_sLeftLen(0),m_sRightLen(0),m_sTopLen(0),m_sBotLen(0){
-#ifdef TOOLS_MEM
-      mem::increment(s_class().c_str());
-#endif
     }
     ~CFnStr(){
-#ifdef TOOLS_MEM
-      mem::decrement(s_class().c_str());
-#endif
     }
   protected:
     CFnStr(const CFnStr&){}
@@ -172,9 +137,6 @@ protected:
 	unsigned int m_iRowSec;								// secondary grid, number of rows
         void* m_pFieldFcnData; // G.Barrand : handle a user data pointer.
         double (*m_pFieldFcn)(double x, double y,void*); // pointer to F(x,y) function
-
-	// Protected function
-	//virtual void ExportLine(int iPlane, int x1, int y1, int x2, int y2) = 0; // plots a line from (x1,y1) to (x2,y2)
 
 	// Work functions and variables
 	double m_dDx;
@@ -224,9 +186,6 @@ protected:
 
 inline ccontour::ccontour()
 {
-#ifdef TOOLS_MEM
-      mem::increment(s_class().c_str());
-#endif
 	m_iColFir=m_iRowFir=32;
 	m_iColSec=m_iRowSec=256;
 	m_dDx=m_dDy=0;
@@ -618,8 +577,8 @@ inline void ccontour::set_field_fcn(double (*_pFieldFcn)(double, double,void*),v
 
 inline void ccontour::set_first_grid(int iCol, int iRow)
 {
-	m_iColFir=mx<int>(iCol,2);
-	m_iRowFir=mx<int>(iRow,2);
+	m_iColFir=max_of<int>(iCol,2);
+	m_iRowFir=max_of<int>(iRow,2);
 }
 
 inline void ccontour::set_secondary_grid(int iCol, int iRow)
@@ -627,8 +586,8 @@ inline void ccontour::set_secondary_grid(int iCol, int iRow)
 	// cleaning work matrices if allocated
 	CleanMemory();
 
-	m_iColSec=mx<int>(iCol,2);
-	m_iRowSec=mx<int>(iRow,2);
+	m_iColSec=max_of<int>(iCol,2);
+	m_iRowSec=max_of<int>(iRow,2);
 }
 
 inline void ccontour::set_limits(double pLimits[4])

@@ -218,7 +218,7 @@ void G4VisCommandList::SetNewValue (G4UIcommand*, G4String newValue)
 
   G4VisManager::PrintAvailableVerbosity(G4cout);
   G4cout << G4endl;
-  fpVisManager->PrintAvailableGraphicsSystems(verbosity);
+  fpVisManager->PrintAvailableGraphicsSystems(G4VisManager::all);
   G4cout << G4endl;
   fpVisManager->PrintAvailableModels(verbosity);
   G4cout << G4endl;

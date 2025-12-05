@@ -23,16 +23,19 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-///  \file XSHistoManager.hh
-///  \brief Create a set of profiles for XS study.
+/// \file XSHistoManager.hh
+/// \brief Definition of the XSHistoManager class
+///
+/// Create a set of profiles for XS study.
+
 //
 //  Adapted from hadronic/Hadr00/include/HistoManager.hh
 //  Author: G.Hugo, 06 January 2023
 //
 // ***************************************************************************
 //
-//      XSHistoManager
-//
+///  \class XSHistoManager
+///
 ///  Create a set of profiles for XS study.
 ///
 ///  All profiles are G4H1.
@@ -50,6 +53,7 @@
 ///  It could also be added as an extension of core G4 Analysis Manager.
 //
 // ***************************************************************************
+
 
 #ifndef XS_HISTO_MANAGER_HH
 #define XS_HISTO_MANAGER_HH

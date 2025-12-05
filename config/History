@@ -6,6 +6,28 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 --------------------------------------------------------------------------------
 
+## 2025-11-07 John Allison (config-V11-03-03)
+- Remove all references to HepRep:
+  - config/G4VIS_BUILD.gmk
+  - config/G4VIS_USE.gmk
+
+## 2025-11-03 John Allison (config-V11-03-02)
+- Remove all references to Qt3D:
+  - config/G4VIS_BUILD.gmk
+  - config/G4VIS_USE.gmk
+  - config/sys/Linux-icc.gmk
+  - config/sys/Linux-g++.gmk
+  - config/sys/Darwin-g++.gmk
+  - config/interactivity.gmk
+- Also in packaging:
+  - packaging/rpm/geant4.spec
+- There is a comment in tests/tools/ctest/g4-setup.sh:
+  - # skip system provided qt3: 
+
+## 2025-08-28 Ben Morgan (config-V11-03-01)
+- Replace linking to G4processes library with linking to the two
+  components it has been split into.
+
 ## 2025-05-12 Gabriele Cosmo (config-V11-03-00)
 - Updated system scripts for Qt settings: set Qt6 as default.
 

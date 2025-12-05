@@ -45,13 +45,8 @@ public:
     unsigned int _s,_c;
     if(!a_buffer.read_version(v,_s,_c)) return false;
 
-    //::printf("debug : stl_vector::stream<%s> : version %d, byte count %d\n",
-    //   stype(T()).c_str(),v,c);
-
     unsigned int num;
     if(!a_buffer.read(num)) return false;
-
-    //::printf("debug : stl_vector : %d\n",num);
 
     if(num) {
       T* vec = new T[num];
@@ -71,23 +66,14 @@ public:
   }
 public:
   stl_vector(){
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
   }
   virtual ~stl_vector(){
-#ifdef TOOLS_MEM
-    mem::decrement(s_class().c_str());
-#endif
   }
 public:
   stl_vector(const stl_vector& a_from)
   :iro(a_from)
   ,std::vector<T>(a_from)
   {
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
   }
   stl_vector& operator=(const stl_vector& a_from){
     std::vector<T>::operator=(a_from);
@@ -131,13 +117,10 @@ public:
     unsigned int _s,_c;
     if(!a_buffer.read_version(v,_s,_c)) return false;
 
-    //::printf("debug : stl_vector_vector::stream<%s> : version %d, byte count %d\n",stype(T()).c_str(),v,c);
-
     unsigned int vecn;
     if(!a_buffer.read(vecn)) return false;
 
     std::vector<vec_t>::resize(vecn);
-    //::printf("debug : stl_vector_vector : %d\n",vecn);
     for(unsigned int veci=0;veci<vecn;veci++) {
       vec_t& elem = std::vector<vec_t>::operator[](veci);
 
@@ -146,7 +129,6 @@ public:
         std::vector<vec_t>::clear();
         return false;
       }
-      //::printf("debug : stl_vector_vector :   index %d num %d\n",veci,num);
       if(num) {
         T* vec = new T[num];
         if(!a_buffer.read_fast_array<T>(vec,num)) {
@@ -165,23 +147,14 @@ public:
   }
 public:
   stl_vector_vector(){
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
   }
   virtual ~stl_vector_vector(){
-#ifdef TOOLS_MEM
-    mem::decrement(s_class().c_str());
-#endif
   }
 public:
   stl_vector_vector(const stl_vector_vector& a_from)
   :iro(a_from)
   ,std::vector< std::vector<T> >(a_from)
   {
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
   }
   stl_vector_vector& operator=(const stl_vector_vector& a_from){
     std::vector< std::vector<T> >::operator=(a_from);
@@ -215,20 +188,12 @@ public:
   virtual bool stream(buffer& a_buffer) {
     std::vector<std::string>::clear();
 
-    //uint32 startpos = a_buffer.length();
-
-    //WARNING : not tested yet.
-
     short v;
     unsigned int _s,_c;
     if(!a_buffer.read_version(v,_s,_c)) return false;
 
-    //::printf("debug : stl_vector_string::stream : version %d, byte count %d\n",v,c);
-
     unsigned int num;
     if(!a_buffer.read(num)) return false;
-
-    //::printf("debug : stl_vector_string : %d\n",num);
 
     std::vector<std::string>::resize(num);
     for(unsigned int index=0;index<num;index++) {
@@ -239,29 +204,18 @@ public:
       }
     }
 
-    //a_buffer.set_offset(startpos+_c+sizeof(unsigned int));
-
     return a_buffer.check_byte_count(_s,_c,s_store_class());
   }
 public:
   stl_vector_string(){
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
   }
   virtual ~stl_vector_string(){
-#ifdef TOOLS_MEM
-    mem::decrement(s_class().c_str());
-#endif
   }
 public:
   stl_vector_string(const stl_vector_string& a_from)
   :iro(a_from)
   ,std::vector<std::string>(a_from)
   {
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
   }
   stl_vector_string& operator=(const stl_vector_string& a_from){
     std::vector<std::string>::operator=(a_from);

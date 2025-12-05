@@ -23,13 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file optical/wls/include/WLSTrajectoryPoint.hh
+/// \file WLSTrajectoryPoint.hh
 /// \brief Definition of the WLSTrajectoryPoint class
-//
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #ifndef WLSTrajectoryPoint_h
 #define WLSTrajectoryPoint_h 1

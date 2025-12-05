@@ -88,7 +88,7 @@ public:
   inline void SetMaxZForFermiBreakUp(G4int aZ);
   inline void SetMaxAForFermiBreakUp(G4int anA);
   inline void SetMaxAandZForFermiBreakUp(G4int anA,G4int aZ);
-  inline void SetMinEForMultiFrag(G4double anE);
+  void SetMinEForMultiFrag(G4double anE);
 
   // access methods
   G4VEvaporation* GetEvaporation();
@@ -116,7 +116,7 @@ private:
   inline void SortSecondaryFragment(G4Fragment*);
   
   G4VEvaporation* theEvaporation{nullptr};
-  G4VMultiFragmentation* theMultiFragmentation;
+  G4VMultiFragmentation* theMultiFragmentation{nullptr};
   G4VFermiBreakUp* theFermiModel;
   G4VEvaporationChannel* thePhotonEvaporation;
   G4ParticleTable* thePartTable;
@@ -140,9 +140,7 @@ private:
   G4int  fVerbose{1};
   G4int  fWarnings{0};
 
-  G4double minEForMultiFrag;
   G4double minExcitation;
-  G4double maxExcitation;
   G4double fLambdaMass;
 
   G4bool isInitialised{false};
@@ -173,11 +171,6 @@ inline void G4ExcitationHandler::SetMaxAandZForFermiBreakUp(G4int anA, G4int aZ)
 {
   SetMaxAForFermiBreakUp(anA);
   SetMaxZForFermiBreakUp(aZ);
-}
-
-inline void G4ExcitationHandler::SetMinEForMultiFrag(G4double anE)
-{
-  minEForMultiFrag = anE;
 }
 
 inline void G4ExcitationHandler::SortSecondaryFragment(G4Fragment* frag)

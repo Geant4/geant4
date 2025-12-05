@@ -58,14 +58,13 @@ class G4Navigator;
 class G4AdjointPrimaryGenerator
 {
   public:
+	static  G4AdjointPrimaryGenerator* GetInstance();
 
-    G4AdjointPrimaryGenerator();    
-   ~G4AdjointPrimaryGenerator();
-
-    G4AdjointPrimaryGenerator(const G4AdjointPrimaryGenerator&) = delete;
-    G4AdjointPrimaryGenerator& operator=(const G4AdjointPrimaryGenerator&) = delete;
 
   public:
+
+	G4AdjointPrimaryGenerator();
+	 ~G4AdjointPrimaryGenerator();
     
     void GenerateAdjointPrimaryVertex(G4Event* anEvt,
                                       G4ParticleDefinition* adj_part,
@@ -81,13 +80,13 @@ class G4AdjointPrimaryGenerator
                                                    G4ParticleDefinition* aPDef);
     G4double SampleDistanceAlongBackRayAndComputeWeightCorrection(G4double& weight_corr);
 
-
   private: // attributes
 
     // The class responsible for the random generation of  positions
     // and direction of primaries for adjoint source set on the external
     // surface of a G4 volume
     //
+    //static G4ThreadLocal G4AdjointPrimaryGenerator* theInstance;
     G4AdjointPosOnPhysVolGenerator* theG4AdjointPosOnPhysVolGenerator = nullptr;
     
     G4SingleParticleSource* theSingleParticleSource = nullptr;

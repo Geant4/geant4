@@ -152,7 +152,7 @@ protected:
   unsigned int getWinHeight() const;
   G4bool sizeHasChanged();
   // return true if size has change since last redraw
-  GLdouble getSceneNearWidth();
+  G4double GetSceneNearWidth();
   GLdouble getSceneFarWidth();
   GLdouble getSceneDepth();
   void addExportImageFormat(std::string format);

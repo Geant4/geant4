@@ -25,7 +25,7 @@
 //
 // G4RKG3_Stepper implementation
 //
-// Created: J.Apostolakis, V.Grichine - 30.01.1997
+// Authors: John Apostolakis & Vladimir Grichine (CERN), 30.01.1997
 // -------------------------------------------------------------------
 
 #include "G4RKG3_Stepper.hh"
@@ -36,8 +36,6 @@ G4RKG3_Stepper::G4RKG3_Stepper(G4Mag_EqRhs* EqRhs)
   : G4MagIntegratorStepper(EqRhs,6)
 {
 }
-
-G4RKG3_Stepper::~G4RKG3_Stepper() = default;
 
 void G4RKG3_Stepper::Stepper( const G4double yInput[], // [8]
                               const G4double dydx[],   // [6]

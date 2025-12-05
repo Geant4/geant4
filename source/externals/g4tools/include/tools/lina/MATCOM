@@ -4,49 +4,6 @@
 #ifndef tools_MATCOM
 #define tools_MATCOM
 
-/* NOTE : bof, no big improvement.
-#include <cstring> //memcpy
-inline void vec_copy(double* a_to,const double* a_from,unsigned int a_number) {
-  ::memcpy(a_to,a_from,a_number*sizeof(double));
-}
-
-template <class T>
-inline void vec_copy(T* a_to,const T* a_from,unsigned int a_number) {
-  T* pto = (T*)a_to;
-  T* pfm = (T*)a_from;
-  for(unsigned int i=0;i<a_number;i++,pto++,pfm++) *pto = *pfm;
-}
-*/
-
-/*NOTE : bof, no big improvement.
-#include <Accelerate/Accelerate.h>
-
-inline void vec_add(const float* a_1,const float* a_2,float* a_res,unsigned int a_number) {
-  ::vDSP_vadd(a_1,1,a_2,1,a_res,1,a_number);
-}
-inline void vec_sub(const float* a_1,const float* a_2,float* a_res,unsigned int a_number) {
-  ::vDSP_vsub(a_1,1,a_2,1,a_res,1,a_number);
-}
-*/
-
-/*
-template <class T>
-inline void vec_add(const T* a_1,const T* a_2,T* a_res,unsigned int a_number) {
-  T* p1 = (T*)a_1;
-  T* p2 = (T*)a_2;
-  T* pr = (T*)a_res;
-  for(unsigned int i=0;i<a_number;i++,p1++,p2++,pr++) *pr = *p1+*p2;
-}
-
-template <class T>
-inline void vec_sub(const T* a_1,const T* a_2,T* a_res,unsigned int a_number) {
-  T* p1 = (T*)a_1;
-  T* p2 = (T*)a_2;
-  T* pr = (T*)a_res;
-  for(unsigned int i=0;i<a_number;i++,p1++,p2++,pr++) *pr = *p1-*p2;
-}
-*/
-
 #include "../eqT"
 
 #include <cstddef> //size_t
@@ -247,8 +204,6 @@ public:\
     for(unsigned int i=0;i<dim2();i++,tp++,mp++) {\
              if( ((*tp)==zero()) && ((*mp)==zero())) {\
         continue;\
-      /*} else if( ((*tp)!=zero()) && ((*mp)==zero())) {\
-        return false;*/\
       } else if( ((*tp)==zero()) && ((*mp)!=zero())) {\
         return false;\
       } else {\
@@ -691,8 +646,6 @@ public:\
    {\
    {for(unsigned int i=0;i<rord;i++) {a_tmp_rs[i] = i+1;}}\
     unsigned int r = 0;\
-    /*if(r>=1) a_tmp_rs[r-1] = r-1;*/\
-  \
    {for(unsigned int i=0;i<rord;i++) {a_tmp_cs[i] = i+1;}}\
     bool sg = true; /*r=0+c=0*/\
     for(unsigned int c=0;c<ord;c++) {\
@@ -981,39 +934,17 @@ protected:\
   void _copy(const T a_m[]) {\
     T* tp = (T*)m_vec;T* ap = (T*)a_m;\
     for(unsigned int i=0;i<dim2();i++,tp++,ap++) *tp = *ap;\
-   /*{for(unsigned int i=0;i<dim2();i++) m_vec[i] = a_m[i];}*/\
-   /* memcpy does not work with std::complex<> and mat<symbol,4> see tools/tests/symbolic.cpp */\
-    /*vec_copy(m_vec,a_m,dim2());*/\
   }\
 \
   void _add_mtx(const T a_m[]) {  /* this = this + a_m, */\
     T* tp = (T*)m_vec;T* ap = (T*)a_m;\
     for(unsigned int i=0;i<dim2();i++,tp++,ap++) *tp += *ap;\
-    /*for(unsigned int i=0;i<dim2();i++) m_vec[i] += a_m[i];*/\
-    /*vec_add(m_vec,a_m,m_vec,dim2());*/\
   }\
   void _sub_mtx(const T a_m[]) {  /* this = this - a_m, */\
     T* tp = (T*)m_vec;T* ap = (T*)a_m;\
     for(unsigned int i=0;i<dim2();i++,tp++,ap++) *tp -= *ap;\
-    /*for(unsigned int i=0;i<dim2();i++) m_vec[i] -= a_m[i];*/\
-    /*vec_sub(m_vec,a_m,m_vec,dim2());*/\
   }\
 \
-/*\
-  void _mul_mtx(const T a_m[],T a_tmp[]) {\
-    unsigned int ord = dimension();\
-    for(unsigned int r=0;r<ord;r++) {\
-      for(unsigned int c=0;c<ord;c++) {\
-        T _value = zero();\
-        for(unsigned int i=0;i<ord;i++) {\
-          _value += (*(m_vec+r+i*ord)) * (*(a_m+i+c*ord)); //optimize.\
-        }\
-        *(a_tmp+r+c*ord) = _value;\
-      }\
-    }\
-    _copy(a_tmp);\
-  }\
-*/\
   void _mul_mtx(const T a_m[],T a_tmp[]) { /*OPTIMIZATION*/\
     /* this = this * a_m */\
     typedef T* Tp;\

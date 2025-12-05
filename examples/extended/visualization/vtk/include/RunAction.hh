@@ -23,9 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file B1/include/RunAction.hh
-/// \brief Definition of the B1::RunAction class
+/// \file RunAction.hh
+/// \brief Definition of the VtkVis::RunAction class
 
 #ifndef B1RunAction_h
 #define B1RunAction_h 1

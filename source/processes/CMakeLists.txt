@@ -1,10 +1,4 @@
 # - G4processes category build
-# Add (private) allocation export symbol for the EM category
-add_definitions(-DG4EM_ALLOC_EXPORT)
-
-# Add (private) allocation export symbol for the hadronic category
-add_definitions(-DG4HADRONIC_ALLOC_EXPORT)
-
 foreach(modfile
     biasing/management/sources.cmake
     biasing/generic/sources.cmake
@@ -76,7 +70,9 @@ foreach(modfile
   include(${modfile})
 endforeach()
 
-geant4_add_category(G4processes
+# Processes is a split category due to its size
+# EM is kept in "main" for now as other components depend on it.
+geant4_add_category(G4processes_core
   MODULES
     G4biasing_mgt
     G4biasing_gen
@@ -98,6 +94,18 @@ geant4_add_category(G4processes
     G4emstandard
     G4emutils
     G4xrays
+    G4procman
+    G4optical
+    G4solidstate_phonon
+    G4solidstate_channeling
+    G4parameterisation
+    G4scoring
+    G4transportation )
+# Override (private) allocation export symbol for the EM category
+geant4_set_category_property(G4processes_core PROPERTY DEFINE_SYMBOL G4EM_ALLOC_EXPORT)
+
+geant4_add_category(G4processes_hadronic
+  MODULES
     G4hadronic_xsect
     G4hadronic_mgt
     G4hadronic_abla
@@ -137,11 +145,9 @@ geant4_add_category(G4processes
     G4had_theo_max
     G4hadronic_proc
     G4hadronic_stop
-    G4hadronic_util
-    G4procman
-    G4optical
-    G4solidstate_phonon
-    G4solidstate_channeling
-    G4parameterisation
-    G4scoring
-    G4transportation )
+    G4hadronic_util )
+# Override (private) allocation export symbol for the hadronic category
+geant4_set_category_property(G4processes_hadronic PROPERTY DEFINE_SYMBOL G4HADRONIC_ALLOC_EXPORT)
+
+# For backward compatibility, we need to create an interface target
+geant4_add_category(G4processes INTERFACE G4processes_core G4processes_hadronic)

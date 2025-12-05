@@ -6,6 +6,7 @@
 
 #include <tools/xml/tree>
 #include <tools/file>
+#include <tools/fileis>
 #include <tools/mnmx>
 
 #include <cstdio>
@@ -13,32 +14,10 @@
 
 #include <expat.h>
 
-#ifdef TOOLS_MEM
-#include <tools/mem>
-namespace toolx {
-extern "C" {
-inline void* xml_malloc(size_t a_size){
-  tools::mem::increment(tools::s_malloc().c_str());
-  return ::malloc(a_size);
-}
-inline void* xml_realloc(void* a_ptr,size_t a_size){
-  if(a_ptr==NULL) tools::mem::increment(tools::s_malloc().c_str());
-  return ::realloc(a_ptr,a_size);
-}
-inline void xml_free(void* a_ptr){
-  if(a_ptr!=NULL) tools::mem::decrement(tools::s_malloc().c_str());
-  ::free(a_ptr);
-}
-}}
-#endif
-
 namespace toolx {
 namespace xml {
 
 class loader {
-#ifdef TOOLS_MEM
-  TOOLS_SCLASS(toolx::xml::loader)
-#endif
 public:
   loader(tools::xml::factory& a_factory,
          std::ostream& a_out,bool a_verbose = false)
@@ -54,17 +33,11 @@ public:
   ,m_depth(0)
   ,m_abort(false)
   {
-#ifdef TOOLS_MEM
-    tools::mem::increment(s_class().c_str());
-#endif
   }
 
   virtual ~loader(){
     delete m_compressed_reader;
     clear();
-#ifdef TOOLS_MEM
-    tools::mem::decrement(s_class().c_str());
-#endif
   }
 
 protected:
@@ -81,9 +54,6 @@ protected:
   ,m_depth(0)
   ,m_abort(false)
   {
-#ifdef TOOLS_MEM
-    tools::mem::increment(s_class().c_str());
-#endif
   }
   loader& operator=(const loader& a_from){
     if(&a_from==this) return *this;
@@ -188,25 +158,16 @@ protected:
     m_depth = 0;
     m_abort = false;
 
-#ifdef TOOLS_MEM
-    XML_Memory_Handling_Suite mem;
-    mem.malloc_fcn = xml_malloc;
-    mem.realloc_fcn = xml_realloc;
-    mem.free_fcn = xml_free;
-    XML_Parser _parser = XML_ParserCreate_MM(NULL,&mem,NULL);
-#else
     XML_Parser _parser = XML_ParserCreate(NULL);
-#endif
 
     XML_SetUserData(_parser,a_tag);
     XML_SetElementHandler(_parser,a_start,a_end);
     XML_SetCharacterDataHandler(_parser,(XML_CharacterDataHandler)character_data_handler);
-  //XML_SetProcessingInstructionHandler(_parser,processingInstructionHandler);
     char* buf = (char*)aBuffer;
     size_t l = aSize;
     int done = 0;
     do {
-      size_t len = tools::mn<size_t>(l,BUFSIZ); //BUFSIZ in cstdio
+      size_t len = tools::min_of<size_t>(l,BUFSIZ); //BUFSIZ in cstdio
       done = len < BUFSIZ ? 1 : 0;
       if(XML_Parse(_parser, buf, (int)len, done)==XML_STATUS_ERROR) {
         m_out << "parse_buffer :"
@@ -215,8 +176,8 @@ protected:
             << " at byte index " << (int)XML_GetCurrentByteIndex(_parser)
             << std::endl;
        {XML_Index pos = XML_GetCurrentByteIndex(_parser);
-        XML_Index pmn = tools::mx<XML_Index>(pos-10,0);
-        XML_Index pmx = tools::mn<XML_Index>(pos+10,XML_Index(aSize)-1);
+        XML_Index pmn = tools::max_of<XML_Index>(pos-10,0);
+        XML_Index pmx = tools::min_of<XML_Index>(pos+10,XML_Index(aSize)-1);
         std::string c = " ";
        {for(XML_Index p=pmn;p<=pmx;p++) {c[0] = *(aBuffer+p);m_out << c;}
         m_out << std::endl;}
@@ -290,24 +251,11 @@ protected:
     m_depth = 0;
     m_abort = false;
 
-#ifdef TOOLS_MEM
-    XML_Memory_Handling_Suite mem;
-    mem.malloc_fcn = xml_malloc;
-    mem.realloc_fcn = xml_realloc;
-    mem.free_fcn = xml_free;
-    XML_Parser _parser = XML_ParserCreate_MM(NULL,&mem,NULL);
-#else
     XML_Parser _parser = XML_ParserCreate(NULL);
-#endif
 
     XML_SetUserData(_parser,a_tag);
     XML_SetElementHandler(_parser,a_start,a_end);
     XML_SetCharacterDataHandler(_parser,(XML_CharacterDataHandler)character_data_handler);
-    //XML_SetProcessingInstructionHandler(_parser,
-    //      processingInstructionHandler);
-
-
-    //char buf[1024 * BUFSIZ];
     char buf[BUFSIZ];
     int done = 0;
     do {
@@ -415,19 +363,7 @@ protected:
         return;
       }
 
-      //out << "start_element :" << std::endl;
-      //_tree->print_xml(*(This->m_printer),"debug : ");
-
       if(parent) parent->add_child(_tree);
-
-/*
-      if(This->m_current && !This->m_current->parent()) {
-        This->m_out << "start_element :"
-            << " warning : current tree without parent."
-            << " Potential mem leak."
-            << std::endl;
-      }
-*/
 
       This->m_current = _tree;
       _tree->set_depth(This->m_depth); // Internal only.
@@ -499,14 +435,6 @@ protected:
         bool cont = This->visit_end_element(*tr,keep);
         if(keep) {
           if(parent) {
-/*
-            if(!This->m_current->parent()) {
-              This->m_out << "end_element :"
-                  << " warning : current tree without parent (1)."
-                  << " Potential mem leak."
-                  << std::endl;
-            }
-*/
             This->m_current = parent;
           }
         } else {
@@ -519,15 +447,6 @@ protected:
             delete tr;
           }
 
-/*
-          if(!This->m_current->parent()) {
-            This->m_out << "end_element :"
-                   << " warning : current tree without parent (2)."
-                   << " Potential mem leak."
-                   << std::endl;
-          }
-*/
-
           This->m_current = parent; //parent could be 0 : ok.
         }
 
@@ -537,7 +456,6 @@ protected:
 
         //FIXME : correct m_value ? (Can we pick the one of a sub item ?)
         tr->add_element(std::string(a_name),This->m_atbs,This->m_value);
-        //This->m_value = "";
 
       } else {
 

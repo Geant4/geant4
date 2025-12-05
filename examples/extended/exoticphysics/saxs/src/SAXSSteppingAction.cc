@@ -24,9 +24,7 @@
 // ********************************************************************
 //
 /// \file SAXSSteppingAction.cc
-/// \brief Definition of the SAXSSteppingAction class
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// \brief Implementation of the SAXSSteppingAction class
 
 #ifdef G4MULTITHREADED
 #  include "G4MTRunManager.hh"

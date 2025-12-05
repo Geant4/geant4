@@ -57,7 +57,7 @@ target_link_libraries(DMX ${Geant4_LIBRARIES})
 # relies on these scripts being in the current working directory.
 #
 set(underground_physics_SCRIPTS
-    alpha_1000.mac alpha.mac ambe_spectrum.mac gamma_1000.mac gamma_2000.mac gamma_low.mac gamma.mac initInter.mac neutron.mac stt.mac stt.out stt_pmt_ref.out stt_ref.out wired.mac
+    alpha_1000.mac alpha.mac ambe_spectrum.mac gamma_1000.mac gamma_2000.mac gamma_low.mac gamma.mac initInter.mac neutron.mac stt.mac stt.out stt_pmt_ref.out stt_ref.out
   )
 
 foreach(_script ${underground_physics_SCRIPTS})

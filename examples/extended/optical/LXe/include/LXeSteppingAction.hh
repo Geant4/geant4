@@ -23,10 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file optical/LXe/include/LXeSteppingAction.hh
+/// \file LXeSteppingAction.hh
 /// \brief Definition of the LXeSteppingAction class
-//
+
 #ifndef LXeSteppingAction_h
 #  define LXeSteppingACtion_h 1
 

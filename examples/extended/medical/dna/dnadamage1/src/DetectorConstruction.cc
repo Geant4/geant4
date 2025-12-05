@@ -22,6 +22,9 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
+//
+/// \file DetectorConstruction.cc
+/// \brief Implementation of the DetectorConstruction class
 
 #include "DetectorConstruction.hh"
 
@@ -44,10 +47,6 @@ DetectorConstruction::DetectorConstruction() : G4VUserDetectorConstruction()
   fpDNAParser->ParseFile("VoxelStraight.fab2g4dna");
   fpGun = fpDNAParser->ReleaseMoleculeGun();
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-DetectorConstruction::~DetectorConstruction() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

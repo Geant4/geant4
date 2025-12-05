@@ -94,7 +94,6 @@ public:
       }
 
     } else if(style.value()==marker_circle_filled) {
-  //} else if((style.value()==marker_circle_filled)||(style.value()==marker_dot)) {
       filled = true;
       unsigned int segs = 16;
       float _cos[16];float _sin[16];
@@ -140,7 +139,6 @@ public:
         _add(pts, x-hsx,y+hsy,z);
         _add(pts, x-hsx,y-hsy,z);
       }
-  //} else if(style.value()==marker_square_filled) {
     } else if((style.value()==marker_square_filled)||(style.value()==marker_dot)) {
       filled = true;
       std::vector<float>::const_iterator it;
@@ -560,15 +558,9 @@ public:
   ,style(marker_cross)
   ,size(10)
   {
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
     add_fields();
   }
   virtual ~markers(){
-#ifdef TOOLS_MEM
-    mem::decrement(s_class().c_str());
-#endif
   }
 public:
   markers(const markers& a_from)
@@ -577,9 +569,6 @@ public:
   ,xyzs(a_from.xyzs)
   ,size(a_from.size)
   {
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
     add_fields();
   }
   markers& operator=(const markers& a_from){

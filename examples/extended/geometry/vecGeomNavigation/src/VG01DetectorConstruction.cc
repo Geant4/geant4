@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 /// \file VG01DetectorConstruction.cc
 /// \brief Implementation of the VG01DetectorConstruction class
 
@@ -66,7 +65,8 @@ namespace
 using vecgeom::LogLevel;
 using vecgeom::Provenance;
 
-// This logger adapts VecGeom messages, warnings, and errors to Geant4 io/exceptions.
+// This logger adapts VecGeom messages, warnings, and errors to Geant4
+// io/exceptions.
 void G4VecGeomLogger(Provenance prov, LogLevel lev, std::string str)
 {
   std::ostringstream where;
@@ -80,12 +80,14 @@ void G4VecGeomLogger(Provenance prov, LogLevel lev, std::string str)
   }
 
   if (lev < LogLevel::warning) {
-    G4cout << "VecGeom: " << where.str() << ": " << vecgeom::to_cstring(lev) << ": " << str << std::endl;
+    G4cout << "VecGeom: " << where.str() << ": " << vecgeom::to_cstring(lev)
+           << ": " << str << std::endl;
     return;
   }
 
   G4Exception(where.str().c_str(), "VecGeom",
-              lev == LogLevel::warning ? JustWarning : FatalException, str.c_str());
+              lev == LogLevel::warning ? JustWarning : FatalException,
+              str.c_str());
 }
 }  // namespace
 #endif
@@ -102,7 +104,8 @@ VG01DetectorConstruction::VG01DetectorConstruction()
   fGDMLFileName = "TestNTST.gdml";
   fDetectorMessenger = new VG01DetectorMessenger(this);
 #ifdef VECGEOM_HAS_LOGGER
-  // Have the global VecGeom logger redirect to G4cout rather than the default std:clog
+  // Have the global VecGeom logger redirect to G4cout rather than the
+  // default std:clog
   auto orig_level = vecgeom::logger().level();
   vecgeom::Logger new_logger(&G4VecGeomLogger);
   new_logger.level(orig_level);
@@ -125,7 +128,8 @@ VG01DetectorConstruction::~VG01DetectorConstruction()
 G4VPhysicalVolume* VG01DetectorConstruction::Construct()
 {
   //  parser.SetOverlapCheck(true);
-  G4TransportationManager* trMgr = G4TransportationManager::GetTransportationManager();
+  G4TransportationManager* trMgr =
+    G4TransportationManager::GetTransportationManager();
   assert(trMgr);
 
   fParser.Read(fGDMLFileName, false);
@@ -147,8 +151,8 @@ G4VPhysicalVolume* VG01DetectorConstruction::Construct()
     G4ExceptionDescription ed;
     ed << "World volume not set properly check your setup selection criteria"
        << "or GDML input!" << G4endl;
-    G4Exception("VG01DetectorConstruction::Construct()", "G4VecGeomNavExtExample_0001",
-                FatalException, ed);
+    G4Exception("VG01DetectorConstruction::Construct()",
+                "G4VecGeomNavExtExample_0001", FatalException, ed);
   }
   CreateMagFieldAndIntegrator();
 
@@ -172,10 +176,12 @@ void VG01DetectorConstruction::CreateMagFieldAndIntegrator()
     // Apply a global uniform magnetic field along the Z axis.
     // Note:  only when the magnetic field (pointer) is NOT zero,
     //        does the Geant4 transportion in field get activated.
-    fUniformMagField = new G4UniformMagField(G4ThreeVector(0.0, 0.0, fglobFieldValue));
+    fUniformMagField = new G4UniformMagField(G4ThreeVector(0.0, 0.0,
+                                             fglobFieldValue));
     fFieldMgr->SetDetectorField(fUniformMagField);
     fFieldMgr->CreateChordFinder(fUniformMagField);
-    G4cout << G4endl << " *** SETTING MAGNETIC FIELD in Z direction : fieldValue = "
+    G4cout << G4endl
+           << " *** SETTING MAGNETIC FIELD in Z direction : fieldValue = "
            << fglobFieldValue / tesla << " tesla *** " << G4endl << G4endl;
   }
   else {

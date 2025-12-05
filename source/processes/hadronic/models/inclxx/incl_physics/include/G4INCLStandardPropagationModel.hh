@@ -85,7 +85,8 @@ namespace G4INCL {
       G4double shoot(ParticleSpecies const &projectileSpecies, const G4double kineticEnergy, const G4double impactParameter, const G4double phi);
       G4double shootParticle(ParticleType const t, const G4double kineticEnergy, const G4double impactParameter, const G4double phi);
       G4double shootComposite(ParticleSpecies const &s, const G4double kineticEnergy, const G4double impactParameter, const G4double phi);
-      G4double shootAtrest(ParticleType const t, const G4double kineticEnergy); 
+      G4double shootAtrest(ParticleType const t, const G4double kineticEnergy);  
+      G4double shootCompositeAtrest(ParticleSpecies const &s, const G4double kineticEnergy); 
       
       /**
        * Set the stopping time of the simulation.

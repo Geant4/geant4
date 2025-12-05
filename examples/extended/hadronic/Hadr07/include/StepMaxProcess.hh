@@ -25,10 +25,6 @@
 //
 /// \file StepMaxProcess.hh
 /// \brief Definition of the StepMaxProcess class
-//
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef StepMaxProcess_h
 #define StepMaxProcess_h 1

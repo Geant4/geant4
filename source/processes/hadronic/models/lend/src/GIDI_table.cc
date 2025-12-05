@@ -25,8 +25,8 @@ namespace Table {
 
 Table::Table( Construction::Settings const &a_construction, HAPI::Node const &a_node, SetupInfo &a_setupInfo ) :
         Form( a_node, a_setupInfo, FormType::table ),
-        m_rows( a_node.attribute_as_int( GIDI_rowsChars ) ),
-        m_coluns( a_node.attribute_as_int( GIDI_columnsChars ) ),
+        m_rows( static_cast<std::size_t>( a_node.attribute_as_int( GIDI_rowsChars ) ) ),
+        m_columns( static_cast<std::size_t>( a_node.attribute_as_int( GIDI_columnsChars ) ) ),
         m_storageOrder( a_node.attribute_as_string( GIDI_storageOrderChars ) ),
         m_columnHeaders( a_construction, GIDI_columnHeadersChars, GIDI_indexChars, a_node, a_setupInfo, PoPI::Database( ), PoPI::Database( ), parseColumnHeaders, nullptr ),
         m_data( a_construction, a_node.child( GIDI_dataChars ), a_setupInfo ) {
@@ -56,8 +56,8 @@ void Table::toXMLList( GUPI::WriteInfo &a_writeInfo, std::string const &a_indent
     std::string indent2 = a_writeInfo.incrementalIndent( a_indent );
 
     std::string attributes;
-    attributes += a_writeInfo.addAttribute( GIDI_rowsChars, intToString( m_rows ) );
-    attributes += a_writeInfo.addAttribute( GIDI_columnsChars, intToString( m_coluns ) );
+    attributes += a_writeInfo.addAttribute( GIDI_rowsChars, intToString( static_cast<int>( m_rows ) ) );
+    attributes += a_writeInfo.addAttribute( GIDI_columnsChars, intToString( static_cast<int>( m_columns ) ) );
     if( m_storageOrder != GIDI_rowMajorChars ) attributes += a_writeInfo.addAttribute( GIDI_storageOrderChars, m_storageOrder );
     a_writeInfo.addNodeStarter( a_indent, moniker( ), attributes );
 

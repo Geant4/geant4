@@ -58,11 +58,6 @@ G4LogicalBorderSurface(const G4String& name,
 }
 
 // --------------------------------------------------------------------
-// Default destructor
-//
-G4LogicalBorderSurface::~G4LogicalBorderSurface() = default;
-
-// --------------------------------------------------------------------
 G4bool
 G4LogicalBorderSurface::operator==(const G4LogicalBorderSurface &right) const
 {

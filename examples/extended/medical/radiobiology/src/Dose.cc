@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file radiobiology/src/Dose.cc
+/// \file Dose.cc
 /// \brief Implementation of the RadioBio::Dose class
 
 #include "Dose.hh"

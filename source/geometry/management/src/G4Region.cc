@@ -23,9 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 // 
-// G4Region class implementation
+// G4Region implementation
 //
-// 18.09.02, G.Cosmo - Initial version
+// Author: Gabriele Cosmo (CERN), 18.09.2002
 // --------------------------------------------------------------------
 
 #include "G4Region.hh"

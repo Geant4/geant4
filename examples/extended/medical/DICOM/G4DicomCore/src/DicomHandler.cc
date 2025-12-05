@@ -23,10 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file medical/DICOM/src/DicomHandler.cc
+/// \file DicomHandler.cc
 /// \brief Implementation of the DicomHandler class
-//
+
 // The code was written by :
 //      *Louis Archambault louis.archambault@phy.ulaval.ca,
 //      *Luc Beaulieu beaulieu@phy.ulaval.ca

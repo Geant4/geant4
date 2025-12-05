@@ -23,11 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file biasing/ReverseMC01/src/RMC01DoubleWithWeightHit.cc
+/// \file RMC01DoubleWithWeightHit.cc
 /// \brief Implementation of the RMC01DoubleWithWeightHit class
-//
-//
-//////////////////////////////////////////////////////////////
+
 //      Class Name:        RMC01DoubleWithWeightHit
 //        Author:               L. Desorgher
 //         Organisation:         SpaceIT GmbH
@@ -40,7 +38,7 @@
 
 #include "RMC01DoubleWithWeightHit.hh"
 
-G4Allocator<RMC01DoubleWithWeightHit> RMC01DoubleWithWeightHitAllocator;
+G4ThreadLocal G4Allocator<RMC01DoubleWithWeightHit>* RMC01DoubleWithWeightHitAllocator;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

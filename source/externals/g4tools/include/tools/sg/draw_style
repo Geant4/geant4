@@ -24,16 +24,18 @@ public:
   sf<float> point_size;
   sf<bool> cull_face;
   sf<bool> winding_ccw;
+  sf<bool> point_smooth;
 public:
   virtual const desc_fields& node_desc_fields() const {
     TOOLS_FIELD_DESC_NODE_CLASS(tools::sg::draw_style)
-    static const desc_fields s_v(parent::node_desc_fields(),6, //WARNING : take care of count.
+    static const desc_fields s_v(parent::node_desc_fields(),7, //WARNING : take care of count.
       TOOLS_ARG_FIELD_DESC(style),
       TOOLS_ARG_FIELD_DESC(line_width),
       TOOLS_ARG_FIELD_DESC(line_pattern),
       TOOLS_ARG_FIELD_DESC(point_size),
       TOOLS_ARG_FIELD_DESC(cull_face),
-      TOOLS_ARG_FIELD_DESC(winding_ccw)
+      TOOLS_ARG_FIELD_DESC(winding_ccw),
+      TOOLS_ARG_FIELD_DESC(point_smooth)
     );
     return s_v;
   }
@@ -45,6 +47,7 @@ private:
     add_field(&point_size);
     add_field(&cull_face);
     add_field(&winding_ccw);
+    add_field(&point_smooth);
   }
 public:
   virtual void render(render_action& a_action) {
@@ -52,12 +55,10 @@ public:
     _set_state(state);
 
     if(style.value()==draw_lines) {
-      //no LINE_STIPPLE in GLES.
-      //::glEnable(GL_LINE_STIPPLE); //done in viewer::render()
-      //::glLineStipple(1,line_pattern.value());
       a_action.line_width(state.m_line_width);
     } else if(style.value()==draw_points) {
       a_action.point_size(state.m_point_size);
+      a_action.set_point_smooth(state.m_GL_POINT_SMOOTH);
     } else if(style.value()==draw_filled) {
       a_action.set_cull_face(state.m_GL_CULL_FACE);
       a_action.set_winding(state.m_winding);
@@ -74,6 +75,7 @@ public:
   ,point_size(1)
   ,cull_face(true)
   ,winding_ccw(true)
+  ,point_smooth(false)
   {
     add_fields();
   }
@@ -87,6 +89,7 @@ public:
   ,point_size(a_from.point_size)
   ,cull_face(a_from.cull_face)
   ,winding_ccw(a_from.winding_ccw)
+  ,point_smooth(a_from.point_smooth)
   {
     add_fields();
   }
@@ -99,6 +102,7 @@ public:
     point_size = a_from.point_size;
     cull_face = a_from.cull_face;
     winding_ccw = a_from.winding_ccw;
+    point_smooth = a_from.point_smooth;
 
     return *this;
   }
@@ -110,6 +114,7 @@ protected:
     a_state.m_point_size = point_size;
     a_state.m_GL_CULL_FACE = cull_face;
     a_state.m_winding = winding_ccw.value()?sg::winding_ccw:sg::winding_cw;
+    a_state.m_GL_POINT_SMOOTH = point_smooth;
   }
 };
 

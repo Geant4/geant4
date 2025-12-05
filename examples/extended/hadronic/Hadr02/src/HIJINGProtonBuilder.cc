@@ -23,10 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file hadronic/Hadr02/src/HIJINGProtonBuilder.cc
+/// \file HIJINGProtonBuilder.cc
 /// \brief Implementation of the HIJINGProtonBuilder class
-//
-//
+
 //---------------------------------------------------------------------------
 //
 //

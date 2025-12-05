@@ -107,6 +107,7 @@ namespace G4INCL {
 
       vLambda = 30.;
       vantiProton = 100.;
+      vantiNeutron = 50.;
 
       const G4double asy = (theA - 2.*theZ)/theA;
       // Jose Luis Rodriguez-Sanchez et al., Rapid Communication PRC 98, 021602 (2018)
@@ -114,7 +115,9 @@ namespace G4INCL {
       else if (asy > 0.133) vLambda = 56.549 - 678.73*asy + 4905.35*asy*asy - 9789.1*asy*asy*asy;
          
       const G4double theLambdaSeparationEnergy = ParticleTable::getSeparationEnergy(Lambda,theA,theZ);
+      const G4double theantiLambdaSeparationEnergy = ParticleTable::getSeparationEnergy(antiLambda,theA,theZ);
       const G4double theantiProtonSeparationEnergy = ParticleTable::getSeparationEnergy(antiProton,theA,theZ);
+      const G4double theantiNeutronSeparationEnergy = ParticleTable::getSeparationEnergy(antiNeutron,theA,theZ);
 
       separationEnergy[PiPlus] = theProtonSeparationEnergy - theNeutronSeparationEnergy;
       separationEnergy[PiZero] = 0.;
@@ -130,6 +133,11 @@ namespace G4INCL {
       separationEnergy[SigmaZero]	= theLambdaSeparationEnergy;
       separationEnergy[SigmaMinus]	= theNeutronSeparationEnergy + theLambdaSeparationEnergy - theProtonSeparationEnergy;
 
+      separationEnergy[antiLambda]   = theantiLambdaSeparationEnergy;
+      separationEnergy[antiSigmaPlus] = theantiProtonSeparationEnergy + theantiLambdaSeparationEnergy - theantiNeutronSeparationEnergy;
+      separationEnergy[antiSigmaZero] = theantiLambdaSeparationEnergy;
+      separationEnergy[antiSigmaMinus]  = theantiNeutronSeparationEnergy + theantiLambdaSeparationEnergy - theantiProtonSeparationEnergy;
+
       separationEnergy[KPlus]		= theProtonSeparationEnergy - theLambdaSeparationEnergy;
       separationEnergy[KZero]		= (theNeutronSeparationEnergy - theLambdaSeparationEnergy);
       separationEnergy[KZeroBar]	= (theLambdaSeparationEnergy - theNeutronSeparationEnergy);
@@ -139,6 +147,7 @@ namespace G4INCL {
       separationEnergy[KLong]		= (theNeutronSeparationEnergy - theLambdaSeparationEnergy);
 
       separationEnergy[antiProton]    = theantiProtonSeparationEnergy;
+      separationEnergy[antiNeutron]   = theantiNeutronSeparationEnergy;
 
       fermiEnergy[DeltaPlusPlus] = vDeltaPlusPlus - separationEnergy[DeltaPlusPlus];
       fermiEnergy[DeltaPlus] = vDeltaPlus - separationEnergy[DeltaPlus];
@@ -156,6 +165,7 @@ namespace G4INCL {
       fermiEnergy[SigmaMinus] = vSigmaMinus - separationEnergy[SigmaMinus];
    
       fermiEnergy[antiProton] = vantiProton - separationEnergy[antiProton];
+      fermiEnergy[antiNeutron] = vantiNeutron - separationEnergy[antiNeutron];
 
       INCL_DEBUG("Table of separation energies [MeV] for A=" << theA << ", Z=" << theZ << ":" << '\n'
             << "  proton:  " << separationEnergy[Proton] << '\n'
@@ -255,7 +265,7 @@ namespace G4INCL {
           return vantiProton;
           break;
         case antiNeutron:
-          return vantiProton;
+          return vantiNeutron;
           break;
         case antiLambda:
           return 0.0;
@@ -297,6 +307,10 @@ namespace G4INCL {
       case Composite:
 	INCL_ERROR("No potential computed for particle of type Cluster.");
 	return 0.0;
+  break;
+      case antiComposite:
+  INCL_ERROR("No potential computed for particle of type Cluster");
+  return 0.0;
 	break;
       case UnknownParticle:
 	INCL_ERROR("Trying to compute potential energy for an unknown particle.");

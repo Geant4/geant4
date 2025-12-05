@@ -26,7 +26,6 @@
 // -------------------------------------------------------------------
 //   
 // GEANT4 Class file
-//    
 //
 // File name:   G4UrbanMscModel
 //
@@ -97,7 +96,7 @@ G4UrbanMscModel::G4UrbanMscModel(const G4String& nam)
   tlimitmin     = 10.*tlimitminfix;            
   tgeom         = 1.e50*CLHEP::mm;
   geombig       = tgeom;
-  geommin       = 1.e-3*CLHEP::mm;
+  geommin       = 1.e-6*CLHEP::mm;
   geomlimit     = geombig;
   presafety     = 0.;
 
@@ -546,8 +545,7 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
         } 
 
       //step limit 
-      tlimit = (currentRange > presafety) ?
-        std::max(facrange*rangeinit, facsafety*presafety) : currentRange;
+      tlimit = (currentRange > presafety) ? facrange*rangeinit : currentRange;
 
       //lower limit for tlimit
       tlimit = std::max(tlimit, tlimitmin);

@@ -25,7 +25,7 @@
 //
 // G4VDivisionParameterisation inline methods implementation
 //
-// 09.05.01 - P.Arce, Initial version
+// Author: Pedro Arce (CIEMAT), 09.05.2001 - Initial version
 // --------------------------------------------------------------------
 
 inline
@@ -68,12 +68,6 @@ inline
 void G4VDivisionParameterisation::SetType( const G4String& type )
 {
   ftype = type;
-}
-
-inline
-G4int G4VDivisionParameterisation::VolumeFirstCopyNo() const
-{
-  return theVoluFirstCopyNo;
 }
 
 inline

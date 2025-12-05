@@ -25,7 +25,6 @@
 //
 /// \file MoviesPrimaryGeneratorAction.cc
 /// \brief Implementation of the MoviesPrimaryGeneratorAction class
-//
 
 #include "MoviesPrimaryGeneratorAction.hh"
 

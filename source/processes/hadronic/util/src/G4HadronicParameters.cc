@@ -166,6 +166,7 @@ void G4HadronicParameters::StreamInfo( std::ostream& os ) const {
   os << "Hadron inelastic cross section factor               " << fXSFactorHadronInelastic << "\n";
   os << "Hadron elastic cross section factor                 " << fXSFactorHadronElastic << "\n";
   os << "EM cross section factor                             " << fXSFactorEM << "\n";
+  os << "For XS neutron cross sections use detailed R-data   " << fUseRFilesForXS << "\n";
 
   os << "=======================================================================" << "\n";
   os << "======                 Process Control Parameters              ========" << "\n";
@@ -419,4 +420,9 @@ void G4HadronicParameters::SetBertiniAngularEmissionsAs11_2( G4bool val ) {
 
 void G4HadronicParameters::SetBertiniNucleiModelAs11_2( G4bool val ) {
   if ( ! IsLocked() ) fBertiniNucleiModelAs11_2 = val;
+}
+
+
+void G4HadronicParameters::SetUseRFilesForXS( G4bool val ) {
+  if ( ! IsLocked() ) fUseRFilesForXS = val;
 }

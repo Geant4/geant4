@@ -35,26 +35,54 @@
 //  Take the output and its derivative. Add the mean of both derivatives
 //  to form the final output.
 
-// Author: W.Wander <wwc@mit.edu>, 03/11/1998
+// Author: W.Wander (MIT), 03.11.1998
 // -------------------------------------------------------------------
 #ifndef G4HELIXIMPLICITEULER_HH
 #define G4HELIXIMPLICITEULER_HH
 
 #include "G4MagHelicalStepper.hh"
 
+/**
+ * @brief G4HelixImplicitEuler implements a helix implicit Euler
+ * stepper for magnetic field with 2nd order solver.
+ */
+
 class G4HelixImplicitEuler : public G4MagHelicalStepper
 {
   public:
 
-    G4HelixImplicitEuler(G4Mag_EqRhs *EqRhs);
-   ~G4HelixImplicitEuler() override;
+    /**
+     * Constructor for G4HelixImplicitEuler.
+     *  @param[in] EqRhs Pointer to the provided equation of motion.
+     */
+    G4HelixImplicitEuler(G4Mag_EqRhs* EqRhs);
+
+    /**
+     * Default Destructor.
+     */
+    ~G4HelixImplicitEuler() override = default;
   
+    /**
+     * The stepper function for the integration.
+     *  @param[in] y Starting values array of integration variables.
+     *  @param[in] Bfld Derivatives array.
+     *  @param[in] h The given step size.
+     *  @param[out] yout Integration output.
+     */
     void DumbStepper( const G4double y[],
                             G4ThreeVector Bfld,
-                            G4double      h,
-                            G4double      yout[] ) override;
+                            G4double h,
+                            G4double yout[] ) override;
   
+    /**
+     * Returns the order, 2, of integration.
+     */
     inline G4int IntegratorOrder() const override { return 2; }
+
+    /**
+     * Returns the stepper type-ID, "kHelixImplicitEuler".
+     */
+    inline G4StepperType StepperType() const override { return kHelixImplicitEuler; }
 };
 
 #endif

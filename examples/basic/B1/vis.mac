@@ -21,7 +21,6 @@
 # Other suggestions for G4VIS_DEFAULT_DRIVER (see list of registered
 # graphics systems printed at the start):
 #     DAWNFILE: to create a .prim file suitable for viewing in DAWN.
-#     HepRepFile: to create a .heprep file suitable for viewing in HepRApp.
 #     VRML2FILE: to create a .wrl file suitable for viewing in a VRML viewer.
 #     "TSG_OFFSCREEN 1200x1200": to create an image file with TSG.
 #       See the tsg_offscreen.mac in examples/basic/B5 for more commands

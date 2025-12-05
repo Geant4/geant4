@@ -25,7 +25,7 @@
 //
 // Implementation of G4LogicalCrystalVolume
 //
-// 21-04-16, created by E.Bagli 
+// Author: Enrico Bagli (Ferrara Univ.), 21.04.2016
 // --------------------------------------------------------------------
 
 #include "G4LogicalCrystalVolume.hh"

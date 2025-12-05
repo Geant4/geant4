@@ -109,9 +109,9 @@ class String
     LUPI_HOST_DEVICE size_type capacity() const { return allocated_-1; }
 
     // 8 byte alligned size
-    LUPI_HOST_DEVICE long internalSize() const {
-        long delta = allocated_;
-        long sub = delta % 8;
+    LUPI_HOST_DEVICE size_t internalSize() const {
+        size_t delta = allocated_;
+        size_t sub = delta % 8;
         if (sub != 0) delta += (8-sub);
         return delta * sizeof(char);
     }

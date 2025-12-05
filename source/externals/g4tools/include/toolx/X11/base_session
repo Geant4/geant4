@@ -21,15 +21,6 @@ namespace X11 {
 
 class base_session {
 public:
-  //virtual bool make_current(Window) const {
-  //  if(!m_display) return false;
-  //  return true;
-  //}
-  //virtual bool swap_buffers(Window) const {
-  //  if(!m_display) return false;
-  //  return true;
-  //}
-public:
   base_session(std::ostream& a_out,unsigned int a_monitor = 0)
   :m_out(a_out)
   ,m_monitor(a_monitor)
@@ -74,7 +65,6 @@ public:
     clear_dispatchers();
     if(m_display) ::XCloseDisplay(m_display);
     m_display = 0;
-    //std::cout << "debug : ~base_session" << std::endl;
   }
 protected:
   base_session(const base_session& a_from)
@@ -116,7 +106,6 @@ public:
 
   bool sync() {
     if(!m_display) return false;
-  //::glXWaitX();
     ::XSync(m_display,False);
     while(true) {
       XEvent xevent;
@@ -277,7 +266,6 @@ public:
       unsigned long status;
     } prop;
 
-    //unsigned long mwm_hints_functions = 1L << 0;
     unsigned long mwm_hints_decorations  = 1L << 1;
 
     Atom atom = ::XInternAtom(m_display,"_MOTIF_WM_HINTS",False);
@@ -308,15 +296,34 @@ public:
     event.xclient.data.l[2] = a_2;
     event.xclient.data.l[3] = a_3;
     event.xclient.data.l[4] = a_4;
-    //lock();
     Status stat = ::XSendEvent(m_display,a_win,False,0L,&event);
     ::XFlush(m_display);
-    //unlock();
     return (stat==0?false:true);
   }
 
   bool post_EXIT_STEER(Window a_win) {
     return post(a_win,SESSION_EXIT_STEER_atom());
+  }
+
+  bool post_expose(Window a_win) const {
+    int width,height;
+    if(!window_size(a_win,width,height)) return false;
+    XEvent event;
+    event.type = Expose;
+    event.xexpose.serial = 0;
+    event.xexpose.send_event = True;
+    event.xexpose.display = m_display;
+    event.xexpose.window = a_win;
+    event.xexpose.x = 0;
+    event.xexpose.y = 0;
+    event.xexpose.width = width;
+    event.xexpose.height = height;
+    event.xexpose.count = 0;
+    //locks
+    Status stat = ::XSendEvent(m_display,a_win,False,0L,&event);
+    ::XFlush(m_display);
+    //unlock();
+    return (stat==0?false:true);
   }
 
   //////////////////////////////////////////////////
@@ -333,7 +340,7 @@ public:
   }
 
   void remove_dispatchers_with_window(Window a_win){
-    tools_vforit_npp(dispatcher*,m_dispatchers,it) {
+    for(auto it = m_dispatchers.begin(); it != m_dispatchers.end();) {
       if((*it)->window()==a_win) {
         dispatcher* obj = *it;
         it = m_dispatchers.erase(it);
@@ -345,7 +352,7 @@ public:
   }
 
   bool dispatch(XEvent& a_event) {
-   {tools_vforit_npp(dispatcher*,m_dispatchers,it) {
+   {for(auto it = m_dispatchers.begin(); it != m_dispatchers.end();) {
       if(!(*it)->is_valid()) {
         dispatcher* obj = *it;
         it = m_dispatchers.erase(it);
@@ -369,30 +376,8 @@ protected:
     return (a_event->type == UnmapNotify) && (a_event->xmap.window == (Window)a_arg);
   }
 
-/*
-  void wait_xxx(Window a_window) {
-    if(!m_display) return;
-   {wait_what arg;
-    arg.m_event_type = ConfigureNotify;
-    arg.m_window = a_window;
-    XEvent event;
-    ::XIfEvent(m_display,&event,wait_for,(char*)&arg);
-    dispatch(event);}
-  }
-
-  struct wait_what {
-    int m_event_type;
-    Window m_window;
-  };
-  static Bool wait_for(Display*,XEvent* a_event,char* a_arg){
-    wait_what* arg = (wait_what*)a_arg;
-    return (a_event->type == arg->m_event_type) &&
-           (a_event->xmap.window == arg->m_window);
-  }
-*/
-
   void clear_dispatchers() {
-    tools_vforit_npp(dispatcher*,m_dispatchers,it) {
+    for(auto it = m_dispatchers.begin(); it != m_dispatchers.end();) {
       dispatcher* obj = *it;
       it = m_dispatchers.erase(it);
       delete obj;

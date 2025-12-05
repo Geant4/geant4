@@ -25,7 +25,7 @@
 //
 // G4ExactHelixStepper implementation
 //
-// Author: J.Apostolakis, 28.01.2005.
+// Author: John Apostolakis (CERN), 28.01.2005.
 //         Implementation adapted from ExplicitEuler by W.Wander 
 // -------------------------------------------------------------------
 
@@ -39,8 +39,6 @@ G4ExactHelixStepper::G4ExactHelixStepper(G4Mag_EqRhs* EqRhs)
     fBfieldValue(DBL_MAX, DBL_MAX, DBL_MAX)
 {
 }
-
-G4ExactHelixStepper::~G4ExactHelixStepper() = default; 
 
 // ---------------------------------------------------------------------------
 
@@ -114,11 +112,3 @@ G4ExactHelixStepper::DistChord() const
 
   return distChord;
 }   
-
-// ---------------------------------------------------------------------------
-
-G4int
-G4ExactHelixStepper::IntegratorOrder() const 
-{
-  return 1; 
-}

@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file svalue.cc
+/// \brief Main program of the dna/svalue example
+
 // This example is provided by the Geant4-DNA collaboration
 // Any report or published results obtained using the Geant4-DNA software
 // shall cite the following Geant4-DNA collaboration publications:
@@ -31,8 +34,6 @@
 // Med. Phys. 37 (2010) 4692-4708
 // Int. J. Model. Simul. Sci. Comput. 1 (2010) 157–178
 //
-/// \file medical/dna/svalue/svalue.cc
-/// \brief Main program of the medical/dna/svalue example
 
 #include "ActionInitialization.hh"
 #include "DetectorConstruction.hh"

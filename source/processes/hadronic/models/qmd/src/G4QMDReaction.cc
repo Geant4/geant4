@@ -489,6 +489,9 @@ G4HadFinalState* G4QMDReaction::ApplyYourself( const G4HadProjectile & projectil
 
    } 
 
+// random rotation
+   G4double randAzimuthAngle = CLHEP::twopi*G4UniformRand();
+   G4ThreeVector zAxis(0.,0.,1.);
 
 // Statical Decay Phase
 
@@ -552,6 +555,7 @@ G4HadFinalState* G4QMDReaction::ApplyYourself( const G4HadProjectile & projectil
           G4LorentzVector p4 ( (*itt)->GetMomentum()/GeV , (*itt)->GetTotalEnergy()/GeV );  //in nucleus(*it) rest system
           G4LorentzVector p4_CM = CLHEP::boostOf( p4 , -nucleus_p4CM.findBoostToCM() );  // Back to CM
           G4LorentzVector p4_LAB = CLHEP::boostOf( p4_CM , boostBackToLAB ); // Back to LAB  
+          p4_LAB.rotate(randAzimuthAngle, zAxis); // random rotation
 
 
 //090122
@@ -574,12 +578,14 @@ G4HadFinalState* G4QMDReaction::ApplyYourself( const G4HadProjectile & projectil
              G4LorentzVector p4_a1_Be8 = CLHEP::boostOf ( p4_a1/GeV , -p4.findBoostToCM() );
              G4LorentzVector p4_a1_CM = CLHEP::boostOf ( p4_a1_Be8 , -nucleus_p4CM.findBoostToCM() );
              G4LorentzVector p4_a1_LAB = CLHEP::boostOf ( p4_a1_CM , boostBackToLAB );
+             p4_a1_LAB.rotate(randAzimuthAngle, zAxis); // random rotation
 
              G4LorentzVector p4_a2 ( -p_decay*randomized_direction , G4Alpha::Alpha()->GetPDGMass()+q_decay/2 );  //in Be8 rest system
              
              G4LorentzVector p4_a2_Be8 = CLHEP::boostOf ( p4_a2/GeV , -p4.findBoostToCM() );
              G4LorentzVector p4_a2_CM = CLHEP::boostOf ( p4_a2_Be8 , -nucleus_p4CM.findBoostToCM() );
              G4LorentzVector p4_a2_LAB = CLHEP::boostOf ( p4_a2_CM , boostBackToLAB );
+             p4_a2_LAB.rotate(randAzimuthAngle, zAxis); // random rotation
              
              G4DynamicParticle* dp1 = new G4DynamicParticle( G4Alpha::Alpha() , p4_a1_LAB*GeV );  
              G4DynamicParticle* dp2 = new G4DynamicParticle( G4Alpha::Alpha() , p4_a2_LAB*GeV );  
@@ -622,6 +628,7 @@ G4HadFinalState* G4QMDReaction::ApplyYourself( const G4HadProjectile & projectil
              //G4cout << "pd in notBreak loop : " << pd->GetParticleName() << G4endl;
          G4LorentzVector p4_CM = nucleus_p4CM;
          G4LorentzVector p4_LAB = CLHEP::boostOf( p4_CM , boostBackToLAB ); // Back to LAB  
+         p4_LAB.rotate(randAzimuthAngle, zAxis); // random rotation
          G4DynamicParticle* dp = new G4DynamicParticle( pd , p4_LAB*GeV );  
          theParticleChange.AddSecondary( dp ); 
 
@@ -647,6 +654,7 @@ G4HadFinalState* G4QMDReaction::ApplyYourself( const G4HadProjectile & projectil
       const G4ParticleDefinition* pd = system->GetParticipant( i )->GetDefinition();
       G4LorentzVector p4_CM = system->GetParticipant( i )->Get4Momentum();
       G4LorentzVector p4_LAB = CLHEP::boostOf( p4_CM , boostBackToLAB );
+      p4_LAB.rotate(randAzimuthAngle, zAxis); // random rotation
       G4DynamicParticle* dp = new G4DynamicParticle( pd , p4_LAB*GeV );  
       theParticleChange.AddSecondary( dp ); 
       //G4cout << "In the last theParticleChange loop : " << pd->GetParticleName() << G4endl;

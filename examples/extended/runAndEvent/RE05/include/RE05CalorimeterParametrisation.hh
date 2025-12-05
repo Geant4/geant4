@@ -23,10 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file RE05/include/RE05CalorimeterParametrisation.hh
+/// \file RE05CalorimeterParametrisation.hh
 /// \brief Definition of the RE05CalorimeterParametrisation class
-//
 
 #ifndef RE05CalorimeterParametrisation_H
 #define RE05CalorimeterParametrisation_H 1

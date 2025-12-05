@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file Par04DetectorConstruction.cc
+/// \brief Implementation of the Par04DetectorConstruction class
+
 #include "Par04DetectorConstruction.hh"
 
 #include "Par04DefineMeshModel.hh"  // for Par04DefineMeshModel

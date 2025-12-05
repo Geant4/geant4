@@ -26,7 +26,7 @@ inline bool write_std_map_ss(hid_t a_loc,const std::string& a_name,const std::ma
   if(!write_scalar<tools::uint64>(a_loc,a_name+"_size",a_map.size())) return false;
   unsigned int count = 0; //uint for num2s.
   std::string scount;
-  tools_mforcit(std::string,std::string,a_map,it) {
+  for(auto it = a_map.cbegin(); it != a_map.cend(); ++it) {
     tools::num2s(count,scount);
     if(!write_string(a_loc,a_name+"_elem_"+scount+"_first",(*it).first)) return false;
     if(!write_string(a_loc,a_name+"_elem_"+scount+"_secon",(*it).second)) return false;
@@ -207,8 +207,6 @@ inline bool read_hdata(hid_t a_loc,histo_data_t& a_hdata) {
 template <class HISTO>
 inline bool read_histo(std::ostream& a_out,hid_t a_loc,const std::string& a_name,HISTO*& a_histo,bool a_verb_class = true) {
   a_histo = 0;
-
-  //if(::H5Gget_objinfo(a_loc,a_name.c_str(),0,NULL)<0) {return false;}
 
   hid_t histo = toolx_H5Gopen(a_loc,a_name.c_str());
   if(histo<0) {

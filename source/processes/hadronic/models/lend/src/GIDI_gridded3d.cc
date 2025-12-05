@@ -46,7 +46,7 @@ Gridded3d::~Gridded3d( ) {
  * @param a_maxTNSL_index           [in]    All elements up to *a_maxTNSL_index* exclusive are zero-ed.
  ***********************************************************************************************************/
 
-void Gridded3d::modifiedMultiGroupElasticForTNSL( LUPI_maybeUnused int a_maxTNSL_index ) {
+void Gridded3d::modifiedMultiGroupElasticForTNSL( LUPI_maybeUnused std::size_t a_maxTNSL_index ) {
 
 }
 

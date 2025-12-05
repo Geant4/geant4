@@ -79,7 +79,7 @@ void appendXMLEnd( std::vector<std::string> &a_XMLList, std::string const &a_lab
 std::string specialParticleID( SpecialParticleID_mode a_mode, std::string const &a_id ) {
 
     static std::string firstChars( "pdthaH" );
-    int iid = 0;
+    std::size_t iid = 0;
 
     if( a_id.size( ) > 3 ) return( a_id );
 
@@ -180,7 +180,7 @@ int particleZ( Base const &a_particle, bool a_isNeutronProtonANucleon ) {
  * @return                                      The Z returned by **particleZ( Base const &, bool )**.
  ***********************************************************************************************************/
 
-int particleZ( Database const &a_pops, int a_index, bool a_isNeutronProtonANucleon ) {
+int particleZ( Database const &a_pops, std::size_t a_index, bool a_isNeutronProtonANucleon ) {
 
     int Z = 0;
     Base const &base( a_pops.get<Base>( a_pops.final( a_index ) ) );
@@ -256,7 +256,7 @@ int particleA( Base const &a_particle, bool a_isNeutronProtonANucleon ) {
  * @return                                      The A returned by **particleA( Base const &, bool )**.
  ***********************************************************************************************************/
 
-int particleA( Database const &a_pops, int a_index, bool a_isNeutronProtonANucleon ) {
+int particleA( Database const &a_pops, std::size_t a_index, bool a_isNeutronProtonANucleon ) {
 
     Base const &particle( a_pops.get<Base>( a_pops.final( a_index ) ) );
 
@@ -314,7 +314,7 @@ int particleZA( Base const &a_particle, bool a_isNeutronProtonANucleon ) {
  * @return                                      The ZA returned by **particleZA( Base const &, bool )**.
  ***********************************************************************************************************/
 
-int particleZA( Database const &a_pops, int a_index, bool a_isNeutronProtonANucleon ) {
+int particleZA( Database const &a_pops, std::size_t a_index, bool a_isNeutronProtonANucleon ) {
 
     Base const &particle( a_pops.get<Base>( a_pops.final( a_index ) ) );
     
@@ -367,7 +367,7 @@ int particleMetaStableIndex( Base const &a_particle ) {
  * @return                                      The meta-stable index of the particle
  ***********************************************************************************************************/
 
-int particleMetaStableIndex( Database const &a_pops, int a_index ) {
+int particleMetaStableIndex( Database const &a_pops, std::size_t a_index ) {
 
     Base const &object( a_pops.get<Base>( a_pops.final( a_index ) ) );
 

@@ -23,19 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//------------------------------------------------
-// The Geant4 Virtual Monte Carlo package
-// Copyright (C) 2007 - 2014 Ivana Hrivnacova
-// All rights reserved.
+// Implementation of the G4FieldSetupMessenger class
 //
-// For the licensing terms see geant4_vmc/LICENSE.
-// Contact: root-vmc@cern.ch
-//-------------------------------------------------
-
-/// \file G4FieldSetupMessenger.cc
-/// \brief Implementation of the G4FieldSetupMessenger class
-///
-/// \author I. Hrivnacova; IJCLab, Orsay
+// Author: Ivana Hrivnacova (IJCLab, Orsay), 2024
+// --------------------------------------------------------------------
 
 #include "G4FieldSetupMessenger.hh"
 #include "G4FieldSetup.hh"
@@ -52,7 +43,8 @@ G4FieldSetupMessenger::G4FieldSetupMessenger(G4FieldSetup* fieldSetup)
   // Standard constructor
 
   G4String directoryName = "/field/";
-  if (fFieldSetup->GetLogicalVolume() != nullptr) {
+  if (fFieldSetup->GetLogicalVolume() != nullptr)
+  {
     directoryName.append(fFieldSetup->GetLogicalVolume()->GetName());
     directoryName.append("/");
   }
@@ -61,8 +53,7 @@ G4FieldSetupMessenger::G4FieldSetupMessenger(G4FieldSetup* fieldSetup)
   commandName.append("update");
   fUpdateCmd = new G4UIcmdWithoutParameter(commandName, this);
   fUpdateCmd->SetGuidance("Update field setup.");
-  fUpdateCmd->AvailableForStates(
-    G4State_PreInit, G4State_Init, G4State_Idle);
+  fUpdateCmd->AvailableForStates(G4State_PreInit, G4State_Init, G4State_Idle);
 }
 
 //_____________________________________________________________________________
@@ -83,7 +74,8 @@ void G4FieldSetupMessenger::SetNewValue(
 {
   // Apply command to the associated object.
 
-  if (command == fUpdateCmd) {
+  if (command == fUpdateCmd)
+  {
     G4cout << "Execute update command" << G4endl;
     fFieldSetup->Update();
     return;

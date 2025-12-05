@@ -23,12 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file OpNovice/include/OpNoviceStackingAction.hh
+/// \file OpNoviceStackingAction.hh
 /// \brief Definition of the OpNoviceStackingAction class
-//
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef OpNoviceStackingAction_h
 #define OpNoviceStackingAction_h 1

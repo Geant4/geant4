@@ -8,7 +8,19 @@
 #include "window"
 #include "glarea"
 
+#include <GL/gl.h>
+
+#include "gl_functions"
+
+#include "../sg/GL_action"
 #include "../sg/GL_viewer"
+
+namespace toolx {
+namespace sg {
+  using GL_action = GL_action_T<Windows::gl_functions>;
+  using GL_manager = GL_manager_T<Windows::gl_functions>;
+  using GL_viewer = GL_viewer_T<GL_manager,GL_action>;
+}}
 
 // disable the warning about the usage of "this" in the constructor.
 #pragma warning(disable:4355)
@@ -19,8 +31,6 @@ namespace Windows {
 class sg_viewer : public window, public sg::GL_viewer  {
   typedef window parent_window;
   typedef sg::GL_viewer parent_viewer;
-public:  
-  virtual void close() {}
 public:
   sg_viewer(session& a_session,
             int a_x = 0,int a_y = 0,
@@ -56,7 +66,12 @@ public:
     return true;
   }
 
-  void win_render() {m_glarea.wm_paint();}
+  void win_render() {
+    m_glarea.wm_paint();
+    m_session.sync();
+  }
+
+  void emit_win_render() {m_glarea.post_WM_PAINT();}
 
   bool window_size(unsigned int& a_w,unsigned int& a_h) {
     if(!m_glarea.hwnd()) {a_w = 0;a_h = 0;return false;}
@@ -70,7 +85,7 @@ public:
     a_w = parent_viewer::width();
     a_h = parent_viewer::height();
   }
-  
+
 public:
   void set_device_interactor(tools::sg::device_interactor* a_interactor) {  //we do not have ownership.
     m_glarea.set_device_interactor(a_interactor);
@@ -97,6 +112,5 @@ protected:
 };
 
 }}
-
 
 #endif

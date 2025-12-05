@@ -25,8 +25,8 @@
 //
 // G4TsitourasRK45 implementation
 //
-// Author: Somnath Banerjee, Google Summer of Code 2015, 11.06.2015
-// Supervision: John Apostolakis, CERN
+// Author: Somnath Banerjee (CERN, Google Summer of Code 2015), 11.06.2015
+// Supervision: John Apostolakis (CERN)
 // -------------------------------------------------------------------
 
 #include "G4TsitourasRK45.hh"

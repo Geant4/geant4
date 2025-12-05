@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file B4/B4c/include/CalorimeterSD.hh
+/// \file CalorimeterSD.hh
 /// \brief Definition of the B4c::CalorimeterSD class
 
 #ifndef B4cCalorimeterSD_h

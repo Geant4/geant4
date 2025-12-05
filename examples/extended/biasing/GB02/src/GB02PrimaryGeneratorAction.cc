@@ -23,9 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file GB02/src/GB02PrimaryGeneratorAction.cc
+/// \file GB02PrimaryGeneratorAction.cc
 /// \brief Implementation of the GB02PrimaryGeneratorAction class
-//
+
 #include "GB02PrimaryGeneratorAction.hh"
 
 #include "G4Event.hh"

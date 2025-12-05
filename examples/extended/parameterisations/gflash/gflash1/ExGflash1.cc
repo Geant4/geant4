@@ -23,10 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 /// \file ExGflash1.cc
-/// \brief Main program of the parameterisations/gflash/gflash1 example
-//
+/// \brief Main program of the gflash/gflash1 example
+
 // Created by Joanna Weng 26.11.2004
 
 // G4 includes

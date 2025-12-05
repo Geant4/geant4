@@ -23,11 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file optical/LXe/src/LXeEventMessenger.cc
+/// \file LXeEventMessenger.cc
 /// \brief Implementation of the LXeEventMessenger class
-//
-//
+
 #include "LXeEventMessenger.hh"
 
 #include "LXeEventAction.hh"

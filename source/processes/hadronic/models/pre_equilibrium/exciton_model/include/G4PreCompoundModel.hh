@@ -59,12 +59,13 @@ class G4PreCompoundEmission;
 class G4VPreCompoundTransitions;
 class G4NuclearLevelData;
 class G4ParticleDefinition;
+class G4VMultiFragmentation;
 
 class G4PreCompoundModel : public G4VPreCompoundModel
 { 
 public:
 
-  explicit G4PreCompoundModel(G4ExcitationHandler* ptr = nullptr); 
+  explicit G4PreCompoundModel(G4ExcitationHandler* ptr = nullptr);
 
   ~G4PreCompoundModel() override;
 
@@ -80,28 +81,32 @@ public:
   void ModelDescription(std::ostream& outFile) const override;
   void DeExciteModelDescription(std::ostream& outFile) const override;
 
-  G4PreCompoundModel(const G4PreCompoundModel &) = delete;
+  G4PreCompoundModel(const G4PreCompoundModel&) = delete;
   const G4PreCompoundModel& operator=(const G4PreCompoundModel &right) = delete;
   G4bool operator==(const G4PreCompoundModel &right) const = delete;
   G4bool operator!=(const G4PreCompoundModel &right) const = delete;
 
 private:  
 
+  void DoIt(G4ReactionProductVector* result, G4Fragment&);
+
   inline 
-  void PerformEquilibriumEmission(const G4Fragment & aFragment, 
-				  G4ReactionProductVector * result) const;
+  void PerformEquilibriumEmission(const G4Fragment& aFragment, 
+				  G4ReactionProductVector* result) const;
 
   G4PreCompoundInterface* fInterface{nullptr};
   G4PreCompoundEmission* theEmission{nullptr};
   G4VPreCompoundTransitions* theTransition{nullptr};
   G4NuclearLevelData* fNuclData{nullptr};
+  G4VMultiFragmentation* theMultiFrag{nullptr};
 
   const G4ParticleDefinition* proton;
   const G4ParticleDefinition* neutron;
 
   G4double fLowLimitExc{0.0};
-  G4double fHighLimitExc{DBL_MAX};
+  G4double fHighLimitExc{0.0};
   G4double fFermiBreakUpExc{DBL_MAX};
+  G4double fMinEForMultiFrag{DBL_MAX};
 
   G4bool useSCO{false};
   G4bool isInitialised{false};

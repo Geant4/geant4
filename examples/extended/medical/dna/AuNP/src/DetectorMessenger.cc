@@ -23,13 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file medical/dna/AuNP/src/DetectorMessenger.cc
+/// \file DetectorMessenger.cc
 /// \brief Implementation of the DetectorMessenger class
-//
-// $Id: DetectorMessenger.cc 78723 2014-01-20 10:32:17Z gcosmo $
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "DetectorMessenger.hh"
 
@@ -42,45 +37,35 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-DetectorMessenger::DetectorMessenger(DetectorConstruction* Det)
-  : G4UImessenger(),
-    fDetector(Det),
-    fTestemDir(0),
-    fDetDir(0),
-    fNPMaterCmd(0),
-    fNReplicaRCmd(0),
-    fNReplicaAzmCmd(0),
-    fAbsRadiusCmd(0),
-    fNPRadiusCmd(0),
-    fTrackingCutCmd(0)
-{
-  fTestemDir = new G4UIdirectory("/AuNP/");
+DetectorMessenger::DetectorMessenger(DetectorConstruction *Det)
+  : G4UImessenger(), fDetector(Det) {
+  fTestemDir = std::make_unique<G4UIdirectory>("/AuNP/");
   fTestemDir->SetGuidance("Detector control.");
 
-  fDetDir = new G4UIdirectory("/AuNP/det/");
+  fDetDir = std::make_unique<G4UIdirectory>("/AuNP/det/");
   fDetDir->SetGuidance("Detector construction commands");
 
-  fNPMaterCmd = new G4UIcmdWithAString("/AuNP/det/setNPMat", this);
+  fNPMaterCmd = std::make_unique<G4UIcmdWithAString>("/AuNP/det/setNPMat", this);
   fNPMaterCmd->SetGuidance("Select material of the sphere.");
   fNPMaterCmd->SetParameterName("choice", false);
   fNPMaterCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
   fNPMaterCmd->SetToBeBroadcasted(false);
 
-  fNReplicaRCmd = new G4UIcmdWithAnInteger("/AuNP/det/setNReplicaR", this);
+  fNReplicaRCmd = std::make_unique<G4UIcmdWithAnInteger>("/AuNP/det/setNReplicaR", this);
   fNReplicaRCmd->SetGuidance("Set Number of Replica in R direction");
   fNReplicaRCmd->SetParameterName("NR", false);
   fNReplicaRCmd->SetRange("NR>0");
   fNReplicaRCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
   fNReplicaRCmd->SetToBeBroadcasted(false);
 
-  fNReplicaAzmCmd = new G4UIcmdWithAnInteger("/AuNP/det/setNReplicaAzm", this);
+  fNReplicaAzmCmd = std::make_unique<G4UIcmdWithAnInteger>("/AuNP/det/setNReplicaAzm", this);
   fNReplicaAzmCmd->SetGuidance("Set Number of Replica in Azimuthal direction");
   fNReplicaAzmCmd->SetParameterName("NAzm", false);
   fNReplicaAzmCmd->SetRange("NAzm>0");
   fNReplicaAzmCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
   fNReplicaAzmCmd->SetToBeBroadcasted(false);
 
-  fAbsRadiusCmd = new G4UIcmdWithADoubleAndUnit("/AuNP/det/setAbsRadius", this);
+  fAbsRadiusCmd = std::make_unique<G4UIcmdWithADoubleAndUnit>("/AuNP/det/setAbsRadius", this);
   fAbsRadiusCmd->SetGuidance("Set radius of the absorber");
   fAbsRadiusCmd->SetParameterName("Radius", false);
   fAbsRadiusCmd->SetRange("Radius>0.");
@@ -88,7 +73,7 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction* Det)
   fAbsRadiusCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
   fAbsRadiusCmd->SetToBeBroadcasted(false);
 
-  fNPRadiusCmd = new G4UIcmdWithADoubleAndUnit("/AuNP/det/setNPRadius", this);
+  fNPRadiusCmd = std::make_unique<G4UIcmdWithADoubleAndUnit>("/AuNP/det/setNPRadius", this);
   fNPRadiusCmd->SetGuidance("Set radius of the nano particle");
   fNPRadiusCmd->SetParameterName("Radius", false);
   fNPRadiusCmd->SetRange("Radius>0.");
@@ -96,7 +81,7 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction* Det)
   fNPRadiusCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
   fNPRadiusCmd->SetToBeBroadcasted(false);
 
-  fTrackingCutCmd = new G4UIcmdWithADoubleAndUnit("/AuNP/det/setTrackingCut", this);
+  fTrackingCutCmd = std::make_unique<G4UIcmdWithADoubleAndUnit>("/AuNP/det/setTrackingCut", this);
   fTrackingCutCmd->SetGuidance("Set tracking cut in the absorber");
   fTrackingCutCmd->SetParameterName("Cut", false);
   fTrackingCutCmd->SetRange("Cut>0.");
@@ -107,43 +92,32 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction* Det)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-DetectorMessenger::~DetectorMessenger()
-{
-  delete fNPMaterCmd;
-  delete fNReplicaRCmd;
-  delete fNReplicaAzmCmd;
-  delete fAbsRadiusCmd;
-  delete fNPRadiusCmd;
-  delete fTrackingCutCmd;
-  delete fDetDir;
-  delete fTestemDir;
-}
+DetectorMessenger::~DetectorMessenger() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void DetectorMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
-{
-  if (command == fNPMaterCmd) {
+void DetectorMessenger::SetNewValue(G4UIcommand *command, G4String newValue) {
+  if (command == fNPMaterCmd.get()) {
     fDetector->SetNPMaterial(newValue);
   }
 
-  if (command == fNReplicaRCmd) {
+  if (command == fNReplicaRCmd.get()) {
     fDetector->SetNReplicaR(fNReplicaRCmd->GetNewIntValue(newValue));
   }
 
-  if (command == fNReplicaAzmCmd) {
+  if (command == fNReplicaAzmCmd.get()) {
     fDetector->SetNReplicaAzm(fNReplicaAzmCmd->GetNewIntValue(newValue));
   }
 
-  if (command == fAbsRadiusCmd) {
+  if (command == fAbsRadiusCmd.get()) {
     fDetector->SetAbsRadius(fAbsRadiusCmd->GetNewDoubleValue(newValue));
   }
 
-  if (command == fNPRadiusCmd) {
+  if (command == fNPRadiusCmd.get()) {
     fDetector->SetNPRadius(fNPRadiusCmd->GetNewDoubleValue(newValue));
   }
 
-  if (command == fTrackingCutCmd) {
+  if (command == fTrackingCutCmd.get()) {
     fDetector->SetTrackingCut(fTrackingCutCmd->GetNewDoubleValue(newValue));
   }
 }

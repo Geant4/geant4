@@ -69,11 +69,6 @@ G4VExternalPhysicalVolume::G4VExternalPhysicalVolume( __void__& a )
 }
 
 // ----------------------------------------------------------------------
-// Destructor
-//
-G4VExternalPhysicalVolume::~G4VExternalPhysicalVolume() = default;
-
-// ----------------------------------------------------------------------
 // IsMany
 //
 G4bool G4VExternalPhysicalVolume::IsMany() const

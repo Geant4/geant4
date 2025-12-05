@@ -27,10 +27,10 @@
 //
 // Class description:
 //
-//   An abstract class inherited from G4VSolid for Constructed Solids.
-//   Used primarily to structure inheritance tree.
+// An abstract class inherited from G4VSolid for Constructed Solids.
+// Used primarily to structure inheritance tree.
 
-// 27.03.98 J.Apostolakis (CERN) - Created first version.
+// Author: John Apostolakis (CERN), 27.03.1998 - Created first version
 // --------------------------------------------------------------------
 
 #ifndef G4CSGSOLID_HH
@@ -38,30 +38,54 @@
 
 #include "G4VSolid.hh"
 
+/**
+ * @brief G4CSGSolid is an abstract class inherited from G4VSolid for
+ * Constructed Solids. Used primarily to structure inheritance tree.
+ */
+
 class G4CSGSolid : public G4VSolid
 {
   public:
 
+    /**
+     * Constructor with a name.
+     */
     G4CSGSolid(const G4String& pName);
+
+    /**
+     * Destructor.
+     */
     ~G4CSGSolid() override;
 
+    /**
+     * Streams the object contents to an output stream.
+     */
     std::ostream& StreamInfo(std::ostream& os) const override;
 
+    /**
+     * Returns a pointer to the generated polyhedron for visualisation.
+     */
     G4Polyhedron* GetPolyhedron () const override;
 
+    /**
+     * Fake default constructor for usage restricted to direct object
+     * persistency for clients requiring preallocation of memory for
+     * persistifiable objects.
+     */
     G4CSGSolid(__void__&);
-      // Fake default constructor for usage restricted to direct object
-      // persistency for clients requiring preallocation of memory for
-      // persistifiable objects.
 
+    /**
+     * Copy constructor and assignment operator.
+     */
     G4CSGSolid(const G4CSGSolid& rhs);
     G4CSGSolid& operator=(const G4CSGSolid& rhs); 
-      // Copy constructor and assignment operator.
 
   protected:
 
+    /**
+     * Utility function for subclasses to generate proper circular areas.
+     */
     G4double GetRadiusInRing(G4double rmin, G4double rmax) const;
-      // Utility function for subclasses to generate proper circular areas
 
   protected:
 

@@ -23,11 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file biasing/ReverseMC01/include/RMC01AnalysisManagerMessenger.hh
+/// \file RMC01AnalysisManagerMessenger.hh
 /// \brief Definition of the RMC01AnalysisManagerMessenger class
-//
-//
-//////////////////////////////////////////////////////////////
+
 //  Class Name:           RMC01AnalysisManagerMessenger
 //        Author:               L. Desorgher
 //        Organisation:         SpaceIT GmbH
@@ -47,8 +45,8 @@
 #ifndef RMC01AnalysisManagerMessenger_h
 #define RMC01AnalysisManagerMessenger_h 1
 
-#include "G4UImessenger.hh"
 #include "globals.hh"
+#include "G4UImessenger.hh"
 
 class RMC01AnalysisManager;
 class G4UIdirectory;
@@ -56,25 +54,27 @@ class G4UIcmdWithADouble;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class RMC01AnalysisManagerMessenger : public G4UImessenger
+class RMC01AnalysisManagerMessenger: public G4UImessenger
 {
   public:
-    RMC01AnalysisManagerMessenger(RMC01AnalysisManager*);
-
+    RMC01AnalysisManagerMessenger(RMC01AnalysisManager* );
+    
     virtual ~RMC01AnalysisManagerMessenger();
-
+    
     virtual void SetNewValue(G4UIcommand*, G4String);
-
+    
   private:
     RMC01AnalysisManager* fAnalysisManager;
-
-    G4UIdirectory* fAnalysisDir;
-
+    
+    G4UIdirectory*        fAnalysisDir;
+  
     G4UIcmdWithADouble* fSetPrecisionForConvergenceTestCmd;
     G4UIcommand* fSetExpSpectrumToNormaliseAdjResCmd;
     G4UIcommand* fSetPowerLawSpectrumToNormaliseAdjResCmd;
+    G4UIcommand* fSetUserDefinedSpectrumToNormaliseAdjResCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
+

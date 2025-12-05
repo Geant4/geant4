@@ -27,19 +27,19 @@
 //
 // Class description:
 //
-//  G4TwistedTubs is a sector of a twisted hollow cylinder.
-//  A twisted cylinder which is placed along with z-axis and is
-//  separated into phi-segments should become a hyperboloid, and
-//  its each segmented piece should be tilted with a stereo angle.
-//  G4TwistedTubs is a G4VSolid.
+// G4TwistedTubs is a sector of a twisted hollow cylinder.
+// A twisted cylinder which is placed along with z-axis and is
+// separated into phi-segments should become a hyperboloid, and
+// its each segmented piece should be tilted with a stereo angle.
+// G4TwistedTubs is a G4VSolid.
 //
-//  Details of the implementation: "Development of a Geant4 solid
-//  for stereo mini-jet cells in a cylindrical drift chamber",
-//  Computer Physics Communications 153 (2003) pp.373–391
+// Details of the implementation: "Development of a Geant4 solid
+// for stereo mini-jet cells in a cylindrical drift chamber",
+// Computer Physics Communications 153 (2003) pp.373-391
 
-// 01-Aug-2002 - Kotoyo Hoshina (hoshina@hepburn.s.chiba-u.ac.jp), created.
-// 13-Nov-2003 - O.Link (Oliver.Link@cern.ch), Integration in Geant4
-//               from original version in Jupiter-2.5.02 application.
+// Author: Kotoyo Hoshina (Chiba University), 01.08.2002 - created.
+//         Oliver Link (CERN), 13.11.2003 - Integration in Geant4
+//                from original version in Jupiter-2.5.02 application.
 // --------------------------------------------------------------------
 #ifndef G4TWISTEDTUBS_HH
 #define G4TWISTEDTUBS_HH
@@ -52,33 +52,81 @@
 class G4SolidExtentList;
 class G4ClippablePolygon;
 
+/**
+ * @brief G4TwistedTubs is a sector of a twisted hollow cylinder.
+ * A twisted cylinder which is placed along with Z axis and is separated into
+ * phi-segments should become a hyperboloid, and its each segmented piece
+ * should be tilted with a stereo angle.
+ */
+
 class G4TwistedTubs : public G4VSolid
 {
   public:
  
+    /**
+     * Constructs a twisted tube, given radii and twist angle.
+     *  @param[in] pName The solid name.
+     *  @param[in] twistedangle The twisted angle.
+     *  @param[in] endinnerrad Inner radius at endcap.
+     *  @param[in] endouterrad Outer radius at endcap.
+     *  @param[in] halfzlen Half Z length.
+     *  @param[in] dphi Phi angle of a segment.
+     */
     G4TwistedTubs(const G4String& pname,        // Name of instance
                         G4double  twistedangle, // Twisted angle
-                        G4double  endinnerrad,  // Inner radius at endcap 
-                        G4double  endouterrad,  // Outer radius at endcap 
-                        G4double  halfzlen,     // half z length 
+                        G4double  endinnerrad,  // Inner radius at endcap
+                        G4double  endouterrad,  // Outer radius at endcap
+                        G4double  halfzlen,     // half z length
                         G4double  dphi);        // Phi angle of a segment
                       
+    /**
+     * Constructs a twisted tube, given radii, twist angle and number of segments.
+     *  @param[in] pName The solid name.
+     *  @param[in] twistedangle The twisted angle.
+     *  @param[in] endinnerrad Inner radius at endcap.
+     *  @param[in] endouterrad Outer radius at endcap.
+     *  @param[in] halfzlen Half Z length.
+     *  @param[in] nseg Number of segments in Phi.
+     *  @param[in] totphi Total angle of all segments.
+     */
     G4TwistedTubs(const G4String& pname,        // Name of instance
                         G4double  twistedangle, // Stereo angle
-                        G4double  endinnerrad,  // Inner radius at endcap 
-                        G4double  endouterrad,  // Outer radius at endcap 
+                        G4double  endinnerrad,  // Inner radius at endcap
+                        G4double  endouterrad,  // Outer radius at endcap
                         G4double  halfzlen,     // half z length 
                         G4int     nseg,         // Number of segments in totalPhi
                         G4double  totphi);      // Total angle of all segments
                       
+    /**
+     * Constructs a twisted tube, given radii, twist angle and EndZ values.
+     *  @param[in] pName The solid name.
+     *  @param[in] twistedangle The twisted angle.
+     *  @param[in] innerrad Inner radius at z=0.
+     *  @param[in] outerrad Outer radius at z=0.
+     *  @param[in] negativeEndz -ve Z endplate.
+     *  @param[in] positiveEndz +ve Z endplate.
+     *  @param[in] dphi Phi angle of a segment.
+     */
     G4TwistedTubs(const G4String& pname,        // Name of instance
                         G4double  twistedangle, // Twisted angle
-                        G4double  innerrad,     // Inner radius at z=0 
-                        G4double  outerrad,     // Outer radius at z=0 
+                        G4double  innerrad,     // Inner radius at z=0
+                        G4double  outerrad,     // Outer radius at z=0
                         G4double  negativeEndz, // -ve z endplate
                         G4double  positiveEndz, // +ve z endplate
                         G4double  dphi);        // Phi angle of a segment
 
+    /**
+     * Constructs a twisted tube, given radii, twist angle, EndZ values
+     * and number of segments.
+     *  @param[in] pName The solid name.
+     *  @param[in] twistedangle The twisted angle.
+     *  @param[in] innerrad Inner radius at z=0.
+     *  @param[in] outerrad Outer radius at z=0.
+     *  @param[in] negativeEndz -ve Z endplate.
+     *  @param[in] positiveEndz +ve Z endplate.
+     *  @param[in] nseg Number of segments in Phi.
+     *  @param[in] totphi Total angle of all segments.
+     */
     G4TwistedTubs(const G4String& pname,        // Name of instance
                         G4double  twistedangle, // Stereo angle
                         G4double  innerrad,     // Inner radius at z=0 
@@ -88,45 +136,73 @@ class G4TwistedTubs : public G4VSolid
                         G4int     nseg,         // Number of segments in totalPhi
                         G4double  totphi);      // Total angle of all segments
 
-   ~G4TwistedTubs() override;
+    /**
+     * Destructor.
+     */
+    ~G4TwistedTubs() override;
              
+    /**
+     * Thows a fatal exception. Parameterisations are not allowed on this shape.
+     */
     void ComputeDimensions(G4VPVParameterisation*    /* p  */ ,
                            const G4int               /* n  */ ,
                            const G4VPhysicalVolume*  /* prep */ ) override;
 
+    /**
+     * Computes the bounding limits of the solid.
+     *  @param[out] pMin The minimum bounding limit point.
+     *  @param[out] pMax The maximum bounding limit point.
+     */
     void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const override;
 
+    /**
+     * Calculates the minimum and maximum extent of the solid, when under the
+     * specified transform, and within the specified limits.
+     *  @param[in] pAxis The axis along which compute the extent.
+     *  @param[in] pVoxelLimit The limiting space dictated by voxels.
+     *  @param[in] pTransform The internal transformation applied to the solid.
+     *  @param[out] pMin The minimum extent value.
+     *  @param[out] pMax The maximum extent value.
+     *  @returns True if the solid is intersected by the extent region.
+     */
     G4bool CalculateExtent(const EAxis               pAxis,
                            const G4VoxelLimits&     pVoxelLimit,
                            const G4AffineTransform& pTransform,
                                  G4double&          pMin,
                                  G4double&          pMax ) const override;
 
+    /**
+     * Concrete implementations of the expected query interfaces for
+     * solids, as defined in the base class G4VSolid.
+     */
     G4double DistanceToIn (const G4ThreeVector& p,
                            const G4ThreeVector& v ) const override;
-
     G4double DistanceToIn (const G4ThreeVector& p ) const override;
-   
     G4double DistanceToOut(const G4ThreeVector& p, 
                            const G4ThreeVector& v,
                            const G4bool calcnorm = false,
                                  G4bool* validnorm = nullptr, 
                                  G4ThreeVector* n = nullptr ) const override;
-
     G4double DistanceToOut(const G4ThreeVector& p) const override;
-  
     EInside Inside (const G4ThreeVector& p) const override;
-
     G4ThreeVector SurfaceNormal(const G4ThreeVector& p) const override;
 
-    void          DescribeYourselfTo (G4VGraphicsScene& scene) const override;
-    G4Polyhedron* CreatePolyhedron   () const override;
-    G4Polyhedron* GetPolyhedron      () const override;
+    /**
+     * Methods for creating graphical representations (i.e. for visualisation).
+     */
+    void DescribeYourselfTo (G4VGraphicsScene& scene) const override;
+    G4Polyhedron* CreatePolyhedron () const override;
+    G4Polyhedron* GetPolyhedron () const override;
+    G4VisExtent GetExtent () const override;
 
+    /**
+     * Streams the object contents to an output stream.
+     */
     std::ostream &StreamInfo(std::ostream& os) const override;
 
-    // accessors
-  
+    /**
+     * Accessors.
+     */
     inline G4double GetDPhi        () const { return fDPhi       ; }
     inline G4double GetPhiTwist    () const { return fPhiTwist   ; }
     inline G4double GetInnerRadius () const { return fInnerRadius; }
@@ -135,12 +211,12 @@ class G4TwistedTubs : public G4VSolid
     inline G4double GetOuterStereo () const { return fOuterStereo; }
     inline G4double GetZHalfLength () const { return fZHalfLength; }
     inline G4double GetKappa       () const { return fKappa      ; }
-
+    //
     inline G4double GetTanInnerStereo () const { return fTanInnerStereo  ; }
     inline G4double GetTanInnerStereo2() const { return fTanInnerStereo2 ; }
     inline G4double GetTanOuterStereo () const { return fTanOuterStereo  ; }
     inline G4double GetTanOuterStereo2() const { return fTanOuterStereo2 ; }
-  
+    //
     inline G4double GetEndZ           (G4int i) const { return fEndZ[i]  ; }
     inline G4double GetEndPhi         (G4int i) const { return fEndPhi[i]; }
     inline G4double GetEndInnerRadius (G4int i) const
@@ -154,38 +230,64 @@ class G4TwistedTubs : public G4VSolid
                     { return (fEndOuterRadius[0] > fEndOuterRadius[1] ?
                       fEndOuterRadius[0] : fEndOuterRadius[1]); }
   
-    G4VisExtent     GetExtent    () const override;
+    /**
+     * Returns the type ID, "G4TwistedTubs" of the solid.
+     */
     G4GeometryType  GetEntityType() const override;
+
+    /**
+     * Makes a clone of the object for use in multi-treading.
+     *  @returns A pointer to the new cloned allocated solid.
+     */
     G4VSolid* Clone() const override;
 
+    /**
+     * Returning an estimation of the solid volume (capacity) and surface area,
+     * in internal units. Caches the computed value once computed the first time.
+     */
     G4double GetCubicVolume() override;
-      // Returns an estimation of the geometrical cubic volume of the
-      // solid. Caches the computed value once computed the first time.
     G4double GetSurfaceArea() override;
-      // Returns the geometrical surface area of the solid.
-      // Caches the computed value once computed the first time.
 
+    /**
+     * Returns a random point located and uniformly distributed on the
+     * surface of the solid.
+     */
     G4ThreeVector GetPointOnSurface() const override ;
 
+    /**
+     * Fake default constructor for usage restricted to direct object
+     * persistency for clients requiring preallocation of memory for
+     * persistifiable objects.
+     */
     G4TwistedTubs(__void__&);
-      // Fake default constructor for usage restricted to direct object
-      // persistency for clients requiring preallocation of memory for
-      // persistifiable objects.
 
+    /**
+     * Copy constructor and assignment operator.
+     */
     G4TwistedTubs(const G4TwistedTubs& rhs);
     G4TwistedTubs& operator=(const G4TwistedTubs& rhs); 
-      // Copy constructor and assignment operator.
 
 #ifdef G4TWISTDEBUG
-    G4VTwistSurface* GetOuterHype() const { return fOuterHype; }
+    inline G4VTwistSurface* GetOuterHype() const { return fOuterHype; }
 #endif
   
   private:
  
+    /**
+     * Initialiser of data.
+     */
     inline void SetFields(G4double phitwist, G4double innerrad,
                           G4double outerrad,
                           G4double negativeEndz, G4double positiveEndz);
+
+    /**
+     * Generates the surfaces. Used in constructors.
+     */
     void CreateSurfaces();
+
+    /**
+     * Utilities for area computation.
+     */
     G4double GetLateralArea(G4double a, G4double r, G4double z) const;
     G4double GetPhiCutArea(G4double a, G4double r, G4double z) const;
 

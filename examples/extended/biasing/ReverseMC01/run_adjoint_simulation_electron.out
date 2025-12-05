@@ -1,3 +1,4 @@
+Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Forcing G4RunManager type...
 
         ############################################
         !!! WARNING - FPE detection is activated !!!
@@ -10,7 +11,7 @@
 
 
 **************************************************************
- Geant4 version Name: geant4-11-03-ref-06    (30-June-2025)
+ Geant4 version Name: geant4-11-04-ref-00    (5-December-2025)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -18,6 +19,8 @@
                              WWW : http://geant4.org/
 **************************************************************
 
+Accumulable registered as "Accumulated_edep"
+Accumulable registered as "Accumulated_edep2"
 Visualization Manager instantiating with verbosity "warnings (3)"...
 Visualization Manager initialising...
 Registering graphics systems...
@@ -26,7 +29,6 @@ You have successfully registered the following graphics systems.
 Registered graphics systems are:
   ASCIITree (ATree)
   DAWNFILE (DAWNFILE)
-  G4HepRepFile (HepRepFile)
   RayTracer (RT)
   VRML2FILE (VRML2FILE)
   gMocrenFile (gMocrenFile)
@@ -39,13 +41,12 @@ Registered graphics systems are:
   OpenGLStoredX (OGLSX, OGLSQt_FALLBACK, OGLSXm_FALLBACK)
   RayTracerX (RTX)
   RayTracerQt (RTQt)
-  Qt3D (Qt3D)
   TOOLSSG_X11_GLES (TSG_X11_GLES, TSGX11, TSG_XT_GLES_FALLBACK)
   TOOLSSG_X11_ZB (TSG_X11_ZB, TSGX11ZB)
   TOOLSSG_XT_GLES (TSG_XT_GLES, TSGXt, TSG_QT_GLES_FALLBACK)
   TOOLSSG_XT_ZB (TSG_XT_ZB, TSGXtZB)
   TOOLSSG_QT_GLES (TSG_QT_GLES, TSGQt, TSG, OGL)
-  TOOLSSG_QT_ZB (TSG_QT_ZB, TSGQtZB)
+  TOOLSSG_QT_ZB (TSG_QT_ZB, TSGQtZB, TSGZB)
 You may choose a graphics system (driver) with a parameter of
 the command "/vis/open" or "/vis/sceneHandler/create",
 or you may omit the driver parameter and choose at run time:
@@ -88,6 +89,11 @@ End of Run User Vis Actions: none
 
 Some /vis commands (optionally) take a string to specify colour.
 "/vis/list" to see available colours.
+G4SDManager::AddNewCollection : the collection <SensitiveCylinder/edep> is registered at 1
+G4SDManager::AddNewCollection : the collection <SensitiveCylinder/current_electron> is registered at 2
+G4SDManager::AddNewCollection : the collection <SensitiveCylinder/current_proton> is registered at 3
+G4SDManager::AddNewCollection : the collection <SensitiveCylinder/current_gamma> is registered at 4
+New sensitive detector <SensitiveCylinder> is registered at /
 ### G4VEnergyLossProcess::SetLossFluctuations has no effect and will be removed for the next major release
 G4AdjointPhysicsList::SetCuts:CutLength : 1 mm 
 G4AdjointPhysicsList::SetCuts:CutLength : 10 um 
@@ -148,7 +154,7 @@ Lowest muon/hadron kinetic energy                  1 keV
 Use ICRU90 data                                    0
 Fluctuations of dE/dx are enabled                  1
 Type of fluctuation model for leptons and hadrons  Universal
-Use built-in Birks satuaration                     0
+Use built-in Birks saturation                      0
 Build CSDA range enabled                           0
 Use cut as a final range enabled                   0
 Enable angular generator interface                 0
@@ -255,22 +261,6 @@ Index : 4     used in the geometry : Yes
 
 ### Run 0 starts.
 ### Run 0 start.
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W001
-      issued by : G4VFileManager::SetHistoDirectoryName
-Cannot set Histo directory name as its value was already used.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W001
-      issued by : G4VFileManager::SetHistoDirectoryName
-Cannot set Histo directory name as its value was already used.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
 
 ----> Histogram Tree is opened in adjoint_sim.
 nb event 0
@@ -428,15 +418,15 @@ nb event 195000
  Run terminated.
 Run Summary
   Number of events processed : 200000
-  User=36.570000s Real=36.717281s Sys=0.080000s
+  User=35.460000s Real=35.688175s Sys=0.060000s
 Results of reverse/adjoint simulation!
 normalised edep [MeV] = 0.00163827
-error[MeV] = 1.70862e-05
+precision[MeV] = 1.70863e-05
 
 ----> Histogram Tree is saved in adjoint_sim.
 Graphics systems deleted.
 Visualization Manager deleting...
 ================== Deleting memory pools ===================
-Number of memory pools allocated: 12 of which, static: 1
-Dynamic pools deleted: 11 / Total memory freed: 32 MB
+Number of memory pools allocated: 12 of which, static: 0
+Dynamic pools deleted: 12 / Total memory freed: 32 MB
 ============================================================

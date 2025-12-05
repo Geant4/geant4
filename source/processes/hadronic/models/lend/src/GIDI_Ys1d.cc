@@ -62,13 +62,13 @@ Ys1d::Ys1d( Axes const &a_axes, ptwXY_interpolation a_interpolation, std::size_t
 
 Ys1d::Ys1d( Construction::Settings const &a_construction, HAPI::Node const &a_node, SetupInfo &a_setupInfo, Suite *a_parent ) :
         Function1dForm( a_construction, a_node, a_setupInfo, FormType::Ys1d, a_parent ),
-        m_start( a_node.child( "values" ).attribute( "start" ).as_int( ) ),         // as_int returns 0 if "start" not present.
+        m_start( static_cast<std::size_t>( a_node.child( GIDI_valuesChars ).attribute( GIDI_startChars ).as_int( ) ) ),     // as_int returns 0 if "start" not present.
         m_Ys( ) {
 
-    HAPI::Node values = a_node.child("values");
+    HAPI::Node values = a_node.child( GIDI_valuesChars );
     nf_Buffer<double> data;
     parseValuesOfDoubles( a_construction, values, a_setupInfo, data );
-    m_Ys.resize( (long) data.size() );
+    m_Ys.resize( data.size() );
     for( size_t i1 = 0; i1 < data.size(); ++i1 ) m_Ys[i1] = data[i1];
 }
 
@@ -119,15 +119,15 @@ Ys1d &Ys1d::operator+=( Ys1d const &a_rhs ) {
     if( length( ) == 0 ) m_start = a_rhs.length( );                        // Allow for empty (uninitialized) this.
     if( length( ) != a_rhs.length( ) ) throw Exception( "Ys1d::operator+=: lengths not equal." );
 
-    long deltaStart = (long) a_rhs.start( );
-    deltaStart -= (long)  m_start;
-    if( deltaStart >= 0 ) {
+    if( a_rhs.start( ) >= m_start ) {
+        std::size_t deltaStart = a_rhs.start( ) - m_start;
         for( std::size_t i1 = 0; i1 < a_rhs.size( ); ++i1 ) m_Ys[i1+deltaStart] += a_rhs[i1]; }
     else {
+        std::size_t deltaStart = m_start - a_rhs.start( );
         std::vector<double> _Ys( a_rhs.Ys( ) );
 
-        for( std::size_t i1 = 0; i1 < size( ); ++i1 ) _Ys[i1-deltaStart] += m_Ys[i1];
-        m_Ys = _Ys;
+        for( std::size_t i1 = 0; i1 < size( ); ++i1 ) _Ys[i1+deltaStart] += m_Ys[i1];
+        m_Ys = std::move( _Ys );
         m_start = a_rhs.start( );
     }
     return( *this );
@@ -208,8 +208,8 @@ void Ys1d::toXMLList_func( GUPI::WriteInfo &a_writeInfo, std::string const &a_in
 
 void Ys1d::write( FILE *a_file, std::string const &a_format ) const {
 
-    long size = static_cast<long>(  m_Ys.size( ) );
-    for( long index = 0; index < size; ++index ) fprintf( a_file, a_format.c_str( ), index + m_start, m_Ys[index] );
+    std::size_t size = m_Ys.size( );
+    for( std::size_t index = 0; index < size; ++index ) fprintf( a_file, a_format.c_str( ), index + m_start, m_Ys[index] );
 }
 
 }               // End namespace Functions.

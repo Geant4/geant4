@@ -61,11 +61,6 @@
 #include "G4BertiniNeutronBuilder.hh"
 #include "G4FTFPNeutronBuilder.hh"
 
-#include "G4HyperonBuilder.hh"
-#include "G4HyperonFTFPBuilder.hh"
-#include "G4AntiBarionBuilder.hh"
-#include "G4FTFPAntiBarionBuilder.hh"
-
 #include "G4MesonConstructor.hh"
 #include "G4BaryonConstructor.hh"
 #include "G4ShortLivedConstructor.hh"
@@ -108,9 +103,6 @@ G4HadronPhysicsFTFP_BERT::G4HadronPhysicsFTFP_BERT(const G4String& name, G4bool 
   minBERT_proton = minBERT_neutron = 0.0;
   param->SetEnableBCParticles(true);
 }
-
-G4HadronPhysicsFTFP_BERT::~G4HadronPhysicsFTFP_BERT()
-{}
 
 void G4HadronPhysicsFTFP_BERT::ConstructParticle()
 {
@@ -297,6 +289,7 @@ void G4HadronPhysicsFTFP_BERT::Others()
 
 void G4HadronPhysicsFTFP_BERT::ConstructProcess()
 {
+  // allow changing of parameters at PreInit
   G4HadronicParameters* param = G4HadronicParameters::Instance();
   minFTFP_pion = param->GetMinEnergyTransitionFTF_Cascade();
   maxBERT_pion = param->GetMaxEnergyTransitionFTF_Cascade();
@@ -307,9 +300,8 @@ void G4HadronPhysicsFTFP_BERT::ConstructProcess()
   minFTFP_neutron = param->GetMinEnergyTransitionFTF_Cascade();
   maxBERT_neutron = param->GetMaxEnergyTransitionFTF_Cascade();
 
-  if(G4Threading::IsMasterThread() &&
-     G4HadronicParameters::Instance()->GetVerboseLevel() > 0) {
-      DumpBanner();
+  if (G4Threading::IsMasterThread() && param->GetVerboseLevel() > 0) {
+    DumpBanner();
   }
   CreateModels();
 }

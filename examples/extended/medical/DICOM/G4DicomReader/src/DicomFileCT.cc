@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file DicomFileCT.cc
+/// \brief Implementation of the DicomFileCT class
+
 #include "DicomFileCT.hh"
 
 #include "DicomFileStructure.hh"

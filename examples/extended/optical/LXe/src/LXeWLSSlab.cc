@@ -23,11 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file optical/LXe/src/LXeWLSSlab.cc
+/// \file LXeWLSSlab.cc
 /// \brief Implementation of the LXeWLSSlab class
-//
-//
+
 #include "LXeWLSSlab.hh"
 
 #include "LXeWLSFiber.hh"

@@ -25,7 +25,7 @@
 //
 // G4TwistedTrap implementation
 //
-// Author: 10/11/2004 - O.Link (Oliver.Link@cern.ch)
+// Author: Oliver Link (CERN), 27.10.2004 - Created
 // --------------------------------------------------------------------
 
 #include "G4TwistedTrap.hh"
@@ -72,11 +72,6 @@ G4TwistedTrap::G4TwistedTrap( __void__& a )
   : G4VTwistedFaceted(a)
 {
 }
-
-//=====================================================================
-//* Destructor --------------------------------------------------------
-
-G4TwistedTrap::~G4TwistedTrap() = default;
 
 //=====================================================================
 //* Copy constructor --------------------------------------------------

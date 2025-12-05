@@ -23,14 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm9/include/DetectorConstruction.hh
+/// \file DetectorConstruction.hh
 /// \brief Definition of the DetectorConstruction class
-//
-//
-//
+
 /////////////////////////////////////////////////////////////////////////
 //
-// TestEm9: Cryslal calorimetry
+// TestEm9: Crystal calorimetry
 //
 // Created: 31.01.03 V.Ivanchenko
 //

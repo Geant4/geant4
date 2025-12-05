@@ -47,14 +47,8 @@ public:
   }
 public:
   graph(){
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
   }
   virtual ~graph(){
-#ifdef TOOLS_MEM
-    mem::decrement(s_class().c_str());
-#endif
   }
 protected:
   graph(const graph& a_from): iro(a_from){}

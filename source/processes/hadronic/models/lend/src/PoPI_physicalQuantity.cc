@@ -57,7 +57,7 @@ void PhysicalQuantity::toXMLList( std::vector<std::string> &a_XMLList, std::stri
     if( m_unit.size( ) > 0 ) _unit = "\" unit=\"" + m_unit;
 
     std::string header = a_indent1 + "<" + m_tag + " label=\"" + m_label + "\" value=\"" + valueToString( ) + _unit + "\"/>";
-    a_XMLList.push_back( header );
+    a_XMLList.push_back( std::move( header ) );
 }
 
 /*! \class PQ_double

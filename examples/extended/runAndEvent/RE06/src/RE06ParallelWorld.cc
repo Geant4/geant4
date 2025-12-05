@@ -23,10 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file RE06/src/RE06ParallelWorld.cc
+/// \file RE06ParallelWorld.cc
 /// \brief Implementation of the RE06ParallelWorld class
-//
-//
 
 #include "RE06ParallelWorld.hh"
 

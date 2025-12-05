@@ -29,12 +29,16 @@
 //
 // A G4TouchableHistory object.
 
-// Created: Paul Kent, August 1996
+// Author: Paul Kent (CERN), August 1996
 // --------------------------------------------------------------------
 #ifndef G4VTOUCHABLE_HH
-#define G4VTOUCHABLE_HH 1
+#define G4VTOUCHABLE_HH
 
 #include "G4TouchableHistory.hh"
+
+/**
+ * @brief G4VTouchable is a G4TouchableHistory object.
+ */
 
 using G4VTouchable = G4TouchableHistory;
 

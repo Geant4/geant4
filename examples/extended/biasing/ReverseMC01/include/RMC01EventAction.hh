@@ -23,11 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file biasing/ReverseMC01/include/RMC01EventAction.hh
+/// \file RMC01EventAction.hh
 /// \brief Definition of the RMC01EventAction class
-//
-//
-//////////////////////////////////////////////////////////////
+
 //  Class Name:            RMC01EventAction
 //        Author:               L. Desorgher
 //        Organisation:         SpaceIT GmbH

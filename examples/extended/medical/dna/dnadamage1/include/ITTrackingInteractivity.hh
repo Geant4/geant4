@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 /// \file ITTrackingInteractivity.hh
 /// \brief Definition of the ITTrackingInteractivity class
 
@@ -42,7 +41,7 @@ class ITTrackingInteractivity : public G4ITTrackingInteractivity
 {
   public:
     ITTrackingInteractivity();
-    ~ITTrackingInteractivity() override;
+    ~ITTrackingInteractivity() override = default;
 
     void Initialize() override;
     void StartTracking(G4Track*) override;

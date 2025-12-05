@@ -29,18 +29,22 @@
 //
 // Data structure for G4Polycone
 
-// Author: David C. Williams (davidw@scipp.ucsc.edu)
+// Author: David C. Williams (UCSC), 1998 - Created
 // --------------------------------------------------------------------
 #ifndef G4POLYCONEHISTORICAL_HH
 #define G4POLYCONEHISTORICAL_HH
 
 #include "G4Types.hh"
 
+/**
+ * @brief G4PolyconeHistorical is a data structure for use in G4Polycone.
+ */
+
 class G4PolyconeHistorical
 {
   public:
 
-    G4PolyconeHistorical();
+    G4PolyconeHistorical() = default;
     G4PolyconeHistorical( G4int z_planes );
     ~G4PolyconeHistorical();
     G4PolyconeHistorical( const G4PolyconeHistorical& source );

@@ -23,10 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file eventgenerator/HepMC/HepMCEx01/src/HepMCG4AsciiReaderMessenger.cc
+/// \file HepMCG4AsciiReaderMessenger.cc
 /// \brief Implementation of the HepMCG4AsciiReaderMessenger class
-//
-//
+
 #include "HepMCG4AsciiReaderMessenger.hh"
 
 #include "HepMCG4AsciiReader.hh"

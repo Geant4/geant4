@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// \file RadioactiveDecayPhysics.hh
+/// \brief Definition of the RadioactiveDecayPhysics class
 
 #ifndef RadioactiveDecayPhysics_h
 #define RadioactiveDecayPhysics_h 1

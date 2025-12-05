@@ -23,30 +23,32 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
+/// \file SteppingAction.hh
+/// \brief Definition of the SteppingAction class
+
 #pragma once
 #include "DNAParser.hh"
 
 #include "G4String.hh"
 #include "G4UserSteppingAction.hh"
 
+class DetectorConstruction;
 class EventAction;
 class G4ParticleDefinition;
 class G4VPhysicalVolume;
-class DetectorConstruction;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 class SteppingAction : public G4UserSteppingAction
 {
   public:
-    SteppingAction(DetectorConstruction* fpDet);
-    ~SteppingAction() override;
+    SteppingAction();
+    ~SteppingAction() override = default;
 
     void UserSteppingAction(const G4Step* step) override;
 
   private:
-    DetectorConstruction* fpDetector;
+    const DetectorConstruction* fpDetector{nullptr};
     DNAVolumeType fVolumeType;
     void SetupFlags(const G4Step* step);
     DNAVolumeType SetupVolumeType(const G4VPhysicalVolume* pPhyVolume);

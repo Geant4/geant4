@@ -36,10 +36,7 @@
 // also non-embedded methods of the same order.
 //
 // Can be used to enable use of non-virtual calls for field, equation,
-//   and stepper - potentially with inlined methods.
-//
-// Created: Josh Xie  June 2014 (supported by Google Summer of Code 2014 )
-// Supervisors:  Sandro Wenzel, John Apostolakis (CERN)
+// and stepper - potentially with inlined methods.
 //
 // Adapted from G4CashKarpRKF45 class
 // --------------------------------------------------------------------
@@ -49,8 +46,10 @@
 // Two different fourth order estimates are calculated; their difference
 // gives an error estimate. [ref. Numerical Recipes in C, 2nd Edition]
 // Used to integrate the equations of motion of a particle in a field.
-// Original Authors: J.Apostolakis, V.Grichine - 30.01.1997
 
+// Author: Josh Xie (CERN, Google Summer of Code 2014), June 2014
+// Supervisors:  Sandro Wenzel, John Apostolakis (CERN)
+// --------------------------------------------------------------------
 #ifndef G4T_CASH_KARP_RKF45_HH
 #define G4T_CASH_KARP_RKF45_HH
 
@@ -59,60 +58,66 @@
 #include "G4LineSection.hh"
 #include "G4MagIntegratorStepper.hh"
 
+/**
+ * @brief G4TCashKarpRKF45 is a templated version of Cash-Karp
+ * 4th/5th order embedded stepper.
+ */
+
 template <class T_Equation, unsigned int N = 6 >
 class G4TCashKarpRKF45 : public G4MagIntegratorStepper
 {
- public:
+  public:
 
-  G4TCashKarpRKF45(T_Equation* EqRhs, // G4int noIntegrationVariables = 6,
-                    G4bool primary = true);
+    G4TCashKarpRKF45(T_Equation* EqRhs, // G4int noIntegrationVariables = 6,
+                     G4bool primary = true);
 
-  virtual ~G4TCashKarpRKF45();
+    virtual ~G4TCashKarpRKF45();
 
-  inline void
-  StepWithError(const G4double yInput[], // * __restrict__ yInput,
-                const G4double dydx[],   // * __restrict__ dydx,
-                G4double Step,
-                G4double yOut[],         // * __restrict__ yOut,
-                G4double yErr[] );       // * __restrict__ yErr);
+    G4TCashKarpRKF45(const G4TCashKarpRKF45&) = delete;
+    G4TCashKarpRKF45& operator=(const G4TCashKarpRKF45&) = delete;
 
-  virtual void Stepper(const G4double yInput[],
-                       const G4double dydx[],
-                       G4double hstep,
-                       G4double yOutput[],
-                       G4double yError[]) override final;
+    inline void
+    StepWithError(const G4double yInput[], // * __restrict__ yInput,
+                  const G4double dydx[],   // * __restrict__ dydx,
+                  G4double Step,
+                  G4double yOut[],         // * __restrict__ yOut,
+                  G4double yErr[] );       // * __restrict__ yErr);
+
+    virtual void Stepper(const G4double yInput[],
+                         const G4double dydx[],
+                         G4double hstep,
+                         G4double yOutput[],
+                         G4double yError[]) override final;
   
-  // __attribute__((always_inline))
-  void RightHandSideInl( const G4double y[],  // * __restrict__  y,
-                               G4double dydx[] ) // * __restrict__  dydx )
-  {
-    fEquation_Rhs->T_Equation::RightHandSide(y, dydx);
-  }
+    // __attribute__((always_inline))
+    void RightHandSideInl( const G4double y[],  // * __restrict__  y,
+                                 G4double dydx[] ) // * __restrict__  dydx )
+    {
+      fEquation_Rhs->T_Equation::RightHandSide(y, dydx);
+    }
 
-  inline G4double DistChord() const override;
+    inline G4double DistChord() const override;
 
-  inline G4int IntegratorOrder() const override { return 4; }
+    inline G4int IntegratorOrder() const override { return 4; }
 
- private:
-  G4TCashKarpRKF45(const G4TCashKarpRKF45&);
-  G4TCashKarpRKF45& operator=(const G4TCashKarpRKF45&);
-  // private copy constructor and assignment operator.
+    G4StepperType StepperType() const override { return kTCashKarpRKF45; }
 
- private:
-  G4double ak2[N], ak3[N], ak4[N], ak5[N], ak6[N], ak7[N], yTemp[N], yIn[N];
-  // scratch space
+  private:
 
-  G4double fLastStepLength= 0.0;
-  G4double* fLastInitialVector;
-  G4double* fLastFinalVector;
-  G4double* fLastDyDx;
-  G4double* fMidVector;
-  G4double* fMidError;
-  // for DistChord calculations
+    G4double ak2[N], ak3[N], ak4[N], ak5[N], ak6[N], ak7[N], yTemp[N], yIn[N];
+    // scratch space
 
-  G4TCashKarpRKF45* fAuxStepper = nullptr;   
-  // ... or G4TCashKarpRKF45<T_Equation, N>* fAuxStepper;
-  T_Equation* fEquation_Rhs;
+    G4double fLastStepLength= 0.0;
+    G4double* fLastInitialVector;
+    G4double* fLastFinalVector;
+    G4double* fLastDyDx;
+    G4double* fMidVector;
+    G4double* fMidError;
+    // for DistChord calculations
+
+    G4TCashKarpRKF45* fAuxStepper = nullptr;   
+    // ... or G4TCashKarpRKF45<T_Equation, N>* fAuxStepper;
+    T_Equation* fEquation_Rhs;
 };
 
 /////////////////////////////////////////////////////////////////////
@@ -316,6 +321,4 @@ G4TCashKarpRKF45<T_Equation,N>::Stepper(const G4double yInput[],
   StepWithError( yInput, dydx, Step, yOutput, yError);
 }
 
-
-
-#endif /* G4TCashKARP_RKF45_hh */
+#endif

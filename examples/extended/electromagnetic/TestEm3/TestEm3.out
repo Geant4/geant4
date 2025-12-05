@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-03-ref-06    (30-June-2025)
+ Geant4 version Name: geant4-11-04-ref-00    (5-December-2025)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -122,7 +122,7 @@ Lowest muon/hadron kinetic energy                  1 keV
 Use ICRU90 data                                    0
 Fluctuations of dE/dx are enabled                  1
 Type of fluctuation model for leptons and hadrons  Urban
-Use built-in Birks satuaration                     0
+Use built-in Birks saturation                      0
 Build CSDA range enabled                           0
 Use cut as a final range enabled                   0
 Enable angular generator interface                 0
@@ -259,7 +259,7 @@ hBrems:  for proton  XStype:1  SubType=3
 hPairProd:  for proton  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
-      Sampling table 17x1001 from 7.50618 GeV to 100 TeV 
+      Sampling table 17x1001, from 7.50618 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
@@ -317,7 +317,7 @@ hBrems:  for anti_proton  XStype:1  SubType=3
 hPairProd:  for anti_proton  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
-      Sampling table 17x1001 from 7.50618 GeV to 100 TeV 
+      Sampling table 17x1001, from 7.50618 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
@@ -349,7 +349,7 @@ hBrems:  for kaon+  XStype:1  SubType=3
 hPairProd:  for kaon+  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
-      Sampling table 18x1001 from 3.94942 GeV to 100 TeV 
+      Sampling table 18x1001, from 3.94942 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
@@ -381,7 +381,7 @@ hBrems:  for kaon-  XStype:1  SubType=3
 hPairProd:  for kaon-  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
-      Sampling table 18x1001 from 3.94942 GeV to 100 TeV 
+      Sampling table 18x1001, from 3.94942 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
@@ -413,7 +413,7 @@ muBrems:  for mu+  XStype:1  SubType=3
 muPairProd:  for mu+  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
-      Sampling table 21x1001 from 0.85 GeV to 100 TeV 
+      Sampling table 21x1001, from 0.85 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
@@ -445,7 +445,7 @@ muBrems:  for mu-  XStype:1  SubType=3
 muPairProd:  for mu-  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
-      Sampling table 21x1001 from 0.85 GeV to 100 TeV 
+      Sampling table 21x1001, from 0.85 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
@@ -477,7 +477,7 @@ hBrems:  for pi+  XStype:1  SubType=3
 hPairProd:  for pi+  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
-      Sampling table 20x1001 from 1.11656 GeV to 100 TeV 
+      Sampling table 20x1001, from 1.11656 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
@@ -509,7 +509,7 @@ hBrems:  for pi-  XStype:1  SubType=3
 hPairProd:  for pi-  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
-      Sampling table 20x1001 from 1.11656 GeV to 100 TeV 
+      Sampling table 20x1001, from 1.11656 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
@@ -550,31 +550,31 @@ Index : 2     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.770000s Real=0.776283s Sys=0.000000s
+  User=0.740000s Real=0.734984s Sys=0.000000s
 
 ------------------------------------------------------------
       material   Edep       RMS         sqrt(E0(GeV))*rmsE/Emean     total tracklen 
  
-         G4_Pb: 774.02 MeV :  15.41 MeV     1.991 +- 0.1991 %      54.7 cm  +- 1.19 cm 
-        G4_lAr: 215.75 MeV :  15.11 MeV     7.002 +- 0.7002 %      1.06 m   +- 7.51 cm 
+         G4_Pb: 774.03 MeV :  14.58 MeV     1.883 +- 0.1883 %      54.6 cm  +- 1.17 cm 
+        G4_lAr: 215.74 MeV :  13.37 MeV     6.199 +- 0.6199 %      1.06 m   +- 6.84 cm 
 
- Total energy deposited = 989.8 MeV +- 6.36 MeV
- Energy leakage = 10.23 MeV +- 6.36 MeV
- Total energy :  Edep + Eleak = 1 GeV +- 47.03 eV 
+ Total energy deposited = 989.8 MeV +- 6.905 MeV
+ Energy leakage = 10.22 MeV +- 6.905 MeV
+ Total energy :  Edep + Eleak = 1 GeV +- 61.04 eV 
 ------------------------------------------------------------
  Beam particle e-  E = 1 GeV
- Mean number of gamma       510.7
- Mean number of e-          872.6
- Mean number of e+          53.75
- Mean number of charged steps  3635.38
- Mean number of neutral steps  3700.9
+ Mean number of gamma       508.8
+ Mean number of e-          870
+ Mean number of e+          53.89
+ Mean number of charged steps  3710.83
+ Mean number of neutral steps  3715.22
 ------------------------------------------------------------
 
  Energy deposition from Energy flow balance : 
   material 	 Total Edep 
  
-     G4_Pb:	 774.018 MeV
-    G4_lAr:	 215.747 MeV
+     G4_Pb:	 774.038 MeV
+    G4_lAr:	 215.736 MeV
 
 ------------------------------------------------------------
 
@@ -625,36 +625,36 @@ Index : 2     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.640000s Real=0.639217s Sys=0.000000s
+  User=0.610000s Real=0.609390s Sys=0.000000s
 
 ------------------------------------------------------------
       material   Edep       RMS         sqrt(E0(GeV))*rmsE/Emean     total tracklen 
  
-         G4_Pb: 774.95 MeV :  21.67 MeV     2.796 +- 0.2796 %      51.9 cm  +- 1.26 cm 
-        G4_lAr: 216.33 MeV :  15.36 MeV     7.101 +- 0.7101 %      1.02 m   +- 7.08 cm 
+         G4_Pb: 778.62 MeV :  23.49 MeV     3.017 +- 0.3017 %      52.3 cm  +- 1.35 cm 
+        G4_lAr: 214.09 MeV :  18.28 MeV      8.54 +- 0.854 %      1.01 m   +-  8.3 cm 
 
- Total energy deposited = 991.3 MeV +- 16.02 MeV
- Energy leakage = 10.09 MeV +- 9.407 MeV
- Total energy :  Edep + Eleak = 1.001 GeV +- 13.68 MeV
+ Total energy deposited = 992.7 MeV +- 16.58 MeV
+ Energy leakage = 8.722 MeV +- 5.448 MeV
+ Total energy :  Edep + Eleak = 1.001 GeV +- 15.52 MeV
 ------------------------------------------------------------
  Beam particle e-  E = 1 GeV
- Mean number of gamma       292.9
- Mean number of e-          558.7
- Mean number of e+          53.66
- Mean number of charged steps  3138.34
- Mean number of neutral steps  2951
+ Mean number of gamma       292.4
+ Mean number of e-          557.7
+ Mean number of e+          53.54
+ Mean number of charged steps  3140.74
+ Mean number of neutral steps  2920.78
 ------------------------------------------------------------
 
  Energy deposition from Energy flow balance : 
   material 	 Total Edep 
  
-     G4_Pb:	 772.681 MeV
-    G4_lAr:	 217.081 MeV
+     G4_Pb:	 775.556 MeV
+    G4_lAr:	 215.711 MeV
 
 ------------------------------------------------------------
 
 #
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 9 of which, static: 0
-Dynamic pools deleted: 9 / Total memory freed: 0.1 MB
+Dynamic pools deleted: 9 / Total memory freed: 0.088 MB
 ============================================================

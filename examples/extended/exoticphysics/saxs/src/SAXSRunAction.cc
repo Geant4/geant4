@@ -25,8 +25,6 @@
 //
 /// \file SAXSRunAction.cc
 /// \brief Implementation of the SAXSRunAction class
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "SAXSRunAction.hh"
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// Authors: Lucio Santi, Rodrigo Castro (Univ. Buenos Aires) - 2018-2021
+// Authors: Lucio Santi, Rodrigo Castro (Univ. Buenos Aires), 2018-2021
 // --------------------------------------------------------------------
 
 template <class T>
@@ -37,21 +37,22 @@ template <class T>
 void G4QSSDriver<T>::OnStartTracking()
 {
   Base::OnStartTracking();
-  if (! initializedOnFirstRun) {
-    // this->SetPrecision( G4QSSMessenger::instance()->dQRel, G4QSSMessenger::instance()->dQMin);
-
-    G4double dqRel = G4QSSMessenger::instance()->dQRel;
-    G4double dQMin = G4QSSMessenger::instance()->dQMin;
-    if (dqRel == 0) {
-      dqRel = 0.001;
-    }
-    if (dQMin == 0) {
-      dQMin = 0.0001;
-    }
+  if (! initializedOnFirstRun)
+  {
+    G4double dqRel = G4QSSMessenger::instance()->Get_dQRel();
+    G4double dQMin = G4QSSMessenger::instance()->Get_dQMin();
+    if (dqRel == 0) { dqRel = 0.001; }
+    if (dQMin == 0) { dQMin = 0.0001; }
     this->SetPrecision(dqRel, dQMin);
 
     initializedOnFirstRun = true;
   }
+}
+
+template <class T>
+void G4QSSDriver<T>::OnComputeStep(const G4FieldTrack* track)
+{
+  Base::OnComputeStep(track);
 }
 
 template <class T>
@@ -61,7 +62,8 @@ void G4QSSDriver<T>::SetPrecision(G4double dq_rel, G4double dq_min)
          << "dQRel = " << dq_rel << " - "
          << "dQMin = " << dq_min << G4endl;
 
-  for (const auto& item : this->fSteppers) {
+  for (const auto& item : this->fSteppers)
+  {
     item.stepper->SetPrecision(dq_rel, dq_min);
   }
 }

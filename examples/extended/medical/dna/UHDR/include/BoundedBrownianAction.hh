@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file BoundedBrownianAction.hh
+/// \brief Definition of the BoundedBrownianAction class
 
 #ifndef BoundedBrownianAction_hh
 #  define BoundedBrownianAction_hh 1

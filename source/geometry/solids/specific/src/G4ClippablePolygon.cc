@@ -41,13 +41,9 @@ G4ClippablePolygon::G4ClippablePolygon()
   kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
 }
 
-// Destructor
-//
-G4ClippablePolygon::~G4ClippablePolygon() = default;
-
 // AddVertexInOrder
 //
-void G4ClippablePolygon::AddVertexInOrder( const G4ThreeVector vertex )
+void G4ClippablePolygon::AddVertexInOrder( const G4ThreeVector& vertex )
 {
   vertices.push_back( vertex );
 }
@@ -82,9 +78,9 @@ G4bool G4ClippablePolygon::PartialClip( const G4VoxelLimits& voxelLimit,
 {
   if (voxelLimit.IsLimited())
   {
-    if (IgnoreMe != kXAxis) ClipAlongOneAxis( voxelLimit, kXAxis );
-    if (IgnoreMe != kYAxis) ClipAlongOneAxis( voxelLimit, kYAxis );
-    if (IgnoreMe != kZAxis) ClipAlongOneAxis( voxelLimit, kZAxis );
+    if (IgnoreMe != kXAxis) { ClipAlongOneAxis( voxelLimit, kXAxis ); }
+    if (IgnoreMe != kYAxis) { ClipAlongOneAxis( voxelLimit, kYAxis ); }
+    if (IgnoreMe != kZAxis) { ClipAlongOneAxis( voxelLimit, kZAxis ); }
   }
   
   return (!vertices.empty());
@@ -104,7 +100,7 @@ G4bool G4ClippablePolygon::GetExtent( const EAxis axis,
   //
   // Return false if nothing is left
   //
-  if (noLeft == 0) return false;
+  if (noLeft == 0) { return false; }
   
   //
   // Initialize min and max to our first vertex
@@ -118,9 +114,13 @@ G4bool G4ClippablePolygon::GetExtent( const EAxis axis,
   {
     G4double component = vertices[i].operator()( axis );
     if (component < min )
+    {
       min = component;
+    }
     else if (component > max )
+    {
       max = component;
+    }
   }
   
   return true;
@@ -208,9 +208,9 @@ G4bool G4ClippablePolygon::InFrontOf( const G4ClippablePolygon& other,
   // If things are empty, do something semi-sensible
   //
   std::size_t noLeft = vertices.size();
-  if (noLeft==0) return false;
+  if (noLeft==0) { return false; }
   
-  if (other.Empty()) return true;
+  if (other.Empty()) { return true; }
 
   //
   // Get minimum of other polygon
@@ -227,9 +227,9 @@ G4bool G4ClippablePolygon::InFrontOf( const G4ClippablePolygon& other,
   //
   // Easy decision
   //
-  if (min < minOther-kCarTolerance) return true;    // Clear winner
+  if (min < minOther-kCarTolerance) { return true; }   // Clear winner
   
-  if (minOther < min-kCarTolerance) return false;    // Clear loser
+  if (minOther < min-kCarTolerance) { return false; }   // Clear loser
   
   //
   // We have a tie (this will not be all that rare since our
@@ -272,9 +272,9 @@ G4bool G4ClippablePolygon::BehindOf( const G4ClippablePolygon& other,
   // If things are empty, do something semi-sensible
   //
   std::size_t noLeft = vertices.size();
-  if (noLeft==0) return false;
+  if (noLeft==0) { return false; }
   
-  if (other.Empty()) return true;
+  if (other.Empty()) { return true; }
 
   //
   // Get minimum of other polygon
@@ -291,9 +291,9 @@ G4bool G4ClippablePolygon::BehindOf( const G4ClippablePolygon& other,
   //
   // Easy decision
   //
-  if (max > maxOther+kCarTolerance) return true;    // Clear winner
+  if (max > maxOther+kCarTolerance) { return true; }   // Clear winner
   
-  if (maxOther > max+kCarTolerance) return false;    // Clear loser
+  if (maxOther > max+kCarTolerance) { return false; }   // Clear loser
   
   //
   // We have a tie (this will not be all that rare since our
@@ -341,7 +341,7 @@ G4bool G4ClippablePolygon::GetPlanerExtent( const G4ThreeVector& pointOnPlane,
   //
   // Return false if nothing is left
   //
-  if (noLeft == 0) return false;
+  if (noLeft == 0) { return false; }
   
   //
   // Initialize min and max to our first vertex
@@ -355,9 +355,13 @@ G4bool G4ClippablePolygon::GetPlanerExtent( const G4ThreeVector& pointOnPlane,
   {
     G4double component = planeNormal.dot(vertices[i] - pointOnPlane);
     if (component < min )
+    {
       min = component;
+    }
     else if (component > max )
+    {
       max = component;
+    }
   }
   
   return true;
@@ -370,7 +374,7 @@ G4bool G4ClippablePolygon::GetPlanerExtent( const G4ThreeVector& pointOnPlane,
 void G4ClippablePolygon::ClipAlongOneAxis( const G4VoxelLimits& voxelLimit,
                                            const EAxis axis )
 {    
-  if (!voxelLimit.IsLimited(axis)) return;
+  if (!voxelLimit.IsLimited(axis)) { return; }
   
   G4ThreeVectorList tempPolygon;
 
@@ -403,7 +407,7 @@ void G4ClippablePolygon::ClipAlongOneAxis( const G4VoxelLimits& voxelLimit,
   //
   // If nothing is left, return now
   //
-  if (vertices.empty()) return;
+  if (vertices.empty()) { return; }
 }
 
 // ClipToSimpleLimits

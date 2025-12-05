@@ -25,9 +25,6 @@
 //
 /// \file PhysicsList.cc
 /// \brief Implementation of the PhysicsList class
-//
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "PhysicsList.hh"
 
@@ -38,7 +35,10 @@
 #include "RadioactiveDecayPhysics.hh"
 
 #include "G4DecayPhysics.hh"
+#include "G4EmStandardPhysics.hh"
 #include "G4EmStandardPhysics_option3.hh"
+#include "G4EmStandardPhysics_option4.hh"
+#include "G4EmExtraPhysics.hh"
 #include "G4HadronElasticPhysicsXS.hh"
 #include "G4HadronInelasticQBBC.hh"
 #include "G4HadronPhysicsFTFP_BERT_HP.hh"
@@ -76,8 +76,8 @@ PhysicsList::PhysicsList()
   G4NuclideTable::GetInstance()->SetThresholdOfHalfLife(halfLife);
 
   // Hadron Elastic scattering
-  fHadronElastic = new HadronElasticPhysicsHP(verb);
-  ////fHadronElastic = new G4HadronElasticPhysicsXS(verb);
+  ////fHadronElastic = new HadronElasticPhysicsHP(verb);
+  fHadronElastic = new G4HadronElasticPhysicsXS(verb);
   RegisterPhysics(fHadronElastic);
 
   // Hadron Inelastic Physics
@@ -102,13 +102,14 @@ PhysicsList::PhysicsList()
   /// RegisterPhysics( new G4StoppingPhysics(verb));
 
   // Gamma-Nuclear Physics
-  fGammaNuclear = new GammaNuclearPhysics("gamma");
+  ////fGammaNuclear = new GammaNuclearPhysics("gamma");
   ////fGammaNuclear = new GammaNuclearPhysicsLEND("gamma");
+  fGammaNuclear = new G4EmExtraPhysics;
   RegisterPhysics(fGammaNuclear);
 
   // EM physics
-  fElectromagnetic = new ElectromagneticPhysics();
-  ////fElectromagnetic = new G4EmStandardPhysics_option3();
+  ////fElectromagnetic = new ElectromagneticPhysics();  
+  fElectromagnetic = new G4EmStandardPhysics_option3();
   RegisterPhysics(fElectromagnetic);
 
   // Decay
@@ -139,13 +140,6 @@ void PhysicsList::ConstructProcess()
   fElectromagnetic->ConstructProcess();
   fDecay->ConstructProcess();
   fRadioactiveDecay->ConstructProcess();
-
-  // example of GetHadronicModel (due to bug in QGSP_BIC_AllHP)
-  //
-  G4ProcessManager* pManager = G4Neutron::Neutron()->GetProcessManager();
-  G4HadronicProcess* process = dynamic_cast<G4HadronicProcess*>(pManager->GetProcess("nCapture"));
-  G4HadronicInteraction* model = process->GetHadronicModel("nRadCapture");
-  if (model) model->SetMinEnergy(19.9 * MeV);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

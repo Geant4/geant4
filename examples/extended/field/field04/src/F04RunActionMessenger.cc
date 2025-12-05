@@ -23,10 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file field/field04/src/F04RunActionMessenger.cc
+/// \file F04RunActionMessenger.cc
 /// \brief Implementation of the F04RunActionMessenger class
-//
 
 #include "F04RunActionMessenger.hh"
 

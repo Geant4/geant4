@@ -111,6 +111,10 @@ void G4Evaporation::InitialiseChannelFactory()
     theFBU = new G4FermiBreakUpVI();
     theFBU->Initialise();
   }
+  if (nullptr == theChannelFactory) {
+    channelType = fEvaporation;
+    theChannelFactory = new G4EvaporationFactory(thePhotonEvaporation);
+  }
   theChannels = theChannelFactory->GetChannel(); 
   nChannels = theChannels->size();   
   probabilities.resize(nChannels, 0.0);

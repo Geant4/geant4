@@ -23,8 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//////////////////////////////////////////////////////////////////////////
+/// \file example_MyPythia.cxx
+/// \brief Main program of the HepMCEx02/data example
+
 // Matt.Dobbs@Cern.CH, December 1999
 // November 2000, updated to use Pythia 6.1
 // example of generating events with Pythia

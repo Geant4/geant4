@@ -32,10 +32,9 @@
 //  Journal of computational and applied Math., vol.6, no.1, pp.19-26, 1980.
 //
 //  DormandPrince7 - 5(4) embedded RK method
-//
 
-// Created: Somnath Banerjee, Google Summer of Code 2015, 25 May 2015
-// Supervision: John Apostolakis, CERN
+// Author: Josh Xie (CERN, Google Summer of Code 2014), June 2014
+// Supervisors:  Sandro Wenzel, John Apostolakis (CERN)
 // --------------------------------------------------------------------
 #ifndef G4TDORMAND_PRINCE_45_HH
 #define G4TDORMAND_PRINCE_45_HH
@@ -46,6 +45,11 @@
 
 #include <cstring>
 #include <cassert>
+
+/**
+ * @brief G4TDormandPrince45 is a templated version of G4DormandPrince745
+ * 5th order Runge-Kutta stepper.
+ */
 
 template <class T_Equation, unsigned int N = 6 >
 class G4TDormandPrince45 : public G4MagIntegratorStepper
@@ -85,6 +89,8 @@ class G4TDormandPrince45 : public G4MagIntegratorStepper
     G4double DistChord() const final;
 
     inline G4int IntegratorOrder() const override { return 4; }
+
+    G4StepperType StepperType() const override { return kTDormandPrince45; }
 
     inline const field_utils::ShortState<N>& GetYOut() const { return fyOut; }
 

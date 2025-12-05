@@ -27,8 +27,8 @@
 //
 // Class description:
 //
-// A utility class responsible for (efficiently) maintaining a List 
-// of blocked volume numbers, with rapid `reset' operations.
+// A utility class responsible for (efficiently) maintaining a list 
+// of blocked volume numbers, with rapid 'reset' operations.
 //
 // Notes:
 //
@@ -37,7 +37,7 @@
 // increased, so that the ValVector must only be zeroed when the
 // numerical range of the tag is used.
 
-// 24.7.96, P.Kent - Separated from G4Navigator
+// Author: Paul Kent (CERN), 24.07.1996 - Separated from G4Navigator
 // --------------------------------------------------------------------
 #ifndef G4BLOCKINGLIST_HH
 #define G4BLOCKINGLIST_HH 1
@@ -50,49 +50,71 @@ const G4int kBlockingListMaxDefault = 500; // Block up to 511 daughters
 const G4int kBlockingListStride = 128;
 const G4int kBlockTagNoMax = 2147483647;   // 2^31-1 maximum tag no may reach
 
+/**
+ * @brief G4BlockingList is an utility class responsible for (efficiently)
+ * maintaining a list of blocked volume numbers, with rapid 'reset' operations.
+ */
+
 class G4BlockingList
 {
   public:
 
+    /**
+     * Constructor for G4BlockingList.
+     * Creates empty blocking list of default size and 'stride' resize count.
+     *  @param[in] maxDefault Maximum list size.
+     *  @param[in] stride Stride resize count.
+     */
     G4BlockingList(G4int maxDefault = kBlockingListMaxDefault,
                    G4int stride = kBlockingListStride);
-      // Create empty blocking List of default size and `stride' resize count.
 
+    /**
+     * Default Destructor.
+     */
     ~G4BlockingList() = default;
-      // Destructor. No operations.
 
-    void Reset();
-      // Efficiently `Reset' the blocking List, so that no volumes
-      // are blocked [Advance tag number and only fully clear List
-      // if tag max reached]
+    /**
+     * Efficiently resets the blocking list, so that no volumes are blocked.
+     * Advances tag number and only fully clears the list if tag max is reached.
+     */
+    inline void Reset();
 
+    /**
+     * Clears the blocking list and resets the tag value [slow].
+     */
     void FullyReset();
-      // Clear the blocking List and reset tag value [slow].
 
-    void Enlarge(const G4int nv);
-      // Enlarges blocking List if current size < nv, in units of stride.
-      // Clears the new part of the List.
+    /**
+     * Enlarges the blocking list if current size less than 'nv', in units
+     * of stride. Clears the new part of the list.
+     */
+    inline void Enlarge(const G4int nv);
 
-    std::size_t Length() const;
-      // Returns the current length of the List. Note a length of 16
-      // means volumes of indices between 0 & 15 inclusive may be blocked.
+    /**
+     * Returns the current length of the list. A length of 16 means volumes
+     * of indices between 0 & 15 inclusive may be blocked.
+     */
+    inline std::size_t Length() const;
 
-    void BlockVolume(const G4int v);
-      // Block the volume number v.
-      // Requires: 0<=v<Length().
+    /**
+     * Blocks the volume number 'v'. Requires: 0<=v<Length().
+     */
+    inline void BlockVolume(const G4int v);
 
-    G4bool IsBlocked(const G4int v) const;
-      // Return true if the volume number v is blocked, else false.
-      // Requires: 0 <= v < Length().
+    /**
+     * Returns true if the volume number 'v' is blocked, else false.
+     * Requires: 0 <= v < Length().
+     */
+    inline G4bool IsBlocked(const G4int v) const;
 
   private:
 
+    /** Current blocked volume tag number. */
     G4int fBlockTagNo = 1, fStride;
-      // Current blocked volume tag number.
 
+    /** Blocked volumes: elements with indices corresponding to blocked
+        volume set to fBlockTagNo. */
     std::vector<G4int> fBlockingList; 
-      // Blocked volumes: Elements with indices
-      // corresponding to blocked volume set to fBlockTagNo.
 };
 
 #include "G4BlockingList.icc"

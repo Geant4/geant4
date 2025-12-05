@@ -29,6 +29,7 @@
 // --------------------------------------------------------------------
 
 #include "G4ExceptionHandler.hh"
+#include "G4ExceptionHandlerMessenger.hh"
 
 #include "G4EventManager.hh"
 #include "G4Material.hh"
@@ -48,6 +49,14 @@
 #include "G4ios.hh"
 
 #include <cstdlib>
+
+// --------------------------------------------------------------------
+G4ExceptionHandler::G4ExceptionHandler()
+{ messenger = new G4ExceptionHandlerMessenger(this); }
+
+// --------------------------------------------------------------------
+G4ExceptionHandler::~G4ExceptionHandler()
+{ delete messenger; }
 
 // --------------------------------------------------------------------
 G4bool G4ExceptionHandler::operator==(const G4ExceptionHandler& right) const
@@ -111,8 +120,14 @@ G4bool G4ExceptionHandler::Notify(const char* originOfException, const char* exc
       abortionForCoreDump = false;
       break;
     case JustWarning:
-      G4cout << ws_banner << message.str() << "*** This is just a warning message. ***" << we_banner
-             << G4endl;
+      if(IfPrint(exceptionCode))
+      {
+        std::ostringstream wmessage;
+        wmessage << "*** G4Exception : " << exceptionCode << G4endl
+                << "      issued by : " << originOfException << G4endl << description << G4endl;
+        G4cout << ws_banner << wmessage.str() << "*** This is just a warning message. ***" << we_banner
+               << G4endl;
+      }
       abortionForCoreDump = false;
       break;
     default:
@@ -208,3 +223,45 @@ void G4ExceptionHandler::DumpTrackInfo()
     G4cerr << " *** Note: Step information might not be properly updated." << G4endl;
   }
 }
+
+// --------------------------------------------------------------------
+G4bool G4ExceptionHandler::IfPrint(const char* errCode)
+{
+  static const G4String ws_banner =
+    "\n-------- WWWW ------- G4Exception-START -------- WWWW -------\n";
+  static const G4String we_banner =
+    "\n-------- WWWW -------- G4Exception-END --------- WWWW -------\n";
+  auto ec = fWarnCount.find(errCode);
+  if(ec!=fWarnCount.end())
+  {
+    if(ec->second>0)
+    {
+      ec->second--; 
+      if(ec->second==0)
+      {
+        std::ostringstream wmessage;
+        wmessage << "*** G4Exception " << errCode << " has reached the maximum number." << G4endl
+                 << "This warning message won't be displayed any longer.";
+        G4cout << ws_banner << wmessage.str() << we_banner
+               << G4endl;
+      }
+    }
+    else
+    { return false; }
+  }
+  if(fTotalWarnCount>0)
+  {
+    fTotalWarnCount--;
+    if(fTotalWarnCount==0)
+    {
+      std::ostringstream wmessage;
+      wmessage << "*** G4Exception warning messages reached the maximum number." << G4endl
+               << "Warning messages won't be displayed any longer.";
+      G4cout << ws_banner << wmessage.str() << we_banner
+             << G4endl;
+    }
+    return true;
+  }
+  return false;
+}
+

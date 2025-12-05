@@ -756,13 +756,13 @@ std::vector<std::string> Map::availableEvaluations( std::string const &a_project
 
     for( std::vector<BaseEntry *>::const_iterator iter1 = m_entries.begin( ); iter1 != m_entries.end( ); ++iter1 ) {
         if( (*iter1)->name( ) == GIDI_importChars ) {
-            Import *_mapEntry = dynamic_cast<Import *> (*iter1);
+            Import *_mapEntry = static_cast<Import *> (*iter1);
 
             std::vector<std::string> sub_list = _mapEntry->availableEvaluations( a_projectileID, a_targetID );
             for( std::vector<std::string>::const_iterator iter2 = sub_list.begin( ); iter2 != sub_list.end( ); ++iter2 )
                 list.push_back( *iter2 ); }
         else {
-            ProtareBase *protareEntry = dynamic_cast<ProtareBase *> (*iter1);
+            ProtareBase *protareEntry = static_cast<ProtareBase *> (*iter1);
 
             if( protareEntry->isMatch( a_projectileID, a_targetID ) ) list.push_back( protareEntry->evaluation( ) );
         }

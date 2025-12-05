@@ -1,10 +1,41 @@
-# Category emutils History
+emutils History
 
 See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top).
 It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
+
+## 2025-11-06 V.Ivanchenko (emutils-V11-03-15)
+- G4EmParameters - fixed typo in printout
+
+## 2025-10-21 V.Ivanchenko (emutils-V11-03-14)
+- G4VXRayModel, G4OpticalParameters - added extra methods needed for new Cerenkov
+  processes and models
+
+## 2025-09-10 V.Ivanchenko (emutils-V11-03-13)
+- G4EmParameters, G4EmLowEParameters - added DNA upper limits in energy 
+
+## 2025-08-04 V.Ivanchenko (emutils-V11-03-12)
+- G4EmCalculator - fixed Coverity warning
+
+## 2025-07-24 S.Y.Jun (emutils-V11-03-11)
+- G4OpticalParameters - Added QuasiCerenkov and QuasiScintillation in the
+  processActivation map
+
+## 2025-07-17 V.Ivanchenko (emutils-V11-03-10)
+- G4VEmProcess, G4VEnergyLossProcess, G4EmDataHandler, G4EmDataRegistry -
+  clean-up handling of tables, removed unused methods and headers.
+
+## 2025-07-14 S.Y.Jun (emutils-V11-03-09)
+- G4OpticalParameters, G4OpticalParametersMessenger - Introduce configurable
+  options to offload the generation of optical photons for the Cerenkov and
+  Scintillation processes
+
+## 2025-07-11 V.Ivanchenko (emutils-V11-03-08)
+- G4EmCalculator - provided computation of dEdx for ions (problem #2664)
+- G4VEmModel, G4VEnergyLossProcess - changed signature of the method
+    CorrectionsAlongStep(...), which is more convinient for G4EmCalulator
 
 ## 2025-06-11 V.Ivanchenko (emutils-V11-03-07)
 - G4VXRayModel - updated new base class for X-ray processes

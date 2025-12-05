@@ -23,10 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file exoticphysics/dmparticle/src/G4LDMHi.cc
+/// \file G4LDMHi.cc
 /// \brief Implementation of the G4LDMHi class
-//
-//
+
 //---------------------------------------------------------------------------
 //
 // ClassName:   G4LDMHi

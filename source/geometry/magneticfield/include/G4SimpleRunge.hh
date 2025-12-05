@@ -35,27 +35,63 @@
 // Takes the derivative at a position to be assumed at the middle of the
 // Step and adds it to the current position.
 
-// Created: W.Wander <wwc@mit.edu>, 12/09/1997
+// Author: W.Wander (MIT), 12.09.1997
 // -------------------------------------------------------------------
 #ifndef G4SIMPLERUNGE_HH
 #define G4SIMPLERUNGE_HH
 
 #include "G4MagErrorStepper.hh"
 
+/**
+ * @brief G4SimpleRunge implements a simple Runge stepper for magnetic field
+ * with 2nd order solver.
+ */
+
 class G4SimpleRunge : public G4MagErrorStepper
 {
   public:
 
-    G4SimpleRunge(G4EquationOfMotion* EquationRhs, G4int numberOfVariables = 6);
-   ~G4SimpleRunge() override;
-      // Constructor and destructor.
+    /**
+     * Constructor for G4SimpleRunge.
+     *  @param[in] EquationRhs Pointer to the provided equation of motion.
+     *  @param[in] numberOfVariables The number of integration variables.
+     */
+    G4SimpleRunge(G4EquationOfMotion* EquationRhs,
+                  G4int numberOfVariables = 6);
 
+    /**
+     * Destructor.
+     */
+    ~G4SimpleRunge() override;
+
+    /**
+     * Copy constructor and assignment operator not allowed.
+     */
+    G4SimpleRunge(const G4SimpleRunge&) = delete;
+    G4SimpleRunge& operator=(const G4SimpleRunge&) = delete;
+
+    /**
+     * The stepper for the Runge Kutta integration, but performing a 'dump' step
+     * without error calculation.
+     *  @param[in] y Starting values array of integration variables.
+     *  @param[in] dydx Derivatives array.
+     *  @param[in] h The given step size.
+     *  @param[out] yout Integration output.
+     */
     void DumbStepper( const G4double y[],
                       const G4double dydx[],
                             G4double h,
                             G4double yout[] ) override;
 
+    /**
+     * Returns the order, 2, of integration.
+     */
     inline G4int IntegratorOrder() const override { return 2; }
+
+    /**
+     * Returns the stepper type-ID, "kSimpleRunge".
+     */
+    inline G4StepperType StepperType() const override { return kSimpleRunge; }
 
   private:
 

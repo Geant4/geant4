@@ -93,6 +93,11 @@ namespace G4INCL {
         nucleonAbsorption(false),
         pionAbsorption(false),
         nDecays(0),
+        fission(false),
+        fissmode(0),
+        EStarFis((Float_t)0.0),
+        ASad(0),
+        ZSad(0),
         nSrcCollisions(0),
         nSrcPairs(0),
         nBlockedCollisions(0),
@@ -101,6 +106,7 @@ namespace G4INCL {
         deltasInside(false),
         sigmasInside(false),
         kaonsInside(false),
+        antinucleonsInside(false),
         antikaonsInside(false),
         lambdasInside(false),
         forcedDeltasInside(false),
@@ -110,7 +116,9 @@ namespace G4INCL {
         forcedSigmaOutside(false),
         forcedStrangeInside(false),
         emitLambda(0),
+        emitAntilambda(0),
         emitKaon(false),
+        emitAntinucleon(false),
         clusterDecay(false),
         firstCollisionTime((Float_t)0.0),
         firstCollisionXSec((Float_t)0.0),
@@ -274,6 +282,20 @@ namespace G4INCL {
       Bool_t pionAbsorption;
       /** \brief Number of accepted Delta decays */
       Int_t nDecays;
+      /** \brief True if the event is fission */
+      Bool_t fission;
+      /** \brief Fission mode */
+      Short_t fissmode;
+      /** \brief Excitation energy above fission barrier [MeV] */
+      Float_t EStarFis;
+      /** \brief Mass number at saddle */
+      Short_t ASad;
+      /** \brief Charge number at saddle */
+      Short_t ZSad;
+      /** \brief Mass number at scission */
+      std::vector<Int_t> ASci;
+      /** \brief Charge number at scission */
+      std::vector<Int_t> ZSci;
       /** \brief Number of accepted SRC collisions */
       Int_t nSrcCollisions;
       /** \brief Number of src pairs */
@@ -290,6 +312,8 @@ namespace G4INCL {
       Bool_t sigmasInside;
       /** \brief Event involved kaons in the nucleus at the end of the cascade */
       Bool_t kaonsInside;
+      /** \brief Event involved antinucleons in the nucleus at the end of the cascade */
+      Bool_t antinucleonsInside;
       /** \brief Event involved antikaons in the nucleus at the end of the cascade */
       Bool_t antikaonsInside;
       /** \brief Event involved lambdas in the nucleus at the end of the cascade */
@@ -308,8 +332,12 @@ namespace G4INCL {
       Bool_t forcedStrangeInside;
       /** \brief Number of forced Lambda emit out of the nucleus */
       Int_t emitLambda;
+      /** \brief Number of forced Antilambda emit out of the nucleus */
+      Int_t emitAntilambda;
       /** \brief Event involved forced Kaon emission */
       Bool_t emitKaon;
+      /** \brief Event involved forced Antinucleon emission */
+      Bool_t emitAntinucleon;
       /** \brief Event involved cluster decay */
       Bool_t clusterDecay;
       /** \brief Time of the first collision [fm/c] */
@@ -399,6 +427,13 @@ namespace G4INCL {
         nucleonAbsorption = false;
         pionAbsorption = false;
         nDecays = 0;
+        fission = false;
+        fissmode = 0;
+        EStarFis = (Float_t)0.0;
+        ASad = 0;
+        ZSad = 0;
+        ASci.clear();
+        ZSci.clear();
         nSrcCollisions = 0;
         nSrcPairs = 0;
         nBlockedCollisions = 0;
@@ -407,6 +442,7 @@ namespace G4INCL {
         deltasInside = false;
         sigmasInside = false;
         kaonsInside = false;
+        antinucleonsInside = false;
         antikaonsInside = false;
         lambdasInside = false;
         forcedDeltasInside = false;
@@ -416,7 +452,9 @@ namespace G4INCL {
         forcedSigmaOutside = false;
         forcedStrangeInside = false;
         emitLambda = 0;
+        emitAntilambda = 0;
         emitKaon = false;
+        emitAntinucleon = false;
         clusterDecay = false;
         firstCollisionTime = (Float_t)0.0;
         firstCollisionXSec = (Float_t)0.0;

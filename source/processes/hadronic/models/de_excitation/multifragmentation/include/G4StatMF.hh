@@ -23,8 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
 
@@ -38,52 +36,35 @@
 #include "G4StatMFMacroCanonical.hh"
 #include "G4StatMFChannel.hh"
 #include "G4Fragment.hh"
-#include "G4ParticleTable.hh"
-#include "G4IonTable.hh"
-#include "Randomize.hh"
 
 class G4StatMF : public G4VMultiFragmentation
 {
 public:
 
-    G4StatMF();
-    ~G4StatMF();
+  G4StatMF();
+  ~G4StatMF() override;
 
-    // Copy constructor	
-    G4StatMF(const G4StatMF & right) = delete;
+  G4FragmentVector* BreakItUp(const G4Fragment &theNucleus) override;
 
-    // Operators
-    G4StatMF & operator=(const G4StatMF & right) = delete;
-    G4bool operator==(const G4StatMF & right) = delete;
-    G4bool operator!=(const G4StatMF & right) = delete;
-
-    G4FragmentVector* BreakItUp(const G4Fragment &theNucleus) override;
+  G4StatMF(const G4StatMF & right) = delete;
+  G4StatMF & operator=(const G4StatMF & right) = delete;
+  G4bool operator==(const G4StatMF & right) = delete;
+  G4bool operator!=(const G4StatMF & right) = delete;
 
 private:
 
-    // This finds temperature of breaking channel.
-    G4bool FindTemperatureOfBreakingChannel(const G4Fragment & theFragment, 
-					    const G4StatMFChannel * aChannel,
-					    G4double & Temperature);
+  // This finds temperature of breaking channel.
+  G4bool FindTemperatureOfBreakingChannel(const G4Fragment & theFragment, 
+					  const G4StatMFChannel * aChannel,
+					  G4double & Temperature);
 
-    G4double CalcEnergy(G4int A, G4int Z, 
-			const G4StatMFChannel * aChannel,
-			G4double T);
+  G4double CalcEnergy(G4int A, G4int Z, const G4StatMFChannel* aChannel,
+		      G4double T);
 
-    G4VStatMFEnsemble* _theEnsemble = nullptr;
-    G4int _secID = -1;  // Creator model ID for the secondaries created by this model
+  G4StatMFMicroCanonical* theMicrocanonicalEnsemble{nullptr};
+  G4StatMFMacroCanonical* theMacrocanonicalEnsemble{nullptr};
+
+  G4VStatMFEnsemble* fEnsemble{nullptr};
 };
 
 #endif
-
-
-
-
-
-
-
-
-
-
-
-

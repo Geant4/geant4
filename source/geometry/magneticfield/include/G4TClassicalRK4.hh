@@ -27,58 +27,61 @@
 //
 // Class description:
 //
-// Templated version of G4ClassicalRK4
-//
-//
-// Created: Josh Xie  (supported by Google Summer of Code 2014 )
+// Templated version of G4ClassicalRK4.
+// Adapted from G4TClassicalRK4 class.
+
+// Author: Josh Xie (CERN, Google Summer of Code 2014), June 2014
 // Supervisors:  Sandro Wenzel, John Apostolakis (CERN)
-// Adapted from G4G4TClassicalRK4 class
 // --------------------------------------------------------------------
+#ifndef G4TCLASSICALRK4_HH
+#define G4TCLASSICALRK4_HH
+
 #include "G4ThreeVector.hh"
 #include "G4MagIntegratorStepper.hh"
 #include "G4TMagErrorStepper.hh"
 
+/**
+ * @brief G4TClassicalRK4 is a templated version of G4ClassicalRK4
+ * 4th order Runge-Kutta stepper.
+ */
+
 template <class T_Equation, unsigned int N>
-class G4TClassicalRK4
-  : public G4TMagErrorStepper<G4TClassicalRK4<T_Equation, N>, T_Equation, N>
+class G4TClassicalRK4 : public G4TMagErrorStepper<G4TClassicalRK4<T_Equation, N>, T_Equation, N>
 {
- public:  // with description
-  static constexpr G4double IntegratorCorrection = 1. / ((1 << 4) - 1);
+  public:
 
-  G4TClassicalRK4(T_Equation* EqRhs, G4int numberOfVariables = 8);
+    static constexpr G4double IntegratorCorrection = 1. / ((1 << 4) - 1);
 
-  virtual ~G4TClassicalRK4() { ; }
+    G4TClassicalRK4(T_Equation* EqRhs, G4int numberOfVariables = 8);
 
-  void RightHandSideInl(G4double y[],
-                     G4double dydx[])
-  {
-    fEquation_Rhs->T_Equation::RightHandSide(y, dydx);
-  }
+    ~G4TClassicalRK4() override = default;
 
-  // A stepper that does not know about errors.
-  // It is used by the MagErrorStepper stepper.
+    G4TClassicalRK4(const G4TClassicalRK4&) = delete;
+    G4TClassicalRK4& operator=(const G4TClassicalRK4&) = delete;
 
-  inline  // __attribute__((always_inline))
-  void DumbStepper(const G4double yIn[],
-                   const G4double dydx[],
-                   G4double h,
-                   G4double yOut[]);
+    void RightHandSideInl(G4double y[], G4double dydx[])
+    {
+      fEquation_Rhs->T_Equation::RightHandSide(y, dydx);
+    }
 
- public:  // without description
-  G4int IntegratorOrder() const { return 4; }
+    // A stepper that does not know about errors.
+    // It is used by the MagErrorStepper stepper.
 
-  G4TClassicalRK4(const G4TClassicalRK4&) = delete;
-  G4TClassicalRK4& operator=(const G4TClassicalRK4&) = delete;
-  // No copy constructor and assignment operator.
+    inline void DumbStepper(const G4double yIn[],
+                            const G4double dydx[],
+                            G4double h,
+                            G4double yOut[]);
 
- private:
-  // G4int fNumberOfVariables ; // is set default to 6 in constructor
-  G4double dydxm[N < 8 ? 8 : N];
-  G4double dydxt[N < 8 ? 8 : N];
-  G4double yt[N < 8 ? 8 : N];
-  // scratch space - not state
+    G4int IntegratorOrder() const { return 4; }
 
-  T_Equation* fEquation_Rhs;
+  private:
+
+    G4double dydxm[N < 8 ? 8 : N];
+    G4double dydxt[N < 8 ? 8 : N];
+    G4double yt[N < 8 ? 8 : N];
+    // scratch space - not state
+
+    T_Equation* fEquation_Rhs;
 };
 
 template <class T_Equation, unsigned int N >
@@ -146,9 +149,6 @@ G4TClassicalRK4<T_Equation,N>::DumbStepper(const G4double yIn[],
   {
      this->NormalisePolarizationVector(yOut);
   }
-  
-}  // end of DumbStepper ....................................................
+}
 
-// template <class T_Equation, unsigned int N >
-// G4TClassicalRK4<T_Equation,N>::
-
+#endif

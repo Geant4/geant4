@@ -1,0 +1,43 @@
+#Positron Source type
+/det/isHybridSource true
+
+#Radiator Crystal settings
+/crystal/setCrystalMaterial W
+/crystal/setCrystalSize 7.5 7.5 1.50 mm
+/crystal/setCrystalLattice <111>
+
+#Converter/Target t (amorphous) settings
+/det/setRadiatorConverterSepDistance 0.1 cm
+/det/setConverterSize 22 22 10.50 mm
+
+/run/initialize
+
+/run/verbose 1
+
+/run/setfilenamesave output/output_2.86GeV_W1.50mm_D0.1cm_target10.50mm.root
+
+/control/execute macros/setPrimaryBeam.mac        
+
+/score/create/boxMesh boxMesh1                
+/score/mesh/boxSize 11 11 5.00 mm #converter
+/score/mesh/nBin 45 45 21 #converter
+/score/mesh/translate/xyz 0 0 6.28 mm #converter
+/score/quantity/energyDeposit Edep #[MeV]        
+/score/close
+/score/list    
+
+/score/create/boxMesh boxMesh2                
+/score/mesh/boxSize 3.75 3.75 0.75 mm #radiator
+/score/mesh/nBin 15 15 3 #radiator
+/score/mesh/translate/xyz 0 0 -0.75 mm #radiator
+/score/quantity/energyDeposit Edep #[MeV]        
+/score/close
+/score/list             
+
+#statistics
+/run/printProgress 100
+/run/beamOn 10000                             
+
+/score/dumpQuantityToFile boxMesh1 Edep output/Edep_2.86GeV_W1.50mm_D0.1cm_target10.50mm.txt
+/score/dumpQuantityToFile boxMesh2 Edep output/Edep_2.86GeV_W1.50mm_D0.1cm_target10.50mm_rad.txt
+

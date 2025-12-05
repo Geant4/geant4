@@ -23,10 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file eventgenerator/HepMC/HepMCEx01/include/ExN04TrackerHit.hh
+/// \file ExN04TrackerHit.hh
 /// \brief Definition of the ExN04TrackerHit class
-//
-//
 
 #ifndef ExN04TrackerHit_h
 #define ExN04TrackerHit_h 1

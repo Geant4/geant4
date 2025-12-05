@@ -82,6 +82,7 @@ namespace G4INCL {
     virtual void postInteraction(FinalState *) = 0;
 
     G4double getTime() const { return theTime; };
+    G4double setTime(G4double t) const { return t; };
 
     virtual ParticleList getParticles() const = 0;
 

@@ -29,7 +29,7 @@
 
 
 #include "FlashDetectorConstruction.hh"
-
+#include "FlashMinibeamTemplate.hh"
 #include "G4RunManager.hh"
 
 #include "G4Material.hh"
@@ -77,7 +77,6 @@ fPhantomLogicalVolume(0),fPhant_phys(0),
       fCheckOverlaps(true),
       fActivateDet(false)
        {
-
   DefineMaterials();
   fDetectorMessenger = new FlashDetectorMessenger(this);
 
@@ -111,22 +110,14 @@ G4bool isotopes = false;
  C = nist->FindOrBuildElement("C", isotopes);
 
   }
-
-
 //
 G4VPhysicalVolume *
 FlashDetectorConstruction::ConstructPhantom(G4double CollPos) {
 //This function creates a cubic phantom with the point Collpos on the surface of the cube.
-
  fPhantomMaterial = nist->FindOrBuildMaterial("G4_WATER");
-
  fPosition_coefficient = CollPos;
- 
  fPhantom_coordinateX = (fPosition_coefficient * mm + fPhantomSizeX / 2);
-
  fPhantomPosition =  G4ThreeVector(fPhantom_coordinateX, 0. * mm, 0. * mm); //phantom is constructed with the entrance surface attached to the applicator 
-  
-
   // Definition of the solid volume of the Phantom
   fPhantom = new G4Box("Phantom", fPhantomSizeX / 2, fPhantomSizeY / 2,
                       fPhantomSizeZ / 2);
@@ -159,22 +150,14 @@ FlashDetectorConstruction::ConstructPhantom(G4double CollPos) {
 
   return fPhant_phys;
 }
-
-
 void FlashDetectorConstruction::ConstructDetector(){
  //Detector
-  
-
   G4double fDensity_SiC=3.22*g/cm3;
-
   SiC=new G4Material("SiC", fDensity_SiC,2);
   SiC->AddElement(Si,1);
   SiC->AddElement(C,1);
  
  fDetectorMaterial=SiC;
-
-
-
  fDet_box = new G4Box("Detector",fDet_thickness/2,fDet_width/2,fDet_width/2);
  
   // Definition of the logical volume of the Detector
@@ -187,10 +170,8 @@ void FlashDetectorConstruction::ConstructDetector(){
     // Definition of the logical volume of the Detector substrate
     fDet_sub_LogicalVolume =
         new G4LogicalVolume(fDet_sub, fDetectorMaterial, "Det_sub_Log", 0, 0, 0);
-
     
   G4double posInit = (nDet - 1) * fDet_ctc / 2; 
-
 
 if (fActivateDet) {
     // Placement physical volumes of the detector array
@@ -221,7 +202,6 @@ if (fActivateDet) {
         fCheckOverlaps
     ));
 
-
     fDet_sub_phys.push_back (new G4PVPlacement
 			     (0,
 			      G4ThreeVector(-fPhantomSizeX/2+fDetectorPosition+fDet_thickness/2+fDet_sub_thickness/2, 0. * mm, -posInit + fDet_ctc * i),
@@ -231,9 +211,6 @@ if (fActivateDet) {
 			      false,
 			      i,
 			      fCheckOverlaps));
-
-  
-    
     }
 }
 
@@ -252,7 +229,6 @@ G4VPhysicalVolume *FlashDetectorConstruction::Construct() {
   airNist = G4NistManager::Instance()->FindOrBuildMaterial("G4_AIR", isotopes);
   // Air
   //
-
   G4Box *treatmentRoom = new G4Box("TreatmentRoom", worldX, worldY, worldZ);
   logicTreatmentRoom = new G4LogicalVolume(treatmentRoom, airNist,
                                            "logicTreatmentRoom", 0, 0, 0);
@@ -266,21 +242,24 @@ G4VPhysicalVolume *FlashDetectorConstruction::Construct() {
   // -----------------------------
   // Applicator + phantom +Default dimensions
   //------------------------------
- 
-
-  
-
   Collimator = new FlashApplicator(physicalTreatmentRoom);
+  //// Construct minibeam collimator////
   
-
-   
- fPhantom_physical =
+  G4bool Template_constr = false; //Set to true to activate the minibeam configuration
+  
+  if (Template_constr == true){
+  fTemp_= new FlashMinibeamTemplate(physicalTreatmentRoom,Collimator->fFinalApplicatorXPositionFlash +
+                         Collimator->fHightFinalApplicatorFlash,Collimator->fOuterRadiusFirstApplicatorFlash);
+    fPhantom_physical =
         ConstructPhantom(Collimator->fFinalApplicatorXPositionFlash +
-	Collimator->fHightFinalApplicatorFlash+fAirGap);
- 
-
+                         Collimator->fHightFinalApplicatorFlash +fAirGap+ 2*fTemp_->hight );}
+   else if (Template_constr == false){
+    
+   fPhantom_physical =
+        ConstructPhantom(Collimator->fFinalApplicatorXPositionFlash +
+	Collimator->fHightFinalApplicatorFlash+fAirGap); 
+   }
   ConstructDetector();
- 
   return physicalTreatmentRoom;
 }
 
@@ -300,8 +279,6 @@ if (fActivateDet){
 }    
 
 }
-
-
 /////MESSANGER ///
 
 G4bool FlashDetectorConstruction::SetPhantomMaterial(G4String material)
@@ -331,7 +308,6 @@ G4bool FlashDetectorConstruction::SetPhantomMaterial(G4String material)
 
     return true;
 }
-
 
 void FlashDetectorConstruction::SetPhantomSize(G4double sizeX, G4double sizeY, G4double sizeZ)
 {
@@ -373,9 +349,6 @@ G4bool FlashDetectorConstruction::SetDetectorMaterial(G4String material)
 
     return true;
 }
-
-
-
 
 void FlashDetectorConstruction::SetDetectorThickness(G4double thickness)
 {

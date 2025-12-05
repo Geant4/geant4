@@ -1,0 +1,88 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+// Implementation of inline methods of G4TwistTrapParallelSide.
+// --------------------------------------------------------------------
+
+inline 
+G4double G4TwistTrapParallelSide::GetValueB(G4double phi) 
+{
+  return ( fDy2plus1 + fDy2minus1 * ( 2 * phi ) / fPhiTwist ) ;
+}
+
+inline
+G4double G4TwistTrapParallelSide::Xcoef(G4double phi)
+{
+  return GetValueB(phi)/2. ;
+}
+
+inline G4ThreeVector
+G4TwistTrapParallelSide::
+SurfacePoint( G4double phi, G4double u, G4bool isGlobal ) 
+{
+  // function to calculate a point on the surface, given by parameters phi,u
+
+  G4ThreeVector SurfPoint ( u*std::cos(phi) - Xcoef(phi)*std::sin(phi)
+                          + fdeltaX*phi/fPhiTwist,
+                            u*std::sin(phi) + Xcoef(phi)*std::cos(phi)
+                          + fdeltaY*phi/fPhiTwist,
+                            2*fDz*phi/fPhiTwist  );
+  if (isGlobal) { return (fRot * SurfPoint + fTrans); }
+  return SurfPoint;
+}
+
+
+inline
+G4double G4TwistTrapParallelSide::GetBoundaryMin(G4double phi)
+{
+  return  -(fPhiTwist*(fDx2 + fDx4 - fDy2plus1*fTAlph)
+          + 2*fDx4minus2*phi - 2*fDy2minus1*fTAlph*phi)/(2.*fPhiTwist) ;
+}
+
+inline
+G4double G4TwistTrapParallelSide::GetBoundaryMax(G4double phi)
+{
+  return (fDx2 + fDx4 + fDy2plus1*fTAlph)/ 2.
+       + ((fDx4minus2 + fDy2minus1*fTAlph)*phi)/fPhiTwist ;
+}
+
+inline
+G4double  G4TwistTrapParallelSide::GetSurfaceArea()
+{
+  return 2*fDx4plus2*fDz ;
+}
+
+inline
+G4ThreeVector G4TwistTrapParallelSide::NormAng( G4double phi, G4double u ) 
+{
+  // function to calculate the norm at a given point on the surface
+  // replace a1-d1
+
+  G4ThreeVector nvec(-2*fDz*std::sin(phi) ,
+                      2*fDz*std::cos(phi) ,
+                     -(fDy2minus1 + fPhiTwist*u + fdeltaY*std::cos(phi)
+                     -fdeltaX*std::sin(phi))) ;
+  return nvec.unit();
+}

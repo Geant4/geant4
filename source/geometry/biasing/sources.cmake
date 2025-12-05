@@ -29,12 +29,6 @@ geant4_add_module(G4geombias
     G4IStore.cc
     G4ImportanceAlgorithm.cc
     G4Nsplit_Weight.cc
-    G4VGCellFinder.cc
-    G4VIStore.cc
-    G4VImportanceAlgorithm.cc
-    G4VImportanceSplitExaminer.cc
-    G4VWeightWindowAlgorithm.cc
-    G4VWeightWindowStore.cc
     G4WeightWindowAlgorithm.cc
     G4WeightWindowStore.cc)
 

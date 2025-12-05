@@ -41,7 +41,7 @@
 // Author: Gabriele Cosmo (CERN), 9 October 2018
 // --------------------------------------------------------------------
 #ifndef G4ASSEMBLYSTORE_HH
-#define G4ASSEMBLYSTORE_HH 1
+#define G4ASSEMBLYSTORE_HH
 
 #include <vector>
 

@@ -1,0 +1,32 @@
+\page Examples_molcounters Category "medical/dna/molcounters"
+
+Author: C. Velten \n
+Date: 7 April 2025 \n
+Email: cv2415@columbia.edu
+
+This example is provided by the Geant4-DNA collaboration
+(http://geant4-dna.org).
+
+  Any report or published results obtained using the Geant4-DNA software
+  shall cite the following Geant4-DNA collaboration publications:\n
+    Med. Phys. 51 (2024) 5873–5889\n
+    Med. Phys. 45 (2018) e722-e739\n
+    Phys. Med. 31 (2015) 861-874\n
+    Med. Phys. 37 (2010) 4692-4708\n
+    Int. J. Model. Simul. Sci. Comput. 1 (2010) 157–178
+
+
+This folder contains two examples.
+
+\ref Examplebasic
+
+"basic" focuses on the use of the molecule counter manager
+system and how to register different counters and adjust their
+parameters like, e.g., activation and time precision.
+
+\ref Examplesdcounters
+
+"sdcounters" shows how to use primitive scorers and a multi-
+functional detector to record and write out molecule counts.
+
+Please refer to each example's README for further information.

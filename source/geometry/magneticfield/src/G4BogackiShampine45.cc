@@ -53,7 +53,7 @@
 //   for re-use in case of a successful step.
 //   (This is done in a 'later' version using a refined interface).
 //
-// Created: Somnath Banerjee, Google Summer of Code 2015, May-August 2015
+// Author: Somnath Banerjee, Google Summer of Code 2015, May-August 2015
 // Revision: John Apostolakis, CERN, May 2016
 // --------------------------------------------------------------------
 

@@ -23,10 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file eventgenerator/HepMC/HepMCEx01/src/ExN04MuonSD.cc
+/// \file ExN04MuonSD.cc
 /// \brief Implementation of the ExN04MuonSD class
-//
-//
 
 #include "ExN04MuonSD.hh"
 

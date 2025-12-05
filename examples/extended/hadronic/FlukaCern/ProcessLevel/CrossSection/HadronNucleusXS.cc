@@ -23,9 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-///  \file HadronicNucleusXS.cc
-///  \brief Main program,
-///         hadronic/FlukaCern/ProcessLevel/CrossSection example.
+/// \file HadronNucleusXS.cc
+/// \brief Main program of the ProcessLevel/CrossSection example
+
 //
 //  Author: G.Hugo, 06 January 2023
 //

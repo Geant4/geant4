@@ -124,12 +124,15 @@ namespace G4INCL {
     }
 
     InterpolationTable *createRCDFTable(const ParticleType t, const G4int A, const G4int Z) {
-// assert(t==Proton || t==Neutron || t==Lambda);
+// assert(t==Proton || t==Neutron || t==Lambda || t==antiNeutron || t==antiProton);
 
       if(!rCDFTableCache)
         rCDFTableCache = new std::map<G4int,InterpolationTable*>;
 
-      const G4int nuclideID = ((t==Proton) ? 1000 : -1000)*Z + A; // MCNP-style nuclide IDs
+      G4int nuclideID = ((t==Proton) ? 1000 : -1000)*Z + A; // MCNP-style nuclide IDs
+      if (A<0){
+        nuclideID = ((t==antiProton) ? 1000 : -1000)*(-Z) + (-A);
+      }
       const std::map<G4int,InterpolationTable*>::const_iterator mapEntry = rCDFTableCache->find(nuclideID);
       if(mapEntry == rCDFTableCache->end()) {
 
@@ -148,7 +151,7 @@ namespace G4INCL {
           G4double radius = ParticleTable::getRadiusParameter(t, A, Z);
           G4double maximumRadius = ParticleTable::getMaximumNuclearRadius(t, A, Z);
           rDensityFunction = new NuclearDensityFunctions::Gaussian(maximumRadius, Math::oneOverSqrtThree * radius);
-        } else if(A == 2 && Z == 1) { // density from the Paris potential for deuterons
+        } else if((A == 2 && Z == 1) || (A ==-2 && Z==-1)){ // density from the Paris potential for deuterons & antideuterons
           rDensityFunction = new NuclearDensityFunctions::ParisR();
         } else {
           INCL_ERROR("No nuclear density function for target A = "
@@ -169,12 +172,15 @@ namespace G4INCL {
     }
 
     InterpolationTable *createPCDFTable(const ParticleType t, const G4int A, const G4int Z) {
-// assert(t==Proton || t==Neutron || t==Lambda);
+// assert(t==Proton || t==Neutron || t==Lambda || t==antiNeutron || t==antiProton);
 
       if(!pCDFTableCache)
         pCDFTableCache = new std::map<G4int,InterpolationTable*>;
 
-      const G4int nuclideID = ((t==Proton) ? 1000 : -1000)*Z + A; // MCNP-style nuclide IDs
+      G4int nuclideID = ((t==Proton) ? 1000 : -1000)*Z + A; // MCNP-style nuclide IDs
+      if (A<0){
+        nuclideID = ((t==antiProton) ? 1000 : -1000)*(-Z) + (-A);
+      }
       const std::map<G4int,InterpolationTable*>::const_iterator mapEntry = pCDFTableCache->find(nuclideID);
       if(mapEntry == pCDFTableCache->end()) {
         IFunction1D *pDensityFunction;
@@ -184,7 +190,7 @@ namespace G4INCL {
         } else if(A <= 19 && A > 2) { // Gaussian distribution for light nuclei
           const G4double momentumRMS = Math::oneOverSqrtThree * ParticleTable::getMomentumRMS(A, Z);
           pDensityFunction = new NuclearDensityFunctions::Gaussian(5.*momentumRMS, momentumRMS);
-        } else if(A == 2 && Z == 1) { // density from the Paris potential for deuterons
+        } else if((A == 2 && Z == 1) || (A ==-2 && Z==-1)) { // density from the Paris potential for deuterons & antideuterons
           pDensityFunction = new NuclearDensityFunctions::ParisP();
         } else {
           INCL_ERROR("No nuclear density function for target A = "

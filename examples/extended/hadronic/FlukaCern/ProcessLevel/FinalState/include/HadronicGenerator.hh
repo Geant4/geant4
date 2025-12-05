@@ -25,12 +25,14 @@
 //
 /// \file HadronicGenerator.hh
 /// \brief Definition of the HadronicGenerator class
-//
+
 //------------------------------------------------------------------------
 // Class: HadronicGenerator
 // Author: Alberto Ribon (CERN EP/SFT), May 2020
 // Modified: G. Hugo, 8 December 2022
 //
+/// \class HadronicGenerator
+///
 /// This class shows how to use Geant4 as a generator for simulating
 /// inelastic hadron-nuclear interactions.
 /// Some of the most used hadronic models are currently supported in
@@ -59,9 +61,6 @@
 /// Ivanchenko), with various simplifications and restricted to hadronic
 /// inelastic interactions.
 //------------------------------------------------------------------------
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef HadronicGenerator_h
 #define HadronicGenerator_h 1

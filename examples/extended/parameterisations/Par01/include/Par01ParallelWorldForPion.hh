@@ -23,11 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file Par01/include/Par01ParallelWorldForPion.hh
+/// \file Par01ParallelWorldForPion.hh
 /// \brief Definition of the Par01ParallelWorldForPion class
-//
-//
-//
+
 #ifndef Par01ParallelWorldForPion_hh
 #define Par01ParallelWorldForPion_hh
 

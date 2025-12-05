@@ -23,9 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-
 // Class Description
 // Final state production model for theoretical models of hadron inelastic
 // scattering in geant4;
@@ -51,54 +48,54 @@
 
 class G4CRCoalescence;
 
-class G4TheoFSGenerator : public G4HadronicInteraction 
 
-{
+class G4TheoFSGenerator : public G4HadronicInteraction {
   public:
-      explicit G4TheoFSGenerator(const G4String& name = "TheoFSGenerator");
-      ~G4TheoFSGenerator() override;
+    explicit G4TheoFSGenerator( const G4String& name = "TheoFSGenerator" );
+    ~G4TheoFSGenerator() override;
 
-      G4TheoFSGenerator(const G4TheoFSGenerator &right) = delete;
-      const G4TheoFSGenerator & operator=(const G4TheoFSGenerator &right) = delete;
-      G4bool operator==(const G4TheoFSGenerator &right) const = delete;
-      G4bool operator!=(const G4TheoFSGenerator &right) const = delete;
+    G4TheoFSGenerator( const G4TheoFSGenerator &right ) = delete;
+    const G4TheoFSGenerator & operator=( const G4TheoFSGenerator &right ) = delete;
+    G4bool operator==( const G4TheoFSGenerator &right ) const = delete;
+    G4bool operator!=( const G4TheoFSGenerator &right ) const = delete;
+  
+    G4HadFinalState* ApplyYourself( const G4HadProjectile &thePrimary, G4Nucleus &theNucleus ) override;
 
-  public:
-      G4HadFinalState * ApplyYourself(const G4HadProjectile & thePrimary, G4Nucleus & theNucleus) override;
+    inline void SetTransport( G4VIntraNuclearTransportModel *const value );
+    inline void SetHighEnergyGenerator( G4VHighEnergyGenerator *const value );
+    inline void SetQuasiElasticChannel( G4QuasiElasticChannel *const value );
 
-      inline void SetTransport(G4VIntraNuclearTransportModel *const  value);
-      inline void SetHighEnergyGenerator(G4VHighEnergyGenerator *const  value);
-      inline void SetQuasiElasticChannel(G4QuasiElasticChannel *const value);
+    inline const G4VIntraNuclearTransportModel* GetTransport() const;
+    inline const G4VHighEnergyGenerator* GetHighEnergyGenerator() const;
+    inline const G4QuasiElasticChannel* GetQuasiElasticChannel() const;
 
-      inline const G4VIntraNuclearTransportModel* GetTransport() const;
-      inline const G4VHighEnergyGenerator* GetHighEnergyGenerator() const;
-      inline const G4QuasiElasticChannel* GetQuasiElasticChannel() const;
-
-      std::pair<G4double, G4double> GetEnergyMomentumCheckLevels() const override;
-      void ModelDescription(std::ostream& outFile) const override;
+    std::pair<G4double, G4double> GetEnergyMomentumCheckLevels() const override;
+    void ModelDescription( std::ostream& outFile ) const override;
 
   private: 
-      G4VIntraNuclearTransportModel * theTransport;
-      G4VHighEnergyGenerator * theHighEnergyGenerator;
-      G4DecayStrongResonances theDecay;
-      G4HadFinalState * theParticleChange;
-      G4QuasiElasticChannel * theQuasielastic;
-      G4CRCoalescence * theCosmicCoalescence;
-      G4int theStringModelID;
+    G4VIntraNuclearTransportModel* theTransport;
+    G4VHighEnergyGenerator* theHighEnergyGenerator;
+    G4DecayStrongResonances theDecay;
+    G4HadFinalState* theParticleChange;
+    G4QuasiElasticChannel* theQuasielastic;
+    G4CRCoalescence* theCosmicCoalescence;
+    G4int theStringModelID;      // ID for generic inelastic interactions by string models (FTF and QGS)
+    G4int theFTFQuasiElasticID;  // ID for FTF model quasi-elastic interactions
+    G4int theFTFDiffractiveID;   // ID for FTF model diffractive interactions
 };
 
 
-inline void G4TheoFSGenerator::SetTransport(G4VIntraNuclearTransportModel *const  value)
+inline void G4TheoFSGenerator::SetTransport( G4VIntraNuclearTransportModel *const value )
 {
   theTransport = value;
 }
 
-inline void G4TheoFSGenerator::SetHighEnergyGenerator(G4VHighEnergyGenerator *const  value)
+inline void G4TheoFSGenerator::SetHighEnergyGenerator( G4VHighEnergyGenerator *const value )
 {
   theHighEnergyGenerator= value;
 }
 
-inline void G4TheoFSGenerator::SetQuasiElasticChannel(G4QuasiElasticChannel *const value)
+inline void G4TheoFSGenerator::SetQuasiElasticChannel( G4QuasiElasticChannel *const value )
 {
   theQuasielastic = value;
 }
@@ -119,5 +116,3 @@ inline const G4QuasiElasticChannel* G4TheoFSGenerator::GetQuasiElasticChannel() 
 }
 
 #endif
-
-

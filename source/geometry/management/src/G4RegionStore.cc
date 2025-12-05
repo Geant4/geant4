@@ -25,7 +25,7 @@
 //
 // G4RegionStore implementation
 //
-// 18.09.02, G.Cosmo - Initial version
+// Author: Gabriele Cosmo (CERN), 18.09.2002
 // --------------------------------------------------------------------
 
 #include "G4Region.hh"

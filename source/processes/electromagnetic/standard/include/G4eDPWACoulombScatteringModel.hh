@@ -77,23 +77,14 @@ public:
    *                     pared for sampling polar angle of Coulomb scattering
    *                     for mixed and for pure single scattering models: cosine
    *                     of the polar scattering angle can be sampled in a
-   *                     restriced inteval (see mumin input parameter below).
+   *                     restriced inteval (see fMuMin parameter).
    * @param[in] isscpcor Indicates if scattering power correction should be used.
    *                     Note, scattering power correction accounts the effects
    *                     angular deflections due to sub-threshold ionisations
    *                     when ionisation is described by using condensed history
    *                     model (should be active only in this case).
-   * @param[in] mumin    When the model is used for mixed simulation, Coulomb
-   *                     scatterings, resulting in a minimum t_c polar angular
-   *                     deflection, modelled explicitly. Therefore, cross
-   *                     sections are computed, and angular deflections are
-   *                     sampled ina resricted [\theta_c,\pi] interval. The
-   *                     minimum of this interval is determined by the mumin
-   *                     parameter as:
-   *                     \mu_{min} = \mu(\theta_c)=0.5[1-\cos(\theta_c)]
    */
-  G4eDPWACoulombScatteringModel(G4bool ismixed=false, G4bool isscpcor=true,
-                                G4double mumin=0.0);
+  G4eDPWACoulombScatteringModel(G4bool ismixed=false, G4bool isscpcor=true);
 
   ~G4eDPWACoulombScatteringModel() override;
 
@@ -114,8 +105,8 @@ public:
                              G4double tmin,
                              G4double maxEnergy) override;
 
-  G4double MinPrimaryEnergy(const G4Material*, const G4ParticleDefinition*, 
-                            G4double) override { return 10.0*CLHEP::eV; }
+  G4double MinPrimaryEnergy(const G4Material*, const G4ParticleDefinition*,
+                            G4double) override;
 
   void     SetTheDCS(G4eDPWAElasticDCS* theDCS) { fTheDCS = theDCS; }
 
@@ -135,6 +126,7 @@ private:
   // case of condensed history simulation of inonisation!
   G4bool                     fIsScpCorrection;
   // mu(theta)=0.5[1-cos(theta)]: the model porvides final states \in [fMuMin,1]
+  // NOTE: `theta` for this limit can be set in `G4EmParameters::SetMscThetaLimit`
   G4double                   fMuMin;
   // the object that provides cross sections and polar angle of scattering
   G4eDPWAElasticDCS*         fTheDCS;

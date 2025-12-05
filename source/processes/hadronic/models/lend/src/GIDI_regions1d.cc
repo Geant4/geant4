@@ -144,7 +144,8 @@ double Regions1d::evaluate( double a_x1 ) const {
         }
         iX1 = 0;                /* x1 < last value of Xs. */
     }
-    return( m_function1ds[iX1]->evaluate( a_x1 ) );
+
+    return( m_function1ds[static_cast<std::size_t>(iX1)]->evaluate( a_x1 ) );
 }
 
 /* *********************************************************************************************************//**
@@ -157,7 +158,7 @@ double Regions1d::evaluate( double a_x1 ) const {
  * @param a_scaleFactor     [in]    A factor applied to each evaluation before it is added to *a_results*.
  ***********************************************************************************************************/
 
-void Regions1d::mapToXsAndAdd( int a_offset, std::vector<double> const &a_Xs, std::vector<double> &a_results, double a_scaleFactor ) const {
+void Regions1d::mapToXsAndAdd( std::size_t a_offset, std::vector<double> const &a_Xs, std::vector<double> &a_results, double a_scaleFactor ) const {
 
     for( auto iter = m_function1ds.begin( ); iter < m_function1ds.end( ); ++iter ) {
         (*iter)->mapToXsAndAdd( a_offset, a_Xs, a_results, a_scaleFactor );

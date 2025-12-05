@@ -23,11 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file optical/wls/src/WLSTrajectoryPoint.cc
+/// \file WLSTrajectoryPoint.cc
 /// \brief Implementation of the WLSTrajectoryPoint class
-//
-//
+
 #include "WLSTrajectoryPoint.hh"
 
 #include "G4AttDef.hh"

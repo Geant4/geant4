@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file DetectorConstruction.cc
+/// \brief Implementation of the DetectorConstruction class
+
 // The `molcounters` example(s) are provided as part of Geant4-DNA
 // and any report or published result obtained using it shall cite
 // the respective Geant4-DNA collaboration publications.
@@ -30,7 +33,8 @@
 // Reports or results obtained using the spatially-aware `MoleculeCounter`
 // provided in this example, shall further cite:
 //
-// Velten & Tomé, Radiation Physics and Chemistry, 2023 (10.1016/j.radphyschem.2023.111194)
+// Velten & Tomé, Radiation Physics and Chemistry,
+// 2023 (10.1016/j.radphyschem.2023.111194)
 //
 //
 // Author: Christian Velten (2025)
@@ -67,10 +71,11 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   //
   const G4double worldXYZ = 1 * m;
 
-  auto solidWorld = new G4Box("World", 0.5 * worldXYZ, 0.5 * worldXYZ, 0.5 * worldXYZ);
+  auto solidWorld = new G4Box("World", 0.5 * worldXYZ,
+                                       0.5 * worldXYZ, 0.5 * worldXYZ);
   auto lvWorld = new G4LogicalVolume(solidWorld, water, "World");
-  auto pvWorld =
-    new G4PVPlacement(nullptr, G4ThreeVector(), lvWorld, "World", nullptr, false, 0, true);
+  auto pvWorld = new G4PVPlacement(nullptr, G4ThreeVector(), lvWorld,
+                                   "World", nullptr, false, 0, true);
 
   //
   // Cell
@@ -91,20 +96,21 @@ void DetectorConstruction::ConstructCell(G4VPhysicalVolume* pvWorld)
   const G4double mitoC = 0.90 * micrometer;
 
   auto solidCell = new G4Orb("Cell", cellRadius);
-  auto lvCell = new G4LogicalVolume(
-    solidCell, G4NistManager::Instance()->FindOrBuildMaterial("G4_WATER"), "Cell");
-  auto pvCell =
-    new G4PVPlacement(nullptr, G4ThreeVector(), "Cell", lvCell, pvWorld, false, 0, true);
+  auto lvCell = new G4LogicalVolume(solidCell,
+    G4NistManager::Instance()->FindOrBuildMaterial("G4_WATER"), "Cell");
+  auto pvCell = new G4PVPlacement(nullptr, G4ThreeVector(),
+                                  "Cell", lvCell, pvWorld, false, 0, true);
 
   auto solidNucleus = new G4Orb("Nucleus", nucleusRadius);
-  auto lvNucleus = new G4LogicalVolume(
-    solidNucleus, G4NistManager::Instance()->FindOrBuildMaterial("G4_WATER"), "Nucleus");
+  auto lvNucleus = new G4LogicalVolume(solidNucleus,
+    G4NistManager::Instance()->FindOrBuildMaterial("G4_WATER"), "Nucleus");
 
-  new G4PVPlacement(nullptr, G4ThreeVector(), "Nucleus", lvNucleus, pvCell, false, 0, true);
+  new G4PVPlacement(nullptr, G4ThreeVector(), "Nucleus",
+                    lvNucleus, pvCell, false, 0, true);
 
   auto solidMito = new G4Ellipsoid("Mitochondria", mitoA, mitoB, mitoC);
-  auto lvMito = new G4LogicalVolume(
-    solidMito, G4NistManager::Instance()->FindOrBuildMaterial("G4_WATER"), "Mitochondria");
+  auto lvMito = new G4LogicalVolume(solidMito,
+    G4NistManager::Instance()->FindOrBuildMaterial("G4_WATER"), "Mitochondria");
 
   for (auto i = 0; i < nMitochondria; ++i) {
     G4bool overlap = true;
@@ -123,7 +129,8 @@ void DetectorConstruction::ConstructCell(G4VPhysicalVolume* pvWorld)
       rot->rotateX(psi);
       rot->rotateY(phi);
 
-      auto pvMito = new G4PVPlacement(rot, pos, "Mitochondria", lvMito, pvCell, false, i, false);
+      auto pvMito = new G4PVPlacement(rot, pos, "Mitochondria",
+                                      lvMito, pvCell, false, i, false);
 
       overlap = pvMito->CheckOverlaps(1000, 0, false);
       if (overlap) {
@@ -139,12 +146,15 @@ void DetectorConstruction::ConstructSDandField()
 
   auto mfDetector = new G4MultiFunctionalDetector("mfDetector");
 
-  G4VPrimitiveScorer* primitivSpecies = new ScoreBasicMoleculeCounts("BasicMoleculeCounts", 1, "BasicCounter");
+  G4VPrimitiveScorer* primitivSpecies =
+    new ScoreBasicMoleculeCounts("BasicMoleculeCounts", 1, "BasicCounter");
   mfDetector->RegisterPrimitive(primitivSpecies);
-  primitivSpecies = new ScoreBasicMoleculeCounts("BasicCounter_VariablePrecision", 1,
-                                                 "BasicCounter_VariablePrecision");
+  primitivSpecies =
+    new ScoreBasicMoleculeCounts("BasicCounter_VariablePrecision", 1,
+                                 "BasicCounter_VariablePrecision");
   mfDetector->RegisterPrimitive(primitivSpecies);
-  primitivSpecies = new ScoreBasicReactionCounts("BasicReactionCounts", 1, "Reactions");
+  primitivSpecies =
+    new ScoreBasicReactionCounts("BasicReactionCounts", 1, "Reactions");
   mfDetector->RegisterPrimitive(primitivSpecies);
 
   G4SDManager::GetSDMpointer()->AddNewDetector(mfDetector);

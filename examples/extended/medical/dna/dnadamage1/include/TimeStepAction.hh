@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 /// \file TimeStepAction.hh
 /// \brief Definition of the TimeStepAction class
 
@@ -35,7 +34,7 @@ class TimeStepAction : public G4UserTimeStepAction
 {
   public:
     TimeStepAction();
-    ~TimeStepAction() override;
+    ~TimeStepAction() override = default;
     TimeStepAction(const TimeStepAction& r);
     TimeStepAction& operator=(const TimeStepAction& r);
     void UserReactionAction(const G4Track& trackA, const G4Track& trackB,

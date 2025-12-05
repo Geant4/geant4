@@ -23,12 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file medical/fanoCavity/include/MyKleinNishinaMessenger.hh
+/// \file MyKleinNishinaMessenger.hh
 /// \brief Definition of the MyKleinNishinaMessenger class
-//
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef MyKleinNishinaMessenger_h
 #define MyKleinNishinaMessenger_h 1

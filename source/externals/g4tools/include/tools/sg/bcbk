@@ -6,10 +6,6 @@
 
 // "cbk" is for callback. Base class to handle a callback.
 
-#ifdef TOOLS_MEM
-#include "../mem"
-#endif
-
 #include "../scast"
 #include "../S_STRING"
 
@@ -35,29 +31,19 @@ public:
 public:
   virtual return_action action() = 0;
   virtual bcbk* copy() const = 0;
-  //virtual bool equal(const bcbk&) const = 0; //it would need the upper cast.
 public:
   virtual ~bcbk(){
-#ifdef TOOLS_MEM
-    mem::decrement(s_class().c_str());
-#endif
   }
 protected:
   bcbk()
   :m_single_shoot(false)
   ,m_is_valid(true)
   {
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
   }
   bcbk(const bcbk& a_from)
   :m_single_shoot(a_from.m_single_shoot)
   ,m_is_valid(a_from.m_is_valid)
   {
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
   }
   bcbk& operator=(const bcbk& a_from){
     m_single_shoot = a_from.m_single_shoot;

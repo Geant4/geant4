@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file ChemPureWaterBuilder.cc
+/// \brief Implementation of the ChemPureWaterBuilder class
 
 #include "ChemPureWaterBuilder.hh"
 

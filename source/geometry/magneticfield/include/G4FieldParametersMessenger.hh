@@ -22,16 +22,39 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
+//
+// G4FieldParametersMessenger
+//
+// Class description:
+//
+// Messenger class that defines commands for field configuration.
+//
+// Implements commands:
+// - /field/fieldType fieldType
+//       fieldType = Magnetic | ElectroMagnetic | Gravity
+// - /field/equationType eqType
+//       eqType = EqMagnetic | EqMagneticWithSpin | EqElectroMagnetic |
+//                EqEMfieldWithSpin | EqEMfieldWithEDM
+// - /field/stepperType stepperType
+//       stepperType = CashKarpRKF45 | ClassicalRK4 | ExplicitEuler | ImplicitEuler |
+//                     SimpleHeum | SimpleRunge | ConstRK4 | ExactHelixStepper
+//                     | HelixExplicitEuler | HelixHeum | HelixImplicitEuler |
+//                     HelixMixedStepper | HelixSimpleRunge | NystromRK4 |
+//                     RKG3Stepper
+// - /field/setMinimumStep value
+// - /field/setDeltaChord  value
+// - /field/setDeltaOneStep value
+// - /field/setDeltaIntersection value
+// - /field/setMinimumEpsilonStep value
+// - /field/setMaximumEpsilonStep value
+// - /field/setConstDistance value
+// - /field/printParameters
+//
+// Only equation type and stepper type values that are handled by G4FieldBuilder
+// are accepted by the commands.
 
-/// \file G4FieldParametersMessenger.h
-/// \brief Definition of the G4FieldParametersMessenger class
-///
-/// This code was initially developed in Geant4 VMC package
-/// (https://github.com/vmc-project)
-/// and adapted to Geant4.
-///
-/// \author I. Hrivnacova; IJCLab, Orsay
-
+// Author: Ivana Hrivnacova (IJClab, Orsay), 2024.
+// -------------------------------------------------------------------
 #ifndef G4FIELDPARAMETERSMESSENGER_HH
 #define G4FIELDPARAMETERSMESSENGER_HH
 
@@ -48,92 +71,81 @@ class G4UIcmdWithADouble;
 class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWithABool;
 
-/// \ingroup geometry
-/// \brief Messenger class that defines commands for TG4DetConstruction.
-///
-/// Implements commands:
-/// - /field/fieldType fieldType     \n
-///       fieldType = Magnetic | ElectroMagnetic | Gravity
-/// - /field/equationType eqType     \n
-///       eqType = EqMagnetic | EqMagneticWithSpin | EqElectroMagnetic |
-///                EqEMfieldWithSpin | EqEMfieldWithEDM
-/// - /field/stepperType stepperType \n
-///       stepperType = CashKarpRKF45 | ClassicalRK4 | ExplicitEuler | ImplicitEuler |
-///                     SimpleHeum | SimpleRunge | ConstRK4 | ExactHelixStepper
-///                     | HelixExplicitEuler | HelixHeum | HelixImplicitEuler |
-///                     HelixMixedStepper | HelixSimpleRunge | NystromRK4 |
-///                     RKG3Stepper
-/// - /field/setMinimumStep value
-/// - /field/setDeltaChord  value
-/// - /field/setDeltaOneStep value
-/// - /field/setDeltaIntersection value
-/// - /field/setMinimumEpsilonStep value
-/// - /field/setMaximumEpsilonStep value
-/// - /field/setConstDistance value
-/// - /field/printParameters
-///
-/// \author I. Hrivnacova; IJClab, Orsay
+/**
+ * @brief G4FieldParametersMessenger is a messenger class that defines
+ * commands for field configuration. Only equation type and stepper type
+ * values that are handled by G4FieldBuilder are accepted by the commands.
+ */
 
 class G4FieldParametersMessenger : public G4UImessenger
 {
- public:
-  /// Standard constructor
-  G4FieldParametersMessenger(G4FieldParameters* fieldParameters);
-  /// Destructor
-  ~G4FieldParametersMessenger() override;
+  public:
 
-  // methods
-  /// Apply command to the associated object.
-  void SetNewValue(G4UIcommand* command, G4String newValues) override;
+    /**
+     * Standard constructor for G4FieldParametersMessenger.
+     *  @param[in] fieldParameters Pointer to the field parameters object.
+     */
+    G4FieldParametersMessenger(G4FieldParameters* fieldParameters);
 
- private:
-  /// Not implemented
-  G4FieldParametersMessenger() = delete;
-  /// Not implemented
-  G4FieldParametersMessenger(const G4FieldParametersMessenger& right) = delete;
-  /// Not implemented
-  G4FieldParametersMessenger& operator=(
-    const G4FieldParametersMessenger& right) = delete;
+    /**
+     * Destructor.
+     */
+    ~G4FieldParametersMessenger() override;
 
-  // Data members
+    /**
+     * Default constructor, copy constructor and assignment operator not allowed.
+     */
+    G4FieldParametersMessenger() = delete;
+    G4FieldParametersMessenger(const G4FieldParametersMessenger&) = delete;
+    G4FieldParametersMessenger& operator=(const G4FieldParametersMessenger&) = delete;
 
-  G4FieldParameters* fFieldParameters = nullptr; ///< associated class
-  G4UIdirectory* fDirectory = nullptr;           ///< command directory
+    /**
+     * Applies command to the associated object.
+     */
+    void SetNewValue(G4UIcommand* command, G4String newValues) override;
 
-  // Commands data members
+  private:
 
-  /// Command: fieldType
-  G4UIcmdWithAString* fFieldTypeCmd = nullptr; 
+    /** Associated class object. */
+    G4FieldParameters* fFieldParameters = nullptr;
 
-  /// Command: equationType
-  G4UIcmdWithAString* fEquationTypeCmd = nullptr; 
+    /** Commands directory. */
+    G4UIdirectory* fDirectory = nullptr;
 
-  /// Command: stepperType
-  G4UIcmdWithAString* fStepperTypeCmd = nullptr; 
+    // Commands data members
 
-  /// Command: setMinimumStep
-  G4UIcmdWithADoubleAndUnit* fSetMinimumStepCmd = nullptr; 
+    /** Command: fieldType. */
+    G4UIcmdWithAString* fFieldTypeCmd = nullptr; 
 
-  /// Command: setDeltaChord
-  G4UIcmdWithADoubleAndUnit* fSetDeltaChordCmd = nullptr; 
+    /** Command: equationType. */
+    G4UIcmdWithAString* fEquationTypeCmd = nullptr; 
 
-  /// Command: setDeltaOneStep
-  G4UIcmdWithADoubleAndUnit* fSetDeltaOneStepCmd = nullptr; 
+    /** Command: stepperType. */
+    G4UIcmdWithAString* fStepperTypeCmd = nullptr; 
 
-  /// Command: setDeltaIntersection
-  G4UIcmdWithADoubleAndUnit* fSetDeltaIntersectionCmd = nullptr; 
+    /** Command: setMinimumStep. */
+    G4UIcmdWithADoubleAndUnit* fSetMinimumStepCmd = nullptr; 
 
-  /// Command: setMinimumEpsilon
-  G4UIcmdWithADouble* fSetMinimumEpsilonStepCmd = nullptr; 
+    /** Command: setDeltaChord. */
+    G4UIcmdWithADoubleAndUnit* fSetDeltaChordCmd = nullptr; 
 
-  /// Command: setMaximumEpsilon
-  G4UIcmdWithADouble* fSetMaximumEpsilonStepCmd = nullptr; 
+    /** Command: setDeltaOneStep. */
+    G4UIcmdWithADoubleAndUnit* fSetDeltaOneStepCmd = nullptr; 
 
-  /// Command: setConstDistance
-  G4UIcmdWithADoubleAndUnit* fSetConstDistanceCmd = nullptr; 
+    /** Command: setDeltaIntersection. */
+    G4UIcmdWithADoubleAndUnit* fSetDeltaIntersectionCmd = nullptr; 
 
-  /// Command: printParameters
-  G4UIcmdWithoutParameter* fPrintParametersCmd = nullptr; 
+    /** Command: setMinimumEpsilon. */
+    G4UIcmdWithADouble* fSetMinimumEpsilonStepCmd = nullptr; 
+
+    /** Command: setMaximumEpsilon. */
+    G4UIcmdWithADouble* fSetMaximumEpsilonStepCmd = nullptr; 
+
+    /** Command: setConstDistance. */
+    G4UIcmdWithADoubleAndUnit* fSetConstDistanceCmd = nullptr; 
+
+    /** Command: printParameters. */
+    G4UIcmdWithoutParameter* fPrintParametersCmd = nullptr; 
 };
 
-#endif // G4FIELDPARAMETERSMESSENGER_HH
+#endif

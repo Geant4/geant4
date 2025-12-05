@@ -29,68 +29,126 @@
 //
 // DormandPrince7 - 5(4) FSAL stepper
 
-// Created: Somnath Banerjee, Google Summer of Code 2015, 25 May 2015
-// Supervision: John Apostolakis, CERN
+// Author: Somnath Banerjee (CERN, Google Summer of Code 2015), 25.05.2015
+// Supervision: John Apostolakis (CERN)
 // --------------------------------------------------------------------
 #ifndef G4FSALDORMANDPRINCE745_HH
 #define G4FSALDORMANDPRINCE745_HH
 
 #include "G4VFSALIntegrationStepper.hh"
 
+/**
+ * @brief G4FSALDormandPrince745 is an integrator of particle's equation of
+ * motion based on the DormandPrince7 - 5(4) FSAL implementation.
+ */
+
 class G4FSALDormandPrince745 : public G4VFSALIntegrationStepper
 {
   public:
 
+    /**
+     * Constructor for G4FSALDormandPrince745.
+     *  @param[in] EqRhs Pointer to the provided equation of motion.
+     *  @param[in] numberOfVariables The number of integration variables.
+     *  @param[in] primary Flag for initialisation of the auxiliary stepper.
+     */
     G4FSALDormandPrince745(G4EquationOfMotion* EqRhs,
                            G4int numberOfVariables = 6,
                            G4bool primary = true);
-   ~G4FSALDormandPrince745() override;
 
+    /**
+     * Destructor.
+     */
+    ~G4FSALDormandPrince745() override;
+
+    /**
+     * Copy constructor and assignment operator not allowed.
+     */
     G4FSALDormandPrince745(const G4FSALDormandPrince745&) = delete;
     G4FSALDormandPrince745& operator=(const G4FSALDormandPrince745&) = delete;
 
+    /**
+     * The stepper for the Runge Kutta integration.
+     * The stepsize is fixed, with the step size given by 'h'.
+     * Integrates ODE starting values y[0 to 6].
+     * Outputs yout[] and its estimated error yerr[].
+     *  @param[in] y Starting values array of integration variables.
+     *  @param[in] dydx Derivatives array.
+     *  @param[in] h The given step size.
+     *  @param[out] yout Integration output.
+     *  @param[out] yerr The estimated error.
+     *  @param[out] nextDydx Last derivatives array for the next step.
+     */
     void Stepper( const G4double y[],
                   const G4double dydx[],
                         G4double h,
                         G4double yout[],
                         G4double yerr[],
                         G4double nextDydx[]) override ;
+
+    /**
+     * Calculates the output at the tau fraction of step.
+     *  @param[in] yInput Starting values array of integration variables.
+     *  @param[in] dydx Derivatives array.
+     *  @param[out] yOut Interpolation output.
+     *  @param[in] Step The given step size.
+     *  @param[in] tau The tau fraction of the step.
+     */
     void interpolate( const G4double yInput[],
                       const G4double dydx[],
                             G4double yOut[],
                             G4double Step,
                             G4double tau ) ;
 
-    void SetupInterpolate( const G4double yInput[],
-                           const G4double dydx[],
-                           const G4double Step );
-      // For higher order Interpolant
-    
+    /**
+     * Calculates the output at the tau fraction of step. Same as above
+     * for higher order interpolant.
+     */
     void Interpolate( const G4double yInput[],
                       const G4double dydx[],
                       const G4double Step,
                             G4double yOut[],
                             G4double tau );
-      // For calculating the output at the tau fraction of Step
     
+    /**
+     * Setup method for higher order interpolant.
+     *  @param[in] yInput Starting values array of integration variables.
+     *  @param[in] dydx Derivatives array.
+     *  @param[in] Step The given step size.
+     */
+    void SetupInterpolate( const G4double yInput[],
+                           const G4double dydx[],
+                           const G4double Step );
 
-    G4double  DistChord()   const override;
+    /**
+     * Returns the distance from chord line.
+     */
+    G4double DistChord() const override;
+
+    /**
+     * Returns the order, 4, of integration.
+     */
     inline G4int IntegratorOrder() const override { return 4; }
+
+    /**
+     * Returns true as this is a FSAL integrator.
+     */
     inline G4bool isFSAL() const { return true; }
     
   private:
     
+    /** Working arrays -- used during stepping. */
     G4double *ak2, *ak3, *ak4, *ak5, *ak6, *ak7,
              *ak8, *ak9,         // For additional stages in the interpolant
              *yTemp, *yIn;
     
+    /** Only for use with DistChord(). */
     G4double* pseudoDydx_for_DistChord;
-      // Only for use with DistChord()
     
     G4double fLastStepLength = -1.0;
     G4double *fLastInitialVector, *fLastFinalVector,
-             *fInitialDyDx, *fLastDyDx, *fMidVector, *fMidError;
-      // For DistChord() calculations
+             *fInitialDyDx, *fLastDyDx,
+             *fMidVector, *fMidError;   // For DistChord() calculations
     
     G4FSALDormandPrince745* fAuxStepper = nullptr;
 };

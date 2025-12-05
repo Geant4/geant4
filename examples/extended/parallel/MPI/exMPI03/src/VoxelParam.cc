@@ -23,9 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// @file VoxelParam.cc
-/// @brief Define voxel parameterization
+/// \file VoxelParam.cc
+/// \brief Implementation of the VoxelParam class
+///
+/// Define voxel parameterization
 
 #include "VoxelParam.hh"
 

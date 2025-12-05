@@ -23,11 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file medical/DICOM/src/DicomPhantomZSliceMerged.cc
+/// \file DicomPhantomZSliceMerged.cc
 /// \brief Implementation of the DicomPhantomZSliceMerged class
-//
-//
+
 // The code was written by :
 //      * Jonathan Madsen : jonathan.madsen@cern.ch (12/18/2012)
 //

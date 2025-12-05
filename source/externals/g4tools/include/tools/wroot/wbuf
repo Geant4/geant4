@@ -9,10 +9,6 @@
 #include "../charp_out"
 #include "../stype"
 
-#ifdef TOOLS_MEM
-#include "../mem"
-#endif
-
 #include <cstring> //memcpy
 #include <vector>
 
@@ -81,15 +77,9 @@ public:
   ,m_w_4_func(0)
   ,m_w_8_func(0)
   {
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
     set_byte_swap(a_byte_swap);
   }
   virtual ~wbuf(){
-#ifdef TOOLS_MEM
-    mem::decrement(s_class().c_str());
-#endif
   }
 public:
   wbuf(const wbuf& a_from)
@@ -101,9 +91,6 @@ public:
   ,m_w_4_func(a_from.m_w_4_func)
   ,m_w_8_func(a_from.m_w_8_func)
   {
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
     set_byte_swap(a_from.m_byte_swap);
   }
   wbuf& operator=(const wbuf& a_from){
@@ -230,7 +217,6 @@ protected:
   bool check_eob(){
     if((m_pos+sizeof(T))>m_eob) {
       m_out << s_class() << " : " << stype(T()) << " : "
-//           << " try to access out of buffer " << long_out(sizeof(T)) << " bytes"
            << " try to access out of buffer " << sizeof(T) << " bytes"
            << " (pos=" << charp_out(m_pos)
            << ", eob=" << charp_out(m_eob) << ")." << std::endl;
@@ -241,7 +227,6 @@ protected:
   bool check_eob(size_t a_n,const char* a_cmt){
     if((m_pos+a_n)>m_eob) {
       m_out << s_class() << " : " << a_cmt << " : "
-//           << " try to access out of buffer " << long_out(a_n) << " bytes"
            << " try to access out of buffer " << a_n << " bytes"
            << " (pos=" << charp_out(m_pos)
            << ", eob=" << charp_out(m_eob) << ")." << std::endl;

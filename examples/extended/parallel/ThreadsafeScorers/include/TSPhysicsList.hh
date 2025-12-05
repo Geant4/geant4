@@ -23,12 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file parallel/ThreadsafeScorers/include/TSPhysicsList.hh
+/// \file TSPhysicsList.hh
 /// \brief Definition of the TSPhysicsList class
-//
-//
-//
-//
+///
 /// This is a very, very extensive physics list and step-limiters are applied
 ///     to many particles. The reasoning behind this is because we wan't to put
 ///     as much pressure on the atomics as possible and produce as much

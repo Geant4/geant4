@@ -24,11 +24,7 @@
 // ********************************************************************
 //
 /// \file Run.cc
-/// \brief Implementation of the Run class
-//
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// \brief Implementation of the oooOO0OOooo::Run class
 
 #include "Run.hh"
 

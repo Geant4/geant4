@@ -23,9 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// \file G4ChannelingPhysics.hh
+/// \brief Definition of the G4ChannelingPhysics class
 
 #ifndef G4ChannelingPhysics_h
 #define G4ChannelingPhysics_h 1

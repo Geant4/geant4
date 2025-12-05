@@ -23,9 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file hadronic/Hadr02/include/IonUrQMDPhysics.hh
+/// \file IonUrQMDPhysics.hh
 /// \brief Definition of the IonUrQMDPhysics class
-//
+
 // GRAS tag Name:
 //
 //---------------------------------------------------------------------------

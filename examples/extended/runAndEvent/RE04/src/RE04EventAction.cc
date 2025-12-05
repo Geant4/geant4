@@ -23,10 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file runAndEvent/RE04/src/RE04EventAction.cc
+/// \file RE04EventAction.cc
 /// \brief Implementation of the RE04EventAction class
-//
-//
+
 #include "RE04EventAction.hh"
 
 #include "RE04Trajectory.hh"

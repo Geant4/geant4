@@ -6,7 +6,6 @@
 
 #include "store"
 
-#include <tools/vfind>
 #include <tools/vmanip>
 #include <tools/ntuple_binding>
 #include <tools/ntuple_booking>
@@ -15,12 +14,6 @@
 #include <tools/forit>
 #include <tools/stype>
 #include <tools/mnmx>
-#include <tools/vdata>
-
-#ifdef TOOLS_MEM
-#include <tools/mem>
-#include <tools/stype>
-#endif
 
 namespace toolx {
 namespace hdf5 {
@@ -45,12 +38,6 @@ public:
 
   template <class T>
   class column_ref : public virtual icol {
-#ifdef TOOLS_MEM
-    static const std::string& s_class() {
-      static const std::string s_v("toolx::hdf5::ntuple::column_ref<"+tools::stype(T())+">");
-      return s_v;
-    }
-#endif
   public:
     static tools::cid id_class() {
       static const T s_v = T(); //do that for T = std::string.
@@ -100,7 +87,7 @@ public:
 	  m_want_new_basket_size = 0;
 	}
         tools::uint64 remain = m_branch.entries()-m_branch.pos();
-        size_t n = tools::mn<size_t>((size_t)remain,m_basket_size);
+        size_t n = tools::min_of<size_t>((size_t)remain,m_basket_size);
         if(!m_branch.read_page<T>(n,m_basket)) {
           m_store.out() << "toolx::hdf5::ntuple::column_ref:fetch_entry : read_page() failed." << std::endl;
           m_basket_pos = 0;
@@ -134,14 +121,11 @@ public:
     ,m_basket(0)
     ,m_want_new_basket_size(0)
     {
-#ifdef TOOLS_MEM
-      tools::mem::increment(s_class().c_str());
-#endif
       m_basket = new T[m_basket_size];
       if(m_write) {
       } else { //read.
         tools::uint64 _entries = m_branch.entries();
-        size_t n = tools::mn<size_t>((size_t)_entries,m_basket_size);
+        size_t n = tools::min_of<size_t>((size_t)_entries,m_basket_size);
         if(_entries) {
           if(!m_branch.read_page<T>(n,m_basket)) {
             m_store.out() << "toolx::hdf5::ntuple::column_ref:column_ref : read_page() failed." << std::endl;
@@ -161,9 +145,6 @@ public:
         }
       }
       delete [] m_basket;
-#ifdef TOOLS_MEM
-      tools::mem::decrement(s_class().c_str());
-#endif
     }
   protected:
     column_ref(const column_ref& a_from)
@@ -204,12 +185,6 @@ public:
   template <class T>
   class column : public column_ref<T> {
     typedef column_ref<T> parent;
-#ifdef TOOLS_MEM
-    static const std::string& s_class() {
-      static const std::string s_v("toolx::hdf5::ntuple::column<"+tools::stype(T())+">");
-      return s_v;
-    }
-#endif
   public:
     static tools::cid id_class() {
       static const T s_v = T(); //do that for T = std::string.
@@ -225,14 +200,8 @@ public:
     :parent(a_store,a_pages,a_write,a_name,a_basket_size,m_tmp)
     ,m_tmp(T())
     {
-#ifdef TOOLS_MEM
-      tools::mem::increment(s_class().c_str());
-#endif
     }
     virtual ~column(){
-#ifdef TOOLS_MEM
-      tools::mem::decrement(s_class().c_str());
-#endif
     }
   protected:
     column(const column& a_from)
@@ -271,12 +240,6 @@ public:
 
   template <class T>
   class std_vector_column_ref : public virtual icol {
-#ifdef TOOLS_MEM
-    static const std::string& s_class() {
-      static const std::string s_v("toolx::hdf5::ntuple::std_vector_column_ref<"+tools::stype(T())+">");
-      return s_v;
-    }
-#endif
   public:
     static tools::cid id_class() {return tools::_cid_std_vector<T>()+10000;}
     virtual void* cast(tools::cid a_class) const {
@@ -287,7 +250,7 @@ public:
   public: //icol
     virtual bool add() { //write.
       if(!m_write) return false;
-      const T* _data = tools::vec_data(m_ref);
+      const T* _data = m_ref.data();
       return m_branch.write_vlen<T>(m_ref.size(),_data);
     }
     virtual bool fetch_entry() { //read.
@@ -300,7 +263,7 @@ public:
       }
       m_ref.resize(n);
       T* dpos = _data;
-      T* pos = tools::vec_data(m_ref);
+      T* pos = m_ref.data();
       for(size_t index=0;index<n;index++,pos++,dpos++) *pos = *dpos;
       delete [] _data;
       return true;
@@ -318,14 +281,8 @@ public:
     ,m_name(a_name)
     ,m_ref(a_ref)
     {
-#ifdef TOOLS_MEM
-      tools::mem::increment(s_class().c_str());
-#endif
     }
     virtual ~std_vector_column_ref(){
-#ifdef TOOLS_MEM
-      tools::mem::decrement(s_class().c_str());
-#endif
     }
   protected:
     std_vector_column_ref(const std_vector_column_ref& a_from)
@@ -352,12 +309,6 @@ public:
   template <class T>
   class std_vector_column : public std_vector_column_ref<T> {
     typedef std_vector_column_ref<T> parent;
-#ifdef TOOLS_MEM
-    static const std::string& s_class() {
-      static const std::string s_v("toolx::hdf5::ntuple::std_vector_column<"+tools::stype(T())+">");
-      return s_v;
-    }
-#endif
   public:
     static tools::cid id_class() {return tools::_cid_std_vector<T>();}
     virtual void* cast(tools::cid a_class) const {
@@ -386,9 +337,6 @@ public:
   };
 
   class column_string_ref : public virtual icol {
-#ifdef TOOLS_MEM
-    TOOLS_SCLASS(toolx::hdf5::ntuple::column_string_ref)
-#endif
   public:
     static tools::cid id_class() {
       static const std::string s_v;
@@ -425,14 +373,8 @@ public:
     ,m_name(a_name)
     ,m_ref(a_ref)
     {
-#ifdef TOOLS_MEM
-      tools::mem::increment(s_class().c_str());
-#endif
     }
     virtual ~column_string_ref(){
-#ifdef TOOLS_MEM
-      tools::mem::decrement(s_class().c_str());
-#endif
     }
   protected:
     column_string_ref(const column_string_ref& a_from)
@@ -458,9 +400,6 @@ public:
 
   class column_string : public column_string_ref {
     typedef column_string_ref parent;
-#ifdef TOOLS_MEM
-    TOOLS_SCLASS(toolx::hdf5::ntuple::column_string)
-#endif
   public:
     static tools::cid id_class() {
       static const std::string s_v;
@@ -475,14 +414,8 @@ public:
     column_string(store& a_store,pages& a_pages,bool a_write,const std::string& a_name,tools::uint32 a_basket_size)
     :parent(a_store,a_pages,a_write,a_name,a_basket_size,m_tmp)
     {
-#ifdef TOOLS_MEM
-      tools::mem::increment(s_class().c_str());
-#endif
     }
     virtual ~column_string(){
-#ifdef TOOLS_MEM
-      tools::mem::decrement(s_class().c_str());
-#endif
     }
   protected:
     column_string(const column_string& a_from)
@@ -504,12 +437,6 @@ public:
 
 
   class std_vector_column_string_ref : public virtual icol {
-#ifdef TOOLS_MEM
-    static const std::string& s_class() {
-      static const std::string s_v("toolx::hdf5::ntuple::std_vector_column_string_ref");
-      return s_v;
-    }
-#endif
   public:
     static tools::cid id_class() {return tools::_cid_std_vector<std::string>()+10000;}
     virtual void* cast(tools::cid a_class) const {
@@ -568,14 +495,8 @@ public:
     ,m_name(a_name)
     ,m_ref(a_ref)
     {
-#ifdef TOOLS_MEM
-      tools::mem::increment(s_class().c_str());
-#endif
     }
     virtual ~std_vector_column_string_ref(){
-#ifdef TOOLS_MEM
-      tools::mem::decrement(s_class().c_str());
-#endif
     }
   protected:
     std_vector_column_string_ref(const std_vector_column_string_ref& a_from)
@@ -601,12 +522,6 @@ public:
 
   class std_vector_column_string : public std_vector_column_string_ref {
     typedef std_vector_column_string_ref parent;
-#ifdef TOOLS_MEM
-    static const std::string& s_class() {
-      static const std::string s_v("toolx::hdf5::ntuple::std_vector_column_string");
-      return s_v;
-    }
-#endif
   public:
     static tools::cid id_class() {return tools::_cid_std_vector<std::string>();}
     virtual void* cast(tools::cid a_class) const {
@@ -629,10 +544,6 @@ public:
       return *this;
     }
   public:
-    //bool get_entry(std::vector<T>& a_v) const {
-    //  a_v = m_tmp;
-    //  return true;
-    //}
     const std::vector<std::string>& data() const {return m_tmp;}
   protected:
     std::vector<std::string> m_tmp;
@@ -683,8 +594,6 @@ public:
       else TOOLX_HDF5_NTUPLE_READ_CREATE_COL(tools::uint32)
       else TOOLX_HDF5_NTUPLE_READ_CREATE_COL(tools::uint64)
 
-    //else TOOLX_HDF5_NTUPLE_READ_CREATE_COL(bool) //use byte=uchar.
-
       else
       if((*it)->form()==s_string()) {
         column_string* col = new column_string(*this,*(*it),false,(*it)->name(),0);
@@ -706,7 +615,6 @@ public:
       else TOOLX_HDF5_NTUPLE_READ_CREATE_VEC_COL(uint64,tools::uint64)
 
       else TOOLX_HDF5_NTUPLE_READ_CREATE_VEC_COL_STRING
-//    else TOOLX_HDF5_NTUPLE_READ_CREATE_VEC_COL(bool) //use byte=uchar.
 
       else {
         m_out << "toolx::hdf5::ntuple::ntuple(read) :"
@@ -811,8 +719,6 @@ public:
       else TOOLX_HDF5_NTUPLE_CREATE_COL(tools::uint32)
       else TOOLX_HDF5_NTUPLE_CREATE_COL(tools::uint64)
 
-    //else TOOLX_HDF5_NTUPLE_CREATE_COL(bool) //use byte=uchar.
-
       else if((*it).cls_id()==tools::_cid(std::string())) {
         if(!create_column_string((*it).name(),a_basket_size)) {
           m_out << "toolx::hdf5::ntuple :"
@@ -836,8 +742,6 @@ public:
       else TOOLX_HDF5_NTUPLE_CREATE_VEC_COL(tools::uint64)
 
       else TOOLX_HDF5_NTUPLE_CREATE_VEC_COL_STRING
-//    else TOOLX_HDF5_NTUPLE_CREATE_VEC_COL(std::string)
-//    else TOOLX_HDF5_NTUPLE_CREATE_VEC_COL(bool) //use byte=uchar.
 
       else {
         m_out << "toolx::hdf5::ntuple :"
@@ -923,8 +827,6 @@ public:
       else TOOLX_HDF5_NTUPLE_READ_BINDING_CREATE_COL(tools::uint32)
       else TOOLX_HDF5_NTUPLE_READ_BINDING_CREATE_COL(tools::uint64)
 
-    //else TOOLX_HDF5_NTUPLE_READ_BINDING_CREATE_COL(bool) //use byte=uchar.
-
       else
       if((*it)->form()==s_string()) {
         std::string* user_var = a_bd.find_variable<std::string>((*it)->name());
@@ -953,8 +855,6 @@ public:
       else TOOLX_HDF5_NTUPLE_READ_BINDING_CREATE_VEC_COL(uint64,tools::uint64)
 
       else TOOLX_HDF5_NTUPLE_READ_BINDING_CREATE_VEC_COL_STRING
-
-//    else TOOLX_HDF5_NTUPLE_READ_BINDING_CREATE_VEC_COL(bool) //use byte=uchar.
 
       else {
         a_out << "toolx::hdf5::ntuple::ntuple(read with binding) :"
@@ -1096,9 +996,6 @@ public:
     if(m_cols.empty()) return false;
     bool status = true;
     tools_vforit(icol*,m_cols,it) {if(!(*it)->add()) status = false;}
-    //tools::uint32 n;
-    //bool status = store::fill(n);
-    //tools_vforit(icol*,m_cols,it) (*it)->set_def();
     return status;
   }
 

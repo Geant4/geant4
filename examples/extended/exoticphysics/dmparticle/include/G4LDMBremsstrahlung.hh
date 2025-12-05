@@ -23,8 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
+/// \file G4LDMBremsstrahlung.hh
+/// \brief Definition of the G4LDMBremsstrahlung class
+
 // Class Description:
 //
 // This class manages the Bremsstrahlung process for hadrons

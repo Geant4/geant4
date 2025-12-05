@@ -92,7 +92,6 @@ void G4OpWLS2::Initialise()
 G4VParticleChange* G4OpWLS2::PostStepDoIt(const G4Track& aTrack,
                                           const G4Step& aStep)
 {
-  std::vector<G4Track*> proposedSecondaries;
   aParticleChange.Initialize(aTrack);
   aParticleChange.ProposeTrackStatus(fStopAndKill);
 
@@ -101,14 +100,29 @@ G4VParticleChange* G4OpWLS2::PostStepDoIt(const G4Track& aTrack,
     G4cout << "\n** G4OpWLS2: Photon absorbed! **" << G4endl;
   }
 
-  G4StepPoint* pPostStepPoint = aStep.GetPostStepPoint();
   G4MaterialPropertiesTable* MPT =
     aTrack.GetMaterial()->GetMaterialPropertiesTable();
   if(!MPT)
   {
     return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
   }
+
+  G4PhysicsFreeVector* WLSIntegral = nullptr;
   if(!MPT->GetProperty(kWLSCOMPONENT2))
+  {
+    return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
+  }
+  else
+  {
+    // Retrieve the WLS Integral for this material
+    WLSIntegral = (G4PhysicsFreeVector*) ((*theIntegralTable)
+      (aTrack.GetMaterial()->GetIndex()));
+  }
+
+  G4double primaryEnergy = aTrack.GetDynamicParticle()->GetKineticEnergy();
+  // No WLS photons are produced if the primary photon's energy is below
+  // the lower bound of the WLS integral range
+  if(primaryEnergy < WLSIntegral->GetMinValue())
   {
     return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
   }
@@ -127,54 +141,27 @@ G4VParticleChange* G4OpWLS2::PostStepDoIt(const G4Track& aTrack,
     }
   }
 
-  // Retrieve the WLS Integral for this material
-  // new G4PhysicsFreeVector allocated to hold CII's
-  G4double primaryEnergy = aTrack.GetDynamicParticle()->GetKineticEnergy();
-  G4double WLSTime       = 0.;
-  G4PhysicsFreeVector* WLSIntegral = nullptr;
+  G4double WLSTime = MPT->GetConstProperty(kWLSTIMECONSTANT2);
+  G4StepPoint* pPostStepPoint = aStep.GetPostStepPoint();
+  std::vector<G4Track*> proposedSecondaries;
 
-  WLSTime     = MPT->GetConstProperty(kWLSTIMECONSTANT2);
-  WLSIntegral = (G4PhysicsFreeVector*) ((*theIntegralTable)(
-    aTrack.GetMaterial()->GetIndex()));
-
-  // Max WLS Integral
-  G4double CIImax       = WLSIntegral->GetMaxValue();
-  G4int NumberOfPhotons = NumPhotons;
+  // Max WLS Integral - force sampling of a WLS photon with energy below
+  // the primary photon's energy
+  G4double CIImax = (primaryEnergy > WLSIntegral->GetMaxEnergy()) ?
+    WLSIntegral->GetMaxValue() : WLSIntegral->Value(primaryEnergy);
 
   for(G4int i = 0; i < NumPhotons; ++i)
   {
-    G4double sampledEnergy;
+    // Determine photon energy
+    G4double sampledEnergy = WLSIntegral->GetEnergy(G4UniformRand() * CIImax);
+
     // Make sure the energy of the secondary is less than that of the primary
-    for(G4int j = 1; j <= 100; ++j)
-    {
-      // Determine photon energy
-      G4double CIIvalue = G4UniformRand() * CIImax;
-      sampledEnergy     = WLSIntegral->GetEnergy(CIIvalue);
-      if(sampledEnergy <= primaryEnergy)
-        break;
-    }
-    // If no such energy can be sampled, return one less secondary, or none
     if(sampledEnergy > primaryEnergy)
     {
-      if(verboseLevel > 1)
-      {
-        G4cout << " *** G4OpWLS2: One less WLS2 photon will be returned ***"
-               << G4endl;
-      }
-      NumberOfPhotons--;
-      if(NumberOfPhotons == 0)
-      {
-        if(verboseLevel > 1)
-        {
-          G4cout << " *** G4OpWLS2: No WLS2 photon can be sampled for this "
-                    "primary ***"
-                 << G4endl;
-        }
-        // return unchanged particle and no secondaries
-        aParticleChange.SetNumberOfSecondaries(0);
-        return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
-      }
-      continue;
+      G4ExceptionDescription ed;
+      ed << "Sampled photon energy " << sampledEnergy << " is greater than "
+         << "the primary photon energy " << primaryEnergy << G4endl;
+      G4Exception("G4OpWLS2::PostStepDoIt", "WSL02", FatalException, ed);
     }
     else if(verboseLevel > 1)
     {

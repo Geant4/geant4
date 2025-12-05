@@ -23,7 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
+/// \file TimeStepAction.cc
+/// \brief Implementation of the TimeStepAction class
+
 #include "TimeStepAction.hh"
 
 #include "InterPulseAction.hh"

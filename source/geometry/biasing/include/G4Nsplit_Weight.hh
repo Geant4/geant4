@@ -33,20 +33,26 @@
 // Author: Michael Dressel (CERN), 2002
 // ----------------------------------------------------------------------
 #ifndef G4NSPLIT_WEIGHT_HH
-#define G4NSPLIT_WEIGHT_HH 1
+#define G4NSPLIT_WEIGHT_HH
 
 #include "globals.hh"
+
+/**
+ * @brief G4Nsplit_Weight is a class (struct) used by importance sampling.
+ * It contains the number of tracks a mother track should be split into and
+ * their associated weight.
+ */
 
 class G4Nsplit_Weight
 {
   public:
 
+    /** Number of tracks a mother track should be split into
+        including the mother track. */
     G4int fN = 0;
-      // number of tracks a mother track should be split into
-      // including the mother track
 
+    /** The weight to be given to the tracks. */
     G4double fW = 0.0;
-      // the weight to be given to the tracks
 };
 
 std::ostream& operator<<(std::ostream& out, const G4Nsplit_Weight& nw);

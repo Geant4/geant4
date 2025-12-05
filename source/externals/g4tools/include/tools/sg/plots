@@ -5,7 +5,6 @@
 #define tools_sg_plots
 
 #include "_switch"
-//#include "head_light"
 #include "matrix"
 
 #include "plotter"
@@ -68,13 +67,6 @@ public:
      if(m_sep.empty()) return true;
      if(m_extras.size()!=m_extras_sep.size()) return true;
 
-  //{size_t _number = m_sep.size();
-  // for(size_t index=0;index<_number;index++) {
-  //   separator* sep = (separator*)m_sep[index];
-  //   plotter* _plotter = (plotter*)(*sep)[PLOTTER()];
-  //   if(_plotter->shape.touched()) return true;
-  // }}
-
      return false;
    }
 private:
@@ -102,22 +94,10 @@ private:
   static unsigned int MATRIX()  {return 0;}
   static unsigned int BORDER()  {return 1;}
   static unsigned int PLOTTER() {return 2;}
-  //static unsigned int TSF()     {return xxx;}
-  //static unsigned int LIGHT()   {return xxx;}
 
   typedef std::vector<plottable*> ptbs_t;
   typedef std::vector<node*> todels_t;
   typedef std::vector<plotprim*> prims_t;
-public:
-/*
-  class updater {
-  public:
-    virtual void update(plots&,size_t) = 0;
-    virtual updater* copy() const = 0;
-  public:
-    virtual ~updater(){}
-  };
-*/
 public:
   virtual void render(render_action& a_action) {
     update_if_touched();
@@ -126,7 +106,6 @@ public:
   virtual void pick(pick_action& a_action) {
     update_if_touched();
     nodekit_pick(a_action,m_group,this);
-    //m_group.pick(a_action);
   }
   virtual void search(search_action& a_action) {
     update_if_touched();
@@ -176,7 +155,6 @@ public:
   ,m_ttf(a_ttf)
   ,m_current(0)
   ,m_extras()
-  //,m_updater(0)
   ,m_old_cols(0)
   ,m_old_rows(0)
   {
@@ -184,7 +162,6 @@ public:
     init_sg();
   }
   virtual ~plots() {
-    //delete m_updater;
   }
 public:
   plots(const plots& a_from)
@@ -211,7 +188,6 @@ public:
   ,m_ttf(a_from.m_ttf)
   ,m_current(a_from.m_current)
   ,m_extras(a_from.m_extras)
-  //,m_updater(0)
   ,m_old_cols(0)
   ,m_old_rows(0)
   ,m_origins(a_from.m_origins)
@@ -221,7 +197,6 @@ public:
   {
     add_fields();
     init_sg();
-    //m_updater = a_from.m_updater?a_from.m_updater->copy():0;
     if(!copy_plotters(a_from)) {}
   }
   plots& operator=(const plots& a_from){
@@ -274,20 +249,8 @@ public:
     width = height * aspect;
   }
 
-  //void enforce_update() { //used in geant4 plotting.
-  //  update_sg();
-  //  reset_touched();
-  //}
-
   const base_freetype& ttf() const {return m_ttf;}
 public:
-/*
-  void set_updater(updater* a_updater) {
-    //WARNING : we take ownership of a_updater
-    delete m_updater;
-    m_updater = a_updater;
-  }
-*/
   void clear() {
     update_if_touched();
    {size_t _number = m_sep.size();
@@ -368,25 +331,6 @@ public:
     return false;
   }
 
-//  torche* current_torche() {
-//    update_if_touched();
-//    separator* sep = (separator*)m_sep[m_current];
-//    return safe_cast<node,torche>(*((*sep)[LIGHT()]));
-//  }
-
-/*
-  matrix* current_tsf() {
-    plotter& _plotter = current_plotter();
-    if(_plotter.shape.value()==plotter::xyz) {
-      return &(_plotter.tsf());
-    } else {
-      update_if_touched();
-      separator* sep = (separator*)m_sep[m_current];
-      return safe_cast<node,matrix>(*((*sep)[TSF()]));
-    }
-  }
-*/
-
   plotter& current_plotter() {
     update_if_touched();
     separator* sep = (separator*)m_sep[m_current];
@@ -398,51 +342,6 @@ public:
     separator* sep = (separator*)m_sep[a_index];
     return (plotter*)(*sep)[PLOTTER()];
   }
-
-/*
-  bool find_plotter(unsigned int a_ww,unsigned int a_wh,
-                    float a_x,float a_y,
-                    unsigned int& a_index) {
-    update_if_touched();
-
-    a_index = 0;
-
-    if(!a_ww) return false;
-    if(!a_wh) return false;
-
-    float aspect = float(a_ww)/float(a_wh);
-
-    // one plotter in pixels :
-    unsigned int rw = (unsigned int)(float(a_ww)/float(cols.value()));
-    unsigned int rh = (unsigned int)(float(a_wh)/float(rows.value()));
-    float ra = float(rw)/float(rh);
-
-    // all window wc :
-    float wh_wc = 1;
-    float ww_wc = wh_wc * aspect;
-
-    // plotter size in window wc :
-    float rh_wc = wh_wc/rows;
-    float rw_wc = rh_wc*ra;
-
-    unsigned int _number = m_sep.size();
-    for(unsigned int index=0;index<_number;index++) {
-      unsigned int row = index/cols;
-      unsigned int col = index-cols*row;
-
-      float x = -ww_wc*0.5f + col * rw_wc + rw_wc * 0.5f;
-      float y =  wh_wc*0.5f - row * rh_wc - rh_wc * 0.5f;
-
-      if( ((x-rw_wc*0.5f)<a_x)&&(a_x<(x+rw_wc*0.5f)) &&
-          ((y-rh_wc*0.5f)<a_y)&&(a_y<(y+rh_wc*0.5f)) ){
-        a_index = index;
-        return true;
-      }
-    }
-
-    return false;
-  }
-*/
 
   void set_regions(unsigned int a_cols = 1,unsigned int a_rows = 1,bool a_transfer = false) {
     unsigned int oldn = cols*rows;
@@ -563,21 +462,6 @@ public:
     }
   }
 
-/*
-  void set_border_style() {
-    update_if_touched();
-    size_t _number = m_sep.size();
-    for(size_t index=0;index<_number;index++) {
-      separator* sep = (separator*)m_sep[index];
-      plotter* _plotter = (plotter*)(*sep)[PLOTTER()];
-      _plotter->background_style().visible = true;
-      _plotter->background_style().color = colorf_black();
-      _plotter->background_style().line_width = 0.003;
-    }
-    border_visible = true;
-  }
-*/
-
   void set_grids_visibility(bool a_visible = false) {
     update_if_touched();
     size_t _number = m_sep.size();
@@ -654,28 +538,6 @@ public:
 
     if((wdata<=0)||(hdata<=0)) return;
 
-/*
-    //    wpix = w * wvp pixels
-    //    hpix = h * hvp pixels
-    //  wpix/hpix = cst = (w * wvp) / (h * hvp) = width / height
-    float h,w,xo,yo;
-    h = w = xo = yo = 0;
-    float waspect = wvp/hvp;
-    float paspect = width.value()/height.value();
-    if(waspect>=paspect) {
-      h = 1;
-      w = paspect * h * (hvp/wvp);
-      xo = (1-w)/2;
-      yo = 0;
-    } else {
-      w = 1;
-      h = w * (wvp/hvp)/paspect;
-      xo = 0;
-      yo = (1-h)/2;
-    }
-    float xfac = w / width.value();
-    float yfac = h / height.value();
-*/
 
     unsigned int _num = number();
     for(unsigned int iregion=0;iregion<_num;iregion++) {
@@ -741,29 +603,17 @@ public:
         }
       }
 
-      //m_origins.push_back(vec2f(xo/xfac+x,yo/yfac+y));
       m_origins.push_back(vec2f(x,y));
       m_sizes.push_back(vec2f(wr,hr));
 
       separator* sep = (separator*)m_sep[iregion];
       plotter* _plotter = (plotter*)(*sep)[PLOTTER()];
 
-      //_plotter->width = wr;
       _plotter->left_margin = lm;
       _plotter->right_margin = rm;
 
-      //_plotter->height = hr;
       _plotter->top_margin = tm;
-      _plotter->bottom_margin = bm;
-
-      // ignore margins and spacings :
-      //float wr = w/_cols;
-      //float hr = h/_rows;
-      //float x = xo + col * wr;
-      //float y = yo + (rows-1-row) * hr;
-      //viewportRegion->setPositionPercent(x,y);
-      //viewportRegion->setSizePercent(wr,hr);
-
+      _plotter->bottom_margin = bm; 
     }
   }
 
@@ -850,29 +700,17 @@ public:
         }
       }
 
-      //m_extras_origins.push_back(vec2f(xo/xfac+x,yo/yfac+y));
       m_extras_origins.push_back(vec2f(x,y));
       m_extras_sizes.push_back(vec2f(wr,hr));
 
       separator* sep = _extra.m_sep;
       plotter* _plotter = (plotter*)(*sep)[PLOTTER()];
 
-      //_plotter->width = wr;
       _plotter->left_margin = lm;
       _plotter->right_margin = rm;
 
-      //_plotter->height = hr;
       _plotter->top_margin = tm;
       _plotter->bottom_margin = bm;
-
-      // ignore margins and spacings :
-      //float wr = w/_cols;
-      //float hr = h/_rows;
-      //float x = xo + col * wr;
-      //float y = yo + (rows-1-row) * hr;
-      //viewportRegion->setPositionPercent(x,y);
-      //viewportRegion->setSizePercent(wr,hr);
-
     } //tools_vforcit
   }
   void configure_PAW(unsigned int a_ww,unsigned int a_wh) {
@@ -945,16 +783,8 @@ protected:
 
           sep->add(new sg::matrix); //MATRIX()
 
-          //head_light* light = new head_light;
-          //light->direction = vec3f(1,-1,-10);
-          //light->on = false;
-          //sep->add(light); //LIGHT()
-
           _switch* border = new _switch;
           sep->add(border); //BORDER()
-
-          //matrix* tsf = new matrix;
-          //sep->add(tsf); //TSF()
 
           sep->add(new plotter(m_ttf)); //PLOTTER()
         }
@@ -975,10 +805,6 @@ protected:
       float ww_wc = width;
       float wh_wc = height;
 
-      // plotter size in window wc :
-      //float rw_wc = ww_wc/cols;
-      //float rh_wc = wh_wc/rows;
-
       for(size_t index=0;index<_number;index++) {
         separator* sep = (separator*)m_sep[index];
         set_plotter_layout(*sep,index,configure,cols.value(),rows.value(),
@@ -996,7 +822,6 @@ protected:
       for(size_t index=0;index<_number;index++) {
         separator* _from_sep = (separator*)a_from.m_sep[index];
         matrix* _from_matrix = (matrix*)(*_from_sep)[MATRIX()];
-        //_switch* _border = (_switch*)(*_sep)[BORDER()];
         plotter* _from_plotter = (plotter*)(*_from_sep)[PLOTTER()];
 
         separator* _sep = (separator*)m_sep[index];
@@ -1062,7 +887,6 @@ protected:
       _switch* _border = (_switch*)(*sep)[BORDER()];
       if(index==m_current) {
         _border->which = view_border.value()?0:1;
-        //if(m_updater) m_updater->update(*this,index);
       } else {
         _border->which = 1;
       }
@@ -1208,17 +1032,8 @@ protected:
 
         sep->add(new sg::matrix); //MATRIX()
 
-        //head_light* light = new head_light;
-        //light->direction = vec3f(1,-1,-10);
-        //light->on = false;
-        //sep->add(light); //LIGHT()
-
         _switch* border = new _switch;
         sep->add(border); //BORDER()
-
-        //matrix* tsf = new matrix;
-        //sep->add(tsf); //TSF()
-
         sep->add(new plotter(m_ttf)); //PLOTTER()
       }
     }
@@ -1274,18 +1089,12 @@ protected:
 
    {_switch* _border = (_switch*)(a_sep)[BORDER()];
     create_plotter_border(*_border,rw_wc,rh_wc);
-    //_border->which = view_border.value()?(a_index==m_current?0:1):1;
     _border->which = 1;
     }
 
     if(_plotter->shape.value()==plotter::xy) {
       _plotter->depth = min_of(rw_wc,rh_wc);
     } else {
-      //if((rw_wc/rh_wc)>=1.0f) {
-      //  _plotter->depth = rh_wc;
-      //} else {
-      //  _plotter->depth = rh_wc;
-      //}
       _plotter->depth = rh_wc;
     }
 

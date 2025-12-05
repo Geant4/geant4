@@ -25,18 +25,12 @@
 //
 // G4DELPHIMagField implementation
 //
-// Created: V.Grichine - 03.02.1997
+// Author: Vladimir Grichine (CERN), 03.02.1997
 // -------------------------------------------------------------------
 
 #include "G4DELPHIMagField.hh"
 #include "globals.hh"
 #include "G4SystemOfUnits.hh"
-
-G4DELPHIMagField::G4DELPHIMagField() = default;
-
-////////////////////////////////////////////////////////////////////////
-
-G4DELPHIMagField::~G4DELPHIMagField() = default;
 
 ///////////////////////////////////////////////////////////////////////
 

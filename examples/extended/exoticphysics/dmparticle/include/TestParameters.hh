@@ -23,10 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file exoticphysics/dmparticle/include/TestParameters.hh
+/// \file TestParameters.hh
 /// \brief Definition of the TestParameters class
-//
-//
+
 //---------------------------------------------------------------------------
 //
 // ClassName:   HistoManager

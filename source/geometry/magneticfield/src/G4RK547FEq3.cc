@@ -38,8 +38,8 @@
 //             1247/10890      0                57375/108053       -1229312/1962015      125/207     43/114       0
 //             21487/185130    0                963225/1836901     -39864832/33354255    2575/3519   4472/4845    -1/10
 //
-// Author: Dmitry Sorokin, Google Summer of Code 2017
-// Supervision: John Apostolakis, CERN
+// Author: Dmitry Sorokin (CERN, Google Summer of Code 2017), 02.11.2017
+// Supervision: John Apostolakis (CERN)
 // --------------------------------------------------------------------
 
 #include "G4RK547FEq3.hh"

@@ -1,0 +1,48 @@
+#########################
+# Set of the verboses 
+#
+/control/verbose 1
+/tracking/verbose 0
+/run/verbose 1
+/event/verbose 0
+
+#########################
+# Activate detector array
+/changeDetector/activateArray false
+
+##########################
+# Initialisation procedure
+#
+/run/initialize
+
+# Set a very high time threshold to allow all decays to happen
+/process/had/rdm/thresholdForVeryLongDecayTime 1.0e+60 year
+
+###########BEAM##############
+
+##Custom Histogram (ElectronFlash)########################
+/control/execute 9MeVEF.mac
+#/control/execute 7MeVEF.mac
+#########################
+
+# Scoring mesh is used to calculate
+#  the dose in the water phantom
+
+##### This scorer compute the 2D lateral dose map
+/score/create/boxMesh boxMesh_1
+
+# scorer for 9 mev
+/score/mesh/boxSize 0.1 0.75 0.75 cm
+/score/mesh/nBin 1 200 200
+/score/mesh/translate/xyz 5 0 0 mm 
+/score/quantity/doseDeposit dose Gy
+/score/close
+
+
+/score/list  
+
+/run/beamOn	10000000
+
+/score/dumpQuantityToFile boxMesh_1 dose dose_2dMap.out
+
+

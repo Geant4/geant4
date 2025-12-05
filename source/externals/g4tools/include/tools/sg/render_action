@@ -7,7 +7,6 @@
 #include "matrix_action"
 
 #include "../glprims"
-#include "../vdata"
 #include "../colorf"
 
 namespace tools {
@@ -139,28 +138,28 @@ public:
   }
 
   void draw_vertex_array(gl::mode_t a_mode,const std::vector<float>& a_xyzs){
-    const float* _xyzs = vec_data<float>(a_xyzs);
+    const float* _xyzs = a_xyzs.data();
     draw_vertex_array(a_mode,a_xyzs.size(),_xyzs);
   }
 
   void draw_vertex_array_xy(gl::mode_t a_mode,const std::vector<float>& a_xys){
-    const float* _xys = vec_data<float>(a_xys);
+    const float* _xys = a_xys.data();
     draw_vertex_array_xy(a_mode,a_xys.size(),_xys);
   }
 
   void draw_vertex_color_array(gl::mode_t a_mode,
                                const std::vector<float>& a_xyzs,
                                const std::vector<float>& a_rgbas){
-    const float* _xyzs = vec_data<float>(a_xyzs);
-    const float* _rgbas = vec_data<float>(a_rgbas);
+    const float* _xyzs = a_xyzs.data();
+    const float* _rgbas = a_rgbas.data();
     draw_vertex_color_array(a_mode,a_xyzs.size(),_xyzs,_rgbas);
   }
 
   void draw_vertex_normal_array(gl::mode_t a_mode,
                                 const std::vector<float>& a_xyzs,
                                 const std::vector<float>& a_nms){
-    const float* _xyzs = vec_data<float>(a_xyzs);
-    const float* _nms = vec_data<float>(a_nms);
+    const float* _xyzs = a_xyzs.data();
+    const float* _nms = a_nms.data();
     draw_vertex_normal_array(a_mode,a_xyzs.size(),_xyzs,_nms);
   }
 
@@ -168,9 +167,9 @@ public:
                                       const std::vector<float>& a_xyzs,
                                       const std::vector<float>& a_rgbas,
                                       const std::vector<float>& a_nms){
-    const float* _xyzs = vec_data<float>(a_xyzs);
-    const float* _rgbas = vec_data<float>(a_rgbas);
-    const float* _nms = vec_data<float>(a_nms);
+    const float* _xyzs = a_xyzs.data();
+    const float* _rgbas = a_rgbas.data();
+    const float* _nms = a_nms.data();
     draw_vertex_color_normal_array(a_mode,a_xyzs.size(),_xyzs,_rgbas,_nms);
   }
 
@@ -215,20 +214,6 @@ public:
     return true;
   }
 
-/*
-  bool add_triangles_texture(size_t a_floatn,const float* a_xyzs,gstoid a_tex,const float* a_texs){
-    draw_vertex_array_texture(gl::triangles(),a_floatn,a_xyzs,a_tex,a_texs);
-    return true;
-  }
-  bool add_triangle_fan_texture(size_t a_floatn,const float* a_xyzs,gstoid a_tex,const float* a_texs){
-    draw_vertex_array_texture(gl::triangle_fan(),a_floatn,a_xyzs,a_tex,a_texs);
-    return true;
-  }
-  bool add_triangle_strip_texture(size_t a_floatn,const float* a_xyzs,gstoid a_tex,const float* a_texs){
-    draw_vertex_array_texture(gl::triangle_strip(),a_floatn,a_xyzs,a_tex,a_texs);
-    return true;
-  }
-*/
   bool add_triangle_fan_texture_normal(size_t a_floatn,const float* a_xyzs,const float* a_nms,gstoid a_tex,const float* a_texs){
     draw_vertex_normal_array_texture(gl::triangle_fan(),a_floatn,a_xyzs,a_nms,a_tex,a_texs);
     return true;
@@ -239,49 +224,17 @@ public:
   }
 
   bool add_line_loop(const std::vector<float>& a_xyzs){
-    const float* _xyzs = vec_data<float>(a_xyzs);
+    const float* _xyzs = a_xyzs.data();
     draw_vertex_array(gl::line_loop(),a_xyzs.size(),_xyzs);
     return true;
   }
 
   bool add_line_strip(const std::vector<float>& a_xyzs){
-    const float* _xyzs = vec_data<float>(a_xyzs);
+    const float* _xyzs = a_xyzs.data();
     draw_vertex_array(gl::line_strip(),a_xyzs.size(),_xyzs);
     return true;
   }
 
-/*
-  /////////////////////////////////////////////////////////
-  /// for sg::markers and gstos : /////////////////////////
-  /////////////////////////////////////////////////////////
-  bool add_lines(const std::vector<float>& a_xyzs){
-    const float* _xyzs = vec_data<float>(a_xyzs);
-    draw_vertex_array(gl::lines(),a_xyzs.size(),_xyzs);
-    return true;
-  }
-  bool add_triangles_normal(const std::vector<float>& a_xyzs,const std::vector<float>& a_nms){
-    if(a_xyzs.size()!=a_nms.size()) return false;
-    const float* _xyzs = vec_data<float>(a_xyzs);
-    const float* _nms = vec_data<float>(a_nms);
-    draw_vertex_normal_array(gl::triangles(),a_xyzs.size(),_xyzs,_nms);
-    return true;
-  }
-  bool project_point(const mat4f& a_model_matrix,const mat4f& a_projection_matrix,
-                     float& a_x,float& a_y,float& a_z,float& a_w) {
-    //return project_point(a_x,a_y,a_z,a_w);
-    a_w = 1;
-    a_model_matrix.mul_4f(a_x,a_y,a_z,a_w);
-    a_projection_matrix.mul_4f(a_x,a_y,a_z,a_w);
-    if(a_w==0.0F) return false;
-    a_x /= a_w;
-    a_y /= a_w;
-    a_z /= a_w;
-    return true;
-  }
-  /////////////////////////////////////////////////////////
-  /////////////////////////////////////////////////////////
-  /////////////////////////////////////////////////////////
-*/
 
   bool add_triangle_strip_as_triangles(size_t a_floatn,const float* a_xyzs,const float* a_nms) { //used in sg::sphere, icosahedron_sphere.
     // It appears that if glShadeModel is GL_FLAT, triangle strip does not look the same in "gsto mode" where it is rendered as triangles.
@@ -294,11 +247,11 @@ public:
     std::vector<float> m_xyzs(nxyzs);
     std::vector<float> m_nms(nxyzs);
 
-   {float* pxyzs = vec_data<float>(m_xyzs);
-    float* pnms = vec_data<float>(m_nms);
+   {float* pxyzs = m_xyzs.data();
+    float* pnms = m_nms.data();
     gl::triangle_strip_to_triangles_nms(num,a_xyzs,a_nms,pxyzs,pnms);}
 
-    return add_triangles_normal(nxyzs,vec_data<float>(m_xyzs),vec_data<float>(m_nms));
+    return add_triangles_normal(nxyzs,m_xyzs.data(),m_nms.data());
   }
 
   void dump_vertex_array_xy(std::ostream& a_out,gl::mode_t /*a_mode*/,size_t a_floatn,const float* a_xys) {

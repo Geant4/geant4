@@ -25,22 +25,18 @@
 //
 // G4HarmonicPolMagField implementation
 //
-// Author: V.Grichine, 03.02.1997
+// Author: Vladimir Grichine (CERN), 03.02.1997
 // -------------------------------------------------------------------
 
 #include "G4HarmonicPolMagField.hh"
 #include "globals.hh"
 
-G4HarmonicPolMagField::G4HarmonicPolMagField() = default;
+// -------------------------------------------------------------------
 
 G4HarmonicPolMagField* G4HarmonicPolMagField::Clone() const
 {
   return new G4HarmonicPolMagField;
 }
-
-// -------------------------------------------------------------------
-
-G4HarmonicPolMagField::~G4HarmonicPolMagField() = default;
 
 // -------------------------------------------------------------------
 

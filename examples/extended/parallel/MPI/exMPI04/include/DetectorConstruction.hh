@@ -23,9 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// @file DetectorConstruction.hh
-/// @brief Define geometry
+/// \file DetectorConstruction.hh
+/// \brief Definition of the DetectorConstruction class
+///
+/// Define geometry
 
 #ifndef DETECTOR_CONSTRUCTION_H
 #define DETECTOR_CONSTRUCTION_H

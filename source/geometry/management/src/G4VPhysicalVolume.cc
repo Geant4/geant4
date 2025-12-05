@@ -25,10 +25,10 @@
 //
 // class G4VPhysicalVolume Implementation
 //
-// 15.01.13, G.Cosmo, A.Dotti: Modified for thread-safety for MT
-// 28.08.96, P.Kent: Replaced transform by rotmat + vector
-// 25.07.96, P.Kent: Modified interface for new `Replica' capable geometry 
-// 24.07.95, P.Kent: First non-stub version
+// 24.07.95, P.Kent (CERN): First non-stub version
+// 25.07.96, P.Kent (CERN): Modified interface for 'Replica' capable geometry
+// 28.08.96, P.Kent (CERN): Replaced transform by rotmat + vector
+// 15.01.13, G.Cosmo, A.Dotti (CERN): Modified for thread-safety for MT
 // --------------------------------------------------------------------
 
 #include "G4VPhysicalVolume.hh"

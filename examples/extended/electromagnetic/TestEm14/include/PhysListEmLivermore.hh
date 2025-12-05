@@ -25,10 +25,6 @@
 //
 /// \file PhysListEmLivermore.hh
 /// \brief Definition of the PhysListEmLivermore class
-//
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef PhysListEmLivermore_h
 #define PhysListEmLivermore_h 1

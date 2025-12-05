@@ -23,12 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file runAndEvent/RE01/RE01.cc
+/// \file RE01.cc
 /// \brief Main program of the runAndEvent/RE01 example
-//
-//
-//
-//
+
 // --------------------------------------------------------------
 //      GEANT4 - RE01 exsample code
 //

@@ -30,10 +30,10 @@
 // Class representing a single volume positioned within and relative
 // to a mother volume.
 
-// Author: Paul Kent (CERN), 24 July 1995 - first non-stub version
+// Author: Paul Kent (CERN), 24.07.1995 - First non-stub version
 // ----------------------------------------------------------------------
 #ifndef G4PVPLACEMENT_HH
-#define G4PVPLACEMENT_HH 1
+#define G4PVPLACEMENT_HH
 
 #include "G4VPhysicalVolume.hh"
 #include "G4Transform3D.hh"
@@ -167,7 +167,7 @@ class G4PVPlacement : public G4VPhysicalVolume
      * Reports a maximum of overlaps errors according to parameter in input.
      *  @param[in] res The number of points to generate on volume's surface.
      *  @param[in] tol The precision tolerance for the overlap check, below
-     *             which to ignore overlaps (deafult is maximim precision).
+     *             which to ignore overlaps (default is maximim precision).
      *  @param[in] verbose Verbosity mode (default is true).
      *  @param[in] maxErr Maximum of overlaps errors to report (default is 1).
      *  @returns True if an overlap occurs.
@@ -210,9 +210,14 @@ class G4PVPlacement : public G4VPhysicalVolume
 
   private:
 
-    G4bool fmany = false;   // flag for overlapping structure - not used
-    G4bool fallocatedRotM = false;  // flag for allocation of Rotation Matrix
-    G4int fcopyNo = 0;      // for identification
+    /** Flag for overlapping structure - not used. */
+    G4bool fmany = false;
+
+    /** Flag for allocation of the rotation matrix. */
+    G4bool fallocatedRotM = false;
+
+    /** Optional copy number, for identification. */
+    G4int fcopyNo = 0;
 };
 
 #endif

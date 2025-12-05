@@ -25,6 +25,8 @@
 //
 // G4SmartVoxelHeader Inline implementation
 //
+// Author: Paul Kent (CERN), 13.07.1995 - Initial version
+//         Gabriele Cosmo (CERN), 18.04.2001 - Migrated to STL vector
 // --------------------------------------------------------------------
 
 inline

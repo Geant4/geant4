@@ -1,0 +1,12 @@
+# Example phasespace History
+
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top). It must **not**
+be used as a substitute for writing good git commit messages!
+
+## 2025-10-30 Sebastien Incerti (phasespace-V11-03-01)
+- modified geometry boundary detection in SteppingAction
+
+## 2025-07-17 Sebastien Incerti (phasespace-V11-03-00)
+- first version of phasespace example committed
+

@@ -149,7 +149,6 @@ public:
     if(back_visible.value()) {
       nodekit_pick(a_action,m_back_sep,this);
     }
-    //m_sep.pick(a_action);
   }
   virtual void search(search_action& a_action) {
     if(touched()) {
@@ -266,10 +265,6 @@ public:
     vjust = a_from.vjust;
 
     m_base_text = 0;
-
-    //delete m_TT_text;
-    //m_TT_text = base_freetype::create(*a_from.m_TT_text);
-
     return *this;
   }
 public:
@@ -277,21 +272,7 @@ public:
     if(!m_base_text) return 0;
     return m_base_text->height;
   }
-/*bool get_bounds(float a_height,
-                  float& a_mn_x,float& a_mn_y,float& a_mn_z,
-                  float& a_mx_x,float& a_mx_y,float& a_mx_z) const {
-    if(!m_base_text) {
-      a_mn_x = 0;
-      a_mn_y = 0;
-      a_mn_z = 0;
-      a_mx_x = 0;
-      a_mx_y = 0;
-      a_mx_z = 0;
-      return false;
-    }
-    m_base_text->get_bounds(m_base_text->height,a_mn_x,a_mn_y,a_mn_z,a_mx_x,a_mx_y,a_mx_z);
-    return true;
-  }*/
+
   bool is_empty() const {
     tools_vforcit(std::string,strings.values(),it) {
       const std::string& line = *it;
@@ -319,7 +300,6 @@ public:
     matrix* tsf = new matrix;
     m_sep.add(tsf);
 
-    //sf<float> zfront ?
     float zz = back_visible.value()?0.01f:0;
 
     if(font==font_hershey()) {
@@ -343,8 +323,6 @@ public:
       m_TT_text->font = font;
       m_TT_text->strings = strings;
       m_TT_text->modeling = font_modeling;
-
-      //_text->modeling.value(font_outline);
 
       m_sep.add(new noderef(*m_TT_text));
 
@@ -508,12 +486,7 @@ public:
 
       float mxh = m_base_text->ascent(th)+
                   m_base_text->y_advance(th)*(strings.size()-1)+
-                  m_base_text->descent(th);
-
-   //{box3f box;
-   // m_base_text->get_bounds(th,box);
-   // float bxh = box.mx()[1]-box.mn()[1]; //should be idem mxh.
-   // mxh = bxh;}
+                  m_base_text->descent(th); 
 
       if(mxh) th = fh*fh/mxh; //end/final height.
 
@@ -526,8 +499,6 @@ public:
       float yy = -fh*0.5f+m_base_text->descent(th)+
                  m_base_text->y_advance(th)*(strings.size()-1);
 
-    //float xx = -fw*0.5F; //left justified.
-    //tsf->set_translate(xx,yy,zz);
      {float mn_x,mn_y,mn_z;
       float mx_x,mx_y,mx_z;
       m_base_text->get_bounds(th,mn_x,mn_y,mn_z,mx_x,mx_y,mx_z);
@@ -541,17 +512,7 @@ public:
       } else if(hjust==right) {
         xtrans = fw*0.5f-bxw*0.5f;
       }
-/*
-      float bxh = mx_y-mn_y;
-      float ytrans = 0;
-      if(vjust==middle) {
-        ytrans = 0;
-      } else if(vjust==bottom) {
-        ytrans = -fh*0.5f+bxh*0.5f;
-      } else if(vjust==top) {
-        ytrans = fh*0.5f-bxh*0.5f;
-      }
-*/
+
       float xx = -(mn_x+mx_x)*0.5F+xtrans;
       tsf->set_translate(xx,yy,zz);}
 

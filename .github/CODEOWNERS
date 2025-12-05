@@ -44,9 +44,9 @@
 /source/processes/optical/                      @civanch @dsawkey
 
 # Low Energy Electromagnetic Physics
-/source/processes/electromagnetic/dna/       @sincerti @pandola
-/source/processes/electromagnetic/lowenergy/ @sincerti @pandola
-/source/processes/electromagnetic/pii/       @sincerti @pandola
+/source/processes/electromagnetic/dna/       @sincerti @pandola @civanch
+/source/processes/electromagnetic/lowenergy/ @sincerti @pandola @civanch
+/source/processes/electromagnetic/pii/       @sincerti @pandola @civanch
 
 # Hadronic Physics
 # TBA: Dennis Wright
@@ -66,7 +66,7 @@
 /source/visualization/ @laurent-garnier @jiperl @johna1941
 
 # Physics Lists
-/source/physics_lists/ @gunterfolger @hanswenzel
+/source/physics_lists/ @gunterfolger @AlbertoRibon
 
 # Novice+Extended Examples (Individual Examples assigned to Responsibles)
 /examples/basic/    @ihrivnac @ashoward

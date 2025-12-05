@@ -6,7 +6,6 @@
 
 #include "../mnmx"
 
-//#include <limits>
 #include <ostream>
 
 namespace tools {
@@ -15,11 +14,9 @@ template <class VEC3>
 class box3 {
 protected:
   typedef typename VEC3::elem_t T_t;
-  //static T_t num_max() {return std::numeric_limits<T_t>::max();} //max is a forever pain on Windows.
   static T_t zero() {return T_t();}
 protected:
   box3(){
-    //make_empty();
   }
 public:
   virtual ~box3() {}

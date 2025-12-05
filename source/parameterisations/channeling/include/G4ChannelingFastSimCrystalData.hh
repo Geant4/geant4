@@ -29,16 +29,13 @@
 #ifndef G4ChannelingFastSimCrystalData_h
 #define G4ChannelingFastSimCrystalData_h 1
 
-#include "G4ios.hh"
-#include "globals.hh"
-#include <CLHEP/Units/SystemOfUnits.h>
-#include "G4ThreeVector.hh"
-#include "Randomize.hh"
-#include "G4Material.hh"
-#include <unordered_map>
 
+#include "globals.hh"
+#include "G4ios.hh"
+#include "G4ThreeVector.hh"
+#include "G4Material.hh"
 #include "G4VChannelingFastSimCrystalData.hh"
-#include "G4ChannelingFastSimInterpolation.hh"
+
 
 /** \file G4ChannelingFastSimCrystalData.hh
 * \brief Definition of the G4ChannelingFastSimCrystalData class
@@ -54,10 +51,8 @@ class G4ChannelingFastSimCrystalData  : public G4VChannelingFastSimCrystalData
 {
 public:
 
-    G4ChannelingFastSimCrystalData();
-    virtual ~G4ChannelingFastSimCrystalData() = default;
-
-public:
+    G4ChannelingFastSimCrystalData() = default;
+    ~G4ChannelingFastSimCrystalData() = default;
 
     ///find and upload crystal lattice input files, calculate all the basic values
     ///(to do only once)

@@ -23,9 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 /// \file exampleB3a.cc
-/// \brief Main program of the B3a example
+/// \brief Main program of the B3/B3a example
 
 #include "ActionInitialization.hh"
 #include "DetectorConstruction.hh"

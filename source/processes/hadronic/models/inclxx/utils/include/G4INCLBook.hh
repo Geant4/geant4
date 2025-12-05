@@ -54,6 +54,8 @@ namespace G4INCL {
       nBlockedCollisions = 0;
       nAcceptedDecays = 0;
       nBlockedDecays = 0;
+      nAcceptedSrc=0;
+      nSrcPairs = 0;
       currentTime = 0.0;
       firstCollisionTime = 0.0;
       firstCollisionXSec = 0.0;
@@ -68,10 +70,12 @@ namespace G4INCL {
       nEmittedClusters = 0;
       nEnergyViolationInteraction = 0;
     };
-
+ 
+    void incrementAcceptedSrcCollisions() { nAcceptedSrc++; };
     void incrementAcceptedCollisions() { nAcceptedCollisions++; };
     void incrementBlockedCollisions() { nBlockedCollisions++; };
     void incrementAcceptedDecays() { nAcceptedDecays++; };
+    void incrementSrcPairs() { nSrcPairs++; };
     void incrementBlockedDecays() { nBlockedDecays++; };
     void incrementAvatars(AvatarType type) { nAvatars[type]++; };
     void incrementCascading() { nCascading++; }
@@ -96,6 +100,12 @@ namespace G4INCL {
 
     void setCurrentTime(G4double t) { currentTime = t; };
     G4double getCurrentTime() const { return currentTime; };
+ 
+    void setSrcPairs(G4int n) { nSrcPairs=n; };
+    G4int getSrcPairs() const { return nSrcPairs; };
+    
+    void setAcceptedSrcCollisions(G4int n) { nAcceptedSrc=n; };  
+    G4int getAcceptedSrcCollisions() const { return nAcceptedSrc; };
 
     G4int getAcceptedCollisions() const { return nAcceptedCollisions; };
     G4int getBlockedCollisions() const {return nBlockedCollisions; };
@@ -107,10 +117,12 @@ namespace G4INCL {
     G4int getEnergyViolationInteraction() const { return nEnergyViolationInteraction; };
 
   private:
+    G4int nAcceptedSrc;
     G4int nAcceptedCollisions;
     G4int nBlockedCollisions;
     G4int nAcceptedDecays;
     G4int nBlockedDecays;
+    G4int nSrcPairs;
     G4double currentTime;
     G4double firstCollisionTime;
     G4double firstCollisionXSec;

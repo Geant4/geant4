@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file radiobiology/include/SD.hh
+/// \file SD.hh
 /// \brief Definition of the RadioBio::SD class
 
 #ifndef RadiobiologySD_h

@@ -23,8 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
 /// \file PhysicsList.hh
 /// \brief Definition of the PhysicsList class
 
@@ -42,7 +40,7 @@ class PhysicsList : public G4VModularPhysicsList
 {
   public:
     PhysicsList();
-    ~PhysicsList() override;
+    ~PhysicsList() override = default;
 
     void ConstructParticle() override;
     void ConstructProcess() override;

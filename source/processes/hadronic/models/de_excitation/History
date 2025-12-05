@@ -6,6 +6,70 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2025-11-09 Vladimir Ivanchenko (hadr-deex-V11-03-25)
+- G4LevelReader, G4GammaTransition, G4photonEvaporation - fixed Bugzilla
+    problems #2672, #2588, #2451. The vector of IC probabilities is limited by
+    number of levels in an atom; if in gamma level data all IC transitions are
+    zero, then instead of K-shell probability 1.0 is assigned to the last
+    existing level; electron emission is sampled if nuclear excitation is above
+    the bound level and if number of electrons on electron shell is above 1;
+    more accurate sampling of final state using masses of the nucleus plus
+    masses of electrons from electron shells.
+
+## 2025-11-04 Vladimir Ivanchenko (hadr-deex-V11-03-24)
+- G4StatMFMicroCanonical - N. Chalyi fixed computation of temperature
+- G4DeexPrecoParameters - upper limit of energy per nucleon for the
+    pre-compound model is reduced from 30 to 15 MeV according to the
+    prescription of Botvina A. S. et al. Nucl. Phys. A, 475:663, 1987.
+
+## 2025-10-18 Vladimir Ivanchenko (hadr-deex-V11-03-23)
+- G4StatMFMicroCanonical - hard-coded solver was implemented inside the class,
+  which is substituted by usage of G4FunctionSolver, surface energy computation
+  bug is fixed, unnecessary computations are removed.
+
+## 2025-10-12 Vladimir Ivanchenko (hadr-deex-V11-03-22)
+- multifragmentation models are using G4FunctionSolver instead of G4Solver
+- G4CoulombBarrier, G4DeexPrecoUtils, G4EvaporationFragment, G4EvaporationProbability
+- G4EvaporationGEMFactoryVI - use the default evaporation for neutrons, protons,
+    and light ions
+- G4GEMChannelVI - used G4DeexPrecoUtils
+
+## 2025-10-08 Ben Morgan (hadr-deex-V11-03-21)
+- Emit fatal exception in G4LevelReader if path to G4LEVELGAMMADATA is empty
+  - Addresses Issue #236
+
+## 2025-09-09 Vladimir Ivanchenko (hadr-deex-V11-03-20)
+- G4StatMF, G4StatMFMicroCanonical, G4Evaporation - fixed Coverity warnings.
+
+## 2025-08-31 Vladimir Ivanchenko (hadr-deex-V11-03-19)
+- G4FermiBreakUpVI - removed the limit on excitation energy from the condition
+    of the model applicability, the model become similar to G4FermiBreakUpAN
+    in this respect.
+- G4DeexPrecoParameters - define limits maxZ=9, maxA=17 instead of maxZ=3
+    maxA=5. This means that Fermi BreakUp models will be used for light fragment
+    de-excitation, which happens in high energy ion collision with light targets.
+
+## 2025-08-15 Vladimir Ivanchenko (hadr-deex-V11-03-18)
+- General clean-up of the multifragmentation model: fixed equation solver,
+  make uniform headers and source, reduced number of new/delete operations.
+
+## 2025-08-03 Vladimir Ivanchenko (hadr-deex-V11-03-17)
+- G4StatMF, G4FermiSplitter - fixed Coverity warnings
+
+## 2025-07-08 Vladimir Ivanchenko (hadr-deex-V11-03-16)
+- G4VEmissionProbability, G4EvaporationChannel, G4GEMChannelVI - use optimazed
+    parameters for G4VSIntegrator - initial step 0.15 MeV for neutrons, 0.2 MeV
+    for charged, tolerance from 1.05 to 1.25. Avoid precision
+    loss for computation of minimal energy of emitted fragment. 
+
+## 2025-07-04 Vladimir Ivanchenko (hadr-deex-V11-03-15)
+- G4ExcitationHandler - moved multi-fragmentation model to be called before
+    the pre-compound model and not inside G4ExcitationHandler. The interfaces
+    are preserved, warnings are added to obsolete methods
+- G4StatMF - always return non-empty vector of final fragments, if
+    multi-fragmentation is not possible, then it returns the primary fragment.
+    Cleaned up method of final state energy correction and Lorentz boost.
+
 ## 2025-06-18 Vladimir Ivanchenko (hadr-deex-V11-03-14)
 - G4ExcitationHandler - fix initialisation of the new Fermi-BreakUp model
 - G4FermiBreakUpAN - delete primary fragment, if decay is sucsessful - fixed

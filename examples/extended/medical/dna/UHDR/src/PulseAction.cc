@@ -23,7 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file PulseAction.cc
+/// \brief Implementation of the PulseAction class
+
 // author: hoang tran
+// Important : This example is provided as a prototype. Some mistakes may be present in the code.
+// We would be happy to hear from you — please don’t hesitate to share your feedback and
+// let us know about any difficulties you may encounter.
 
 #include "PulseAction.hh"
 

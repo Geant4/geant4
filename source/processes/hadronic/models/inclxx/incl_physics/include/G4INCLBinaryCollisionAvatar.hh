@@ -97,6 +97,8 @@ namespace G4INCL {
     G4bool isElastic;
     G4bool isStrangeProduction;
 
+    void generateSrcPairsMethod(ParticleList &theList, const int then, const int thez, G4INCL::Particle*, G4INCL::Particle*);
+
     INCL_DECLARE_ALLOCATION_POOL(BinaryCollisionAvatar)
   };
 

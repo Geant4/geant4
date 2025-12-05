@@ -1,12 +1,10 @@
-#/run/numberOfThreads 4
-#/scheduler/verbose 0
-/tracking/verbose 0
+/run/numberOfThreads 1
 /run/verbose 0
 #
 /AuNP/det/setNPMat G4_Au
 #/AuNP/det/setNPMat G4_WATER
 #
-/AuNP/det/setAbsRadius 1000 um 
+/AuNP/det/setAbsRadius 100 um
 /AuNP/det/setNReplicaAzm 360
 /AuNP/det/setNPRadius 50 nm
 /AuNP/det/setNReplicaR 1000
@@ -16,14 +14,51 @@
 #/AuNP/phys/Physics4NP Livermore
 #/AuNP/phys/Physics4NP Penelope
 #
-#/chem/activate True
-#/chem/activate False
-#
 /run/setCut 0.1 nm
 /cuts/setLowEdge 1 eV #take long time
-#
+
+# The plot.C is for study of physics only.
+# Make sure the chemistry is disactivated
+# as "/chem/activate False"
+/chem/activate True
+
+/process/dna/e-SolvationSubType Meesungnoen2002
+
+# use Step-by-Step (SBS), independent reaction time (IRT)
+# or synchronized IRT (IRT_syn),
+# SBS ( is only for TDC, set 0 )
+/process/chem/TimeStepModel IRT_syn
+
 /run/initialize
-#
+
+# species definition
+# username [ molecule | charge | D(m2/s) | Radius(nm) ]
+#/chem/species O2 [ O2 | 0 | 2.4e-9 | 0.17 ]
+
+/chem/PrintSpeciesTable
+
+# reset reaction table
+/chem/reaction/UI
+
+# totally diffusion-controlled (TDC)                | Fix |  reactionRate[dm3/(mol*s)] | TDC (0)
+/chem/reaction/add H + H -> H2                      | Fix |  0.503e10 | 0
+/chem/reaction/add e_aq + H -> H2 + OHm             | Fix |  2.50e10  | 0
+/chem/reaction/add e_aq + e_aq -> H2 + OHm + OHm    | Fix |  0.636e10 | 0
+/chem/reaction/add H3Op + OHm -> H2O                | Fix |  1.13e11  | 0
+
+# partially diffusion-controlled (PDC)              | Fix |  reactionRate[dm3/(mol*s)] | PDC (1)
+/chem/reaction/add °OH + H -> H2O                   | Fix |  1.55e10 | 1
+/chem/reaction/add °OH + °OH -> H2O2                | Fix |  0.55e10 | 1
+/chem/reaction/add e_aq + °OH -> OHm                | Fix |  2.95e10 | 1
+/chem/reaction/add e_aq + H2O2 -> OHm + °OH         | Fix |  1.10e10 | 1
+/chem/reaction/add e_aq + H3Op -> H + H2O           | Fix |  2.11e10 | 1
+
+/chem/reaction/print
+
+/tracking/verbose 0
+/scheduler/verbose 1
+/scheduler/endTime 1 microsecond
+
 /process/em/fluo true
 /process/em/pixe true
 /process/em/auger true
@@ -32,13 +67,8 @@
 /process/em/lowestElectronEnergy 1 eV
 #/process/em/pixeElecXSmodel Penelope #for Penelope
 #
-#/gun/particle gamma
 /gun/particle e-
-#/gun/energy 100 eV
-#/gun/energy 1 keV
-/gun/energy 10 keV
-#/gun/energy 100 keV
-#/gun/energy 1 MeV
+/gun/energy 0.999 MeV
 #
-/run/printProgress 10000
-/run/beamOn 10000
+/run/printProgress 100
+/run/beamOn 1

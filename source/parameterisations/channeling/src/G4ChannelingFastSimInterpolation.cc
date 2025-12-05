@@ -93,9 +93,9 @@ void G4ChannelingFastSimInterpolation::SetCoefficients1D(G4double AI0,
                                                        G4double DI0,
                                                        G4int i){
     fAI[i] = AI0;
-    fBI[i] = BI0/cm;
-    fCI[i] = CI0/cm2;
-    fDI[i] = DI0/cm3;
+    fBI[i] = BI0/CLHEP::cm;
+    fCI[i] = CI0/CLHEP::cm2;
+    fDI[i] = DI0/CLHEP::cm3;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -110,13 +110,13 @@ void G4ChannelingFastSimInterpolation::SetCoefficients2D(G4double AI3D0,
     {
         fAI3D[i][j] = AI3D0/fStepj/fStepi/6.;
         fBI3D[i][j] = BI3D0/fStepj/fStepi/6.;
-        fCI3D[i][j] = CI3D0/fStepj/fStepi/6./cm2;
+        fCI3D[i][j] = CI3D0/fStepj/fStepi/6./CLHEP::cm2;
     }
     else if (k==1)
     {
-        fAI3D3[i][j] = AI3D0/fStepj/fStepi/6./cm2;
-        fBI3D3[i][j] = BI3D0/fStepj/fStepi/6./cm2;
-        fCI3D3[i][j] = CI3D0/fStepj/fStepi/6./cm2/cm2;
+        fAI3D3[i][j] = AI3D0/fStepj/fStepi/6./CLHEP::cm2;
+        fBI3D3[i][j] = BI3D0/fStepj/fStepi/6./CLHEP::cm2;
+        fCI3D3[i][j] = CI3D0/fStepj/fStepi/6./CLHEP::cm2/CLHEP::cm2;
     }
 }
 

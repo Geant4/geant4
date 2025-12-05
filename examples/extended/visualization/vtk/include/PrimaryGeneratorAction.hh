@@ -23,9 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file B1/include/PrimaryGeneratorAction.hh
-/// \brief Definition of the B1::PrimaryGeneratorAction class
+/// \file PrimaryGeneratorAction.hh
+/// \brief Definition of the VtkVis::PrimaryGeneratorAction class
 
 #ifndef B1PrimaryGeneratorAction_h
 #define B1PrimaryGeneratorAction_h 1

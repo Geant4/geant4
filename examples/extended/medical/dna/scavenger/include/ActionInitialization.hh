@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file scavenger/include/ActionInitialization.hh
+/// \file ActionInitialization.hh
 /// \brief Definition of the scavenger::ActionInitialization class
 
 #ifndef SCAVENGER_ActionInitialization_h

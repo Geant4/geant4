@@ -44,9 +44,9 @@
 class G4HadronPhysicsQGS_BIC : public G4HadronPhysicsQGSP_BERT
 {
   public: 
-    G4HadronPhysicsQGS_BIC(G4int verbose =1);
-    G4HadronPhysicsQGS_BIC(const G4String& name, G4bool quasiElastic=true);
-    virtual ~G4HadronPhysicsQGS_BIC();
+    G4HadronPhysicsQGS_BIC(G4int verbose = 1);
+    G4HadronPhysicsQGS_BIC(const G4String& name, G4bool quasiElastic = true);
+    ~G4HadronPhysicsQGS_BIC() override = default;
 
     // copy constructor and hide assignment operator
     G4HadronPhysicsQGS_BIC(G4HadronPhysicsQGS_BIC &) = delete;
@@ -56,12 +56,6 @@ class G4HadronPhysicsQGS_BIC : public G4HadronPhysicsQGSP_BERT
   protected:
     void Neutron() override;
     void Proton() override;
-    void Pion() override;
-
-  private:
-    G4double minBERT_pion;
-    G4double maxBIC_pion;
-    
 };
 
 #endif

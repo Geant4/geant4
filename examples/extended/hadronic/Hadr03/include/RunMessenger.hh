@@ -25,10 +25,6 @@
 //
 /// \file RunMessenger.hh
 /// \brief Definition of the RunMessenger class
-//
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef RunMessenger_h
 #define RunMessenger_h 1

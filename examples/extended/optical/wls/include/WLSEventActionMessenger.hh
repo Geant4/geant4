@@ -23,13 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file optical/wls/include/WLSEventActionMessenger.hh
+/// \file WLSEventActionMessenger.hh
 /// \brief Definition of the WLSEventActionMessenger class
-//
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #ifndef WLSEventActionMessenger_h
 #define WLSEventActionMessenger_h 1

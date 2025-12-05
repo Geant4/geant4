@@ -4,6 +4,12 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
+## 2025-10-22 M. Maire (exampleB1-V11-03-01)
+- RunAction.cc: modify printout to use the expression "Absorbed dose"
+
+## 2025-10-11 M. Maire (exampleB1-V11-03-00)
+- RunAction.cc: print Edep and mass of scoring volume
+- exampleB1.in, run2.mac : increase statistic
 
 ## 2024-08-12 I. Hrivnacova (exampleB1-V11-02-00)
 - Updated for changes in accumulables:

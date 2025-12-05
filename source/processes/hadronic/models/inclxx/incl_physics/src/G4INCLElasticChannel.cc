@@ -40,17 +40,16 @@
 #include "G4INCLKinematicsUtils.hh"
 #include "G4INCLParticleTable.hh"
 #include "G4INCLCrossSections.hh"
+#include "G4INCLInteractionAvatar.hh"
 #include "G4INCLGlobals.hh"
 
 namespace G4INCL {
 
-  ElasticChannel::ElasticChannel(Particle *p1, Particle *p2)
-    :particle1(p1), particle2(p2)
-  {
-  }
+  ElasticChannel::ElasticChannel(Particle *p1, Particle *p2, Nucleus *n)
+    : particle1(p1), particle2(p2), thenucleus(n) {}
 
-  ElasticChannel::~ElasticChannel()
-  {
+  ElasticChannel::~ElasticChannel() {
+  // delete srcChannel;
   }
 
   void ElasticChannel::fillFinalState(FinalState *fs)
@@ -154,6 +153,12 @@ namespace G4INCL {
       particle1->setMomentum(p1momentum);
       particle2->setMomentum(-p1momentum);
     }
+ 
+    if (thenucleus) {
+      srcChannel = new SrcChannel(particle1, particle2, thenucleus);
+      srcChannel->fillFinalState(fs, particle1->getType(), particle2->getType());
+      delete srcChannel;
+    } else {
 
     // Handle backward scattering here.
 
@@ -177,5 +182,5 @@ namespace G4INCL {
     fs->addModifiedParticle(particle2);
 
     }
-
-}
+ }
+} // namespace G4INCL

@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file plotG.cc
+/// \brief Main program of the chem4/plot example
+
 #define USE_CANVASINTAB
 
 #ifdef USE_CANVASINTAB

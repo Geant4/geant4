@@ -6,6 +6,65 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2025-12-05 Gabriele Cosmo (global-V11-03-31)
+- Updated tag IDs for geant4-11-04-ref-00.
+
+## 2025-11-15 Gabriele Cosmo (global-V11-03-30)
+- Updated tag IDs for geant4-11-04-cand-01.
+
+## 2025-11-08 Gabriele Cosmo (global-V11-03-29)
+- Updated tag IDs for geant4-11-04-cand-00.
+
+## 2025-10-31 Gabriele Cosmo (global-V11-03-28)
+- Updated tag IDs for geant4-11-03-ref-10.
+
+## 2025-10-13 Ben Morgan (global-V11-03-27)
+- Fix data race on std::cout in G4iosFinalization.
+
+## 2025-10-08 Vladimir Ivantchenko (global-V11-03-26)
+- G4FunctionSolver - fixed shadowing
+
+## 2025-10-04 Vladimir Ivantchenko (global-V11-03-25)
+- G4FunctionSolver - a new utility to solve equation F(x) = 0.
+
+## 2025-10-01 Vladimir Ivantchenko (global-V11-03-24)
+- G4ExtendedPhysicsVector - fixed destruction of the class (Coverity report).
+
+## 2025-08-27 Gabriele Cosmo (global-V11-03-23)
+- Updated tag IDs for geant4-11-03-ref-09.
+
+## 2025-09-08 Vladimir Ivantchenko (global-V11-03-22)
+- G4PhysicsVector, G4PhysicsFreeVector - added a new method CheckIndex() to reduce
+    code duplication, removed tabs from source and headers, extended comments.
+- G4ExtendedPhysicsVector - a new data structure, which includes partial cross
+  sections, and methods for randon selection of a partial cross section channel.
+  The total cross section is included via pointer to the G4PhysicsVector.
+  
+## 2025-08-27 Gabriele Cosmo (global-V11-03-21)
+- Updated tag IDs for geant4-11-03-ref-08.
+
+## 2025-08-14 Alberto Ribon (global-V11-03-20)
+- G4PhysicsModelCatalog : introduced FTF quasi-elastic and FTF diffraction.
+  This is coming from a request from users.
+  Note that we don't introduce QGS quasi-elastic and QGS diffraction
+  (because the Chips quasi-elastic model is used in all QGS-based physics
+   lists, whereas for diffraction, we don't know how to identify this type
+   of interaction).
+
+## 2025-07-31 Gabriele Cosmo (global-V11-03-19)
+- Updated tag IDs for geant4-11-03-ref-07.
+
+## 2025-07-24 Soon Yung Jun (global-V11-03-18)
+- Added model Ids and names for G4QuasiCherenkov and G4QuasiScintillation
+  processes.
+
+## 2025-07-03 Vladimir Ivantchenko (global-V11-03-17)
+- G4VSIntegration - fixed bug in sampling of tail of a distribution.
+    Exclude usage of G4Log and G4Exp, which makes code faster.
+    Improved comments to the code. Set limit number of iterations 100000
+    instead of 1000, which allowing correct sampling of tails but still
+    prevent from infinite loop 
+
 ## 2025-06-26 Gabriele Cosmo (global-V11-03-16)
 - Updated tag IDs for geant4-11-03-ref-06.
 

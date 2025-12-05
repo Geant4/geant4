@@ -222,8 +222,7 @@ void G4DNARuddIonisationExtendedModel::Initialise(const G4ParticleDefinition* p,
     statCode = G4EmParameters::Instance()->DNAStationary();
 
     // initialise atomic de-excitation
-    if (!statCode)
-      fAtomDeexcitation = G4LossTableManager::Instance()->AtomDeexcitation();
+    fAtomDeexcitation = G4LossTableManager::Instance()->AtomDeexcitation();
 
     if (verbose > 0) {
       G4cout << "### G4DNARuddIonisationExtendedModel::Initialise(..) " << pname 
@@ -343,7 +342,11 @@ G4DNARuddIonisationExtendedModel::SampleSecondaries(std::vector<G4DynamicParticl
 	   << G4endl;
   }
   scatteredEnergy = std::max(scatteredEnergy, 0.0);
-
+  /*
+  G4cout << "Eprim(keV)=" << kinE/CLHEP::keV << " Efin(keV)=" << scatteredEnergy/CLHEP::keV
+	 << " Esec(keV)=" << esec/CLHEP::keV << " Exc(keV)=" << exc/CLHEP::keV
+	 << " tolerance(keV)=" << tolerance/CLHEP::keV << G4endl; 
+  */
   // projectile
   if (!statCode) {
     fParticleChangeForGamma->SetProposedKineticEnergy(scatteredEnergy);
@@ -449,8 +452,6 @@ G4double G4DNARuddIonisationExtendedModel::SampleElectronEnergy(G4double kine,
 
   // find max probability
   G4double pmax = ProbabilityFunction(kine, 0.0, shell);
-  //G4cout << "## E(keV)=" << kine/keV << " emax=" << emax/keV
-  //       << " pmax(0)=" << pmax << " shell=" << shell << " nn=" << nn << G4endl;
 
   G4double e0 = 0.0; // energy with max probability
   // 2 areas after point with max probability

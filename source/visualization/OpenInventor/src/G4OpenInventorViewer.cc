@@ -192,7 +192,9 @@ G4bool G4OpenInventorViewer::CompareForKernelVisit(G4ViewParameters& vp) {
       (vp.GetVisAttributesModifiers()    != fVP.GetVisAttributesModifiers())    ||
       (vp.IsSpecialMeshRendering()       != fVP.IsSpecialMeshRendering())       ||
       (vp.GetSpecialMeshRenderingOption()!= fVP.GetSpecialMeshRenderingOption())||
-      (vp.GetTransparencyByDepth()       != fVP.GetTransparencyByDepth())
+      (vp.GetTransparencyByDepth() != fVP.GetTransparencyByDepth()) ||
+      (vp.IsDotsSmooth()        != fVP.IsDotsSmooth())        ||
+      (vp.GetDotsSize()         != fVP.GetDotsSize())
       )
     return true;
 

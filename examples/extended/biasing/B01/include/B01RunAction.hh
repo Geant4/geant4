@@ -23,11 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file biasing/B01/include/B01RunAction.hh
+/// \file B01RunAction.hh
 /// \brief Definition of the B01RunAction class
-//
-//
-//
 
 #ifndef B01RunAction_h
 #define B01RunAction_h 1

@@ -9,9 +9,6 @@
 
 #include "PoPI.hpp"
 
-#define PoPI_idChars "id"
-#define PoPI_symbolChars "symbol"
-
 namespace PoPI {
 
 /*! \class Base
@@ -26,7 +23,7 @@ namespace PoPI {
 Base::Base( std::string const &a_id, Particle_class a_class ) :
         m_id( a_id ),
         m_class( a_class ),
-        m_index( -1 ),
+        m_index( SIZE_MAX ),
         m_intid( -1 ) {
 
 }
@@ -42,7 +39,7 @@ Base::Base( std::string const &a_id, Particle_class a_class ) :
 Base::Base( HAPI::Node const &a_node, std::string const &a_label, Particle_class a_class ) :
         m_id( a_node.attribute( a_label.c_str( ) ).value( ) ),
         m_class( a_class ),
-        m_index( -1 ),
+        m_index( SIZE_MAX ),
         m_intid( -1 ) {
 
 }
@@ -95,7 +92,7 @@ IDBase::~IDBase( ) {
  * @return                          The index assigned to *this* by *a_DB*.
  ***********************************************************************************************************/
 
-int IDBase::addToDatabase( Database *a_DB ) {
+std::size_t IDBase::addToDatabase( Database *a_DB ) {
 
     a_DB->add( this );
     return( index( ) );
@@ -130,7 +127,7 @@ SymbolBase::~SymbolBase( ) {
  * @return                          The index assigned to *this* by *a_DB*.
  ***********************************************************************************************************/
 
-int SymbolBase::addToSymbols( Database *a_DB ) {
+std::size_t SymbolBase::addToSymbols( Database *a_DB ) {
 
     a_DB->addSymbol( this );
     return( index( ) );

@@ -23,8 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-///  \file XSHistoManagerMessenger.cc
-///  \brief UI commands for XS study.
+/// \file XSHistoManagerMessenger.cc
+/// \brief Implementation of the XSHistoManagerMessenger class
+
 //
 //  Author: G.Hugo, 06 January 2023
 //

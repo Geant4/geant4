@@ -23,10 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file runAndEvent/RE01/include/RE01CalorimeterHit.hh
+/// \file RE01CalorimeterHit.hh
 /// \brief Definition of the RE01CalorimeterHit class
-//
-//
 
 #ifndef RE01CalorimeterHit_h
 #define RE01CalorimeterHit_h 1

@@ -23,10 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file persistency/P02/src/ExP02PrimaryGeneratorAction.cc
+/// \file ExP02PrimaryGeneratorAction.cc
 /// \brief Implementation of the ExP02PrimaryGeneratorAction class
-//
-//
+
 #include "ExP02PrimaryGeneratorAction.hh"
 
 #include "G4Event.hh"

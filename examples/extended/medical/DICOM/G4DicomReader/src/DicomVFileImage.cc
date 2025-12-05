@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file DicomVFileImage.cc
+/// \brief Implementation of the DicomVFileImage class
+
 #include "DicomVFileImage.hh"
 
 #include "DicomFileStructure.hh"

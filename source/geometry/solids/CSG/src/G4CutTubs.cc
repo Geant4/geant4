@@ -50,7 +50,7 @@
 
 namespace
 {
-  G4Mutex zminmaxMutex = G4MUTEX_INITIALIZER;
+  G4Mutex ctubsMutex = G4MUTEX_INITIALIZER;
 }
 
 using namespace CLHEP;
@@ -172,18 +172,6 @@ G4CutTubs::G4CutTubs( __void__& a )
 
 //////////////////////////////////////////////////////////////////////////
 //
-// Destructor
-
-G4CutTubs::~G4CutTubs() = default;
-
-//////////////////////////////////////////////////////////////////////////
-//
-// Copy constructor
-
-G4CutTubs::G4CutTubs(const G4CutTubs&) = default;
-
-//////////////////////////////////////////////////////////////////////////
-//
 // Assignment operator
 
 G4CutTubs& G4CutTubs::operator = (const G4CutTubs& rhs)
@@ -213,111 +201,6 @@ G4CutTubs& G4CutTubs::operator = (const G4CutTubs& rhs)
    fLowNorm = rhs.fLowNorm; fHighNorm = rhs.fHighNorm;
 
    return *this;
-}
-
-//////////////////////////////////////////////////////////////////////////
-//
-// Get volume
-
-G4double G4CutTubs::GetCubicVolume()
-{
-  constexpr G4int nphi = 200, nrho = 100;
-
-  if (fCubicVolume == 0.)
-  {
-    // get parameters
-    G4double rmin = GetInnerRadius();
-    G4double rmax = GetOuterRadius();
-    G4double dz   = GetZHalfLength();
-    G4double sphi = GetStartPhiAngle();
-    G4double dphi = GetDeltaPhiAngle();
-
-    // calculate volume
-    G4double volume = dz*dphi*(rmax*rmax - rmin*rmin);
-    if (dphi < twopi) // make recalculation
-    {
-      // set values for calculation of h - distance between
-      // opposite points on bases
-      G4ThreeVector nbot = GetLowNorm();
-      G4ThreeVector ntop = GetHighNorm();
-      G4double nx = nbot.x()/nbot.z() - ntop.x()/ntop.z();
-      G4double ny = nbot.y()/nbot.z() - ntop.y()/ntop.z();
-
-      // compute volume by integration
-      G4double delrho = (rmax - rmin)/nrho;
-      G4double delphi = dphi/nphi;
-      volume = 0.;
-      for (G4int irho=0; irho<nrho; ++irho)
-      {
-        G4double r1  = rmin + delrho*irho;
-        G4double r2  = rmin + delrho*(irho + 1);
-        G4double rho = 0.5*(r1 + r2);
-        G4double sector = 0.5*delphi*(r2*r2 - r1*r1);
-        for (G4int iphi=0; iphi<nphi; ++iphi)
-        {
-          G4double phi = sphi + delphi*(iphi + 0.5);
-          G4double h = nx*rho*std::cos(phi) + ny*rho*std::sin(phi) + 2.*dz;
-          volume += sector*h;
-        }
-      }
-    }
-    fCubicVolume = volume;
-  }
-  return fCubicVolume;
-}
-
-//////////////////////////////////////////////////////////////////////////
-//
-// Get surface area
-
-G4double G4CutTubs::GetSurfaceArea()
-{
-  constexpr G4int nphi = 400;
-
-  if (fSurfaceArea == 0.)
-  {
-    // get parameters
-    G4double rmin = GetInnerRadius();
-    G4double rmax = GetOuterRadius();
-    G4double dz   = GetZHalfLength();
-    G4double sphi = GetStartPhiAngle();
-    G4double dphi = GetDeltaPhiAngle();
-    G4ThreeVector nbot = GetLowNorm();
-    G4ThreeVector ntop = GetHighNorm();
-
-    // calculate lateral surface area
-    G4double sinner = 2.*dz*dphi*rmin;
-    G4double souter = 2.*dz*dphi*rmax;
-    if (dphi < twopi) // make recalculation
-    {
-      // set values for calculation of h - distance between
-      // opposite points on bases
-      G4double nx = nbot.x()/nbot.z() - ntop.x()/ntop.z();
-      G4double ny = nbot.y()/nbot.z() - ntop.y()/ntop.z();
-
-      // compute lateral surface area by integration
-      G4double delphi = dphi/nphi;
-      sinner = 0.;
-      souter = 0.;
-      for (G4int iphi=0; iphi<nphi; ++iphi)
-      {
-        G4double phi = sphi + delphi*(iphi + 0.5);
-        G4double cosphi = std::cos(phi);
-        G4double sinphi = std::sin(phi);
-        sinner += rmin*(nx*cosphi + ny*sinphi) + 2.*dz;
-        souter += rmax*(nx*cosphi + ny*sinphi) + 2.*dz;
-      }
-      sinner *= delphi*rmin;
-      souter *= delphi*rmax;
-    }
-    // set surface area
-    G4double scut  = (dphi == twopi) ? 0. : 2.*dz*(rmax - rmin);
-    G4double szero = 0.5*dphi*(rmax*rmax - rmin*rmin);
-    G4double slow  = szero/std::abs(nbot.z());
-    G4double shigh = szero/std::abs(ntop.z());
-    fSurfaceArea = sinner + souter + 2.*scut + slow + shigh;
-  }
-  return fSurfaceArea;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -352,12 +235,12 @@ void G4CutTubs::BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const
   if (dphi > pi)
   {
     iftop = true;
-    if (dists > 0 && diste > 0)iftop = false;
+    if (dists > 0 && diste > 0) { iftop = false; }
   }
   else
   {
     iftop = false;
-    if (dists <= 0 && diste <= 0) iftop = true;
+    if (dists <= 0 && diste <= 0) { iftop = true; }
   }
   if (iftop)
   {
@@ -384,12 +267,12 @@ void G4CutTubs::BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const
   if (dphi > pi)
   {
     iftop = true;
-    if (dists > 0 && diste > 0) iftop = false;
+    if (dists > 0 && diste > 0) { iftop = false; }
   }
   else
   {
     iftop = false;
-    if (dists <= 0 && diste <= 0) iftop = true;
+    if (dists <= 0 && diste <= 0) { iftop = true; }
   }
   if (iftop)
   {
@@ -517,7 +400,10 @@ G4bool G4CutTubs::CalculateExtent( const EAxis              pAxis,
 
     // set quadrilaterals
     G4ThreeVectorList pols[NSTEPS+2];
-    for (G4int k=0; k<ksteps+2; ++k) pols[k].resize(4);
+    for (G4int k=0; k<ksteps+2; ++k)
+    {
+      pols[k].resize(4);
+    }
     pols[0][0].set(rmin*cosStart,rmin*sinStart,zmax);
     pols[0][1].set(rmin*cosStart,rmin*sinStart,zmin);
     pols[0][2].set(rmax*cosStart,rmax*sinStart,zmin);
@@ -596,14 +482,18 @@ EInside G4CutTubs::Inside( const G4ThreeVector& p ) const
     G4double ephi = sphi + fDPhi + kAngTolerance;
     if ((phi0  >= sphi && phi0  <= ephi) ||
         (phi1  >= sphi && phi1  <= ephi) ||
-        (phi2  >= sphi && phi2  <= ephi)) in = kSurface;
+        (phi2  >= sphi && phi2  <= ephi))
+    {
+      in = kSurface;
+    }
     if (in == kOutside)  { return kOutside; }
 
     sphi += kAngTolerance;
     ephi -= kAngTolerance;
     if ((phi0  >= sphi && phi0  <= ephi) ||
         (phi1  >= sphi && phi1  <= ephi) ||
-        (phi2  >= sphi && phi2  <= ephi)) in = kInside;
+        (phi2  >= sphi && phi2  <= ephi)) { in = kInside;
+}
     if (in == kSurface)  { return kSurface; }
   }
 
@@ -1056,13 +946,11 @@ G4double G4CutTubs::DistanceToIn( const G4ThreeVector& p,
               {
                 return sd ;
               }
-              else
-              {
-                xi     = p.x() + sd*v.x() ;
-                yi     = p.y() + sd*v.y() ;
-                cosPsi = (xi*cosCPhi + yi*sinCPhi)/fRMax ;
-                if (cosPsi >= cosHDPhiIT)  { return sd ; }
-              }
+              
+              xi     = p.x() + sd*v.x() ;
+              yi     = p.y() + sd*v.y() ;
+              cosPsi = (xi*cosCPhi + yi*sinCPhi)/fRMax ;
+              if (cosPsi >= cosHDPhiIT)  { return sd ; }
             }  //  end if std::fabs(zi)
           }
         }    //  end if (sd>=0)
@@ -1095,22 +983,18 @@ G4double G4CutTubs::DistanceToIn( const G4ThreeVector& p,
             {
               return 0.0;
             }
-            else
+            
+            c = c/t1 ;
+            d = b*b-c;
+            if ( d>=0.0 )
             {
-              c = c/t1 ;
-              d = b*b-c;
-              if ( d>=0.0 )
-              {
-                snxt = c/(-b+std::sqrt(d)); // using safe solution
-                                            // for quadratic equation
-                if ( snxt < halfCarTolerance ) { snxt=0; }
-                return snxt ;
-              }
-              else
-              {
-                return kInfinity;
-              }
+              snxt = c/(-b+std::sqrt(d)); // using safe solution
+                                          // for quadratic equation
+              if ( snxt < halfCarTolerance ) { snxt=0; }
+              return snxt ;
             }
+            
+            return kInfinity;
           }
         }
         else
@@ -1126,22 +1010,18 @@ G4double G4CutTubs::DistanceToIn( const G4ThreeVector& p,
           {
             return 0.0;
           }
-          else
+          
+          c = c/t1 ;
+          d = b*b-c;
+          if ( d>=0.0 )
           {
-            c = c/t1 ;
-            d = b*b-c;
-            if ( d>=0.0 )
-            {
-              snxt= c/(-b+std::sqrt(d)); // using safe solution
-                                         // for quadratic equation
-              if ( snxt < halfCarTolerance ) { snxt=0; }
-              return snxt ;
-            }
-            else
-            {
-              return kInfinity;
-            }
+            snxt= c/(-b+std::sqrt(d)); // using safe solution
+                                       // for quadratic equation
+            if ( snxt < halfCarTolerance ) { snxt=0; }
+            return snxt ;
           }
+          
+          return kInfinity;
         } // end if   (!fPhiFullCutTube)
       }   // end if   (t3>tolIRMin2)
     }     // end if   (Inside Outer Radius)
@@ -1181,16 +1061,14 @@ G4double G4CutTubs::DistanceToIn( const G4ThreeVector& p,
               {
                 return sd ;
               }
-              else
+              
+              cosPsi = (xi*cosCPhi + yi*sinCPhi)/fRMin ;
+              if (cosPsi >= cosHDPhiIT)
               {
-                cosPsi = (xi*cosCPhi + yi*sinCPhi)/fRMin ;
-                if (cosPsi >= cosHDPhiIT)
-                {
-                  // Good inner radius isect
-                  // - but earlier phi isect still possible
-                  //
-                  snxt = sd ;
-                }
+                // Good inner radius isect
+                // - but earlier phi isect still possible
+                //
+                snxt = sd ;
               }
             }      //    end if std::fabs(zi)
           }
@@ -1922,7 +1800,7 @@ G4ThreeVector G4CutTubs::GetPointOnSurface() const
   // Set min and max z
   if (fZMin == 0. && fZMax == 0.)
   {
-    G4AutoLock l(&zminmaxMutex);
+    G4AutoLock l(&ctubsMutex);
     G4ThreeVector bmin, bmax;
     BoundingLimits(bmin,bmax);
     fZMin = bmin.z();
@@ -2019,8 +1897,8 @@ G4ThreeVector G4CutTubs::GetPointOnSurface() const
         break;
       }
     }
-    if ((ntop.dot(p) - fDz*ntop.z()) > 0.) continue;
-    if ((nbot.dot(p) + fDz*nbot.z()) > 0.) continue;
+    if ((ntop.dot(p) - fDz*ntop.z()) > 0.) { continue; }
+    if ((nbot.dot(p) + fDz*nbot.z()) > 0.) { continue; }
     return p;
   }
   // Just in case, if all attempts to generate a point have failed
@@ -2029,6 +1907,115 @@ G4ThreeVector G4CutTubs::GetPointOnSurface() const
   G4double y = rmax*std::sin(sphi + 0.5*dphi);
   G4double z = fDz - (x*ntop.x() + y*ntop.y())/ntop.z();
   return {x, y, z};
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Get volume
+
+G4double G4CutTubs::GetCubicVolume()
+{
+  constexpr G4int nphi = 200, nrho = 100;
+
+  if (fCubicVolume == 0)
+  {
+    G4AutoLock l(&ctubsMutex);
+    // get parameters
+    G4double rmin = GetInnerRadius();
+    G4double rmax = GetOuterRadius();
+    G4double dz   = GetZHalfLength();
+    G4double sphi = GetStartPhiAngle();
+    G4double dphi = GetDeltaPhiAngle();
+
+    // calculate volume
+    G4double volume = dz*dphi*(rmax*rmax - rmin*rmin);
+    if (dphi < twopi) // make recalculation
+    {
+      // set values for calculation of h - distance between
+      // opposite points on bases
+      G4ThreeVector nbot = GetLowNorm();
+      G4ThreeVector ntop = GetHighNorm();
+      G4double nx = nbot.x()/nbot.z() - ntop.x()/ntop.z();
+      G4double ny = nbot.y()/nbot.z() - ntop.y()/ntop.z();
+
+      // compute volume by integration
+      G4double delrho = (rmax - rmin)/nrho;
+      G4double delphi = dphi/nphi;
+      volume = 0.;
+      for (G4int irho=0; irho<nrho; ++irho)
+      {
+        G4double r1  = rmin + delrho*irho;
+        G4double r2  = rmin + delrho*(irho + 1);
+        G4double rho = 0.5*(r1 + r2);
+        G4double sector = 0.5*delphi*(r2*r2 - r1*r1);
+        for (G4int iphi=0; iphi<nphi; ++iphi)
+        {
+          G4double phi = sphi + delphi*(iphi + 0.5);
+          G4double h = nx*rho*std::cos(phi) + ny*rho*std::sin(phi) + 2.*dz;
+          volume += sector*h;
+        }
+      }
+    }
+    fCubicVolume = volume;
+    l.unlock();
+  }
+  return fCubicVolume;
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Get surface area
+
+G4double G4CutTubs::GetSurfaceArea()
+{
+  constexpr G4int nphi = 400;
+
+  if (fSurfaceArea == 0)
+  {
+    G4AutoLock l(&ctubsMutex);
+    // get parameters
+    G4double rmin = GetInnerRadius();
+    G4double rmax = GetOuterRadius();
+    G4double dz   = GetZHalfLength();
+    G4double sphi = GetStartPhiAngle();
+    G4double dphi = GetDeltaPhiAngle();
+    G4ThreeVector nbot = GetLowNorm();
+    G4ThreeVector ntop = GetHighNorm();
+
+    // calculate lateral surface area
+    G4double sinner = 2.*dz*dphi*rmin;
+    G4double souter = 2.*dz*dphi*rmax;
+    if (dphi < twopi) // make recalculation
+    {
+      // set values for calculation of h - distance between
+      // opposite points on bases
+      G4double nx = nbot.x()/nbot.z() - ntop.x()/ntop.z();
+      G4double ny = nbot.y()/nbot.z() - ntop.y()/ntop.z();
+
+      // compute lateral surface area by integration
+      G4double delphi = dphi/nphi;
+      sinner = 0.;
+      souter = 0.;
+      for (G4int iphi=0; iphi<nphi; ++iphi)
+      {
+        G4double phi = sphi + delphi*(iphi + 0.5);
+        G4double cosphi = std::cos(phi);
+        G4double sinphi = std::sin(phi);
+        sinner += rmin*(nx*cosphi + ny*sinphi) + 2.*dz;
+        souter += rmax*(nx*cosphi + ny*sinphi) + 2.*dz;
+      }
+      sinner *= delphi*rmin;
+      souter *= delphi*rmax;
+    }
+    // set surface area
+    G4double scut  = (dphi == twopi) ? 0. : 2.*dz*(rmax - rmin);
+    G4double szero = 0.5*dphi*(rmax*rmax - rmin*rmin);
+    G4double slow  = szero/std::abs(nbot.z());
+    G4double shigh = szero/std::abs(ntop.z());
+    fSurfaceArea = sinner + souter + 2.*scut + slow + shigh;
+    l.unlock();
+  }
+  return fSurfaceArea;
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -2110,8 +2097,8 @@ G4bool G4CutTubs::IsCrossingCutPlanes() const
   // opposite points on bases
   G4ThreeVector nbot = GetLowNorm();
   G4ThreeVector ntop = GetHighNorm();
-  if (std::abs(nbot.z()) < kCarTolerance) return true;
-  if (std::abs(ntop.z()) < kCarTolerance) return true;
+  if (std::abs(nbot.z()) < kCarTolerance) { return true; }
+  if (std::abs(ntop.z()) < kCarTolerance) { return true; }
   G4double nx = nbot.x()/nbot.z() - ntop.x()/ntop.z();
   G4double ny = nbot.y()/nbot.z() - ntop.y()/ntop.z();
 
@@ -2125,7 +2112,7 @@ G4bool G4CutTubs::IsCrossingCutPlanes() const
   for (G4int i=0; i<npoints+1; ++i)
   {
     G4double h = nx*cosphi + ny*sinphi + hzero;
-    if (h < 0.) return true;
+    if (h < 0.) { return true; }
     G4double sintmp = sinphi;
     sinphi = sintmp*cosdel + cosphi*sindel;
     cosphi = cosphi*cosdel - sintmp*sindel;

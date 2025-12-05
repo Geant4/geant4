@@ -23,13 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file optical/wls/include/WLSPrimaryGeneratorMessenger.hh
+/// \file WLSPrimaryGeneratorMessenger.hh
 /// \brief Definition of the WLSPrimaryGeneratorMessenger class
-//
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #ifndef WLSPrimaryGeneratorMessenger_h
 #define WLSPrimaryGeneratorMessenger_h 1

@@ -82,6 +82,9 @@ void G4EmLowEParameters::Initialise()
   namePIXE = "Empirical";
   nameElectronPIXE = "Livermore";
   livDataDir = "epics_2017";
+
+  maxEElectron = 1*CLHEP::MeV;
+  maxEIon = 300*CLHEP::MeV;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -184,6 +187,26 @@ void G4EmLowEParameters::SetDNAElectronMsc(G4bool val)
 G4bool G4EmLowEParameters::DNAElectronMsc() const
 {
   return dnaMsc;
+}
+
+void G4EmLowEParameters::SetMaxDNAElectronEnergy(G4double val)
+{
+  if (0.0 < val) { maxEElectron = val; }
+}
+
+G4double G4EmLowEParameters::MaxDNAElectronEnergy() const
+{
+  return maxEElectron;
+}
+
+void G4EmLowEParameters::SetMaxDNAIonEnergy(G4double val)
+{
+  if (0.0 < val) { maxEIon = val; }
+}
+
+G4double G4EmLowEParameters::MaxDNAIonEnergy() const
+{
+  return maxEIon;
 }
 
 void G4EmLowEParameters::SetDNAeSolvationSubType(G4DNAModelSubType val)

@@ -63,6 +63,10 @@ G4LevelReader::G4LevelReader(G4NuclearLevelData* ptr)
   fAlphaMax = (G4float)1.e15;
   fTimeFactor = CLHEP::second/G4Pow::GetInstance()->logZ(2);
   fDirectory = G4String(G4FindDataDir("G4LEVELGAMMADATA"));
+  if (fDirectory.empty()) {
+    G4Exception("G4LevelReader::G4LevelReader()", "had014", FatalException,
+      "G4LEVELGAMMADATA environment variable not set");
+  }
 
   vTrans.resize(fTransMax,0);
   vRatio.resize(fTransMax,0.0f);
@@ -122,19 +126,26 @@ const std::vector<G4float>* G4LevelReader::NormalizedICCProbability(G4int Z)
   G4int LL = 3;
   G4int M = 5;
   G4int N = 1;
+  G4int Kmax = 9;
   if(Z <= 27) {
     M = N = 0;
     if(Z <= 4) {
       LL = 1;
+      Kmax = 2;
     } else if(Z <= 6) {
       LL = 2;
+      Kmax = 3;
     } else if(Z <= 10) {
+      Kmax = 4;
     } else if(Z <= 12) {
       M = 1;
+      Kmax = 8;
     } else if(Z <= 17) {
       M = 2;
+      Kmax = 8;
     } else if(Z == 18) {
       M = 3;
+      Kmax = 8;
     } else if(Z <= 20) {
       M = 3;
       N = 1;
@@ -147,33 +158,24 @@ const std::vector<G4float>* G4LevelReader::NormalizedICCProbability(G4int Z)
     if(N < 1)  { fICC[9] = 0.0f; }
   }
   G4float norm = 0.0f;
-  for(G4int i=0; i<10; ++i) {
+  for (G4int i = 0; i <= Kmax; ++i) {
     norm += fICC[i]; 
     fICC[i] = norm;
   }
-  if(norm == 0.0f && fAlpha > 0.0f) {
-    fICC[0] = norm = 1.0f;
-  } 
-  if(norm > 0.0f) {
+  if (norm > 0.0f) {
     norm = 1.0f/norm;
-    vec = new std::vector<G4float>;
-    G4float x;
-    for(G4int i=0; i<10; ++i) {
-      x = fICC[i]*norm;
-      if(x > 0.995f || 9 == i) {
-	vec->push_back(1.0f);
-	break;
-      } 
-      vec->push_back(x); 
-    }
-    if (fVerbose > 3) {
-      G4long prec = G4cout.precision(3);
-      G4cout << "# InternalConv: ";
-      std::size_t nn = vec->size();
-      for(std::size_t i=0; i<nn; ++i) { G4cout << " " << (*vec)[i]; }
-      G4cout << G4endl;
-      G4cout.precision(prec);
-    }
+  }
+  vec = new std::vector<G4float>(Kmax + 1, 0.0f);
+  for (G4int i = 0; i < Kmax; ++i) {
+    (*vec)[i] = fICC[i]*norm;
+  }
+  (*vec)[Kmax] = 1.0f;
+  if (fVerbose > 3) {
+    G4long prec = G4cout.precision(3);
+    G4cout << "# InternalConv: ";
+    for (G4int i = 0; i <= Kmax; ++i) { G4cout << " " << (*vec)[i]; }
+    G4cout << G4endl;
+    G4cout.precision(prec);
   }
   return vec;
 }

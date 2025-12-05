@@ -25,7 +25,7 @@
 //
 // G4UniformElectricField implementation
 //
-// Created: V.Grichine, 30.01.1997
+// Author: Vladimir Grichine (CERN), 30.01.1997
 // -------------------------------------------------------------------
 
 #include "G4UniformElectricField.hh"
@@ -59,8 +59,6 @@ G4UniformElectricField::G4UniformElectricField(G4double vField,
    fFieldComponents[4] = vField*std::sin(vTheta)*std::sin(vPhi) ;
    fFieldComponents[5] = vField*std::cos(vTheta) ;
 }
-
-G4UniformElectricField::~G4UniformElectricField() = default;
 
 G4UniformElectricField::
 G4UniformElectricField (const G4UniformElectricField& p)

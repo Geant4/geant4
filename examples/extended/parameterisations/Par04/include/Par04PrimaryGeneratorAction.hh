@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file Par04PrimaryGeneratorAction.hh
+/// \brief Definition of the Par04PrimaryGeneratorAction class
+
 #ifndef PAR04PRIMARYGENERATORACTION_HH
 #define PAR04PRIMARYGENERATORACTION_HH
 

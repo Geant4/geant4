@@ -35,13 +35,13 @@ LUPI_HOST_DEVICE DomainHash::DomainHash( ) :
  * @param a_domainMax           [in]    The maximum value of the energy domain for the hash function.
  ***********************************************************************************************************/
 
-LUPI_HOST_DEVICE DomainHash::DomainHash( int a_bins, double a_domainMin, double a_domainMax ) :
+LUPI_HOST_DEVICE DomainHash::DomainHash( std::size_t a_bins, double a_domainMin, double a_domainMax ) :
         m_bins( a_bins ),
         m_domainMin( a_domainMin ),
         m_domainMax( a_domainMax ),
         m_u_domainMin( log( a_domainMin ) ),
         m_u_domainMax( log( a_domainMax ) ),
-        m_inverse_du( a_bins / ( m_u_domainMax - m_u_domainMin ) ) {
+        m_inverse_du( static_cast<double>( a_bins ) / ( m_u_domainMax - m_u_domainMin ) ) {
 
 }
 
@@ -68,12 +68,12 @@ LUPI_HOST_DEVICE DomainHash::DomainHash( DomainHash const &a_domainHash ) :
  * @return                              The hash index.
  ***********************************************************************************************************/
 
-LUPI_HOST_DEVICE int DomainHash::index( double a_domain ) const {
+LUPI_HOST_DEVICE std::size_t DomainHash::index( double a_domain ) const {
 
     if( a_domain < m_domainMin ) return( 0 );
     if( a_domain > m_domainMax ) return( m_bins + 1 );
     double dIndex = m_inverse_du * ( log( a_domain ) - m_u_domainMin ) + 1;
-    return( (int) dIndex );
+    return( static_cast<std::size_t>( dIndex ) );
 }
 
 /* *********************************************************************************************************//**
@@ -84,11 +84,11 @@ LUPI_HOST_DEVICE int DomainHash::index( double a_domain ) const {
  * @return                              The hash indices.
  ***********************************************************************************************************/
 
-LUPI_HOST_DEVICE Vector<int> DomainHash::map( Vector<double> const &a_domainValues ) const {
+LUPI_HOST_DEVICE Vector<std::size_t> DomainHash::map( Vector<double> const &a_domainValues ) const {
 
     std::size_t i1, size( a_domainValues.size( ) );
-    Vector<int> indices( m_bins + 2, 0 );
-    int lastIndex = 0, currentIndex, i2 = 1;
+    Vector<std::size_t> indices( m_bins + 2, static_cast<std::size_t>( 0 ) );
+    std::size_t lastIndex = 0, currentIndex, i2 = 1;
 
     for( i1 = 0; i1 < size; ++i1 ) {
         currentIndex = index( a_domainValues[i1] );
@@ -113,7 +113,7 @@ LUPI_HOST_DEVICE Vector<int> DomainHash::map( Vector<double> const &a_domainValu
 
 LUPI_HOST_DEVICE void DomainHash::serialize( LUPI::DataBuffer &a_buffer, LUPI::DataBuffer::Mode a_mode ) {
 
-    DATA_MEMBER_INT( m_bins, a_buffer, a_mode );
+    DATA_MEMBER_SIZE_T( m_bins, a_buffer, a_mode );
     DATA_MEMBER_DOUBLE( m_domainMin, a_buffer, a_mode );
     DATA_MEMBER_DOUBLE( m_domainMax, a_buffer, a_mode );
     DATA_MEMBER_DOUBLE( m_u_domainMin, a_buffer, a_mode );
@@ -134,9 +134,9 @@ LUPI_HOST void DomainHash::print( bool a_printValues ) const {
     std::cout << "    m_u_domainMin = " << m_u_domainMin << "  << m_u_domainMax = " << m_u_domainMax << std::endl;
     std::cout << "    m_inverse_du = " << m_inverse_du << std::endl;
     if( a_printValues ) {
-        double domain = m_domainMin, factor = pow( m_domainMax / m_domainMin, 1. / m_bins );
+        double domain = m_domainMin, factor = pow( m_domainMax / m_domainMin, 1. / static_cast<double>( m_bins ) );
 
-        for( int i1 = 0; i1 < bins( ); ++i1, domain *= factor ) {
+        for( std::size_t i1 = 0; i1 < bins( ); ++i1, domain *= factor ) {
             std::cout << LUPI::Misc::argumentsToString( " %14.7e", domain );
             if( ( ( i1 + 1 ) % 10 ) == 0 ) std::cout << std::endl;
         }
@@ -150,10 +150,26 @@ LUPI_HOST void DomainHash::print( bool a_printValues ) const {
  */
 
 /* *********************************************************************************************************//**
+ ***********************************************************************************************************/
+
+LUPI_HOST_DEVICE MultiGroupHash::MultiGroupHash( ) {
+
+}
+
+/* *********************************************************************************************************//**
  * @param a_boundaries          [in]    The list of multi-group boundaries.
  ***********************************************************************************************************/
 
 LUPI_HOST MultiGroupHash::MultiGroupHash( std::vector<double> a_boundaries ) :
+        m_boundaries( a_boundaries ) {
+
+}
+
+/* *********************************************************************************************************//**
+ * @param a_boundaries          [in]    The list of multi-group boundaries.
+ ***********************************************************************************************************/
+
+LUPI_HOST_DEVICE MultiGroupHash::MultiGroupHash( Vector<double> a_boundaries ) :
         m_boundaries( a_boundaries ) {
 
 }
@@ -184,6 +200,18 @@ LUPI_HOST MultiGroupHash::MultiGroupHash( GIDI::Protare const &a_protare, GIDI::
     GIDI::Transporting::Particle const &particle = *a_particles.particle( a_protare.projectile( ).pid( ) );
 
     m_boundaries = particle.multiGroup( ).boundaries( );
+}
+
+/* *********************************************************************************************************//**
+ * This constructor gets the list of multi-group boundaries from the GIDI::Particle of *a_particles* that is the projectile.
+ *
+ * @param a_protare             [in]    The GIDI::Protare containing the GIDI::Styles::MultiGroup style.
+ * @param a_particles           [in]    The list of transportable particles.
+ ***********************************************************************************************************/
+
+LUPI_HOST MultiGroupHash::MultiGroupHash( MultiGroupHash const &a_multiGroupHash ) :
+        m_boundaries( a_multiGroupHash.boundaries( ) ) {
+
 }
 
 /* *********************************************************************************************************//**

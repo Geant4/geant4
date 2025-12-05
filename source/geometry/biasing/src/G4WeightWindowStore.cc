@@ -56,8 +56,6 @@ G4WeightWindowStore(const G4String& ParallelWorldName)
 {
 }
 
-G4WeightWindowStore::~G4WeightWindowStore() = default;
-
 G4double G4WeightWindowStore::
 GetLowerWeight(const G4GeometryCell& gCell, 
                      G4double partEnergy) const

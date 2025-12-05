@@ -222,23 +222,29 @@ void G4VModularPhysicsList::ReplacePhysics(G4VPhysicsConstructor* fPhysics)
   }
 
   // Check if physics with the physics_type same as one of given physics
+  G4String pName0;
   auto itr = G4MT_physicsVector->begin();
   for (; itr != G4MT_physicsVector->end(); ++itr) {
-    if (pType == (*itr)->GetPhysicsType()) break;
+    if (pType == (*itr)->GetPhysicsType()) {
+      pName0 = (*itr)->GetPhysicsName();
+      break;
+    }
   }
   if (itr == G4MT_physicsVector->end()) {
-    // register
+    // register new at the end of the vector
     G4MT_physicsVector->push_back(fPhysics);
   }
   else {
 #ifdef G4VERBOSE
-    if (verboseLevel > 0) {
+    // it is not needed to print on replacement if the same physics configuration
+    // replaces the previous one - the previous will be silently deleted
+    if (verboseLevel > 0 && pName != pName0) {
       G4cout << "G4VModularPhysicsList::ReplacePhysics: " << (*itr)->GetPhysicsName()
              << " with type : " << pType << " is replaced with " << pName << G4endl;
     }
 #endif
 
-    //  delete exsiting one
+    // delete exsiting one
     delete (*itr);
     // replace with given one
     (*itr) = fPhysics;

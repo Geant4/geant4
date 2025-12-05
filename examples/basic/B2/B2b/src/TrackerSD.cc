@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file B2/B2b/src/TrackerSD.cc
+/// \file TrackerSD.cc
 /// \brief Implementation of the B2::TrackerSD class
 
 #include "TrackerSD.hh"

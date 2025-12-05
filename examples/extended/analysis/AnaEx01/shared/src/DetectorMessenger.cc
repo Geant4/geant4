@@ -26,9 +26,6 @@
 /// \file DetectorMessenger.cc
 /// \brief Implementation of the DetectorMessenger class
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 #include "DetectorMessenger.hh"
 
 #include "DetectorConstruction.hh"

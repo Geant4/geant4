@@ -753,9 +753,9 @@ void G4ReflectionFactory::PrintConstituentLVMap() const
   // temporary - for debugging purpose
   // ---
 
-  for (auto it=fConstituentLVMap.cbegin(); it!=fConstituentLVMap.cend(); ++it)
+  for (const auto & it : fConstituentLVMap)
   {
-    G4cout << "lv: " << (*it).first << "  lv_refl: " << (*it).second << G4endl;
+    G4cout << "lv: " << it.first << "  lv_refl: " << it.second << G4endl;
   }
   G4cout << G4endl;
 }  

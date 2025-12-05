@@ -25,8 +25,6 @@
 //
 /// \file SAXSEventAction.cc
 /// \brief Implementation of the SAXSEventAction class
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #ifdef G4MULTITHREADED
 #  include "G4MTRunManager.hh"

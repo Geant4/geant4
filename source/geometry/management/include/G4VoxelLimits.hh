@@ -37,10 +37,10 @@
 // G4double fzAxisMin,fzAxisMax
 // - The min and max values along each axis. +-kInfinity if not restricted.
 
-// 13.07.95, P.Kent - Initial version.
+// Author: Paul Kent (CERN), 13.07.1995 - Initial version.
 // --------------------------------------------------------------------
 #ifndef G4VOXELLIMITS_HH
-#define G4VOXELLIMITS_HH 1
+#define G4VOXELLIMITS_HH
 
 #include "G4Types.hh"
 #include "geomdefs.hh"
@@ -49,69 +49,89 @@
 
 #include <assert.h>
 
+/**
+ * @brief G4VoxelLimits represents limitation/restrictions of space, where
+ * restrictions are only made perpendicular to the Cartesian axes.
+ */
+
 class G4VoxelLimits
 {
   public:
   
+    /**
+     * Default Constructor & Destructor.
+     * Constructor initialises to be unlimited. Volume unrestricted.
+     */
     G4VoxelLimits() = default;
-      // Constructor - initialise to be unlimited. Volume unrestricted.
-
     ~G4VoxelLimits() = default;
-      // Destructor. No actions.
 
+    /**
+     * Restricts the volume to between specified min and max along the
+     * given axis. Cartesian axes only, pMin<=pMax.
+     */
     void AddLimit(const EAxis pAxis, const G4double pMin, const G4double pMax);
-      // Restrict the volume to between specified min and max along the
-      // given axis. Cartesian axes only, pMin<=pMax.
 
+    /**
+     * Accessors for max extent
+     */
     G4double GetMaxXExtent() const;
-      // Return maximum x extent.
     G4double GetMaxYExtent() const;
-      // Return maximum y extent.
     G4double GetMaxZExtent() const;
-      // Return maximum z extent.
 
+    /**
+     * Accessors for min extent
+     */
     G4double GetMinXExtent() const;
-      // Return minimum x extent.
     G4double GetMinYExtent() const;
-      // Return minimum y extent.
     G4double GetMinZExtent() const;
-      // Return minimum z extent.
 
+    /**
+     * Accessors for the extent of the volume along the specified axis.
+     */
     G4double GetMaxExtent(const EAxis pAxis) const;
-      // Return maximum extent of volume along specified axis.
     G4double GetMinExtent(const EAxis pAxis) const;
-      // Return minimum extent of volume along specified axis.
 
+    /**
+     * Return true if the X/Y/Z axis is limited.
+     */
     G4bool IsXLimited() const;
-      // Return true if the x axis is limited.
     G4bool IsYLimited() const;
-      // Return true if the y axis is limited.
     G4bool IsZLimited() const;
-      // Return true if the z axis is limited.
 
+    /**
+     * Return true if limited along any axis.
+     */
     G4bool IsLimited() const;
-      // Return true if limited along any axis
+
+    /**
+     * Return true if the specified axis is restricted/limited.
+     */
     G4bool IsLimited(const EAxis pAxis) const;
-      // Return true if the specified axis is restricted/limited.
 
+    /**
+     * Clips the line segment pStart->pEnd to the volume described by the
+     * current limits. Returns true if the line remains after clipping,
+     * else false, and leaves the vectors in an undefined state.
+     */
     G4bool ClipToLimits(G4ThreeVector& pStart, G4ThreeVector& pEnd) const;
-      // Clip the line segment pStart->pEnd to the volume described by the
-      // current limits. Return true if the line remains after clipping,
-      // else false, and leave the vectors in an undefined state.
 
+    /**
+     * Returns true if the specified vector is inside/on boundaries of limits.
+     */
     G4bool Inside(const G4ThreeVector& pVec) const;
-      // Return true if the specified vector is inside/on boundaries of limits.
 
+    /**
+     * Calculates the 'outcode' for the specified vector.
+     * Intended for use during clipping against the limits.
+     * The bits are set given the following conditions:
+     *   0      pVec.x()<fxAxisMin && IsXLimited()
+     *   1      pVec.x()>fxAxisMax && IsXLimited()
+     *   2      pVec.y()<fyAxisMin && IsYLimited()
+     *   3      pVec.y()>fyAxisMax && IsYLimited()
+     *   4      pVec.z()<fzAxisMin && IsZLimited()
+     *   5      pVec.z()>fzAxisMax && IsZLimited()
+     */
     G4int OutCode(const G4ThreeVector& pVec) const;
-      // Calculate the `outcode' for the specified vector.
-      // Intended for use during clipping against the limits
-      // The bits are set given the following conditions:
-      //   0      pVec.x()<fxAxisMin && IsXLimited()
-      //   1      pVec.x()>fxAxisMax && IsXLimited()
-      //   2      pVec.y()<fyAxisMin && IsYLimited()
-      //   3      pVec.y()>fyAxisMax && IsYLimited()
-      //   4      pVec.z()<fzAxisMin && IsZLimited()
-      //   5      pVec.z()>fzAxisMax && IsZLimited()
 
   private:
 
@@ -120,11 +140,13 @@ class G4VoxelLimits
     G4double fzAxisMin = -kInfinity, fzAxisMax = kInfinity;
 };
 
-#include "G4VoxelLimits.icc"
-
+/**
+ * Prints the limits to the stream in the form:
+ * "{(xmin,xmax) (ymin,ymax) (zmin,zmax)}"
+ * Replaces (xmin,xmax) by (-,-)  when not limited.
+ */
 std::ostream& operator << (std::ostream& os, const G4VoxelLimits& pLim);
-  // Print the limits to the stream in the form:
-  //  "{(xmin,xmax) (ymin,ymax) (zmin,zmax)}"
-  // Replace (xmin,xmax) by (-,-)  when not limited.
+
+#include "G4VoxelLimits.icc"
 
 #endif

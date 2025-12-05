@@ -6,6 +6,7 @@ geant4_add_module(G4hepnumerics
     G4ChebyshevApproximation.hh
     G4ConvergenceTester.hh
     G4DataInterpolation.hh
+    G4FunctionSolver.hh
     G4GaussChebyshevQ.hh
     G4GaussHermiteQ.hh
     G4GaussJacobiQ.hh

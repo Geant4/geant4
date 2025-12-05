@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file EventAction.hh
+/// \brief Definition of the EventAction class
+
 // This example is provided by the Geant4-DNA collaboration
 // Any report or published results obtained using the Geant4-DNA software
 // shall cite the following Geant4-DNA collaboration publication:
@@ -37,8 +40,6 @@
 // -------------------------------------------------------------------
 //
 //
-/// \file EventAction.hh
-/// \brief Implementation of the EventAction class
 #ifndef EventAction_h
 #define EventAction_h 1
 

@@ -23,93 +23,63 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
+//
+// Modification: 13.08.2025 V.Ivanchenko rewrite
 
 #ifndef G4StatMFMacroChemicalPotential_h
 #define G4StatMFMacroChemicalPotential_h 1
 
 #include <vector>
-
-#include "G4StatMFParameters.hh"
 #include "G4VStatMFMacroCluster.hh"
-#include "G4StatMFMacroMultiplicity.hh"
-#include "G4Solver.hh"
+#include "G4FunctionSolver.hh"
 
-
+class G4StatMFMacroMultiplicity;
 
 class G4StatMFMacroChemicalPotential {
 
 public:
 
-    G4StatMFMacroChemicalPotential(const G4double anA, const G4double aZ,
-				   const G4double kappa, 
-				   const G4double temp, 
-				   std::vector<G4VStatMFMacroCluster*> * ClusterVector) :
-	theA(anA),
-	theZ(aZ),
-	_Kappa(kappa),
-	_MeanMultiplicity(0.0),
-	_MeanTemperature(temp),
-	_ChemPotentialMu(0.0),
-	_ChemPotentialNu(0.0),
-	_theClusters(ClusterVector) 
-	{};
-	
-    ~G4StatMFMacroChemicalPotential() {};
-   
-    G4double operator()(const G4double nu)
-	{ return (theZ - this->CalcMeanZ(nu))/theZ; }	
+  G4StatMFMacroChemicalPotential();
 
-private:
-    // Default constructor
-    G4StatMFMacroChemicalPotential() {};
+  ~G4StatMFMacroChemicalPotential();
 
-    // copy constructor
-    G4StatMFMacroChemicalPotential(const G4StatMFMacroChemicalPotential &) {};
+  void Initialise(const G4int anA, const G4int aZ,
+		  const G4double kappa, const G4double temp, 
+		  std::vector<G4VStatMFMacroCluster*>* cVector);
 
+  G4double Function(G4double nu)
+  { return (theZ - CalcMeanZ(nu)); }
 
-    // operators
-    G4StatMFMacroChemicalPotential & operator=(const G4StatMFMacroChemicalPotential & right);
-    G4bool operator==(const G4StatMFMacroChemicalPotential & right) const;
-    G4bool operator!=(const G4StatMFMacroChemicalPotential & right) const;
+  G4double CalcChemicalPotentialNu();
 
-public:
+  G4double GetMeanMultiplicity() const {return fMeanMultiplicity;}	
+  G4double GetChemicalPotentialMu() const {return fChemPotentialMu;}
+  G4double GetChemicalPotentialNu() const {return fChemPotentialNu;}
 
-    G4double GetMeanMultiplicity(void) const {return _MeanMultiplicity;}
-	
-    G4double GetChemicalPotentialMu(void) const {return _ChemPotentialMu;}
-
-    G4double GetChemicalPotentialNu(void) const {return _ChemPotentialNu;}
-
-    G4double CalcChemicalPotentialNu(void);
+  G4StatMFMacroChemicalPotential(const G4StatMFMacroChemicalPotential &) = delete;
+  G4StatMFMacroChemicalPotential& operator=
+  (const G4StatMFMacroChemicalPotential & right) = delete;
+  G4bool operator==(const G4StatMFMacroChemicalPotential & right) const = delete;
+  G4bool operator!=(const G4StatMFMacroChemicalPotential & right) const = delete;
 
 private:
 	
-    G4double CalcMeanZ(const G4double nu);
+  G4double CalcMeanZ(const G4double nu);
+  void CalcChemicalPotentialMu(const G4double nu);
 
-    void CalcChemicalPotentialMu(const G4double nu);
-
-private:
-
-    G4double theA;
-
-    G4double theZ;
-
-    G4double _Kappa;
-
-    G4double _MeanMultiplicity;
-
-    G4double _MeanTemperature;
+  G4FunctionSolver<G4StatMFMacroChemicalPotential>* fSolver;
+  G4StatMFMacroMultiplicity* theMultip;
+  
+  G4int theA{0};
+  G4int theZ{0};
+  G4double fKappa{0.0};
+  G4double fMeanTemperature{0.0};
+  G4double fMeanMultiplicity{0.0};
+  G4double fChemPotentialMu{0.0};
+  G4double fChemPotentialNu{0.0};
 	
-    G4double _ChemPotentialMu;
-	
-    G4double _ChemPotentialNu;
-	
-    std::vector<G4VStatMFMacroCluster*> * _theClusters; 
-
-
+  std::vector<G4VStatMFMacroCluster*>* fClusters{nullptr}; 
 };
 #endif

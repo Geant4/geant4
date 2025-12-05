@@ -25,15 +25,19 @@
 //
 // Declarations
 //
-// Declarations of streams for G4GeometryCell and G4GeometryCellStep
+// Declarations of streams for G4GeometryCell and G4GeometryCellStep.
 
 // Author: Michael Dressel (CERN), 2002
 // ----------------------------------------------------------------------
 #ifndef G4GEOMETRYCELLSTEPSTREAM_HH
-#define G4GEOMETRYCELLSTEPSTREAM_HH 1
+#define G4GEOMETRYCELLSTEPSTREAM_HH
 
 #include "G4GeometryCell.hh"
 #include "G4GeometryCellStep.hh"
+
+/**
+ * @brief Declarations of streams for G4GeometryCell and G4GeometryCellStep.
+ */
 
 std::ostream& operator<<(std::ostream& out, const G4GeometryCell& tk);
 std::ostream& operator<<(std::ostream& out, const G4GeometryCellStep& ps);

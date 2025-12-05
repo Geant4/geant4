@@ -23,10 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file exoticphysics/phonon/include/XDetectorConstruction.hh
+/// \file XDetectorConstruction.hh
 /// \brief Definition of the XDetectorConstruction class
-//
-//
 
 #ifndef XDetectorConstruction_h
 #define XDetectorConstruction_h 1

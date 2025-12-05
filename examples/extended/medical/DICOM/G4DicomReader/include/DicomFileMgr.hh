@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file DicomFileMgr.hh
+/// \brief Definition of the DicomFileMgr class
+
 #ifndef DicomFileMgr__HH
 #define DicomFileMgr__HH
 #include "dcmtk/dcmdata/dcfilefo.h"

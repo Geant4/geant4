@@ -23,9 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file persistency/P03/include/ExTGRCDetectorBuilder.hh
+/// \file ExTGRCDetectorBuilder.hh
 /// \brief Definition of the ExTGRCDetectorBuilder class
-//
 
 #ifndef ExTGRCDetectorBuilder_h
 #define ExTGRCDetectorBuilder_h

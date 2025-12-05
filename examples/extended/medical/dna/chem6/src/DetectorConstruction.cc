@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file DetectorConstruction.cc
+/// \brief Implementation of the DetectorConstruction class
+
 // This example is provided by the Geant4-DNA collaboration
 // chem6 example is derived from chem4 and chem5 examples
 //
@@ -38,8 +41,6 @@
 // Authors: W. G. Shin and S. Incerti (CENBG, France)
 //
 // $Id$
-/// \file DetectorConstruction.cc
-/// \brief Implementation of the DetectorConstruction class
 
 #include "DetectorConstruction.hh"
 
@@ -60,14 +61,6 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-DetectorConstruction::DetectorConstruction() : G4VUserDetectorConstruction() {}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
-
-DetectorConstruction::~DetectorConstruction() {}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
-
 G4VPhysicalVolume* DetectorConstruction::Construct()
 {
   // Water is defined from NIST material database
@@ -77,14 +70,14 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   //
   // World
   //
-  double world_sizeXYZ = 1 * km;
+  constexpr G4double world_sizeXYZ = 1 * km;
 
-  G4Box* solidWorld =
+  const auto solidWorld =
     new G4Box("World", 0.5 * world_sizeXYZ, 0.5 * world_sizeXYZ, 0.5 * world_sizeXYZ);
 
-  G4LogicalVolume* logicWorld = new G4LogicalVolume(solidWorld, water, "World");
+  const auto logicWorld = new G4LogicalVolume(solidWorld, water, "World");
 
-  G4VPhysicalVolume* physWorld = new G4PVPlacement(0,  // no rotation
+  G4VPhysicalVolume* physWorld = new G4PVPlacement(nullptr,  // no rotation
                                                    G4ThreeVector(),  // its position at (0,0,0)
                                                    logicWorld,  // its logical volume
                                                    "World",  // its name
@@ -94,7 +87,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
                                                    true);  // checking overlaps
 
   // Visualization attributes
-  G4VisAttributes* worldVisAtt = new G4VisAttributes(G4Colour(.5, 1.0, .5));
+  const auto worldVisAtt = new G4VisAttributes(G4Colour(.5, 1.0, .5));
   worldVisAtt->SetVisibility(true);
   logicWorld->SetVisAttributes(worldVisAtt);
 
@@ -110,13 +103,13 @@ void DetectorConstruction::ConstructSDandField()
 
   // declare World as a MultiFunctionalDetector scorer
   //
-  G4MultiFunctionalDetector* mfDetector = new G4MultiFunctionalDetector("mfDetector");
+  const auto mfDetector = new G4MultiFunctionalDetector("mfDetector");
 
   //--
   // Kill primary track after a chosen energy loss OR under a chosen
   // kinetic energy
 
-  PrimaryKiller* primaryKiller = new PrimaryKiller("PrimaryKiller");
+  const auto primaryKiller = new PrimaryKiller("PrimaryKiller");
   primaryKiller->SetMinLossEnergyLimit(500 * eV);  // default value
   primaryKiller->SetMaxLossEnergyLimit(1 * eV);  // default value
   mfDetector->RegisterPrimitive(primaryKiller);
@@ -124,7 +117,7 @@ void DetectorConstruction::ConstructSDandField()
   // LET scorer
   //  - scores restricted or unrestricted LET
 
-  ScoreLET* LET = new ScoreLET("LET");
+  const auto LET = new ScoreLET("LET");
   mfDetector->RegisterPrimitive(LET);
 
   //--

@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file ScoreLET.hh
+/// \brief Definition of the ScoreLET class
+
 // This example is provided by the Geant4-DNA collaboration
 // chem6 example is derived from chem4 and chem5 examples
 //
@@ -36,11 +39,6 @@
 // The Geant4-DNA web site is available at http://geant4-dna.org
 //
 // Authors: W. G. Shin and S. Incerti (CENBG, France)
-//
-// $Id$
-//
-/// \file ScoreLET.hh
-/// \brief Definition of the ScoreLET class
 
 #ifndef CHEM6_ScoreLET_h
 #define CHEM6_ScoreLET_h 1
@@ -51,31 +49,30 @@
 #include "G4UIdirectory.hh"
 #include "G4UImessenger.hh"
 #include "G4VPrimitiveScorer.hh"
+#include <memory>
 
-class ScoreLET : public G4VPrimitiveScorer, public G4UImessenger
+class ScoreLET final : public G4VPrimitiveScorer, public G4UImessenger
 {
   public:  // with description
-    ScoreLET(G4String name);
-    ~ScoreLET() override;
+  explicit ScoreLET(G4String name);
+    ~ScoreLET() override = default;
     void Initialize(G4HCofThisEvent*) override;
     void EndOfEvent(G4HCofThisEvent*) override;
-    void OutputAndClear();
 
     G4bool ProcessHits(G4Step*, G4TouchableHistory*) override;
-    G4int GetIndex(G4Step*) override;
     void SetNewValue(G4UIcommand*, G4String) override;
 
   private:
-    G4UIdirectory* fpLETDir;
-    G4UIcmdWithADoubleAndUnit* fpCutoff;
+    std::unique_ptr<G4UIdirectory> fpLETDir;
+    std::unique_ptr<G4UIcmdWithADoubleAndUnit> fpCutoff;
 
-    G4double fCutoff;
-    G4int fNEvent;
-    G4double fLET;
-    G4double fEdep;
-    G4double fStepL;
-    G4int fTrackID;
+    G4double fCutoff = DBL_MAX;
+    G4int fNEvent = 0;
+    G4double fLET = 0;
+    G4double fEdep = 0;
+    G4double fStepL = 0;
+    G4int fTrackID = 1;
 
-    G4THitsMap<G4double>* fEvtMap;
+    G4THitsMap<G4double>* fEvtMap = nullptr;
 };
 #endif

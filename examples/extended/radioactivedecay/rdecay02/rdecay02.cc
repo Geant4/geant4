@@ -25,11 +25,6 @@
 //
 /// \file rdecay02.cc
 /// \brief Main program of the radioactivedecay/rdecay02 example
-//
-//
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "ActionInitialization.hh"
 #include "DetectorConstruction.hh"

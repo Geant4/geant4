@@ -23,9 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 /// \file dicom2.cc
-/// \brief Main program of the Dicom2 example
+/// \brief Main program of the DICOM/DICOM2 example
 
 #include "Dicom2ActionInitialization.hh"
 #include "DicomIntersectVolume.hh"

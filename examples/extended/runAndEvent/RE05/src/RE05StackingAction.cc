@@ -23,10 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file RE05/src/RE05StackingAction.cc
+/// \file RE05StackingAction.cc
 /// \brief Implementation of the RE05StackingAction class
-//
 
 #include "RE05StackingAction.hh"
 

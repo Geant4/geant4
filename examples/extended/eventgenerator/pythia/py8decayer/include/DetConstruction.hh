@@ -23,12 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 /// \file DetConstruction.hh
 /// \brief Definition of the DetConstruction class
 ///
 /// \author J. Yarba; FNAL
-///
 
 #ifndef DetConstruction_H
 #define DetConstruction_H

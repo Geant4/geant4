@@ -9,7 +9,6 @@
 #include "bmf"
 
 #include "../stype"
-#include "../cstr"
 #include "../io/iwbuf"
 #include "../io/irbuf"
 #include "../HEADER"
@@ -33,7 +32,7 @@ public:
 public:
   virtual bool write(io::iwbuf& a_buffer) {
     const std::vector<T>& vec = parent::m_values;
-    return a_buffer.write_vec((uint32)vec.size(),vec_data(vec));
+    return a_buffer.write_vec((uint32)vec.size(),vec.data());
   }
   virtual bool read(io::irbuf& a_buffer) {
     std::vector<T>& vec = parent::m_values;
@@ -58,7 +57,6 @@ public:
 public:
   mf(const mf& a_from):parent(a_from){}
   mf& operator=(const mf& a_from){
-    //typedef typename parent::iterator bmf_t;
     parent::operator=(a_from);
     return *this;
   }
@@ -116,8 +114,6 @@ public:
   }
 };
 
-//exa tools::sg::entries.mf_vec<entry_type>
-
 template <class T>
 class mf_enum : public bmf<T> {
   typedef bmf<T> parent;
@@ -137,7 +133,7 @@ public:
     std::vector<int16> v; //an enum can be negative.
     typedef typename std::vector<T>::const_iterator cit_t;
     for(cit_t it=vec.begin();it!=vec.end();++it) v.push_back(*it);
-    return a_buffer.write_vec((uint32)v.size(),vec_data(v));
+    return a_buffer.write_vec((uint32)v.size(),v.data());
   }
   virtual bool read(io::irbuf& a_buffer) {
     std::vector<int16> v; //an enum can be negative.
@@ -189,7 +185,7 @@ inline bool set_from_vec(std::vector<std::string>&,const std::vector<std::string
 }
 
 inline const std::string* get_data(const std::vector<std::string>& a_v) {
-  return vec_data(a_v);
+  return a_v.data();
 }
 ///////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////
@@ -237,8 +233,6 @@ public:
     typedef typename std::vector<vec_t>::iterator _it_t;
     for(_it_t it=vec_vec.begin();it!=vec_vec.end();++it) {
       T x;
-      // x colorf, *it = std::vector<float>
-      // x vecs, *it = std::vector<std::string>
       if(!set_from_vec(x,*it)) {vec.clear();return false;}
       vec.push_back(x);
     }
@@ -296,7 +290,6 @@ public:
     a_out << "size : " << vec.size() << std::endl;
     typedef typename std::vector< std::vector<T> >::const_iterator cit_t;
     for(cit_t it=vec.begin();it!=vec.end();++it) {
-      //a_out << "  " << (*it) << std::endl;
     }
     return true;
   }

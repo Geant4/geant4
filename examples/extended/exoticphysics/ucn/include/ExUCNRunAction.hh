@@ -23,14 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file exoticphysics/ucn/include/ExUCNRunAction.hh
+/// \file ExUCNRunAction.hh
 /// \brief Definition of the ExUCNRunAction class
-//
-//
-//
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef ExUCNRunAction_h
 #define ExUCNRunAction_h 1

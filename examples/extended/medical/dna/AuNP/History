@@ -1,9 +1,19 @@
 # Example AuNP History
 
 See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
-which **must** added in reverse chronological order (newest at the top). It must **not**
-be used as a substitute for writing good git commit messages!
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
 
+-------------------------------------------------------------------------------
+
+## 2025-11-10 Gabriele Cosmo (AuNP-V11-03-01)
+- Fixed coding conventions for long lines in source.
+
+## 2025-10-17 Hoang Tran (AuNP-V11-03-00)
+- refactoring and code cleanup
+- added chemistry functionality to the example
+
+# History entries prior to 11.4
 
 ## 2021-12-10 Ben Morgan (AuNP-V11-00-00)
 - Change to new Markdown History format

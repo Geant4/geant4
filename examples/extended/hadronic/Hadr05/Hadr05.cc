@@ -23,12 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm3/TestEm3.cc
-/// \brief Main program of the electromagnetic/TestEm3 example
-//
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+/// \file Hadr05.cc
+/// \brief Main program of the hadronic/Hadr05 example
 
 #include "ActionInitialization.hh"
 #include "DetectorConstruction.hh"

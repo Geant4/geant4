@@ -23,11 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file runAndEvent/RE02/include/RE02PSNofStep.hh
+/// \file RE02PSNofStep.hh
 /// \brief Definition of the RE02PSNofStep class
-//
-//
-//
 
 #ifndef RE02PSNofStep_h
 #define RE02PSNofStep_h 1

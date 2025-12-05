@@ -9,6 +9,16 @@
 #include <X11/CompositeP.h>
 #include <X11/StringDefs.h>
 
+#ifndef GL_GLEXT_LEGACY
+#define GL_GLEXT_LEGACY
+#endif
+#include <GL/gl.h>
+
+#ifndef GL_GLEXT_PROTOTYPES
+#define GL_GLEXT_PROTOTYPES
+#endif
+#include <GL/glext.h>
+
 #include <GL/glx.h>
 
 #include <stdio.h>
@@ -96,10 +106,6 @@ protected:
   static void initialize_widget(Widget a_request,Widget a_this,ArgList,Cardinal*) {
     if(a_request->core.width<=0)  a_this->core.width  = 100;
     if(a_request->core.height<=0) a_this->core.height = 100;
-
-#ifdef TOOLX_XT_OPENGLAREA_DEBUG
-    ::printf ("debug : OpenGLArea : InitializeWidget : %s\n",::XtName(a_this));
-#endif
 
     OpenGLAreaPart& athis = _athis(a_this);
     athis.visual          = CopyFromParent;
@@ -196,16 +202,9 @@ protected:
 
     ::XtAddEventHandler
        (a_this,ButtonPressMask|ButtonReleaseMask|ButtonMotionMask|KeyPressMask|KeyReleaseMask,0,event_handler,NULL);
-
-#ifdef TOOLX_XT_OPENGLAREA_DEBUG
-    printf("debug : OpenGLArea : InitializeWidget : end\n");
-#endif
   }
 
   static void realize_widget(Widget a_this,XtValueMask* a_mask,XSetWindowAttributes* a_watbs) {
-#ifdef TOOLX_XT_OPENGLAREA_DEBUG
-    printf("debug : OpenGLArea : realize_widget : %s\n",XtName(a_this));
-#endif
 
     // Have to create window ourselves due to OpenGL that compells it's visual.
     // In principle colormap is correctly set in a_watbsy.
@@ -221,17 +220,9 @@ protected:
     // If window is delete, all seems ok :
     if(athis.installColormap==True) install_colormap(a_this);
   
-    //make_current(a_this);
-  
-#ifdef TOOLX_XT_OPENGLAREA_DEBUG
-    printf("debug : OpenGLArea : realize_widget : end\n");
-#endif
   }
 
   static void destroy_widget(Widget a_this) {
-#ifdef TOOLX_XT_OPENGLAREA_DEBUG
-    printf("debug : OpenGLArea : destroy_widget : begin\n");
-#endif
     OpenGLAreaPart& athis = _athis(a_this);
     if(athis.installColormap==True) {
       uninstall_colormap (a_this);
@@ -243,9 +234,6 @@ protected:
       ::glXDestroyContext(XtDisplay(a_this),athis.glContext);
       athis.glContext = NULL;
     }
-#ifdef TOOLX_XT_OPENGLAREA_DEBUG
-    printf("debug : OpenGLArea : destroy_widget : end\n");
-#endif
   }
 
   static Boolean set_values(Widget a_current,Widget,Widget a_this,ArgList,Cardinal*) {
@@ -264,31 +252,16 @@ protected:
   }
   
   static void change_widget_size(Widget a_this) {
-#ifdef TOOLX_XT_OPENGLAREA_DEBUG
-    printf("debug : OpenGLArea : change_widget_size : %s\n",XtName(a_this));
-#endif
-
     // Call the Resize procedure (XtInheritResize) :
     if(widget_class()->core_class.superclass->core_class.resize!=NULL)
       (widget_class()->core_class.superclass->core_class.resize)(a_this);
-  
-#ifdef TOOLX_XT_OPENGLAREA_DEBUG
-    printf("debug : OpenGLArea : change_widget_size : end\n");
-#endif
 }
 
   static void draw_widget(Widget  a_this,XEvent* a_event,Region a_region) {
-#ifdef TOOLX_XT_OPENGLAREA_DEBUG
-    printf("debug : OpenGLArea : draw_widget : %s\n",XtName(a_this));
-#endif
-
     if(widget_class()->core_class.superclass->core_class.expose!=NULL)
       (widget_class()->core_class.superclass->core_class.expose)(a_this,a_event,a_region);
 
     if(make_current(a_this)==1) {
-#ifdef TOOLX_XT_OPENGLAREA_DEBUG
-      printf("debug : OpenGLArea : draw_widget : %s : make_current ok : call paintCallback...\n",XtName(a_this));
-#endif
       XoAnyCallbackStruct value;
       value.reason = XoCR_PAINT;
       value.event = a_event;
@@ -296,10 +269,6 @@ protected:
       ::glXSwapBuffers(XtDisplay(a_this),XtWindow(a_this));
       ::glXMakeCurrent(XtDisplay(a_this),None,NULL);
     }
-  
-#ifdef TOOLX_XT_OPENGLAREA_DEBUG
-  printf("debug : OpenGLArea : draw_widget : end\n");
-#endif
   }
 
 protected:
@@ -484,6 +453,5 @@ public:
 };
 
 }}
-
 
 #endif

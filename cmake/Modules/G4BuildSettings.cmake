@@ -285,6 +285,25 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|.*Clang")
 endif()
 
 #.rst:
+# - ``GEANT4_BUILD_XCODE_WARNINGS``
+#   - Build libraries on macOS command line with extended warnings from Xcode
+if(APPLE AND 
+  (NOT CMAKE_GENERATOR STREQUAL "Xcode") AND
+  (CMAKE_CXX_COMPILER_ID MATCHES ".*Clang"))
+
+  set(__geant4_appleclang_additional "-Wshorten-64-to-32")
+  
+  option(GEANT4_BUILD_XCODE_WARNINGS "Enable additional warnings used by Xcode when building with Command Line Tools")
+  geant4_add_feature(GEANT4_BUILD_XCODE_WARNINGS "Compiling Geant4 with additional warnings '${__geant4_appleclang_additional}'")
+  mark_as_advanced(GEANT4_BUILD_XCODE_WARNINGS)
+
+
+  if(GEANT4_BUILD_XCODE_WARNINGS)
+    string(APPEND CMAKE_CXX_FLAGS " ${__geant4_appleclang_additional}")
+  endif()
+endif()
+
+#.rst:
 # - ``GEANT4_BUILD_ENABLE_ASSERTIONS``
 #   - Build libraries with assertions enabled even in release build types (Release, RelWithDebInfo, MinSizeRel)
 #

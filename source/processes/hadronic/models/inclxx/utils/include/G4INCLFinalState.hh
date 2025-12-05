@@ -82,6 +82,8 @@ namespace G4INCL {
     ParticleList const &getDestroyedParticles() const;
     ParticleList const &getCreatedParticles() const;
     ParticleList const &getEnteringParticles() const;
+ 
+    ParticleList &getSrcModifiedParticles();
 
     FinalStateValidity getValidity() const { return validity; }
     void makeValid() { validity = ValidFS; }

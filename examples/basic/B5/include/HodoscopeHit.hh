@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file B5/include/HodoscopeHit.hh
+/// \file HodoscopeHit.hh
 /// \brief Definition of the B5::HodoscopeHit class
 
 #ifndef B5HodoscopeHit_h

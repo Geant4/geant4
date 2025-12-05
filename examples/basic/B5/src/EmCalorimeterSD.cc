@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file B5/src/EmCalorimeterSD.cc
+/// \file EmCalorimeterSD.cc
 /// \brief Implementation of the B5::EmCalorimeterSD class
 
 #include "EmCalorimeterSD.hh"

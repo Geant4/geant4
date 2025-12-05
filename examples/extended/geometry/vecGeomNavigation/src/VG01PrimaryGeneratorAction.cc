@@ -23,10 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 /// \file VG01PrimaryGeneratorAction.cc
 /// \brief Implementation of the VG01PrimaryGeneratorAction class
-//
+
 //  Authors: J. Apostolakis & S. Wenzel (CERN)  2018-2021
 //
 //  Started from FullCMS code by Mihaly Novak (CERN) 2017

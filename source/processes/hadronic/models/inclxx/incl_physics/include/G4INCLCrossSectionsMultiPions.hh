@@ -98,7 +98,13 @@ namespace G4INCL {
       virtual G4double etaNToPiN(Particle const * const p1, Particle const * const p2);
       virtual G4double omegaNToPiN(Particle const * const p1, Particle const * const p2);
       virtual G4double etaPrimeNToPiN(Particle const * const p1, Particle const * const p2);
-	  
+    
+      /// \brief Cross sections for mesonic resonance absorption on nucleon - LK/SKChannel
+      virtual G4double etaNToLK(Particle const * const p1, Particle const * const p2);     
+      virtual G4double omegaNToLK(Particle const * const p1, Particle const * const p2);
+      virtual G4double etaNToSK(Particle const * const p1, Particle const * const p2);     
+      virtual G4double omegaNToSK(Particle const * const p1, Particle const * const p2);  
+   	  
 	    /// \brief Cross section for Eta production - NN entrance channel
       virtual G4double NNToNNEta(Particle const * const particle1, Particle const * const particle2);
 			

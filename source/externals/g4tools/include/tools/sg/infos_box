@@ -251,7 +251,6 @@ public:
       }
     }
     if(empty) {
-      //parent::update_sg();
       return;
     }}
 
@@ -262,7 +261,6 @@ public:
     if(font==font_hershey()) {
       draw_style* ds = new draw_style;
       ds->style.value(draw_lines);
-      //ds->line_pattern = line_pattern;
       ds->line_width = line_width;
       m_sep.add(ds);
     }
@@ -284,7 +282,6 @@ public:
       sep->add(text);
     } else {
       base_freetype* text = base_freetype::create(m_ttf);
-      //TTNODE* text = new TTNODE;
       ltext = text;
       text->font = font;
       text->modeling = font_modeling;
@@ -310,7 +307,6 @@ public:
       sep->add(text);
     } else {
       base_freetype* text = base_freetype::create(m_ttf);
-      //TTNODE* text = new TTNODE;
       rtext = text;
       text->font = font;
       text->modeling = font_modeling;
@@ -331,7 +327,6 @@ public:
       text->hjust = left;
     } else {
       base_freetype* text = base_freetype::create(m_ttf);
-      //TTNODE* text = new TTNODE;
       mtext = text;
       text->strings.add(_s);
       text->hjust = left;
@@ -339,7 +334,6 @@ public:
       text->modeling = font_modeling;
     }}
 
-    //sf<float> zfront ?
     float zz = back_visible.value()?0.01f:0;
 
     float fw = width * wmargin_factor;

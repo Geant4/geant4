@@ -57,14 +57,8 @@ public:
   ,fCheckSum(a_cls_check_sum)
   ,fStreamedClassVersion(a_cls_vers)
   {
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
   }
   virtual ~streamer_info(){
-#ifdef TOOLS_MEM
-    mem::decrement(s_class().c_str());
-#endif
   }
 protected:
   streamer_info(const streamer_info& a_from)
@@ -75,9 +69,6 @@ protected:
   ,fStreamedClassVersion(a_from.fStreamedClassVersion)
   ,fElements(a_from.fElements)
   {
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
   }
   streamer_info& operator=(const streamer_info& a_from){
     fName = a_from.fName;
@@ -95,7 +86,6 @@ protected: //Named
 protected:
   unsigned int fCheckSum;    //checksum of original class
   int fStreamedClassVersion; //Class version identifier
-  //int fNumber;               //!Unique identifier
   obj_array<streamer_element> fElements; //Array of TStreamerElements
 };
 

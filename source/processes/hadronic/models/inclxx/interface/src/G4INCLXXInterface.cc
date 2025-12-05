@@ -58,6 +58,8 @@
 #include "G4CompetitiveFission.hh"
 #include "G4FissionLevelDensityParameterINCLXX.hh"
 #include "G4PhysicsModelCatalog.hh"
+#include "G4INCLConfig.hh"
+#include "G4INCLRandom.hh"
 
 #include "G4HyperNucleiProperties.hh"
 #include "G4HyperTriton.hh"
@@ -179,6 +181,7 @@ G4HadFinalState* G4INCLXXInterface::ApplyYourself(const G4HadProjectile& aTrack,
   const G4bool isIonTrack = trackDefinition->GetParticleType()==G4GenericIon::GenericIon()->GetParticleType();
   const G4int trackA = trackDefinition->GetAtomicMass();
   const G4int trackZ = (G4int) trackDefinition->GetPDGCharge();
+  const G4int trackPDG = (G4int) trackDefinition->GetPDGEncoding();
   const G4int trackL = trackDefinition->GetNumberOfLambdasInHypernucleus();
   const G4int nucleusA = theNucleus.GetA_asInt();
   const G4int nucleusZ = theNucleus.GetZ_asInt();
@@ -194,8 +197,8 @@ G4HadFinalState* G4INCLXXInterface::ApplyYourself(const G4HadProjectile& aTrack,
   }
 
   // For reactions on nucleons, use the backup model (without complaining),
-  // except for anti_proton projectile (in this case, INCLXX is used).
-  if(trackA<=1 && nucleusA<=1 && (trackZ>=0 || trackA==0)) {
+  // except for anti_proton and anti_neutron projectile (in this case, INCLXX is used).
+  if(trackA<=1 && nucleusA<=1 && (trackPDG!=-2212 && trackPDG!=-2112)) {
     return theBackupModelNucleon->ApplyYourself(aTrack, theNucleus);
   }
  
@@ -411,6 +414,7 @@ G4HadFinalState* G4INCLXXInterface::ApplyYourself(const G4HadProjectile& aTrack,
             );
         const G4double excitationE = eventInfo.EStarRem[i];
         G4double nuclearMass = excitationE;
+
         if ( S == 0 ) {
           nuclearMass += G4NucleiProperties::GetNuclearMass(A, Z);
         } else {
@@ -461,7 +465,23 @@ G4HadFinalState* G4INCLXXInterface::ApplyYourself(const G4HadProjectile& aTrack,
         theResult.SetStatusChange(stopAndKill);
         remnants.clear();
       } else {
-        // Check four-momentum conservation
+ /*       // Check four-momentum conservation
+        G4INCL::Config  *theConfig;
+        theConfig=&theInterfaceStore->GetINCLConfig(); 
+        G4double nbatrestThreshold=theConfig->getnbAtrestThreshold(); 
+        G4double pbatrestThreshold=theConfig->getAtrestThreshold();
+        if (((trackDefinition->GetParticleName() == "anti_neutron") && // in INCL antinucleon at rest is considered with 0 kinetic energy
+             (aTrack.GetKineticEnergy() <= nbatrestThreshold)) ||
+            ((trackDefinition->GetParticleName() == "anti_proton") && 
+             (aTrack.GetKineticEnergy() <= pbatrestThreshold)) ||
+            ((trackDefinition->GetParticleName() == "anti_neutron") &&
+             ((theTargetNucleus->GetA_asInt()==1 || theTargetNucleus->GetA_asInt()==2) && theTargetNucleus->GetZ_asInt()==1)) ||
+            ((trackDefinition->GetParticleName() == "anti_proton") &&
+             ((theTargetNucleus->GetA_asInt()==1 || theTargetNucleus->GetA_asInt()==2) && theTargetNucleus->GetZ_asInt()==1)))
+        {
+          fourMomentumIn.setE(theNucleusMass + theTrackMass);
+          fourMomentumIn.setVect(theTrackMomentum-theTrackMomentum);
+        }*/
         const G4LorentzVector violation4Momentum = fourMomentumOut - fourMomentumIn;
         const G4double energyViolation = std::abs(violation4Momentum.e());
         const G4double momentumViolation = violation4Momentum.rho();
@@ -573,6 +593,7 @@ G4INCL::ParticleType G4INCLXXInterface::toINCLParticleType(G4ParticleDefinition 
   else if(pdef == G4He3::He3())                     return G4INCL::Composite;
   else if(pdef == G4Alpha::Alpha())                 return G4INCL::Composite;
   else if(pdef == G4AntiProton::AntiProton())       return G4INCL::antiProton;
+  else if(pdef == G4AntiNeutron::AntiNeutron())     return G4INCL::antiNeutron;
   else if(pdef->GetParticleType() == G4GenericIon::GenericIon()->GetParticleType()) return G4INCL::Composite;
   else                                              return G4INCL::UnknownParticle;
 }
@@ -613,13 +634,17 @@ G4ParticleDefinition *G4INCLXXInterface::toG4ParticleDefinition(G4int A, G4int Z
   } else if(PDGCode == -321) { return G4KaonMinus::KaonMinus();
   } else if(PDGCode == 130)  { return G4KaonZeroLong::KaonZeroLong();
   } else if(PDGCode == 310)  { return G4KaonZeroShort::KaonZeroShort();
-  
+  } else if(PDGCode == 311 || PDGCode == -311)  { 
+    if (G4INCL::Random::shoot() < 0.5) return G4KaonZeroShort::KaonZeroShort();
+    else return G4KaonZeroLong::KaonZeroLong();
+    
   } else if(PDGCode == 1002) { return G4Deuteron::Deuteron();
   } else if(PDGCode == 1003) { return G4Triton::Triton();
   } else if(PDGCode == 2003) { return G4He3::He3();
   } else if(PDGCode == 2004) { return G4Alpha::Alpha();
 
   } else if(PDGCode == -2212) { return G4AntiProton::AntiProton();
+  } else if(PDGCode == -2112) { return G4AntiNeutron::AntiNeutron();
   } else if(S != 0) {  // Assumed that -S gives the number of Lambdas
     if (A == 3 && Z == 1 && S == -1 ) return G4HyperTriton::Definition();
     if (A == 4 && Z == 1 && S == -1 ) return G4HyperH4::Definition();
@@ -663,15 +688,15 @@ G4double G4INCLXXInterface::remnant4MomentumScaling(G4double mass,
 void G4INCLXXInterface::ModelDescription(std::ostream& outFile) const {
    outFile
      << "The Liège Intranuclear Cascade (INCL++) is a model for reactions induced\n"
-     << "by nucleons, pions and light ion on any nucleus. The reaction is\n"
-     << "described as an avalanche of binary nucleon-nucleon collisions, which can\n"
-     << "lead to the emission of energetic particles and to the formation of an\n"
+     << "by nucleons, antinucleons, pions, kaons, Lambda, Sigma and light ion on any nucleus.\n"
+     << "The reaction is described as an avalanche of binary nucleon-nucleon collisions,\n"
+     << "which can lead to the emission of energetic particles and to the formation of an\n"
      << "excited thermalised nucleus (remnant). The de-excitation of the remnant is\n"
      << "outside the scope of INCL++ and is typically described by another model.\n\n"
      << "INCL++ has been reasonably well tested for nucleon (~50 MeV to ~15 GeV),\n"
      << "pion (idem) and light-ion projectiles (up to A=18, ~10A MeV to 1A GeV).\n"
      << "Most tests involved target nuclei close to the stability valley, with\n"
-     << "numbers between 4 and 250.\n\n"
+     << "numbers between 4 and 300.\n\n"
      << "Reference: D. Mancusi et al., Phys. Rev. C90 (2014) 054602\n\n";
 }
 

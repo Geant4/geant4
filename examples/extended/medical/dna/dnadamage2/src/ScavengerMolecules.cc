@@ -23,12 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
+/// \file ScavengerMolecules.cc
+/// \brief Implementation of the ScavengerMolecules class
+///
+/// Implementation of the Background Scavenber chemical species
+
 // Authors: J. Naoki D. Kondo (UCSF, US)
 //          J. Ramos-Mendez and B. Faddegon (UCSF, US)
 //
-/// \file ScavengerMolecules.cc
-/// \brief Implementation of the Background Scavenber chemical species
 
 #include "ScavengerMolecules.hh"
 

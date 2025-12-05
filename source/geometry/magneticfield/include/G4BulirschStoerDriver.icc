@@ -25,8 +25,8 @@
 //
 // G4BulirschStoer driver inline methods implementation
 
-// Author: Dmitry Sorokin, Google Summer of Code 2016
-// Supervision: John Apostolakis, CERN
+// Author: Dmitry Sorokin (CERN, Google Summer of Code 2016), 13.02.2018
+// Supervision: John Apostolakis (CERN)
 // --------------------------------------------------------------------
 
 #include <cassert>
@@ -61,9 +61,9 @@ G4bool G4IntegrationDriver<G4BulirschStoer>::
 AccurateAdvance( G4FieldTrack& track, G4double hstep,
                  G4double eps, G4double hinitial)
 {
-    G4int fNoTotalSteps = 0;
+    // G4int fNoTotalSteps = 0;
     G4int fMaxNoSteps = 10000;
-    G4double fNoBadSteps = 0.0;
+    // G4double fNoBadSteps = 0.0;
     G4double fSmallestFraction = 1.0e-12;
 
     // Driver with adaptive stepsize control. Integrate starting
@@ -124,13 +124,13 @@ AccurateAdvance( G4FieldTrack& track, G4double hstep,
 
     // loop variables
     //
-    G4int nstp = 1, no_warnings = 0;
+    G4int nstp = 1; //, no_warnings = 0;
     G4double hnext, hdid;
 
     G4bool succeeded = true, lastStepSucceeded;
 
     G4int  noFullIntegr = 0, noSmallIntegr = 0 ;
-    static G4ThreadLocal G4int  noGoodSteps = 0 ;  // Bad = chord > curve-len
+    // static G4ThreadLocal G4int noGoodSteps = 0 ;  // Bad = chord > curve-len
 
     G4bool lastStep = false;
 
@@ -142,7 +142,7 @@ AccurateAdvance( G4FieldTrack& track, G4double hstep,
     {
         G4ThreeVector StartPos(yCurrent[0], yCurrent[1], yCurrent[2]);
         GetEquationOfMotion()->RightHandSide(yCurrent, dydxCurrent);
-        fNoTotalSteps++;
+        // fNoTotalSteps++;
 
         // Perform the Integration
         //
@@ -185,7 +185,7 @@ AccurateAdvance( G4FieldTrack& track, G4double hstep,
         lastStepSucceeded ? ++noFullIntegr : ++noSmallIntegr;
 
         G4ThreeVector EndPos(yCurrent[0], yCurrent[1], yCurrent[2]);
-
+/*
         // Check the endpoint
         //
         G4double endPointDist = (EndPos - StartPos).mag();
@@ -205,7 +205,7 @@ AccurateAdvance( G4FieldTrack& track, G4double hstep,
         {
             ++noGoodSteps;
         }
-
+*/
         //  Avoid numerous small last steps
         //
         if((h < eps * hstep) || (h < fSmallestFraction * startCurveLength))
@@ -262,7 +262,7 @@ AccurateAdvance( G4FieldTrack& track, G4double hstep,
 
     if(nstp > fMaxNoSteps)
     {
-      ++no_warnings;
+      // ++no_warnings;
       succeeded = false;
     }
 
@@ -329,6 +329,14 @@ QuickAdvance( G4FieldTrack& track, const G4double dydx[],
     return true;
 }
 
+G4double G4IntegrationDriver<G4BulirschStoer>::
+AdvanceChordLimited(G4FieldTrack& track, G4double hstep, G4double eps,
+                    G4double chordDistance)
+{
+    return ChordFinderDelegate::
+           AdvanceChordLimitedImpl(track, hstep, eps, chordDistance);
+}
+
 void G4IntegrationDriver<G4BulirschStoer>::
 OneGoodStep( G4double y[], const G4double dydx[], G4double& curveLength,
              G4double htry, G4double eps, G4double& hdid, G4double& hnext)
@@ -351,6 +359,23 @@ OneGoodStep( G4double y[], const G4double dydx[], G4double& curveLength,
 
     std::memcpy(y, yOut, sizeof(G4double) * GetNumberOfVarialbles());
     hdid = curveLength - curveLengthBegin;
+}
+
+void G4IntegrationDriver<G4BulirschStoer>::
+OnStartTracking()
+{
+  ChordFinderDelegate::ResetStepEstimate();
+}
+
+void G4IntegrationDriver<G4BulirschStoer>::
+OnComputeStep(const G4FieldTrack* /*track*/)
+{
+}
+
+G4bool G4IntegrationDriver<G4BulirschStoer>::
+DoesReIntegrate() const
+{
+  return false;
 }
 
 void G4IntegrationDriver<G4BulirschStoer>::

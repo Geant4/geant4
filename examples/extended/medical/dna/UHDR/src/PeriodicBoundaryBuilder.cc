@@ -23,7 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
+/// \file PeriodicBoundaryBuilder.cc
+/// \brief Implementation of the PeriodicBoundaryBuilder class
+
 #include "PeriodicBoundaryBuilder.hh"
 
 #include "LogicalVolumePeriodic.hh"

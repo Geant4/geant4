@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 /// \file Dicom2ActionInitialization.cc
 /// \brief Implementation of the Dicom2ActionInitialization class
 

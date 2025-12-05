@@ -57,7 +57,6 @@ geant4_module_link_libraries(G4phys_ctor_hinelastic
     G4run
   PRIVATE
     G4baryons
-    G4had_gamma_nuclear
     G4phys_ctor_em
     G4emutils
     G4had_lend

@@ -30,7 +30,7 @@
 // Stores information on the performance of the smart voxel algorithm
 // for an individual logical volume.
 
-// Author: D.C.Williams, UCSC (davidw@scipp.ucsc.edu)
+// Author: D.C.Williams (UCSC), 1998
 // --------------------------------------------------------------------
 #ifndef G4SmartVoxelStat_hh
 #define G4SmartVoxelStat_hh
@@ -40,48 +40,82 @@
 class G4LogicalVolume;
 class G4SmartVoxelHeader;
 
+/**
+ * @brief G4SmartVoxelStat stores the information on the performance of the
+ * smart voxel optimisation algorithm for an individual logical volume.
+ */
+
 class G4SmartVoxelStat
 {
-  public:  // with description
+  public:
   
+    /**
+     * Constructs the information on one volume's voxels.
+     *  @param[in] theVolume Pointer to the logical volume concerned.
+     *  @param[in] theVoxel Pointer to the associated voxel header.
+     *  @param[in] theSysTime System time.
+     *  @param[in] theUserTime User time.
+     */
     G4SmartVoxelStat( const G4LogicalVolume* theVolume,
                       const G4SmartVoxelHeader* theVoxel,
                             G4double theSysTime,
                             G4double theUserTime );
-      // Construct information on one volume's voxels
 
+    /**
+     * Returns a pointer to the logical volume.
+     */
     const G4LogicalVolume* GetVolume() const;
-      // Return a pointer to the logical volume
   
+    /**
+     * Returns a pointer to the voxel header.
+     */
     const G4SmartVoxelHeader* GetVoxel() const;
-      // Return a pointer to the voxel header
   
+    /**
+     * Gets the amount of system CPU time needed to build voxels.
+     */
     G4double GetSysTime() const;
-      // Get amount of system CPU time needed to build voxels
   
+    /**
+     * Gets the amount of user CPU time needed to build voxels.
+     */
     G4double GetUserTime() const;
-      // Get amount of user CPU time needed to build voxels
   
+    /**
+     * Gets the total amount of CPU time needed to build voxels.
+     */
     G4double GetTotalTime() const;
-      // Get total amount of CPU time needed to build voxels
   
+    /**
+     * Gets the number of voxel headers used in the volume.
+     */
     G4long GetNumberHeads() const;
-      // Get number of voxel headers used in the volume
   
+    /**
+     * Gets the number of voxel slices used in the volume.
+     */
     G4long GetNumberNodes() const;
-      // Get number of voxel slices used in the volume
-  
+
+    /**
+     * Gets the number of voxel proxy pointers used in the volume.
+     */
     G4long GetNumberPointers() const;
-      // Get number of voxel proxy pointers used in the volume
   
+    /**
+     * Gets the number of bytes needed to store voxel information.
+     */
     G4long GetMemoryUse() const;
-      // Get number of bytes needed to store voxel information
 
 
-  protected:
+  private:
   
+    /**
+     * Counts headers and nodes from provided 'head' header.
+     */
     void CountHeadsAndNodes( const G4SmartVoxelHeader* head );
   
+  private:
+
     const G4LogicalVolume* volume;
     const G4SmartVoxelHeader* voxel;
   

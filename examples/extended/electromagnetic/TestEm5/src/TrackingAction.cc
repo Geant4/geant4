@@ -23,13 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm5/src/TrackingAction.cc
+/// \file TrackingAction.cc
 /// \brief Implementation of the TrackingAction class
-//
-//
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "TrackingAction.hh"
 
@@ -80,7 +75,7 @@ void TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
     (((fDirX >= 0.0 && position.x() >= fXendAbs) || (fDirX < 0.0 && position.x() <= fXstartAbs))
      && energy > 0.0);
   G4bool reflect =
-    (((fDirX >= 0.0 && position.x() <= fXstartAbs) || (fDirX < 0.0 && position.x() <= fXendAbs))
+    (((fDirX >= 0.0 && position.x() <= fXstartAbs) || (fDirX < 0.0 && position.x() >= fXendAbs))
      && energy > 0.0);
   G4bool notabsor = (transmit || reflect);
 

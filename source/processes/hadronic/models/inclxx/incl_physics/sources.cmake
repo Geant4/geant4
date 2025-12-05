@@ -3,6 +3,7 @@
 # Define the Geant4 Module.
 geant4_add_module(G4hadronic_inclxx_physics
   PUBLIC_HEADERS
+    G4INCLAntinucleiAtrestEntryChannel.hh
     G4INCLAvatarDumpAction.hh
     G4INCLBinaryCollisionAvatar.hh
     G4INCLCascade.hh
@@ -33,6 +34,8 @@ geant4_add_module(G4hadronic_inclxx_physics
     G4INCLEtaNElasticChannel.hh
     G4INCLEtaNToPiNChannel.hh
     G4INCLEtaNToPiPiNChannel.hh
+    G4INCLEtaOrOmegaNToLKChannel.hh
+    G4INCLEtaOrOmegaNToSKChannel.hh
     G4INCLIClusteringModel.hh
     G4INCLICoulomb.hh
     G4INCLICrossSections.hh
@@ -42,6 +45,7 @@ geant4_add_module(G4hadronic_inclxx_physics
     G4INCLIPhaseSpaceGenerator.hh
     G4INCLIPropagationModel.hh
     G4INCLKinematicsUtils.hh
+    G4INCLNbarAtrestEntryChannel.hh
     G4INCLNDeltaEtaProductionChannel.hh
     G4INCLNDeltaOmegaProductionChannel.hh
     G4INCLNDeltaToDeltaLKChannel.hh
@@ -131,12 +135,14 @@ geant4_add_module(G4hadronic_inclxx_physics
     G4INCLRecombinationChannel.hh
     G4INCLReflectionChannel.hh
     G4INCLSigmaZeroDecayChannel.hh
+    G4INCLSrcChannel.hh
     G4INCLStandardPropagationModel.hh
     G4INCLStore.hh
     G4INCLStrangeAbsorbtionChannel.hh
     G4INCLSurfaceAvatar.hh
     G4INCLTransmissionChannel.hh
   SOURCES
+    G4INCLAntinucleiAtrestEntryChannel.cc  
     G4INCLAvatarDumpAction.cc
     G4INCLBinaryCollisionAvatar.cc
     G4INCLCascade.cc
@@ -165,9 +171,12 @@ geant4_add_module(G4hadronic_inclxx_physics
     G4INCLEtaNElasticChannel.cc
     G4INCLEtaNToPiNChannel.cc
     G4INCLEtaNToPiPiNChannel.cc
+    G4INCLEtaOrOmegaNToLKChannel.cc
+    G4INCLEtaOrOmegaNToSKChannel.cc
     G4INCLInteractionAvatar.cc
     G4INCLINuclearPotential.cc
     G4INCLKinematicsUtils.cc
+    G4INCLNbarAtrestEntryChannel.cc
     G4INCLNDeltaEtaProductionChannel.cc
     G4INCLNDeltaOmegaProductionChannel.cc
     G4INCLNDeltaToDeltaLKChannel.cc
@@ -252,6 +261,7 @@ geant4_add_module(G4hadronic_inclxx_physics
     G4INCLRecombinationChannel.cc
     G4INCLReflectionChannel.cc
     G4INCLSigmaZeroDecayChannel.cc
+    G4INCLSrcChannel.cc
     G4INCLStandardPropagationModel.cc
     G4INCLStore.cc
     G4INCLStrangeAbsorbtionChannel.cc

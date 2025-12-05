@@ -1,0 +1,76 @@
+#/run/numberOfThreads 10
+
+#/random/setSeeds 19577793 424238335        #uncomment this to have reproducibility
+
+#Positron Source type
+#/det/isHybridSource false                  #defualt true
+
+#Radiator Crystal settings
+/crystal/setCrystalMaterial W               #All materials with channeling data can be used.
+                                            #Up to now we have: W, C(diamond), Ge and Si
+/crystal/setCrystalSize 20 20 2 mm
+/crystal/setCrystalLattice <111>            #planes (e.g. (111)) or axes (e.g. <111>)
+/crystal/setCrystalAngleX 0.e-6             #rad (default 0.)
+/crystal/setCrystalAngleY 0.e-6             #rad (default 0.)
+#/crystal/setOCeffects false                #Deactivate Orientetional Coherent (OC) effects
+                                            #in crystals through G4ChannelingFastSimModel
+
+#Converter/Target t (amorphous) settings
+/det/setConverterMaterial W                 #PWO, BGO, W (default), Ir
+/det/setRadiatorConverterSepDistance 50 cm
+/det/setConverterSize 100 100 8 mm
+#/det/setGranularConverter true              #default is false
+#/det/setSphereRadius 1.1 mm                 #radius of the spheres in a granular target
+
+#other geometry settings
+#/det/setMagneticField true                  #default is false
+#/det/setMagneticFieldValue 5 tesla
+#/det/setMagneticFieldRegionLength 20 cm
+
+#/det/setCollimator true                     #default is false
+#/det/setCollimatorAperture 5.5 mm
+#/det/setCollimatorHole circular             #default is squared
+#/det/setCollimatorThickness 50 cm
+#/det/setCollimatorSide 2.5 m
+#/det/setRadiatorCollimatorSepDistance 5 cm
+
+#/crystal/setVirtualDetectorSize 40 40 0.001 cm
+
+#further settings
+#/det/setScoringCrystalExit true             #score all particles exiting the radiator crystal
+
+/run/initialize
+
+/control/verbose 0
+/run/verbose 1                              #to see the Couples CutsVsRegion
+/tracking/verbose 0
+
+/run/setfilenamesave output/output_6GeV_W2.0mm_conv8.0mm_D50cm.root
+
+#/gun/UseGPS true                            #default false.
+#/control/execute macros/beam.mac            #it works if UseGPS is true
+/control/execute macros/setPrimaryBeam.mac  #new custom ParticleGun commands  
+
+/score/create/boxMesh boxMesh1                
+/score/mesh/boxSize 50 50 4.0 mm            #semi-quantities
+/score/mesh/nBin 401 401 33                
+/score/mesh/translate/xyz 0 0 504.03 mm     #CHECK ALWAYS!
+/score/quantity/energyDeposit Edep          #[MeV]       
+/score/close
+/score/list
+
+/score/create/boxMesh boxMesh2                
+/score/mesh/boxSize 10 10 1.0 mm            #semi-quantities
+/score/mesh/nBin 81 81 9                
+/score/mesh/translate/xyz 0 0 -1.0 mm
+/score/quantity/energyDeposit Edep          #[MeV]        
+/score/close
+/score/list                
+
+#statistics
+/run/printProgress 10
+/run/beamOn 10
+
+/score/dumpQuantityToFile boxMesh1 Edep output/Edep_6GeV_W2.0mm_conv8.0mm_D50cm.txt
+/score/dumpQuantityToFile boxMesh2 Edep output/Edep_6GeV_W2.0mm_conv8.0mm_D50cm_rad.txt
+

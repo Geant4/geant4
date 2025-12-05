@@ -32,41 +32,57 @@
 //
 // Modified:
 //
+// 25.10.25    Changed the settings to the most accurate configuration of the
+//             Goudsmit-Saunderson MSC model for e-/e+ multiple Coulomb
+//             scattering. The class descrition has been changed to reflect the
+//             new configuration (Mihaly Novak).
+//
 // Class Description:
 //
-// Standard EM physics constructor for HEP applications with the Goudsmit
-// -Saunderson MSC model for e-/e+ Coulomb scattering below 100 [MeV] (instead
-// of the Urban model). Note, that the Goudsmit-Saunderson MSC model used here
-// with its HEP settings (i.e. less accurate). The Goudsmit-Saunderson MSC
-// model with its most accurate settings is used in the G4EmStandard_opt4
-// physics constructor for e-/e+ Coulomb scattering.
+// This EM physics constructor utilises the Goudsmit-Saunderson (GS) MSC model
+// for e-/e+ multiple Coulomb scattering (below 1 GeV kinetic energies). The
+// GS MSC model has been changed in version 11.4 keeping only its accurate
+// stepping and boundary crossing algorithms while removeing the other, less
+// accurate alternatives. All the corrections offered by the GS model, including
+// the Mott, screening and scattering power corrections, are activated. This,
+// together with the Penelope model for e-/e+ ionisations (below 1 GeV),
+// offers an accurate an accurate e-/e+ simualtion down to few keV kinetic
+// enegies independently form the target material and geometry.
+//
+// The same settings of the GS MSC model has already been used for e-/e+ below
+// 100 MeV kinetic energies in the option4, Penelope and Livermore EM physics
+// constructors since version 10.6.
 //
 //----------------------------------------------------------------------------
 //
 
 #include "G4EmStandardPhysicsGS.hh"
+
 #include "G4SystemOfUnits.hh"
 #include "G4ParticleDefinition.hh"
-#include "G4EmParameters.hh"
-#include "G4EmBuilder.hh"
 #include "G4LossTableManager.hh"
+#include "G4EmParameters.hh"
+#include "G4EmStandUtil.hh"
+#include "G4EmBuilder.hh"
 
 #include "G4ComptonScattering.hh"
 #include "G4GammaConversion.hh"
 #include "G4PhotoElectricEffect.hh"
-#include "G4RayleighScattering.hh"
 #include "G4LivermorePhotoElectricModel.hh"
+#include "G4RayleighScattering.hh"
 
-#include "G4eMultipleScattering.hh"
 #include "G4hMultipleScattering.hh"
 #include "G4CoulombScattering.hh"
 #include "G4eCoulombScatteringModel.hh"
 #include "G4WentzelVIModel.hh"
-#include "G4UrbanMscModel.hh"
 #include "G4GoudsmitSaundersonMscModel.hh"
 
 #include "G4eIonisation.hh"
+#include "G4PenelopeIonisationModel.hh"
 #include "G4eBremsstrahlung.hh"
+#include "G4SeltzerBergerModel.hh"
+#include "G4Generator2BS.hh"
+
 #include "G4eplusAnnihilation.hh"
 
 #include "G4hIonisation.hh"
@@ -80,6 +96,7 @@
 #include "G4PhysicsListHelper.hh"
 #include "G4BuilderType.hh"
 #include "G4EmModelActivator.hh"
+#include "G4GammaGeneralProcess.hh"
 
 // factory
 #include "G4PhysicsConstructorFactory.hh"
@@ -95,9 +112,23 @@ G4EmStandardPhysicsGS::G4EmStandardPhysicsGS(G4int ver, const G4String&)
   G4EmParameters* param = G4EmParameters::Instance();
   param->SetDefaults();
   param->SetVerbose(ver);
-  param->SetMscRangeFactor(0.06);
-  //  param->SetMscStepLimitType(fUseSafetyPlus); // corresponds to the error-free stepping
-  //  param->SetFluo(true);
+  // use a denser discrete kinetic energy grid for more accurate interpolation
+  param->SetNumberOfBinsPerDecade(16);
+  // set the continuous step limit to: 0.2*Range that goes to Range below 10 um
+  param->SetStepFunction(0.2, 10*CLHEP::um);
+  // set the GS MSC model for e-/e+ to be used below 1.0 GeV with its (Mott,
+  // screening, scattering power) corrections activated and with the accurate
+  // stepping and boundary crossing algorithms (no other options since 11.4)
+  // with a skin of 3 elastic MFP near boundary
+  param->SetMscEnergyLimit(1.0*CLHEP::GeV);
+  param->SetUseMottCorrection(true);
+  param->SetMscStepLimitType(fUseSafetyPlus);
+  param->SetMscSkin(3);
+  param->SetMscRangeFactor(0.08);
+  // activate fluoresence, i.e. emission of characteristic X-ray
+  param->SetFluo(true);
+  // set the energy loss fluctuation type
+  param->SetFluctuationType(fUrbanFluctuation);
   SetPhysicsType(bElectromagnetic);
 }
 
@@ -129,63 +160,109 @@ void G4EmStandardPhysicsGS::ConstructProcess()
   G4NuclearStopping* pnuc(nullptr);
 
   // high energy limit for e+- scattering models and bremsstrahlung
-  G4double highEnergyLimit = G4EmParameters::Instance()->MscEnergyLimit();
+  G4double mscEnergyLimit = G4EmParameters::Instance()->MscEnergyLimit();
 
   // Add gamma EM processes
+
+  // gamma
   G4ParticleDefinition* particle = G4Gamma::Gamma();
 
-  G4PhotoElectricEffect* pee = new G4PhotoElectricEffect();
-  pee->SetEmModel(new G4LivermorePhotoElectricModel());
-  ph->RegisterProcess(pee, particle);
+  G4PhotoElectricEffect* pe = new G4PhotoElectricEffect();
+  pe->SetEmModel(new G4LivermorePhotoElectricModel());
 
-  ph->RegisterProcess(new G4ComptonScattering(), particle);
-  ph->RegisterProcess(new G4GammaConversion(), particle);
-  ph->RegisterProcess(new G4RayleighScattering(), particle);
+  G4ComptonScattering* cs = new G4ComptonScattering;
+  G4GammaConversion* gc = new G4GammaConversion;
+  G4RayleighScattering* rs = new G4RayleighScattering;
+
+  if (G4EmParameters::Instance()->GeneralProcessActive()) {
+    G4GammaGeneralProcess* sp = new G4GammaGeneralProcess();
+    sp->AddEmProcess(pe);
+    sp->AddEmProcess(cs);
+    sp->AddEmProcess(gc);
+    sp->AddEmProcess(rs);
+    G4LossTableManager::Instance()->SetGammaGeneralProcess(sp);
+    ph->RegisterProcess(sp, particle);
+  } else {
+    ph->RegisterProcess(pe, particle);
+    ph->RegisterProcess(cs, particle);
+    ph->RegisterProcess(gc, particle);
+    ph->RegisterProcess(rs, particle);
+  }
 
   // e-
   particle = G4Electron::Electron();
 
-  G4eMultipleScattering* msc = new G4eMultipleScattering;
+  // msc: GS[:100 MeV] + WentzelVI[100 MeV:]
   G4GoudsmitSaundersonMscModel* msc1 = new G4GoudsmitSaundersonMscModel();
   G4WentzelVIModel* msc2 = new G4WentzelVIModel();
-  msc1->SetHighEnergyLimit(highEnergyLimit);
-  msc2->SetLowEnergyLimit(highEnergyLimit);
-  msc->SetEmModel(msc1);
-  msc->SetEmModel(msc2);
-
+  msc1->SetHighEnergyLimit(mscEnergyLimit);
+  msc2->SetLowEnergyLimit(mscEnergyLimit);
+  G4EmBuilder::ConstructElectronMscProcess(msc1, msc2, particle);
+  // (WVI is a mixed model, i.e. needs single scattering)
   G4eCoulombScatteringModel* ssm = new G4eCoulombScatteringModel();
   G4CoulombScattering* ss = new G4CoulombScattering();
   ss->SetEmModel(ssm);
-  ss->SetMinKinEnergy(highEnergyLimit);
-  ssm->SetLowEnergyLimit(highEnergyLimit);
-  ssm->SetActivationLowEnergyLimit(highEnergyLimit);
+  ss->SetMinKinEnergy(mscEnergyLimit);
+  ssm->SetLowEnergyLimit(mscEnergyLimit);
+  ssm->SetActivationLowEnergyLimit(mscEnergyLimit);
 
-  ph->RegisterProcess(msc, particle);
-  ph->RegisterProcess(new G4eIonisation(), particle);
-  ph->RegisterProcess(new G4eBremsstrahlung(), particle);
+  // ionisation: Penelope[:1.0 GeV] + Moller[1.0 GeV:]
+  G4eIonisation* eioni = new G4eIonisation();
+  eioni->SetFluctModel(G4EmStandUtil::ModelOfFluctuations());
+  G4VEmModel* theIoniMod = new G4PenelopeIonisationModel();
+  theIoniMod->SetHighEnergyLimit(1.0*CLHEP::GeV);
+  eioni->AddEmModel(0, theIoniMod);
+
+  // bremsstrahlung: Seltzer-Berger[:1.0 GeV] + extended Bethe–Heitler[1.0 GeV:]
+  G4eBremsstrahlung* brem = new G4eBremsstrahlung();
+  G4SeltzerBergerModel* br1 = new G4SeltzerBergerModel();
+  G4eBremsstrahlungRelModel* br2 = new G4eBremsstrahlungRelModel();
+  br1->SetAngularDistribution(new G4Generator2BS());
+  br2->SetAngularDistribution(new G4Generator2BS());
+  brem->SetEmModel(br1);
+  brem->SetEmModel(br2);
+  br1->SetHighEnergyLimit(1.0*CLHEP::GeV);
+
+  ph->RegisterProcess(eioni, particle);
+  ph->RegisterProcess(brem, particle);
   ph->RegisterProcess(ss, particle);
 
   // e+
   particle = G4Positron::Positron();
 
-  msc = new G4eMultipleScattering;
+  // msc: GS[:100 MeV] + WentzelVI[100 MeV:]
   msc1 = new G4GoudsmitSaundersonMscModel();
   msc2 = new G4WentzelVIModel();
-  msc1->SetHighEnergyLimit(highEnergyLimit);
-  msc2->SetLowEnergyLimit(highEnergyLimit);
-  msc->SetEmModel(msc1);
-  msc->SetEmModel(msc2);
-
+  msc1->SetHighEnergyLimit(mscEnergyLimit);
+  msc2->SetLowEnergyLimit(mscEnergyLimit);
+  G4EmBuilder::ConstructElectronMscProcess(msc1, msc2, particle);
+  // (WVI is a mixed model, i.e. needs single scattering)
   ssm = new G4eCoulombScatteringModel();
   ss = new G4CoulombScattering();
   ss->SetEmModel(ssm);
-  ss->SetMinKinEnergy(highEnergyLimit);
-  ssm->SetLowEnergyLimit(highEnergyLimit);
-  ssm->SetActivationLowEnergyLimit(highEnergyLimit);
+  ss->SetMinKinEnergy(mscEnergyLimit);
+  ssm->SetLowEnergyLimit(mscEnergyLimit);
+  ssm->SetActivationLowEnergyLimit(mscEnergyLimit);
 
-  ph->RegisterProcess(msc, particle);
-  ph->RegisterProcess(new G4eIonisation(), particle);
-  ph->RegisterProcess(new G4eBremsstrahlung(), particle);
+  // ionisation: Penelope[:1.0 GeV] + Bhabha[1.0 GeV:]
+  eioni = new G4eIonisation();
+  eioni->SetFluctModel(G4EmStandUtil::ModelOfFluctuations());
+  G4VEmModel* pen = new G4PenelopeIonisationModel();
+  pen->SetHighEnergyLimit(1.0*CLHEP::GeV);
+  eioni->AddEmModel(0, pen);
+
+  // bremsstrahlung: Seltzer-Berger[:1.0 GeV] + extended Bethe–Heitler[1.0 GeV:]
+  brem = new G4eBremsstrahlung();
+  br1 = new G4SeltzerBergerModel();
+  br2 = new G4eBremsstrahlungRelModel();
+  br1->SetAngularDistribution(new G4Generator2BS());
+  br2->SetAngularDistribution(new G4Generator2BS());
+  brem->SetEmModel(br1);
+  brem->SetEmModel(br2);
+  br1->SetHighEnergyLimit(1.0*CLHEP::GeV);
+
+  ph->RegisterProcess(eioni, particle);
+  ph->RegisterProcess(brem, particle);
   ph->RegisterProcess(new G4eplusAnnihilation(), particle);
   ph->RegisterProcess(ss, particle);
 

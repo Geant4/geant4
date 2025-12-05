@@ -24,11 +24,7 @@
 // ********************************************************************
 //
 /// \file DetectorConstructionMessenger.hh
-/// \brief Description of the DetectorConstruction messenger class
-//
-//
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// \brief Definition of the DetectorConstructionMessenger class
 
 #ifndef DetectorConstructionMessenger_h
 #define DetectorConstructionMessenger_h 1
@@ -79,8 +75,12 @@ private:
     G4UIcmdWithADouble* fCrystallineUndulatorPhaseCmd{nullptr};
     
     G4UIcmdWithAString* fPotentialPathCmd{nullptr};
-    
+    G4UIcmdWithAString* fCrystalInternalGeometryPathCmd{nullptr};
+
+    G4UIcmdWithADoubleAndUnit* fVirtualCollimatorHalfSize{nullptr};
     G4UIcmdWithADoubleAndUnit* fMinPhotonEnergyCmd{nullptr};
+    G4UIcmdWithADoubleAndUnit* fMaxPhotonEnergySpectrumCmd{nullptr};
+    G4UIcmdWithAnInteger* fNBinsSpectrumCmd{nullptr};
     G4UIcmdWithAnInteger* fSamplingPhotonsNumberCmd{nullptr};
     G4UIcmdWithAnInteger* fNSmallTrajectoryStepsCmd{nullptr};
     G4UIcmdWithADouble* fRadiationAngleFactorCmd{nullptr};

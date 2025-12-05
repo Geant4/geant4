@@ -6,6 +6,109 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2025-11-07 John Allison (visman-V11-03-24)
+- G4VisExecutive.icc:
+  - Remove all references to HepRep.
+- G4VisManager.cc:
+  - Substitute G4FRSCENEHANDLER for G4HepRepFile in a comment about ClearTransientStore.
+- G4VisCommandsSceneAdd.cc, G4VisCommandsTouchable.cc, G4VisCommandsViewer.cc:
+  - Remove a mention of HepRep in command guidance.
+
+## 2025-11-05 John Allison (visman-V11-03-23)
+- G4VSceneHandler.cc: Fix another Coverity warning.
+
+## 2025-11-03 John Allison (visman-V11-03-22)
+- G4VisExecutive.icc:
+  - Remove all references to Qt3D.
+
+## 2025-11-03 John Allison (visman-V11-03-21)
+- G4VSceneHandler.cc: Fix Coverity warning.
+
+## 2025-10-31 Andrea Barresi (visman-V11-03-20)
+- G4VViewer:
+  - Added UpdateGUIControlWidgets, UpdateGUIDrawingStyle, UpdateGUIProjectionStyle, 
+    and UpdateGUITransparencySlider methods to update the GUI control widgets
+-G4VisCommandsViewer:
+  - Added UpdateGUIControlWidgets to G4VisCommandViewerSelect::SetNewValue to 
+    update the control widget when the viewer is changed
+  
+## 2025-10-24 Guy Barrand (visman-V11-03-19)
+- G4VisExecutive.icc: Vtk: remove "#undef G4VIS_USE_TOOLSSG_QT_GLES" within the
+  first "#ifdef G4VIS_USE_VTK" block, since ToolsSG-GLES compiles now with OpenGL-3.2
+  if Vtk is choosen, and then can cowork with Vtk at run time.
+  Remove also the "#undef G4VIS_USE_TOOLSSG_[X11,XT,WINDOWS]_GLES" irrelevant with
+  a Qt build.
+
+## 2025-10-15 John Allison (visman-V11-03-18)
+- Smooth dots default and end-of-run drawing.
+  - Following updates to ToolsSG, its behaviour matches OGL's.
+  - Change dotsSmooth initialisation so that dots are typically drawn as
+    filled circles.
+  - We can remove temporary "workaround" in G4VisManager.
+- G4ViewParameters.cc:
+  - fDotsSmooth initialised to true.
+- G4VisCommandsViewerSet.cc:
+  - Improved guidance for vis/viewer/set/dotsSmooth:
+    - "Smooth" typically means rounded, i.e., dots drawn as filled circles.
+      The vis system is configured by default to draw smooth dots. This may
+      be switched off with "/vis/viewer/set/dotsSmooth false" - typically
+      this will result in square dots.
+- G4VisManager.cc:
+  - Remove temporary "workaround" RefreshView() from G4VisManager::EndDraw(2D)().
+
+## 2025-10-01 John Allison (visman-V11-03-17)
+- Add /vis/viewer/set/dotsSize and dotsSmooth.
+  - G4PolyMarkers have a MarkerType that can be dots, circles, or squares. If
+    the MarkerType is G4PolyMarker::dots, the size is determined _only_ by
+    G4ViewParameters::GetDotsSize(), set with /vis/viewer/set/dotsSize. This
+    policy is enforced in G4VSceneHandler::GetMarkerSize(). Other types of
+    marker may be changed in size with /vis/viewer/set/globalMarkerScale.
+  - *Individual scene handlers should use GetMarkerSize() for _all_
+    types of marker*.
+  - *Thus, dots size can no longer be changed with /vis/viewer/set/globalMarkerScale.
+    Use /vis/viewer/set/dotsSize instead*.
+- G4ViewParameters:
+  - Add data members fDotsSize and fDotsSmooth and their access functions.
+  - Also augment operator>> and !=, PrintDifferences and the command dumping
+    routines (for /vis/viewer/save) as apppropriate.
+  - Change GetZoomToCursor() to IsZoomToCursor() to follow convention
+    for Boolean parameters.
+- G4VisCommandsViewerSet:
+  - Add /vis/viewer/set/dotsSize and dotsSmooth.
+  - Follow change in G4ViewParameters: GetZoomToCursor() to IsZoomToCursor().
+- G4VSceneHandler.cc:
+  - Enforce the above policy in G4VSceneHandler::GetMarkerSize().
+  - Remove statements such as dots.SetSize(G4VMarker::screen,1.), which
+    now have no effect for a polymarker of dots.
+- G4VViewer:
+  - Follow change in G4ViewParameters: GetZoomToCursor() to IsZoomToCursor().
+
+## 2025-08-23 Andrea Barresi (visman-V11-03-16)
+- G4VViewer.cc:
+  - Changed Shift key modifier behavior to enable ZoomToCursor while pressed.
+
+## 2025-08-22 John Allison (visman-V11-03-15)
+- G4VisManager.cc:
+  - EndDraw() and EndDraw2D(): Refresh view at end of drawing.
+
+## 2025-08-04 John Allison (visman-V11-03-14)
+- G4VisExecutive.icc:
+  - Introduce nickname/alias TSGZB for appropriate driver by priority.
+- G4VisCommands.cc:
+  - Always print available drivers when using /vis/list.
+
+## 2025-06-18 Andrea Barresi (visman-V11-03-13)
+- G4ViewParameters:
+  - Added zoomToCursor parameter to control the zoom behavior of the mouse wheel.
+- G4VisCommandsViewerSet:
+  - Added command /vis/viewer/set/zoomToCursor to set the zoomToCursor VP
+- G4VViewer:
+  - Added ZoomFromMouseWheel function to control mouse wheel behavior
+  - Added virtual methods to get window size, render area size and scene near width
+  - Implemented ZoomToCursor algorithm to zoom toward the mouse cursor.
+  - General optimization of zoom behavior with mouse wheel. Added Shift key modifier 
+    to change zoom mode in perspective projection from Dolly (default) to zoomFactor.
+
 ## 2025-06-08 John Allison (visman-V11-03-12)
 - G4ViewParameters.cc:
   - Fix for bug report 2460.

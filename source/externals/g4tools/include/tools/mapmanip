@@ -37,10 +37,6 @@ inline void find_and_remove_value(std::map<K,V*>& a_m,V* a_value){
   }
 }
 
-#ifdef TOOLS_DEPRECATED
-template <class K,class V> inline void clear(std::map<K,V*>& a_m){safe_clear<K,V>(a_m);}
-#endif
-
 template <class K,class V>
 inline bool delete_key(std::map<K,V*>& a_m,const K& a_key){
   typedef typename std::map<K,V*>::iterator it_t;
@@ -49,53 +45,6 @@ inline bool delete_key(std::map<K,V*>& a_m,const K& a_key){
   V* obj = (*it).second;
   a_m.erase(it);
   delete obj;
-  return true;
-}
-
-template <class K,class V>
-inline void raw_clear(std::map<K,V*>& a_m){
-  typedef typename std::map<K,V*>::iterator it_t;
-  for(it_t it=a_m.begin();it!=a_m.end();++it) delete (*it).second;
-  a_m.clear();
-}
-
-template <class K,class V>
-inline void copy(std::map<K,V*>& a_to,const std::map<K,V*>& a_from){
-  raw_clear<K,V>(a_to);
-  typedef typename std::map<K,V*>::const_iterator it_t;
-  for(it_t it=a_from.begin();it!=a_from.end();++it) {
-    a_to[(*it).first] = (*it).second->copy();
-  }
-}
-
-template <class K,class V>
-inline bool add_unique(std::map<K,V*>& a_map,const K& a_key,V* a_value,bool a_delete) {
-  typedef typename std::map<K,V*>::iterator it_t;
-  it_t it = a_map.find(a_key);
-  if(it==a_map.end()) {a_map[a_key] = a_value;return false;} //false=was not found.
-  if(a_delete) {
-    V* entry  = (*it).second;
-    a_map.erase(it);
-    delete entry;
-  }
-  a_map[a_key] = a_value;
-  return true;
-}
-
-template <class K,class V>
-inline bool find(const std::map<K,V>& a_map,const K& a_key,V& a_value) {
-  typedef typename std::map<K,V>::const_iterator it_t;
-  it_t it = a_map.find(a_key);
-  if(it==a_map.end()) {a_value = V();return false;}
-  a_value = (*it).second;
-  return true;
-}
-
-template <class K,class V>
-inline bool is_key(const std::map<K,V>& a_map,const K& a_key) {
-  typedef typename std::map<K,V>::const_iterator it_t;
-  it_t it = a_map.find(a_key);
-  if(it==a_map.end()) return false;
   return true;
 }
 

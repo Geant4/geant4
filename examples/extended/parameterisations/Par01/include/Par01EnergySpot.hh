@@ -23,11 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file Par01/include/Par01EnergySpot.hh
+/// \file Par01EnergySpot.hh
 /// \brief Definition of the Par01EnergySpot class
-//
-//
-//
+
 #ifndef Par01EnergySpot_h
 #define Par01EnergySpot_h
 

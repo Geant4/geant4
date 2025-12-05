@@ -13,6 +13,7 @@ typedef double ZZ;
 class point {
 public:
   point():x(0),y(0),z(0){}
+  point(const ZPos& a_x,const ZPos& a_y,const ZZ& a_z):x(a_x),y(a_y),z(a_z){}
 public:
   point(const point& a_from):x(a_from.x),y(a_from.y),z(a_from.z){}
   point& operator=(const point& a_from){

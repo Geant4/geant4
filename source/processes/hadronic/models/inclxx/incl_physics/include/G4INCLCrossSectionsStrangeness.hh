@@ -90,7 +90,7 @@ namespace G4INCL {
       
       virtual G4double NDeltaToNNKKb(Particle const * const p1, Particle const * const p2);
       
-      /// \brief Nucleon-Pion to Stange particles cross sections
+      /// \brief Nucleon-Pion to Strange particles cross sections
       virtual G4double NpiToLK(Particle const * const p1, Particle const * const p2);
 		  G4double p_pimToLK0(Particle const * const p1, Particle const * const p2);
       virtual G4double NpiToSK(Particle const * const p1, Particle const * const p2);
@@ -126,6 +126,15 @@ namespace G4INCL {
 		  virtual G4double p_kmToL_pp_pm(Particle const * const p1, Particle const * const p2);
       virtual G4double NKbToNKbpi(Particle const * const p1, Particle const * const p2);
       virtual G4double NKbToNKb2pi(Particle const * const p1, Particle const * const p2);
+    
+      /// \brief eta-Nucleon cross sections
+      virtual G4double etaNToLK(Particle const * const p1, Particle const * const p2);
+      virtual G4double etaNToSK(Particle const * const p1, Particle const * const p2);
+      
+      /// \brief Omega-Nucleon cross sections
+      virtual G4double omegaNToLK(Particle const * const p1, Particle const * const p2);
+      virtual G4double omegaNToSK(Particle const * const p1, Particle const * const p2);
+      virtual G4double omegaNToPiPiN(Particle const * const p1, Particle const * const p2);
    
   protected:
       /// \brief Maximum number of outgoing pions in NN collisions

@@ -23,19 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file medical/dna/range/include/PhysicsListMessenger.hh
+/// \file PhysicsListMessenger.hh
 /// \brief Definition of the PhysicsListMessenger class
-//
-// $Id: PhysicsListMessenger.hh 82461 2014-06-23 10:44:06Z gcosmo $
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef PhysicsListMessenger_h
 #define PhysicsListMessenger_h 1
 
 #include "G4UImessenger.hh"
 #include "globals.hh"
+#include <memory>
 
 class PhysicsList;
 class G4UIdirectory;
@@ -43,19 +39,15 @@ class G4UIcmdWithAString;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class PhysicsListMessenger : public G4UImessenger
-{
-  public:
-    PhysicsListMessenger(PhysicsList*);
-    ~PhysicsListMessenger();
-
-    virtual void SetNewValue(G4UIcommand*, G4String);
-
-  private:
-    PhysicsList* fPhysicsList;
-
-    G4UIdirectory* fPhysDir;
-    G4UIcmdWithAString* fListCmd;
+class PhysicsListMessenger final : public G4UImessenger {
+public:
+  explicit PhysicsListMessenger(PhysicsList *);
+  ~PhysicsListMessenger() override;
+  void SetNewValue(G4UIcommand *, G4String) override;
+private:
+  PhysicsList *fPhysicsList = nullptr;
+  std::unique_ptr<G4UIdirectory> fPhysDir;
+  std::unique_ptr<G4UIcmdWithAString> fListCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

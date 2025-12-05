@@ -421,7 +421,7 @@ Function1dForm &Function1dForm::operator=( Function1dForm const &a_rhs ) {
  * @param a_scaleFactor     [in]    A factor applied to each evaluation before it is added to *a_results*. 
  ***********************************************************************************************************/
 
-void Function1dForm::mapToXsAndAdd( LUPI_maybeUnused int a_offset, LUPI_maybeUnused std::vector<double> const &a_Xs, LUPI_maybeUnused std::vector<double> &a_results, LUPI_maybeUnused double a_scaleFactor ) const {
+void Function1dForm::mapToXsAndAdd( LUPI_maybeUnused std::size_t a_offset, LUPI_maybeUnused std::vector<double> const &a_Xs, LUPI_maybeUnused std::vector<double> &a_results, LUPI_maybeUnused double a_scaleFactor ) const {
 
     throw Exception( "Function1dForm::mapToXsAndAdd: function " + moniker( ) + " not implemented." );
 }

@@ -18,6 +18,7 @@ geant4_add_module(G4magneticfield
     G4CachedMagneticField.hh
     G4CashKarpRKF45.hh
     G4ChargeState.hh
+    G4ChargeState.icc
     G4ChordFinder.hh
     G4ChordFinder.icc
     G4ChordFinderDelegate.hh
@@ -48,6 +49,7 @@ geant4_add_module(G4magneticfield
     G4FieldManager.icc
     G4FieldManagerStore.hh
     G4FieldParameters.hh
+    G4FieldParameters.icc
     G4FieldParametersMessenger.hh
     G4FieldSetup.hh
     G4FieldSetupMessenger.hh
@@ -132,7 +134,9 @@ geant4_add_module(G4magneticfield
     G4QSS_CustomStats.hh
     G4qss_misc.hh
     G4QSSMessenger.hh
+    G4QSSParameters.hh
     G4QSSubstepStruct.hh
+    G4QSSubstepStruct.icc
   SOURCES
     G4BFieldIntegrationDriver.cc
     G4BogackiShampine23.cc
@@ -215,6 +219,7 @@ geant4_add_module(G4magneticfield
     G4QSStepper.cc
     G4QSS3.cc
     G4QSSMessenger.cc
+    G4QSSParameters.cc
 )
 
 geant4_module_link_libraries(G4magneticfield PUBLIC G4globman G4intercoms

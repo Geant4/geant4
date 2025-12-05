@@ -23,18 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// CaTS (Calorimetry and Tracking Simulation)
 //
-
-// ********************************************************************
+// Authors: Hans Wenzel and Soon Yung Jun
+//          (Fermi National Accelerator Laboratory)
 //
-//  CaTS (Calorimetry and Tracking Simulation)
-//
-//  Authors : Hans Wenzel
-//            Soon Yung Jun
-//            (Fermi National Accelerator Laboratory)
-//
-// History
-//   October 18th, 2021 : first implementation
+// History: October 18th, 2021 : first implementation
 //
 // ********************************************************************
 //

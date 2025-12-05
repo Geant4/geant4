@@ -25,11 +25,6 @@
 //
 /// \file BiasingOperation.cc
 /// \brief Implementation of the BiasingOperation class
-//
-//
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "BiasingOperation.hh"
 

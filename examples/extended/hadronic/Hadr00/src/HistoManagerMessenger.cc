@@ -23,12 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file hadronic/Hadr00/src/HistoManagerMessenger.cc
+/// \file HistoManagerMessenger.cc
 /// \brief Implementation of the HistoManagerMessenger class
-//
-//
-//
-//
+
 /////////////////////////////////////////////////////////////////////////
 //
 // HistoManagerMessenger

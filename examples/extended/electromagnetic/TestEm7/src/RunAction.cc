@@ -23,12 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm7/src/RunAction.cc
+/// \file RunAction.cc
 /// \brief Implementation of the RunAction class
-//
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "RunAction.hh"
 
@@ -198,8 +194,6 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
 void RunAction::BookHisto()
 {
   // Create or get analysis manager
-  // The choice of analysis technology is done via selection of a namespace
-  // in HistoManager.hh
   fAnalysisManager = G4AnalysisManager::Instance();
   fAnalysisManager->SetDefaultFileType("root");
   fAnalysisManager->SetFileName("testem7");

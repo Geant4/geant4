@@ -23,11 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file optical/wls/src/WLSEventAction.cc
+/// \file WLSEventAction.cc
 /// \brief Implementation of the WLSEventAction class
-//
-//
 
 #include "WLSEventAction.hh"
 

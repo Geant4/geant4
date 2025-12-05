@@ -27,11 +27,11 @@
 //
 // Class description:
 //
-//   Definition of a utility class for quickly deciding if a point
-//   is clearly outside a polyhedra or polycone or deciding if
-//   a trajectory is clearly going to miss those shapes.
+// A utility class for quickly deciding if a point is clearly outside a
+// polyhedra or polycone or deciding if a trajectory is clearly going to
+// miss those shapes.
 
-// Author: David C. Williams (davidw@scipp.ucsc.edu)
+// Author: David C. Williams (UCSC), 1998 - Created
 // --------------------------------------------------------------------
 #ifndef G4ENCLOSINGCYLINDER_HH
 #define G4ENCLOSINGCYLINDER_HH
@@ -42,29 +42,52 @@
 
 class G4ReduciblePolygon;
 
+/**
+ * @brief G4EnclosingCylinder is a utility class defining an envelope for
+ * quickly deciding if a point is clearly outside a polyhedra or polycone or
+ * deciding if a trajectory is clearly going to miss those shapes.
+ */
+
 class G4EnclosingCylinder
 {
   public:
 
+    /**
+     * Constructs the envelope, given its parameters.
+     *  @param[in] rz Pointer to the polygon structure.
+     *  @param[in] phiIsOpen Boolean flag to indicate if it is a section in Phi.
+     *  @param[in] startPhi Starting Phi angle.
+     *  @param[in] totalPhi Total Phi angle of the section.
+     */
     G4EnclosingCylinder( const G4ReduciblePolygon* rz,
                                G4bool phiIsOpen, 
                                G4double startPhi, G4double totalPhi );
+
+    /**
+     * Default Destructor.
+     */
     ~G4EnclosingCylinder() = default;
   
+    /**
+     * Decides very rapidly if the point 'p' is outside the cylinder.
+     *  @returns If not certain to be outside, return false.
+     */
     G4bool MustBeOutside( const G4ThreeVector& p ) const;
-      // Decide very rapidly if the point is outside the cylinder.
-      // If one is not certain, return false.
 
+    /**
+     * Decides very rapidly if the trajectory is going to miss the cylinder.
+     *  @returns If not certain to miss, return false.
+     */
     G4bool ShouldMiss( const G4ThreeVector& p, const G4ThreeVector& v ) const;
-      // Decide very rapidly if the trajectory is going to miss the cylinder.
-      // If one is not sure, return false.
 
+    /**
+     * Fake default constructor for usage restricted to direct object
+     * persistency for clients requiring preallocation of memory for
+     * persistifiable objects.
+     */
     G4EnclosingCylinder(__void__&);
-      // Fake default constructor for usage restricted to direct object
-      // persistency for clients requiring preallocation of memory for
-      // persistifiable objects.
 
-  protected:
+  private:
 
     G4double radius;    // radius of our cylinder
     G4double zLo, zHi;  // z extent

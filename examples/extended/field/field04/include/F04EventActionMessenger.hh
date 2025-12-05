@@ -23,10 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file field/field04/include/F04EventActionMessenger.hh
+/// \file F04EventActionMessenger.hh
 /// \brief Definition of the F04EventActionMessenger class
-//
 
 #ifndef F04EventActionMessenger_h
 #define F04EventActionMessenger_h 1

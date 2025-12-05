@@ -25,7 +25,7 @@
 //
 // G4SimpleRunge implementation
 //
-// Created: W.Wander <wwc@mit.edu>, 12/09/1997
+// Author: W.Wander (MIT), 12.09.1997
 // -------------------------------------------------------------------
 
 #include "G4SimpleRunge.hh"
@@ -65,7 +65,7 @@ void
 G4SimpleRunge::DumbStepper( const G4double  yIn[],
                             const G4double  dydx[],
                                   G4double  h,
-                                   G4double  yOut[] )
+                                  G4double  yOut[] )
 {
   // Initialise time to t0, needed when it is not updated by the integration.
   //

@@ -59,6 +59,19 @@ namespace G4INCL {
     // and actually bring the particle to the surface of the nucleus
     return theCoulombNoneSlave.bringToSurface(p,n);
   }
+ 
+  ParticleEntryAvatar *CoulombNonRelativistic::bringToSurfaceAbar(Particle * const p, Nucleus * const n) const {
+    // No distortion for neutral particles
+    if(p->getZ()!=0) {
+      const G4bool success = coulombDeviation(p, n);
+      if(!success) // transparent
+        return NULL;
+    }
+
+    // Rely on the CoulombNone slave to compute the straight-line intersection
+    // and actually bring the particle to the surface of the nucleus
+    return theCoulombNoneSlave.bringToSurfaceAbar(p,n);
+  }
 
   IAvatarList CoulombNonRelativistic::bringToSurface(Cluster * const c, Nucleus * const n) const {
     // Neutral clusters?!
@@ -125,8 +138,12 @@ namespace G4INCL {
                                                     Nucleus const * const n) const {
     const G4double theMinimumDistance = minimumDistance(p, kinE, n);
     G4double rMax = n->getUniverseRadius();
-    if(p.theType == Composite)
+    if(p.theType == Composite){
       rMax +=  2.*ParticleTable::getLargestNuclearRadius(p.theA, p.theZ);
+    }
+    if (p.theType == antiComposite){
+      rMax += 2.*ParticleTable::getLargestNuclearRadius(-(p.theA), -(p.theZ));
+    }
     const G4double theMaxImpactParameterSquared = rMax*(rMax-theMinimumDistance);
     if(theMaxImpactParameterSquared<=0.)
       return 0.;
@@ -194,12 +211,16 @@ namespace G4INCL {
   }
 
   G4double CoulombNonRelativistic::getCoulombRadius(ParticleSpecies const &p, Nucleus const * const n) const {
-    if(p.theType == Composite) {
-      const G4int Zp = p.theZ;
-      const G4int Ap = p.theA;
+    if(p.theType == Composite || p.theType == antiComposite) {
+      G4int Zp = p.theZ;
+      G4int Ap = p.theA;
       const G4int Zt = n->getZ();
       const G4int At = n->getA();
       G4double barr, radius = 0.;
+      if(p.theType == antiComposite){
+        Zp = -Zp;
+        Ap = -Ap;
+      }
       if(Zp==1 && Ap==2) { // d
         barr = 0.2565*Math::pow23((G4double)At)-0.78;
         radius = PhysicalConstants::eSquared*Zp*Zt/barr - 2.5;

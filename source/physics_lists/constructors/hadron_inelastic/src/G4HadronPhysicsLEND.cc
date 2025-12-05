@@ -40,8 +40,8 @@
 #include "G4NeutronLENDBuilder.hh"
 
 #include "G4PhysicsListHelper.hh"
-#include "G4LENDorBERTModel.hh"
-//#include "G4LENDCombinedModel.hh"
+//#include "G4LENDorBERTModel.hh"
+#include "G4LENDCombinedModel.hh"
 #include "G4LENDCombinedCrossSection.hh"
 
 #include "G4CrossSectionDataSetRegistry.hh"
@@ -113,10 +113,8 @@ void G4HadronPhysicsLEND::ConstructProcess()
     }
 
     //....add LEND photonuclear models
-    auto* theGammaReactionLowE = new G4LENDorBERTModel( G4Gamma::Gamma() ); //  checks if LEND has data for specified reaction
-                                                                            //  (note uses G4LENDCombinedModel)
-                                                                            //  if not, uses Bertini cascade
-    //auto* theGammaReactionLowE = new G4LENDCombinedModel( G4Gamma::Gamma() );  // uses LEND only
+    //auto* theGammaReactionLowE = new G4LENDorBERTModel( G4Gamma::Gamma() );
+    auto* theGammaReactionLowE = new G4LENDCombinedModel( G4Gamma::Gamma() ); // use combined LEND models
     theGammaReactionLowE->SetMaxEnergy(maxLEND_Energy);
     theGammaReactionLowE->DumpLENDTargetInfo(true);
     gamma_inelastic->RegisterMe(theGammaReactionLowE);

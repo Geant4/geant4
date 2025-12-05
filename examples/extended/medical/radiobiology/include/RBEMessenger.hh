@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file radiobiology/include/RBEMessenger.hh
+/// \file RBEMessenger.hh
 /// \brief Definition of the RadioBio::RBEMessenger class
 
 #ifndef RadiobiologyRBEMessenger_h

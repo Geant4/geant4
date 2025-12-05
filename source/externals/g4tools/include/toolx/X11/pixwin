@@ -6,7 +6,6 @@
 
 #include "colors"
 #include <tools/sg/zb_viewer>
-//#include <tools/sys/atime>
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h> //XPutPixel
@@ -53,7 +52,6 @@ public:
     if(!m_GC) return;
     if(!m_image) alloc_XImage(a_ww,a_wh);
     if(!m_image) return;
-  //tools::atime start = tools::atime::now();
     const unsigned int* pos = (const unsigned int*)a_rgbas;
     unsigned int row,col;
     toolx::X11::Pixel pixel;
@@ -63,9 +61,7 @@ public:
       pos++;
       XPutPixel(m_image,col,row,pixel);
     }}
-  //::printf("debug : map::colors %lu, pixels %lu\n",m_colors.size(),m_pixels.size());
     ::XPutImage(m_display,a_win,m_GC,m_image,0,0,0,0,a_ww,a_wh);
-  //m_out << "pu_buffer : XImage " << tools::atime::elapsed(start) << std::endl;
   }
   void set_size(unsigned int a_ww,unsigned int a_wh) {
     free_XImage();

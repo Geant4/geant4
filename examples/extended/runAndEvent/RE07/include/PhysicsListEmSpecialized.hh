@@ -23,12 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file include/PhysicsListEmSpecialized.hh
+/// \file PhysicsListEmSpecialized.hh
 /// \brief Definition of the PhysicsListEmSpecialized class
-//
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef PhysicsListEmSpecialized_h
 #define PhysicsListEmSpecialized_h 1

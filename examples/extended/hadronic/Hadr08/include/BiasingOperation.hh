@@ -25,11 +25,6 @@
 //
 /// \file BiasingOperation.hh
 /// \brief Definition of the BiasingOperation class
-//
-//
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef BiasingOperation_hh
 #define BiasingOperation_hh 1

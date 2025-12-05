@@ -42,10 +42,6 @@ namespace
   G4Mutex ImportanceMutex = G4MUTEX_INITIALIZER;
 }
 
-G4ImportanceAlgorithm::G4ImportanceAlgorithm() = default;
-
-G4ImportanceAlgorithm::~G4ImportanceAlgorithm() = default;
-
 G4Nsplit_Weight
 G4ImportanceAlgorithm::Calculate(G4double ipre,
                                  G4double ipost,

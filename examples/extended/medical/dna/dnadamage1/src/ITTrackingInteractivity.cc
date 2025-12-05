@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file ITTrackingInteractivity.hh
+/// \file ITTrackingInteractivity.cc
 /// \brief Implementation of the ITTrackingInteractivity class
 
 #include "ITTrackingInteractivity.hh"
@@ -45,7 +44,7 @@ class G4Trajectory_Lock
     friend class ITTrackingInteractivity;
     G4Trajectory_Lock() : fpTrajectory(0) { ; }
 
-    ~G4Trajectory_Lock() { ; }
+    ~G4Trajectory_Lock() = default;
 
     G4VTrajectory* fpTrajectory;
 };
@@ -56,10 +55,6 @@ ITTrackingInteractivity::ITTrackingInteractivity()
   fpUserTrackingAction.reset(
     G4EventManager::GetEventManager()->GetTrackingManager()->GetUserTrackingAction());
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-ITTrackingInteractivity::~ITTrackingInteractivity() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

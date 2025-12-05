@@ -37,7 +37,6 @@ class G4PairingCorrection;
 class G4VCoulombBarrier;
 class G4LevelManager;
 class G4NuclearLevelData;
-class G4HadronNucleonXsc;
 class G4InterfaceToXS;
 class G4ParticleDefinition;
 class G4Pow;
@@ -80,7 +79,6 @@ private:
   const G4PairingCorrection* pairingCorrection;
   const G4LevelManager* lManagerEvap{nullptr};
   const G4LevelManager* lManagerRes{nullptr};
-  G4HadronNucleonXsc* fHNXsc{nullptr};
   G4InterfaceToXS* fXSection{nullptr};
   G4Pow* g4pow;
   const G4ParticleDefinition* fProton;
@@ -95,7 +93,6 @@ private:
   G4double fEvapExc{0.0}; // excitation energy of the evaporated fragment
   G4double fResExc{0.0};  // excitation energy of the residual fragment
   G4double bCoulomb{0.0};
-  G4double fLimEXS{0.0};
   G4double fDeltaEvap{0.0};
   G4double fE0{0.0};
   G4double fE1{0.0};
@@ -105,6 +102,7 @@ private:
   G4double delta1{0.0};
   G4double recentXS{0.0};
   G4double fEnergyLimitXS{0.0};
+  G4double xsfactor{1.0};
   G4double fTolerance;
   G4double fCoeff;
 

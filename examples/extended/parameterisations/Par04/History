@@ -5,6 +5,31 @@ which **must** added in reverse chronological order (newest at the top).
 It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
+
+## 2025-12-02 Gabriele Cosmo (expar04-V11-03-05)
+- Bump scikit-learn from 1.1.1 to 1.5.0
+  - Addresses security vulnerabilities tagged by GitHub's dependabot.
+
+## 2025-11-10 Gabriele Cosmo (expar04-V11-03-04)
+- Fixed coding conventions for tabs in Par04Hit source.
+
+## 2025-10-29 Ben Morgan (expar04-V11-03-03)
+- Apply [GitHub PR 93](https://github.com/Geant4/geant4/pull/93)
+  - Bump Keras from 2.9.0 to 3.12.0
+  - Addresses security vulnerabilities tagged by GitHub's dependabot.
+
+## 2025-07-24 I. Hrivnacova (expar04-V11-03-02)
+- Migration of existing README.md to Doxygen:
+  - Replaced .README.txt with README.md and added existing README.md files
+    as subpages
+  - Removed .README.txt and README files.
+
+## 2025-06-26 Ben Morgan (expar04-V11-03-01)
+- Apply following GitHub PRs from dependabot to update requirements:
+  - Bump idna from 2.10 to 3.7 [GitHub PR 89](https://github.com/Geant4/geant4/pull/89)
+  - Bump keras from 2.9.0 to 3.9.0 [GitHub PR 90](https://github.com/Geant4/geant4/pull/90)
+  - Bump protobuf from 3.19 to 4.25.8 [GitHub PR 91](https://github.com/Geant4/geant4/pull/91)
+
 ## 2025-05-27 Anna Zaborowska, Piyush Raikwar (expar04-V11-03-00)
 - Update of VAE training with the new translation script and condor scripts
 - Introduction of the CaloDiT pre-trained model which offers far greater accuracy

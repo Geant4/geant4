@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file B5/src/RunAction.cc
+/// \file RunAction.cc
 /// \brief Implementation of the B5::RunAction class
 
 #include "RunAction.hh"

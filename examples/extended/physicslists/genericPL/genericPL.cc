@@ -25,9 +25,7 @@
 //
 /// \file genericPL.cc
 /// \brief Main program of the physicslists/genericPL example
-//
-//
-//
+
 // -------------------------------------------------------------
 //      genericPL
 //

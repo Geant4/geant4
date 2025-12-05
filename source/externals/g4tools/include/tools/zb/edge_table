@@ -96,6 +96,7 @@ inline void CreateETandAET (
 ,EdgeTableEntry* AET
 ,EdgeTableEntry* pETEs
 ,ScanLineListBlock* pSLLBlock
+,int a_pts_xmin,int a_pts_ymin,int a_pts_ymax
 )
 /***************************************************************************/
 /*
@@ -138,14 +139,14 @@ inline void CreateETandAET (
     AET->next = (EdgeTableEntry *)NULL;
     AET->back = (EdgeTableEntry *)NULL;
     AET->nextWETE = (EdgeTableEntry *)NULL;
-    AET->bres.minor_axis = SMALL_COORDINATE;
+    AET->bres.minor_axis = a_pts_xmin;
 
     /*
      *  initialize the Edge Table.
      */
     ET->scanlines.next = (ScanLineList *)NULL;
-    ET->ymax = SMALL_COORDINATE;
-    ET->ymin = LARGE_COORDINATE;
+    ET->ymax = a_pts_ymin;
+    ET->ymin = a_pts_ymax;
     pSLLBlock->next = (ScanLineListBlock *)NULL;
 
     PrevPt = &pts[count-1];

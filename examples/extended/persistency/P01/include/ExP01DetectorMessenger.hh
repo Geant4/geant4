@@ -23,13 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file persistency/P01/include/ExP01DetectorMessenger.hh
+/// \file ExP01DetectorMessenger.hh
 /// \brief Definition of the ExP01DetectorMessenger class
-//
-//
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef ExP01DetectorMessenger_h
 #define ExP01DetectorMessenger_h 1

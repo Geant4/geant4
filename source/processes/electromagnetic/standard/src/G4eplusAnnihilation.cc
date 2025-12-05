@@ -65,6 +65,13 @@
 #include "G4PolarizedOrePowellAtRestModel.hh"
 #include "G4EmParameters.hh"
 #include "G4PhysicsModelCatalog.hh"
+#include "G4Log.hh"
+
+namespace
+{
+  constexpr G4double fTauPara = 0.12*CLHEP::ns;
+  constexpr G4double fTauOrto = 142.*CLHEP::ns;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -168,11 +175,14 @@ G4VParticleChange* G4eplusAnnihilation::AtRestDoIt(const G4Track& track,
   // sample secondaries
   secParticles.clear();
   G4double edep = 0.0;
+  G4double ltime;
   if (nullptr != f3GammaAtRestModel &&
       G4UniformRand() < currentMaterial->GetIonisation()->GetOrtoPositroniumFraction()) {
     f3GammaAtRestModel->SampleSecondaries(secParticles, edep, couple->GetMaterial());
+    ltime = fTauOrto;
   } else {
     f2GammaAtRestModel->SampleSecondaries(secParticles, edep, couple->GetMaterial());
+    ltime = fTauPara;
   }
 
   // define new weight for primary and secondaries
@@ -207,7 +217,7 @@ G4VParticleChange* G4eplusAnnihilation::AtRestDoIt(const G4Track& track,
   }
 
   if (num > 0) {
-    const G4double time = track.GetGlobalTime();
+    const G4double time = track.GetGlobalTime() - ltime*G4Log(G4UniformRand());
     const G4ThreeVector& pos = track.GetPosition();
     auto touch = track.GetTouchableHandle();
     for (std::size_t i=0; i<num; ++i) {

@@ -23,11 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file persistency/gdml/G02/include/G02DetectorConstruction.hh
+/// \file G02DetectorConstruction.hh
 /// \brief Definition of the G02DetectorConstruction class
-//
-//
-//
+
 // Class G02DetectorConstruction
 //
 // A detector construction class loading the geometry from GDML files.

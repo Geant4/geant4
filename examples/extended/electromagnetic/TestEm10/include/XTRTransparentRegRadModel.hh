@@ -23,13 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file electromagnetic/TestEm10/include/XTRTransparentRegRadModel.hh
+/// \file XTRTransparentRegRadModel.hh
 /// \brief Definition of the XTRTransparentRegRadModel class
-//
-//
-///////////////////////////////////////////////////////////////////////////
-//
+
 // Process describing a radiator of X-ray transition radiation.
 // Thicknesses of plates and gas gaps are fixed.
 // We suppose that:

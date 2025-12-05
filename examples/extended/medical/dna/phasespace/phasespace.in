@@ -1,0 +1,50 @@
+# Verbosity
+/tracking/verbose 0
+/run/verbose 2
+/control/verbose 2
+#
+# MT
+/run/numberOfThreads 15
+#
+# Material
+/psp/setMat G4_WATER
+# or alternatively
+#/psp/setMatDens G4_WATER_MODIFIED 1.200 g/cm3
+#
+# Size of World volume
+/psp/setWorldSize 100 um
+#
+# Radius of scoring sphere
+/psp/setScorerRadius 10 um
+#
+# Atomic deexcitation
+/process/em/fluo true
+/process/em/auger true
+/process/em/augerCascade true
+/process/em/deexcitationIgnoreCut true
+#
+# Run initialization
+/run/initialize
+#
+# Kill particles inside scorer 
+/step/killInsideScorer 1
+#
+# Visualization
+#/control/execute vis.mac
+#
+# Incident particle type
+/gps/particle proton
+#
+# Incident particle energy
+/gps/ene/type Mono
+/gps/energy 2 MeV
+#
+# Incident particle position in World
+/gps/pos/type Point
+/gps/pos/centre 0. 0. -12. um
+#
+# Incident particle direction
+/gps/direction 0 0 1
+#
+# Beam on
+/run/beamOn 1000

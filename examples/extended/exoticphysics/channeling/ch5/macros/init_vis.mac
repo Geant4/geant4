@@ -1,0 +1,13 @@
+#Macro for the initialization in interactive mode
+
+#Geometry setting
+/control/execute macros/geom.mac
+
+#Initialize kernel
+/run/initialize
+
+#to see the Couples CutsVsRegion
+/run/verbose 1  
+
+#Visualization setting
+/control/execute macros/vis.mac

@@ -30,50 +30,51 @@
 //
 
 #include "G4DeexPrecoUtility.hh"
+#include "G4SystemOfUnits.hh"
+
+namespace
+{
+  const G4double elim  = 0.2*CLHEP::MeV; // low-energy limit for neutrons
+  const G4double alpha = 2.0; // extra factor for neutrons
+  const G4double beta  = 1.0; // extra factor for the Coulomb barrier
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4DeexPrecoUtility::CorrectionFactor(const G4int index, const G4int Z,
 					      const G4double A13,
 					      const G4double CB,
-					      const G4double eKin,
-					      const G4double eKin0)
+					      const G4double ekin)
 {
-  G4double res = 1.0;
-  
+  G4double e = std::max(ekin, elim);
   G4double x;
   switch (index) {
   case 0:
-    x = (2.12*A13 - 0.05)/(2.2*A13 + 0.76);
-    res = (eKin + x)/(eKin0 + x);
+    x = alpha*(0.76 + 2.2/A13 + (2.12/(A13*A13) - 0.05)*CLHEP::MeV/e);
     break;
 
   case 1:
-    x = ProtonKValue(Z);
-    res = std::max(eKin - x*CB, 0.0)/(eKin0 - x*CB);
+    x = (1. + ProtonCValue(Z))*(1. - beta*ProtonKValue(Z)*CB/e);
     break;
 
   case 2:
-    x = ProtonKValue(Z) + 0.06;
-    res = std::max(eKin - x*CB, 0.0)/(eKin0 - x*CB);
+    x = (1. + ProtonCValue(Z)*0.5)*(1. - beta*(ProtonKValue(Z) + 0.06)*CB/e);
     break;
 
   case 3:
-    x = ProtonKValue(Z) + 0.12;
-    res = std::max(eKin - x*CB, 0.0)/(eKin0 - x*CB);
+    x = (1. + ProtonCValue(Z)/3.)*(1. - beta*(ProtonKValue(Z) + 0.12)*CB/e);
     break;
 
   case 4:
-    x = AlphaKValue(Z) + 0.12;
-    res = std::max(eKin - x*CB, 0.0)/(eKin0 - x*CB);
+    x = (1. + AlphaCValue(Z)*4./3.)*(1. - beta*(AlphaKValue(Z) - 0.06)*CB/e);
     break;
 
   default:
-    x = AlphaKValue(Z);
-    res = std::max(eKin - x*CB, 0.0)/(eKin0 - x*CB);
+    x = (1. + AlphaCValue(Z))*(1. - beta*AlphaKValue(Z)*CB/e);
     break;
   }
-  return res;
+  x = std::max(x, 0.0);
+  return x;
 }
 
 G4double G4DeexPrecoUtility::ProtonKValue(const G4int Z)
@@ -120,6 +121,39 @@ G4double G4DeexPrecoUtility::AlphaCValue(const G4int Z)
   else if (70 >= Z) { res = 0.08 + (Z - 50)*0.001; }
   else { res = 0.06; }
   return res;
+}
+
+G4double
+G4DeexPrecoUtility::LevelDensity(const G4int Z, const G4int A, const G4int idx)
+{
+  G4double a = 0.05*A;
+  G4double x = (A - Z)*1.3/(G4double)A; 
+  switch (idx) {
+  case 0:
+    a *= (1. - x/A)*(1. - x/A);
+    break;
+
+  case 1:
+    a *= (1. + x/A)*(1. + x/A);
+    break;
+
+  case 2:
+    a *= (1. - 0.5/A)*(1. - 0.5/A);
+    break;
+
+  case 3:
+    a *= (1. - (1. + x)/A)*(1. - (1. + x)/A);
+    break;
+
+  case 4:
+    a *= (1. - (1. - x)/A)*(1. - (1. - x)/A);
+    break;
+
+  default:
+    a *= (1. - 1.5/A)*(1. - 1.5/A);
+    break;
+  }
+  return a;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

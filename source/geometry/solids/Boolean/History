@@ -6,6 +6,20 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 ------------------------------------------------------------------------------
 
+## 2025-11-12 Gabriele Cosmo (geom-bool-V11-03-02)
+- Fixed potential thread-safety issue in GetCubicVolume() and GetSurfaceArea()
+  on Boolean solids in case those functions are called from worker threads.
+
+## 2025-09-15 Gabriele Cosmo (geom-bool-V11-03-01)
+- Reorganised and enriched comments in headers to follow Doxygen style.
+- Removed declared but not implemented methods in G4MultiUnion and moved
+  inline implementations to .icc file.
+- Removed declared but not implemented method in G4ScaledSolid.
+
+## 2025-08-22 Gabriele Cosmo (geom-bool-V11-03-00)
+- Applied clang-tidy fixes: basic, readability-braces-around-statements,
+  readability-else-after-return.
+
 ## 2025-03-20 Evgueni Tcherniaev (geom-bool-V11-03-01)
 - G4MultiUnion: some optimisation
   o GetSurfaceArea(): used G4QuickRand()

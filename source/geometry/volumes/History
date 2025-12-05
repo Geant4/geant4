@@ -6,6 +6,13 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2025-10-28 Gabriele Cosmo (geomvol-V11-03-04)
+- Moved default destructor definitions to headers.
+- Minor code formatting in headers.
+
+## 2025-08-20 Gabriele Cosmo (geomvol-V11-03-03)
+- Applied clang-tidy fixes: modernize-loop-convert.
+
 ## 2025-06-10 Seth R Johnson (geomvol-V11-03-02)
 - Only delete surfaces if the geometry is not closed
 

@@ -25,7 +25,7 @@
 //
 // G4LineSection implementation
 //
-// Created: J.Apostolakis, 1999
+// Author: John Apostolakis (CERN), 1999
 // --------------------------------------------------------------------
 
 #include "G4LineSection.hh" 

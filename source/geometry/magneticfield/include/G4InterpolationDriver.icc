@@ -25,7 +25,7 @@
 //
 // G4InterpolationDriver inline implementation
 //
-// Created: D.Sorokin, 2018
+// Author: Dmitry Sorokin (CERN), 26.09.2018
 // --------------------------------------------------------------------
 
 #include "G4Exception.hh"
@@ -41,14 +41,16 @@ G4InterpolationDriver<T, StepperCachesDchord>::G4InterpolationDriver(
   G4double hminimum, T* pStepper, G4int numComponents, G4int statisticsVerbose)
   : G4RKIntegrationDriver<T>(pStepper), fMinimumStep(hminimum), fVerboseLevel(statisticsVerbose)
 {
-  if (numComponents != Base::GetStepper()->GetNumberOfVariables()) {
+  if (numComponents != Base::GetStepper()->GetNumberOfVariables())
+  {
     std::ostringstream message;
     message << "Driver's number of integrated components " << numComponents
             << " != Stepper's number of components " << pStepper->GetNumberOfVariables();
     G4Exception("G4InterpolationDriver", "GeomField0002", FatalException, message);
   }
 
-  for (G4int i = 0; i < Base::GetMaxNoSteps(); ++i) {
+  for (G4int i = 0; i < Base::GetMaxNoSteps(); ++i)
+  {
     fSteppers.push_back(
       {std::unique_ptr<T>(
          new T(pStepper->GetSpecificEquation(),  // Interpolating stepper must have this!
@@ -63,7 +65,8 @@ template <class T, G4bool StepperCachesDchord>
 G4InterpolationDriver<T, StepperCachesDchord>::~G4InterpolationDriver()
 {
 #ifdef G4VERBOSE
-  if (fVerboseLevel > 0) {
+  if (fVerboseLevel > 0)
+  {
     G4cout << "G4ChordFinder statistics report: \n"
            << "  No trials: " << fTotalNoTrials << "  No Calls: " << fNoCalls
            << "  Max-trial: " << fmaxTrials << G4endl;
@@ -103,7 +106,8 @@ template <class T, G4bool StepperCachesDchord>
 void G4InterpolationDriver<T, StepperCachesDchord>::Interpolate(
   G4double curveLength, field_utils::State& y) const
 {
-  if (fLastStepper == fSteppers.end()) {
+  if (fLastStepper == fSteppers.end())
+  {
     std::ostringstream message;
     message << "LOGICK ERROR: fLastStepper == end";
     G4Exception("G4InterpolationDriver::Interpolate()", "GeomField1001", FatalException, message);
@@ -114,8 +118,10 @@ void G4InterpolationDriver<T, StepperCachesDchord>::Interpolate(
 
   auto it = std::lower_bound(fSteppers.cbegin(), end, curveLength,
     [](const InterpStepper& stepper, G4double value) { return stepper.end < value; });
-  if (it == end) {
-    if (curveLength - fLastStepper->end > CLHEP::perMillion) {
+  if (it == end)
+  {
+    if (curveLength - fLastStepper->end > CLHEP::perMillion)
+    {
       std::ostringstream message;
       message << "curveLength = " << curveLength << " > " << fLastStepper->end;
       G4Exception("G4InterpolationDriver::Interpolate()", "GeomField1001", JustWarning, message);
@@ -124,8 +130,10 @@ void G4InterpolationDriver<T, StepperCachesDchord>::Interpolate(
     return fLastStepper->stepper->Interpolate(1, y);
   }
 
-  if (curveLength < it->begin) {
-    if (it->begin - curveLength > CLHEP::perMillion) {
+  if (curveLength < it->begin)
+  {
+    if (it->begin - curveLength > CLHEP::perMillion)
+    {
       std::ostringstream message;
       message << "curveLength = " << curveLength << " < " << it->begin;
       G4Exception("G4InterpolationDriver::Interpolate()", "GeomField1001", JustWarning, message);
@@ -149,10 +157,12 @@ template <class T, G4bool StepperCachesDchord>
 G4double G4InterpolationDriver<T, StepperCachesDchord>::DistChord(const field_utils::State& yBegin,
   G4double curveLengthBegin, const field_utils::State& yEnd, G4double curveLengthEnd) const
 {
-  if (StepperCachesDchord) {
+  if (StepperCachesDchord)
+  {
     // optimization check if it worth
     //
-    if (curveLengthBegin == fLastStepper->begin && curveLengthEnd == fLastStepper->end) {
+    if (curveLengthBegin == fLastStepper->begin && curveLengthEnd == fLastStepper->end)
+    {
       return fLastStepper->stepper
         ->DistChord();  // QssStepper Returns 0.0  !???  Not implemented => WRONG
     }
@@ -184,21 +194,25 @@ G4double G4InterpolationDriver<T, StepperCachesDchord>::AdvanceChordLimited(
   track.DumpToArray(yBegin);
   track.DumpToArray(y);
 
-  if (fFirstStep) {
+  if (fFirstStep)
+  {
     Base::GetEquationOfMotion()->RightHandSide(y, fdydx);
     fFirstStep = false;
   }
 
-  if (fKeepLastStepper) {
+  if (fKeepLastStepper)
+  {
     std::swap(*fSteppers.begin(), *fLastStepper);
     it = fSteppers.begin();  // new begin, update iterator
     fLastStepper = it;
     hdid = it->end - curveLengthBegin;
-    if (hdid > hend) {
+    if (hdid > hend)
+    {
       hdid = hend;
       InterpolateImpl(curveLengthBegin + hdid, it, y);
     }
-    else {
+    else
+    {
       field_utils::copy(y, it->stepper->GetYOut());
     }
 
@@ -209,7 +223,8 @@ G4double G4InterpolationDriver<T, StepperCachesDchord>::AdvanceChordLimited(
 
   // accurate advance & check chord distance
   G4double h = fhnext;
-  for (; hdid < hend && dChordStep < chordDistance && it != fSteppers.end(); ++it) {
+  for (; hdid < hend && dChordStep < chordDistance && it != fSteppers.end(); ++it)
+  {
     h = std::min(h, hstep - hdid);
 
     // make one step
@@ -229,7 +244,8 @@ G4double G4InterpolationDriver<T, StepperCachesDchord>::AdvanceChordLimited(
   //   - reached maximum number of steps (from number of steppers.)
 
   // update step estimation
-  if (h > fMinimumStep) {
+  if (h > fMinimumStep)
+  {
     fhnext = h;
   }
 
@@ -257,7 +273,8 @@ G4double G4InterpolationDriver<T, StepperCachesDchord>::FindNextChord(
   G4double curveLength = curveLengthEnd;
 
   G4int i = 1;
-  for (; i < fMaxTrials && dChord > chordDistance && curveLength > fLastStepper->begin; ++i) {
+  for (; i < fMaxTrials && dChord > chordDistance && curveLength > fLastStepper->begin; ++i)
+  {
     // crop step size
     hstep = CalcChordStep(hstep, dChord, chordDistance);
 
@@ -274,11 +291,13 @@ G4double G4InterpolationDriver<T, StepperCachesDchord>::FindNextChord(
 
   // dChord may be zero
   //
-  if (dChord > 0.0) {
+  if (dChord > 0.0)
+  {
     fChordStepEstimate = hstep * std::sqrt(chordDistance / dChord);
   }
 
-  if (i == fMaxTrials) {
+  if (i == fMaxTrials)
+  {
     G4Exception(
       "G4InterpolationDriver::FindNextChord()", "GeomField1001", JustWarning, "cannot converge");
   }
@@ -299,12 +318,16 @@ G4double G4InterpolationDriver<T, StepperCachesDchord>::CalcChordStep(
   const G4double chordStepEstimate = stepTrialOld * std::sqrt(chordDistance / dChordStep);
   G4double stepTrial = fFractionNextEstimate * chordStepEstimate;
 
-  if (stepTrial <= 0.001 * stepTrialOld) {
-    if (dChordStep > 1000.0 * chordDistance) {
+  if (stepTrial <= 0.001 * stepTrialOld)
+  {
+    if (dChordStep > 1000.0 * chordDistance)
+    {
       stepTrial = stepTrialOld * 0.03;
     }
-    else {
-      if (dChordStep > 100. * chordDistance) {
+    else
+    {
+      if (dChordStep > 100. * chordDistance)
+      {
         stepTrial = stepTrialOld * 0.1;
       }
       else  // Try halving the length until dChordStep OK
@@ -313,11 +336,13 @@ G4double G4InterpolationDriver<T, StepperCachesDchord>::CalcChordStep(
       }
     }
   }
-  else if (stepTrial > 1000.0 * stepTrialOld) {
+  else if (stepTrial > 1000.0 * stepTrialOld)
+  {
     stepTrial = 1000.0 * stepTrialOld;
   }
 
-  if (stepTrial == 0.0) {
+  if (stepTrial == 0.0)
+  {
     stepTrial = 0.000001;
   }
 
@@ -338,14 +363,16 @@ G4bool G4InterpolationDriver<T, StepperCachesDchord>::AccurateAdvance(
   G4FieldTrack& track, G4double hstep, G4double /*eps*/, G4double /*hinitial*/
 )
 {
-  if (hstep == 0.0) {
+  if (hstep == 0.0)
+  {
     std::ostringstream message;
     message << "Proposed step is zero; hstep = " << hstep << " !";
     G4Exception("G4InterpolationDriver::AccurateAdvance()", "GeomField1001", JustWarning, message);
     return true;
   }
 
-  if (hstep < 0) {
+  if (hstep < 0)
+  {
     std::ostringstream message;
     message << "Invalid run condition." << G4endl << "Proposed step is negative; hstep = " << hstep
             << "." << G4endl << "Requested step cannot be negative! Aborting event.";
@@ -390,17 +417,20 @@ G4double G4InterpolationDriver<T, StepperCachesDchord>::OneGoodStep(StepperItera
   G4double h = hstep;
 
   G4int i = 0;
-  for (; i < fMaxTrials; ++i) {
+  for (; i < fMaxTrials; ++i)
+  {
     it->stepper->Stepper(y, dydx, h, ytemp, yerr, dydxtemp);
     error2 = field_utils::relativeError2(y, yerr, h, epsStep);
 
-    if (error2 <= 1.0) {
+    if (error2 <= 1.0)
+    {
       hstep = std::max(Base::GrowStepSize2(h, error2), fMinimumStep);
       break;
     }
 
     // don't control error for small steps
-    if (h <= fMinimumStep) {
+    if (h <= fMinimumStep)
+    {
       hstep = fMinimumStep;
       break;
     }
@@ -408,7 +438,8 @@ G4double G4InterpolationDriver<T, StepperCachesDchord>::OneGoodStep(StepperItera
     h = std::max(Base::ShrinkStepSize2(h, error2), fMinimumStep);
   }
 
-  if (i == fMaxTrials) {
+  if (i == fMaxTrials)
+  {
     G4Exception(
       "G4InterpolationDriver::OneGoodStep()", "GeomField1001", JustWarning, "cannot converge");
     hstep = std::max(Base::ShrinkStepSize2(h, error2), fMinimumStep);
@@ -436,13 +467,15 @@ void G4InterpolationDriver<T, StepperCachesDchord>::PrintState() const
   auto prev = fSteppers.begin();
 
   G4cout << "====== curr state ========" << G4endl;
-  for (auto i = fSteppers.begin(); i <= fLastStepper; ++i) {
+  for (auto i = fSteppers.begin(); i <= fLastStepper; ++i)
+  {
     i->stepper->Interpolate(0, currBegin);
 
     G4cout << "cl_begin: " << i->begin << " "
            << "cl_end: " << i->end << " ";
 
-    if (prev != i) {
+    if (prev != i)
+    {
       prev->stepper->Interpolate(1, prevEnd);
       auto prevPos = makeVector(prevEnd, Value3D::Position);
       auto currPos = makeVector(currBegin, Value3D::Position);
@@ -458,7 +491,8 @@ void G4InterpolationDriver<T, StepperCachesDchord>::PrintState() const
   const G4double hstep = (clEnd - clBegin) / 10.;
   State yBegin, yCurr;
   Interpolate(0, yBegin);
-  for (G4double cl = clBegin; cl <= clEnd + 1e-12; cl += hstep) {
+  for (G4double cl = clBegin; cl <= clEnd + 1e-12; cl += hstep)
+  {
     Interpolate(cl, yCurr);
     auto d = DistChord(yBegin, clBegin, yCurr, cl);
     G4cout << "cl: " << cl << " chord_distance: " << d << G4endl;
@@ -471,17 +505,21 @@ template <class T, G4bool StepperCachesDchord>
 void G4InterpolationDriver<T, StepperCachesDchord>::CheckState() const
 {
   G4int smallSteps = 0;
-  for (auto i = fSteppers.begin(); i <= fLastStepper; ++i) {
+  for (auto i = fSteppers.begin(); i <= fLastStepper; ++i)
+  {
     G4double stepLength = i->end - i->begin;
-    if (stepLength < fMinimumStep) {
+    if (stepLength < fMinimumStep)
+    {
       ++smallSteps;
     }
   }
 
-  if (smallSteps > 1) {
+  if (smallSteps > 1)
+  {
     std::ostringstream message;
     message << "====== curr state ========\n";
-    for (auto i = fSteppers.begin(); i <= fLastStepper; ++i) {
+    for (auto i = fSteppers.begin(); i <= fLastStepper; ++i)
+    {
       message << "cl_begin: " << i->begin << " "
               << "cl_end: " << i->end << "\n";
     }
@@ -496,7 +534,8 @@ void G4InterpolationDriver<T, StepperCachesDchord>::AccumulateStatistics(G4int n
   fTotalNoTrials += noTrials;
   ++fNoCalls;
 
-  if (noTrials > fmaxTrials) {
+  if (noTrials > fmaxTrials)
+  {
     fmaxTrials = noTrials;
   }
 }

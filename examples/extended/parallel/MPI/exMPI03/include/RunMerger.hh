@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file RunMerger.hh
+/// \brief Definition of the RunMerger class
+
 #ifndef MPIRUNMERGER_HH
 #define MPIRUNMERGER_HH
 #include "Run.hh"

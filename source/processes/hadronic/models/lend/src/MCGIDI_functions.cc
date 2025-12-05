@@ -477,12 +477,13 @@ LUPI_HOST_DEVICE XYs1d::~XYs1d( ) {
 */
 LUPI_HOST_DEVICE double XYs1d::evaluate( double a_x1 ) const {
 
-    int lower = binarySearchVector( a_x1, m_Xs );
+    int intLower = binarySearchVector( a_x1, m_Xs );
 
-    if( lower < 0 ) {
-        if( lower == -2 ) return( m_Ys[0] );
+    if( intLower < 0 ) {
+        if( intLower == -2 ) return( m_Ys[0] );
         return( m_Ys.back( ) );
     }
+    std::size_t lower = static_cast<std::size_t>( intLower );
 
     double evaluatedValue = 0.0;
     double y1 = m_Ys[lower];
@@ -641,7 +642,7 @@ LUPI_HOST_DEVICE Gridded1d::~Gridded1d( ) {
 */
 LUPI_HOST_DEVICE double Gridded1d::evaluate( double a_x1 ) const {
 
-    return( m_data[binarySearchVector( a_x1, m_grid, true )] );
+    return( m_data[(std::size_t) binarySearchVector( a_x1, m_grid, true )] );
 }
 
 /* *********************************************************************************************************//**
@@ -705,14 +706,16 @@ LUPI_HOST_DEVICE void Regions1d::append( Function1d_d2 *a_function1d ) {
 */
 LUPI_HOST_DEVICE double Regions1d::evaluate( double a_x1 ) const {
 
-    int lower = binarySearchVector( a_x1, m_Xs );
+    int intLower = binarySearchVector( a_x1, m_Xs );
 
-    if( lower < 0 ) {
-        if( lower == -1 ) {                     // a_x1 > last value of m_Xs.
+    if( intLower < 0 ) {
+        if( intLower == -1 ) {                     // a_x1 > last value of m_Xs.
             return( m_functions1d.back( )->evaluate( a_x1 ) );
         }
-        lower = 0;                              // a_x1 < last value of m_Xs.
+        intLower = 0;                              // a_x1 < last value of m_Xs.
     }
+
+    std::size_t lower = static_cast<std::size_t>( intLower );
 
     return( m_functions1d[lower]->evaluate( a_x1 ) );
 }
@@ -813,7 +816,8 @@ LUPI_HOST_DEVICE void Branching1d::serialize( LUPI::DataBuffer &a_buffer, LUPI::
 */
 
 LUPI_HOST_DEVICE TerrellFissionNeutronMultiplicityModel::TerrellFissionNeutronMultiplicityModel( ) :
-    m_multiplicity( nullptr ) {
+        m_width( 1.079 ),
+        m_multiplicity( nullptr ) {
 
     m_type = Function1dType::TerrellFissionNeutronMultiplicityModel;
 }
@@ -1000,16 +1004,17 @@ LUPI_HOST_DEVICE XYs2d::~XYs2d( ) {
 */
 LUPI_HOST_DEVICE double XYs2d::evaluate( double a_x2, double a_x1 ) const {
 
-    int lower = binarySearchVector( a_x2, m_Xs );
+    int intLower = binarySearchVector( a_x2, m_Xs );
     double evaluatedValue = 0.0;
 
-    if( lower < 0 ) {
-        if( lower == -1 ) {               /* X2 > last value of Xs. */
+    if( intLower < 0 ) {
+        if( intLower == -1 ) {               /* X2 > last value of Xs. */
             evaluatedValue = m_functions1d.back( )->evaluate( a_x1 ); }
         else {                          /* X2 < first value of Xs. */
             evaluatedValue = m_functions1d[0]->evaluate( a_x1 );
         } }
     else {
+        std::size_t lower = static_cast<std::size_t>( intLower );
         double y1 = m_functions1d[lower]->evaluate( a_x1 );
 
         if( interpolation( ) == Interpolation::FLAT ) {
@@ -1071,7 +1076,16 @@ LUPI_HOST_DEVICE void XYs2d::serialize( LUPI::DataBuffer &a_buffer, LUPI::DataBu
 */
 LUPI_HOST Function1d *parseMultiplicityFunction1d( SetupInfo &a_setupInfo, LUPI_maybeUnused Transporting::MC const &a_settings, GIDI::Suite const &a_suite ) {
 
-    GIDI::Functions::Function1dForm const *form1d( a_suite.get<GIDI::Functions::Function1dForm>( 0 ) );
+    auto preProcessingChainEnds = a_setupInfo.m_GIDI_protare.styles( ).preProcessingChainEnds( );
+    if( preProcessingChainEnds.size( ) != 1 ) throw std::runtime_error( "Functions::parseMultiplicityFunction1d: preProcessingChainEnds != 1." );
+
+    std::string const &label = preProcessingChainEnds[0]->label( );
+    GIDI::Functions::Function1dForm const *form1d = nullptr;
+    if( a_suite.has( "muCutoff" ) ) {   // Special case to handle legacy no-Rutherford processing which set the label to "muCutoff".
+        form1d = a_suite.get<GIDI::Functions::Function1dForm const>( 0 ); }
+    else {
+        form1d = a_suite.getViaLineage<GIDI::Functions::Function1dForm const>( label );
+    }
 
     if( form1d->type( ) == GIDI::FormType::branching1d ) return( new Branching1d( a_setupInfo, *static_cast<GIDI::Functions::Branching1d const *>( form1d ) ) );
     if( form1d->type( ) == GIDI::FormType::unspecified1d ) return( nullptr );
@@ -1341,14 +1355,16 @@ LUPI_HOST_DEVICE Xs_pdf_cdf1d::~Xs_pdf_cdf1d( ) {
 */
 LUPI_HOST_DEVICE double Xs_pdf_cdf1d::evaluate( double a_x1 ) const {
 
-    int lower = binarySearchVector( a_x1, m_Xs );
+    int intLower = binarySearchVector( a_x1, m_Xs );
 
-    if( lower < 0 ) {
-        if( lower == -2 ) return( m_pdf[0] );
+    if( intLower < 0 ) {
+        if( intLower == -2 ) return( m_pdf[0] );
         return( m_pdf.back( ) );
     }
 
+    std::size_t lower = static_cast<std::size_t>( intLower );
     double fraction = ( a_x1 - m_Xs[lower] ) / ( m_Xs[lower+1] - m_Xs[lower] );
+
     return( ( 1. - fraction ) * m_pdf[lower] + fraction * m_pdf[lower+1] );
 }
 
@@ -1619,15 +1635,17 @@ LUPI_HOST_DEVICE XYs2d::~XYs2d( ) {
 */
 LUPI_HOST_DEVICE double XYs2d::evaluate( double a_x2, double a_x1 ) const {
 
-    int lower = binarySearchVector( a_x2, m_Xs );
+    int intLower = binarySearchVector( a_x2, m_Xs );
 
-    if( lower < 0 ) {
-        if( lower == -2 ) return( m_probabilities[0]->evaluate( a_x1 ) );
+    if( intLower < 0 ) {
+        if( intLower == -2 ) return( m_probabilities[0]->evaluate( a_x1 ) );
         return( m_probabilities.back( )->evaluate( a_x1 ) );
     }
 
+    std::size_t lower = static_cast<std::size_t>( intLower );
     double fraction = ( a_x2 - m_Xs[lower] ) / ( m_Xs[lower+1] - m_Xs[lower] );
     double d_value = ( 1.0 - fraction ) * m_probabilities[lower]->evaluate( a_x1 ) + fraction * m_probabilities[lower+1]->evaluate( a_x1 );
+
     return( d_value );
 }
 
@@ -1691,14 +1709,16 @@ LUPI_HOST_DEVICE Regions2d::~Regions2d( ) {
 */
 LUPI_HOST_DEVICE double Regions2d::evaluate( double a_x2, double a_x1 ) const {
 
-    int lower = binarySearchVector( a_x2, m_Xs );
+    int intLower = binarySearchVector( a_x2, m_Xs );
 
-    if( lower < 0 ) {
-        if( lower == -1 ) {                         // a_x2 > last value of m_Xs.
+    if( intLower < 0 ) {
+        if( intLower == -1 ) {                         // a_x2 > last value of m_Xs.
             return( m_probabilities.back( )->evaluate( a_x2, a_x1 ) );
         }
-        lower = 0;                                  // a_x2 < first value of m_Xs.
+        intLower = 0;                                  // a_x2 < first value of m_Xs.
     }
+
+    std::size_t lower = static_cast<std::size_t>( intLower );
 
     return( m_probabilities[lower]->evaluate( a_x2, a_x1 ) );
 }
@@ -1758,7 +1778,8 @@ LUPI_HOST_DEVICE Isotropic2d::~Isotropic2d( ) {
 ====================== DiscreteGamma2d =====================
 ============================================================
 */
-LUPI_HOST_DEVICE DiscreteGamma2d::DiscreteGamma2d( ) {
+LUPI_HOST_DEVICE DiscreteGamma2d::DiscreteGamma2d( ) :
+        m_value( 0.0 ) {
 
     m_type = ProbabilityBase2dType::discreteGamma;
 }
@@ -2182,6 +2203,7 @@ LUPI_HOST_DEVICE void SimpleMaxwellianFission2d::serialize( LUPI::DataBuffer &a_
 ============================================================
 */
 LUPI_HOST_DEVICE Watt2d::Watt2d( ) :
+        m_U( 0.0 ),
         m_a( nullptr ),
         m_b( nullptr ) {
 
@@ -2458,14 +2480,15 @@ LUPI_HOST_DEVICE XYs3d::~XYs3d( ) {
 */
 LUPI_HOST_DEVICE double XYs3d::evaluate( double a_x3, double a_x2, double a_x1 ) const {
 
-    int lower = binarySearchVector( a_x3, m_Xs );
+    int intLower = binarySearchVector( a_x3, m_Xs );
     double evaluatedValue;
 
-    if( lower == -2 ) {                         // a_x3 < first value of Xs.
+    if( intLower == -2 ) {                         // a_x3 < first value of Xs.
         evaluatedValue = m_probabilities[0]->evaluate( a_x2, a_x1 ); }
-    else if( lower == -1 ) {                    // a_x3 > last value of Xs.
+    else if( intLower == -1 ) {                    // a_x3 > last value of Xs.
         evaluatedValue = m_probabilities.back( )->evaluate( a_x2, a_x1 ); }
     else {
+        std::size_t lower = static_cast<std::size_t>( intLower );
         double value1 = m_probabilities[lower]->evaluate( a_x2, a_x1 );
 
         if( interpolation( ) == Interpolation::FLAT ) {
@@ -2678,15 +2701,15 @@ LUPI_HOST static ProbabilityBase1d *ptwXY_To_Xs_pdf_cdf1d( ptwXYPoints *pdfXY ) 
     std::vector<double> Xs( n1 ), pdf( n1 ), cdf( n1 );
 
     if( ( cdfX = ptwXY_runningIntegral( nullptr, pdfXY ) ) == nullptr ) throw std::runtime_error( "ptwXY_To_Xs_pdf_cdf1d: ptwXY_runningIntegral returned error." );
-    double norm = ptwX_getPointAtIndex_Unsafely( cdfX, n1 - 1 );
+    double norm = ptwX_getPointAtIndex_Unsafely( cdfX, (int64_t) n1 - 1 );
     if( norm <= 0 ) throw std::runtime_error( "ptwXY_To_Xs_pdf_cdf1d: norm <= 0." );
 
     norm = 1. / norm;
     for( std::size_t i1 = 0; i1 < n1; ++i1 ) {
-        point = ptwXY_getPointAtIndex_Unsafely( pdfXY, i1 );
+        point = ptwXY_getPointAtIndex_Unsafely( pdfXY, (int64_t) i1 );
         Xs[i1] = point->x;
         pdf[i1] = norm * point->y;
-        cdf[i1] = norm * ptwX_getPointAtIndex_Unsafely( cdfX, i1 );
+        cdf[i1] = norm * ptwX_getPointAtIndex_Unsafely( cdfX, (int64_t) i1 );
     }
     cdf[n1-1] = 1.;
 

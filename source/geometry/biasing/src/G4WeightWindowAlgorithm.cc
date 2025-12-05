@@ -40,8 +40,6 @@ G4WeightWindowAlgorithm(G4double upperLimitFactor,
 {
 }
 
-G4WeightWindowAlgorithm::~G4WeightWindowAlgorithm() = default;
-
 G4Nsplit_Weight 
 G4WeightWindowAlgorithm::Calculate(G4double init_w,
                                    G4double lowerWeightBound) const

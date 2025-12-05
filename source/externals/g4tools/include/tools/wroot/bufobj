@@ -31,20 +31,11 @@ public:
   ,m_title(a_title)
   ,m_store_cls(a_store_cls)
   {
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
   }
   virtual ~bufobj(){
-#ifdef TOOLS_MEM
-    mem::decrement(s_class().c_str());
-#endif
   }
 protected:
   bufobj(const bufobj& a_from): iobject(a_from),buffer(a_from){
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
   }
   bufobj& operator=(const bufobj &){return *this;}
 protected:

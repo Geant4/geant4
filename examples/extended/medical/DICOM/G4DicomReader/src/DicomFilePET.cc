@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file DicomFilePET.cc
+/// \brief Implementation of the DicomFilePET class
+
 #include "DicomFilePET.hh"
 
 #include "DicomFileStructure.hh"

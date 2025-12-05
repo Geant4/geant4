@@ -29,7 +29,7 @@
 //
 // Wrapper class for G4Polyhedra to make use of VecGeom Polyhedron.
 
-// 31.10.13 G.Cosmo, CERN
+// Author: Gabriele Cosmo (CERN), 31.10.2013
 // --------------------------------------------------------------------
 #ifndef G4UPOLYHEDRA_HH
 #define G4UPOLYHEDRA_HH
@@ -48,6 +48,11 @@
 class G4EnclosingCylinder;
 class G4ReduciblePolygon;
 
+/**
+ * @brief G4UPolyhedra is a wrapper class for G4Polyhedra to make use
+ * of VecGeom Polyhedron.
+ */
+
 class G4UPolyhedra : public G4UAdapter<vecgeom::UnplacedPolyhedron>
 {
   using Shape_t = vecgeom::UnplacedPolyhedron;
@@ -55,6 +60,17 @@ class G4UPolyhedra : public G4UAdapter<vecgeom::UnplacedPolyhedron>
 
   public:
 
+    /**
+     * Constructs a polyhedra, given its parameters.
+     *  @param[in] name The solid name.
+     *  @param[in] phiStart Initial Phi starting angle.
+     *  @param[in] phiTotal Total Phi angle.
+     *  @param[in] numSide Number of sides.
+     *  @param[in] numZPlanes Number of Z planes.
+     *  @param[in] zPlane Position of Z planes.
+     *  @param[in] rInner Tangent distance to inner surface.
+     *  @param[in] rOuter Tangent distance to outer surface.
+     */
     G4UPolyhedra( const G4String& name, 
                      G4double phiStart,    // initial phi starting angle
                      G4double phiTotal,    // total phi angle
@@ -64,6 +80,16 @@ class G4UPolyhedra : public G4UAdapter<vecgeom::UnplacedPolyhedron>
                const G4double rInner[],    // tangent distance to inner surface
                const G4double rOuter[]  ); // tangent distance to outer surface
 
+    /**
+     * Alternative constructor of a polyhedra, given corners coordinates.
+     *  @param[in] name The solid name.
+     *  @param[in] phiStart Initial Phi starting angle.
+     *  @param[in] phiTotal Total Phi angle.
+     *  @param[in] numSide Number of sides.
+     *  @param[in] numRZ Number of corners in r,Z space.
+     *  @param[in] r r coordinates of corners.
+     *  @param[in] z Z coordinates of corners.
+     */
     G4UPolyhedra( const G4String& name, 
                      G4double phiStart,    // initial phi starting angle
                      G4double phiTotal,    // total phi angle
@@ -72,14 +98,28 @@ class G4UPolyhedra : public G4UAdapter<vecgeom::UnplacedPolyhedron>
                const G4double r[],         // r coordinate of these corners
                const G4double z[]       ); // z coordinate of these corners
 
-   ~G4UPolyhedra() override;
+    /**
+     * Default destructor.
+     */
+    ~G4UPolyhedra() override = default;
 
-    void ComputeDimensions(      G4VPVParameterisation* p,
+    /**
+     * Dispatch method for parameterisation replication mechanism and
+     * dimension computation.
+     */
+    void ComputeDimensions(G4VPVParameterisation* p,
                            const G4int n,
                            const G4VPhysicalVolume* pRep) override;
 
+    /**
+     * Makes a clone of the object for use in multi-treading.
+     *  @returns A pointer to the new cloned allocated solid.
+     */
     G4VSolid* Clone() const override;
 
+    /**
+     * Accessors.
+     */
     G4int GetNumSide()        const;
     G4double GetStartPhi()    const;
     G4double GetEndPhi()      const;
@@ -92,35 +132,71 @@ class G4UPolyhedra : public G4UAdapter<vecgeom::UnplacedPolyhedron>
     G4int GetNumRZCorner()    const;
     G4PolyhedraSideRZ GetCorner( const G4int index ) const;
     G4PolyhedraHistorical* GetOriginalParameters() const;
+
+    /**
+     * Modifier.
+     */
     void SetOriginalParameters(G4PolyhedraHistorical* pars);
 
+    /**
+     * Clears all parameters and rebuild the shape, for use in divisions.
+     */
     G4bool Reset();
 
+    /**
+     * Returns the type ID, "G4Polyhedra" of the solid.
+     */
     inline G4GeometryType GetEntityType() const override;
 
+    /**
+     * Returns true as the solid has only planar faces.
+     */
     inline G4bool IsFaceted() const override;
 
-    G4UPolyhedra( const G4UPolyhedra& source );
-    G4UPolyhedra& operator=( const G4UPolyhedra& source );
-      // Copy constructor and assignment operator.
-
+    /**
+     * Computes the bounding limits of the solid.
+     *  @param[out] pMin The minimum bounding limit point.
+     *  @param[out] pMax The maximum bounding limit point.
+     */
     void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const override;
 
+    /**
+     * Calculates the minimum and maximum extent of the solid, when under the
+     * specified transform, and within the specified limits.
+     *  @param[in] pAxis The axis along which compute the extent.
+     *  @param[in] pVoxelLimit The limiting space dictated by voxels.
+     *  @param[in] pTransform The internal transformation applied to the solid.
+     *  @param[out] pMin The minimum extent value.
+     *  @param[out] pMax The maximum extent value.
+     *  @returns True if the solid is intersected by the extent region.
+     */
     G4bool CalculateExtent(const EAxis pAxis,
                            const G4VoxelLimits& pVoxelLimit,
                            const G4AffineTransform& pTransform,
                            G4double& pMin, G4double& pMax) const override;
 
+    /**
+     * Returns a generated polyhedron as graphical representations.
+     */
     G4Polyhedron* CreatePolyhedron() const override;
 
-  protected:
+    /**
+     * Copy constructor and assignment operator.
+     */
+    G4UPolyhedra( const G4UPolyhedra& source );
+    G4UPolyhedra& operator=( const G4UPolyhedra& source );
 
+  private:
+
+    /**
+     * Sets internal parameters for the generic constructor.
+     */
     void SetOriginalParameters();
+
+  private:
 
     G4bool fGenericPgon; // true if created through the 2nd generic constructor
     G4PolyhedraHistorical fOriginalParameters; // original input parameters
-
-  private:
 
     G4double wrStart;
     G4double wrDelta;

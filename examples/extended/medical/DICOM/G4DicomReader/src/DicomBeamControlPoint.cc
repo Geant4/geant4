@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file DicomBeamControlPoint.cc
+/// \brief Implementation of the DicomBeamControlPoint class
+
 #include "DicomBeamControlPoint.hh"
 
 #include "DicomBeamDevicePos.hh"

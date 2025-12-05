@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file Par03ActionInitialisation.hh
+/// \brief Definition of the Par03ActionInitialisation class
+
 #ifndef PAR03ACTIONINITIALISATION_HH
 #define PAR03ACTIONINITIALISATION_HH
 

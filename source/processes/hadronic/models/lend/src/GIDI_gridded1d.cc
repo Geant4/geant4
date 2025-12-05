@@ -49,7 +49,7 @@ Gridded1d::~Gridded1d( ) {
  * @param a_maxTNSL_index           [in]    All elements up to *a_maxTNSL_index* exclusive are zero-ed.
  ***********************************************************************************************************/
 
-void Gridded1d::modifiedMultiGroupElasticForTNSL( int a_maxTNSL_index ) {
+void Gridded1d::modifiedMultiGroupElasticForTNSL( std::size_t a_maxTNSL_index ) {
 
     m_data.setToValueInFlatRange( 0, a_maxTNSL_index, 0.0 );
 }

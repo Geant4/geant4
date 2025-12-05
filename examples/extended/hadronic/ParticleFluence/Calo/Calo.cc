@@ -23,13 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file Layer.cc
-/// \brief Main program of the hadronic/ParticleFluence/Layer example
-//
-//
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// \file Calo.cc
+/// \brief Main program of the ParticleFluence/Calo example
 
 #include "ActionInitialization.hh"
 #include "DetectorConstruction.hh"

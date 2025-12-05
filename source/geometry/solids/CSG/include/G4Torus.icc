@@ -79,26 +79,3 @@ G4double G4Torus::GetCosEndPhi () const
 {
   return std::cos(fSPhi+fDPhi);
 }
-
-inline
-G4double G4Torus::GetCubicVolume()
-{
-  if(fCubicVolume != 0.) {;}
-  else  { fCubicVolume = fDPhi*CLHEP::pi*fRtor*(fRmax*fRmax-fRmin*fRmin); }
-  return fCubicVolume;
-}
-
-inline
-G4double G4Torus::GetSurfaceArea()
-{
-  if(fSurfaceArea != 0.) {;}
-  else
-  { 
-    fSurfaceArea = fDPhi*CLHEP::twopi*fRtor*(fRmax+fRmin);
-    if(fDPhi < CLHEP::twopi)
-    {
-      fSurfaceArea = fSurfaceArea + CLHEP::twopi*(fRmax*fRmax-fRmin*fRmin);
-    } 
-  }
-  return fSurfaceArea;
-}

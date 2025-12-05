@@ -69,11 +69,6 @@ void G4ParticleHPElementData::Init(G4Element* theElement,
     G4double frac = theElement->GetRelativeAbundanceVector()[i1] / CLHEP::perCent;
     UpdateData(A, Z, M, i1, frac, projectile, dataDirVariable);
   }
-  //theElasticData->ThinOut(precision);
-  //if (projectile == G4Neutron::Neutron()) theInelasticData->ThinOut(precision);
-
-  //theCaptureData->ThinOut(precision);
-  //theFissionData->ThinOut(precision);
 }
 
 void G4ParticleHPElementData::UpdateData(G4int A, G4int Z, G4int M, G4int index,

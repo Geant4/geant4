@@ -21,9 +21,6 @@ namespace tools {
 namespace sg {
 
 class hchar {
-#ifdef TOOLS_MEM
-  TOOLS_SCLASS(tools::sg::hchar)
-#endif
 public:
   hchar()
   :m_char(0)
@@ -33,14 +30,8 @@ public:
   ,m_bar(false)
   ,m_cr(false)
   {
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
   }
   virtual ~hchar(){
-#ifdef TOOLS_MEM
-    mem::decrement(s_class().c_str());
-#endif
   }
 public:
   hchar(const hchar& aFrom)
@@ -51,9 +42,6 @@ public:
   ,m_bar(aFrom.m_bar)
   ,m_cr(aFrom.m_cr)
   {
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
   }
   hchar& operator=(const hchar& aFrom) {
     m_char = aFrom.m_char;
@@ -107,8 +95,8 @@ protected: //gstos
     size_t ngsto = npts*3;     //3 coords.
     size_t sz = gsto_data.size();
     gsto_data.resize(sz+ngsto);
-    float* pxyz = vec_data<float>(gsto_data)+sz;
-    const float* data = vec_data<float>(m_segs);
+    float* pxyz = gsto_data.data()+sz;
+    const float* data = m_segs.data();
     gl::cvt_2to3(npts,data,pxyz);}
 
     m_gsto_sz = gsto_data.size();
@@ -242,7 +230,7 @@ public:
         float XL = 0;
         string_segs(false,*it,a_height,a_encoding,a_font,XL,Y,dummy,false);
         Y -= Y_ADVANCE;
-        width = mx<float>(width,XL);
+        width = max_of<float>(width,XL);
       }
 
       a_mn_x = 0;
@@ -270,7 +258,7 @@ public:
     float XL = 0;
     string_segs(false,a_s,a_height,a_encoding,a_font,XL,Y,dummy,false);
     Y -= Y_ADVANCE;
-    width = mx<float>(width,XL);
+    width = max_of<float>(width,XL);
 
     a_mn_x = 0;
     a_mn_y = -_descent(a_height);
@@ -360,8 +348,7 @@ protected:
     float xp[mx_point];
     float yp[mx_point];
 
-    tools_sforcit(a_string,it) {
-
+    for(auto it = a_string.cbegin(); it != a_string.cend(); ++it) {
       float cwidth;
       int number;
       if (a_font==sg::greek) {
@@ -413,10 +400,10 @@ protected:
       int pointn  = max_point[ipoly];
       if(pointn>0) {
         for(int count=0;count<pointn-1;count++) {
-          ymax = mx<float>(ymax,yp[ipoint]);
+          ymax = max_of<float>(ymax,yp[ipoint]);
           box_3f_extend_by(a_mn_x,a_mn_y,a_mn_z,a_mx_x,a_mx_y,a_mx_z,xp[ipoint],yp[ipoint],0);
 
-          ymax = mx<float>(ymax,yp[ipoint+1]);
+          ymax = max_of<float>(ymax,yp[ipoint+1]);
           box_3f_extend_by(a_mn_x,a_mn_y,a_mn_z,a_mx_x,a_mx_y,a_mx_z,xp[ipoint+1],yp[ipoint+1],0);
 
           ipoint ++;
@@ -522,12 +509,12 @@ protected:
       pointn  = max_point[ipoly];
       if(pointn>0) {
         for(int count=0;count<pointn-1;count++) {
-          ymax = mx<float>(ymax,yp[ipoint]);
+          ymax = max_of<float>(ymax,yp[ipoint]);
           if(a_fill_segs) {
             a_segs.push_back(aX+xp[ipoint]);
             a_segs.push_back(aY+yp[ipoint]);
           }
-          ymax = mx<float>(ymax,yp[ipoint+1]);
+          ymax = max_of<float>(ymax,yp[ipoint+1]);
           if(a_fill_segs) {
             a_segs.push_back(aX+xp[ipoint+1]);
             a_segs.push_back(aY+yp[ipoint+1]);
@@ -558,7 +545,7 @@ protected:
 
   static void decode_plain(const std::string& a_s,sencoded& a_sed){
     a_sed.clear();
-    tools_sforcit(a_s,it) {
+    for(auto it = a_s.cbegin(); it != a_s.cend(); ++it) {
       hchar hc;
       hc.m_char = *it;
       a_sed.push_back(hc);
@@ -592,7 +579,7 @@ protected:
     bool bar = false;
   //bool upper = true; //to be done.
 
-    tools_sforcit(a_s,it) {
+    for(auto it = a_s.cbegin(); it != a_s.cend(); ++it) {
       char c = *it;
       // Control characters :
       if(c=='[') {

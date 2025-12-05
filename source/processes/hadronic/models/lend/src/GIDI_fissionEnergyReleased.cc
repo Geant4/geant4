@@ -72,11 +72,13 @@ Vector FissionEnergyRelease::multiGroupQ( LUPI_maybeUnused LUPI::StatusMessageRe
     if( a_settings.delayedNeutrons( ) == Transporting::DelayedNeutrons::on ) {
         Gridded1d const *gridded1d = dynamic_cast<Gridded1d const *>( m_delayedNeutronKE );
 
-        vector += gridded1d->data( );
+        if( gridded1d != nullptr ) vector += gridded1d->data( );
+
         gridded1d = dynamic_cast<Gridded1d const *>( m_delayedGammaEnergy );
-        vector += gridded1d->data( );
+        if( gridded1d != nullptr ) vector += gridded1d->data( );
+
         gridded1d = dynamic_cast<Gridded1d const *>( m_delayedBetaEnergy );
-        vector += gridded1d->data( );
+        if( gridded1d != nullptr ) vector += gridded1d->data( );
     }
 
     return( vector );

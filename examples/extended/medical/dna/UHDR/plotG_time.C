@@ -97,7 +97,7 @@ void plotG_time() {
   gStyle->SetPadTickY(1);
 
   TGMainFrame *main = new TGMainFrame(gClient->GetRoot(), 200, 200);
-  TGTab *fTab = new TGTab(main, 200, 200);
+  gTab = new TGTab(main, 200, 200);
 
   Double_t timeA, sumG, sumG2;
   Double_t sumDose, sumDose2;
@@ -201,7 +201,7 @@ void plotG_time() {
                                               0,
                                               info.fGerr.data());
 
-    TGCompositeFrame *tf = fTab->AddTab(info.fName.c_str());
+    TGCompositeFrame *tf = gTab->AddTab(info.fName.c_str());
     TGCompositeFrame *frame = new TGCompositeFrame(tf, 60, 60,
                                                    kHorizontalFrame);
 
@@ -237,7 +237,7 @@ void plotG_time() {
     gSpecies->Draw("ALP");
   }
 
-  main->AddFrame(fTab, new TGLayoutHints(kLHintsBottom | kLHintsExpandX |
+  main->AddFrame(gTab, new TGLayoutHints(kLHintsBottom | kLHintsExpandX |
                                          kLHintsExpandY, 2, 2, 5, 1));
 
   main->MapSubwindows();

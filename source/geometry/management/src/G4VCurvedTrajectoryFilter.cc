@@ -23,9 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// G4VCurvedTrajectoryFilter class implementation
+// G4VCurvedTrajectoryFilter implementation
 //
-// First version: Oct 30, 2002 - Jacek Generowicz
+// Author: Jacek Generowicz (CERN), 30.10.2002
 // --------------------------------------------------------------------
 
 #include "G4VCurvedTrajectoryFilter.hh"

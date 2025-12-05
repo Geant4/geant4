@@ -79,7 +79,7 @@ void G4FermiBreakUpVI::Initialise()
 
 G4bool G4FermiBreakUpVI::IsApplicable(G4int Z, G4int A, G4double eexc) const
 {
-  return (Z < maxZ && A < maxA && eexc <= fElim && fPool->HasDecay(Z, A, eexc));
+  return (Z < maxZ && A < maxA && fPool->HasDecay(Z, A, eexc));
 }
 
 void G4FermiBreakUpVI::BreakFragment(G4FragmentVector* theResult, 

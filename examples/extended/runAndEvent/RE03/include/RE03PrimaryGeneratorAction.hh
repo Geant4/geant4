@@ -23,10 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file runAndEvent/RE03/include/RE03PrimaryGeneratorAction.hh
+/// \file RE03PrimaryGeneratorAction.hh
 /// \brief Definition of the RE03PrimaryGeneratorAction class
-//
-//
 
 #ifndef RE03PrimaryGeneratorAction_h
 #define RE03PrimaryGeneratorAction_h 1

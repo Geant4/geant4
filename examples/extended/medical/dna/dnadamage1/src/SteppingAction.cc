@@ -23,11 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
+/// \file SteppingAction.cc
+/// \brief Implementation of the SteppingAction class
+
 #include "SteppingAction.hh"
 
 #include "DetectorConstruction.hh"
-
+#include "G4RunManager.hh"
 #include "G4AnalysisManager.hh"
 #include "G4DNAElastic.hh"
 #include "G4DNAElectronSolvation.hh"
@@ -45,13 +47,14 @@ using MapOfDelayedLists = std::map<double, std::map<int, G4TrackList*>>;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-SteppingAction::SteppingAction(DetectorConstruction* fpDet)
-  : G4UserSteppingAction(), fpDetector(fpDet)
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-SteppingAction::~SteppingAction() {}
+SteppingAction::SteppingAction()
+  : G4UserSteppingAction()
+{
+  if (!fpDetector) {
+    fpDetector = static_cast<const DetectorConstruction*>
+                    (G4RunManager::GetRunManager()->GetUserDetectorConstruction());
+  }
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

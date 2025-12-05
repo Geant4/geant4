@@ -1,3 +1,5 @@
+\page Examples_MPI Category : parallel/MPI
+
 Geant4 MPI Interface
 ====================
 
@@ -33,7 +35,8 @@ G4mpi has been tested with the following MPI flavors:
  
 ### CMake
 
-CMake is used to build G4MPI library, that co-works with Geant4 build system.
+CMake is used to build <a href="./group__extended__parallel__MPI__libG4mpi.html"> G4MPI </a>library,
+that co-works with Geant4 build system.
 
 ### Optional (for exMPI02)
 
@@ -181,8 +184,9 @@ For using ROOT libraries (exMPI02)
 
 - *ROOTSYS* : root path of the ROOT package
 
-exMPI01
--------
+\ref exMPI01
+------------
+
 A simple application.
 
 **Configuration:**
@@ -195,8 +199,9 @@ A simple application.
 - Particles are transported in a geometry without any scoring.
 - Learn how to parallelized your G4 session.
 
-exMPI02 (ROOT application)
---------------------------
+\ref exMPI02 (ROOT application)
+-------------------------------
+
 An example of dosimetry in a water phantom.
 Note: due to limited MT support in ROOT, in this example
       MT is disabled, but the code is migrated to MT, ready
@@ -214,8 +219,8 @@ Note: due to limited MT support in ROOT, in this example
 - Learn how to parallelized your applications.
 - Create a ROOT file containing histograms/trees in each node.
 
-exMPI03 (merging of histograms via MPI)
----------------------------------------
+\ref exMPI03 (merging of histograms via MPI)
+--------------------------------------------
 This example is the same as exMPI02 with the following
 differences:
 - It uses Geant4 analysis instead of ROOT for histogramming
@@ -228,8 +233,8 @@ differences:
   - dose-merged.root - merged histograms
   - dose-rank0,1,2 - histograms data collected on rank 0, 1,2 before merge
 
-exMPI04 (merging of ntuples via MPI)
----------------------------------------
+\ref exMPI04 (merging of ntuples via MPI)
+-----------------------------------------
 This example is the same as exMPI03 with added ntuple.
 - It uses Geant4 analysis for histogramming and ntuples.
 - It shows how to merge, using g4tools, ntuples via MPI in sequential mode,

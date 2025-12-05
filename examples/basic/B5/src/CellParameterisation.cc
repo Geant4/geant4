@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file B5/src/CellParameterisation.cc
+/// \file CellParameterisation.cc
 /// \brief Implementation of the B5::CellParameterisation class
 
 #include "CellParameterisation.hh"

@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file TrackingAction.hh
+/// \brief Definition of the TrackingAction class
+
 #ifndef CHEM4_TRACKINGACTION_HH
 #define CHEM4_TRACKINGACTION_HH
 

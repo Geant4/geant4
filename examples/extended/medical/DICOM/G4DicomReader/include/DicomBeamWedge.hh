@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file DicomBeamWedge.hh
+/// \brief Definition of the DicomBeamWedge class
+
 #ifndef DicomBeamWedge__HH
 #define DicomBeamWedge__HH
 

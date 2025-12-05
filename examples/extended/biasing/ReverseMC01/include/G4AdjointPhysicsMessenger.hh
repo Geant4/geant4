@@ -23,11 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file biasing/ReverseMC01/include/G4AdjointPhysicsMessenger.hh
+/// \file G4AdjointPhysicsMessenger.hh
 /// \brief Definition of the G4AdjointPhysicsMessenger class
-//
-//
-//////////////////////////////////////////////////////////////
+
 //  Class Name:        G4AdjointPhysicsMessenger
 //        Author:               L. Desorgher
 //        Organisation:         SpaceIT GmbH

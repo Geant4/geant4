@@ -77,13 +77,13 @@ inline
 G4bool G4ExtrudedSolid::PointInPolygon(const G4ThreeVector& p) const
 {
   G4bool in = false;
-  G4int icur = (fPolygon[fNv-1].y() > p.y()), iprev = 0;
+  G4int icur = static_cast<G4int>(fPolygon[fNv-1].y() > p.y()), iprev = 0;
   for (std::size_t i = 0; i < fNv; ++i)
   {
     iprev = icur;
-    if ((icur = (fPolygon[i].y() > p.y())) != iprev)
+    if ((icur = static_cast<G4int>(fPolygon[i].y() > p.y())) != iprev)
     {
-      in ^= (p.y()*fLines[i].k + fLines[i].m < p.x());
+      in ^= static_cast<int>(p.y()*fLines[i].k + fLines[i].m < p.x());
     }
   }
   return in;
@@ -101,20 +101,20 @@ G4double G4ExtrudedSolid::DistanceToPolygonSqr(const G4ThreeVector& p) const
     if (u < 0)
     {
       G4double tmp = ix*ix + iy*iy;
-      if (tmp < dd) dd = tmp;
+      if (tmp < dd) { dd = tmp; }
     }
     else if (u > fLengths[i])
     {
       G4double kx = p.x() - fPolygon[k].x();
       G4double ky = p.y() - fPolygon[k].y();
       G4double tmp = kx*kx + ky*ky;
-      if (tmp < dd) dd = tmp;
+      if (tmp < dd) { dd = tmp; }
     }
     else
     {
       G4double tmp = fPlanes[i].a*p.x() + fPlanes[i].b*p.y() + fPlanes[i].d;
       tmp *= tmp;
-      if (tmp < dd) dd = tmp;
+      if (tmp < dd) { dd = tmp; }
     }
   }
   return dd;

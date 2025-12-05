@@ -23,11 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file Par01/src/Par01PrimaryGeneratorAction.cc
+/// \file Par01PrimaryGeneratorAction.cc
 /// \brief Implementation of the Par01PrimaryGeneratorAction class
-//
-//
-//
 
 #include "Par01PrimaryGeneratorAction.hh"
 

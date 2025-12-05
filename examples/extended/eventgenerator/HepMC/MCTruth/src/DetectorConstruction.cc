@@ -23,12 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file eventgenerator/HepMC/MCTruth/src/DetectorConstruction.cc
+/// \file DetectorConstruction.cc
 /// \brief Implementation of the DetectorConstruction class
-//
-//
-//
-//
+
 // --------------------------------------------------------------
 //      GEANT 4 - DetectorConstruction class
 // --------------------------------------------------------------

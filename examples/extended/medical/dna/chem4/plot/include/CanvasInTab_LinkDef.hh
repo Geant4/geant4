@@ -23,4 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file CanvasInTab_LinkDef.hh
+/// \brief Definition of CanvasInTab_LinkDef
+
 #pragma link C++ class CanvasInTab;

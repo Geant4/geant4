@@ -6,6 +6,9 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2025-08-03 Jose Luis Rodriguez Sanchez (hadr-abla-V11-03-00)
+- Added a new description for fission barriers based on PRC 111, 064606 (2025).
+
 ## 2024-09-02 Gabriele Cosmo (hadr-abla-V11-02-06)
 - Fixed reported Coverity defects for uninitialised data in G4Abla.
 

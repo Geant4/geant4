@@ -184,6 +184,7 @@ void G4VtkSceneHandler::ClearStore()
   G4cout << "G4VtkSceneHandler::ClearStore()" << G4endl;
 #endif
   store.Clear();
+  transientStore.Clear();
 }
 
 void G4VtkSceneHandler::ClearTransientStore()

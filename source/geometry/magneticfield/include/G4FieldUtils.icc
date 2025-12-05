@@ -24,8 +24,8 @@
 //
 // Helper namespace field_utils inline implementation
 
-// Author: Dmitry Sorokin, Google Summer of Code 2017
-// Supervision: John Apostolakis, CERN
+// Author: Dmitry Sorokin (CERN, Google Summer of Code 2017), 13.10.2017
+// Supervision: John Apostolakis (CERN)
 // --------------------------------------------------------------------
 
 namespace field_utils {
@@ -42,27 +42,27 @@ namespace internal
 template <typename ArrayType>
 inline G4double getValue(const ArrayType& array, Value1D value)
 {
-    const auto begin = internal::getFirstIndex(value);
-    return array[begin];
+  const auto begin = internal::getFirstIndex(value);
+  return array[begin];
 }
 
 template <typename ArrayType>
 G4double getValue2(const ArrayType& array, Value1D value)
 {
-    return sqr(getValue(array, value));
+  return sqr(getValue(array, value));
 }
 
 template <typename ArrayType>
 G4double getValue(const ArrayType& array, Value3D value)
 {
-    return std::sqrt(getValue2(array, value));
+  return std::sqrt(getValue2(array, value));
 }
 
 template <typename ArrayType>
 G4double getValue2(const ArrayType& array, const Value3D value)
 {
-    const auto begin = internal::getFirstIndex(value);
-    return sqr(array[begin]) + sqr(array[begin+1]) + sqr(array[begin+2]);
+  const auto begin = internal::getFirstIndex(value);
+  return sqr(array[begin]) + sqr(array[begin+1]) + sqr(array[begin+2]);
 }
 
 template <typename ArrayType>
@@ -75,23 +75,23 @@ G4ThreeVector makeVector(const ArrayType& array, Value3D value)
 template <typename SourceArray, typename TargetArray>
 void setValue(const SourceArray& src, Value1D value, TargetArray& trg)
 {
-    const auto begin = internal::getFirstIndex(value);
-    trg[begin] = src[begin];
+  const auto begin = internal::getFirstIndex(value);
+  trg[begin] = src[begin];
 }
 
 template <typename SourceArray, typename TargetArray, typename ...TargetArrays>
 void setValue(const SourceArray& src, Value1D value,
               TargetArray& trg, TargetArrays&... trgs)
 {
-    const auto begin = internal::getFirstIndex(value);
-    trg[begin] = src[begin];
-    setValue(src, value, trgs...);
+  const auto begin = internal::getFirstIndex(value);
+  trg[begin] = src[begin];
+  setValue(src, value, trgs...);
 }
 
 template <typename T>
 T clamp(T value, T lo, T hi)
 {
-    return std::min(std::max(lo, value), hi);
+  return std::min(std::max(lo, value), hi);
 }
 
 } // field_utils

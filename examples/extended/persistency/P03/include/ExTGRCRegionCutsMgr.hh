@@ -23,9 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file persistency/P03/include/ExTGRCRegionCutsMgr.hh
+/// \file ExTGRCRegionCutsMgr.hh
 /// \brief Definition of the ExTGRCRegionCutsMgr class
-//
 
 #ifndef ExTGRCRegionCutsMgr_h
 #define ExTGRCRegionCutsMgr_h

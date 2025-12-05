@@ -23,9 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// @file EventAction.hh
-/// @brief Describe event actions
+/// \file EventAction.hh
+/// \brief Definition of the EventAction class
+///
+/// Describe event actions
 
 #ifndef EVENT_ACTION_H
 #define EVENT_ACTION_H

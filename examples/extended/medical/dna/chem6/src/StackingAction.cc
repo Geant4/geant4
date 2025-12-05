@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file StackingAction.cc
+/// \brief Implementation of the StackingAction class
+
 // This example is provided by the Geant4-DNA collaboration
 // chem6 example is derived from chem4 and chem5 examples
 //
@@ -36,11 +39,6 @@
 // The Geant4-DNA web site is available at http://geant4-dna.org
 //
 // Authors: W. G. Shin and S. Incerti (CENBG, France)
-//
-// $Id$
-//
-/// \file StackingAction.cc
-/// \brief Implementation of the StackingAction class
 
 #include "StackingAction.hh"
 
@@ -62,7 +60,6 @@ StackingAction::~StackingAction() {}
 void StackingAction::NewStage()
 {
   if (stackManager->GetNTotalTrack() == 0) {
-    //    G4cout << "Physics stage ends" << G4endl;
     G4DNAChemistryManager::Instance()->Run();  // starts chemistry
   }
 }

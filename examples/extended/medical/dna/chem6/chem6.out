@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-03-ref-06    (30-June-2025)
+ Geant4 version Name: geant4-11-04-ref-00    (5-December-2025)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -19,8 +19,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
                              WWW : http://geant4.org/
 **************************************************************
 
-===== Register constructor ==== G4EmDNAPhysics_option2
-===== Register constructor ==== G4EmDNAChemistry_option3
+PhysicsList: EM constructor 'G4EmDNAPhysics_option2' already active, no change
 G4SDManager::AddNewCollection : the collection <mfDetector/PrimaryKiller> is registered at 1
 G4SDManager::AddNewCollection : the collection <mfDetector/LET> is registered at 2
 G4SDManager::AddNewCollection : the collection <mfDetector/Species> is registered at 3
@@ -170,7 +169,7 @@ Lowest muon/hadron kinetic energy                  1 keV
 Use ICRU90 data                                    1
 Fluctuations of dE/dx are enabled                  1
 Type of fluctuation model for leptons and hadrons  Universal
-Use built-in Birks satuaration                     0
+Use built-in Birks saturation                      0
 Build CSDA range enabled                           0
 Use cut as a final range enabled                   0
 Enable angular generator interface                 1
@@ -214,6 +213,8 @@ Type of PIXE cross section for e+-                 Livermore
 =======================================================================
 ======                 DNA Physics Parameters                  ========
 =======================================================================
+Max DNA electron energy                            1 MeV
+Max DNA ion energy                                 300 MeV
 Use fast sampling in DNA models                    1
 Use Stationary option in DNA models                0
 Use DNA with multiple scattering of e-             0
@@ -518,8 +519,8 @@ DNAMillerGreenExcitationModel : Emin=    0 eV  Emax=  500 keV
 
 hydrogen_G4DNAIonisation:  for hydrogen SubType=53 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNARuddIonisationExtendedModel : Emin=    0 eV  Emax=  300 MeV  deltaRudd Fluo
-          DummyModel : Emin=  300 MeV Emax=  600 MeV
+DNARuddIonisationExtendedModel : Emin=    0 eV  Emax=  100 MeV  deltaRudd Fluo
+          DummyModel : Emin=  100 MeV Emax=  600 MeV
           StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
 
 hydrogen_G4DNAChargeIncrease:  for hydrogen SubType=57 BuildTable=0
@@ -631,29 +632,29 @@ Number of events recorded by the species scorer = 3
 --> Event 0 starts.
 
 --------------------End of Global Run-----------------------
-  The run has 7 events 
-Number of events recorded by the species scorer = 7
- Total energy deposited in the world volume : 16196 eV
+  The run has 8 events 
+Number of events recorded by the species scorer = 8
+ Total energy deposited in the world volume : 18486 eV
  ------------------------------------------------------------
 
 ### Run 3 starts.
 ### Run 3 starts.
---> Event 0 starts.
-
---------------------End of Global Run-----------------------
-  The run has 4 events 
-Number of events recorded by the species scorer = 4
- Total energy deposited in the world volume : 15264 eV
- ------------------------------------------------------------
-
-### Run 4 starts.
-### Run 4 starts.
 --> Event 0 starts.
 
 --------------------End of Global Run-----------------------
   The run has 2 events 
 Number of events recorded by the species scorer = 2
- Total energy deposited in the world volume : 12053 eV
+ Total energy deposited in the world volume : 7627.8 eV
+ ------------------------------------------------------------
+
+### Run 4 starts.
+### Run 4 starts.
+--> Event 0 starts.
+
+--------------------End of Global Run-----------------------
+  The run has 3 events 
+Number of events recorded by the species scorer = 3
+ Total energy deposited in the world volume : 18026 eV
  ------------------------------------------------------------
 
 ### Run 5 starts.
@@ -663,9 +664,16 @@ Number of events recorded by the species scorer = 2
 --------------------End of Global Run-----------------------
   The run has 2 events 
 Number of events recorded by the species scorer = 2
- Total energy deposited in the world volume : 16031 eV
+ Total energy deposited in the world volume : 16015 eV
  ------------------------------------------------------------
 
 ### Run 6 starts.
 ### Run 6 starts.
 --> Event 0 starts.
+
+--------------------End of Global Run-----------------------
+  The run has 1 events 
+Number of events recorded by the species scorer = 1
+ Total energy deposited in the world volume : 10000 eV
+ ------------------------------------------------------------
+

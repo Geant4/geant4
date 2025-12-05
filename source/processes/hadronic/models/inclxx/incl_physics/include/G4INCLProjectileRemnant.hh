@@ -197,7 +197,7 @@ namespace G4INCL {
       }
 
       std::sort(energies.begin(), energies.end());
-// assert(energies.size()==(unsigned int)theA);
+//assert(energies.size()==(unsigned int)theA || energies.size()== (unsigned int)-theA);
       theGroundStateEnergies.resize(energies.size());
       // Compute the partial sums of the CM energies -- they are our reference
       // ground-state energies for any number of nucleons

@@ -23,12 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// This example is provided by the Geant4-DNA collaboration
-// Any report or published results obtained using the Geant4-DNA software
-// shall cite the following Geant4-DNA collaboration publication:
-// Med. Phys. 37 (2010) 4692-4708
-// The Geant4-DNA web site is available at http://geant4-dna.org
-//
+/// \file PhysicsList.cc
+/// \brief Implementation of the PhysicsList class
 
 #include "PhysicsList.hh"
 
@@ -36,23 +32,16 @@
 #include "PhysicsListMessenger.hh"
 
 #include "G4PhysicsConstructorRegistry.hh"
-#include "G4PhysicsListHelper.hh"
 #include "G4RunManager.hh"
 #include "G4SystemOfUnits.hh"
-// #include "CommandLineParser.hh"
 
-#include "G4BetheBlochIonGasModel.hh"
-#include "G4BraggIonGasModel.hh"
 #include "G4ComptonScattering.hh"
 #include "G4DNAAttachment.hh"
 #include "G4DNABornExcitationModel.hh"
 #include "G4DNABornIonisationModel.hh"
 #include "G4DNAChampionElasticModel.hh"
-#include "G4DNAChargeDecrease.hh"
-#include "G4DNAChargeIncrease.hh"
 #include "G4DNAChemistryManager.hh"
 #include "G4DNADingfelderChargeDecreaseModel.hh"
-#include "G4DNADingfelderChargeIncreaseModel.hh"
 #include "G4DNADiracRMatrixExcitationModel.hh"
 #include "G4DNAELSEPAElasticModel.hh"
 #include "G4DNAElastic.hh"
@@ -60,11 +49,9 @@
 #include "G4DNAGenericIonsManager.hh"
 #include "G4DNAIonisation.hh"
 #include "G4DNAMeltonAttachmentModel.hh"
-#include "G4DNAMillerGreenExcitationModel.hh"
 #include "G4DNAPlasmonExcitation.hh"
 #include "G4DNAQuinnPlasmonExcitationModel.hh"
 #include "G4DNARelativisticIonisationModel.hh"
-#include "G4DNARuddIonisationModel.hh"
 #include "G4DNASancheExcitationModel.hh"
 #include "G4DNAVibExcitation.hh"
 #include "G4DummyModel.hh"
@@ -78,9 +65,7 @@
 #include "G4LivermoreGammaConversionModel.hh"
 #include "G4LivermoreIonisationModel.hh"
 #include "G4LivermorePhotoElectricModel.hh"
-#include "G4LivermoreRayleighModel.hh"
 #include "G4LossTableManager.hh"
-#include "G4MollerBhabhaModel.hh"
 #include "G4PenelopeBremsstrahlungModel.hh"
 #include "G4PenelopeIonisationModel.hh"
 #include "G4PhotoElectricEffect.hh"
@@ -94,81 +79,57 @@
 #include "G4eBremsstrahlung.hh"
 #include "G4eIonisation.hh"
 #include "G4eMultipleScattering.hh"
-#include "G4hIonisation.hh"
 #include "G4hMultipleScattering.hh"
-#include "G4ionIonisation.hh"
-
-// #include "G4ElectronCapture.hh"
 
 #include "G4ProcessTable.hh"
-
-// using namespace G4DNAPARSER;
+#include "G4EmDNAChemistry_option3.hh"
+#include "G4GenericIon.hh"
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-PhysicsList::PhysicsList() : G4VModularPhysicsList(), fpDetector(0)
-{
-  fpDetector = dynamic_cast<const DetectorConstruction*>(
+PhysicsList::PhysicsList() {
+  fpDetector = dynamic_cast<const DetectorConstruction *>(
     G4RunManager::GetRunManager()->GetUserDetectorConstruction());
-  defaultCutValue = 0.1 * nanometer;
-  fcutForGamma = defaultCutValue;
-  fcutForElectron = defaultCutValue;
-  fcutForPositron = defaultCutValue;
-  fcutForProton = defaultCutValue;
-
-  fPhysMessenger = new PhysicsListMessenger(this);
+  defaultCutValue = 0.1 * CLHEP::nanometer;
+  fPhysMessenger = std::make_unique<PhysicsListMessenger>(this);
   SetVerboseLevel(1);
-
-  // RegisterConstructor("G4EmDNAChemistry");
+  fEmDNAChemistryList = std::make_unique<G4EmDNAChemistry_option3>();
+  G4EmParameters *param = G4EmParameters::Instance();
+  param->SetMinEnergy(100 * eV);
+  param->SetMaxEnergy(1 * GeV);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-PhysicsList::~PhysicsList()
-{
-  delete fPhysMessenger;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void PhysicsList::RegisterConstructor(const G4String& name)
-{
-  RegisterPhysics(G4PhysicsConstructorRegistry::Instance()->GetPhysicsConstructor(name));
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void PhysicsList::ConstructParticle()
-{
+void PhysicsList::ConstructParticle() {
   ConstructBosons();
   ConstructLeptons();
   ConstructBarions();
-
+  if (fEmDNAChemistryList != nullptr) {
+    fEmDNAChemistryList->ConstructParticle();
+  }
   G4VModularPhysicsList::ConstructParticle();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void PhysicsList::ConstructBosons()
-{
+void PhysicsList::ConstructBosons() {
   G4Gamma::GammaDefinition();
 }
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void PhysicsList::ConstructLeptons()
-{
+void PhysicsList::ConstructLeptons() {
   G4Electron::ElectronDefinition();
   G4Positron::PositronDefinition();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void PhysicsList::ConstructBarions()
-{
+void PhysicsList::ConstructBarions() {
   G4Proton::ProtonDefinition();
   G4GenericIon::GenericIonDefinition();
 
-  G4DNAGenericIonsManager* genericIonsManager;
-  genericIonsManager = G4DNAGenericIonsManager::Instance();
+  auto *genericIonsManager = G4DNAGenericIonsManager::Instance();
   genericIonsManager->GetIon("alpha++");
   genericIonsManager->GetIon("alpha+");
   genericIonsManager->GetIon("helium");
@@ -177,107 +138,106 @@ void PhysicsList::ConstructBarions()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void PhysicsList::ConstructProcess()
-{
+void PhysicsList::ConstructProcess() {
   ConstructEM();
   ConstructGeneral();
-
+  if (fEmDNAChemistryList != nullptr) {
+    fEmDNAChemistryList->ConstructProcess();
+  }
   // Contruct processes of the chemistry list
   G4VModularPhysicsList::ConstructProcess();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void PhysicsList::ConstructEM()
-{
+void PhysicsList::ConstructEM() {
   G4bool isGNP = false;
   if (fphysname == "") fphysname = "DNA";
 
-  G4Material* NPMaterial = fpDetector->GetNPMaterial();
-  G4String npname = NPMaterial->GetName();
+  const G4Material *NPMaterial = fpDetector->GetNPMaterial();
+  const G4String npname = NPMaterial->GetName();
 
   if (npname == "G4_Au") isGNP = true;
 
-  auto theParticleIterator = GetParticleIterator();
+  const auto theParticleIterator = GetParticleIterator();
   theParticleIterator->reset();
 
   while ((*theParticleIterator)()) {
-    G4ParticleDefinition* particle = theParticleIterator->value();
+    const G4ParticleDefinition *particle = theParticleIterator->value();
 
-    G4ProcessManager* pm = particle->GetProcessManager();
+    G4ProcessManager *pm = particle->GetProcessManager();
 
     G4String particleName = particle->GetParticleName();
 
     if (particleName == "e-") {
-      G4DNAElastic* theDNAElasticProcess = new G4DNAElastic("e-_G4DNAElastic");
+      const auto theDNAElasticProcess = new G4DNAElastic("e-_G4DNAElastic");
       theDNAElasticProcess->SetEmModel(new G4DNAChampionElasticModel(), 1);
       pm->AddDiscreteProcess(theDNAElasticProcess);
 
-      G4DNAExcitation* theDNAExcitationProcess = new G4DNAExcitation("e-_G4DNAExcitation");
+      const auto theDNAExcitationProcess = new G4DNAExcitation("e-_G4DNAExcitation");
       theDNAExcitationProcess->SetEmModel(new G4DNABornExcitationModel(), 1);
       pm->AddDiscreteProcess(theDNAExcitationProcess);
 
-      G4DNAIonisation* theDNAIonizationProcess = new G4DNAIonisation("e-_G4DNAIonisation");
+      const auto theDNAIonizationProcess = new G4DNAIonisation("e-_G4DNAIonisation");
       theDNAIonizationProcess->SetEmModel(new G4DNABornIonisationModel(), 1);
       pm->AddDiscreteProcess(theDNAIonizationProcess);
 
-      G4DNAAttachment* theDNAAttachmentProcess = new G4DNAAttachment("e-_G4DNAAttachment");
+      const auto theDNAAttachmentProcess = new G4DNAAttachment("e-_G4DNAAttachment");
       pm->AddDiscreteProcess(theDNAAttachmentProcess);
 
-      G4DNAVibExcitation* theDNAVibExcProcess = new G4DNAVibExcitation("e-_G4DNAVibExcitation");
+      const auto theDNAVibExcProcess = new G4DNAVibExcitation("e-_G4DNAVibExcitation");
       pm->AddDiscreteProcess(theDNAVibExcProcess);
 
-      G4eBremsstrahlung* theDNABremProcess = new G4eBremsstrahlung("e-_G4DNABremsstrahlung");
+      const auto theDNABremProcess = new G4eBremsstrahlung("e-_G4DNABremsstrahlung");
       pm->AddDiscreteProcess(theDNABremProcess);
 
       if (isGNP) {
         if (fphysname == "DNA") {
-          G4DNAElastic* theDNAELSEPAElasticProcess = new G4DNAElastic("e-_G4DNAELSEPAElastic");
+          const auto theDNAELSEPAElasticProcess = new G4DNAElastic("e-_G4DNAELSEPAElastic");
           theDNAELSEPAElasticProcess->SetEmModel(new G4DummyModel(), 1);
           pm->AddDiscreteProcess(theDNAELSEPAElasticProcess);
-          G4DNAExcitation* theDNADRMExcitationProcess =
-            new G4DNAExcitation("e-_G4DNADRMExcitation");
+          const auto theDNADRMExcitationProcess =
+              new G4DNAExcitation("e-_G4DNADRMExcitation");
           theDNADRMExcitationProcess->SetEmModel(new G4DummyModel(), 1);
           pm->AddDiscreteProcess(theDNADRMExcitationProcess);
-          G4DNAIonisation* theDNARelativisticIonizationProcess =
-            new G4DNAIonisation("e-_G4DNARelativisticIonisation");
+          const auto theDNARelativisticIonizationProcess =
+              new G4DNAIonisation("e-_G4DNARelativisticIonisation");
           theDNARelativisticIonizationProcess->SetEmModel(new G4DummyModel(), 1);
           pm->AddDiscreteProcess(theDNARelativisticIonizationProcess);
-          G4DNAPlasmonExcitation* theDNAPExcitationProcess =
-            new G4DNAPlasmonExcitation("e-_G4DNAPlasmonExcitation");
+          const auto theDNAPExcitationProcess =
+              new G4DNAPlasmonExcitation("e-_G4DNAPlasmonExcitation");
           theDNAPExcitationProcess->SetEmModel(new G4DummyModel(), 1);
           pm->AddDiscreteProcess(theDNAPExcitationProcess);
-          G4eBremsstrahlung* theDNAeBremProcess =
-            new G4eBremsstrahlung("e-_G4DNABremsstrahlung_GNP");
+          const auto theDNAeBremProcess =
+              new G4eBremsstrahlung("e-_G4DNABremsstrahlung_GNP");
           theDNAeBremProcess->SetEmModel(new G4DummyModel(), 1);
           pm->AddDiscreteProcess(theDNAeBremProcess);
         }
         if (fphysname == "Livermore") {
-          G4eMultipleScattering* msc = new G4eMultipleScattering();
+          const auto msc = new G4eMultipleScattering();
           msc->SetEmModel(new G4DummyModel(), 1);
           pm->AddDiscreteProcess(msc);
-          G4eIonisation* eIoni = new G4eIonisation("e-_G4LivermoreIoni");
+          const auto eIoni = new G4eIonisation("e-_G4LivermoreIoni");
           eIoni->SetEmModel(new G4DummyModel(), 1);
           pm->AddDiscreteProcess(eIoni);
-          G4eBremsstrahlung* eBrem = new G4eBremsstrahlung("e-_G4LivermoreBrem");
+          const auto eBrem = new G4eBremsstrahlung("e-_G4LivermoreBrem");
           eBrem->SetEmModel(new G4DummyModel(), 1);
           pm->AddDiscreteProcess(eBrem);
 
-          G4StepLimiter* steplimit = new G4StepLimiter();
+          const auto steplimit = new G4StepLimiter();
           pm->AddDiscreteProcess(steplimit);
         }
         if (fphysname == "Penelope") {
-          G4eMultipleScattering* msc = new G4eMultipleScattering();
+          const auto msc = new G4eMultipleScattering();
           msc->SetEmModel(new G4DummyModel(), 1);
           pm->AddDiscreteProcess(msc);
-          G4eIonisation* eIoni = new G4eIonisation("e-_G4PenelopeIoni");
+          const auto eIoni = new G4eIonisation("e-_G4PenelopeIoni");
           eIoni->SetEmModel(new G4DummyModel(), 1);
           pm->AddDiscreteProcess(eIoni);
-          G4eBremsstrahlung* eBrem = new G4eBremsstrahlung("e-_G4PenelopeBrem");
+          const auto eBrem = new G4eBremsstrahlung("e-_G4PenelopeBrem");
           eBrem->SetEmModel(new G4DummyModel(), 1);
           pm->AddDiscreteProcess(eBrem);
-
-          G4StepLimiter* steplimit = new G4StepLimiter();
+          const auto steplimit = new G4StepLimiter();
           pm->AddDiscreteProcess(steplimit);
         }
       }
@@ -285,32 +245,29 @@ void PhysicsList::ConstructEM()
       //// Capture of low-energy e-
       // G4ElectronCapture* ecap = new G4ElectronCapture("NP",10.*eV);
       // pm->AddDiscreteProcess(ecap);
-    }
-    else if (particleName == "proton") {
-    }
-    else if (particleName == "hydrogen") {
-    }
-    else if (particleName == "gamma") {
-      G4PhotoElectricEffect* thePhotoElectricEffect = new G4PhotoElectricEffect();
+    } else if (particleName == "proton") {
+    } else if (particleName == "hydrogen") {
+    } else if (particleName == "gamma") {
+      G4PhotoElectricEffect *thePhotoElectricEffect = new G4PhotoElectricEffect();
       thePhotoElectricEffect->SetEmModel(new G4LivermorePhotoElectricModel(), 1);
       pm->AddDiscreteProcess(thePhotoElectricEffect);
 
-      G4ComptonScattering* theComptonScattering = new G4ComptonScattering();
+      G4ComptonScattering *theComptonScattering = new G4ComptonScattering();
       theComptonScattering->SetEmModel(new G4LivermoreComptonModel(), 1);
       pm->AddDiscreteProcess(theComptonScattering);
 
-      G4GammaConversion* theGammaConversion = new G4GammaConversion();
+      G4GammaConversion *theGammaConversion = new G4GammaConversion();
       theGammaConversion->SetEmModel(new G4LivermoreGammaConversionModel(), 1);
       pm->AddDiscreteProcess(theGammaConversion);
 
-      G4RayleighScattering* theRayleigh = new G4RayleighScattering();
+      G4RayleighScattering *theRayleigh = new G4RayleighScattering();
       pm->AddDiscreteProcess(theRayleigh);
     }
   }
 
   if (isGNP) {
-    G4EmConfigurator* em_config = G4LossTableManager::Instance()->EmConfigurator();
-    G4VEmModel* mod;
+    G4EmConfigurator *em_config = G4LossTableManager::Instance()->EmConfigurator();
+    G4VEmModel *mod;
     mod = new G4DNAChampionElasticModel();
     mod->SetActivationLowEnergyLimit(1 * GeV);
     em_config->SetExtraEmModel("e-", "e-_G4DNAElastic", mod, "NP");
@@ -369,7 +326,7 @@ void PhysicsList::ConstructEM()
     }
   }
 
-  G4VAtomDeexcitation* de = new G4UAtomicDeexcitation();
+  G4VAtomDeexcitation *de = new G4UAtomicDeexcitation();
   G4LossTableManager::Instance()->SetAtomDeexcitation(de);
   de->SetFluo(true);
   de->SetPIXE(true);
@@ -379,11 +336,7 @@ void PhysicsList::ConstructEM()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void PhysicsList::ConstructGeneral() {}
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void PhysicsList::SetCuts()
-{
+void PhysicsList::SetCuts() {
   if (verboseLevel > 0) {
     G4cout << "PhysicsList::SetCuts:";
     G4cout << "CutLength : " << G4BestUnit(defaultCutValue, "Length") << G4endl;
@@ -397,7 +350,7 @@ void PhysicsList::SetCuts()
     DumpCutValuesTable();
   }
 }
-void PhysicsList::SetPhysics4NP(const G4String& name)
-{
+
+void PhysicsList::SetPhysics4NP(const G4String &name) {
   fphysname = name;
 }

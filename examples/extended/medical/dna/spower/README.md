@@ -1,0 +1,77 @@
+\page Examplespower Example spower
+
+\author S. Incerti et al. (a, *) \n
+a. LP2i, IN2P3 / CNRS / Bordeaux University, 33175 Gradignan, France \n
+* e-mail: incerti@lp2ib.in2p3.fr  \n
+
+## INTRODUCTION.
+
+The spower example shows how to calculate stopping power of particles
+in liquid water using the Geant4-DNA physics processes and models.
+
+This example is provided by the Geant4-DNA collaboration.
+
+These processes and models are further described at:
+http://geant4-dna.org
+
+Any report or published results obtained using the Geant4-DNA software shall
+cite the following Geant4-DNA collaboration publications: \n
+Med. Phys. 51 (2024) 5873–5889 \n
+Med. Phys. 45 (2018) e722-e739 \n
+Phys. Med. 31 (2015) 861-874   \n
+Med. Phys. 37 (2010) 4692-4708 \n
+Int. J. Model. Simul. Sci. Comput. 1 (2010) 157–178
+
+and for this example: \n
+Nucl. Instrum. Meth. B 397 (2017) 45-50.
+
+## GEOMETRY SET-UP
+
+The geometry is a 1 m radius sphere of liquid water (G4_WATER
+material). Particles are shot randomly from the sphere centre.
+
+Radius of the sphere, physics constructor, primary particle and
+energy can be controlled by the spower.in macro file.
+
+## SET-UP
+
+Make sure G4LEDATA points to the low energy electromagnetic data files.
+
+The code can be compiled with cmake.
+
+It works in MT mode.
+
+## HOW TO RUN THE EXAMPLE
+
+In interactive mode, run:
+
+```
+./spower spower.in
+```
+
+The spower.in macro allows a full control of the simulation.
+
+The computation of stopping power is performed in the
+SteppingAction::UserSteppingAction method.
+
+## PHYSICS
+
+Specific physics constructors, called G4EmDNAPhysics_stationary*
+and adapted from G4EmDNAPhysics* are available to set all inelastic
+models in a stationary mode for the computation of the stopping
+power.
+
+## SIMULATION OUTPUT AND RESULT ANALYSIS
+
+The accuracy of results may depend on incident statistics as well as
+on number of steps specified in the SteppingAction::UserSteppingAction
+method.
+
+The output results consist in a text file (spower.txt), containing :
+- energy of incident particles (in eV)
+- stopping power (in keV/um)
+- rms (i.e. standard deviation) on stopping power (in keV/um)
+
+A ROOT file, spower.root, is also provided for the scoring of secondary electrons.
+The Geant4 secondary.in example macro can be used to run the corresponding simulation.
+The plot.C ROOT macro can then be used to display their energy spectrum.

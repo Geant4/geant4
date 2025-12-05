@@ -57,6 +57,7 @@ namespace
 {
   G4Mutex polyhedronMutex  = G4MUTEX_INITIALIZER;
   G4Mutex lateralareaMutex = G4MUTEX_INITIALIZER;
+  G4Mutex gentrapMutex = G4MUTEX_INITIALIZER;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -85,14 +86,6 @@ G4GenericTrap::G4GenericTrap(__void__& a)
 
 ////////////////////////////////////////////////////////////////////////
 //
-// Destructor
-
-G4GenericTrap::~G4GenericTrap()
-{
-}
-
-////////////////////////////////////////////////////////////////////////
-//
 // Copy constructor
 //
 G4GenericTrap::G4GenericTrap(const G4GenericTrap& rhs)
@@ -107,6 +100,7 @@ G4GenericTrap::G4GenericTrap(const G4GenericTrap& rhs)
   for (auto i = 0; i < 4; ++i) { fDelta[i] = rhs.fDelta[i]; }
   for (auto i = 0; i < 8; ++i) { fPlane[i] = rhs.fPlane[i]; }
   for (auto i = 0; i < 4; ++i) { fSurf[i] = rhs.fSurf[i]; }
+  for (auto i = 0; i < 4; ++i) { f4k[i] = rhs.f4k[i]; }
   for (auto i = 0; i < 4; ++i) { fArea[i] = rhs.fArea[i]; }
 }
 
@@ -134,6 +128,7 @@ G4GenericTrap& G4GenericTrap::operator=(const G4GenericTrap& rhs)
   for (auto i = 0; i < 4; ++i) { fDelta[i] = rhs.fDelta[i]; }
   for (auto i = 0; i < 8; ++i) { fPlane[i] = rhs.fPlane[i]; }
   for (auto i = 0; i < 4; ++i) { fSurf[i] = rhs.fSurf[i]; }
+  for (auto i = 0; i < 4; ++i) { f4k[i] = rhs.f4k[i]; }
   for (auto i = 0; i < 4; ++i) { fArea[i] = rhs.fArea[i]; }
 
   fRebuildPolyhedron = false;
@@ -153,7 +148,10 @@ EInside G4GenericTrap::Inside(const G4ThreeVector& p) const
   // intersect edges by z = pz plane
   G4TwoVector pp[4];
   G4double z = (pz + fDz);
-  for (auto i = 0; i < 4; ++i) { pp[i] = fVertices[i] + fDelta[i]*z; }
+  for (auto i = 0; i < 4; ++i)
+  {
+    pp[i] = fVertices[i] + fDelta[i]*z;
+  }
 
   // estimate distance to the solid
   G4double dist = std::abs(pz) - fDz;
@@ -193,7 +191,10 @@ G4ThreeVector G4GenericTrap::SurfaceNormal( const G4ThreeVector& p ) const
   // intersect edges by z = pz plane
   G4TwoVector pp[4];
   G4double tz = (pz + fDz);
-  for (auto i = 0; i < 4; ++i) { pp[i] = fVertices[i] + fDelta[i]*tz; }
+  for (auto i = 0; i < 4; ++i)
+  {
+    pp[i] = fVertices[i] + fDelta[i]*tz;
+  }
 
   // check bottom and top faces
   G4double dz = std::abs(pz) - fDz;
@@ -236,7 +237,10 @@ G4ThreeVector G4GenericTrap::SurfaceNormal( const G4ThreeVector& p ) const
 
   // return normal
   G4double mag2 = nx*nx + ny*ny + nz*nz;
-  if (mag2 == 0.) return ApproxSurfaceNormal(p); // point is not on the surface
+  if (mag2 == 0.)
+  {
+    return ApproxSurfaceNormal(p); // point is not on the surface
+  }
   G4double mag = std::sqrt(mag2);
   G4double inv = (mag == 1.) ? 1. : 1./mag;
   return { nx*inv, ny*inv, nz*inv };
@@ -266,7 +270,10 @@ G4ThreeVector G4GenericTrap::ApproxSurfaceNormal( const G4ThreeVector& p ) const
   // intersect edges by z = pz plane
   G4TwoVector pp[4];
   G4double tz = (pz + fDz);
-  for (auto i = 0; i < 4; ++i) { pp[i] = fVertices[i] + fDelta[i]*tz; }
+  for (auto i = 0; i < 4; ++i)
+  {
+    pp[i] = fVertices[i] + fDelta[i]*tz;
+  }
 
   // check lateral faces
   for (auto i = 0; i < 4; ++i)
@@ -290,7 +297,8 @@ G4ThreeVector G4GenericTrap::ApproxSurfaceNormal( const G4ThreeVector& p ) const
   }
   // check bottom and top faces
   G4double distz = std::abs(pz) - fDz;
-  if (distz >= dist) return { 0., 0., std::copysign(1., pz) };
+  if (distz >= dist) { return { 0., 0., std::copysign(1., pz) };
+}
 
   G4double x = fSurf[iside].A*pz + fSurf[iside].D;
   G4double y = fSurf[iside].B*pz + fSurf[iside].E;
@@ -321,7 +329,7 @@ G4double G4GenericTrap::DistanceToIn(const G4ThreeVector& p,
   // Check plane faces
   for (auto k = 0; k < 4; ++k)
   {
-    if (fTwist[k] != 0) continue; // skip twisted faces
+    if (fTwist[k] != 0) { continue; } // skip twisted faces
     const G4GenericTrapPlane& surf = fPlane[2*k];
     G4double cosa = surf.A*vx + surf.B*vy + surf.C*vz;
     G4double dist = surf.A*px + surf.B*py + surf.C*pz + surf.D;
@@ -343,7 +351,7 @@ G4double G4GenericTrap::DistanceToIn(const G4ThreeVector& p,
   G4double tout = xout;
   for (auto i = 0; i < 4; ++i)
   {
-    if (fTwist[i] == 0) continue; // skip plane faces
+    if (fTwist[i] == 0) { continue; } // skip plane faces
 
     // check intersection with 1st bounding plane
     const G4GenericTrapPlane& surf1 = fPlane[2*i];
@@ -393,22 +401,22 @@ G4double G4GenericTrap::DistanceToIn(const G4ThreeVector& p,
     x0 += vx*t0;
     y0 += vy*t0;
     z0 += vz*t0;
-   }
+  }
 
   // Check intersections with twisted faces
   //
   G4double ttin[2] = { DBL_MAX, DBL_MAX };
   G4double ttout[2] = { tout, tout };
 
-  if (tin - xin < halfTolerance) ttin[0] = xin;
-  if (xout - tout < halfTolerance) ttout[0] = xout;
+  if (tin - xin < halfTolerance) { ttin[0] = xin; }
+  if (xout - tout < halfTolerance) { ttout[0] = xout; }
   G4double tminimal = tin - halfTolerance;
   G4double tmaximal = tout + halfTolerance;
 
   constexpr G4double EPSILON = 1000.*DBL_EPSILON;
   for (auto i = 0; i < 4; ++i)
   {
-    if (fTwist[i] == 0) continue; // skip plane faces
+    if (fTwist[i] == 0) { continue; } // skip plane faces
 
     // twisted face, solve quadratic equation
     G4double ABC  = fSurf[i].A*vx + fSurf[i].B*vy + fSurf[i].C*vz;
@@ -458,8 +466,8 @@ G4double G4GenericTrap::DistanceToIn(const G4ThreeVector& p,
         G4double dist = dx*(py - a.y()) - dy*(px - a.x());
         if (dist >= -halfTolerance*leng) { return kInfinity; } // point is flies away
 
-        if (tmp < tminimal || tmp > tmaximal) continue;
-        if (std::abs(tmp - ttout[0]) < halfTolerance) continue;
+        if (tmp < tminimal || tmp > tmaximal) { continue; }
+        if (std::abs(tmp - ttout[0]) < halfTolerance) { continue; }
         if (tmp < ttout[0])
         {
           ttout[1] = ttout[0];
@@ -469,8 +477,8 @@ G4double G4GenericTrap::DistanceToIn(const G4ThreeVector& p,
       }
       else // point is flying to inside
       {
-        if (tmp < tminimal || tmp > tmaximal) continue;
-        if (std::abs(tmp - ttin[0]) < halfTolerance) continue;
+        if (tmp < tminimal || tmp > tmaximal) { continue; }
+        if (std::abs(tmp - ttin[0]) < halfTolerance) { continue; }
         if (tmp < ttin[0])
         {
           ttin[1] = ttin[0];
@@ -485,7 +493,7 @@ G4double G4GenericTrap::DistanceToIn(const G4ThreeVector& p,
     G4double D = B*B - A*C;
     if (D < 0.25*fScratch*fScratch*A*A)
     {
-      if (A > 0) return kInfinity;
+      if (A > 0) { return kInfinity; }
       continue;
     }
 
@@ -495,7 +503,7 @@ G4double G4GenericTrap::DistanceToIn(const G4ThreeVector& p,
     G4double t2 = C/tmp + t0;
     G4double tsurfin = std::min(t1, t2);
     G4double tsurfout = std::max(t1, t2);
-    if (A < 0) std::swap(tsurfin, tsurfout);
+    if (A < 0) { std::swap(tsurfin, tsurfout); }
 
     if (tsurfin >= tminimal && tsurfin <= tmaximal)
     {
@@ -561,35 +569,30 @@ G4double G4GenericTrap::DistanceToIn(const G4ThreeVector& p,
 //
 G4double G4GenericTrap::DistanceToIn(const G4ThreeVector& p) const
 {
-  G4double px = p.x(), py = p.y(), pz = p.z();
-
-  // intersect edges by z = pz plane
-  G4TwoVector pp[4];
-  G4double z = (pz + fDz);
-  for (auto i = 0; i < 4; ++i) { pp[i] = fVertices[i] + fDelta[i]*z; }
-
-  // estimate distance to the solid
-  G4double dist = std::abs(pz) - fDz;
+  G4double x = p.x(), y = p.y(), z = p.z();
+  G4double dist = std::abs(z) - fDz;
   for (auto i = 0; i < 4; ++i)
   {
     if (fTwist[i] == 0.)
     {
-      G4double dd = fSurf[i].D*px + fSurf[i].E*py + fSurf[i].F*pz + fSurf[i].G;
-      dist = std::max(dd, dist);
+      G4double distPlane = fSurf[i].D*x + fSurf[i].E*y + fSurf[i].F*z + fSurf[i].G;
+      dist = std::max(distPlane, dist);
     }
     else
     {
-      // comptute distance to the wedge (two planes) in front of the surface
-      auto j = (i + 1)%4;
-      G4double cx = pp[j].x() - pp[i].x();
-      G4double cy = pp[j].y() - pp[i].y();
-      G4double d = (pp[i].x() - px)*cy + (py - pp[i].y())*cx;
-      G4ThreeVector na(-cy, cx, fDelta[i].x()*cy - fDelta[i].y()*cx);
-      G4ThreeVector nb(-cy, cx, fDelta[j].x()*cy - fDelta[j].y()*cx);
-      G4double amag2 = na.mag2();
-      G4double bmag2 = nb.mag2();
-      G4double distab = (amag2 > bmag2) ? d/std::sqrt(amag2) : d/std::sqrt(bmag2); // d > 0
-      dist = std::max(distab, dist);
+      G4double A = fSurf[i].A;
+      G4double B = fSurf[i].B;
+      G4double C = fSurf[i].C;
+      G4double Cz = C*z;
+      G4double CzF = Cz + fSurf[i].F;
+      G4double gradx = A*z + fSurf[i].D;
+      G4double grady = B*z + fSurf[i].E;
+      G4double gradz = A*x + B*y + Cz + CzF;
+      G4double fun = gradx*x + grady*y + CzF*z + fSurf[i].G;
+      G4double grad2 = gradx*gradx + grady*grady + gradz*gradz;
+      G4double divisor = std::sqrt(grad2) + std::sqrt(grad2 + f4k[i]*std::abs(fun));
+      G4double distSurf = 2.*fun/divisor;
+      dist = std::max(distSurf, dist);
     }
   }
   return (dist > 0.) ? dist : 0.; // return safety distance
@@ -624,7 +627,7 @@ G4double G4GenericTrap::DistanceToOut(const G4ThreeVector& p,
 
   for (auto i = 0; i < 4; ++i)
   {
-    if (fTwist[i] != 0) continue; // skip twisted faces
+    if (fTwist[i] != 0) { continue; } // skip twisted faces
     const G4GenericTrapPlane& surf = fPlane[2*i];
     G4double cosa = surf.A*vx + surf.B*vy + surf.C*vz;
     if (cosa > 0)
@@ -649,7 +652,7 @@ G4double G4GenericTrap::DistanceToOut(const G4ThreeVector& p,
   constexpr G4double EPSILON = 1000.*DBL_EPSILON;
   for (auto i = 0; i < 4; ++i)
   {
-    if (fTwist[i] == 0) continue; // skip plane faces
+    if (fTwist[i] == 0) { continue; } // skip plane faces
 
     // twisted face, solve quadratic equation
     const G4GenericTrapSurface& surf = fSurf[i];
@@ -741,7 +744,7 @@ G4double G4GenericTrap::DistanceToOut(const G4ThreeVector& p,
 
     if (A < 0) // concave profile: tmin(out) -> tmax(in)
     {
-      if (std::abs(tmax) < std::abs(tmin)) continue; // point flies inside
+      if (std::abs(tmax) < std::abs(tmin)) { continue; } // point flies inside
       if (tmin <= halfTolerance) // point is on external side of the surface
       {
         G4double t = 0.5*(tmin + tmax);
@@ -757,7 +760,7 @@ G4double G4GenericTrap::DistanceToOut(const G4ThreeVector& p,
         G4double dy = b.y() - a.y();
         G4double leng = std::sqrt(dx*dx + dy*dy);
         G4double dist = dx*(y - a.y()) - dy*(x - a.x());
-        if  (dist <= -halfTolerance*leng) continue; // scratch
+        if  (dist <= -halfTolerance*leng) { continue; } // scratch
         if (calcNorm)
         {
           *validNorm = false;
@@ -792,7 +795,7 @@ G4double G4GenericTrap::DistanceToOut(const G4ThreeVector& p,
 
   // Compute normal, if required, and return distance to out
   //
-  if (tout < halfTolerance) tout = 0.;
+  if (tout < halfTolerance) { tout = 0.; }
   if (calcNorm)
   {
     if (iface < 0)
@@ -831,35 +834,30 @@ G4double G4GenericTrap::DistanceToOut(const G4ThreeVector& p,
 //
 G4double G4GenericTrap::DistanceToOut(const G4ThreeVector& p) const
 {
-  G4double px = p.x(), py = p.y(), pz = p.z();
-
-  // intersect edges by z = pz plane
-  G4TwoVector pp[4];
-  G4double z = (pz + fDz);
-  for (auto i = 0; i < 4; ++i) { pp[i] = fVertices[i] + fDelta[i]*z; }
-
-  // estimate distance to the solid
-  G4double dist =  std::abs(pz) - fDz;
+  G4double x = p.x(), y = p.y(), z = p.z();
+  G4double dist = std::abs(z) - fDz;
   for (auto i = 0; i < 4; ++i)
   {
     if (fTwist[i] == 0.)
     {
-      G4double dd = fSurf[i].D*px + fSurf[i].E*py + fSurf[i].F*pz + fSurf[i].G;
-      dist = std::max(dd, dist);
+      G4double distPlane = fSurf[i].D*x + fSurf[i].E*y + fSurf[i].F*z + fSurf[i].G;
+      dist = std::max(distPlane, dist);
     }
     else
     {
-      // comptute distance to the wedge (two planes) in front of the surface
-      auto j = (i + 1)%4;
-      G4double cx = pp[j].x() - pp[i].x();
-      G4double cy = pp[j].y() - pp[i].y();
-      G4double d = (pp[i].x() - px)*cy + (py - pp[i].y())*cx;
-      G4ThreeVector na(-cy, cx, fDelta[i].x()*cy - fDelta[i].y()*cx);
-      G4ThreeVector nb(-cy, cx, fDelta[j].x()*cy - fDelta[j].y()*cx);
-      G4double amag2 = na.mag2();
-      G4double bmag2 = nb.mag2();
-      G4double distab = (amag2 > bmag2) ? d/std::sqrt(amag2) : d/std::sqrt(bmag2); // d < 0
-      dist = std::max(distab, dist);
+      G4double A = fSurf[i].A;
+      G4double B = fSurf[i].B;
+      G4double C = fSurf[i].C;
+      G4double Cz = C*z;
+      G4double CzF = Cz + fSurf[i].F;
+      G4double gradx = A*z + fSurf[i].D;
+      G4double grady = B*z + fSurf[i].E;
+      G4double gradz = A*x + B*y + Cz + CzF;
+      G4double fun = gradx*x + grady*y + CzF*z + fSurf[i].G;
+      G4double grad2 = gradx*gradx + grady*grady + gradz*gradz;
+      G4double divisor = std::sqrt(grad2) + std::sqrt(grad2 + f4k[i]*std::abs(fun));
+      G4double distSurf = 2.*fun/divisor;
+      dist = std::max(distSurf, dist);
     }
   }
   return (dist < 0.) ? -dist : 0.; // return safety distance
@@ -1007,7 +1005,10 @@ G4ThreeVector G4GenericTrap::GetPointOnSurface() const
     { {0,1,2,3}, {0,4,5,1}, {1,5,6,2}, {2,6,7,3}, {3,7,4,0}, {4,5,6,7} };
 
   G4bool isTwisted[6] = {false};
-  for (auto i = 0; i < 4; ++i) { isTwisted[i + 1] = (fTwist[i] != 0.0); }
+  for (auto i = 0; i < 4; ++i)
+  {
+    isTwisted[i + 1] = (fTwist[i] != 0.0);
+  }
 
   G4double ssurf[6];
   G4TwoVector A = fVertices[3] - fVertices[1];
@@ -1023,7 +1024,10 @@ G4ThreeVector G4GenericTrap::GetPointOnSurface() const
 
   G4double select = ssurf[5]*G4QuickRand();
   G4int k;
-  for (k = 0; k < 5; ++k) { if (select <= ssurf[k]) break; }
+  for (k = 0; k < 5; ++k)
+  {
+    if (select <= ssurf[k]) { break; }
+  }
 
   G4int i0 = iface[k][0];
   G4int i1 = iface[k][1];
@@ -1046,7 +1050,7 @@ G4ThreeVector G4GenericTrap::GetPointOnSurface() const
       G4ThreeVector p0 = pp[0] + (pp[1] - pp[0])*u;
       G4ThreeVector p1 = pp[3] + (pp[2] - pp[3])*u;
       G4double v = G4QuickRand()*(maxlength/(p1 - p0).mag());
-      if (v >= 1.) continue;
+      if (v >= 1.) { continue; }
       point = p0 + (p1 - p0)*v;
       break;
     }
@@ -1061,31 +1065,6 @@ G4ThreeVector G4GenericTrap::GetPointOnSurface() const
     point = pp[0] + (pp[2] - pp[0])*u + (pp[j] - pp[0])*v;
   }
   return point;
-}
-
-////////////////////////////////////////////////////////////////////////
-//
-// Return volume of the solid
-//
-G4double G4GenericTrap::GetCubicVolume()
-{
-  if (fCubicVolume == 0.0)
-  {
-    // diagonals
-    G4TwoVector A = fVertices[3] - fVertices[1];
-    G4TwoVector B = fVertices[2] - fVertices[0];
-    G4TwoVector C = fVertices[7] - fVertices[5];
-    G4TwoVector D = fVertices[6] - fVertices[4];
-
-    // kross products
-    G4double AB = A.x()*B.y() - A.y()*B.x();
-    G4double CD = C.x()*D.y() - C.y()*D.x();
-    G4double AD = A.x()*D.y() - A.y()*D.x();
-    G4double CB = C.x()*B.y() - C.y()*B.x();
-
-    fCubicVolume = ((AB + CD)/3. + (AD + CB)/6.)*fDz;
-  }
-  return fCubicVolume;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -1152,12 +1131,40 @@ G4double G4GenericTrap::GetLateralFaceArea(G4int iface) const
 
 ////////////////////////////////////////////////////////////////////////
 //
+// Return volume of the solid
+//
+G4double G4GenericTrap::GetCubicVolume()
+{
+  if (fCubicVolume == 0)
+  {
+    G4AutoLock l(&gentrapMutex);
+    // diagonals
+    G4TwoVector A = fVertices[3] - fVertices[1];
+    G4TwoVector B = fVertices[2] - fVertices[0];
+    G4TwoVector C = fVertices[7] - fVertices[5];
+    G4TwoVector D = fVertices[6] - fVertices[4];
+
+    // kross products
+    G4double AB = A.x()*B.y() - A.y()*B.x();
+    G4double CD = C.x()*D.y() - C.y()*D.x();
+    G4double AD = A.x()*D.y() - A.y()*D.x();
+    G4double CB = C.x()*B.y() - C.y()*B.x();
+
+    fCubicVolume = ((AB + CD)/3. + (AD + CB)/6.)*fDz;
+    l.unlock();
+  }
+  return fCubicVolume;
+}
+
+////////////////////////////////////////////////////////////////////////
+//
 // Return surface area of the solid
 //
 G4double G4GenericTrap::GetSurfaceArea()
 {
-  if (fSurfaceArea == 0.0)
+  if (fSurfaceArea == 0)
   {
+    G4AutoLock l(&gentrapMutex);
     G4TwoVector A = fVertices[3] - fVertices[1];
     G4TwoVector B = fVertices[2] - fVertices[0];
     G4TwoVector C = fVertices[7] - fVertices[5];
@@ -1169,6 +1176,7 @@ G4double G4GenericTrap::GetSurfaceArea()
     fArea[2] = GetLateralFaceArea(2);
     fArea[3] = GetLateralFaceArea(3);
     fSurfaceArea = S_bot + S_top + fArea[0] + fArea[1] + fArea[2] + fArea[3];
+    l.unlock();
   }
   return fSurfaceArea;
 }
@@ -1212,14 +1220,14 @@ G4GenericTrap::CheckParameters(G4double halfZ,
   G4TwoVector diag2 = fVertices[3] - fVertices[1];
   G4double ldiagbot = std::max(diag1.mag(), diag2.mag());
   G4double zbot = diag1.x()*diag2.y() - diag1.y()*diag2.x();
-  if (std::abs(zbot) < ldiagbot*kCarTolerance) zbot = 0.;
+  if (std::abs(zbot) < ldiagbot*kCarTolerance) { zbot = 0.; }
 
   // Top polygon area
   G4TwoVector diag3 = fVertices[6] - fVertices[4];
   G4TwoVector diag4 = fVertices[7] - fVertices[5];
   G4double ldiagtop = std::max(diag3.mag(), diag4.mag());
   G4double ztop = diag3.x()*diag4.y() - diag3.y()*diag4.x();
-  if (std::abs(ztop) < ldiagtop*kCarTolerance) ztop = 0.;
+  if (std::abs(ztop) < ldiagtop*kCarTolerance) { ztop = 0.; }
 
   if (zbot*ztop < 0.)
   {
@@ -1248,7 +1256,7 @@ G4GenericTrap::CheckParameters(G4double halfZ,
     auto j = (i + 1)%4;
     G4double lbot = (fVertices[j] - fVertices[i]).mag();
     G4double ltop = (fVertices[j + 4] - fVertices[i + 4]).mag();
-    ndegenerated += (std::max(lbot, ltop) < kCarTolerance);
+    ndegenerated += static_cast<int>(std::max(lbot, ltop) < kCarTolerance);
   }
   if (ndegenerated > 1 ||
       GetCubicVolume() < fDz*std::max(ldiagbot, ldiagtop)*kCarTolerance)
@@ -1270,11 +1278,11 @@ G4GenericTrap::CheckParameters(G4double halfZ,
     G4TwoVector edge1 = fVertices[j] - fVertices[i];
     G4TwoVector edge2 = fVertices[k] - fVertices[j];
     isConvex = ((edge1.x()*edge2.y() - edge1.y()*edge2.x()) < kCarTolerance);
-    if (!isConvex) break;
+    if (!isConvex) { break; }
     G4TwoVector edge3 = fVertices[j + 4] - fVertices[i + 4];
     G4TwoVector edge4 = fVertices[k + 4] - fVertices[j + 4];
     isConvex = ((edge3.x()*edge4.y() - edge3.y()*edge4.x()) < kCarTolerance);
-    if (!isConvex) break;
+    if (!isConvex) { break; }
   }
   if (!isConvex)
   {
@@ -1353,7 +1361,7 @@ void G4GenericTrap::ComputeLateralSurfaces()
       fSurf[i].F = 2.*fDz*(p4.x()*p3.y() - p3.x()*p4.y() - p2.x()*p1.y() + p1.x()*p2.y());
       fSurf[i].G = fDz*fDz*((p4.x() + p2.x())*(p3.y() + p1.y()) - (p3.x() + p1.x())*(p4.y() + p2.y()));
       G4double magnitude =  G4ThreeVector(fSurf[i].D, fSurf[i].E, fSurf[i].F).mag();
-      if (magnitude < kCarTolerance) continue;
+      if (magnitude < kCarTolerance) { continue; }
       fSurf[i].A /= magnitude;
       fSurf[i].B /= magnitude;
       fSurf[i].C /= magnitude;
@@ -1361,6 +1369,9 @@ void G4GenericTrap::ComputeLateralSurfaces()
       fSurf[i].E /= magnitude;
       fSurf[i].F /= magnitude;
       fSurf[i].G /= magnitude;
+      // set Lipschitz constants
+      G4double k = std::abs(fSurf[i].C) + std::sqrt(sqr(fSurf[i].A) + sqr(fSurf[i].B) + sqr(fSurf[i].C));
+      f4k[i] = 4.*k;
       // set planes of bounding polyhedron
       G4ThreeVector normal1, normal2;
       G4ThreeVector c1, c2;
@@ -1434,7 +1445,7 @@ void G4GenericTrap::ComputeScratchLength()
   G4double scratch = kInfinity;
   for (auto i = 0; i < 4; ++i)
   {
-    if (fTwist[i] == 0.) continue; // skip plane face
+    if (fTwist[i] == 0.) { continue; } // skip plane face
     auto k = (i + 1)%4;
     G4ThreeVector p1(fVertices[i].x(), fVertices[i].y(), -fDz);
     G4ThreeVector p2(fVertices[k].x(), fVertices[k].y(), -fDz);
@@ -1449,16 +1460,16 @@ void G4GenericTrap::ComputeScratchLength()
     vv[0] = (p4 - p1).unit();
     vv[1] = (p3 - p2).unit();
     // find intersection points and compute the scratch
-    for (auto ip = 0; ip < 2; ++ip)
+    for (const auto & ip : pp)
     {
-      G4double px = pp[ip].x();
-      G4double py = pp[ip].y();
-      G4double pz = pp[ip].z();
-      for (auto iv = 0; iv < 2; ++iv)
+      G4double px = ip.x();
+      G4double py = ip.y();
+      G4double pz = ip.z();
+      for (const auto & iv : vv)
       {
-        G4double vx = vv[iv].x();
-        G4double vy = vv[iv].y();
-        G4double vz = vv[iv].z();
+        G4double vx = iv.x();
+        G4double vy = iv.y();
+        G4double vz = iv.z();
         // solve quadratic equation
         G4double ABC  = fSurf[i].A*vx + fSurf[i].B*vy + fSurf[i].C*vz;
         G4double ABCF = fSurf[i].A*px + fSurf[i].B*py + fSurf[i].C*pz + fSurf[i].F;
@@ -1466,7 +1477,7 @@ void G4GenericTrap::ComputeScratchLength()
         G4double B = 0.5*(fSurf[i].D*vx + fSurf[i].E*vy + ABCF*vz + ABC*pz);
         G4double C = fSurf[i].D*px + fSurf[i].E*py + ABCF*pz + fSurf[i].G;
         G4double D = B*B - A*C;
-        if (D < 0) continue;
+        if (D < 0) { continue; }
         G4double leng = 2.*std::sqrt(D)/std::abs(A);
         scratch = std::min(leng, scratch);
       }
@@ -1654,7 +1665,10 @@ void G4GenericTrap::WarningDistanceToIn(G4int k, const G4ThreeVector& p, const G
   if (ttin[1] != DBL_MAX)
   {
     G4double tcheck = 0.5*(ttout[0] + ttin[1]);
-    if (Inside(p + v*tcheck) != kOutside) check = "\n   !!! check point 0.5*(ttout[0] + ttin[1]) is NOT outside !!!";
+    if (Inside(p + v*tcheck) != kOutside)
+    {
+      check = "\n   !!! check point 0.5*(ttout[0] + ttin[1]) is NOT outside !!!";
+    }
   }
 
   auto position = Inside(p);

@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file DicomBeamBlock.cc
+/// \brief Implementation of the DicomBeamBlock class
+
 #include "DicomBeamBlock.hh"
 
 #include "dcmtk/dcmrt/seq/drtcos.h"

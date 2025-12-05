@@ -90,6 +90,7 @@ enum G4MicroElecSurfaceStatus {  UndefinedSurf,
 class G4MicroElecSurface : public G4VDiscreteProcess 
 { 
  public: 
+ 
   explicit G4MicroElecSurface(const G4String& processName = "MicroElecSurface", 
 			      G4ProcessType type = fElectromagnetic);
   
@@ -143,7 +144,6 @@ private:
   G4double kCarTolerance; 
   G4double ekint, thetat, thetaft, energyThreshold, crossingProbability; 
   G4bool flag_franchissement_surface, flag_reflexion,flag_normal, teleportToDo, teleportDone, isInitialised; 
-  
 }; 
  
 #endif  

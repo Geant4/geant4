@@ -45,25 +45,47 @@
 // Author: Michael Dressel (CERN), 2003
 // ----------------------------------------------------------------------
 #ifndef G4WEIGHTWINDOWALGORITHM_HH
-#define G4WEIGHTWINDOWALGORITHM_HH 1
+#define G4WEIGHTWINDOWALGORITHM_HH
 
 #include "G4Nsplit_Weight.hh"
 #include "G4VWeightWindowAlgorithm.hh"
 
+/**
+ * @brief G4WeightWindowAlgorithm is a concrete implementation of a weight
+ * window algorithm.
+ */
+
 class G4WeightWindowAlgorithm : public G4VWeightWindowAlgorithm
 {
-  public:  // with description
+  public:
   
+    /**
+     * Constructor. The arguments configure the algorithm.
+     * In case of upperLimitFactor=survivalFactor=1 the algorithm becomes
+     * the expected weight algorithm of the importance sampling technique.
+     *  @param[in] upperLimitFactor The factor defining the upper weight limit 
+     *             W_u = upperLimitFactor * W_l (W_l lower weight bound).
+     *  @param[in] survivalFactor uUsed in calculating the survival weight
+     *             W_s = survivalFactor * W_l.
+     *  @param[in] maxNumberOfSplits The maximal number of splits allowed
+     *             to be created in one go, and the reciprocal of the minimal
+     *             survival probability in case of Russian roulette.
+     */
     G4WeightWindowAlgorithm(G4double upperLimitFactor = 5,
                             G4double survivalFactor = 3,
                             G4int maxNumberOfSplits = 5);
   
-    ~G4WeightWindowAlgorithm() override;
+    /**
+     * Default Destructor.
+     */
+    ~G4WeightWindowAlgorithm() override = default;
 
+    /**
+     * Calculates the number of tracks and their weight according
+     * to the initial track weight and the lower energy bound.
+     */
     G4Nsplit_Weight Calculate(G4double init_w,
-                                      G4double lowerWeightBound) const override;
-      // calculate number of tracks and their weight according
-      // to the initial track weight and the lower energy bound
+                              G4double lowerWeightBound) const override;
 
   private:
 

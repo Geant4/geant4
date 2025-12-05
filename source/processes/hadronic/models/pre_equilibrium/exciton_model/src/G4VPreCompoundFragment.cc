@@ -60,7 +60,7 @@ G4VPreCompoundFragment::G4VPreCompoundFragment(
   if (OPTxs == 1) {
     fXSection = new G4InterfaceToXS(particle, index);
   }
-  InitialiseIntegrator(0.005, 0.25, 1.05, CLHEP::MeV,
+  InitialiseIntegrator(0.005, 0.25, 1.10, 0.5*CLHEP::MeV,
 		       0.2*CLHEP::MeV, 5*CLHEP::MeV);
 }
 
@@ -107,11 +107,12 @@ G4VPreCompoundFragment::Initialize(const G4Fragment& aFragment)
   if (Ecm <= theResMass + theMass) { return 0.0; }
 
   theResA13 = g4calc->Z13(theResA);
+  G4int nex = aFragment.GetNumberOfExcitons();
 
   G4double elim = 0.0;
   if (0 < theZ) {
     theCoulombBarrier = theCoulombBarrierPtr->
-      GetCoulombBarrier(theResA, theResZ, aFragment.GetExcitationEnergy());
+      GetCoulombBarrier(theResA + nex, theResZ, aFragment.GetExcitationEnergy());
     elim = (0 < OPTxs) ? theCoulombBarrier*0.5 : theCoulombBarrier;
   }
       
@@ -123,6 +124,7 @@ G4VPreCompoundFragment::Initialize(const G4Fragment& aFragment)
   if (resM < theResMass) { return false; }
   theMinKinEnergy =
     0.5*((Ecm - resM)*(Ecm + resM) + theMass*theMass)/Ecm - theMass;
+  theMinKinEnergy = std::max(theMinKinEnergy, 0.0);
 
   if (theMinKinEnergy >= theMaxKinEnergy) { return false; }
   // Calculate masses

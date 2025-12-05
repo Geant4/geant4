@@ -61,7 +61,7 @@ G4EmDNAPhysics_option6::G4EmDNAPhysics_option6(G4int ver, const G4String& nam)
   : G4EmDNAPhysics(ver, nam)
 {
   G4EmParameters* param = G4EmParameters::Instance();
-  param->SetDNAFast(false);
+  param->SetDNAFast(true);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

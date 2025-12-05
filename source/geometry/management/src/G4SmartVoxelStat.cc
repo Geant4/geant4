@@ -28,7 +28,7 @@
 // Stores information on the performance of the smart voxel algorithm
 // for an individual logical volume.
 //
-// Author: D.C.Williams, UCSC (davidw@scipp.ucsc.edu)
+// Author: D.C.Williams (UCSC), 1998
 // --------------------------------------------------------------------
 
 #include "G4SmartVoxelStat.hh"

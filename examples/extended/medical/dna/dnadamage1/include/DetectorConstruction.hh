@@ -22,15 +22,18 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
+//
+/// \file DetectorConstruction.hh
+/// \brief Definition of the DetectorConstruction class
 
 #pragma once
 #include "DNAParser.hh"
 
 #include "G4VUserDetectorConstruction.hh"
+#include "G4MoleculeGun.hh"
 
 #include <memory>
 
-class G4MoleculeGun;
 class G4VPhysicalVolume;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -39,7 +42,7 @@ class DetectorConstruction : public G4VUserDetectorConstruction
 {
   public:
     DetectorConstruction();
-    ~DetectorConstruction() override;
+    ~DetectorConstruction() override = default;
     G4VPhysicalVolume* Construct() override;
     void UpdateGeometry();
     G4MoleculeGun* GetGun() const { return fpGun.get(); }

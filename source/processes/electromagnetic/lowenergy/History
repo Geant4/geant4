@@ -6,6 +6,19 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2025-11-24 V. Ivanchenko (emlowen-V11-03-06)
+- G4eIonisationSpectrum - removed compilation warnings by removal of checks of
+    numerical conditions which never happens.
+
+## 2025-07-11 V. Ivanchenko (emlowen-V11-03-05)
+- G4IonParametrisedLossModel - updated computation of ion effective charge
+    according to modifications in electromagnetic/utils. Fixed problem #2664.
+
+## 2025-07-06 V. Ivanchenko (emlowen-V11-03-04)
+- G4MicroElecElasticModel_new, G4MicroElecInelasticModel_new,
+  G4MicroElecLOPhononModel, G4MicroElecSurface - (C. Inguimbert)
+  updated models uing more datafiles.
+
 ## 2025-05-25 V. Ivanchenko (emlowen-V11-03-03)
 - G4LivermorePhotoElectricModel - reorganisation of initialisation and data
     destruction.

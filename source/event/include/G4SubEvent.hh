@@ -75,11 +75,17 @@ class G4SubEvent : public std::vector<G4StackedTrack>
     inline void SetEvent(G4Event* evt) { fpEvent = evt; }
     inline G4Event* GetEvent() const { return fpEvent; }
   
+    // flag if all tracks of this sub-event have been tracked
+    // and thus ready to be merged to the corresponding event
+    inline void SetCompleted(G4bool val=true) const { fCompleted = val; }
+    inline G4bool IsCompleted() const { return fCompleted; }
+
   private:
 
     G4int fSubEventType = -1;
     std::size_t fMaxEnt = 1000;
     G4Event* fpEvent = nullptr;
+    mutable G4bool fCompleted = false;
 
 };
 

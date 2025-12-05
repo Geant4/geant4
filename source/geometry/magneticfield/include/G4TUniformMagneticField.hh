@@ -23,17 +23,30 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4TUniformMagneticField
+//
+// Class description:
+//
+// Templated version of G4UniformMagneticField.
 
-#ifndef G4UniformMagneticField_HH
-#define G4UniformMagneticField_HH
+// Author: Josh Xie (CERN, Google Summer of Code 2014), June 2014
+// Supervisors:  Sandro Wenzel, John Apostolakis (CERN)
+// --------------------------------------------------------------------
+#ifndef G4TUniformMagneticField_HH
+#define G4TUniformMagneticField_HH
 
 #include "G4Types.hh"
 #include "G4ThreeVector.hh"
 #include "G4MagneticField.hh"
 
+/**
+ * @brief G4TUniformMagneticField is a templated version of
+ * G4UniformMagneticField.
+ */
+
 class G4TUniformMagneticField : public G4MagneticField
 {
-  public:  // with description
+  public:
 
     G4TUniformMagneticField(const G4ThreeVector& FieldVector ) 
     // A field with value equal to FieldVector.
@@ -58,7 +71,7 @@ class G4TUniformMagneticField : public G4MagneticField
       fFieldComponents[2] = vField*std::cos(vTheta) ;
     }
 
-    virtual ~G4TUniformMagneticField() {;}
+    virtual ~G4TUniformMagneticField() = default;
 
     G4TUniformMagneticField(const G4TUniformMagneticField &p)
        : G4MagneticField(p)
@@ -107,8 +120,9 @@ class G4TUniformMagneticField : public G4MagneticField
                                                          this->fFieldComponents[2]) );
     }
 
-    private:
-        G4double fFieldComponents[3] ;
+  private:
+
+    G4double fFieldComponents[3] ;
 };
 
 #endif

@@ -4,6 +4,11 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
+## 2025-09-23 Adrien Paillet, Hoang Tran, Sebastien Incerti (chem6-V11-03-02)
+- Added UI commands to select physics constructor and output file name
+- README file updated
+- Refactored the code
+
 ## 2025-05-05 Hoang Tran (chem6-V11-03-01)
 - Replaced the shared_ptr with unique_ptr and raw for manager counters.
 

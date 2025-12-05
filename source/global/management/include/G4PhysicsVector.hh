@@ -97,6 +97,9 @@ public:
   inline G4double LogFreeVectorValue(const G4double energy,
                                      const G4double theLogEnergy) const;
 
+  // Internal method to define bin location
+  inline G4bool CheckIndex(const G4double energy, std::size_t& lastidx) const;
+  
   // Returns the value for the specified index of the dataVector
   // The boundary check will not be done
   inline G4double operator[](const std::size_t index) const;
@@ -146,7 +149,8 @@ public:
   inline G4double FindLinearEnergy(const G4double rand) const;
 
   // Find low edge index of a bin for given energy.
-  // Min value 0, max value idxmax.
+  // Min value 0, max value idxmax. This method is obsolete and will
+  // be removed with the next major release.
   std::size_t FindBin(const G4double energy, std::size_t idx) const;
 
   // Scale all values of the vector by factorV, energies by vectorE.
@@ -165,6 +169,12 @@ public:
                              const G4double dir1 = 0.0,
                              const G4double dir2 = 0.0);
 
+  // This method may be applied only once.
+  // Force length of data using std::vector::resize() with the
+  // the default value 0; partial cross section vector is resized
+  // only if the number of partial x-sections is above zero.
+  void SetDataLength(G4int dlength);
+    
   // This method can be applied if both energy and data values 
   // grow monotonically, for example, if in this vector a 
   // cumulative probability density function is stored. 
@@ -188,16 +198,16 @@ protected:
 
 private:
 
+  // Internal methods for computing of spline coeffitients
   void ComputeSecDerivative0();
   void ComputeSecDerivative1();
   void ComputeSecDerivative2(const G4double firstPointDerivative,
                              const G4double endPointDerivative);
-  // Internal methods for computing of spline coeffitients
 
   // Linear or spline interpolation.
   inline G4double Interpolation(const std::size_t idx,
                                 const G4double energy) const;
-
+  
   // Assuming (edgeMin <= energy <= edgeMax).
   inline std::size_t LogBin(const G4double energy, const G4double loge) const;
   inline std::size_t BinaryBin(const G4double energy) const;

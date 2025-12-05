@@ -25,8 +25,8 @@
 //
 // G4DoLoMcPriRK34 implementation
 //
-// Created: Somnath Banerjee, Google Summer of Code 2015, 7 July 2015
-// Supervision: John Apostolakis, CERN
+// Author: Somnath Banerjee (CERN, Google Summer of Code 2015), 07.07.2015
+// Supervision: John Apostolakis (CERN)
 // --------------------------------------------------------------------
 
 #include "G4DoLoMcPriRK34.hh"
@@ -231,17 +231,6 @@ G4double  G4DoLoMcPriRK34::DistChord() const
      distChord = (midPoint-initialPoint).mag();
    }
    return distChord;
-}
-
-void G4DoLoMcPriRK34::SetupInterpolation()
-{
-}
-
-void G4DoLoMcPriRK34::SetupInterpolate( const G4double /* yInput */ [] ,
-                                        const G4double  /* dydx */ [] ,
-                                        const G4double  /* Step */ )
-{
-  // Do Nothing
 }
 
 void G4DoLoMcPriRK34::Interpolate( G4double tau, 

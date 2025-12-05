@@ -191,8 +191,10 @@ public:
   virtual void StartTracking(G4Track*);
 
   // add correction to energy loss and compute non-ionizing energy loss
-  virtual void CorrectionsAlongStep(const G4MaterialCutsCouple*,
-                                    const G4DynamicParticle*,
+  virtual void CorrectionsAlongStep(const G4Material*,
+                                    const G4ParticleDefinition*,
+				    const G4double kinEnergy,
+				    const G4double cutEnergy,
                                     const G4double& length,
                                     G4double& eloss);
 
@@ -456,6 +458,7 @@ private:
   G4bool useAngularGenerator = false;
   G4bool useBaseMaterials = false;
   G4bool isLocked = false;
+  G4bool localChange = false;
 
   const G4String  name;
   std::vector<G4double>  xsec;

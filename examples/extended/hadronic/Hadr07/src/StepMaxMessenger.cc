@@ -25,10 +25,6 @@
 //
 /// \file StepMaxMessenger.cc
 /// \brief Implementation of the StepMaxMessenger class
-//
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "StepMaxMessenger.hh"
 

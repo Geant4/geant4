@@ -14,20 +14,6 @@ namespace X11 {
 class session : public base_session {
   typedef base_session parent;
 public:
-  //virtual bool make_current(Window a_window) const {
-  //  if(!m_display) return false;
-  //  if(::glXMakeCurrent(m_display,a_window,m_ctx)==False) {
-  //    m_out << "toolx::X11::session::make_current : glXMakeCurrent failed." << std::endl;
-  //    return false;
-  //  }
-  //  return true;
-  //}
-  //virtual bool swap_buffers(Window a_window) const {
-  //  if(!m_display) return false;
-  //  ::glXSwapBuffers(m_display,a_window);
-  //  return true;
-  //}
-public:
   session(std::ostream& a_out,unsigned int a_monitor = 0)
   :parent(a_out,a_monitor)
   ,m_vinfo(0)
@@ -60,13 +46,6 @@ public:
     //NOTE : macOS : glXChooseVisual leaks 640 bytes.
     m_vinfo = ::glXChooseVisual(m_display,m_monitor,(int*)atbs_alpha);
     if(!m_vinfo) {
-      //m_out << "toolx::X11::session::initialize :"
-      //      << " can't get a visual with alpha on screen " << m_monitor << ". Try without alpha..."
-      //      << std::endl;
-      //m_out << "toolx::X11::session::initialize :"
-      //      << " DefaultScreen(m_display): " << DefaultScreen(m_display) << "."
-      //      << std::endl;
-
       static const int atbs[] = {
         GLX_RGBA,
         GLX_RED_SIZE,   1,
@@ -105,15 +84,10 @@ public:
         m_ctx = 0;
         return;
       }
-  //} else {
-      //m_out << "toolx::X11::session::session :"
-      //      << " glX context with direct rendering created."
-      //      << std::endl;
     }
 
     // It is better to create a colormap adapted to the visual.
     m_colormap = ::XCreateColormap(m_display,::XRootWindow(m_display,m_monitor),m_vinfo->visual,AllocNone);
-    //m_colormap = ::XDefaultColormap(m_display,m_monitor);
     if(m_colormap==0L) {
       m_out << "toolx::X11::session::session : XCreateColormap failed." << std::endl;
       ::XCloseDisplay(m_display);
@@ -140,7 +114,6 @@ public:
       ::XFree(m_vinfo);
       m_vinfo = 0;
     }
-    //std::cout << "debug : ~session" << std::endl;
   }
 protected:
   session(const session& a_from)

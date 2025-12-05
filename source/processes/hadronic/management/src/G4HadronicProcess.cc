@@ -189,18 +189,6 @@ void G4HadronicProcess::BuildPhysicsTable(const G4ParticleDefinition& p)
   if(nullptr == masterProcess) {
     masterProcess = dynamic_cast<const G4HadronicProcess*>(GetMasterProcess());
   }
-  if(nullptr == masterProcess) {
-    if(1 < param->GetVerboseLevel()) {
-      G4ExceptionDescription ed;
-      ed << "G4HadronicProcess::BuildPhysicsTable: for "
-	 << GetProcessName() << " for " << p.GetParticleName()
-	 << " fail due to undefined pointer to the master process \n"
-	 << "  ThreadID= " << G4Threading::G4GetThreadId()
-	 << "  initialisation of worker started before master initialisation";
-      G4Exception("G4HadronicProcess::BuildPhysicsTable", "had066", 
-		  JustWarning, ed);
-    }
-  }
 
   // check particle for integral method
   if(isMaster || nullptr == masterProcess) {

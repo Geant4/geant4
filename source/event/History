@@ -5,7 +5,21 @@ which **must** added in reverse chronological order (newest at the top). It must
 be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
+## 2025-11-06 Laurent Desorgher (event-V11-03-03) 
+- G4AdjointPrimaryGenerator: Make it G4ThreadLocal and add GetInstance() method
+  to solve a bug in Reverse MC  simulation in MT mode.
+- Works with run-V11-03-06
 
+## 2025-11-05 John Allison (event-V11-03-02)
+- G4EventManager.hh:
+  - GetNumberOfRemainingSubEvents():
+    - Fix warning: Implicit conversion loses integer precision.
+    
+## 2025-10-29 Makoto Asai (event-V11-03-01)
+- G4EventManager: Enabling to receive next sub-event before completing the
+    current sub-event when used in the worker thread of sub-event parallel mode
+- G4Event, G4SubEvent: Add some flags and pointers to enable above
+  
 ## 2025-02-13 Gabriele Cosmo (event-V11-03-00)
 - Fixed cut&paste error in G4StackManager::TransferStackedTracks(..),
   reported by Coverity.

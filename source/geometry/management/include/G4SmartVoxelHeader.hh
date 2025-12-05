@@ -46,11 +46,11 @@
 //   - Minimum and maximum equivalent slice nos.
 //     [Applies to the level of the header, not its nodes]
 
-// 18.04.01, G.Cosmo - Migrated to STL vector
-// 13.07.95, P.Kent - Initial version
+// Author: Paul Kent (CERN), 13.07.1995 - Initial version
+//         Gabriele Cosmo (CERN), 18.04.2001 - Migrated to STL vector
 // --------------------------------------------------------------------
 #ifndef G4SMARTVOXELHEADER_HH
-#define G4SMARTVOXELHEADER_HH 1
+#define G4SMARTVOXELHEADER_HH
 
 #include <vector>
 
@@ -71,128 +71,189 @@ using G4NodeVector = std::vector<G4SmartVoxelNode*>;
 using G4VolumeNosVector = std::vector<G4int>;
 using G4VolumeExtentVector = std::vector<G4double>;
 
+/**
+ * @brief G4SmartVoxelHeader represents a set of voxels, created by a single
+ * axis of virtual division. It contains the individual voxels, which are
+ * potentially further divided along different axes.
+ */
+
 class G4SmartVoxelHeader
 {
   public:
 
+    /**
+     * Constructor for the topmost header, to begin voxel construction at a
+     * given logical volume; 'pSlice' is used to set max and min equivalent
+     * slice numbers for the header - they apply to the level of the header,
+     * not its nodes.
+     *  @param[in] pVolume Pointer to the logical volume to voxelise.
+     *  @param[in] pSlice Max & min equivalent slice numbers for the header.
+     */
     G4SmartVoxelHeader(G4LogicalVolume* pVolume, G4int pSlice = 0);
-      // Constructor for topmost header, to begin voxel construction at a
-      // given logical volume. pSlice is used to set max and min equivalent
-      // slice nos for the header - they apply to the level of the header,
-      // not its nodes.
 
-    ~G4SmartVoxelHeader();
-      // Delete all referenced nodes [but *not* referenced physical volumes].
-    
-    G4int GetMaxEquivalentSliceNo() const;
-    void SetMaxEquivalentSliceNo(G4int pMax);
-    G4int GetMinEquivalentSliceNo() const;
-    void SetMinEquivalentSliceNo(G4int pMin);
-      // Access functions for min/max equivalent slices (nodes & headers).
-
-    EAxis GetAxis() const;
-      // Return the current division axis.
-    EAxis GetParamAxis() const;
-      // Return suggested division axis for parameterised volume.
-
-    G4double GetMaxExtent() const;
-      // Return the maximum coordinate limit along the current axis.
-    G4double GetMinExtent() const;
-      // Return the minimum coordinate limit along the current axis.
-    
-    std::size_t GetNoSlices() const;
-      // Return the no of slices along the current axis.
-    
-    G4SmartVoxelProxy* GetSlice(std::size_t n) const;
-      // Return ptr to the proxy for the nth slice (numbering from 0,
-      // no bounds checking performed).
-
-    G4bool AllSlicesEqual() const;
-      // True if all slices equal (after collection).
-
-  public:
-
-    G4bool operator == (const G4SmartVoxelHeader& pHead) const;
-
-    friend std::ostream&
-    operator << (std::ostream&s, const G4SmartVoxelHeader& h);
-
+    /**
+     * Constructor for building and refine voxels between specified limits,
+     * considering only the physical volumes numbered 'pCandidates'; 'pSlice'
+     * is used to set max and min equivalent slice numbers for the header;
+     * they apply to the level of the header, not its nodes.
+     *  @param[in] pVolume Pointer to the logical volume to voxelise.
+     *  @param[in] pLimits Refinement limits for building the voxels.
+     *  @param[in] pCandidates Candidate volumes to be considered.
+     *  @param[in] pSlice Max & min equivalent slice numbers for the header.
+     */
     G4SmartVoxelHeader(G4LogicalVolume* pVolume,
 		       const G4VoxelLimits& pLimits,
 		       const G4VolumeNosVector* pCandidates,
 		       G4int pSlice = 0);
-      // Build and refine voxels between specified limits, considering only
-      // the physical volumes numbered `pCandidates'. pSlice is used to set max
-      // and min equivalent slice nos for the header - they apply to the level
-      // of the header, not its nodes.
+      // 
 
-  protected:
+    /**
+     * Destructor. Deletes all referenced nodes [but *not* the referenced
+     * physical volumes].
+     */
+    ~G4SmartVoxelHeader();
+    
+    /**
+     * Equality operator.
+     */
+    G4bool operator == (const G4SmartVoxelHeader& pHead) const;
 
-    //  `Worker' / operation functions:
+    /**
+     * Streaming operator.
+     */
+    friend std::ostream&
+    operator << (std::ostream&s, const G4SmartVoxelHeader& h);
 
+    /**
+     * Access functions for min/max equivalent slices (nodes & headers).
+     */
+    G4int GetMaxEquivalentSliceNo() const;
+    void SetMaxEquivalentSliceNo(G4int pMax);
+    G4int GetMinEquivalentSliceNo() const;
+    void SetMinEquivalentSliceNo(G4int pMin);
+
+    /**
+     * Returns the current division axis.
+     */
+    EAxis GetAxis() const;
+
+    /**
+     * Returns the suggested division axis for parameterised volume.
+     */
+    EAxis GetParamAxis() const;
+
+    /**
+     * Returns the maximum coordinate limit along the current axis.
+     */
+    G4double GetMaxExtent() const;
+
+    /**
+     * Returns the minimum coordinate limit along the current axis.
+     */
+    G4double GetMinExtent() const;
+    
+    /**
+     * Returns the number of slices along the current axis.
+     */
+    std::size_t GetNoSlices() const;
+    
+    /**
+     * Returns the pointer to the proxy for the n-th slice
+     * (numbering from 0, no bounds checking is performed).
+     */
+    G4SmartVoxelProxy* GetSlice(std::size_t n) const;
+
+    /**
+     * Returns true if all slices are equal (after collection).
+     */
+    G4bool AllSlicesEqual() const;
+
+  private:  // 'Worker' / operation functions
+
+    /**
+     * Builds and refine voxels for daughters of a specified volume 'pVolume'
+     * which DOES NOT contain a REPLICATED daughter.
+     */
     void BuildVoxels(G4LogicalVolume* pVolume);
-      // Build and refine voxels for daughters of specified volume which
-      // DOES NOT contain a REPLICATED daughter.
 
+    /**
+     * Builds voxels for a specified volume 'pVolume' containing a single
+     * replicated volume.
+     */
     void BuildReplicaVoxels(G4LogicalVolume* pVolume);
-      // Build voxels for specified volume containing a single
-      // replicated volume.
 
+    /**
+     * Constructs nodes in simple consuming case.
+     */
     void BuildConsumedNodes(G4int nReplicas);
-      // Construct nodes in simple consuming case.
 
+    /**
+     * Builds and refines voxels between specified limits 'pLimits',
+     * considering only the physical volumes 'pCandidates'. Main entry point
+     * for "construction". Hardwired to stop at third level of refinement,
+     * using the XYZ Cartesian axes in any order.
+     */
     void BuildVoxelsWithinLimits(G4LogicalVolume* pVolume,
                                  G4VoxelLimits pLimits,
 		                 const G4VolumeNosVector* pCandidates);
-      // Build and refine voxels between specified limits, considering only
-      // the physical volumes `pCandidates'. Main entry point for "construction".
-      // Hardwired to stop at third level of refinement, using the xyz cartesian
-      // axes in any order.
 
+    /**
+     * Calculates and stores the minimum and maximum equivalent neighbour
+     * values for all slices.
+     */
     void BuildEquivalentSliceNos();
-      // Calculate and Store the minimum and maximum equivalent neighbour
-      // values for all slices.
 
+    /**
+     * Collects the common nodes, deleting all but one to save memory
+     * and adjusting stored slice pointers appropriately.
+     */
     void CollectEquivalentNodes();
-      // Collect common nodes, deleting all but one to save memory,
-      // and adjusting stored slice ptrs appropriately.
 
+    /**
+     * Collects the common headers, deleting all but one to save memory
+     * and adjusting stored slice pointers appropriately.
+     */
     void CollectEquivalentHeaders();
-      // Collect common headers, deleting all but one to save memory,
-      // and adjusting stored slice ptrs appropriately.
 
-
+    /**
+     * Builds the nodes corresponding to the specified axis 'pAxis', within
+     * the specified limits 'pLimits', considering the daughters numbered
+     * 'pCandidates' of the logical volume 'pVolume'.
+     */
     G4ProxyVector* BuildNodes(G4LogicalVolume* pVolume,
 	                      G4VoxelLimits pLimits,
 	                      const G4VolumeNosVector* pCandidates,
 	                      EAxis pAxis);
-      // Build the nodes corresponding to the specified axis, within
-      // the specified limits, considering the daughters numbered pCandidates
-      // of the logical volume.
 
-    G4double CalculateQuality(G4ProxyVector *pSlice);
-      // Calculate a "quality value" for the specified vector of voxels
-      // The value returned should be >0 and such that the smaller the
-      // number the higher the quality of the slice.
-      // pSlice must consist of smartvoxelnodeproxies only.
+    /**
+     * Calculates a "quality value" for the specified vector of voxels.
+     * The value returned should be greater than zero and such that the
+     * smaller the number the higher the quality of the slice; 'pSlice'
+     * must consist of smart voxel node proxies only.
+     */
+    G4double CalculateQuality(G4ProxyVector* pSlice);
 
-    void RefineNodes(G4LogicalVolume* pVolume,G4VoxelLimits pLimits);
-      // Examined each contained node, refine (create a replacement additional
-      // dimension of voxels) when there is more than one voxel in the slice.
+    /**
+     * Examined each contained node, refines (creates a replacement additional
+     * dimension of voxels) when there is more than one voxel in the slice.
+     */
+    void RefineNodes(G4LogicalVolume* pVolume, G4VoxelLimits pLimits);
 
+  private:
+
+    /** Min and max equivalent slice nos for previous level. */
     G4int fminEquivalent;
     G4int fmaxEquivalent;
-      // Min and max equivalent slice nos for previous level.
 
+    /** Axis for slices. */
     EAxis faxis, fparamAxis;
-      // Axis for slices.
 
+    /** Max and min coordinate along faxis. */
     G4double fmaxExtent;
     G4double fminExtent;
-      // Max and min coordinate along faxis.
 
+    /** Slices along axis. */
     G4ProxyVector fslices;
-      // Slices along axis.
 };
 
 #include "G4SmartVoxelHeader.icc"

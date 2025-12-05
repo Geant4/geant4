@@ -26,11 +26,6 @@ inline const std::string& psep() {
   return s_v;
 }
 
-inline const std::string& res_sep() {
-  static const std::string s_v(".");
-  return s_v;
-}
-
 }
 
 #endif

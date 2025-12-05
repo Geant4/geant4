@@ -25,8 +25,6 @@
 //
 /// \file SAXSSensitiveDetectorHit.cc
 /// \brief Implementation of the SAXSSensitiveDetectorHit class
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "SAXSSensitiveDetectorHit.hh"
 

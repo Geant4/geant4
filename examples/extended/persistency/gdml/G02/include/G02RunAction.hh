@@ -23,11 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file persistency/gdml/G02/include/G02RunAction.hh
+/// \file G02RunAction.hh
 /// \brief Definition of the G02RunAction class
-//
-//
-//
+
 // Class G02RunAction
 //
 // Simple run action class.

@@ -20,6 +20,9 @@
 # Chemistry: selection of IRT_syn
 /process/chem/TimeStepModel IRT_syn
 
+# Chemistry: verbosity
+/scheduler/verbose 0
+
 # Chemistry: end time of chemistry stage
 /scheduler/endTime 5.0 ns
 
@@ -30,7 +33,7 @@
 /world/worldSize 50 um
 
 # Geometry: shape of the cell
-/cell/radiusSize 14 2.5 14 um
+/cell/radiusSize 22 3.45 22 um
 
 # Geometry: creation
 # See https://geant4-dna.github.io/molecular-docs/docs/examples/bacterial-cell

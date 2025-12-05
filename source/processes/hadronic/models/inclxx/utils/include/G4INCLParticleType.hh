@@ -82,6 +82,7 @@ namespace G4INCL {
     KMinus,
     KShort,
     KLong, 
+    antiComposite, 
     // WARNING: if you add more particle types, you MUST add them BEFORE the
     // UnknownParticle type! This is because UnknownParticle is used as a
     // counter of the number of available particle types.

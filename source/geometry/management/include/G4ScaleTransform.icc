@@ -26,7 +26,8 @@
 // G4ScaleTransform inline implementation.
 // Based on implementation provided in Root
 //
-// G.Cosmo, 18 Feb 2016 - initial version
+// Author: Gabriele Cosmo (CERN), 18.02.2016 - Initial version
+//         Evgueni Tcherniaev (CERN), 11.03.2016 - Added normals transforms
 // --------------------------------------------------------------------
 
 inline G4ScaleTransform::G4ScaleTransform()

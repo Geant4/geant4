@@ -5,6 +5,11 @@ which **must** added in reverse chronological order (newest at the top). It must
 be used as a substitute for writing good git commit messages!
 
 
+## 2025-07-30 I. Hrivnacova (exErrorpropagation-V11-03-00)
+- Migration of README pages to Markdown:
+  - .README.txt replaced with README.md and removed README
+- Improved formatting
+
 ## 2022-13-09 I. Hrivnacova (exErrorpropagation-V11-00-00)
 - Introduced 'errorpropagation' category to avoid having the errProp 
   example directly in 'extended' category

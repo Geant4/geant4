@@ -23,10 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file optical/LXe/include/LXeEventAction.hh
+/// \file LXeEventAction.hh
 /// \brief Definition of the LXeEventAction class
-//
 
 #ifndef LXeEventAction_h
 #define LXeEventAction_h 1

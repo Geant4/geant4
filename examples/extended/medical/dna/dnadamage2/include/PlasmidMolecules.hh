@@ -23,7 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
+/// \file PlasmidMolecules.hh
+/// \brief Definition of the PlasmidMolecules class
+///
+/// Definition of the additional Plasmid DNA molecules
+
 // This example is provided by the Geant4-DNA collaboration
 // DNADAMAGE2 example is derived from the chem6 example
 // chem6 example authors: W. G. Shin and S. Incerti (CENBG, France)
@@ -48,8 +52,6 @@
 // J. Comput. Phys. 274 (2014) 841-882
 // Prog. Nucl. Sci. Tec. 2 (2011) 503-508
 //
-/// \file PlasmidMolecules.hh
-/// \brief Definition of the additional Plasmid DNA molecules
 
 #ifndef DNADAMAGE2_PlasmidMolecules_h
 #define DNADAMAGE2_PlasmidMolecules_h 1

@@ -41,6 +41,9 @@
 //   first and second moments) derived by using accurate Dirac-PWA based
 //   integrated quantities.
 //
+// References:
+//   M. Novak: https://arxiv.org/abs/2410.13361
+//
 // ----------------------------------------------------------------------------
 
 #ifndef G4GSPWACorrections_h

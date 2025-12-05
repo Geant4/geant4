@@ -23,9 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file persistency/P03/include/ExTGRCRegionData.hh
+/// \file ExTGRCRegionData.hh
 /// \brief Definition of the ExTGRCRegionData class
-//
 
 #ifndef ExTGRCRegionData_h
 #define ExTGRCRegionData_h

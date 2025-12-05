@@ -155,7 +155,8 @@ G4double G4ParticleHPKallbachMannSyst::A(G4double anEnergy)
 G4double G4ParticleHPKallbachMannSyst::SeparationEnergy(G4int Ac, G4int Nc, G4int AA, G4int ZA,
                                                         G4int Abinding, G4int Zbinding)
 {
-  G4double result;
+  G4double result = 0.0;
+  if (Ac < 1 || AA < 1) { return result; }
   G4int NA = AA - ZA;
   G4int Zc = Ac - Nc;
   result = 15.68 * (Ac - AA);

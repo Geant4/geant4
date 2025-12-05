@@ -18,9 +18,6 @@ namespace tools {
 namespace sg {
 
 class style_parser {
-#ifdef TOOLS_MEM
-  TOOLS_SCLASS(tools::sg::style_parser)
-#endif
 public:
   style_parser()
   :m_color(0,0,0)
@@ -72,15 +69,9 @@ public:
   ,m_title()
   ,m_pickable(false)
   {
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
   }
 
   virtual ~style_parser(){
-#ifdef TOOLS_MEM
-    mem::decrement(s_class().c_str());
-#endif
   }
 public:
   style_parser(const style_parser& a_from)
@@ -133,9 +124,6 @@ public:
   ,m_title(a_from.m_title)
   ,m_pickable(a_from.m_pickable)
   {
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
   }
 
   style_parser& operator=(const style_parser& a_from){

@@ -26,6 +26,7 @@
 // Author: Christian Velten (2025)
 
 #include "G4VMoleculeCounterInternalBase.hh"
+#include "G4SystemOfUnits.hh"
 
 namespace G4
 {

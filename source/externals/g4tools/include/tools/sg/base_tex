@@ -67,20 +67,14 @@ public:
   }
 protected:
   void _update_sg_(std::ostream& a_out) {
-    //clean_texs(); //must reset for all render_manager.
-
     const img_byte& _img = img.value();
-
-   //::printf("debug : base_tex::_update_sg : size = %d, w = %d, h = %d, bpp %d\n",
-   //    _img.size(),_img.width(),_img.height(),_img.bpp());
-
 
     if(_img.is_empty()) {
       m_img.make_empty();
       return;
     }
 
-    unsigned int bpp = _img.bpp();
+    unsigned int bpp = _img.bytes_per_pixel();
     if((bpp!=1)&&(bpp!=3)&&(bpp!=4)) {
       a_out << "tools::sg::tex_rect::update_sg :"
             << " bpp " << bpp << " not handled."
@@ -89,22 +83,15 @@ protected:
       return;
     }
 
-    //a_out << "debug : tools::sg::tex_rect::update_sg :"
-    //      << " this " << tools::p2s(this)
-    //      << std::endl;
-
     // image must be power of two in width and height.
 
     const colorf& bc = back_color.value();
-    //::printf("debug : back_color %g %g %g %g\n",bc.r(),bc.g(),bc.b(),bc.a());
 
     byte pixel[4];
     pixel[0] = bc.ruchar();
     pixel[1] = bc.guchar();
     pixel[2] = bc.buchar();
     pixel[3] = bc.auchar();
-
-    //dump(a_out,"debug : 0000 :",_img);
 
     if((back_color.value().a()!=1)&&(bpp!=4)) {
       //transparent background.
@@ -139,12 +126,10 @@ protected:
       }
     }
 
-  //a_out << "debug : limit : 000 : " << limit.value() << std::endl;
     if(limit.value()) {
       unsigned int tw = m_img.width();
       unsigned int th = m_img.height();
-      if((tw*th*m_img.bpp())>limit.value()) {
-        //a_out << "debug : trunc " << (tw*th) << std::endl;
+      if((tw*th*m_img.bytes_per_pixel())>limit.value()) {
         unsigned int fac = 2;
         while(true) {
           unsigned int pw = tw/fac;
@@ -158,7 +143,6 @@ protected:
               m_img.make_empty();
               return;
             }
-          //a_out << "debug : base_tex : img.get_part due to limit (" << limit.value() << ")." << std::endl;
             m_img = part;
             break;
           }
@@ -166,7 +150,6 @@ protected:
         }
       }
     }
-    //dump_not_null(a_out,"debug : base_tex::_update_sg_ :",m_img);
 
   }
 
@@ -174,7 +157,7 @@ protected:
     if(a_cmt.size()) a_out << a_cmt << std::endl;
     a_out << " width " << a_img.width()
           << " height " << a_img.height()
-          << " bpp " << a_img.bpp()
+          << " bpp " << a_img.bytes_per_pixel()
           << std::endl;
   }
 
@@ -182,7 +165,7 @@ protected:
     if(a_cmt.size()) a_out << a_cmt << std::endl;
     unsigned int w = a_img.width();
     unsigned int h = a_img.height();
-    unsigned int n = a_img.bpp();
+    unsigned int n = a_img.bytes_per_pixel();
     a_out << "img_byte : width " << w << " height " << h << " bpp " << n << std::endl;
     byte* pos = (byte*)a_img.buffer();
     if(n==3) {

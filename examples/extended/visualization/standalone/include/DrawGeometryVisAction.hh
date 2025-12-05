@@ -23,10 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file visualization/standalone/include/DrawGeometryVisAction.hh
-/// \brief Definition of the DrawGeometryVisAction class
-//
-//
+/// \file DrawGeometryVisAction.hh
+/// \brief Definition of the B1::DrawGeometryVisAction class
 
 #ifndef DRAWGEOMETRYVISACTION_HH
 #define DRAWGEOMETRYVISACTION_HH

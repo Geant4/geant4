@@ -23,11 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file runAndEvent/RE03/src/RE03ActionInitialization.cc
+/// \file RE03ActionInitialization.cc
 /// \brief Implementation of the RE03ActionInitialization class
-//
-//
-//
 
 #include "RE03ActionInitialization.hh"
 #include "G4RunManager.hh"

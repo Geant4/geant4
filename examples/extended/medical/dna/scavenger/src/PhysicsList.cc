@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file scavenger/src/PhysicsList.cc
+/// \file PhysicsList.cc
 /// \brief Implementation of the scavenger::PhysicsList class
 
 #include "PhysicsList.hh"

@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file radiobiology/src/DoseMessenger.cc
+/// \file DoseMessenger.cc
 /// \brief Implementation of the RadioBio::DoseMessenger class
 
 #include "DoseMessenger.hh"

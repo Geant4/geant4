@@ -39,6 +39,7 @@ geant4_add_module(G4emstandard
     G4LossFluctuationDummy.hh
     G4LowPAIH2O.hh
     G4LowDataH2O.hh
+    G4LPMFunction.hh
     G4ModifiedTsai.hh
     G4MollerBhabhaModel.hh
     G4MottData.hh

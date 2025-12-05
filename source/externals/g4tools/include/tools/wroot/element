@@ -90,15 +90,9 @@ public:
   :fName(aName),fTitle(aTitle),fType(aType)
   ,fSize(0),fArrayLength(0),fArrayDim(0),fOffset(aOffset)
   ,fTypeName(aTypeName){
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
     for(int i=0;i<5;i++) fMaxIndex[i] = 0;
   }
   virtual ~streamer_element(){
-#ifdef TOOLS_MEM
-    mem::decrement(s_class().c_str());
-#endif
   }
 protected:
   streamer_element(const streamer_element& a_from)
@@ -108,9 +102,6 @@ protected:
   ,fArrayLength(a_from.fArrayLength)
   ,fArrayDim(a_from.fArrayDim),fOffset(a_from.fOffset)
   ,fTypeName(a_from.fTypeName){
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
     for(int i=0;i<5;i++) fMaxIndex[i] = a_from.fMaxIndex[i];
   }
   streamer_element& operator=(const streamer_element& a_from){

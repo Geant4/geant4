@@ -23,11 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file runAndEvent/RE02/src/RE02PSFlatSurfaceFlux.cc
+/// \file RE02PSFlatSurfaceFlux.cc
 /// \brief Implementation of the RE02PSFlatSurfaceFlux class
-//
-//
-//
+
 // RE02PSFlatSurfaceFlux
 #include "RE02PSFlatSurfaceFlux.hh"
 

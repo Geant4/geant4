@@ -4,44 +4,95 @@
 #ifndef toolx_X11_sg_viewer
 #define toolx_X11_sg_viewer
 
-// not pure X11 version. The class inherits tools::sg::viewer that uses GL.
+#ifndef GL_GLEXT_LEGACY
+#define GL_GLEXT_LEGACY
+#endif
+#include <GL/gl.h>
+
+#ifndef GL_GLEXT_PROTOTYPES
+#define GL_GLEXT_PROTOTYPES
+#endif
+#include <GL/glext.h>
 
 #include "session"
 
+#include "../GL/gl_functions"
+
+#include "../sg/GL_action"
 #include "../sg/GL_viewer"
+
+namespace toolx {
+namespace sg {
+  using GL_action = GL_action_T<GL::gl_functions>;
+  using GL_manager = GL_manager_T<GL::gl_functions>;
+  using GL_viewer = GL_viewer_T<GL_manager,GL_action>;
+}}
 
 #include "simple_dispatcher"
 
-namespace tools{namespace sg{class device_interactor;}}
+#include <tools/sg/device_interactor>
 
 namespace toolx {
 namespace X11 {
 
-class sg_viewer : public sg::GL_viewer {
+class sg_viewer: public sg::GL_viewer {
   typedef sg::GL_viewer parent;
 private:
   class dispatcher : public simple_dispatcher {
     typedef simple_dispatcher parent;
   public:
-    virtual void win_render() {m_sg_viewer.win_render();}
-    virtual void set_size(unsigned int a_width,unsigned int a_height) {m_sg_viewer.set_size(a_width,a_height);}
+    virtual bool dispatch(XEvent& a_event) {
+      if(parent::dispatch(a_event)) return true;
+      bool shift_modifier = a_event.xkey.state & ShiftMask;
+      bool control_modifier = a_event.xkey.state & ControlMask;
+      if(a_event.type==ButtonPress && a_event.xbutton.button==1) {
+        if(!m_viewer.device_interactor()) return false;
+        tools::sg::mouse_down_event event(a_event.xbutton.x,a_event.xbutton.y,shift_modifier,control_modifier);
+        m_viewer.device_interactor()->mouse_press(event);
+        return true;
+      } else if(a_event.type==ButtonRelease && a_event.xbutton.button==1) {
+        if(!m_viewer.device_interactor()) return false;
+        tools::sg::mouse_up_event event(a_event.xbutton.x,a_event.xbutton.y,shift_modifier,control_modifier);
+        m_viewer.device_interactor()->mouse_release(event);
+        return true;
+      } else if(a_event.type==MotionNotify) {
+        if(!m_viewer.device_interactor()) return false;
+        if((a_event.xmotion.state & Button1MotionMask)==Button1MotionMask) {
+          tools::sg::mouse_move_event event(a_event.xmotion.x,a_event.xmotion.y,shift_modifier,control_modifier,0,0,false);
+          m_viewer.device_interactor()->mouse_move(event);
+        }
+      } else if((a_event.type==ButtonPress)&&(a_event.xbutton.button==4)) { // mouse scrollwheel down :
+        if(!m_viewer.device_interactor()) return false;
+        tools::sg::wheel_rotate_event event(8,a_event.xbutton.x,a_event.xbutton.y,shift_modifier,control_modifier);  //8=cooking.
+        m_viewer.device_interactor()->wheel_rotate(event);
+        return true;
+      } else if((a_event.type==ButtonPress)&&(a_event.xbutton.button==5)) { // mouse scrollwheel up :
+        if(!m_viewer.device_interactor()) return false;
+        tools::sg::wheel_rotate_event event(-8,a_event.xbutton.x,a_event.xbutton.y,shift_modifier,control_modifier);  //8=cooking.
+        m_viewer.device_interactor()->wheel_rotate(event);
+        return true;
+      }
+      return false;
+    }
+    virtual void win_render() {m_viewer.win_render();}
+    virtual void set_size(unsigned int a_width,unsigned int a_height) {m_viewer.set_size(a_width,a_height);}
     virtual dispatcher* copy() const {return new dispatcher(*this);}
   public:
-    dispatcher(sg_viewer& a_sg_viewer)
-    :parent(a_sg_viewer.m_session,a_sg_viewer.m_win)
-    ,m_sg_viewer(a_sg_viewer){}
+    dispatcher(sg_viewer& a_viewer)
+    :parent(a_viewer.m_session,a_viewer.m_win)
+    ,m_viewer(a_viewer){}
     virtual ~dispatcher(){}
   protected:
     dispatcher(const dispatcher& a_from)
     :parent(a_from)
-    ,m_sg_viewer(a_from.m_sg_viewer)
+    ,m_viewer(a_from.m_viewer)
     {}
     dispatcher& operator=(const dispatcher& a_from) {
       parent::operator=(a_from);
       return *this;
     }
   protected:
-    sg_viewer& m_sg_viewer;
+    sg_viewer& m_viewer;
   };
 
 public:
@@ -52,6 +103,7 @@ public:
   :parent(a_session.out(),a_width,a_height)
   ,m_session(a_session)
   ,m_win(0)
+  ,m_interactor(0)
   {
     if(!m_session.display()) return; //throw
     m_win = m_session.create_window(a_win_title.c_str(),a_x,a_y,a_width,a_height);
@@ -65,11 +117,12 @@ public:
       m_session.sync();
     }
   }
-public:
+protected:
   sg_viewer(const sg_viewer& a_from)
   :parent(a_from)
   ,m_session(a_from.m_session)
   ,m_win(a_from.m_win)
+  ,m_interactor(0)
   {}
   sg_viewer& operator=(const sg_viewer& a_from){
     parent::operator=(a_from);
@@ -98,6 +151,12 @@ public:
     if(::glXMakeCurrent(m_session.display(),None,NULL)==False){
       m_session.out() << "toolx::X11::sg_viewer::win_render : glXMakeCurrent(None,NULL) failed." << std::endl;
     }
+    m_session.sync();
+  }
+
+  void emit_win_render() {
+    if(!m_win) return;
+    m_session.post_expose(m_win);
   }
 
   bool window_size(unsigned int& a_w,unsigned int& a_h) {
@@ -113,14 +172,16 @@ public:
     a_h = parent::height();
   }
 
+  void set_device_interactor(tools::sg::device_interactor* a_interactor) {m_interactor = a_interactor;}
+
 public:
-  void set_device_interactor(tools::sg::device_interactor*) {}
+  tools::sg::device_interactor* device_interactor() {return m_interactor;}
 protected:
   session& m_session;
   Window m_win;
+  tools::sg::device_interactor* m_interactor;
 };
 
 }}
 
 #endif
-

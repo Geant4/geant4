@@ -1,0 +1,351 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef toolx_Windows_gl_functions
+#define toolx_Windows_gl_functions
+
+#ifndef GL_VERSION_1_1
+  #error You have to include OpenGL header(s) before including this file.
+#endif
+
+#ifdef TOOLS_USE_GL_VERSION_3_2
+#include <wingdi.h>
+typedef LONG_PTR GLsizeiptr;
+typedef char GLchar;
+#define GL_ARRAY_BUFFER                0x8892
+#define GL_STATIC_DRAW                 0x88E4
+#define GL_SHADING_LANGUAGE_VERSION    0x8B8C
+#define GL_FRAMEBUFFER                 0x8D40
+#define GL_FRAMEBUFFER_COMPLETE        0x8CD5
+#define GL_COMPILE_STATUS              0x8B81
+#define GL_VERTEX_SHADER               0x8B31
+#define GL_LINK_STATUS                 0x8B82
+#define GL_FRAGMENT_SHADER             0x8B30
+#endif
+
+namespace toolx {
+namespace Windows {
+
+#ifdef TOOLS_USE_GL_VERSION_3_2
+
+class gl_functions {
+public:
+  gl_functions() {}
+  virtual ~gl_functions() {}
+protected:
+  gl_functions(const gl_functions&) {}
+  gl_functions& operator=(const gl_functions&) {return *this;}
+public:
+  virtual bool initialize() {
+    return true;
+  }
+public:
+  /*GL_VERSION_1_1*/
+  void gl__BindTexture(GLenum target, GLuint texture) {::glBindTexture(target,texture);}
+  void gl__BlendFunc(GLenum sfactor, GLenum dfactor) {::glBlendFunc(sfactor,dfactor);}
+  void gl__ClearDepth(GLdouble depth) {::glClearDepth(depth);}
+  void gl__ClearStencil(GLint s) {::glClearStencil(s);}
+  void gl__ClearColor(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha) {::glClearColor(red,green,blue,alpha);}
+  void gl__Clear(GLbitfield mask) {::glClear(mask);}
+
+  void gl__DeleteTextures(GLsizei n, const GLuint *textures) {::glDeleteTextures(n,textures);}
+  void gl__Disable(GLenum cap) {::glDisable(cap);}
+  void gl__DrawArrays(GLenum mode, GLint first, GLsizei count) {::glDrawArrays(mode,first,count);}
+
+  void gl__Enable(GLenum cap) {::glEnable(cap);}
+  void gl__FrontFace(GLenum mode) {::glFrontFace(mode);}
+  void gl__GenTextures(GLsizei n, GLuint *textures) {::glGenTextures(n,textures);}
+  GLenum gl__GetError() {return ::glGetError();}
+  void gl__GetIntegerv(GLenum pname, GLint *params) {::glGetIntegerv(pname,params);}
+  const GLubyte * gl__GetString(GLenum name) {return ::glGetString(name);}
+  GLboolean gl__IsTexture(GLuint texture) {return ::glIsTexture(texture);}
+  void gl__LineWidth(GLfloat width) {::glLineWidth(width);}
+  void gl__PixelStorei(GLenum pname, GLint param) {::glPixelStorei(pname,param);}
+  void gl__PointSize(GLfloat size) {::glPointSize(size);}
+  void gl__PolygonOffset(GLfloat factor, GLfloat units) {::glPolygonOffset(factor,units);}
+  void gl__ReadBuffer(GLenum mode) {::glReadBuffer(mode);}
+  void gl__ReadPixels(GLint x, GLint y, GLsizei width, GLsizei height, GLenum format, GLenum type, GLvoid *pixels) {::glReadPixels(x,y,width,height,format,type,pixels);}
+  void gl__TexImage2D(GLenum target, GLint level, GLint internalformat, GLsizei width, GLsizei height, GLint border, GLenum format, GLenum type, const GLvoid *pixels) {::glTexImage2D(target,level,internalformat,width,height,border,format,type,pixels);}
+  void gl__TexParameteriv(GLenum target, GLenum pname, const GLint *params) {::glTexParameteriv(target,pname,params);}
+  void gl__TexParameteri(GLenum target, GLenum pname, GLint param) {::glTexParameteri(target,pname,param);}
+  void gl__Viewport(GLint x, GLint y, GLsizei width, GLsizei height) {::glViewport(x,y,width,height);}
+  void gl__Hint(GLenum target,GLenum mode) {::glHint(target,mode);}
+  void gl__DepthFunc(GLenum func) {::glDepthFunc(func);}
+  void gl__DepthMask(GLboolean flag) {::glDepthMask(flag);}
+
+  /*GL_VERSION_1_5*/
+  void gl__GenBuffers(GLsizei n, GLuint *buffers) {
+    PROC proc = ::wglGetProcAddress("glGenBuffers");if(proc==NULL) return;
+    typedef void (*function)(GLsizei n, GLuint *buffers);
+    (function(proc))(n,buffers);
+  }
+  void gl__BindBuffer(GLenum target, GLuint buffer) {
+    PROC proc = ::wglGetProcAddress("glBindBuffer");if(proc==NULL) return;
+    typedef void (*function)(GLenum target, GLuint buffer);
+    (function(proc))(target,buffer);
+  }
+  void gl__DeleteBuffers(GLsizei n, const GLuint *buffers) {
+    PROC proc = ::wglGetProcAddress("glDeleteBuffers");if(proc==NULL) return;
+    typedef void (*function)(GLsizei n, const GLuint *buffers);
+    (function(proc))(n,buffers);
+  }
+  void gl__BufferData(GLenum target, GLsizeiptr size, const GLvoid *data, GLenum usage) {
+    PROC proc = ::wglGetProcAddress("glBufferData");if(proc==NULL) return;
+    typedef void (*function)(GLenum target, GLsizeiptr size, const GLvoid *data, GLenum usage);
+    (function(proc))(target,size,data,usage);
+  }
+  GLboolean gl__IsBuffer(GLuint buffer) {
+    PROC proc = ::wglGetProcAddress("glIsBuffer(buffer");if(proc==NULL) return GL_FALSE;
+    typedef GLboolean (*function)(GLuint buffer);
+    return (function(proc))(buffer);
+  }
+  void gl__EnableVertexAttribArray(GLuint index) {
+    PROC proc = ::wglGetProcAddress("glEnableVertexAttribArray");if(proc==NULL) return;
+    typedef void (*function)(GLuint index);
+    (function(proc))(index);
+  }
+  void gl__DisableVertexAttribArray(GLuint index) {
+    PROC proc = ::wglGetProcAddress("glDisableVertexAttribArray");if(proc==NULL) return;
+    typedef void (*function)(GLuint index);
+    (function(proc))(index);
+  }
+
+  /*GL_VERSION_2_0*/
+  GLuint gl__CreateProgram() {
+    PROC proc = ::wglGetProcAddress("glCreateProgram");if(proc==NULL) return 0;
+    typedef GLuint (*function)();
+    return (function(proc))();
+  }
+  void gl__DeleteProgram(GLuint program) {
+    PROC proc = ::wglGetProcAddress("glDeleteProgram");if(proc==NULL) return;
+    typedef void (*function)(GLuint program);
+    (function(proc))(program);
+  }
+  void gl__UseProgram(GLuint program) {
+    PROC proc = ::wglGetProcAddress("glUseProgram");if(proc==NULL) return;
+    typedef void (*function)(GLuint program);
+    (function(proc))(program);
+  }
+  void gl__LinkProgram(GLuint program) {
+    PROC proc = ::wglGetProcAddress("glLinkProgram");if(proc==NULL) return;
+    typedef void (*function)(GLuint program);
+    (function(proc))(program);
+  }
+  void gl__GetProgramiv(GLuint program, GLenum pname, GLint *params) {
+    PROC proc = ::wglGetProcAddress("glGetProgramiv");if(proc==NULL) return;
+    typedef void (*function)(GLuint program, GLenum pname, GLint *params);
+    (function(proc))(program,pname,params);
+  }
+
+  void gl__Uniform1i(GLint location, GLint v0) {
+    PROC proc = ::wglGetProcAddress("glUniform1i");if(proc==NULL) return;
+    typedef void (*function)(GLint location, GLint v0);
+    (function(proc))(location,v0);
+  }
+  void gl__Uniform1f(GLint location, GLfloat v0) {
+    PROC proc = ::wglGetProcAddress("glUniform1f");if(proc==NULL) return;
+    typedef void (*function)(GLint location, GLfloat v0);
+    (function(proc))(location,v0);
+  }
+  void gl__Uniform3f(GLint location, GLfloat v0, GLfloat v1, GLfloat v2) {
+    PROC proc = ::wglGetProcAddress("glUniform3f");if(proc==NULL) return;
+    typedef void (*function)(GLint location, GLfloat v0, GLfloat v1, GLfloat v2);
+    (function(proc))(location,v0,v1,v2);
+  }
+  void gl__Uniform4f(GLint location, GLfloat v0, GLfloat v1, GLfloat v2, GLfloat v3) {
+    PROC proc = ::wglGetProcAddress("glUniform4f");if(proc==NULL) return;
+    typedef void (*function)(GLint location, GLfloat v0, GLfloat v1, GLfloat v2, GLfloat v3);
+    (function(proc))(location,v0,v1,v2,v3);
+  }
+  void gl__UniformMatrix4fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value) {
+    PROC proc = ::wglGetProcAddress("glUniformMatrix4fv");if(proc==NULL) return;
+    typedef void (*function)(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value);
+    (function(proc))(location,count,transpose,value);
+  }
+  GLint gl__GetUniformLocation(GLuint program, const GLchar *name) {
+    PROC proc = ::wglGetProcAddress("glGetUniformLocation");if(proc==NULL) return -1;
+    typedef GLint (*function)(GLuint program, const GLchar *name);
+    return (function(proc))(program,name);
+  }
+  void gl__ShaderSource(GLuint shader, GLsizei count, const GLchar* const *string, const GLint *length) {
+    PROC proc = ::wglGetProcAddress("glShaderSource");if(proc==NULL) return;
+    typedef void (*function)(GLuint shader, GLsizei count, const GLchar* const *string, const GLint *length);
+    (function(proc))(shader,count,string,length);
+  }
+  GLboolean gl__IsShader(GLuint shader) {
+    PROC proc = ::wglGetProcAddress("glIsShader");if(proc==NULL) return GL_FALSE;
+    typedef GLboolean (*function)(GLuint shader);
+    return (function(proc))(shader);
+  }
+  void gl__GetShaderSource(GLuint shader, GLsizei bufSize, GLsizei *length, GLchar *source) {
+    PROC proc = ::wglGetProcAddress("glGetShaderSource");if(proc==NULL) return;
+    typedef void (*function)(GLuint shader, GLsizei bufSize, GLsizei *length, GLchar *source);
+    (function(proc))(shader,bufSize,length,source);
+  }
+  void gl__GetShaderInfoLog(GLuint shader, GLsizei bufSize, GLsizei *length, GLchar *infoLog) {
+    PROC proc = ::wglGetProcAddress("glGetShaderInfoLog");if(proc==NULL) return;
+    typedef void (*function)(GLuint shader, GLsizei bufSize, GLsizei *length, GLchar *infoLog);
+    (function(proc))(shader,bufSize,length,infoLog);
+  }
+  void gl__GetShaderiv(GLuint shader, GLenum pname, GLint *params) {
+    PROC proc = ::wglGetProcAddress("glGetShaderiv");if(proc==NULL) return;
+    typedef void (*function)(GLuint shader, GLenum pname, GLint *params);
+    (function(proc))(shader,pname,params);
+  }
+  void gl__GetAttachedShaders(GLuint program, GLsizei maxCount, GLsizei *count, GLuint *obj) {
+    PROC proc = ::wglGetProcAddress("glGetAttachedShaders");if(proc==NULL) return;
+    typedef void (*function)(GLuint program, GLsizei maxCount, GLsizei *count, GLuint *obj);
+    (function(proc))(program,maxCount,count,obj);
+  }
+  void gl__DetachShader(GLuint program, GLuint shader) {
+    PROC proc = ::wglGetProcAddress("glDetachShader");if(proc==NULL) return;
+    typedef void (*function)(GLuint program, GLuint shader);
+    (function(proc))(program,shader);
+  }
+  void gl__DeleteShader(GLuint shader) {
+    PROC proc = ::wglGetProcAddress("glDeleteShader");if(proc==NULL) return;
+    typedef void (*function)(GLuint shader);
+    (function(proc))(shader);
+  }
+  GLuint gl__CreateShader(GLenum type) {
+    PROC proc = ::wglGetProcAddress("glCreateShader");if(proc==NULL) return 0;
+    typedef GLuint (*function)(GLenum type);
+    return (function(proc))(type);
+  }
+  void gl__CompileShader(GLuint shader) {
+    PROC proc = ::wglGetProcAddress("glCompileShader");if(proc==NULL) return;
+    typedef void (*function)(GLuint shader);
+    (function(proc))(shader);
+  }
+  void gl__AttachShader(GLuint program, GLuint shader) {
+    PROC proc = ::wglGetProcAddress("glAttachShader");if(proc==NULL) return;
+    typedef void (*function)(GLuint program, GLuint shader);
+    (function(proc))(program,shader);
+  }
+
+  void gl__VertexAttribPointer(GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const GLvoid *pointer) {
+    PROC proc = ::wglGetProcAddress("glVertexAttribPointer");if(proc==NULL) return;
+    typedef void (*function)(GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const GLvoid *pointer);
+    (function(proc))(index,size,type,normalized,stride,pointer);
+  }
+  GLint gl__GetAttribLocation(GLuint program, const GLchar *name) {
+    PROC proc = ::wglGetProcAddress("glGetAttribLocation");if(proc==NULL) return -1;
+    typedef GLint (*function)(GLuint program, const GLchar *name);
+    return (function(proc))(program,name);
+  }
+
+  /*GL_VERSION_3_0*/
+  void gl__BindVertexArray(GLuint array) {
+    PROC proc = ::wglGetProcAddress("glBindVertexArray");if(proc==NULL) return;
+    typedef void (*function)(GLuint array);
+    (function(proc))(array);
+  }
+  void gl__GenVertexArrays(GLsizei n, GLuint *arrays) {
+    PROC proc = ::wglGetProcAddress("glGenVertexArrays");if(proc==NULL) return;
+    typedef void (*function)(GLsizei n, GLuint *arrays);
+    (function(proc))(n,arrays);
+  }
+  void gl__DeleteVertexArrays(GLsizei n, const GLuint *arrays) {
+    PROC proc = ::wglGetProcAddress("glDeleteVertexArrays");if(proc==NULL) return;
+    typedef void (*function)(GLsizei n, const GLuint *arrays);
+    (function(proc))(n,arrays);
+  }
+  GLboolean gl__IsVertexArray(GLuint array) {
+    PROC proc = ::wglGetProcAddress("glIsVertexArray");if(proc==NULL) return GL_FALSE;
+    typedef GLboolean (*function)(GLuint array);
+    return (function(proc))(array);
+  }
+  GLenum gl__CheckFramebufferStatus(GLenum target) {
+    PROC proc = ::wglGetProcAddress("glCheckFramebufferStatus");if(proc==NULL) return 0;
+    typedef GLenum (*function)(GLenum target);
+    return (function(proc))(target);
+  }
+};
+
+#else //not TOOLS_USE_GL_VERSION_3_2
+
+class gl_functions {
+public:
+  gl_functions() {}
+  virtual ~gl_functions() {}
+protected:
+  gl_functions(const gl_functions&) {}
+  gl_functions& operator=(const gl_functions&) {return *this;}
+public:
+  virtual bool initialize() {
+    return true;
+  }
+public:
+  /*GL_VERSION_1_1*/
+  void gl__Accum(GLenum op, GLfloat value) {::glAccum(op,value);}
+  void gl__Begin(GLenum mode) {::glBegin(mode);}
+  void gl__BindTexture(GLenum target, GLuint texture) {::glBindTexture(target,texture);}
+  void gl__BlendFunc(GLenum sfactor, GLenum dfactor) {::glBlendFunc(sfactor,dfactor);}
+  void gl__ClearDepth(GLdouble depth) {::glClearDepth(depth);}
+  void gl__ClearStencil(GLint s) {::glClearStencil(s);}
+  void gl__ClearColor(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha) {::glClearColor(red,green,blue,alpha);}
+  void gl__Clear(GLbitfield mask) {::glClear(mask);}
+  void gl__ClearIndex(GLfloat c) {::glClearIndex(c);}
+  void gl__ClearAccum(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha) {::glClearAccum(red,green,blue,alpha);}
+  void gl__Color4fv(const GLfloat *v) {::glColor4fv(v);}
+  void gl__Color4f(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha) {::glColor4f(red,green,blue,alpha);}
+  void gl__ColorPointer(GLint size, GLenum type, GLsizei stride, const GLvoid *pointer) {::glColorPointer(size,type,stride,pointer);}
+  void gl__DeleteTextures(GLsizei n, const GLuint *textures) {::glDeleteTextures(n,textures);}
+  void gl__Disable(GLenum cap) {::glDisable(cap);}
+  void gl__DisableClientState(GLenum array) {::glDisableClientState(array);}
+  void gl__DrawArrays(GLenum mode, GLint first, GLsizei count) {::glDrawArrays(mode,first,count);}
+  void gl__Enable(GLenum cap) {::glEnable(cap);}
+  void gl__EnableClientState(GLenum array) {::glEnableClientState(array);}
+  void gl__End() {::glEnd();}
+  void gl__FrontFace(GLenum mode) {::glFrontFace(mode);}
+  void gl__GenTextures(GLsizei n, GLuint *textures) {::glGenTextures(n,textures);}
+  GLenum gl__GetError() {return ::glGetError();}
+  void gl__GetIntegerv(GLenum pname, GLint *params) {::glGetIntegerv(pname,params);}
+  void gl__GetLightfv(GLenum light, GLenum pname, GLfloat *params) {::glGetLightfv(light,pname,params);}
+  void gl__GetMaterialfv(GLenum face, GLenum pname, GLfloat *params) {::glGetMaterialfv(face,pname,params);}
+  const GLubyte * gl__GetString(GLenum name) {return ::glGetString(name);}
+  GLboolean gl__IsTexture(GLuint texture) {return ::glIsTexture(texture);}
+  void gl__Lightfv(GLenum light, GLenum pname, const GLfloat *params) {::glLightfv(light,pname,params);}
+  void gl__Lightf(GLenum light, GLenum pname, GLfloat param) {::glLightf(light,pname,param);}
+  void gl__LineWidth(GLfloat width) {::glLineWidth(width);}
+  void gl__LoadIdentity() {::glLoadIdentity();}
+  void gl__LoadMatrixf(const GLfloat *m) {::glLoadMatrixf(m);}
+  void gl__MatrixMode(GLenum mode) {::glMatrixMode(mode);}
+  void gl__Normal3fv(const GLfloat *v) {::glNormal3fv(v);}
+  void gl__Normal3f(GLfloat nx, GLfloat ny, GLfloat nz) {::glNormal3f(nx,ny,nz);}
+  void gl__NormalPointer(GLenum type, GLsizei stride, const GLvoid *pointer) {::glNormalPointer(type,stride,pointer);}
+  void gl__PixelStorei(GLenum pname, GLint param) {::glPixelStorei(pname,param);}
+  void gl__PointSize(GLfloat size) {::glPointSize(size);}
+  void gl__PolygonOffset(GLfloat factor, GLfloat units) {::glPolygonOffset(factor,units);}
+  void gl__ReadBuffer(GLenum mode) {::glReadBuffer(mode);}
+  void gl__ReadPixels(GLint x, GLint y, GLsizei width, GLsizei height, GLenum format, GLenum type, GLvoid *pixels) {::glReadPixels(x,y,width,height,format,type,pixels);}
+  void gl__ShadeModel(GLenum mode) {::glShadeModel(mode);}
+  void gl__TexCoordPointer(GLint size, GLenum type, GLsizei stride, const GLvoid *pointer) {::glTexCoordPointer(size,type,stride,pointer);}
+  void gl__TexImage2D(GLenum target, GLint level, GLint internalformat, GLsizei width, GLsizei height, GLint border, GLenum format, GLenum type, const GLvoid *pixels) {::glTexImage2D(target,level,internalformat,width,height,border,format,type,pixels);}
+  void gl__TexParameteriv(GLenum target, GLenum pname, const GLint *params) {::glTexParameteriv(target,pname,params);}
+  void gl__TexParameteri(GLenum target, GLenum pname, GLint param) {::glTexParameteri(target,pname,param);}
+  void gl__Vertex3fv(const GLfloat *v) {::glVertex3fv(v);}
+  void gl__Vertex3f(GLfloat x, GLfloat y, GLfloat z) {::glVertex3f(x,y,z);}
+  void gl__VertexPointer(GLint size, GLenum type, GLsizei stride, const GLvoid *pointer) {::glVertexPointer(size,type,stride,pointer);}
+  void gl__Viewport(GLint x, GLint y, GLsizei width, GLsizei height) {::glViewport(x,y,width,height);}
+  void gl__Hint(GLenum target,GLenum mode) {::glHint(target,mode);}
+  void gl__DepthFunc(GLenum func) {::glDepthFunc(func);}
+  void gl__DepthMask(GLboolean flag) {::glDepthMask(flag);}
+
+  void gl__NewList(GLuint list, GLenum mode) {::glNewList(list,mode);}
+  void gl__DeleteLists(GLuint list, GLsizei range) {::glDeleteLists(list,range);}
+  void gl__CallLists(GLsizei n, GLenum type, const GLvoid *lists) {::glCallLists(n,type,lists);}
+  void gl__CallList(GLuint list) {::glCallList(list);}
+  void gl__EndList() {::glEndList();}
+  GLuint gl__GenLists(GLsizei range) {return ::glGenLists(range);}
+  GLboolean gl__IsList(GLuint list) {return ::glIsList(list);}
+
+  /*GL_VERSION_3_0*/
+};
+
+
+#endif //not TOOLS_USE_GL_VERSION_3_2
+
+}}
+
+#endif

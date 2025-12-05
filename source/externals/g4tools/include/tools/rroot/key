@@ -10,29 +10,41 @@
 #include "ifile"
 #include "../sout"
 
-#ifdef TOOLS_MEM
-#include "../mem"
-#endif
-
 #include <map>
 #include <ostream>
 #include <cstring> //memcpy
 
-//#include <zlib.h>
-
-#ifdef TOOLS_USE_CSZ
-// CSZ code where used as default compressor in old CERN-ROOT, then it may be needed
-// to read old file (as the pawdemo.root one).
-//FIXME : arrange to have csz coming from the "outside" (as zip).
-extern "C" {
-  void csz__Init_Inflate(long,unsigned char*,long,unsigned char*);
-  int csz__Inflate();
-  unsigned char* csz__obufptr();
-}
-#endif
-
 namespace tools {
 namespace rroot {
+//doc :
+//////////////////////////////////////////////////////////////////////////
+//                                                                      //
+//  The Key class includes functions to book space on a file,           //
+//   to create I/O buffers, to fill these buffers                       //
+//   to compress/uncompress data buffers.                               //
+//                                                                      //
+//  Before saving (making persistent) an object on a file, a key must   //
+//  be created. The key structure contains all the information to       //
+//  uniquely identify a persistent object on a file.                    //
+//     fNbytes    = number of bytes for the compressed object+key       //
+//     version of the Key class                                         //
+//     fObjlen    = Length of uncompressed object                       //
+//     fDatime    = Date/Time when the object was written               //
+//     fKeylen    = number of bytes for the key structure               //
+//     fCycle     = cycle number of the object                          //
+//     fSeekKey   = Address of the object on file (points to fNbytes)   //
+//                  This is a redundant information used to cross-check //
+//                  the data base integrity.                            //
+//     fSeekPdir  = Pointer to the directory supporting this object     //
+//     fClassName = Object class name                                   //
+//     fName      = name of the object                                  //
+//     fTitle     = title of the object                                 //
+//                                                                      //
+//  The Key class is used by ROOT to:                                   //
+//    - to write an object in the Current Directory                     //
+//    - to write a new ntuple buffer                                    //
+//                                                                      //
+//////////////////////////////////////////////////////////////////////////
 
 class key {
   static uint32 class_version() {return 2;}
@@ -59,15 +71,8 @@ public:
   ,m_cycle(0)
   ,m_seek_key(0)
   ,m_seek_parent_dir(0)
-  //,m_object_class
-  //,m_object_name
-  //,m_object_title
   {
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
     m_key_length = record_size(m_version);
-    //fDate.setDate(0);
   }
 
   key(std::ostream& a_out,seek a_pos,uint32 a_nbytes)
@@ -83,13 +88,7 @@ public:
   ,m_cycle(0)
   ,m_seek_key(a_pos)
   ,m_seek_parent_dir(0)
-  //,m_object_class
-  //,m_object_name
-  //,m_object_title
   {
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
     if(a_pos>START_BIG_FILE) m_version += big_file_version_tag();
     m_buffer = new char[a_nbytes];
     if(!m_buffer) {
@@ -102,9 +101,6 @@ public:
   }
   virtual ~key(){
     delete [] m_buffer;
-#ifdef TOOLS_MEM
-    mem::decrement(s_class().c_str());
-#endif
   }
 protected:
   key(const key& a_from)
@@ -123,9 +119,6 @@ protected:
   ,m_object_name(a_from.m_object_name)
   ,m_object_title(a_from.m_object_title)
   {
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
     if(a_from.m_buf_size && a_from.m_buffer) {
       m_buffer = new char[a_from.m_buf_size];
       if(!m_buffer) {
@@ -207,21 +200,8 @@ public:
     rbuf rb(m_out,a_byte_swap,aEOB,a_pos);
     int _nbytes;
     if(!rb.read(_nbytes)) return false;
-/*
-    if(m_nbytes) {
-      if(_nbytes!=int(m_nbytes)) {
-        out << "tools::rroot::key::from_buffer :"
-            << " nbytes not consistent."
-            << " read " << _nbytes
-            << ", expected " << m_nbytes
-            << ". Continue with " << _nbytes
-            << std::endl;
-        m_nbytes = _nbytes;
-      }
-    } else {
-*/
+
     m_nbytes = _nbytes;
-    //}
     short version;
     if(!rb.read(version)) return false;
     m_version = version;
@@ -230,7 +210,6 @@ public:
     m_object_size = v;}
     unsigned int _date;
     if(!rb.read(_date)) return false;
-    //fDate.setDate(_date);
    {short v;
     if(!rb.read(v)) return false;
     m_key_length = v;}
@@ -269,11 +248,6 @@ public:
       m_out << "tools::rroot::key::get_object_buffer :"
                    << " WARNING : m_key_length is zero."
                    << std::endl;
-      //delete [] m_buffer;
-      //m_buffer = 0;
-      //m_buf_size = 0;
-      //a_size = 0;
-      //return 0;
     }
     if(!m_nbytes) {
       m_out << "tools::rroot::key::get_object_buffer :"
@@ -508,37 +482,6 @@ protected:
         return false;
       }
       a_irep = irep;
-
-#ifdef TOOLS_USE_CSZ
-    } else if (a_src[0] == 'C' && a_src[1] == 'S') {
-      //compressed with Chernyaev & Smirnov
-
-      csz__Init_Inflate(_ibufcnt,a_src + HDRSIZE,a_tgtsize,a_tgt);
-
-      if (csz__Inflate()) {
-        a_out << "tools::rroot::key::unzip :"
-              << " error during decompression." << std::endl;
-        return false;
-      }
-
-      unsigned char* obufptr = csz__obufptr();
-
-      // if (obufptr - a_tgt != isize) {
-      // There are some rare cases when a few more bytes are required
-      if (obufptr - a_tgt > a_tgtsize) {
-        a_out << "tools::rroot::key::_unzip :"
-              << " discrepancy " << (int)(obufptr - a_tgt)
-              << " with initial size: " << (int)isize
-              << ", tgtsize= " << a_tgtsize
-              << std::endl;
-        a_irep = int(obufptr - a_tgt);
-        //return false;
-      }
-      a_irep = isize;
-
-      //a_out << "tools::rroot::key::unzip : CS : ok "
-      //        << a_irep << std::endl;
-#endif
     } else {
       a_out << "tools::rroot::key::_unzip : unknown a_src[0,1]."
             << " [0] = " << a_src[0] << ", [1] = " << a_src[1]
@@ -575,32 +518,3 @@ protected:
 
 #endif
 
-//doc :
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-//  The Key class includes functions to book space on a file,           //
-//   to create I/O buffers, to fill these buffers                       //
-//   to compress/uncompress data buffers.                               //
-//                                                                      //
-//  Before saving (making persistent) an object on a file, a key must   //
-//  be created. The key structure contains all the information to       //
-//  uniquely identify a persistent object on a file.                    //
-//     fNbytes    = number of bytes for the compressed object+key       //
-//     version of the Key class                                         //
-//     fObjlen    = Length of uncompressed object                       //
-//     fDatime    = Date/Time when the object was written               //
-//     fKeylen    = number of bytes for the key structure               //
-//     fCycle     = cycle number of the object                          //
-//     fSeekKey   = Address of the object on file (points to fNbytes)   //
-//                  This is a redundant information used to cross-check //
-//                  the data base integrity.                            //
-//     fSeekPdir  = Pointer to the directory supporting this object     //
-//     fClassName = Object class name                                   //
-//     fName      = name of the object                                  //
-//     fTitle     = title of the object                                 //
-//                                                                      //
-//  The Key class is used by ROOT to:                                   //
-//    - to write an object in the Current Directory                     //
-//    - to write a new ntuple buffer                                    //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////

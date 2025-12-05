@@ -24,94 +24,118 @@
 // ********************************************************************
 //
 // G4BorisDriver inline methods implementation
-
-// Author: Divyansh Tiwari, Google Summer of Code 2022
-// Supervision: John Apostolakis,Renee Fatemi, Soon Yung Jun
+//
+// Author: Divyansh Tiwari (CERN, Google Summer of Code 2022), 05.11.2022
+// Supervision: John Apostolakis (CERN), Renee Fatemi, Soon Yung Jun (FNAL)
 // --------------------------------------------------------------------
 
+inline
+G4double G4BorisDriver::AdvanceChordLimited(G4FieldTrack& track,
+                                            G4double hstep,
+                                            G4double eps,
+                                            G4double chordDistance)
+{
+  return ChordFinderDelegate::
+         AdvanceChordLimitedImpl(track, hstep, eps, chordDistance);
+}
+
+inline
+void G4BorisDriver::OnStartTracking()
+{
+  ChordFinderDelegate::ResetStepEstimate();
+}
+
+inline
+void G4BorisDriver::OnComputeStep(const G4FieldTrack*)
+{
+}
+
+inline
+G4bool G4BorisDriver::DoesReIntegrate() const
+{
+  return true;
+}
+
+inline
+G4double G4BorisDriver::ComputeNewStepSize( G4double /* errMaxNorm*/,
+                                            G4double  hstepCurrent)
+{
+  return hstepCurrent;
+}
+
+inline
 void G4BorisDriver::SetVerboseLevel(G4int level)
 {
-    fVerbosity = (level != 0);
+  fVerbosity = (level != 0);
 }
 
+inline
 G4int G4BorisDriver::GetVerboseLevel() const
 {
-    return static_cast<G4int>(fVerbosity);
+  return static_cast<G4int>(fVerbosity);
 }
 
-G4double G4BorisDriver::ComputeNewStepSize( G4double /* errMaxNorm*/, G4double  hstepCurrent)
-{
-   return hstepCurrent;
-}
-
+inline
 const G4EquationOfMotion* G4BorisDriver::GetEquationOfMotion() const
 {
-   auto eq = boris->GetEquationOfMotion();
-   return eq;
+  auto eq = boris->GetEquationOfMotion();
+  return eq;
 }
 
+inline
 G4EquationOfMotion* G4BorisDriver::GetEquationOfMotion()
 {
-   auto eq = boris->GetEquationOfMotion();
-   return eq;
+  auto eq = boris->GetEquationOfMotion();
+  return eq;
 }
 
-#if 0
-// #ifdef G4USE_SET_EQUATION_OF_MOTION
-void G4BorisDriver::
-SetEquationOfMotion( G4EquationOfMotion* equation )
-{
-    boris->SetEquationOfMotion(equation);
-}
-#endif
-
+inline
 G4int G4BorisDriver::GetNumberOfVariables() const
 {
-    return boris->GetNumberOfVariables();
+  return boris->GetNumberOfVariables();
 }
 
-const G4MagIntegratorStepper*
-G4BorisDriver::GetStepper() const
+inline
+const G4MagIntegratorStepper* G4BorisDriver::GetStepper() const
 {
-    return nullptr;
+  return nullptr;
 }
 
-G4MagIntegratorStepper*
-G4BorisDriver::GetStepper()
+inline
+G4MagIntegratorStepper* G4BorisDriver::GetStepper()
 {
-    return nullptr;
+  return nullptr;
 }
 
+inline
 void G4BorisDriver::CheckStep(const G4ThreeVector& posIn,
                               const G4ThreeVector& posOut,
                               G4double hdid) const
 {
-   const G4double endPointDist = (posOut - posIn).mag();
-   if (endPointDist >= hdid * (1. + CLHEP::perMillion))
-   {
-      // ++fNoAccurateAdvanceBadSteps;
+  const G4double endPointDist = (posOut - posIn).mag();
+  if (endPointDist >= hdid * (1. + CLHEP::perMillion))
+  {
+    // ++fNoAccurateAdvanceBadSteps;
 // #ifdef G4DEBUG_FIELD
-      // Issue a warning only for gross differences -
-      // we understand how small difference occur.
-      if (endPointDist >= hdid * (1. + CLHEP::perThousand))
-      {
-         G4Exception("G4BorisDriver::CheckStep()",
-                     "GeomField1002", JustWarning,
-                     "endPointDist >= hdid!");
-      }
-      else
-      {
-         G4cerr << "G4BorisDriver::CheckStep: moved further than curve distance! "
-                << "  curve hdid= " << hdid << " endpoint dist= " << endPointDist
-                << "  ratio - 1 = " << (endPointDist - hdid) / hdid
-                << " ( > 1.0e-6 threshold to report ) "
-                << G4endl; 
-      }
+    // Issue a warning only for gross differences -
+    // we understand how small difference occur.
+    if (endPointDist >= hdid * (1. + CLHEP::perThousand))
+    {
+      G4Exception("G4BorisDriver::CheckStep()", "GeomField1002", JustWarning,
+                  "endPointDist >= hdid!");
+    }
+    else
+    {
+      G4cerr << "G4BorisDriver::CheckStep: moved further than curve distance! "
+             << "  curve hdid= " << hdid << " endpoint dist= " << endPointDist
+             << "  ratio - 1 = " << (endPointDist - hdid) / hdid
+             << " ( > 1.0e-6 threshold to report ) "
+             << G4endl; 
+    }
 // #endif
-   }
-   else
-   {
-      // ++fNoAccurateAdvanceGoodSteps;
-   }
+  }
+  else
+  {
+    // ++fNoAccurateAdvanceGoodSteps;
+  }
 }
-

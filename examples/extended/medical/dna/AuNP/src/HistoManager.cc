@@ -23,14 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file medical/dna/range/src/HistoManager.cc
+/// \file HistoManager.cc
 /// \brief Implementation of the HistoManager class
-//
-//
-// $Id: HistoManager.cc 72238 2013-07-12 08:40:30Z gcosmo $
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "HistoManager.hh"
 
@@ -41,100 +35,99 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-HistoManager::HistoManager() : fFileName("AuNP"), fpDetector(0)
-{
-  fpDetector = dynamic_cast<const DetectorConstruction*>(
+HistoManager::HistoManager() : fFileName("AuNP") {
+  fpDetector = dynamic_cast<const DetectorConstruction *>(
     G4RunManager::GetRunManager()->GetUserDetectorConstruction());
-
   Book();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-HistoManager::~HistoManager() {}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void HistoManager::Book()
-{
+void HistoManager::Book() const {
   // Create or get analysis manager
-  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  G4AnalysisManager *analysisManager = G4AnalysisManager::Instance();
   analysisManager->SetDefaultFileType("root");
   analysisManager->SetFileName(fFileName);
   analysisManager->SetVerboseLevel(1);
   analysisManager->SetActivation(true);
 
   // Define histograms start values
-  const G4String nameh1[] = {"h1Events",
-                             "h1Edep",
-                             "h1SecEnergyNP_charged",
-                             "h1SecEnergyNP_nutral",
-                             "h1SecEnergyNPSurf_charged",
-                             "h1SecEnergyNPSurf_nutral",
-                             "h1Sec_charged",
-                             "h1Sec_nutral",
-                             "h1Chem_0",
-                             "h1Chem_1",
-                             "h1Chem_2",
-                             "h1Chem_3",
-                             "h1Chem_4",
-                             "h1Chem_5",
-                             "h1Chem_6",
-                             "h1Chem_7",
-                             "h1IncEnergyNPSurf_Back",
-                             "h1IncEnergyNPSurf_Fowared"};
+  const G4String nameh1[] = {
+    "h1Events",
+    "h1Edep",
+    "h1SecEnergyNP_charged",
+    "h1SecEnergyNP_nutral",
+    "h1SecEnergyNPSurf_charged",
+    "h1SecEnergyNPSurf_nutral",
+    "h1Sec_charged",
+    "h1Sec_nutral",
+    "h1Chem_0",
+    "h1Chem_1",
+    "h1Chem_2",
+    "h1Chem_3",
+    "h1Chem_4",
+    "h1Chem_5",
+    "h1Chem_6",
+    "h1Chem_7",
+    "h1IncEnergyNPSurf_Back",
+    "h1IncEnergyNPSurf_Fowared"
+  };
   const G4String nameh2[] = {"h2Edep", "h2SecEnergyAbs_charged", "h2SecEnergyAbs_nutral"};
 
-  const G4String titleh1[] = {"Events",
-                              "Energy Deposit Distribution",
-                              "Secondary Energy in NP (charged)",
-                              "Secondary Energy in NP (nutral)",
-                              "Secondary Energy at NP Surface (charged)",
-                              "Secondary Energy at NP Surface (nutral)",
-                              "Number of Secondaries in Absorber (charged)",
-                              "Number of Secondaries in Absorber (nutral)",
-                              "Number of Chemical for ID=0 at 1 psec",
-                              "Number of Chemical for ID=1 at 1 psec",
-                              "Number of Chemical for ID=2 at 1 psec",
-                              "Number of Chemical for ID=3 at 1 psec",
-                              "Number of Chemical for ID=4 at 1 psec",
-                              "Number of Chemical for ID=5 at 1 psec",
-                              "Number of Chemical for ID=6 at 1 psec",
-                              "Number of Chemical for ID=7 at 1 psec",
-                              "Energy of Incident particle at backwared of GNP",
-                              "Energy of Incident particle at forwared of GNP"};
-  const G4String titleh2[] = {"Energy Deposit Distribution",
-                              "Secondary Energy vs distance (charged)",
-                              "Secondary Energy vs distance (nutral)"};
+  const G4String titleh1[] = {
+    "Events",
+    "Energy Deposit Distribution",
+    "Secondary Energy in NP (charged)",
+    "Secondary Energy in NP (nutral)",
+    "Secondary Energy at NP Surface (charged)",
+    "Secondary Energy at NP Surface (nutral)",
+    "Number of Secondaries in Absorber (charged)",
+    "Number of Secondaries in Absorber (nutral)",
+    "Number of Chemical for ID=0 at 1 psec",
+    "Number of Chemical for ID=1 at 1 psec",
+    "Number of Chemical for ID=2 at 1 psec",
+    "Number of Chemical for ID=3 at 1 psec",
+    "Number of Chemical for ID=4 at 1 psec",
+    "Number of Chemical for ID=5 at 1 psec",
+    "Number of Chemical for ID=6 at 1 psec",
+    "Number of Chemical for ID=7 at 1 psec",
+    "Energy of Incident particle at backwared of GNP",
+    "Energy of Incident particle at forwared of GNP"
+  };
+  const G4String titleh2[] = {
+    "Energy Deposit Distribution",
+    "Secondary Energy vs distance (charged)",
+    "Secondary Energy vs distance (nutral)"
+  };
 
   // for event counting
-  G4int nbin_eve = 1;
-  G4double vmin_eve = 0.;
-  G4double vmax_eve = 1.;
+  constexpr G4int nbin_eve = 1;
+  constexpr G4double vmin_eve = 0.;
+  constexpr G4double vmax_eve = 1.;
 
   // for SecENP
-  G4int nbin_senp = 1000;
-  G4double vmin_senp = 1.;
-  G4double vmax_senp = 1000000;
+  constexpr G4int nbin_senp = 1000;
+  constexpr G4double vmin_senp = 1.;
+  constexpr G4double vmax_senp = 1000000;
 
-  G4int NAzm = fpDetector->GetNReplicaAzm();
+  const G4int NAzm = fpDetector->GetNReplicaAzm();
   G4int NR = fpDetector->GetNReplicaR();
-  G4double Rmin = fpDetector->GetNPRadius() / CLHEP::nm;
-  G4double Rmax = fpDetector->GetAbsRadius() / CLHEP::nm;
+  const G4double Rmin = fpDetector->GetNPRadius() / CLHEP::nm;
+  const G4double Rmax = fpDetector->GetAbsRadius() / CLHEP::nm;
 
-  G4int Runit = (G4int)(Rmax - Rmin) / NR;
-  NR = NR + (G4int)(Rmin / Runit);
+  const G4int Runit = static_cast<G4int>(Rmax - Rmin) / NR;
+  NR = NR + static_cast<G4int>(Rmin / Runit);
 
   // for dose distribution
-  G4int nbinAzm = NAzm;
-  G4double vminAzm = 0.;
-  G4double vmaxAzm = 360;
-  G4int nbinR2D = NR;
-  G4double vminR2D = 0.;
-  G4double vmaxR2D = 1000.;
-  G4int nbinR = NR;
-  G4double vminR_log = 10;
-  G4double vmaxR_log = Rmax;
+  const G4int nbinAzm = NAzm;
+  constexpr G4double vminAzm = 0.;
+  constexpr G4double vmaxAzm = 360;
+  const G4int nbinR2D = NR;
+  constexpr G4double vminR2D = 0.;
+  constexpr G4double vmaxR2D = 1000.;
+  const G4int nbinR = NR;
+  constexpr G4double vminR_log = 10;
+  const G4double vmaxR_log = Rmax;
 
   analysisManager->CreateH1(nameh1[0], titleh1[0], nbin_eve, vmin_eve, vmax_eve);
   analysisManager->CreateH1(nameh1[1], titleh1[1], nbinR, vminR_log, vmaxR_log, "none", "none",
@@ -201,4 +194,5 @@ void HistoManager::Book()
   analysisManager->SetH2Activation(1, true);
   analysisManager->SetH2Activation(2, true);
 }
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

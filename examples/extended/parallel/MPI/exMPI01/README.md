@@ -1,3 +1,5 @@
+\page ExampleexMPI01 Example : exMPI01
+
 MPI/Examples : exMPI01
 ======================
 

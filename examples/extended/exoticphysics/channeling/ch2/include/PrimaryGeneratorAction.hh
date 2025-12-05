@@ -24,9 +24,7 @@
 // ********************************************************************
 //
 /// \file PrimaryGeneratorAction.hh
-/// \brief Definition of the B1::PrimaryGeneratorAction class
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// \brief Definition of the PrimaryGeneratorAction class
 
 #ifndef B1PrimaryGeneratorAction_h
 #define B1PrimaryGeneratorAction_h 1

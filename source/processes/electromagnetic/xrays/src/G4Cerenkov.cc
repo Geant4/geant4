@@ -77,19 +77,18 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4Cerenkov::G4Cerenkov(const G4String& processName, G4ProcessType type)
-  : G4VProcess(processName, type)
+  : G4VDiscreteProcess(processName, type)
   , fNumPhotons(0)
 {
   secID = G4PhysicsModelCatalog::GetModelID("model_Cerenkov");
   SetProcessSubType(fCerenkov);
 
   thePhysicsTable = nullptr;
-
-  if(verboseLevel > 0)
-  {
+  Initialise();
+  
+  if (verboseLevel > 0) {
     G4cout << GetProcessName() << " is created." << G4endl;
   }
-  Initialise();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -119,17 +118,6 @@ void G4Cerenkov::ProcessDescription(std::ostream& out) const
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-G4bool G4Cerenkov::IsApplicable(const G4ParticleDefinition& aParticleType)
-{
-  return (aParticleType.GetPDGCharge() != 0.0 &&
-          aParticleType.GetPDGMass() != 0.0 &&
-          aParticleType.GetParticleName() != "chargedgeantino" &&
-          !aParticleType.IsShortLived())
-           ? true
-           : false;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void G4Cerenkov::Initialise()
 {
   G4OpticalParameters* params = G4OpticalParameters::Instance();
@@ -138,6 +126,15 @@ void G4Cerenkov::Initialise()
   SetTrackSecondariesFirst(params->GetCerenkovTrackSecondariesFirst());
   SetStackPhotons(params->GetCerenkovStackPhotons());
   SetVerboseLevel(params->GetCerenkovVerboseLevel());
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+G4bool G4Cerenkov::IsApplicable(const G4ParticleDefinition& aParticleType)
+{
+  return ((aParticleType.GetPDGCharge() != 0.0 &&
+           aParticleType.GetPDGMass() != 0.0 &&
+           !aParticleType.IsShortLived()) ||
+	  aParticleType.GetParticleName() == "unknown");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -287,6 +284,10 @@ G4VParticleChange* G4Cerenkov::PostStepDoIt(const G4Track& aTrack,
     return pParticleChange;
   }
 
+  G4double deltaVelocity = pPostStepPoint->GetVelocity() -
+    pPreStepPoint->GetVelocity();
+  auto touchableHandle = aStep.GetPreStepPoint()->GetTouchableHandle();
+
   ////////////////////////////////////////////////////////////////
   aParticleChange.SetNumberOfSecondaries(fNumPhotons);
 
@@ -300,18 +301,21 @@ G4VParticleChange* G4Cerenkov::PostStepDoIt(const G4Track& aTrack,
   G4double Pmin = Rindex->Energy(0);
   G4double Pmax = Rindex->GetMaxEnergy();
   G4double dp   = Pmax - Pmin;
+  G4double deltaNumberOfPhotons = MeanNumberOfPhotons1 - MeanNumberOfPhotons2;
+  G4double maxNumberOfPhotons =
+    std::max(MeanNumberOfPhotons1, MeanNumberOfPhotons2);
 
   G4double nMax        = Rindex->GetMaxValue();
   G4double BetaInverse = 1. / beta;
 
   G4double maxCos  = BetaInverse / nMax;
-  G4double maxSin2 = (1.0 - maxCos) * (1.0 + maxCos);
+  G4double maxSin2 = 1.0 - maxCos * maxCos;
 
   for(G4int i = 0; i < fNumPhotons; ++i)
   {
     // Determine photon energy
     G4double rand;
-    G4double sampledEnergy, sampledRI;
+    G4double sampledEnergy;
     G4double cosTheta, sin2Theta;
 
     // sample an energy
@@ -319,10 +323,9 @@ G4VParticleChange* G4Cerenkov::PostStepDoIt(const G4Track& aTrack,
     {
       rand          = G4UniformRand();
       sampledEnergy = Pmin + rand * dp;
-      sampledRI     = Rindex->Value(sampledEnergy);
-      cosTheta      = BetaInverse / sampledRI;
+      cosTheta      = BetaInverse / Rindex->Value(sampledEnergy);
 
-      sin2Theta = (1.0 - cosTheta) * (1.0 + cosTheta);
+      sin2Theta = 1.0 - cosTheta * cosTheta;
       rand      = G4UniformRand();
 
       // Loop checking, 07-Aug-2015, Vladimir Ivanchenko
@@ -356,24 +359,18 @@ G4VParticleChange* G4Cerenkov::PostStepDoIt(const G4Track& aTrack,
     aCerenkovPhoton->SetPolarization(photonPolarization);
     aCerenkovPhoton->SetKineticEnergy(sampledEnergy);
 
-    G4double NumberOfPhotons, N;
+    G4double NumberOfPhotons;
 
     do
     {
       rand            = G4UniformRand();
-      NumberOfPhotons = MeanNumberOfPhotons1 -
-                        rand * (MeanNumberOfPhotons1 - MeanNumberOfPhotons2);
-      N =
-        G4UniformRand() * std::max(MeanNumberOfPhotons1, MeanNumberOfPhotons2);
+      NumberOfPhotons = MeanNumberOfPhotons1 - rand * deltaNumberOfPhotons;
       // Loop checking, 07-Aug-2015, Vladimir Ivanchenko
-    } while(N > NumberOfPhotons);
+    } while(G4UniformRand() * maxNumberOfPhotons > NumberOfPhotons);
 
     G4double delta = rand * aStep.GetStepLength();
     G4double deltaTime =
-      delta /
-      (pPreStepPoint->GetVelocity() +
-       rand * (pPostStepPoint->GetVelocity() - pPreStepPoint->GetVelocity()) *
-         0.5);
+      delta / (pPreStepPoint->GetVelocity() + rand * deltaVelocity * 0.5);
 
     G4double aSecondaryTime          = t0 + deltaTime;
     G4ThreeVector aSecondaryPosition = x0 + rand * aStep.GetDeltaPosition();
@@ -382,8 +379,7 @@ G4VParticleChange* G4Cerenkov::PostStepDoIt(const G4Track& aTrack,
     G4Track* aSecondaryTrack =
       new G4Track(aCerenkovPhoton, aSecondaryTime, aSecondaryPosition);
 
-    aSecondaryTrack->SetTouchableHandle(
-      aStep.GetPreStepPoint()->GetTouchableHandle());
+    aSecondaryTrack->SetTouchableHandle(touchableHandle);
     aSecondaryTrack->SetParentID(aTrack.GetTrackID());
     aSecondaryTrack->SetCreatorModelID(secID);
     aParticleChange.AddSecondary(aSecondaryTrack);
@@ -408,7 +404,7 @@ void G4Cerenkov::PreparePhysicsTable(const G4ParticleDefinition&)
 G4double G4Cerenkov::GetMeanFreePath(const G4Track&, G4double,
                                      G4ForceCondition*)
 {
-  return 1.;
+  return DBL_MAX;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -417,6 +413,9 @@ G4double G4Cerenkov::PostStepGetPhysicalInteractionLength(
 {
   *condition         = NotForced;
   G4double StepLimit = DBL_MAX;
+  if (aTrack.GetDynamicParticle()->GetCharge() == 0.0) {
+    return StepLimit;
+  }
   fNumPhotons        = 0;
 
   const G4Material* aMaterial = aTrack.GetMaterial();
@@ -424,11 +423,9 @@ G4double G4Cerenkov::PostStepGetPhysicalInteractionLength(
 
   // If Physics Vector is not defined no Cerenkov photons
   const G4MaterialTable* materialTable = G4Material::GetMaterialTable();
-  G4MaterialPropertiesTable* MPT =
+  auto const MPT =
     ((*materialTable)[materialIndex])->GetMaterialPropertiesTable();
-  //  if(!(*thePhysicsTable)[materialIndex])
-  if(!MPT)
-  {
+  if (nullptr == MPT) {
     return StepLimit;
   }
 
@@ -649,3 +646,11 @@ void G4Cerenkov::SetVerboseLevel(G4int verbose)
   verboseLevel = verbose;
   G4OpticalParameters::Instance()->SetCerenkovVerboseLevel(verboseLevel);
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+void G4Cerenkov::DumpInfo() const
+{
+  ProcessDescription(G4cout);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

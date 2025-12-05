@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 // experimental_microdosimetry.cc
-// Authors: Susanna Guatelli and Francesco Romano
-// susanna@uow.edu.au, francesco.romano@ct.infn.it
+// Authors: Susanna Guatelli, Giuliana Milluzzo and  Francesco Romano
+// susanna@uow.edu.au, giuliana.milluzzo@ct.infn.it, francesco.romano@ct.infn.it
 
 #include "G4RunManager.hh"
 #include "DetectorConstruction.hh"

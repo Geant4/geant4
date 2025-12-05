@@ -108,13 +108,6 @@ public:
   virtual unsigned int y_steps() const = 0;
   virtual float y_min() const = 0;
   virtual float y_max() const = 0;
-/*
-  //For "inside" functions :
-  virtual unsigned int number_of_points() const = 0;
-  virtual bool ith_point(int,float&,float&,bool&) const = 0;
-  virtual bool set_ith_point(int,float,float) = 0;
-  virtual bool dragger_update_points() const = 0;
-*/
 };
 
 class points2D : public virtual plottable {
@@ -193,13 +186,6 @@ public:
 public:
   plottable_text(const std::string& a_TEXT,float a_X,float a_Y,
                  float a_SIZE,text_mode a_text_mode,
-  /*
-                 float a_ANGLE = 0,
-                 char a_HJUST = 'L',char a_VJUST = 'B',
-                 const std::string& a_FONT = "Hershey",const colorf& a_TXCI = colorf(0,0,0,1),
-                 float a_SCALE = 1,bool a_SMOOTHING = false,bool a_HINTING = false,float a_line_width = 1,
-                 font_modeling a_font_modeling = font_filled
-		 */
                  float a_ANGLE,
                  char a_HJUST,char a_VJUST,
                  const std::string& a_FONT,const colorf& a_TXCI,

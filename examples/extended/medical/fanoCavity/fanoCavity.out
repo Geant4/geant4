@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-03-ref-06    (30-June-2025)
+ Geant4 version Name: geant4-11-04-ref-00    (5-December-2025)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -174,7 +174,7 @@ Lowest muon/hadron kinetic energy                  1 keV
 Use ICRU90 data                                    0
 Fluctuations of dE/dx are enabled                  1
 Type of fluctuation model for leptons and hadrons  Urban
-Use built-in Birks satuaration                     0
+Use built-in Birks saturation                      0
 Build CSDA range enabled                           1
 Use cut as a final range enabled                   0
 Enable angular generator interface                 0
@@ -289,18 +289,18 @@ Index : 1     used in the geometry : Yes
 ### Run 0 start.
 --> Event 0 starts.
 --> Event 1000 starts.
- ---> NbofEvents= 1000   NbOfelectr= 70472   Tkin= 587.833 keV (0.000 %)   NbOfelec in cav= 4882   Dose/EnFluence= 29.487 cm2/g (0.000 %) 
+ ---> NbofEvents= 1000   NbOfelectr= 70663   Tkin= 588.657 keV (0.000 %)   NbOfelec in cav= 4744   Dose/EnFluence= 28.983 cm2/g (0.000 %) 
 
 --> Event 2000 starts.
- ---> NbofEvents= 2000   NbOfelectr= 140752   Tkin= 587.532 keV (-0.051 %)   NbOfelec in cav= 9647   Dose/EnFluence= 29.645 cm2/g (0.538 %) 
+ ---> NbofEvents= 2000   NbOfelectr= 141131   Tkin= 589.268 keV (0.104 %)   NbOfelec in cav= 9505   Dose/EnFluence= 29.261 cm2/g (0.960 %) 
 
 --> Event 3000 starts.
- ---> NbofEvents= 3000   NbOfelectr= 211683   Tkin= 587.487 keV (-0.008 %)   NbOfelec in cav= 14584   Dose/EnFluence= 28.703 cm2/g (-3.180 %) 
+ ---> NbofEvents= 3000   NbOfelectr= 211697   Tkin= 588.351 keV (-0.156 %)   NbOfelec in cav= 14365   Dose/EnFluence= 28.680 cm2/g (-1.985 %) 
 
  Run terminated.
 Run Summary
   Number of events processed : 4000
-  User=4.920000s Real=4.916582s Sys=0.000000s
+  User=6.060000s Real=6.084007s Sys=0.000000s
 
  ======================== run summary ======================
 
@@ -310,29 +310,29 @@ Run Summary
 
  ============================================================
 
- Process calls frequency --->  compt= 282020  Transportation= 78385  msc= 1049116  eIoni= 2098867
+ Process calls frequency --->  compt= 281959  Transportation= 79127  msc= 2043905  eIoni= 1872824
 
  Gamma crossSections in wall material :  compt= 63.464 cm2/g   --> total= 63.464 cm2/g
 
- Mean energy of secondary e- = 587.9031 keV +- 0.1030 %  (--> range in wall material = 2.2194 mm )
- Mass_energy_transfer coef: 29.8484 cm2/g
+ Mean energy of secondary e- = 588.4922 keV +- 0.1029 %  (--> range in wall material = 2.2224 mm )
+ Mass_energy_transfer coef: 29.8783 cm2/g
 
- StoppingPower in wall   = 1.9646 MeV*cm2/g
-               in cavity = 1.9646 MeV*cm2/g
+ StoppingPower in wall   = 1.9643 MeV*cm2/g
+               in cavity = 1.9643 MeV*cm2/g
 
  Charged particle flow in cavity :
-      Enter --> nbParticles = 19379	 Energy = 9.8581 GeV
-      Exit  --> nbParticles = 19382	 Energy = 9.8562 GeV
+      Enter --> nbParticles = 19322	 Energy = 9.7781 GeV
+      Exit  --> nbParticles = 19326	 Energy = 9.7821 GeV
 
- Total edep in cavity = 12.9357 MeV +- 3.2874 %	 Total charged trackLength = 53.5865 m     (mean value = 2.7652 mm )
- Total dose in cavity = 20.5879 MeV/mg
- Dose/EnergyFluence   = 29.1054 cm2/g
+ Total edep in cavity = 12.6836 MeV +- 2.7299 %	 Total charged trackLength = 53.2474 m     (mean value = 2.7558 mm )
+ Total dose in cavity = 20.1865 MeV/mg
+ Dose/EnergyFluence   = 28.5380 cm2/g
 
- (Dose/EnergyFluence)/Mass_energy_transfer = 0.97511 +- 0.03207
+ (Dose/EnergyFluence)/Mass_energy_transfer = 0.95514 +- 0.02609
 
- StepSize of ch. tracks in wall   = 148.8790 um  +- 150.7159 um 	 (nbSteps/track = 11.2614)
- StepSize of ch. tracks in cavity = 1.2519 mm  +- 1.6595 mm 	 (nbSteps/track = 2.2087)
+ StepSize of ch. tracks in wall   = 119.8298 um  +- 89.6445 um 	 (nbSteps/track = 13.9916)
+ StepSize of ch. tracks in cavity = 1.2336 mm  +- 1.6468 mm 	 (nbSteps/track = 2.2339)
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 9 of which, static: 0
-Dynamic pools deleted: 9 / Total memory freed: 0.074 MB
+Dynamic pools deleted: 9 / Total memory freed: 0.073 MB
 ============================================================

@@ -23,12 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file persistency/gdml/G03/include/G03ColorWriter.hh
+/// \file G03ColorWriter.hh
 /// \brief Definition of the G03ColorWriter class
-//
-//
-//
-//
+
 // class G03ColorWriter
 //
 // Custom writer for handling "color" tags extensions in GDML.

@@ -26,8 +26,8 @@
 //
 // G4VFacet implementation.
 //
-// 31 October 2004, P R Truscott, QinetiQ Ltd, UK - Created.
-// 12 October 2012, M Gayer, CERN, - Reviewed optimized implementation.
+// Author: P.R.Truscott (QinetiQ Ltd, UK), 31.10.2004 - Created.
+//         M.Gayer (CERN), 12.10.2012 - Reviewed optimised implementation.
 // --------------------------------------------------------------------
 
 #include "G4VFacet.hh"
@@ -48,20 +48,22 @@ G4VFacet::G4VFacet()
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-G4VFacet::~G4VFacet() = default;
-
-///////////////////////////////////////////////////////////////////////////////
-//
 G4bool G4VFacet::operator== (const G4VFacet& right) const
 {
   G4double tolerance = kCarTolerance*kCarTolerance/4.0;
 
   if (GetNumberOfVertices() != right.GetNumberOfVertices())
+  {
     return false;
-  else if ((GetCircumcentre()-right.GetCircumcentre()).mag2() > tolerance)
+  }
+  if ((GetCircumcentre()-right.GetCircumcentre()).mag2() > tolerance)
+  {
     return false;
-  else if (std::fabs((right.GetSurfaceNormal()).dot(GetSurfaceNormal())) < 0.9999999999)
+  }
+  if (std::fabs((right.GetSurfaceNormal()).dot(GetSurfaceNormal())) < 0.9999999999)
+  {
     return false;
+  }
 
   G4bool coincident  = true;
   G4int i = 0;
@@ -100,7 +102,9 @@ std::ostream& G4VFacet::StreamInfo(std::ostream& os) const
   os << "ABSOLUTE VECTORS = " << G4endl;
   G4int n = GetNumberOfVertices();
   for (G4int i = 0; i < n; ++i)
+  {
     os << "P[" << i << "]      = " << GetVertex(i) << G4endl;
+  }
   os << "*********************************************************************"
      << G4endl;
 

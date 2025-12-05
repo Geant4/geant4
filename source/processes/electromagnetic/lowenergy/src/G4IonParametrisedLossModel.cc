@@ -107,7 +107,7 @@ G4IonParametrisedLossModel::G4IonParametrisedLossModel(
     nmbBins(90),
     nmbSubBins(100),
     particleChangeLoss(0),
-    corrFactor(1.0),
+    chargeSquareRatio(1.0),
     energyLossLimit(0.01),
     cutEnergies(0),
     isInitialised(false)
@@ -216,17 +216,11 @@ G4double G4IonParametrisedLossModel::MaxSecondaryEnergy(
 G4double G4IonParametrisedLossModel::GetChargeSquareRatio(
                              const G4ParticleDefinition* particle,
 	 	 	     const G4Material* material,
-                             G4double kineticEnergy) {    // Kinetic energy
+                             G4double kinEnergy) {    // Kinetic energy
 
-  G4double chargeSquareRatio = corrections ->
-                                     EffectiveChargeSquareRatio(particle,
-                                                                material,
-                                                                kineticEnergy);
-  corrFactor = chargeSquareRatio *
-                       corrections -> EffectiveChargeCorrection(particle,
-                                                                material,
-                                                                kineticEnergy);
-  return corrFactor;
+  chargeSquareRatio =
+    corrections->EffectiveChargeSquareRatio(particle, material, kinEnergy);
+  return chargeSquareRatio;
 }
 
 // #########################################################################
@@ -581,14 +575,10 @@ G4double G4IonParametrisedLossModel::ComputeDEDXPerVolume(
            dEdx += corrections -> ComputeIonCorrections(particle,
                                       material, kineticEnergy);
         }
-
         dEdx *= factor;
      }
-
   }
-
   if (dEdx < 0.0) dEdx = 0.0;
-
   return dEdx;
 }
 
@@ -903,9 +893,11 @@ void G4IonParametrisedLossModel::UpdateDEDXCache(
 // #########################################################################
 
 void G4IonParametrisedLossModel::CorrectionsAlongStep(
-                             const G4MaterialCutsCouple* couple,
-			     const G4DynamicParticle* dynamicParticle,
-                             const G4double& length,
+                             const G4Material* material,
+			     const G4ParticleDefinition* particle,
+			     const G4double kineticEnergy,
+			     const G4double cutEnergy,
+			     const G4double& length,
 			     G4double& eloss) {
 
   // ############## Corrections for along step energy loss calculation ######
@@ -920,130 +912,72 @@ void G4IonParametrisedLossModel::CorrectionsAlongStep(
   //
   // (Implementation partly adapted from G4BraggIonModel/G4BetheBlochModel)
 
-  const G4ParticleDefinition* particle = dynamicParticle -> GetDefinition();
-  const G4Material* material = couple -> GetMaterial();
-
-  G4double kineticEnergy = dynamicParticle -> GetKineticEnergy();
-
-  if(kineticEnergy == eloss) { return; }
-
-  G4double cutEnergy = DBL_MAX;
-  std::size_t cutIndex = couple -> GetIndex();
-  cutEnergy = cutEnergies[cutIndex];
-
   UpdateDEDXCache(particle, material, cutEnergy);
 
   LossTableList::iterator iter = dedxCacheIter;
 
   // If parameterization for ions is available the electronic energy loss
   // is overwritten
-  if(iter != lossTableList.end()) {
-
-     // The energy loss is calculated using the ComputeDEDXPerVolume function
-     // and the step length (it is assumed that dE/dx does not change
-     // considerably along the step)
-     eloss =
-        length * ComputeDEDXPerVolume(material, particle,
-                                      kineticEnergy, cutEnergy);
+  if (iter != lossTableList.end()) {
+    // The energy loss is calculated using the ComputeDEDXPerVolume function
+    // and the step length (it is assumed that dE/dx does not change
+    // considerably along the step)
+    eloss = length * ComputeDEDXPerVolume(material, particle,
+					  kineticEnergy, cutEnergy);
 
 #ifdef PRINT_DEBUG
-  G4cout.precision(6);
-  G4cout << "########################################################"
-         << G4endl
-         << "# G4IonParametrisedLossModel::CorrectionsAlongStep"
-         << G4endl
-         << "# cut(MeV) = " << cutEnergy/MeV
-         << G4endl;
-
-  G4cout << "#"
-         << std::setw(13) << std::right << "E(MeV)"
-         << std::setw(14) << "l(um)"
-         << std::setw(14) << "l*dE/dx(MeV)"
-         << std::setw(14) << "(l*dE/dx)/E"
-         << G4endl
-         << "# ------------------------------------------------------"
-         << G4endl;
-
-  G4cout << std::setw(14) << std::right << kineticEnergy / MeV
-         << std::setw(14) << length / um
-         << std::setw(14) << eloss / MeV
-         << std::setw(14) << eloss / kineticEnergy * 100.0
-         << G4endl;
+    G4cout.precision(6);
+    G4cout << "########################################################" << G4endl
+	   << "# G4IonParametrisedLossModel::CorrectionsAlongStep" << G4endl
+	   << "# cut(MeV) = " << cutEnergy/MeV << G4endl;
+    G4cout << "#"
+	   << std::setw(13) << std::right << "E(MeV)"
+	   << std::setw(14) << "l(um)"
+	   << std::setw(14) << "l*dE/dx(MeV)"
+	   << std::setw(14) << "(l*dE/dx)/E"
+	   << G4endl
+	   << "# ------------------------------------------------------" << G4endl;
+    G4cout << std::setw(14) << std::right << kineticEnergy / MeV
+	   << std::setw(14) << length / um
+	   << std::setw(14) << eloss / MeV
+	   << std::setw(14) << eloss / kineticEnergy * 100.0
+	   << G4endl;
 #endif
 
-     // If the energy loss exceeds a certain fraction of the kinetic energy
-     // (the fraction is indicated by the parameter "energyLossLimit") then
-     // the range tables are used to derive a more accurate value of the
-     // energy loss
-     if(eloss > energyLossLimit * kineticEnergy) {
-
-        eloss = ComputeLossForStep(couple, particle,
-                                   kineticEnergy,length);
+    // If the energy loss exceeds a certain fraction of the kinetic energy
+    // (the fraction is indicated by the parameter "energyLossLimit") then
+    // the range tables are used to derive a more accurate value of the
+    // energy loss
+    if (eloss > energyLossLimit * kineticEnergy) {
+      eloss = ComputeLossForStep(CurrentCouple(), particle,
+				 kineticEnergy,length);
 
 #ifdef PRINT_DEBUG
-  G4cout << "# Correction applied:"
-         << G4endl;
-
-  G4cout << std::setw(14) << std::right << kineticEnergy / MeV
-         << std::setw(14) << length / um
-         << std::setw(14) << eloss / MeV
-         << std::setw(14) << eloss / kineticEnergy * 100.0
-         << G4endl;
+	G4cout << "# Correction applied:" << G4endl;
+	G4cout << std::setw(14) << std::right << kineticEnergy / MeV
+	       << std::setw(14) << length / um
+	       << std::setw(14) << eloss / MeV
+	       << std::setw(14) << eloss / kineticEnergy * 100.0
+	       << G4endl;
 #endif
-
-     }
+    }
   }
 
   // For all corrections below a kinetic energy between the Pre- and
   // Post-step energy values is used
   G4double energy = kineticEnergy - eloss * 0.5;
-  if(energy < 0.0) energy = kineticEnergy * 0.5;
+  if (energy < 0.0) energy = kineticEnergy * 0.5;
 
-  G4double chargeSquareRatio = corrections ->
-                                     EffectiveChargeSquareRatio(particle,
-                                                                material,
-                                                                energy);
-  GetModelOfFluctuations() -> SetParticleAndCharge(particle,
-                                                   chargeSquareRatio);
+  G4double q2 = corrections->EffectiveChargeSquareRatio(particle, material,
+							energy);
+  GetModelOfFluctuations()->SetParticleAndCharge(particle, q2);
 
   // A correction is applied considering the change of the effective charge
-  // along the step (the parameter "corrFactor" refers to the effective
+  // along the step (the parameter "chargeSquareRatio" refers to the effective
   // charge at the beginning of the step). Note: the correction is not
   // applied for energy loss values deriving directly from parameterized
   // ion stopping power tables
-  G4double transitionEnergy = dedxCacheTransitionEnergy;
-
-  if(iter != lossTableList.end() && transitionEnergy < kineticEnergy) {
-     chargeSquareRatio *= corrections -> EffectiveChargeCorrection(particle,
-                                                                material,
-                                                                energy);
-
-     G4double chargeSquareRatioCorr = chargeSquareRatio/corrFactor;
-     eloss *= chargeSquareRatioCorr;
-  }
-  else if (iter == lossTableList.end()) {
-
-     chargeSquareRatio *= corrections -> EffectiveChargeCorrection(particle,
-                                                                material,
-                                                                energy);
-
-     G4double chargeSquareRatioCorr = chargeSquareRatio/corrFactor;
-     eloss *= chargeSquareRatioCorr;
-  }
-
-  // Ion high order corrections are applied if the current model does not
-  // overwrite the energy loss (i.e. when the effective charge approach is
-  // used)
-  if(iter == lossTableList.end()) {
-
-     G4double scaledKineticEnergy = kineticEnergy * dedxCacheGenIonMassRatio;
-     G4double lowEnergyLimit = betheBlochModel -> LowEnergyLimit();
-
-     // Corrections are only applied in the Bethe-Bloch energy region
-     if(scaledKineticEnergy > lowEnergyLimit)
-       eloss += length *
-            corrections -> IonHighOrderCorrections(particle, couple, energy);
-  }
+  eloss *= q2/chargeSquareRatio;
 }
 
 // #########################################################################

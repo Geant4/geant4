@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file medical/DICOM/src/DicomRun.cc
+/// \file DicomRun.cc
 /// \brief Implementation of the DicomRun class
 
 //=====================================================================

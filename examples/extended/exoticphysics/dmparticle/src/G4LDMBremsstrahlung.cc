@@ -23,7 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
+/// \file G4LDMBremsstrahlung.cc
+/// \brief Implementation of the G4LDMBremsstrahlung class
+
 // -------------------------------------------------------------------
 //
 // GEANT4 Class file

@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file G4LindhardPartition.hh
+/// \brief Definition of the G4LindhardPartition class
+
 /*
  *  \file electromagnetic/TestEm7/include/G4LindhardPartition.hh
  *  \brief Definition of the G4LindhardPartition class

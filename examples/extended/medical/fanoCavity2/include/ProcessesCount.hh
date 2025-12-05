@@ -23,12 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file medical/fanoCavity2/include/ProcessesCount.hh
+/// \file ProcessesCount.hh
 /// \brief Definition of the ProcessesCount class
-//
-//
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 // 08.03.01 Hisaya: adapted for STL
 // 26.10.98 mma   : first version

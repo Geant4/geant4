@@ -1,0 +1,152 @@
+\page ExampleHadr01 Example Hadr01
+
+\author A.Bagulya, I.Gudowska, V.Ivanchenko, N.Starkov \n
+CERN, Geneva, Switzerland \n
+Karolinska Institute & Hospital, Stockholm, Sweden \n
+Lebedev Physical Institute, Moscow, Russia
+
+This example application is based on the application IION developed for
+simulation of proton or ion beam interaction with a water target. Different 
+aspects of beam target interaction are demonstrating in the example including 
+longitudinal profile of energy deposition, spectra of secondary  particles,
+spectra of particles leaving the target. The results are presenting in a form
+of average numbers and histograms. 
+
+
+## GEOMETRY
+
+The Target volume is a cylinder placed inside Check cylindrical volume. The 
+Check volume is placed inside the World volume. The radius and the length of
+the Check volume are 1 mm larger than the radius and the length of the Target.
+The material of the Check volume is the same as the World material.  The World
+volume has the sizes 10 mm larger than that of the Target volume.  Any material
+from the Geant4 database can be defined. The default World  material is
+G4Galactic and the default  Target material is aluminum. The Target is
+subdivided on number of equal slices. Following UI commands are available to
+modify the geometry:
+
+```
+/testhadr/TargetMat     G4_Pb
+/testhadr/WorldMat      G4_AIR
+/testhadr/TargetRadius  10 mm
+/testhadr/TargetLength  20 cm
+/testhadr/NumberDivZ    200
+```
+
+Beam direction coincides with the target axis and is Z axis in the global
+coordinate system. The beam starts 5 mm in front of the target. G4ParticleGun
+is used as a primary generator. The energy and the type of the beam can be
+defined via standard UI commands
+
+```
+/gun/energy   15 GeV
+/gun/particle proton
+```
+
+Default beam position is -(targetHalfLength + 5*mm) and direction along Z axis.
+Beam position and direction can be changed by gun UI commands:
+
+```
+/gun/position  1 10 3 mm
+/gun/direction 1 0 0
+```
+
+however, position command is active only if before it the flag is set
+
+```
+/testhadr/DefaultBeamPosition false   
+```
+ 
+## SCORING
+
+The scoring is performed with the help of UserStackingAction class and two
+sensitive detector  classes: one associated with a target slice, another with
+the Check volume. Each secondary particle is scored by the StackingAction.  In
+the StackingAction it is also possible to kill all or one type of secondary 
+particles 
+
+```
+/testhadr/Kill             neutron
+/testhadr/KillAllSecondaries  
+```
+
+To control running the following options are available:
+
+```
+/testhadr/PrintModulo      100
+/testhadr/DebugEvent       977
+```
+
+The last command selects an events, for which "/tracking/verbose 2" level
+of printout is established.
+
+
+## PHYSICS
+
+PhysicsList of the application uses reference Phsyics Lists or its components, 
+which are distributed with Geant4 in /geant4/physics_lists subdirectory.
+
+The reference Physics List name may be defined in the 3d argument of the 
+run command: 
+
+```
+./Hadr01 my.macro QGSP_BERT 
+```
+
+If 3d argument is not set then the PHYSLIST environment variable is checked.
+If 3d argument is set, it is possible to add the 4th and 5th arguments,
+which defines overlap energies between cascade and string models in GeV:
+
+```
+./Hadr01 my.macro QGSP_BERT 3.5 8.0
+```
+
+If 6 arguments are used the last enabling addition of charge exchange
+physics on top of any reference Physics List.
+
+```
+./Hadr01 my.macro QGSP_BERT 3.5 8.0 CI
+```
+
+If both 3d argument and the environment variable are not defined then
+reference Phsyics Lists is not instantiated, instead the local Physics List
+is used built from components, which may be configured using UI interface.
+The choice of the physics is provided by the UI command:
+
+```
+/testhadr/Physics     QGSP_BIC
+```
+
+To see the list of available configurations with UI one can use
+
+```
+/testhadr/ListPhysics
+```
+
+Note that testhadr UI commands are not available in the case when PHYSLIST 
+environment variable is defined. 
+
+
+## VISUALIZATION
+
+The vis.mac file can be used as an example of visualization. 
+
+## HISTOGRAMS
+
+There are built in histograms. The 1st one (idx=0, id="1") scores energy
+deposition along the target. Histograms "22", "23", "24", "25" scores
+energy deposition per particle type.
+ 
+All other histograms are provided in decimal logarithmic scale (log10(E/MeV),
+where E is secondary particle energy at production
+
+It is possible to change scale using UI commands:
+
+```
+/testhadr/histo/setHisto idx nbins vmin vmax unit
+```
+
+Only ROOT histograms are available.
+
+All histograms are normalized to the number of events.
+  

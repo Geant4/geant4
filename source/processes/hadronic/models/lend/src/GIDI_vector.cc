@@ -376,13 +376,13 @@ void Vector::writeWithBoundaries( FILE *a_file, char const *a_format, std::vecto
  ***********************************************************************************************************/
 void Vector::writeWithBoundaries2( FILE *a_file, char const *a_format, std::vector<double> const &a_boundaries, double a_epsilon ) const {
 
-    int numberOfValues = (int) size( );
+    std::size_t numberOfValues = size( );
 
     if( a_epsilon == 0.0 ) {
-        for( int index = 0; index < numberOfValues; ++index ) fprintf( a_file, a_format, a_boundaries[index], m_vector[index] ); }
+        for( std::size_t index = 0; index < numberOfValues; ++index ) fprintf( a_file, a_format, a_boundaries[index], m_vector[index] ); }
     else {
         if( numberOfValues > 0 ) fprintf( a_file, a_format, a_boundaries[0], m_vector[0] );
-        for( int index = 1; index < numberOfValues; ++index ) {
+        for( std::size_t index = 1; index < numberOfValues; ++index ) {
             fprintf( a_file, a_format, a_boundaries[index] * ( 1.0 - a_epsilon ), m_vector[index-1] );
 
             fprintf( a_file, a_format, a_boundaries[index] * ( 1.0 + a_epsilon ), m_vector[index] );

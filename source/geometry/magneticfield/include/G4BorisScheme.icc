@@ -29,19 +29,12 @@
 // Supervision: John Apostolakis,Renee Fatemi, Soon Yung Jun
 // --------------------------------------------------------------------
 
-#if 0
-inline void G4BorisScheme::SetEquationOfMotion(G4EquationOfMotion* eq)
+inline G4EquationOfMotion* G4BorisScheme::GetEquationOfMotion() const
 {
-    fEquation = eq;
-}
-#endif
-
-inline G4EquationOfMotion* G4BorisScheme::GetEquationOfMotion()
-{
-    return fEquation;
+  return fEquation;
 }
 
 inline G4int G4BorisScheme::GetNumberOfVariables() const
 {
-    return fnvar;
+  return fnvar;
 }

@@ -23,10 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file field/field04/src/F04EventActionMessenger.cc
+/// \file F04EventActionMessenger.cc
 /// \brief Implementation of the F04EventActionMessenger class
-//
 
 #include "F04EventActionMessenger.hh"
 

@@ -23,9 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// @file MedicalBeam.hh
-/// @brief Define beam profile as primary generator
+/// \file MedicalBeam.hh
+/// \brief Definition of the MedicalBeam class
+///
+/// Define beam profile as primary generator
 
 #ifndef MEDICAL_BEAM_H
 #define MEDICAL_BEAM_H

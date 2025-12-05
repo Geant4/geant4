@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 /// \file StackingAction.cc
 /// \brief Implementation of the StackingAction class
 

@@ -94,7 +94,6 @@ public: //for g4dum/G4ThreeVector :
       dx = -dx; dz = -dz;
     } else {
     }
-    //return *this;
   }
 
 

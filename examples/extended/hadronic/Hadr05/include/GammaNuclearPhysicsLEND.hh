@@ -24,10 +24,7 @@
 // ********************************************************************
 //
 /// \file GammaNuclearPhysicsLEND.hh
-/// \brief Definition of the GammaNuclearPhysics class
-//
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// \brief Definition of the GammaNuclearPhysicsLEND class
 
 #ifndef GammaNuclearPhysicsLEND_h
 #define GammaNuclearPhysicsLEND_h 1

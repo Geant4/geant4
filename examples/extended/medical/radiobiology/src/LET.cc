@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file radiobiology/src/LET.cc
+/// \file LET.cc
 /// \brief Implementation of the RadioBio::LET class
 
 #include "LET.hh"

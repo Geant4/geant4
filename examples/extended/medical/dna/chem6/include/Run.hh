@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file Run.hh
+/// \brief Definition of the Run class
+
 // This example is provided by the Geant4-DNA collaboration
 // chem6 example is derived from chem4 and chem5 examples
 //
@@ -36,11 +39,6 @@
 // The Geant4-DNA web site is available at http://geant4-dna.org
 //
 // Authors: W. G. Shin and S. Incerti (CENBG, France)
-//
-// $Id$
-//
-/// \file Run.hh
-/// \brief Definition of the Run class
 
 #ifndef CHEM6_Run_h
 #define CHEM6_Run_h 1
@@ -55,24 +53,26 @@
 /// In RecordEvent() there is collected information event per event
 /// from Hits Collections, and accumulated statistic for the run
 class G4VPrimitiveScorer;
-class Run : public G4Run
-{
-  public:
-    Run();
-    virtual ~Run();
 
-    virtual void RecordEvent(const G4Event*);
-    virtual void Merge(const G4Run*);
+class Run final : public G4Run {
+public:
+  Run();
 
-    G4double GetSumDose() const { return fSumEne; }
-    G4VPrimitiveScorer* GetPrimitiveScorer() const { return fScorerRun; }
-    G4THitsMap<G4double>* GetLET() { return fTotalLET; }
+  ~Run() override = default;
 
-  private:
-    G4double fSumEne;
-    G4VPrimitiveScorer* fScorerRun;
-    G4VPrimitiveScorer* fLETScorerRun;
-    G4THitsMap<G4double>* fTotalLET;
+  void RecordEvent(const G4Event *) override;
+
+  void Merge(const G4Run *) override;
+
+  G4double GetSumDose() const { return fSumEne; }
+  G4VPrimitiveScorer *GetPrimitiveScorer() const { return fScorerRun; }
+  G4THitsMap<G4double> *GetLET() const { return fTotalLET; }
+
+private:
+  G4double fSumEne = 0;
+  G4VPrimitiveScorer *fScorerRun = nullptr;
+  G4VPrimitiveScorer *fLETScorerRun = nullptr;
+  G4THitsMap<G4double> *fTotalLET = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -25,9 +25,6 @@
 //
 /// \file NeutronHPphysics.cc
 /// \brief Implementation of the NeutronHPphysics class
-//
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "NeutronHPphysics.hh"
 

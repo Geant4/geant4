@@ -7,7 +7,6 @@
 #include "enums"
 #include "senums"
 #include "../img"
-#include "../vdata"
 #include "../scast"
 
 namespace tools {
@@ -39,7 +38,7 @@ public:
   virtual ~render_manager(){}
 public:
   unsigned int create_gsto_from_data(const std::vector<float>& a_xyzs){
-    const float* _xyzs = vec_data<float>(a_xyzs);
+    const float* _xyzs = a_xyzs.data();
     return create_gsto_from_data(a_xyzs.size(),_xyzs);
   }
 };

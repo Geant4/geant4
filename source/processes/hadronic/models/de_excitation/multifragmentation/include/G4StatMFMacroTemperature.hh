@@ -23,93 +23,77 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
+//
+// Modification: 13.08.2025 V.Ivanchenko rewrite
 
 #ifndef G4StatMFMacroTemperature_h
 #define G4StatMFMacroTemperature_h 1
 
-#include "G4StatMFParameters.hh"
+#include <vector>
+#include "globals.hh"
 #include "G4VStatMFMacroCluster.hh"
-#include "G4StatMFMacroChemicalPotential.hh"
-#include "G4Solver.hh"
+#include "G4FunctionSolver.hh"
 
-
+class G4StatMFMacroChemicalPotential;
 
 class G4StatMFMacroTemperature {
 
 public:
 
-    G4StatMFMacroTemperature(const G4double anA, const G4double aZ, 
-			     const G4double ExEnergy, const G4double FreeE0, 
-			     const G4double kappa, 
-			     std::vector<G4VStatMFMacroCluster*> * ClusterVector);
+  G4StatMFMacroTemperature();
+  ~G4StatMFMacroTemperature();
+
+  void Initialise(const G4int anA, const G4int aZ, 
+		  const G4double ExEnergy, const G4double FreeE0, 
+		  const G4double kappa, 
+		  std::vector<G4VStatMFMacroCluster*>* ClusterVector);
 	
-    ~G4StatMFMacroTemperature();
    
-    G4double operator()(const G4double T)
-	{ return (_ExEnergy - this->FragsExcitEnergy(T))/_ExEnergy; }	
+  G4double Function(G4double T)
+  { return (fExEnergy - FragsExcitEnergy(T)); }	
 
-private:
+  // copy constructor
+  G4StatMFMacroTemperature(const G4StatMFMacroTemperature&) = delete;
+  G4StatMFMacroTemperature& operator=
+  (const G4StatMFMacroTemperature& right) = delete;
+  G4bool operator==(const G4StatMFMacroTemperature& right) const = delete;
+  G4bool operator!=(const G4StatMFMacroTemperature& right) const = delete;
 
-    // Default constructor
-    G4StatMFMacroTemperature();
-
-    // copy constructor
-    G4StatMFMacroTemperature(const G4StatMFMacroTemperature &) {};
-
-
-    // operators
-    G4StatMFMacroTemperature & operator=(const G4StatMFMacroTemperature & right);
-    G4bool operator==(const G4StatMFMacroTemperature & right) const;
-    G4bool operator!=(const G4StatMFMacroTemperature & right) const;
-
-public:
-
-    inline G4double GetMeanMultiplicity(void) const {return _MeanMultiplicity;}
+  G4double GetMeanMultiplicity(void) const {return fMeanMultiplicity;}
 	
-    inline G4double GetChemicalPotentialMu(void) const {return _ChemPotentialMu;}
+  G4double GetChemicalPotentialMu(void) const {return fChemPotentialMu;}
 
-    inline G4double GetChemicalPotentialNu(void) const {return _ChemPotentialNu;}
+  G4double GetChemicalPotentialNu(void) const {return fChemPotentialNu;}
 
-    inline G4double GetTemperature(void) const {return _MeanTemperature;}
+  G4double GetTemperature(void) const {return fMeanTemperature;}
 
-    inline G4double GetEntropy(void) const {return _MeanEntropy;}
+  G4double GetEntropy(void) const {return fMeanEntropy;}
 
-    G4double CalcTemperature(void);
+  G4double CalcTemperature(void);
 
 private:
 	
-    G4double FragsExcitEnergy(const G4double T);
+  G4double FragsExcitEnergy(const G4double T);
 
-    void CalcChemicalPotentialNu(const G4double T);
+  void CalcChemicalPotentialNu(const G4double T);
 
-private:
+  G4FunctionSolver<G4StatMFMacroTemperature>* fSolver;
+  G4StatMFMacroChemicalPotential* theChemPot;
 
-    G4double theA;
-
-    G4double theZ;
-
-    G4double _ExEnergy;
+  G4int theA{0};
+  G4int theZ{0};
+  G4double fExEnergy{0.0};
+  G4double fFreeInternalE0{0.0};
+  G4double fKappa{0.0};
+  G4double fMeanMultiplicity{0.0};
+  G4double fMeanTemperature{0.0};
+  G4double fChemPotentialMu{0.0};
+  G4double fChemPotentialNu{0.0};
+  G4double fMeanEntropy{0.0};
 	
-    G4double _FreeInternalE0;
-
-    G4double _Kappa;
-
-    G4double _MeanMultiplicity;
-
-    G4double _MeanTemperature;
-	
-    G4double _ChemPotentialMu;
-	
-    G4double _ChemPotentialNu;
-	
-    G4double _MeanEntropy;
-	
-    std::vector<G4VStatMFMacroCluster*> * _theClusters; 
-
-
+  std::vector<G4VStatMFMacroCluster*>* fClusters{nullptr};
 };
+
 #endif

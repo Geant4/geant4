@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file B3/B3a/include/RunAction.hh
+/// \file RunAction.hh
 /// \brief Definition of the B3a::RunAction class
 
 #ifndef B3aRunAction_h

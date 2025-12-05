@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file B3/B3a/src/PhysicsList.cc
+/// \file PhysicsList.cc
 /// \brief Implementation of the B3::PhysicsList class
 
 #include "PhysicsList.hh"

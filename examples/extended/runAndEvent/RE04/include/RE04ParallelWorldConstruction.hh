@@ -23,10 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file runAndEvent/RE04/include/RE04ParallelWorldConstruction.hh
+/// \file RE04ParallelWorldConstruction.hh
 /// \brief Definition of the RE04ParallelWorldConstruction class
-//
-//
+
 #ifndef RE04ParallelWorldConstruction_h
 #define RE04ParallelWorldConstruction_h 1
 

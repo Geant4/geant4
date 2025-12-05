@@ -25,7 +25,6 @@
 //
 /// \file MoviesPrimaryGeneratorAction.hh
 /// \brief Definition of the MoviesPrimaryGeneratorAction class
-//
 
 #ifndef MoviesPrimaryGeneratorAction_h
 #define MoviesPrimaryGeneratorAction_h 1

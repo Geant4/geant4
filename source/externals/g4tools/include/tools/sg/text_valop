@@ -116,7 +116,6 @@ public: //sg::base_text :
     mnmx(self.m_out,self.m_sep,mn,mx);
     a_mn_x = mn[0];a_mn_y = mn[1];a_mn_z = mn[2];
     a_mx_x = mx[0];a_mx_y = mx[1];a_mx_z = mx[2];
-    //::printf("debug : get_bounds : %g %g %g : %g %g %g\n",a_mn_x,a_mn_y,a_mn_z,a_mx_x,a_mx_y,a_mx_z);
   }
   virtual float ascent(float) const {return 1;}
   virtual float y_advance(float) const {return 1;}

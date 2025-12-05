@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file MyPrimaryGeneratorActionFromFile.hh
+/// \brief Definition of the MyPrimaryGeneratorActionFromFile class
+
 // Derived from
 //  https://twiki.cern.ch/twiki/bin/view/Geant4/QuickMigrationGuideForGeant4V10
 // Courtesy of A. Dotti
@@ -37,8 +40,6 @@
 //
 // The Geant4-DNA web site is available at http://geant4-dna.org
 //
-/// \file medical/dna/svalue/include/MyPrimaryGeneratorActionFromFile.hh
-/// \brief Declaration of the MyPrimaryGeneratorActionFromFile class
 
 #include "G4ParticleGun.hh"
 #include "G4VStateDependent.hh"

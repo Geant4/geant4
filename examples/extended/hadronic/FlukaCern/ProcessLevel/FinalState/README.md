@@ -1,6 +1,8 @@
+\page ExampleFinalState Example FinalState
+
 # Description
 
-This example allows the simulation of hadron-nucleus inelastic nuclear interactions,    
+This FlukaCern example allows the simulation of hadron-nucleus inelastic nuclear interactions,
 and the study of the resulting final states.   
    
 It is an adaptation of `Hadr09` example.  

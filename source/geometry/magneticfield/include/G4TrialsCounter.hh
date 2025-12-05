@@ -30,7 +30,7 @@
 // Keeps statistics of the number of trials, including the Maximum
 // and how many times it was reached.
 
-// Author: John Apostolakis, CERN - 08.12.2006   
+// Author: John Apostolakis (CERN), 08.12.2006   
 // -------------------------------------------------------------------
 #ifndef G4TRIALS_COUNTER_HH
 #define G4TRIALS_COUNTER_HH
@@ -38,39 +38,77 @@
 #include "G4Types.hh"
 #include "G4String.hh"
 
-class  G4TrialsCounter
+/**
+ * @brief G4TrialsCounter is a class to keep statistics of the number of
+ * trials, including the maximum and how many times it was reached.
+ */
+
+class G4TrialsCounter
 {
-  public:  // with description
+  public:
 
+    /**
+     * Constructor for G4TrialsCounter.
+     *  @param[in] nameStats Identifier.
+     *  @param[in] description Description text.
+     *  @param[in] printOnExit Flag for enabling additional verbosity on exit.
+     */
     G4TrialsCounter( const G4String& nameStats,
-                     const G4String& description, G4bool printOnExit = false ); 
-   ~G4TrialsCounter();
+                     const G4String& description,
+                     G4bool printOnExit = false ); 
 
+    /**
+     * Destructor.
+     */
+    ~G4TrialsCounter();
+
+    /**
+     * Adds this number to stats.
+     */
     inline void AccumulateCounts( G4int noTrials ); 
-       //  Add this number to stats
-    void ClearCounts(); 
-       //  Reset all counts
-    G4int ReturnTotals( G4int& calls, G4int& maxTrials, G4int& numMaxT ) ; 
-       //  Return number of count/trials, calls, max & no-max
 
+    /**
+     * Resets all counts.
+     */
+    void ClearCounts(); 
+
+    /**
+     * Returns number of count/trials, calls, max & no-max.
+     */
+    G4int ReturnTotals( G4int& calls, G4int& maxTrials, G4int& numMaxT ) ; 
+
+    /**
+     * Prints out statistics.
+     */
     void PrintStatistics(); 
 
   private:
 
-    G4int fTotalNoTrials = 0;    //  Counts sum of trials 
-    G4int fNumberCalls = 0;      //  Total # of calls to accumulate
-    G4int fmaxTrials = 0;        // Max value of trials
-    G4int fNoTimesMaxTrials = 0; // How many times maximum is reached
+    /** Counts sum of trials. */
+    G4int fTotalNoTrials = 0;
 
-    G4String fName;        //  Identifies stats, and is printed 
-    G4String fDescription; //  Explanation of stats
+    /** Total number of calls to accumulate. */
+    G4int fNumberCalls = 0;
 
+    /** Max value of trials. */
+    G4int fmaxTrials = 0;
+
+    /** How many times maximum is reached. */
+    G4int fNoTimesMaxTrials = 0;
+
+    /** Identifies stats, and is printed. */
+    G4String fName;
+
+    /** Explanation of stats. */
+    G4String fDescription;
+
+    /** If verbose and not printed, print on destruction. */
     G4bool fStatsVerbose = false;
-      // If verbose and not printed, print on destruction
+
+    /** Flag, to avoid reprinting on destruction. */
     G4bool fPrinted = false;
-      // Flag, to avoid reprinting on destruction
 }; 
 
 #include "G4TrialsCounter.icc"
 
-#endif  /* End of ifndef G4TRIALS_COUNTER_HH */
+#endif

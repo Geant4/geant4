@@ -23,8 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-///  \file FinalStateHistoManager.hh
-///  \brief Create a set of histos for final state study.
+/// \file FinalStateHistoManager.cc
+/// \brief Implementation of the FinalStateHistoManager class
+///
+///  Create a set of histos for final state study.
+
 //
 //  Author: G.Hugo, 08 December 2022
 //

@@ -23,9 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file GB02/src/GB02DetectorConstruction.cc
+/// \file GB02DetectorConstruction.cc
 /// \brief Implementation of the GB02DetectorConstruction class
-//
+
 #include "GB02DetectorConstruction.hh"
 
 #include "GB02BOptrMultiParticleForceCollision.hh"

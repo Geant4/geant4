@@ -1,0 +1,91 @@
+\page Examplesdcounters Example sdcounters
+
+Author: C. Velten \n
+Date: 7 April 2025 \n
+Email: cv2415@columbia.edu
+
+The custom (spatially-aware) molecule counter used here
+is further described in:
+- Radiat. Phys. Chem. 212 (2023) 111194 \n
+doi:10.1016/j.radphyschem.2023.111194
+
+ This example is provided by the Geant4-DNA collaboration
+  (http://geant4-dna.org).
+
+  Any report or published results obtained using the Geant4-DNA software
+  shall cite the following Geant4-DNA collaboration publications:\n
+  Med. Phys. 45 (2018) e722-e739\n
+  Phys. Med. 31 (2015) 861-874\n
+  Med. Phys. 37 (2010) 4692-4708\n
+  Int. J. Model. Simul. Sci. Comput. 1 (2010) 157–178\n
+
+\Description:
+
+## Geometry
+
+A box of liquid water with a 8 µm (radius) spherical cell placed at its center.
+The cell contains a 4 µm (radius) nucleus and 100 mitochondria.
+
+## Incident particles
+
+Electrons with 1 keV energy, which can be changed in
+the simple_sbs.ini macro file.
+They are shot from the center of the box (inside the nucleus).
+
+## Physics
+
+The default Geant4-DNA physics constructor 2 is used in
+the PhysicsList class with chemistry constructor 3.
+
+## Molecule Counters
+
+Counters are defined and registered in the ActionInitialization
+class for master & workers using the BuildMoleculeCounters(), and
+BuildMultipleAndCustomMoleculeCounters() methods.
+To switch between either of these methods, change the
+boolean value of fBuildMultipleAndCustomMoleculeCounters in
+ActionInitialization.hh.
+
+By default, the molecule counter manager will accumulate counts from
+worker instances into the master instance. To facilitate this the user
+__must__ create a `UserEventAction` and `UserRunAction` and override
+the `(Begin|End)Of(Event|Run)Action` methods and call the corresponding
+method on the `G4DNAChemistryManager::Instance()`. See the example's
+`EventAction.hh` and `RunAction.(hh|cc)` on how to do this.
+
+    __`BuildMoleculeCounters()`:__
+    * __[important]__ Reset counters before each event but not keep counter values between events. \
+    This is required since our scorers will read out the molecule counters using
+    their `EndOfEvent()` method and save the recorded molecules.
+    * Register a `G4MoleculeCounter` instance called "BasicCounter":
+        * set its time precision to 10 ps
+    * Register a `G4MoleculeCounter` instance called "BasicCounter_VariablePrecision":
+        * set its time precision to vary with global time:
+        ```
+            <= 10 ps: 5 ps
+            <= 100 ps: 50 ps
+            <= 1 ns: 0.5 ns
+            <= 1 µs: 50 ns
+        ```
+    * Register a `G4MoleculeReactionCounter` instance called "Reactions":
+        * set its time precision to 10 ps
+
+## Multifunctional Detector & Primitive Scorers:
+
+Two scorers are defined for molecule (`ScoreBasicMoleculeCounts`) and
+reaction (`ScoreBasicReactionCounts`) counts. The basic molecule scorers
+are instantiated once for each molecule counter.
+The results are saved as ROOT trees to a single file.
+
+## Execute the code by running:
+
+```
+./sdcounters [simple_sbs.in,simple_irt_syn_react.in]
+```
+
+The `simple_sbs.in` macro __only__ includes molecule transport (diffusion)!
+
+## Output
+
+Visualize the molecule and reaction counts using the Python notebook `plotRoot.ipynb`. It does not require a ROOT installation but the following packages:
+    `matplotlib pandas seaborn uproot`

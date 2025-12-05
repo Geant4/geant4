@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file ScoreSpecies.cc
+/// \brief Implementation of the ScoreSpecies class
+
 // This example is provided by the Geant4-DNA collaboration
 // Any report or published results obtained using the Geant4-DNA software
 // shall cite the following Geant4-DNA collaboration publication:
@@ -46,7 +49,6 @@
 #include <iomanip>
 
 /**
- \file ScoreSpecies.cc
  \class ScoreSpecies
   This is a primitive scorer class for molecular species.
   The number of species is recorded for all times (log spaced). It

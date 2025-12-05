@@ -12,6 +12,7 @@ geant4_add_module(G4bosons
     G4PhononLong.hh
     G4PhononTransFast.hh
     G4PhononTransSlow.hh
+    G4QuasiOpticalPhoton.hh
     G4UnknownParticle.hh
   SOURCES
     G4BosonConstructor.cc
@@ -23,6 +24,7 @@ geant4_add_module(G4bosons
     G4PhononLong.cc
     G4PhononTransFast.cc
     G4PhononTransSlow.cc
+    G4QuasiOpticalPhoton.cc
     G4UnknownParticle.cc)
 
 geant4_module_link_libraries(G4bosons PUBLIC G4partman PRIVATE G4globman)

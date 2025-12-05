@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file PrimaryGeneratorAction.cc
+/// \brief Implementation of the PrimaryGeneratorAction class
+
 // This example is provided by the Geant4-DNA collaboration
 // Any report or published results obtained using the Geant4-DNA software
 // shall cite the following Geant4-DNA collaboration publications:
@@ -34,8 +37,6 @@
 //
 // The Geant4-DNA web site is available at http://geant4-dna.org
 //
-/// \file PrimaryGeneratorAction.cc
-/// \brief Implementation of the PrimaryGeneratorAction class
 
 #include "PrimaryGeneratorAction.hh"
 #include "DetectorConstruction.hh"
@@ -66,11 +67,12 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
       static_cast<const DetectorConstruction*>
       (G4RunManager::GetRunManager()->GetUserDetectorConstruction());
 
-  G4double worldLength = detectorConstruction->GetWorldLength();
+  G4double cylindersLength = detectorConstruction->GetCylinderLength();
+  G4double worldOffsetLength = detectorConstruction->GetWorldOffsetLength();
 
   G4double gunX = 0.0;
   G4double gunY = 0.0;
-  G4double gunZ = -0.5 * worldLength;
+  G4double gunZ = -0.5 * cylindersLength - worldOffsetLength ;
 
   fParticleGun->SetParticlePosition(G4ThreeVector(gunX, gunY, gunZ));
 

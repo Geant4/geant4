@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file CanvasInTab.cc
+/// \brief Implementation of the CanvasInTab class
+
 #include "CanvasInTab.hh"
 
 #include "TGFileDialog.h"

@@ -31,8 +31,6 @@
 
 #include "AnalysisManager.hh"
 
-#include "G4RootAnalysisManager.hh"
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::RunAction(AnalysisManager* man) : fAnalysisManager(man) {}
@@ -41,9 +39,6 @@ RunAction::RunAction(AnalysisManager* man) : fAnalysisManager(man) {}
 
 void RunAction::BeginOfRunAction(const G4Run*)
 {
-  if (G4Threading::IsMultithreadedApplication() && IsMaster()) {
-    return;
-  }
   fAnalysisManager->Initialize();
 }
 
@@ -51,10 +46,8 @@ void RunAction::BeginOfRunAction(const G4Run*)
 
 void RunAction::EndOfRunAction(const G4Run*)
 {
-  if (G4Threading::IsMultithreadedApplication() && IsMaster()) {
-    return;
-  }
   fAnalysisManager->Close();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+

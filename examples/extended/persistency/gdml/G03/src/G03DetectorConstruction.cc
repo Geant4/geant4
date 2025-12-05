@@ -23,11 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file persistency/gdml/G03/src/G03DetectorConstruction.cc
+/// \file G03DetectorConstruction.cc
 /// \brief Implementation of the G03DetectorConstruction class
-//
-//
-//
+
 // Class G03DetectorConstruction implementation
 //
 // ----------------------------------------------------------------------------

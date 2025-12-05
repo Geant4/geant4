@@ -23,11 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file optical/LXe/src/LXeSteppingMessenger.cc
+/// \file LXeSteppingMessenger.cc
 /// \brief Implementation of the LXeSteppingMessenger class
-//
-//
+
 #include "LXeSteppingMessenger.hh"
 
 #include "LXeSteppingAction.hh"

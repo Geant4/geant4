@@ -23,12 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file parallel/ThreadsafeScorers/src/TSDetectorConstruction.cc
+/// \file TSDetectorConstruction.cc
 /// \brief Implementation of the TSDetectorConstruction class
-//
-//
-//
-//
+///
 /// Construction of a target material (default = boron) surrounded by a
 ///     casing material (default = water) and a vacuum world (default =
 ///     target and casing fill world). The target + casing is brick
@@ -36,12 +33,14 @@
 ///     in each dimension. The end sections in each dimension
 ///     is set to the casing. So a fTargetSections = G4ThreeVector(3, 3, 3)
 ///     would be one section of boron and 8 sections of water.
+///
 /// The idea behind this geometry is just to create a simple geometry that
 ///     scatters and produces a lot neutrons with a minimal number of sections
 ///     (i.e. coarse meshing) such that the contention in operating on
 ///     the atomic hits maps is higher and round-off errors in the
 ///     thread-local hits maps are detectable (printed out in TSRunAction)
 ///     from the sheer number of floating point sum operations.
+///
 /// Two scorers are implemented: EnergyDeposit and Number of steps
 ///     The energy deposit is to (possibly) show the round-off error seen
 ///     with thread-local hits maps. The # of steps scorer is to verify

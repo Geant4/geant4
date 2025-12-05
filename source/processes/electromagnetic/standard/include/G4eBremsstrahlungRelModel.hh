@@ -112,21 +112,10 @@ private:
   // init special data per element i.e. per Z
   void InitialiseElementData();
 
-  // methods for initialisation and run-time evaluation of LPM functions:
-  void InitLPMFunctions();
-
   void ComputeLPMfunctions(G4double& funcXiS,
                            G4double& funcGS,
                            G4double& funcPhiS,
                            const G4double egamma);
-
-  void GetLPMFunctions(G4double& lpmGs,
-                       G4double& lpmPhis,
-                       const G4double ss);
-
-  void ComputeLPMGsPhis(G4double& funcGS,
-                        G4double& funcPhiS,
-                        const G4double varShat);
 
   // for evaluating screening related functions
   void ComputeScreeningFunctions(G4double& phi1,
@@ -208,17 +197,6 @@ private:
     G4double  fGammaFactor;
     G4double  fEpsilonFactor;
   };
-  //
-  struct LPMFuncs {
-    LPMFuncs() : fIsInitialized(false), fISDelta(100.), fSLimit(2.) {}
-    G4bool                 fIsInitialized;
-    G4double               fISDelta;
-    G4double               fSLimit;
-    std::vector<G4double>  fLPMFuncG;
-    std::vector<G4double>  fLPMFuncPhi;
-  };
-  //
-  static LPMFuncs                   gLPMFuncs;
   static std::vector<ElementData*>  gElementData;
 
 };

@@ -53,6 +53,7 @@
 #include "G4AutoLock.hh"
 
 G4ElementData* G4NeutronCaptureXS::data = nullptr;
+G4ElementData* G4NeutronCaptureXS::dataR = nullptr;
 G4String G4NeutronCaptureXS::gDataDirectory = "";
 
 static std::once_flag applyOnce;
@@ -76,6 +77,8 @@ G4NeutronCaptureXS::G4NeutronCaptureXS()
   if (nullptr == data) { 
     data = new G4ElementData(MAXZCAPTURE+1);
     data->SetName("nCapture");
+    dataR = new G4ElementData(MAXZCAPTURE+1);
+    dataR->SetName("nRCapture");
     FindDirectoryPath();
   }
 }
@@ -141,15 +144,31 @@ G4NeutronCaptureXS::ElementCrossSection(G4double eKin, G4double logE, G4int ZZ)
     logEkin = logElimit; 
   }
 
-  auto pv = GetPhysicsVector(Z);
-  const G4double e0 = pv->Energy(0);
-  G4double xs = (ekin >= e0) ? pv->LogVectorValue(ekin, logEkin) 
-    : (*pv)[0]*std::sqrt(e0/ekin); 
+  G4double xs;
+  G4bool done{false};
+  
+  // data from the resonance region
+  if (fRfilesEnabled) {
+    auto pv = GetPhysicsVectorR(Z);
+    if (nullptr != pv && ekin < cap_max_r_e[Z]) {
+      const G4double e0 = pv->Energy(0);
+      xs = (ekin >= e0) ? pv->LogVectorValue(ekin, logEkin) 
+	: (*pv)[0]*std::sqrt(e0/ekin); 
+      done = true;
+    }
+  }
+  // data above the resonance region
+  if (!done) {
+    auto pv = GetPhysicsVector(Z);
+    const G4double e0 = pv->Energy(0);
+    xs = (ekin >= e0) ? pv->LogVectorValue(ekin, logEkin) 
+      : (*pv)[0]*std::sqrt(e0/ekin);
+  }
 
 #ifdef G4VERBOSE
   if (verboseLevel > 1){
-    G4cout  << "Ekin= " << ekin/CLHEP::MeV 
-            << " ElmXScap(b)= " << xs/CLHEP::barn << G4endl;
+    G4cout << "Ekin= " << ekin/CLHEP::MeV 
+           << " ElmXScap(b)= " << xs/CLHEP::barn << G4endl;
   }
 #endif
   return xs;
@@ -190,34 +209,55 @@ G4double G4NeutronCaptureXS::IsoCrossSection(G4double eKin, G4double logE,
     logEkin = logElimit; 
   }
 
-  auto pv = GetPhysicsVector(Z);
-  if (pv == nullptr) { return xs; }
+  G4bool done{false};
 
-  // use isotope x-section if possible
-  if (data->GetNumberOfComponents(Z) > 0) {
-    G4PhysicsVector* pviso = data->GetComponentDataByID(Z, A);
-    if(pviso != nullptr) { 
-      const G4double e0 = pviso->Energy(0);
-      xs = (ekin >= e0) ? pviso->LogVectorValue(ekin, logEkin)
-	: (*pviso)[0]*std::sqrt(e0/ekin); 
-#ifdef G4VERBOSE
-      if(verboseLevel > 0) {
-	G4cout << "G4NeutronCaptureXS::IsoXS: Ekin(MeV)= " << ekin/MeV 
-	       << "  xs(b)= " << xs/barn 
-	       << "  Z= " << Z << "  A= " << A << G4endl;
+  // data from the resonance region
+  if (fRfilesEnabled) {
+    auto pv = GetPhysicsVectorR(Z);
+    if (nullptr != pv && ekin < cap_max_r_e[Z]) {
+      // use isotope x-section if possible
+      if (dataR->GetNumberOfComponents(Z) > 0) {
+	auto pviso = dataR->GetComponentDataByID(Z, A);
+	if (pviso != nullptr) { 
+	  const G4double e0 = pviso->Energy(0);
+	  xs = (ekin >= e0) ? pviso->LogVectorValue(ekin, logEkin)
+	    : (*pviso)[0]*std::sqrt(e0/ekin);
+	  done = true;
+	}
       }
-#endif
-      return xs;
+      // isotope data are not available or applicable
+      if (!done) {
+	const G4double e0 = pv->Energy(0);
+	xs = (ekin >= e0) ? pv->LogVectorValue(ekin, logEkin)
+	  : (*pv)[0]*std::sqrt(e0/ekin); 
+	done = true;
+      }
     }
   }
-  // isotope data are not available or applicable
-  const G4double e0 = pv->Energy(0);
-  xs = (ekin >= e0) ? pv->LogVectorValue(ekin, logEkin)
-    : (*pv)[0]*std::sqrt(e0/ekin); 
+  // data above the resonance region
+  if (!done) { 
+    auto pv = GetPhysicsVector(Z);
+    // use isotope x-section if possible
+    if (data->GetNumberOfComponents(Z) > 0) {
+      auto pviso = data->GetComponentDataByID(Z, A);
+      if (pviso != nullptr) { 
+	const G4double e0 = pviso->Energy(0);
+	xs = (ekin >= e0) ? pviso->LogVectorValue(ekin, logEkin)
+	  : (*pviso)[0]*std::sqrt(e0/ekin);
+	done = true;
+      }
+    }
+    // isotope data are not available or applicable
+    if (!done) {
+      const G4double e0 = pv->Energy(0);
+      xs = (ekin >= e0) ? pv->LogVectorValue(ekin, logEkin)
+	: (*pv)[0]*std::sqrt(e0/ekin);
+    }
+  }
 #ifdef G4VERBOSE
   if (verboseLevel > 0) {
     G4cout << "G4NeutronCaptureXS::IsoXS: Ekin(MeV)= " << ekin/MeV 
-           << "  xs(b)= " << xs/barn 
+           << "  xs(b)= " << xs/CLHEP::barn 
 	   << "  Z= " << Z << "  A= " << A << " no iso XS" << G4endl;
   }
 #endif
@@ -247,7 +287,7 @@ G4NeutronCaptureXS::SelectIsotope(const G4Element* anElement,
   if (Z > MAXZCAPTURE || 0 == data->GetNumberOfComponents(Z)) {
     for (j = 0; j<nIso; ++j) {
       sum += abundVector[j];
-      if(q <= sum) {
+      if (q <= sum) {
 	iso = anElement->GetIsotope(j);
 	break;
       }
@@ -288,6 +328,8 @@ G4NeutronCaptureXS::BuildPhysicsTable(const G4ParticleDefinition& p)
     return; 
   }
 
+  fRfilesEnabled = G4HadronicParameters::Instance()->UseRFilesForXS();
+
   // it is possible re-initialisation for the second run
   const G4ElementTable* table = G4Element::GetElementTable();
 
@@ -318,7 +360,7 @@ const G4String& G4NeutronCaptureXS::FindDirectoryPath()
   // build the complete string identifying the file with the data set
   if(gDataDirectory.empty()) {
     std::ostringstream ost;
-    ost << G4HadronicParameters::Instance()->GetDirPARTICLEXS() << "/neutron/cap";
+    ost << G4HadronicParameters::Instance()->GetDirPARTICLEXS() << "/neutron/";
     gDataDirectory = ost.str();
   }
   return gDataDirectory;
@@ -337,16 +379,24 @@ void G4NeutronCaptureXS::Initialise(G4int Z)
 
   // upload element data 
   std::ostringstream ost;
-  ost << FindDirectoryPath() << Z ;
+  ost << FindDirectoryPath() << "cap" << Z;
   G4PhysicsVector* v = RetrieveVector(ost, true);
   data->InitialiseForElement(Z, v);
+  G4PhysicsVector* vr = nullptr;
+  if (fRfilesEnabled) {
+    std::ostringstream ostr;
+    ostr << FindDirectoryPath() << "Rcap" << Z;
+    vr = RetrieveVector(ostr, false);
+    dataR->InitialiseForElement(Z, vr);
+  }
 
   // upload isotope data
   G4bool noComp = true;
+  G4bool noCompR = true;
   if (amin[Z] < amax[Z]) {
-    for(G4int A=amin[Z]; A<=amax[Z]; ++A) {
+    for (G4int A=amin[Z]; A<=amax[Z]; ++A) {
       std::ostringstream ost1;
-      ost1 << gDataDirectory << Z << "_" << A;
+      ost1 << gDataDirectory << "cap" << Z << "_" << A;
       G4PhysicsVector* v1 = RetrieveVector(ost1, false);
       if (nullptr != v1) {
 	if (noComp) {
@@ -356,10 +406,24 @@ void G4NeutronCaptureXS::Initialise(G4int Z)
 	}
 	data->AddComponent(Z, A, v1);
       } 
+      if (nullptr != vr) {
+	std::ostringstream ost2;
+	ost2 << gDataDirectory << "Rcap" << Z << "_" << A;
+	G4PhysicsVector* v2 = RetrieveVector(ost2, false);
+	if (nullptr != v2) {
+	  if (noCompR) {
+	    G4int nmax = amax[Z] - A + 1;
+	    dataR->InitialiseForComponent(Z, nmax);
+	    noCompR = false;
+	  }
+	  dataR->AddComponent(Z, A, v2);
+	}
+      }
     }
   }
   // no components case
   if (noComp) { data->InitialiseForComponent(Z, 0); }
+  if (noCompR && nullptr != vr) { dataR->InitialiseForComponent(Z, 0); }
 }
  
 G4PhysicsVector* 

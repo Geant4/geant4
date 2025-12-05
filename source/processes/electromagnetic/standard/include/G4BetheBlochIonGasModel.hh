@@ -59,10 +59,17 @@ public:
   explicit G4BetheBlochIonGasModel(const G4ParticleDefinition* p = nullptr,
 				   const G4String& nam = "BetheBlochGasIon");
 
-  ~G4BetheBlochIonGasModel() override;
+  ~G4BetheBlochIonGasModel() override = default;
 
+  // access dynamic charge
   G4double ChargeSquareRatio(const G4Track& track) final;
 
+  // access current dynamic charge
+  G4double GetChargeSquareRatio(const G4ParticleDefinition* p,
+				const G4Material* mat,
+                                G4double kineticEnergy) final;
+
+  // return dynamic charge
   G4double GetParticleCharge(const G4ParticleDefinition* p,
 			     const G4Material* mat,
 			     G4double kineticEnergy) final;

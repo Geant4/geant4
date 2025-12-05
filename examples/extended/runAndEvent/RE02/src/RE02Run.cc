@@ -23,11 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file runAndEvent/RE02/src/RE02Run.cc
+/// \file RE02Run.cc
 /// \brief Implementation of the RE02Run class
-//
-//
-//
 
 //=====================================================================
 //

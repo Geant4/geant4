@@ -50,6 +50,7 @@ set(flash_SCRIPTS
   vis.mac
   9MeVEF.mac
   7MeVEF.mac
+minibeam.mac
   )
 
 foreach(_script ${flash_SCRIPTS})

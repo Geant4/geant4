@@ -27,20 +27,24 @@
 //
 // Class description:
 //
-// Data structure for G4Polyhedra
+// Data structure for G4Polyhedra.
 
-// Author: David C. Williams (davidw@scipp.ucsc.edu)
+// Author: David C. Williams (UCSC), 1998 - Created
 // --------------------------------------------------------------------
 #ifndef G4POLYHEDRAHISTORICAL_HH
 #define G4POLYHEDRAHISTORICAL_HH
 
 #include "G4Types.hh"
 
+/**
+ * @brief G4PolyhedraHistorical is a data structure for use in G4Polyhedra.
+ */
+
 class G4PolyhedraHistorical
 {
   public:
 
-    G4PolyhedraHistorical();
+    G4PolyhedraHistorical() = default;
     G4PolyhedraHistorical( G4int z_planes );
     ~G4PolyhedraHistorical();
     G4PolyhedraHistorical( const G4PolyhedraHistorical &source );

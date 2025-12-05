@@ -23,10 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file exoticphysics/monopole/src/G4MonopolePhysicsMessenger.cc
+/// \file G4MonopolePhysicsMessenger.cc
 /// \brief Implementation of the G4MonopolePhysicsMessenger class
-//
-//
+
 //  12.07.10  S.Burdin (changed the magnetic and electric charge variables
 //            from integer to double)
 //

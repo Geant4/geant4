@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// --------------------------------------------------------------
-//
+/// \file DetectorConstructionMessenger.hh
+/// \brief Definition of the DetectorConstructionMessenger class
 
 #ifndef DetectorConstructionMessenger_h
 #define DetectorConstructionMessenger_h 1

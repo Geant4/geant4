@@ -184,6 +184,11 @@ G4bool IRTDamageReactionModel::DoReaction(const G4Track& track, const G4double& 
                                           const DNANode& vp)
 {
   fReactionTime = reactionTime;
+
+  if (fReactionTime == G4Scheduler::Instance()->GetLimitingTimeStep()) {
+    return false;
+  }
+
   fpTrack = &track;
   fpDNAPhyVolume = std::get<const G4VPhysicalVolume*>(vp);
   MakeReaction(track);
@@ -299,6 +304,11 @@ G4double IRTDamageReactionModel::CalculateReactionTime(const G4Track& track, DNA
       fminTimeStep = tempMinET;
       vp = physicalVolume;
     }
+  }
+  if (fminTimeStep > G4Scheduler::Instance()->GetLimitingTimeStep()
+      && fminTimeStep < G4Scheduler::Instance()->GetEndTime())
+  {
+    fminTimeStep = G4Scheduler::Instance()->GetLimitingTimeStep();
   }
   return fminTimeStep;
 }

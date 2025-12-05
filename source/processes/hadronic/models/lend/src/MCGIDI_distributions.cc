@@ -72,7 +72,7 @@ LUPI_HOST_DEVICE Distribution::~Distribution( ) {
 }
 
 /* *********************************************************************************************************//**
- * This method calls the **setModelDBRC_data2* method if the distribution is AngularTwoBody, otherwise it * executes a thrwo.
+ * This method calls the **setModelDBRC_data2* method if the distribution is AngularTwoBody, otherwise it * executes a throw.
  *
  * @param a_modelDBRC_data      [in]    The instance storing data needed to treat the DRRC upscatter mode.
  ***********************************************************************************************************/
@@ -83,7 +83,6 @@ LUPI_HOST void Distribution::setModelDBRC_data( Sampling::Upscatter::ModelDBRC_d
 
     static_cast<AngularTwoBody *>( this )->setModelDBRC_data2( a_modelDBRC_data );
 }
-
 
 /* *********************************************************************************************************//**
  * This method serializes *this* for broadcasting as needed for MPI and GPUs. The method can count the number of required
@@ -654,7 +653,8 @@ LUPI_HOST_DEVICE CoherentPhotoAtomicScattering::~CoherentPhotoAtomicScattering( 
 LUPI_HOST_DEVICE double CoherentPhotoAtomicScattering::evaluate( double a_energyIn, double a_mu ) const {
 
     double probability;
-    int lowerIndexEnergy = binarySearchVector( a_energyIn, m_energies, true );      // FIXME - need to handle case where lowerIndexEnergy = 0 like in evaluateScatteringFactor.
+    int intLowerIndexEnergy = binarySearchVector( a_energyIn, m_energies, true );      // FIXME - need to handle case where lowerIndexEnergy = 0 like in evaluateScatteringFactor.
+    std::size_t lowerIndexEnergy = static_cast<std::size_t>( intLowerIndexEnergy );
     double _a = m_a[lowerIndexEnergy];
     double _a_2 = _a * _a;
     double X1 = m_energies[lowerIndexEnergy];
@@ -702,13 +702,15 @@ LUPI_HOST_DEVICE double CoherentPhotoAtomicScattering::evaluate( double a_energy
 LUPI_HOST_DEVICE double CoherentPhotoAtomicScattering::evaluateFormFactor( double a_energyIn, double a_mu ) const {
 
     double X = a_energyIn * sqrt( 0.5 * ( 1 - a_mu ) );
-    int lowerIndex = binarySearchVector( X, m_energies );
+    int intLowerIndex = binarySearchVector( X, m_energies );
 
-    if( lowerIndex < 1 ) {
-        if( lowerIndex == 0 ) return( m_formFactor[0] );
-        if( lowerIndex == -2 ) return( m_formFactor[0] );               // This should never happend for proper a_energyIn and a_mu.
+    if( intLowerIndex < 1 ) {
+        if( intLowerIndex == 0 ) return( m_formFactor[0] );
+        if( intLowerIndex == -2 ) return( m_formFactor[0] );               // This should never happend for proper a_energyIn and a_mu.
         return( m_formFactor.back( ) );
     }
+
+    std::size_t lowerIndex = static_cast<std::size_t>( intLowerIndex );
 
     return( m_formFactor[lowerIndex] * pow( X / m_energies[lowerIndex] , m_a[lowerIndex] ) );
 }
@@ -938,13 +940,14 @@ LUPI_HOST_DEVICE double IncoherentPhotoAtomicScattering::evaluateKleinNishina( d
 
 LUPI_HOST_DEVICE double IncoherentPhotoAtomicScattering::evaluateScatteringFactor( double a_energyIn ) const {
 
-    int lowerIndex = binarySearchVector( a_energyIn, m_energies );
+    int intLowerIndex = binarySearchVector( a_energyIn, m_energies );
 
-    if( lowerIndex < 1 ) {
-        if( lowerIndex == -1 ) return( m_scatteringFactor.back( ) );
+    if( intLowerIndex < 1 ) {
+        if( intLowerIndex == -1 ) return( m_scatteringFactor.back( ) );
         return( m_scatteringFactor[1] * a_energyIn / m_energies[1] );
     }
 
+    std::size_t lowerIndex = static_cast<std::size_t>( intLowerIndex );
     return( m_scatteringFactor[lowerIndex] * pow( a_energyIn / m_energies[lowerIndex], m_a[lowerIndex] ) );
 }
 
@@ -985,7 +988,8 @@ LUPI_HOST_DEVICE IncoherentBoundToFreePhotoAtomicScattering::IncoherentBoundToFr
 LUPI_HOST IncoherentBoundToFreePhotoAtomicScattering::IncoherentBoundToFreePhotoAtomicScattering( 
                 GIDI::Distributions::IncoherentBoundToFreePhotoAtomicScattering const &a_incoherentBoundToFreePhotoAtomicScattering,
                 SetupInfo &a_setupInfo ) :
-        Distribution( Type::incoherentBoundToFreePhotoAtomicScattering, a_incoherentBoundToFreePhotoAtomicScattering, a_setupInfo ) {
+        Distribution( Type::incoherentBoundToFreePhotoAtomicScattering, a_incoherentBoundToFreePhotoAtomicScattering, a_setupInfo ),
+        m_bindingEnergy( 0.0 ) {
 
     GIDI::ProtareSingle const &GIDI_protare = a_setupInfo.m_GIDI_protare;
     auto monikers = GIDI_protare.styles( ).findAllOfMoniker( GIDI_MonteCarlo_cdfStyleChars );
@@ -1074,13 +1078,14 @@ LUPI_HOST_DEVICE double IncoherentBoundToFreePhotoAtomicScattering::evaluateOccu
     const double alpha_binding = -m_bindingEnergy/PoPI_electronMass_MeV_c2;  // BE [MeV] / 0.511 [MeV]
     const double pzmax = ( -alpha_binding + alpha_in*(alpha_in - alpha_binding)*(1-a_mu) )/( sqrt( 2*alpha_in*(alpha_in-alpha_binding)*(1-a_mu) + alpha_binding*alpha_binding ) ); // *mec
 
-    int lowerIndex = binarySearchVector( pzmax, m_pz );
-    const int size1 = m_occupationNumber.size();
+    int intLowerIndex = binarySearchVector( pzmax, m_pz );
+    std::size_t lowerIndex = static_cast<std::size_t>( intLowerIndex );
+    int size1 = static_cast<int>( m_occupationNumber.size( ) );
 
-    if( lowerIndex == -1 || lowerIndex == (size1 -1)){
+    if( intLowerIndex == -1 || intLowerIndex == ( size1 - 1 ) ) {
          return( m_occupationNumber.back( ) );
     }
-    if( lowerIndex == -2 ){
+    if( intLowerIndex == -2 ){
         return( m_occupationNumber[0] );
     }
 
@@ -1169,7 +1174,8 @@ LUPI_HOST_DEVICE void IncoherentPhotoAtomicScatteringElectron::serialize( LUPI::
  * Basic constructor.
  ***********************************************************************************************************/
 
-LUPI_HOST_DEVICE PairProductionGamma::PairProductionGamma( ) {
+LUPI_HOST_DEVICE PairProductionGamma::PairProductionGamma( ) :
+        m_firstSampled( false ) {
 
 }
 
@@ -1329,6 +1335,7 @@ LUPI_HOST_DEVICE void CoherentElasticTNSL::serialize( LUPI::DataBuffer &a_buffer
  ***********************************************************************************************************/
 
 LUPI_HOST_DEVICE IncoherentElasticTNSL::IncoherentElasticTNSL( ) :
+        m_temperatureToMeV_K( 1.0 ),
         m_DebyeWallerIntegral( nullptr ) {
 
 }

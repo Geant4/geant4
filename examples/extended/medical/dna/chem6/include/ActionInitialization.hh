@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file ActionInitialization.hh
+/// \brief Definition of the ActionInitialization class
+
 // This example is provided by the Geant4-DNA collaboration
 // chem6 example is derived from chem4 and chem5 examples
 //
@@ -36,11 +39,6 @@
 // The Geant4-DNA web site is available at http://geant4-dna.org
 //
 // Authors: W. G. Shin and S. Incerti (CENBG, France)
-//
-// $Id$
-//
-/// \file ActionInitialization.hh
-/// \brief Definition of the ActionInitialization class
 
 #ifndef CHEM6_ActionInitialization_h
 #define CHEM6_ActionInitialization_h 1
@@ -52,15 +50,18 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 class DetectorConstruction;
-class ActionInitialization : public G4VUserActionInitialization
-{
-  public:
-    ActionInitialization();
-    virtual ~ActionInitialization();
-    void BuildMoleculeCounters() const;
 
-    virtual void BuildForMaster() const;
-    virtual void Build() const;
+class ActionInitialization final : public G4VUserActionInitialization {
+public:
+  ActionInitialization() = default;
+
+  ~ActionInitialization() override = default;
+
+  static void BuildMoleculeCounters();
+
+  void BuildForMaster() const override;
+
+  void Build() const override;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -129,4 +129,4 @@
 /gps/ang/type iso
 
 # Beam on
-/run/beamOn 10
+/run/beamOn 99

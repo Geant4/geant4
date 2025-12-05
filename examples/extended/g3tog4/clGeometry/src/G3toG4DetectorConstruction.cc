@@ -23,11 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file g3tog4/clGeometry/src/G3toG4DetectorConstruction.cc
+/// \file G3toG4DetectorConstruction.cc
 /// \brief Implementation of the G3toG4DetectorConstruction class
-//
-//
-//
+
 //--------------------------------------------------------------------------
 // G3toG4DetectorConstruction. Most the work is Done in
 // G4BuildGeom, which returns a G4LogicalVolume*, a pointer to the

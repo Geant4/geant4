@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file B4/B4b/include/SteppingAction.hh
+/// \file SteppingAction.hh
 /// \brief Definition of the B4b::SteppingAction class
 
 #ifndef B4bSteppingAction_h

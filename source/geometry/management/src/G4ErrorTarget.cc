@@ -25,7 +25,7 @@
 //
 // G4ErrorTarget class implementation
 //
-// Created: P.Arce, September 2004
+// Author: Pedro Arce (CIEMAT), September 2004
 // --------------------------------------------------------------------
 
 #include "G4ErrorTarget.hh"

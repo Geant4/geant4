@@ -169,8 +169,7 @@ void G4DNABornIonisationModel::Initialise(const G4ParticleDefinition* p,
   statCode = G4EmParameters::Instance()->DNAStationary();
 
   // initialise atomic de-excitation
-  if (!statCode)
-    fAtomDeexcitation = G4LossTableManager::Instance()->AtomDeexcitation();
+  fAtomDeexcitation = G4LossTableManager::Instance()->AtomDeexcitation();
 
   // chemistry
   auto chem = G4DNAChemistryManager::Instance();

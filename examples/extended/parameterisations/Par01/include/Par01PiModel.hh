@@ -23,12 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file Par01/include/Par01PiModel.hh
+/// \file Par01PiModel.hh
 /// \brief Definition of the Par01PiModel class
-//
-//
-//
-//
+
 //----------------------------------------
 // Simple example of a "parameterisation".
 //----------------------------------------

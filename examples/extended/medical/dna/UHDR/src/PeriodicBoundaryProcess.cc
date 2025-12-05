@@ -23,7 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
+/// \file PeriodicBoundaryProcess.cc
+/// \brief Implementation of the PeriodicBoundaryProcess class
+
 /*
  * Based on 'g4pbc'.
  * Copyright (c) 2020 Amentum Pty Ltd

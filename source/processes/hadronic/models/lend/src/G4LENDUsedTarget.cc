@@ -53,7 +53,7 @@ void G4LENDUsedTarget::searchTarget()
       actual_Z = wanted_Z;
       actual_A = wanted_A;
       actual_M = wanted_M;
-      actual_Evaluation = wanted_Evaluation; 
+      actual_Evaluation = target->getEvaluation( )->c_str( );
 
       return;
    }
@@ -66,7 +66,7 @@ void G4LENDUsedTarget::searchTarget()
          actual_Z = wanted_Z;
          actual_A = 0;
          actual_M = wanted_M;
-         actual_Evaluation = wanted_Evaluation; 
+         actual_Evaluation = target->getEvaluation( )->c_str( );
 
          return;  
       }

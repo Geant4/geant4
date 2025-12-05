@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file radiobiology/src/Hit.cc
+/// \file Hit.cc
 /// \brief Implementation of the RadioBio::Hit class
 
 #include "Hit.hh"

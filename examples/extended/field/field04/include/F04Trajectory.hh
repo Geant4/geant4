@@ -23,10 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file field/field04/include/F04Trajectory.hh
+/// \file F04Trajectory.hh
 /// \brief Definition of the F04Trajectory class
-//
 
 #ifndef F04Trajectory_h
 #define F04Trajectory_h 1

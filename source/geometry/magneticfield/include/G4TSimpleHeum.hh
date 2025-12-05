@@ -27,12 +27,8 @@
 //
 // Class description:
 //
-// Templated version of G4SimpleHeum
-//
-// Created: Josh Xie  (supported by Google Summer of Code 2014 )
-// Supervisors:  Sandro Wenzel, John Apostolakis (CERN)
-// --------------------------------------------------------------------
-// Adapted from G4G4TSimpleHeum class
+// Templated version of G4SimpleHeum.
+// Adapted from G4G4TSimpleHeum class.
 // Original desription:
 //
 // Simple Heum stepper for magnetic field:
@@ -41,53 +37,57 @@
 //                  3/4 * dx(t0+2/3*h, x0+2/3*h*(dx(t0+h/3,x0+h/3*dx(t0,x0)))) 
 //
 // Third order solver.
-// Created: W.Wander <wwc@mit.edu>, 12/09/1997
-// --------------------------------------------------------------------
 
-#ifndef TSIMPLEHEUM_HH
-#define TSIMPLEHEUM_HH
+// Author: Josh Xie (CERN, Google Summer of Code 2014), June 2014
+// Supervisors:  Sandro Wenzel, John Apostolakis (CERN)
+// --------------------------------------------------------------------
+#ifndef G4TSIMPLEHEUM_HH
+#define G4TSIMPLEHEUM_HH
 
 #include <cassert>
 #include "G4TMagErrorStepper.hh"
 #include "G4ThreeVector.hh"
 
+/**
+ * @brief G4TSimpleHeum is a templated version of G4SimpleHeum.
+ */
+
 template <class T_Equation, unsigned int N>
 class G4TSimpleHeum
   : public G4TMagErrorStepper<G4TSimpleHeum<T_Equation, N>, T_Equation, N>
 {
- public:  // with description
-  constexpr static unsigned int gIntegratorOrder = 3;
-  static constexpr double IntegratorCorrection= 1.0 /
-                                                ((1<<gIntegratorOrder) - 1);
+  public:
 
-  G4TSimpleHeum(T_Equation* EqRhs, unsigned int numberOfVariables = 6);
+    constexpr static unsigned int gIntegratorOrder = 3;
+    static constexpr double IntegratorCorrection= 1.0 / ((1<<gIntegratorOrder) - 1);
 
-  ~G4TSimpleHeum() { ; }
-  // Constructor and destructor.
+    G4TSimpleHeum(T_Equation* EqRhs, unsigned int numberOfVariables = 6);
 
-  inline void RightHandSide(G4double y[],
-                            G4double dydx[])
-  {
-    fEquation_Rhs->T_Equation::RightHandSide(y, dydx);
-  }
+    ~G4TSimpleHeum() = default;
 
-  inline void DumbStepper(const G4double yIn[],
-                          const G4double dydx[],
-                          G4double h, G4double yOut[]); // override final
+    inline void RightHandSide(G4double y[],
+                              G4double dydx[])
+    {
+      fEquation_Rhs->T_Equation::RightHandSide(y, dydx);
+    }
 
- public:  // without description
-  G4int IntegratorOrder() const { return gIntegratorOrder; }
+    inline void DumbStepper(const G4double yIn[],
+                            const G4double dydx[],
+                            G4double h, G4double yOut[]); // override final
 
- private:
-  G4int fNumberOfVariables;
+    inline G4int IntegratorOrder() const { return gIntegratorOrder; }
 
-  G4double dydxTemp[N];
-  G4double dydxTemp2[N];
-  G4double yTemp[N];
-  G4double yTemp2[N];
-  // scratch space
+  private:
+
+    G4int fNumberOfVariables;
+
+    G4double dydxTemp[N];
+    G4double dydxTemp2[N];
+    G4double yTemp[N];
+    G4double yTemp2[N];
+    // scratch space
    
-  T_Equation* fEquation_Rhs;
+    T_Equation* fEquation_Rhs;
 };
 
 template <class T_Equation, unsigned int N >
@@ -137,4 +137,4 @@ G4TSimpleHeum<T_Equation,N>::DumbStepper(const G4double yIn[],
   }
 }
 
-#endif /* TSIMPLEHEUM_HH */
+#endif

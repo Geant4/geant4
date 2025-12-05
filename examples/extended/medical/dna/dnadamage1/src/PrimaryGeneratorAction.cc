@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 /// \file PrimaryGeneratorAction.cc
 /// \brief Implementation of the PrimaryGeneratorAction class
 
@@ -45,10 +44,6 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
   fpParticleGun->SetParticleMomentumDirection(G4ThreeVector(0., 0., 1.));
   fpParticleGun->SetParticlePosition(G4ThreeVector(0., 0., -20. * CLHEP::nm));
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-PrimaryGeneratorAction::~PrimaryGeneratorAction() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

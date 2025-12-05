@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file Par04EventInformation.hh
+/// \brief Definition of the Par04EventInformation class
+
 #ifndef PAR04EVENTINFORMATION_HH
 #define PAR04EVENTINFORMATION_HH
 

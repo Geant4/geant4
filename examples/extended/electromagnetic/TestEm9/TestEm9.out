@@ -10,7 +10,7 @@
 
 
 **************************************************************
- Geant4 version Name: geant4-11-03-ref-06    (30-June-2025)
+ Geant4 version Name: geant4-11-04-ref-00    (5-December-2025)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -88,7 +88,7 @@ Lowest muon/hadron kinetic energy                  1 keV
 Use ICRU90 data                                    0
 Fluctuations of dE/dx are enabled                  1
 Type of fluctuation model for leptons and hadrons  Universal
-Use built-in Birks satuaration                     0
+Use built-in Birks saturation                      0
 Build CSDA range enabled                           0
 Use cut as a final range enabled                   0
 Enable angular generator interface                 0
@@ -277,7 +277,7 @@ hBrems:  for proton  XStype:1  SubType=3
 hPairProd:  for proton  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
-      Sampling table 17x1001 from 7.50618 GeV to 100 TeV 
+      Sampling table 17x1001, from 7.50618 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
@@ -335,7 +335,7 @@ hBrems:  for anti_proton  XStype:1  SubType=3
 hPairProd:  for anti_proton  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
-      Sampling table 17x1001 from 7.50618 GeV to 100 TeV 
+      Sampling table 17x1001, from 7.50618 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
@@ -367,7 +367,7 @@ hBrems:  for kaon+  XStype:1  SubType=3
 hPairProd:  for kaon+  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
-      Sampling table 18x1001 from 3.94942 GeV to 100 TeV 
+      Sampling table 18x1001, from 3.94942 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
@@ -399,7 +399,7 @@ hBrems:  for kaon-  XStype:1  SubType=3
 hPairProd:  for kaon-  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
-      Sampling table 18x1001 from 3.94942 GeV to 100 TeV 
+      Sampling table 18x1001, from 3.94942 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
@@ -431,7 +431,7 @@ muBrems:  for mu+  XStype:1  SubType=3
 muPairProd:  for mu+  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
-      Sampling table 21x1001 from 0.85 GeV to 100 TeV 
+      Sampling table 21x1001, from 0.85 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
@@ -463,7 +463,7 @@ muBrems:  for mu-  XStype:1  SubType=3
 muPairProd:  for mu-  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
-      Sampling table 21x1001 from 0.85 GeV to 100 TeV 
+      Sampling table 21x1001, from 0.85 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
@@ -495,7 +495,7 @@ hBrems:  for pi+  XStype:1  SubType=3
 hPairProd:  for pi+  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
-      Sampling table 20x1001 from 1.11656 GeV to 100 TeV 
+      Sampling table 20x1001, from 1.11656 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
@@ -527,7 +527,7 @@ hBrems:  for pi-  XStype:1  SubType=3
 hPairProd:  for pi-  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
-      Sampling table 20x1001 from 1.11656 GeV to 100 TeV 
+      Sampling table 20x1001, from 1.11656 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
@@ -605,39 +605,39 @@ Index : 7     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.340000s Real=0.340165s Sys=0.000000s
+  User=0.320000s Real=0.340263s Sys=0.000000s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started   RunID# 0
 =================================================================
 Number of events             100
-Average number of e-         402.8
-Average number of gamma      636.7
-Average number of e+         48.13
-Average number of steps      2960
-Edep 1x1 =                   0.8298 +- 0.003084  res=  3.717 %   100
-Edep 3x3 =                   0.9549 +- 0.001579  res=  1.654 %   100
-Edep 5x5 =                   0.9772 +- 0.00112  res=  1.146 %   100
+Average number of e-         403.7
+Average number of gamma      635.5
+Average number of e+         47.22
+Average number of steps      2946
+Edep 1x1 =                   0.8329 +- 0.003391  res=  4.071 %   100
+Edep 3x3 =                   0.959 +- 0.001318  res=  1.374 %   100
+Edep 5x5 =                   0.9796 +- 0.0009483  res=  0.9681 %   100
 ===========  Ratios without trancating ===========================
-  E1/E9  =                   0.869 +- 0.002788
-  E1/E25 =                   0.8492 +- 0.003001
-  E9/E25 =                   0.9772 +- 0.001013
+  E1/E9  =                   0.8685 +- 0.003149
+  E1/E25 =                   0.8503 +- 0.003311
+  E9/E25 =                   0.979 +- 0.0008637
 Beam Energy                  1 GeV
 ==================================================================
 
 
 <<<<<ACCEPTANCE>>>>> 100 events for Crystal Calorimeter
-Edep1x1: 0.8298  delEdep1x1= -0.1702 nrms= -1.702
-Erms1x1: 0.03084  delErms1x1= -0.9692 nrms= -9.692
-Edep3x3: 0.9549  delEdep3x3= -0.04511 nrms= -0.4511
-Erms3x3: 0.01579  delErms3x3= -0.9842 nrms= -9.842
-Edep5x5: 0.9772  delEdep5x5= -0.0228 nrms= -0.228
-Erms5x5: 0.0112  delErms5x5= -0.9888 nrms= -9.888
+Edep1x1: 0.8329  delEdep1x1= -0.1671 nrms= -1.671
+Erms1x1: 0.03391  delErms1x1= -0.9661 nrms= -9.661
+Edep3x3: 0.959  delEdep3x3= -0.04099 nrms= -0.4099
+Erms3x3: 0.01318  delErms3x3= -0.9868 nrms= -9.868
+Edep5x5: 0.9796  delEdep5x5= -0.02042 nrms= -0.2042
+Erms5x5: 0.009483  delErms5x5= -0.9905 nrms= -9.905
 <<<<<END>>>>>   IS ACCEPTED
 
    Z  bremsstrahlung photoeffect  compton    conversion
-  13           0           0         157           0
-  53         262          41           0          46
-  55         277          49           0          47
+  13           0           0         160           0
+  53         261          42           0          44
+  55         278          48           0          48
 #
 /testem/det/acceptance1 0.0136 0.0001 500
 /testem/det/acceptance9 0.0139 0.0001 500
@@ -715,22 +715,22 @@ Index : 7     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.520000s Real=0.512789s Sys=0.000000s
+  User=0.490000s Real=0.493606s Sys=0.000000s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started   RunID# 1
 =================================================================
 Number of events             1000
-Average number of e-         67.78
-Average number of gamma      59.36
-Average number of e+         3.215
-Average number of steps      415.9
-Edep 1x1 =                   0.01396 +- 0.0002087
-Edep 3x3 =                   0.01427 +- 0.0002304
-Edep 5x5 =                   0.01432 +- 0.0002336
+Average number of e-         69.02
+Average number of gamma      61.77
+Average number of e+         3.389
+Average number of steps      421.8
+Edep 1x1 =                   0.0141 +- 0.0003603
+Edep 3x3 =                   0.01445 +- 0.0004103
+Edep 5x5 =                   0.01451 +- 0.0004186
 ===========  Ratios without trancating ===========================
-  E1/E9  =                   0.9847 +- 0.0006783
-  E1/E25 =                   0.9821 +- 0.000761
-  E9/E25 =                   0.9973 +- 0.000168
+  E1/E9  =                   0.984 +- 0.0006927
+  E1/E25 =                   0.9811 +- 0.0007849
+  E9/E25 =                   0.997 +- 0.0001965
 Beam Energy                  20 GeV
 ==================================================================
 
@@ -838,22 +838,22 @@ Index : 7     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.250000s Real=0.242976s Sys=0.000000s
+  User=0.240000s Real=0.244744s Sys=0.000000s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started   RunID# 2
 =================================================================
 Number of events             100
-Average number of e-         173.1
-Average number of gamma      222.4
-Average number of e+         47.83
-Average number of steps      1842
-Edep 1x1 =                   0.8364 +- 0.003535  res=  4.226 %   100
-Edep 3x3 =                   0.9596 +- 0.003475  res=  3.621 %   100
-Edep 5x5 =                   0.9816 +- 0.003513  res=  3.579 %   100
+Average number of e-         173.2
+Average number of gamma      223
+Average number of e+         48.24
+Average number of steps      1838
+Edep 1x1 =                   0.8322 +- 0.004077  res=  4.898 %   100
+Edep 3x3 =                   0.9578 +- 0.003436  res=  3.587 %   100
+Edep 5x5 =                   0.9806 +- 0.003509  res=  3.579 %   100
 ===========  Ratios without trancating ===========================
-  E1/E9  =                   0.872 +- 0.003318
-  E1/E25 =                   0.8526 +- 0.003511
-  E9/E25 =                   0.9776 +- 0.001144
+  E1/E9  =                   0.869 +- 0.003095
+  E1/E25 =                   0.8488 +- 0.003257
+  E9/E25 =                   0.9768 +- 0.001139
 Beam Energy                  1 GeV
 ==================================================================
 
@@ -961,27 +961,27 @@ Index : 7     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.240000s Real=0.242505s Sys=0.000000s
+  User=0.230000s Real=0.233556s Sys=0.000000s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started   RunID# 3
 =================================================================
 Number of events             100
-Average number of e-         173.2
-Average number of gamma      223.7
-Average number of e+         47.71
-Average number of steps      1844
-Edep 1x1 =                   0.8339 +- 0.003455  res=  4.144 %   100
-Edep 3x3 =                   0.9577 +- 0.00327  res=  3.414 %   100
-Edep 5x5 =                   0.9783 +- 0.00315  res=  3.22 %   100
+Average number of e-         172.7
+Average number of gamma      223
+Average number of e+         47.33
+Average number of steps      1842
+Edep 1x1 =                   0.8241 +- 0.003772  res=  4.577 %   100
+Edep 3x3 =                   0.9537 +- 0.003438  res=  3.605 %   100
+Edep 5x5 =                   0.9756 +- 0.003368  res=  3.452 %   100
 ===========  Ratios without trancating ===========================
-  E1/E9  =                   0.8709 +- 0.002945
-  E1/E25 =                   0.8527 +- 0.003074
-  E9/E25 =                   0.979 +- 0.001112
+  E1/E9  =                   0.8642 +- 0.00281
+  E1/E25 =                   0.8449 +- 0.003046
+  E9/E25 =                   0.9775 +- 0.001322
 Beam Energy                  1 GeV
 ==================================================================
 
 #
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 9 of which, static: 0
-Dynamic pools deleted: 9 / Total memory freed: 0.1 MB
+Dynamic pools deleted: 9 / Total memory freed: 0.09 MB
 ============================================================

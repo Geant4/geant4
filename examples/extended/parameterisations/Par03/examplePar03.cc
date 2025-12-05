@@ -23,9 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
+/// \file examplePar03.cc
+/// \brief Main program of the parameterisations/Par03 example
+
 // --------------------------------------------------------------
 //      GEANT 4 - examplePar03
 // --------------------------------------------------------------

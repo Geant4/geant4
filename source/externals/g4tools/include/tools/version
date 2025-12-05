@@ -4,14 +4,14 @@
 #ifndef tools_version
 #define tools_version
 
-#define TOOLS_MAJOR_VERSION 6
-#define TOOLS_MINOR_VERSION 5
-#define TOOLS_PATCH_VERSION 1
-#define TOOLS_VERSION "6.5.1"
-#define TOOLS_VERSION_VRP "v6r5p1"
+#define TOOLS_MAJOR_VERSION 8
+#define TOOLS_MINOR_VERSION 0
+#define TOOLS_PATCH_VERSION 0
+#define TOOLS_VERSION "8.0.0"
+#define TOOLS_VERSION_VRP "v8r0p0"
 
 namespace tools {
-inline unsigned int version() {return 60501;}
+inline unsigned int version() {return 80000;}
 }
 
 #endif

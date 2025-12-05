@@ -188,7 +188,14 @@ void G4QMDNucleus::CalEnergyAndAngularMomentumInCM()
       tmass += es[i];
    }
 
-   rcm0 = rcm0/tmass;
+   if (tmass != 0.)
+   {
+     rcm0 = rcm0/tmass;
+   }
+   else
+   {
+     rcm0 = G4ThreeVector(0.);
+   }
 
    for ( G4int i= 0; i < n ; i++ ) 
    {

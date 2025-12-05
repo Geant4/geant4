@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file medical/electronScattering2/include/StepMax.hh
+/// \file StepMax.hh
 /// \brief Definition of the StepMax class
 
 #ifndef StepMax_h

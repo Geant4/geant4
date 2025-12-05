@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file Par04TorchInference.hh
+/// \brief Definition of the Par04TorchInference class
 
 #ifdef USE_INFERENCE_TORCH
 #  ifndef PAR04TORCHINFERENCE_HH

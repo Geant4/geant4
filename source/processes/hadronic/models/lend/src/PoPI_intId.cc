@@ -81,6 +81,7 @@ ParseIntidInfo::ParseIntidInfo( int a_intid, bool a_GRIN_mode ) :
         m_AAA( -1 ),
         m_ZZZ( -1 ),
         m_III( -1 ),
+        m_nuclearLevelIndex( -1 ),
         m_metaStableIndex( -1 ),
         m_generation( -1 ),
         m_isNeutrino( false ),

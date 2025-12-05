@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file dnadamage2.cc
+/// \brief Main program of the dna/dnadamage2 example
+
 // This example is provided by the Geant4-DNA collaboration
 // chem6 example is derived from chem4 and chem5 examples
 //
@@ -38,8 +41,6 @@
 // Authors: J. Naoki D. Kondo (UCSF, US)
 //          Jose Ramos-Mendez and Bruce Faddegon (UCSF, US)
 //
-/// \file dnadamage2.cc
-/// \brief DnaDamage2 example
 
 #include "ActionInitialization.hh"
 #include "DetectorConstruction.hh"
@@ -119,9 +120,8 @@ int main(int argc, char** argv)
   // Free the store: user actions, physics_list and detector_description are
   // owned and deleted by the run manager, so they should not be deleted
   // in the main() program !
-  delete runManager;
   delete vM;
-  return 0;
+  delete runManager;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....

@@ -23,10 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file errProp/include/ExErrorDetectorMessenger.hh
+/// \file ExErrorDetectorMessenger.hh
 /// \brief Definition of the ExErrorDetectorMessenger class
-//
 
 #ifndef ExErrorDetectorMessenger_hh
 #define ExErrorDetectorMessenger_hh 1

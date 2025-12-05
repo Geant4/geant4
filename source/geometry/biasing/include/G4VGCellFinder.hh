@@ -35,20 +35,34 @@
 // Author: Michael Dressel (CERN), 2002
 // ----------------------------------------------------------------------
 #ifndef G4VGCELLFINDER_HH
-#define G4VGCELLFINDER_HH 1
+#define G4VGCELLFINDER_HH
 
 #include "globals.hh"
 #include "G4GeometryCell.hh"
 
 class G4Step;
 
+/**
+ * @brief G4VGCellFinder is an interface base class for GCellFinder.
+ * The G4GeometryCell is obtained in the parallel geometry from
+ * G4VParallelStepper and in the mass geometry from G4Step. This interface
+ * allows one to implement the two different ways to get a G4GeometryCell
+ * used by a process.
+ */
+
 class  G4VGCellFinder
 {
-  public:  // with description
+  public:
 
-    G4VGCellFinder();
-    virtual ~G4VGCellFinder();
+    /**
+     * Default Constructor and Destructor.
+     */
+    G4VGCellFinder() = default;
+    virtual ~G4VGCellFinder() = default;
 
+    /**
+     * Returns the pre/post cell given the step.
+     */
     virtual G4GeometryCell GetPreGeometryCell(const G4Step& aStep) const = 0;
     virtual G4GeometryCell GetPostGeometryCell(const G4Step& aStep) const = 0;
 };

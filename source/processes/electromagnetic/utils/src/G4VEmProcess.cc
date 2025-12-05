@@ -191,15 +191,15 @@ void G4VEmProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
 
   // prepare tables
   if(isTheMaster) {
-    if(nullptr == theData) { theData = new G4EmDataHandler(2); }
-
     if(buildLambdaTable) {
-      theLambdaTable = theData->MakeTable(0);
+      if (nullptr == theData) { theData = new G4EmDataHandler(2, particle->GetParticleName()); }
+      theLambdaTable = theData->MakeTable(theLambdaTable, 0);
       bld->InitialiseBaseMaterials(theLambdaTable);
     }
     // high energy table
     if(minKinEnergyPrim < maxKinEnergy) {
-      theLambdaTablePrim = theData->MakeTable(1);
+      if (nullptr == theData) { theData = new G4EmDataHandler(2, particle->GetParticleName()); }
+      theLambdaTablePrim = theData->MakeTable(theLambdaTablePrim, 1);
       bld->InitialiseBaseMaterials(theLambdaTablePrim);
     }
   }

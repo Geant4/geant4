@@ -54,6 +54,83 @@ std::string const *Suite::findLabelInLineage( GIDI::Suite const &a_suite, std::s
     return( label );
 }
 
+/* *********************************************************************************************************//**
+ *
+ *
+ * @param a_ends        [in]    If **true** only the end of each chain is returned.
+ * @param a_styles      [in]    The style's suite whose styles are analyzed.
+ *
+ * @return
+ ***********************************************************************************************************/
+
+std::vector< std::vector< Base const * > > Suite::chains( bool a_ends ) const {
+
+    std::vector< std::vector< Base const * > > chains1;
+
+    for( auto iter = begin( ); iter != end( ); ++iter ) {
+        Base const *base = static_cast<Base const *>( *iter );
+        chains1.push_back( base->chain( ) );
+    }
+
+    if( a_ends ) {
+        std::vector< std::vector<Base const *> > chains2;
+        for( auto iter1 = chains1.begin( ); iter1 != chains1.end( ); ++iter1 ) {
+            Base const *head = (*iter1)[0];
+            bool found = false;
+            for( auto iter2 = chains1.begin( ); iter2 != chains1.end( ); ++iter2 ) {
+                if( (*iter2)[0]->isStyleInDerivedForm( head ) ) {
+                    found = true;
+                    break;
+                }
+            }
+            if( !found ) {
+                std::vector< Base const * > item;
+                item.push_back( head );
+                chains2.push_back( item );
+            }
+        }
+        chains1 = chains2;
+    }
+
+    return( chains1 );
+}
+
+/* *********************************************************************************************************//**
+ * This methods updates the *m_chainEnds* member of *this*.
+ ***********************************************************************************************************/
+
+void Suite::updateChainEnds( ) {
+
+    m_chainEnds.clear( );
+    m_preProcessingChainEnds.clear( );
+
+    auto chains1 = chains( true );
+    for( auto iter = chains1.begin( ); iter != chains1.end( ); ++iter ) m_chainEnds.push_back( (*iter)[0] );
+
+    chains1 = chains( false );
+    std::vector<Base const *> preProcessingChains;
+    for( auto iter = chains1.begin( ); iter != chains1.end( ); ++iter ) {
+        auto moniker = (*iter)[0]->moniker( );
+        if( ( moniker == GIDI_evaluatedStyleChars ) || ( moniker == GIDI_crossSectionReconstructedStyleChars )
+                || ( moniker == GIDI_realizationChars ) ) {
+            preProcessingChains.push_back( (*iter)[0] );
+        }
+    }
+
+    for( auto iter1 = preProcessingChains.begin( ); iter1 != preProcessingChains.end( ); ++iter1 ) {
+        bool found = false;
+        for( auto iter2 = preProcessingChains.begin( ); iter2 != preProcessingChains.end( ); ++iter2 ) {
+            if( (*iter2)->isStyleInDerivedForm( *iter1 ) ) {
+                found = true;
+                break;
+            }
+        }
+        if( !found ) {
+            m_preProcessingChainEnds.push_back( *iter1 );
+        }
+    }
+}
+
 /*! \class Base
  * This is the virtual base class inherited by all **style** classes. It handles the *date* and **derivedFrom** members.
  */
@@ -63,7 +140,6 @@ std::string const *Suite::findLabelInLineage( GIDI::Suite const &a_suite, std::s
  * @param a_node        [in]    The **HAPI::Node** to be parsed.
  * @param a_setupInfo   [in]    Information create my the Protare constructor to help in parsing.
  * @param a_parent      [in]    The parent GIDI::Suite.
- * @return
  ***********************************************************************************************************/
 
 Base::Base( HAPI::Node const &a_node, SetupInfo &a_setupInfo, GIDI::Suite *a_parent ) : 
@@ -116,6 +192,45 @@ Base const *Base::getDerivedStyle( std::string const &a_moniker ) const {
 }
 
 /* *********************************************************************************************************//**
+ * Thie method returns the list of self and all its derived from styles in reverse order (i.e, the first style in the list is *this*).
+ *
+ * @return                      The list of derived styles of *this* (includng *this*) in reverse order.
+ ***********************************************************************************************************/
+
+std::vector<Base const *> Base::chain( ) const {
+
+    std::vector<Base const *> chain1;
+
+    Base const *style = this;
+    while( style != nullptr ) {
+        chain1.push_back( style );
+        style = style->getDerivedStyle( );
+    }
+
+    return( chain1 );
+}
+
+/* *********************************************************************************************************//**
+ * This method returns **true** if *a_style* is in *this* derivedFrom list and **false** otherwise.
+ *
+ * @param   a_style     [in]    The style to check for.
+ *
+ * @return                      The list of derived styles of *this* (includng *this*) in reverse order.
+ ***********************************************************************************************************/
+
+bool Base::isStyleInDerivedForm( Base const *a_style ) const {
+
+    Base const *style = getDerivedStyle( );
+
+    while( style != nullptr ) {
+        if( style == a_style ) return( true );
+        style = style->getDerivedStyle( );
+    }
+
+    return( false );
+}
+
+/* *********************************************************************************************************//**
  * Returns the base attributes for *this* as a *std::string* instance.
  *
  * @param       a_writeInfo         [in/out]    Instance containing incremental indentation and other information and stores the appended lines.
@@ -151,6 +266,7 @@ Evaluated::Evaluated( HAPI::Node const &a_node, SetupInfo &a_setupInfo, GIDI::Su
         m_temperature( a_node.child( GIDI_temperatureChars ), a_setupInfo ),
         m_projectileEnergyDomain( a_node.child( GIDI_projectileEnergyDomainChars ), a_setupInfo ) {
 
+    a_setupInfo.m_protare->parseEvaluatedTargetInfo( a_node.child( GIDI_targetInfoChars ) );
 }
 
 /* *********************************************************************************************************//**

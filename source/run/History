@@ -5,6 +5,30 @@ which **must** added in reverse chronological order (newest at the top).
 It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
+## 2025-11-06 Laurent Desorgher (run-V11-03-06)
+- G4AdjointPrimaryGeneratorAction : 
+    Remove pointer attribute on G4AdjointPrimaryGenerator and call it by G4AdjointPrimaryGenerator::GetInstance() 
+    to solve a bug in Reverse MC  simulation in MT mode.  Works with event-V11-03-03.
+
+## 2025-10-31 Vladimir Ivantchenko (run-V11-03-05)
+- G4VModularPhysicsList - do not print line if the same physics type is
+    substituted, which may confuse users
+- G4PhysicsListHelper - Changed ordering of processes: for X-Ray production
+    use ordering parameter 100 for post step instead of 1000; fixed ordering
+    for muon capture at rest.
+
+## 2025-10-29 Makoto Asai (run-V11-03-04)
+- G4WorkerSubEvtRunManager.cc
+  - Enabling worker threads to receive next sub-event before completing the
+    current sub-event
+  - Code clean up
+
+## 2025-08-04 Makoto Asai (run-V11-03-03)
+- Introducing UI commands to limit number of warning messages to be printed out.
+
+## 2025-08-01 Makoto Asai (run-V11-03-02)
+- Add some verbose level checks to G4TaskRunManager and G4SubEvtRunManager
+  to reduce printouts.
 
 ## 2025-06-10 Seth R Johnson (run-V11-03-01)
 - Clear surfaces in G4RunManager::ReinitializeGeometry

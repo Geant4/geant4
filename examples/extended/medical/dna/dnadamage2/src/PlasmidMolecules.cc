@@ -23,13 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
+/// \file PlasmidMolecules.cc
+/// \brief Implementation of the PlasmidMolecules class
+///
+/// Implementation of the additional Plasmid DNA molecules
+
 // Authors: J. Naoki D. Kondo (UCSF, US)
 //          J. Ramos-Mendez and B. Faddegon (UCSF, US)
 //
 //
-/// \file PlasmidMolecules.cc
-/// \brief Implementation of the additional Plasmid DNA molecules
 
 #include "PlasmidMolecules.hh"
 

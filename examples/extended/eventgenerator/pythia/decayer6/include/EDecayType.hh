@@ -23,9 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file eventgenerator/pythia/decayer6/include/EDecayType.hh
-/// \brief Definition of the EDecayType enumeration
+/// \file EDecayType.hh
+/// \brief Definition of the EDecayType class
 
 #ifndef E_DECAY_TYPE_H
 #define E_DECAY_TYPE_H

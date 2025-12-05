@@ -23,11 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file biasing/ReverseMC01/include/RMC01DoubleWithWeightHit.hh
+/// \file RMC01DoubleWithWeightHit.hh
 /// \brief Definition of the RMC01DoubleWithWeightHit class
-//
-//
-//////////////////////////////////////////////////////////////
+
 //  Class Name:           RMC01DoubleWithWeightHit
 //        Author:               L. Desorgher
 //        Organisation:         SpaceIT GmbH
@@ -45,11 +43,11 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef RMC01DoubleWithWeightHit_h
-#define RMC01DoubleWithWeightHit_h 1
+#define RMC01DoubleWithWeightHit_h
 
-#include "G4Allocator.hh"
-#include "G4THitsCollection.hh"
 #include "G4VHit.hh"
+#include "G4THitsCollection.hh"
+#include "G4Allocator.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -58,47 +56,54 @@ class RMC01DoubleWithWeightHit : public G4VHit
   public:
     RMC01DoubleWithWeightHit(G4double value, G4double weight);
     virtual ~RMC01DoubleWithWeightHit();
-
-    RMC01DoubleWithWeightHit(const RMC01DoubleWithWeightHit& right);
-
-    const RMC01DoubleWithWeightHit& operator=(const RMC01DoubleWithWeightHit& right);
-
-    G4bool operator==(const RMC01DoubleWithWeightHit& right) const;
+ 
+    RMC01DoubleWithWeightHit(const RMC01DoubleWithWeightHit&);
+ 
+    const RMC01DoubleWithWeightHit& operator = (const RMC01DoubleWithWeightHit&);
+ 
+    G4bool operator == (const RMC01DoubleWithWeightHit& right) const;
 
     inline void* operator new(size_t);
     inline void operator delete(void* aHit);
 
     // Methods to get the information - energy deposit and associated
-    // position in the phantom - of the hits stored in the hits collection
+    // position in the phantom - of the hits stored in the hits collection  
+ 
+    inline G4double GetValue() {return fValue;}
 
-    inline G4double GetValue() { return fValue; }
-
-    inline G4double GetWeight() { return fWeight; }
+    inline G4double GetWeight() {return fWeight;}
 
   private:
-    G4double fValue;  // It can be anything
-    G4double fWeight;
+ 
+    G4double fValue; // It can be anything
+    G4double fWeight; 
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-typedef G4THitsCollection<RMC01DoubleWithWeightHit> RMC01DoubleWithWeightHitsCollection;
-extern G4Allocator<RMC01DoubleWithWeightHit> RMC01DoubleWithWeightHitAllocator;
+using RMC01DoubleWithWeightHitsCollection
+      = G4THitsCollection<RMC01DoubleWithWeightHit>;
+
+extern G4ThreadLocal
+       G4Allocator<RMC01DoubleWithWeightHit>* RMC01DoubleWithWeightHitAllocator;
 
 inline void* RMC01DoubleWithWeightHit::operator new(size_t)
 {
-  void* aHit;
-  aHit = (void*)RMC01DoubleWithWeightHitAllocator.MallocSingle();
-  return aHit;
+  if (!RMC01DoubleWithWeightHitAllocator)
+    RMC01DoubleWithWeightHitAllocator = new G4Allocator<RMC01DoubleWithWeightHit>;
+  return (void *)RMC01DoubleWithWeightHitAllocator->MallocSingle();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline void RMC01DoubleWithWeightHit::operator delete(void* aHit)
+inline void RMC01DoubleWithWeightHit::operator delete(void *aHit)
 {
-  RMC01DoubleWithWeightHitAllocator.FreeSingle((RMC01DoubleWithWeightHit*)aHit);
+  if (RMC01DoubleWithWeightHitAllocator)
+    RMC01DoubleWithWeightHitAllocator
+    ->FreeSingle((RMC01DoubleWithWeightHit*) aHit);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
+

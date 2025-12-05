@@ -78,8 +78,10 @@ G4bool G4PSCellFlux::ProcessHits(G4Step* aStep, G4TouchableHistory*)
   G4int idx = ((G4TouchableHistory*) (aStep->GetPreStepPoint()->GetTouchable()))
                 ->GetReplicaNumber(indexDepth);
   G4double cubicVolume = ComputeVolume(aStep, idx);
-
   G4double CellFlux = stepLength / cubicVolume;
+  if (scoreWeighted) {
+    CellFlux *= fScoreWeightCalculator(aStep);
+  }
   if(weighted)
     CellFlux *= aStep->GetPreStepPoint()->GetWeight();
   G4int index = GetIndex(aStep);

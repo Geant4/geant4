@@ -23,10 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file GB06/src/GB06SD.cc
+/// \file GB06SD.cc
 /// \brief Implementation of the GB06SD class
-//
-//
 
 #include "GB06SD.hh"
 

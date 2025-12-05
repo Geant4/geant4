@@ -51,6 +51,27 @@ void G4PhysicsVector::Initialise()
   }
 }
 
+// --------------------------------------------------------------------
+void G4PhysicsVector::SetDataLength(G4int dlength)
+{
+  // this method may be applied for empty vector only
+  if (numberOfNodes > 0) { return; }
+
+  // 
+  if (dlength < 1)
+  {
+    if (0 < verboseLevel)
+    {
+      G4cout << "### G4PhysicsVector::SetDataLength length="
+             << dlength << " is ignored." << G4endl;
+    }
+    return;
+  }
+  numberOfNodes = dlength;
+  binVector.resize(numberOfNodes, 0.0);
+  dataVector.resize(numberOfNodes, 0.0);
+}
+
 // --------------------------------------------------------------
 G4bool G4PhysicsVector::Store(std::ofstream& fOut, G4bool ascii) const
 {
@@ -205,8 +226,8 @@ void G4PhysicsVector::ScaleVector(const G4double factorE,
 
 // --------------------------------------------------------------------
 void G4PhysicsVector::FillSecondDerivatives(const G4SplineType stype,
-					    const G4double dir1,
-					    const G4double dir2)
+                                            const G4double dir1,
+                                            const G4double dir2)
 {
   if (!useSpline) { return; }
   // cannot compute derivatives for less than 5 points
@@ -216,8 +237,8 @@ void G4PhysicsVector::FillSecondDerivatives(const G4SplineType stype,
     if (0 < verboseLevel)
     { 
       G4cout << "### G4PhysicsVector: spline cannot be used for "
-	     << numberOfNodes << " points - spline disabled" 
-	     << G4endl;
+             << numberOfNodes << " points - spline disabled" 
+             << G4endl;
       DumpValues();
     }
     useSpline = false;
@@ -232,11 +253,10 @@ void G4PhysicsVector::FillSecondDerivatives(const G4SplineType stype,
       {
         if (0 < verboseLevel) 
         {
-	  G4cout << "### G4PhysicsVector: spline cannot be used, because "
-		 << " E[" << i << "]=" << binVector[i]
-		 << " >= E[" << i+1 << "]=" << binVector[i + 1]
-		 << G4endl;
-	  DumpValues();
+          G4cout << "### G4PhysicsVector: spline cannot be used, because "
+                 << " E[" << i << "]=" << binVector[i]
+                 << " >= E[" << i+1 << "]=" << binVector[i + 1] << G4endl;
+          DumpValues();
         }
         useSpline = false;
         return;

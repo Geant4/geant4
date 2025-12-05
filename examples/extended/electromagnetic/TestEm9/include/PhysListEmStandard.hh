@@ -23,8 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
+/// \file PhysListEmStandard.hh
+/// \brief Definition of the PhysListEmStandard class
+
 //---------------------------------------------------------------------------
 //
 // ClassName:   PhysListEmStandard

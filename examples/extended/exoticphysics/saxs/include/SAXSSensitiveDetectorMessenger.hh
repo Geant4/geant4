@@ -24,9 +24,7 @@
 // ********************************************************************
 //
 /// \file SAXSSensitiveDetectorMessenger.hh
-/// \brief Implementation of the SAXSSensitiveDetectorMessenger class
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// \brief Definition of the SAXSSensitiveDetectorMessenger class
 
 #ifndef SAXSSensitiveDetectorMessenger_h
 #define SAXSSensitiveDetectorMessenger_h 1

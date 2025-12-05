@@ -23,13 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file medical/dna/range/include/TrackingAction.hh
+/// \file TrackingAction.hh
 /// \brief Definition of the TrackingAction class
-//
-// $Id: TrackingAction.hh 78723 2014-01-20 10:32:17Z gcosmo $
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef TrackingAction_h
 #define TrackingAction_h 1
@@ -38,24 +33,17 @@
 #include "globals.hh"
 
 class DetectorConstruction;
-class PrimaryGeneratorAction;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class TrackingAction : public G4UserTrackingAction
-{
-  public:
-    TrackingAction(PrimaryGeneratorAction*);
-    ~TrackingAction() {};
-
-    virtual void PreUserTrackingAction(const G4Track*);
-    virtual void PostUserTrackingAction(const G4Track*);
-
-  private:
-    // PrimaryGeneratorAction* fPrimary;
-    // G4double                fTrackCut;
-    G4double fTrackLength;
-    const DetectorConstruction* fpDetector;
+class TrackingAction final : public G4UserTrackingAction {
+public:
+  TrackingAction();
+  ~TrackingAction() override = default;
+  void PreUserTrackingAction(const G4Track *) override;
+private:
+  G4double fTrackLength = 0;
+  const DetectorConstruction *fpDetector = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

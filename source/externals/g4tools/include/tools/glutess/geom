@@ -75,10 +75,6 @@ inline GLUdouble __gl_edgeSign( GLUvertex *u, GLUvertex *v, GLUvertex *w )
    */
   GLUdouble gapL, gapR;
 
-  /*
-#define VertLeq(u,v)	(((u)->s < (v)->s) ||			\
-                         ((u)->s == (v)->s && (u)->t <= (v)->t))
-  */
   assert( VertLeq( u, v ) && VertLeq( v, w ));
   
   gapL = v->s - u->s;
@@ -172,7 +168,6 @@ inline int __gl_vertCCW( GLUvertex *u, GLUvertex *v, GLUvertex *w )
                         : (x + (y-x) * (a/(a+b))))	\
             : (y + (x-y) * (b/(a+b)))))
 
-//#define Swap(a,b)	if (1) { GLUvertex *t = a; a = b; b = t; } else
 #define Swap(a,b)	do { GLUvertex *t = a; a = b; b = t; } while(false)
 
 inline void __gl_edgeIntersect( GLUvertex *o1, GLUvertex *d1,

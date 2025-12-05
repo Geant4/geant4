@@ -124,6 +124,7 @@ void G4VViewer::ProcessView()
     fSceneHandler.ClearStore();
     fSceneHandler.ProcessScene();
     UpdateGUISceneTree();
+    UpdateGUIControlWidgets();
     timer.Stop();
     fKernelVisitElapsedTimeSeconds = timer.GetRealElapsed();
   }
@@ -137,6 +138,78 @@ void G4VViewer::ProcessTransients()
     fTransientsNeedRedrawing = false;
     fSceneHandler.ClearTransientStore();
     fSceneHandler.ProcessTransients();
+  }
+}
+
+void G4VViewer::ZoomFromMouseWheel(G4double delta, G4bool shift, G4double xPos, G4double yPos) {
+  
+  G4double sceneWidth = GetSceneNearWidth();
+  unsigned int winWidth = 0, winHeight = 0;
+  G4bool winSizeOk = GetWindowSize(winWidth, winHeight);
+
+  if ((fVP.IsZoomToCursor() || shift) && sceneWidth > 0 && winSizeOk) {
+
+    // Compute mouse position in scene coordinates
+    G4double minWidth = winWidth > winHeight ? winHeight : winWidth;
+    G4double px = xPos - G4double(winWidth) / 2;
+    G4double py = -(yPos - G4double(winHeight) / 2);
+    G4double xi = px * sceneWidth / minWidth;
+    G4double yi = py * sceneWidth / minWidth;
+
+    // ZoomToCursor enabled
+    if (fVP.GetFieldHalfAngle() == 0.) {
+      // Orthographic projection
+      G4double zoomFactor = 1. + std::abs(double(delta)) / 1200;
+      if (delta < 0) zoomFactor = 1. / zoomFactor;
+
+      G4double xf = xi / zoomFactor;
+      G4double yf = yi / zoomFactor;
+
+      G4double deltaX = xf - xi;
+      G4double deltaY = yf - yi;
+
+      fVP.MultiplyZoomFactor(zoomFactor);
+      fVP.IncrementPan(-deltaX, -deltaY, 0);
+    }
+    else {
+      // Perspective projection
+      G4double radius = fSceneHandler.GetScene()->GetExtent().GetExtentRadius();
+      if (radius <= 0.) radius = 1.;
+      const G4double cameraDistance = fVP.GetCameraDistance(radius);
+      const G4double pnear = fVP.GetNearDistance(cameraDistance, radius);
+
+      G4double deltaDolly = 0.1 * cameraDistance * std::abs(delta) / 120;
+      if (delta < 0) deltaDolly = -deltaDolly;
+
+      G4double deltaX = -xi * deltaDolly / pnear;
+      G4double deltaY = -yi * deltaDolly / pnear;
+
+      // This condition prevents going too deeply into the scene, but what if there are volumes with very different sizes?
+      // if(deltaDolly<0 || cameraDistance > radius / std::sin(fVP.GetFieldHalfAngle()) * 1e-2)
+      fVP.IncrementDolly(deltaDolly);
+      fVP.IncrementPan(-deltaX, -deltaY, 0);
+    }
+  }
+  else {
+    // ZoomToCursor disabled
+    if (fVP.GetFieldHalfAngle() == 0.) {
+      // Orthographic projection
+      G4double zoomFactor = 1. + std::abs(double(delta)) / 1200;
+      if (delta < 0) zoomFactor = 1. / zoomFactor;
+      fVP.MultiplyZoomFactor(zoomFactor);
+    }
+    else {
+      // Perspective projection
+      G4double radius = fSceneHandler.GetScene()->GetExtent().GetExtentRadius();
+      if (radius <= 0.) radius = 1.;
+      const G4double cameraDistance = fVP.GetCameraDistance(radius);
+
+      G4double deltaDolly = 0.1 * cameraDistance * std::abs(delta) / 120;
+      if (delta < 0) deltaDolly = -deltaDolly;
+      // This condition prevents going too deeply into the scene, but what if there are volumes with very different sizes?
+      //if (deltaDolly < 0 || cameraDistance > radius / std::sin(fVP.GetFieldHalfAngle()) * 1e-2) 
+      fVP.IncrementDolly(deltaDolly);
+    }
   }
 }
 
@@ -244,6 +317,30 @@ void G4VViewer::UpdateGUISceneTree()
   G4UImanager* UI = G4UImanager::GetUIpointer();
   auto uiWindow = dynamic_cast<G4VInteractiveSession*>(UI->GetG4UIWindow());
   if (uiWindow) uiWindow->UpdateSceneTree(fSceneTree);
+}
+
+void G4VViewer::UpdateGUIControlWidgets() {
+  this->UpdateGUIDrawingStyle();
+  this->UpdateGUIProjectionStyle();
+  this->UpdateGUITransparencySlider();
+}
+
+void G4VViewer::UpdateGUIDrawingStyle()
+{
+  G4UImanager* UI = G4UImanager::GetUIpointer();
+  auto uiWindow = dynamic_cast<G4VInteractiveSession*>(UI->GetG4UIWindow());
+  if (uiWindow) uiWindow->UpdateDrawingStyle(fVP.GetDrawingStyle());
+}
+void G4VViewer::UpdateGUIProjectionStyle() {
+  G4UImanager* UI = G4UImanager::GetUIpointer();
+  auto uiWindow = dynamic_cast<G4VInteractiveSession*>(UI->GetG4UIWindow());
+  if (uiWindow) uiWindow->UpdateProjectionStyle(fVP.GetFieldHalfAngle() == 0 ? 0 : 1);
+}
+void G4VViewer::UpdateGUITransparencySlider() {
+  G4UImanager* UI = G4UImanager::GetUIpointer();
+  auto uiWindow = dynamic_cast<G4VInteractiveSession*>(UI->GetG4UIWindow());
+  if (uiWindow)
+    uiWindow->UpdateTransparencySlider(fVP.GetTransparencyByDepth(), fVP.GetTransparencyByDepthOption());
 }
 
 void G4VViewer::InsertModelInSceneTree(G4VModel* model)

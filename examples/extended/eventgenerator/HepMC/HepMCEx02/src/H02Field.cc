@@ -23,9 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file eventgenerator/HepMC/HepMCEx02/src/H02Field.cc
+/// \file H02Field.cc
 /// \brief Implementation of the H02Field class
-//
+
 //   H02Field.hh
 //
 #include "H02Field.hh"

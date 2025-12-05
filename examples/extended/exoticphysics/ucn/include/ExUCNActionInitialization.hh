@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 /// \file ExUCNActionInitialization.hh
 /// \brief Definition of the ExUCNActionInitialization class
 

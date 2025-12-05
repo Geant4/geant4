@@ -23,9 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file GB06/include/GB06DetectorConstruction.hh
+/// \file GB06DetectorConstruction.hh
 /// \brief Definition of the GB06DetectorConstruction class
-//
+
 #ifndef GB06DetectorConstruction_h
 #define GB06DetectorConstruction_h 1
 

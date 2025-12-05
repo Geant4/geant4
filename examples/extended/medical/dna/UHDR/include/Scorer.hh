@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file Scorer.hh
+/// \brief Definition of the Scorer class
+
 #ifndef scorer_h
 #define scorer_h 1
 

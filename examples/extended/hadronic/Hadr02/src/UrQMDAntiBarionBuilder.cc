@@ -23,10 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file hadronic/Hadr02/src/UrQMDAntiBarionBuilder.cc
+/// \file UrQMDAntiBarionBuilder.cc
 /// \brief Implementation of the UrQMDAntiBarionBuilder class
-//
-//
+
 //---------------------------------------------------------------------------
 //
 // ClassName:   UrQMDAntiBarionBuilder

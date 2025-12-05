@@ -1,0 +1,34 @@
+#Positron Source type
+/det/isHybridSource false
+
+#Radiator Crystal settings
+/crystal/setCrystalMaterial W
+/crystal/setCrystalSize 20 20 12.0 mm
+/crystal/setCrystalLattice <111>
+/crystal/setCrystalAngleX 0.e-6             
+/crystal/setCrystalAngleY 0.e-6       
+
+#further settings
+/det/setScoringCrystalExit true
+
+/run/initialize
+
+/run/verbose 1
+
+/run/setfilenamesave output/output_2.86GeV_W12.0mm_single_crystal.root
+
+/control/execute macros/setPrimaryBeam.mac     
+
+/score/create/boxMesh boxMesh1                
+/score/mesh/boxSize 10 10 6.0 mm
+/score/mesh/nBin 41 41 25
+/score/mesh/translate/xyz 0 0 -6.0 mm
+/score/quantity/energyDeposit Edep #[MeV]       
+/score/close
+/score/list             
+
+#statistics
+/run/printProgress 100
+/run/beamOn 10000                            
+
+/score/dumpQuantityToFile boxMesh1 Edep output/Edep_2.86GeV_W12.0mm_single_crystal.txt

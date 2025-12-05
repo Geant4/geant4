@@ -42,7 +42,6 @@ LUPI_HOST MC::MC( LUPI_maybeUnused PoPI::Database const &a_pops, std::string con
         m_other1dDataLookupMode( LookupMode::Data1d::continuousEnergy ),
         m_distributionLookupMode( LookupMode::Distribution::pdf_cdf ),
         m_upscatterModel( Sampling::Upscatter::Model::none ),
-        m_upscatterModelALabel( "" ),
         m_URR_mode( URR_mode::none ),
         m_wantTerrellPromptNeutronDistribution( false ),
         m_wantRawTNSL_distributionSampling( true ),
@@ -75,7 +74,6 @@ LUPI_HOST MC::MC( LUPI_maybeUnused PoPI::Database const &a_pops, GIDI::Protare c
         m_other1dDataLookupMode( LookupMode::Data1d::continuousEnergy ),
         m_distributionLookupMode( LookupMode::Distribution::pdf_cdf ),
         m_upscatterModel( Sampling::Upscatter::Model::none ),
-        m_upscatterModelALabel( "" ),
         m_URR_mode( URR_mode::none ),
         m_wantTerrellPromptNeutronDistribution( false ),
         m_wantRawTNSL_distributionSampling( true ),
@@ -124,16 +122,26 @@ LUPI_HOST void MC::setDistributionLookupMode( LookupMode::Distribution a_distrib
 }
 
 /* *********************************************************************************************************//**
- * Sets the *m_upscatterModel* member of *this* to **Sampling::Upscatter::Model::A** and the *m_upscatterModelALabel* member
- * to *a_upscatterModelALabel*.
- *
- * @param a_upscatterModelALabel        [in]    The *LookupMode::Data1d* data mode.
+ * This method sets the member *m_upscatterModelAGroupBoundaries* to *a_groupBoundaries*. It also checks that
+ * the groups are in ascending order and executes a throw if they are not.
+ *      
+ * @param a_groupBoundaries     [in]    List of multi-group boundaries.
  ***********************************************************************************************************/
+        
+LUPI_HOST void MC::setUpscatterModelAGroupBoundaries( std::vector<double> const &a_groupBoundaries ) {
 
-LUPI_HOST void MC::set_upscatterModelA( std::string const &a_upscatterModelALabel ) {
+    double priorValue = 0.0;
 
-    m_upscatterModel = Sampling::Upscatter::Model::A;
-    m_upscatterModelALabel = a_upscatterModelALabel;
+    for( std::size_t index = 0; index < a_groupBoundaries.size( ); ++index ) {
+        double value = a_groupBoundaries[index];
+
+        if( index != 0 ) {
+            if( value <= priorValue ) throw( "MC::setUpscatterModelAGroupBoundaries: group boundaries not in ascending order/" );
+        }
+        priorValue = value;
+    }
+
+    m_upscatterModelAGroupBoundaries = a_groupBoundaries;
 }
 
 }

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file radiobiology/include/ActionInitialization.hh
+/// \file ActionInitialization.hh
 /// \brief Definition of the RadioBio::ActionInitialization class
 
 #ifndef RadiobiologyActionInitialization_h

@@ -23,10 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file eventgenerator/HepMC/HepMCEx01/src/ExN04StackingAction.cc
+/// \file ExN04StackingAction.cc
 /// \brief Implementation of the ExN04StackingAction class
-//
-//
 
 #include "ExN04StackingAction.hh"
 

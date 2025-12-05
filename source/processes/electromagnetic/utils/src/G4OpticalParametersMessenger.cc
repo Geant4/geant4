@@ -146,6 +146,14 @@ G4OpticalParametersMessenger::G4OpticalParametersMessenger(
     "Set whether or not to stack secondary Cerenkov photons");
   fCerenkovStackPhotonsCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
 
+  fCerenkovOffloadPhotonsCmd =
+    new G4UIcmdWithABool("/process/optical/cerenkov/setOffloadPhotons", this);
+  fCerenkovOffloadPhotonsCmd->SetGuidance(
+    "Set whether or not to offload secondary Cerenkov photons");
+  fCerenkovOffloadPhotonsCmd->SetParameterName("CerenkovOffloadPhotons", false);
+  fCerenkovOffloadPhotonsCmd->SetDefaultValue(false);
+  fCerenkovOffloadPhotonsCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
+
   fCerenkovTrackSecondariesFirstCmd = new G4UIcmdWithABool(
     "/process/optical/cerenkov/setTrackSecondariesFirst", this);
   fCerenkovTrackSecondariesFirstCmd->SetGuidance(
@@ -195,6 +203,14 @@ G4OpticalParametersMessenger::G4OpticalParametersMessenger(
   fScintStackPhotonsCmd->SetParameterName("ScintillationStackPhotons", true);
   fScintStackPhotonsCmd->SetDefaultValue(true);
   fScintStackPhotonsCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
+
+  fScintOffloadPhotonsCmd = new G4UIcmdWithABool(
+    "/process/optical/scintillation/setOffloadPhotons", this);
+  fScintOffloadPhotonsCmd->SetGuidance(
+    "Set whether or not to offload secondary scintillation photons");
+  fScintOffloadPhotonsCmd->SetParameterName("ScintillationOffloadPhotons", false);
+  fScintOffloadPhotonsCmd->SetDefaultValue(false);
+  fScintOffloadPhotonsCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
 
   fScintTrackSecondariesFirstCmd = new G4UIcmdWithABool(
     "/process/optical/scintillation/setTrackSecondariesFirst", this);
@@ -392,6 +408,11 @@ void G4OpticalParametersMessenger::SetNewValue(G4UIcommand* command,
     params->SetCerenkovStackPhotons(
       fCerenkovStackPhotonsCmd->GetNewBoolValue(newValue));
   }
+  else if(command == fCerenkovOffloadPhotonsCmd)
+  {
+    params->SetCerenkovOffloadPhotons(
+      fCerenkovOffloadPhotonsCmd->GetNewBoolValue(newValue));
+  }
   else if(command == fCerenkovTrackSecondariesFirstCmd)
   {
     params->SetCerenkovTrackSecondariesFirst(
@@ -420,6 +441,11 @@ void G4OpticalParametersMessenger::SetNewValue(G4UIcommand* command,
   {
     params->SetScintStackPhotons(
       fScintStackPhotonsCmd->GetNewBoolValue(newValue));
+  }
+  else if(command == fScintOffloadPhotonsCmd)
+  {
+    params->SetScintOffloadPhotons(
+      fScintOffloadPhotonsCmd->GetNewBoolValue(newValue));
   }
   else if(command == fScintTrackSecondariesFirstCmd)
   {

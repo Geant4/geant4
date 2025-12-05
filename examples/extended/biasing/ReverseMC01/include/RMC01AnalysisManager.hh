@@ -23,11 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file biasing/ReverseMC01/include/RMC01AnalysisManager.hh
+/// \file RMC01AnalysisManager.hh
 /// \brief Definition of the RMC01AnalysisManager class
-//
-//
-//////////////////////////////////////////////////////////////
+
 //  Class Name:            RMC01AnalysisManager
 //        Author:               L. Desorgher
 //        Organisation:         SpaceIT GmbH
@@ -54,87 +52,107 @@
 #ifndef RMC01AnalysisManager_HH
 #define RMC01AnalysisManager_HH
 
-#include "G4AnalysisManager.hh"
+#include "G4ios.hh"
+//#include "G4strstreambuf.hh"
+#include <vector>
+#include "globals.hh"
+#include <fstream>
+#include "G4ThreeVector.hh"
+#include "G4Accumulable.hh"
+#include "G4ThreadLocalSingleton.hh"
 #include "G4Event.hh"
 #include "G4Run.hh"
-#include "G4ThreeVector.hh"
-#include "G4ios.hh"
-#include "g4hntools_defs.hh"
-#include "globals.hh"
+#include"G4AnalysisManager.hh"
+#include "RMC01Analysis.hh"
 
-#include <fstream>
-#include <vector>
 
 class G4Timer;
 class RMC01AnalysisManagerMessenger;
 
-enum PRIM_SPECTRUM_TYPE
-{
-  EXPO,
-  POWER
-};
+enum PRIM_SPECTRUM_TYPE{EXPO,POWER,USER};
 
 class G4Step;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+using G4AnaH1 = tools::histo::h1d; // keep for backward compatibility
+using G4AnaH2 = tools::histo::h2d; // keep for backward compatibility
+//
 
 class RMC01AnalysisManager
 {
+  friend class G4ThreadLocalSingleton <RMC01AnalysisManager>;
+
   public:
+  
     ~RMC01AnalysisManager();
     static RMC01AnalysisManager* GetInstance();
 
-    void BeginOfRun(const G4Run*);
-    void EndOfRun(const G4Run*);
-    void BeginOfEvent(const G4Event*);
-    void EndOfEvent(const G4Event*);
+    void BeginOfRun(const G4Run*); 
+    void EndOfRun(const G4Run*); 
+    void BeginOfEvent(const G4Event*); 
+    void EndOfEvent(const G4Event*); 
+   
+    void SetPrimaryExpSpectrumForAdjointSim(const G4String& particle_name,
+                                            G4double fluence, G4double E0,
+                                            G4double Emin, G4double Emax);
+    void SetPrimaryPowerLawSpectrumForAdjointSim(
+                                            const G4String& particle_name,
+                                            G4double fluence, G4double alpha,
+                                            G4double Emin, G4double Emax);
 
-    void SetPrimaryExpSpectrumForAdjointSim(const G4String& particle_name, G4double fluence,
-                                            G4double E0, G4double Emin, G4double Emax);
-    void SetPrimaryPowerLawSpectrumForAdjointSim(const G4String& particle_name, G4double fluence,
-                                                 G4double alpha, G4double Emin, G4double Emax);
-    // precision of the simulation results is given in % by the user
-    inline void SetPrecision(G4double precision) { fPrecision_to_reach = precision / 100.; };
+
+
+    void SetUserDefinedSpectrumPointForAdjointSim(
+                                            const G4String& particle_name,
+                                            G4double fluence,
+                                            G4bool is_arbitrary_point_wise=true);
+
+    // Precision of the simulation results is given in % by the user
+    //
+    inline void SetPrecision(G4double precision)
+    {
+      fPrecision_to_reach =precision/100.;
+    }
+
+    inline void SetEventWeightFactor(G4double factor)
+    {
+      fevent_weight_factor=factor;
+    }
 
     // Booking and saving of histograms
+    //
     void Book();
     void Save(G4double scaling_factor);
 
   private:
-    static RMC01AnalysisManager* fInstance;
 
-    RMC01AnalysisManager();
-
+    RMC01AnalysisManager(); 
+  
     void EndOfEventForForwardSimulation(const G4Event* anEvent);
     void EndOfEventForAdjointSimulation(const G4Event* anEvent);
     G4double PrimDiffAndDirFluxForAdjointSim(G4double prim_energy);
-    /*
-    void WriteHisto(G4H1* anHisto, G4double scaling_factor,
-                                  G4String fileName, G4String header_lines);
-    void WriteHisto(G4H2* anHisto, G4double scaling_factor,
-                                  G4String fileName, G4String header_lines);
-    */
-    void ComputeMeanEdepAndError(const G4Event* anEvent, G4double& mean, G4double& error);
 
+    void ComputeMeanEdepAndError(G4double& mean, G4double& error,
+                                 G4int nb_of_global_evt);
+  
     RMC01AnalysisManagerMessenger* fMsg;
-
-    // Histos for  fwd simulation
+  
+    // Histos for fwd simulation
     //--------------
-    G4H1* fEdep_vs_prim_ekin;
-    G4H1* fElectron_current;
-    G4H1* fProton_current;
-    G4H1* fGamma_current;
-
+    G4AnaH1* fEdep_vs_prim_ekin;
+    G4AnaH1* fElectron_current;
+    G4AnaH1* fProton_current;
+    G4AnaH1* fGamma_current;
+  
     // Fluence
     //------------
-    // G4double fOmni_fluence_for_fwd_sim;
-
+    //G4double fOmni_fluence_for_fwd_sim;
+  
     // Variable to check the convergence of the energy deposited
     //             for forward and adjoint simulations
     //---------------------------------------------------------
-    G4double fAccumulated_edep;
-    G4double fAccumulated_edep2;
-    G4double fNentry;
+    G4Accumulable<G4double> fAccumulated_edep;
+    G4Accumulable<G4double> fAccumulated_edep2;
     G4double fMean_edep;
     G4double fError_mean_edep;
     G4double fRelative_error;
@@ -145,18 +163,18 @@ class RMC01AnalysisManager
 
     // Histos for forward and adjoint simulation
     //-----------------------------
-    G4H1* fEdep_rmatrix_vs_electron_prim_energy;
-    G4H2* fElectron_current_rmatrix_vs_electron_prim_energy;
-    G4H2* fGamma_current_rmatrix_vs_electron_prim_energy;
-
-    G4H1* fEdep_rmatrix_vs_gamma_prim_energy;
-    G4H2* fElectron_current_rmatrix_vs_gamma_prim_energy;
-    G4H2* fGamma_current_rmatrix_vs_gamma_prim_energy;
-
-    G4H1* fEdep_rmatrix_vs_proton_prim_energy;
-    G4H2* fElectron_current_rmatrix_vs_proton_prim_energy;
-    G4H2* fProton_current_rmatrix_vs_proton_prim_energy;
-    G4H2* fGamma_current_rmatrix_vs_proton_prim_energy;
+    G4AnaH1* fEdep_rmatrix_vs_electron_prim_energy;
+    G4AnaH2* fElectron_current_rmatrix_vs_electron_prim_energy;
+    G4AnaH2* fGamma_current_rmatrix_vs_electron_prim_energy;
+  
+    G4AnaH1* fEdep_rmatrix_vs_gamma_prim_energy;
+    G4AnaH2* fElectron_current_rmatrix_vs_gamma_prim_energy;
+    G4AnaH2* fGamma_current_rmatrix_vs_gamma_prim_energy;
+  
+    G4AnaH1* fEdep_rmatrix_vs_proton_prim_energy;
+    G4AnaH2* fElectron_current_rmatrix_vs_proton_prim_energy;
+    G4AnaH2* fProton_current_rmatrix_vs_proton_prim_energy;
+    G4AnaH2* fGamma_current_rmatrix_vs_proton_prim_energy;
 
     G4String fFileName[2];
     G4bool fFactoryOn;
@@ -173,11 +191,13 @@ class RMC01AnalysisManager
     G4double fEmax_prim_spectrum;
     G4bool fAdjoint_sim_mode;
     G4int fNb_evt_per_adj_evt;
+    std::vector<G4double> f_energy_vec; //User spectrum
+    std::vector<G4double> f_flux_vec; //User spectrum
+    G4double fevent_weight_factor;
 
     // Timer
     //------
-    G4Timer* fTimer;
-    std::fstream fConvergenceFileOutput;
+    G4bool fIsEndOfRun;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

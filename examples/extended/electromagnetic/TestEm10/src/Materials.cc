@@ -23,12 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file electromagnetic/TestEm10/src/Materials.cc
+/// \file Materials.cc
 /// \brief Implementation of the Materials class
-//
-//
-//
+
 //      GEANT 4 class
 //
 //      History: based on object model of

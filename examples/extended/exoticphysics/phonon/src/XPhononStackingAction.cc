@@ -23,8 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file exoticphysics/phonon/src/XPhononStackingAction.cc
+/// \file XPhononStackingAction.cc
 /// \brief Implementation of the XPhononStackingAction class
+
 ///     This stacking action is necessary to ensure that velocity and
 ///     propagation direction are set properly for phonons created with
 ///     G4ParticleGun

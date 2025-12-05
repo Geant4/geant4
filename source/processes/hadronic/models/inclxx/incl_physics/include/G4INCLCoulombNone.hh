@@ -66,6 +66,15 @@ namespace G4INCL {
      * \param n distorting nucleus
      **/
     ParticleEntryAvatar *bringToSurface(Particle * const p, Nucleus * const n) const;
+ 
+    /** \brief Position the particle on the surface of the nucleus.
+     * ONLY FOR ANTIDEUTERON !!!
+     * This method does not perform any distortion.
+     *
+     * \param p incoming particle
+     * \param n distorting nucleus
+     **/
+    ParticleEntryAvatar *bringToSurfaceAbar(Particle * const p, Nucleus * const n) const;
 
     /** \brief Position the cluster on the surface of the nucleus.
      *
@@ -86,7 +95,7 @@ namespace G4INCL {
      *         trajectories. **/
     G4double maxImpactParameter(ParticleSpecies const &p, const G4double /*kinE*/, Nucleus const *
         const n) const {
-      if(p.theType == Composite)
+      if(p.theType == Composite || p.theType == antiComposite)
         return 2.*ParticleTable::getLargestNuclearRadius(p.theA, p.theZ)
           + n->getUniverseRadius();
       else

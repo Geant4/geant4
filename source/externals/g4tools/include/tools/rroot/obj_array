@@ -48,15 +48,9 @@ public:
   obj_array(ifac& a_fac)
   :m_fac(a_fac)
   {
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
   }
   virtual ~obj_array(){
     _clear();
-#ifdef TOOLS_MEM
-    mem::decrement(s_class().c_str());
-#endif
   }
 public:
   obj_array(const obj_array& a_from)
@@ -64,9 +58,6 @@ public:
   ,parent()
   ,m_fac(a_from.m_fac)
   {
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
     typedef typename parent::const_iterator it_t;
     for(it_t it=a_from.begin();it!=a_from.end();++it) {
       if(!(*it)) {
@@ -124,13 +115,9 @@ public:
   bool stream(buffer& a_buffer,const ifac::args& a_args,bool a_accept_null = false) {
     _clear();
 
-    //::printf("debug : obj_array::stream : %lu : begin\n",(unsigned long)this);
-
     short v;
     unsigned int sp, bc;
     if(!a_buffer.read_version(v,sp,bc)) return false;
-
-    //::printf("debug : obj_array::stream : version %d, byte count %d\n",v,bc);
 
    {uint32 id,bits;
     if(!Object_stream(a_buffer,id,bits)) return false;}
@@ -141,11 +128,7 @@ public:
     int lowerBound;
     if(!a_buffer.read(lowerBound)) return false;
 
-    //::printf("debug : obj_array : name \"%s\", nobject %d, lowerBound %d\n",name.c_str(),nobjects,lowerBound);
-
     for (int i=0;i<nobjects;i++) {
-      //::printf("debug : obj_array::stream : %lu : n=%d i=%d ...\n",(unsigned long)this,nobjects,i);
-
       iro* obj;
       bool created;
       if(!a_buffer.read_object(m_fac,a_args,obj,created)){
@@ -154,8 +137,6 @@ public:
                        << ", nobjects " << nobjects << ", iobject " << i << std::endl;
         return false;
       }
-      //::printf("debug : obj_array::stream : %lu : n=%d i=%d : ok, obj %lu\n",(unsigned long)this,
-      //    nobjects,i,(unsigned long)obj);
       if(obj) {
         T* to = safe_cast<iro,T>(*obj);
         if(!to) {

@@ -10,7 +10,6 @@
 
 #include <tools/sg/device_interactor>
 #include <tools/sg/keys>
-//#include <tools/log_file>
 
 #include <string>
 
@@ -58,7 +57,6 @@ class pixwin {
   }
 public:
   virtual void resize(unsigned int,unsigned int){}
-//virtual void paint(HDC) {}
   virtual void paint() {}
   virtual void close(){}
   
@@ -74,7 +72,6 @@ public:
   {
     register_class();
     m_hwnd = ::CreateWindow((PTSTR)s_class().c_str(),
-  //m_hwnd = ::CreateWindowEx(WS_EX_LAYERED,s_class().c_str(),
                              NULL,
                              WS_CHILD | WS_VISIBLE,
                              0,0,
@@ -90,7 +87,6 @@ public:
     if((digitizer_status & (0x80 + 0x40)) == 0) {
       m_touch_available = false;
     } else {
-      //BYTE nInputs = (BYTE)::GetSystemMetrics(SM_MAXIMUMTOUCHES);
       m_touch_available = true;
       if(!::RegisterTouchWindow(m_hwnd,0)) m_touch_available = false;
     }}
@@ -142,6 +138,14 @@ public:
     ::MoveWindow(m_hwnd,rect.left,rect.top,a_w,a_h,TRUE);
   }
   HWND hwnd() const {return m_hwnd;}
+  void post_WM_PAINT() const {
+    if(!m_hwnd) return;
+    ::PostMessage(m_hwnd,WM_PAINT,(WPARAM)0,(LPARAM)0);
+  }
+  void send_WM_PAINT() const {
+    if(!m_hwnd) return;
+    ::SendMessage(m_hwnd,WM_PAINT,(WPARAM)0,(LPARAM)0);
+  }
   void wm_paint() {paint();}
 public:
   void set_device_interactor(tools::sg::device_interactor* a_interactor) {m_interactor = a_interactor;} //we do not have ownership.
@@ -266,12 +270,10 @@ protected:
       pixwin* _this = (pixwin*)::GetWindowLongPtr(a_hwnd,GWLP_USERDATA);
       if(_this && _this->m_touch_available) {
         RECT rect;
-        //::GetWindowRect(hwnd,&rect); ???
         ::GetClientRect(a_hwnd,&rect);
         unsigned int h = rect.bottom-rect.top;
 
         unsigned int num_inputs = (int)a_wparam;
-        //::printf("debug : WM_TOUCH : 001 : %d\n",num_inputs);
         TOUCHINPUT* ti = new TOUCHINPUT[num_inputs];
         POINT p;
         if(::GetTouchInputInfo((HTOUCHINPUT)a_lparam,num_inputs,ti,sizeof(TOUCHINPUT))) {
@@ -280,14 +282,11 @@ protected:
             p.y = TOUCH_COORD_TO_PIXEL(ti[i].y);
             if(!::ScreenToClient(a_hwnd,&p)) {}
             if(ti[i].dwFlags & TOUCHEVENTF_DOWN) {
-              //::printf("debug : TOUCHEVENTF_DOWN %lu %lu\n",p.x,p.y);
               _this->left_button_down(p.x,h-p.y);
             } else if (ti[i].dwFlags & TOUCHEVENTF_UP) {
-              //::printf("debug : TOUCHEVENTF_UP %lu %lu\n",p.x,p.y);
               _this->left_button_up(p.x,h-p.y);
             } else if (ti[i].dwFlags & TOUCHEVENTF_MOVE) {
               bool ldown = true; //we assume that a TOUCHEVENT_DOWN had been done.
-              //::printf("debug : TOUCHEVENTF_MOVE %lu %lu\n",p.x,p.y);
               _this->mouse_move(p.x,h-p.y,ldown);
             }
           }
@@ -355,7 +354,6 @@ protected:
     if(_this) { //How to be sure that we have a pixwin* ???
       _this->close();
       if(_this->m_hwnd!=a_hwnd) {
-        //::printf("WinTk::Component::wm_destroy : HWND mismatch !\n");
       }
       _this->m_hwnd = 0;
     }

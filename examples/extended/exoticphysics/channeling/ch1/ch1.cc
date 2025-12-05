@@ -23,11 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 /// \file ch1.cc
-/// \brief Main program of the ch1 example
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// \brief Main program of the channeling/ch1 example
 
 #include "DetectorConstruction.hh"
 #include "ActionInitialization.hh"

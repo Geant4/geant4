@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file Par04InferenceInterface.hh
+/// \brief Definition of the Par04InferenceInterface class
+
 #ifdef USE_INFERENCE
 #  ifndef PAR04INFERENCEINTERFACE_HH
 #    define PAR04INFERENCEINTERFACE_HH

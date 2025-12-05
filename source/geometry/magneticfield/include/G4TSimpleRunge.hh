@@ -27,12 +27,11 @@
 //
 // Class description:
 //
-// Templated version of G4SimpleRunge
-//
-//
-// Created: Josh Xie  (supported by Google Summer of Code 2014 )
+// Templated version of G4SimpleRunge.
+// Adapted from G4G4TSimpleRunge class.
+
+// Author: Josh Xie (CERN, Google Summer of Code 2014), June 2014
 // Supervisors:  Sandro Wenzel, John Apostolakis (CERN)
-// Adapted from G4G4TSimpleRunge class
 // --------------------------------------------------------------------
 #ifndef G4TSimpleRunge_HH
 #define G4TSimpleRunge_HH
@@ -41,62 +40,67 @@
 #include "G4TMagErrorStepper.hh"
 #include "G4ThreeVector.hh"
 
+/**
+ * @brief G4TSimpleRunge is a templated version of G4SimpleRunge.
+ */
+
 template <class T_Equation, int N>
 class G4TSimpleRunge
   : public G4TMagErrorStepper<G4TSimpleRunge<T_Equation, N>, T_Equation, N>
 {
- public:  // with description
-  static constexpr double IntegratorCorrection = 1. / ((1 << 2) - 1);
+  public:
 
-  G4TSimpleRunge(T_Equation* EqRhs, G4int numberOfVariables = 6)
-    : G4TMagErrorStepper<G4TSimpleRunge<T_Equation, N>, T_Equation, N>(
-        EqRhs, numberOfVariables)
-    , fNumberOfVariables(numberOfVariables)
-    , fEquation_Rhs(EqRhs)
+    static constexpr double IntegratorCorrection = 1. / ((1 << 2) - 1);
+
+    G4TSimpleRunge(T_Equation* EqRhs, G4int numberOfVariables = 6)
+      : G4TMagErrorStepper<G4TSimpleRunge<T_Equation, N>, T_Equation, N>(
+          EqRhs, numberOfVariables)
+      , fNumberOfVariables(numberOfVariables)
+      , fEquation_Rhs(EqRhs)
       
-  {
-    // default GetNumberOfStateVariables() == 12
-    assert(this->GetNumberOfStateVariables() <= 12);
-  }
-
-  ~G4TSimpleRunge() { ; }
-
-  inline void RightHandSide(G4double y[],
-                            G4double dydx[])
-  {
-    fEquation_Rhs->T_Equation::RightHandSide(y, dydx);
-  }
-
-  inline void DumbStepper(const G4double yIn[],
-                          const G4double dydx[],
-                          G4double h, G4double yOut[]) // override final
-  {
-    // Initialise time to t0, needed when it is not updated by the integration.
-    yTemp[7] = yOut[7] = yIn[7];  //  Better to set it to NaN;  // TODO
-
-    for(G4int i = 0; i < N; ++i)
     {
-      yTemp[i] = yIn[i] + 0.5 * h * dydx[i];
+      // default GetNumberOfStateVariables() == 12
+      assert(this->GetNumberOfStateVariables() <= 12);
     }
 
-    this->RightHandSide(yTemp, dydxTemp);
+    ~G4TSimpleRunge() = default;
 
-    for(G4int i = 0; i < N; ++i)
+    inline void RightHandSide(G4double y[],
+                              G4double dydx[])
     {
-      yOut[i] = yIn[i] + h * (dydxTemp[i]);
+      fEquation_Rhs->T_Equation::RightHandSide(y, dydx);
     }
-  }
 
- public:  // without description
-  inline G4int IntegratorOrder() const { return 2; }
+    inline void DumbStepper(const G4double yIn[],
+                            const G4double dydx[],
+                            G4double h, G4double yOut[]) // override final
+    {
+      // Initialise time to t0, needed when it is not updated by the integration.
+      yTemp[7] = yOut[7] = yIn[7];  //  Better to set it to NaN;  // TODO
 
- private:
-  G4int fNumberOfVariables;
-  G4double dydxTemp[N > 12 ? N : 12];
-  G4double yTemp[N > 12 ? N : 12];
+      for(G4int i = 0; i < N; ++i)
+      {
+        yTemp[i] = yIn[i] + 0.5 * h * dydx[i];
+      }
 
-  T_Equation* fEquation_Rhs;
-  // scratch space
+      this->RightHandSide(yTemp, dydxTemp);
+
+      for(G4int i = 0; i < N; ++i)
+      {
+        yOut[i] = yIn[i] + h * (dydxTemp[i]);
+      }
+    }
+
+    inline G4int IntegratorOrder() const { return 2; }
+
+  private:
+
+    G4int fNumberOfVariables;
+    G4double dydxTemp[N > 12 ? N : 12];
+    G4double yTemp[N > 12 ? N : 12];
+
+    T_Equation* fEquation_Rhs;
+    // scratch space
 };
 
-#endif /* G4TSimpleRunge_HH */
+#endif

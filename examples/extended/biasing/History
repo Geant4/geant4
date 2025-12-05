@@ -6,6 +6,12 @@ be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2025-07-30 I. Hrivnacova (exbiasing-V11-03-01)
+- Migration of README pages to Markdown:
+  - .README.txt replaced with README.md and removed README
+  - Added README.md pages in B01, B02, B03
+  - Reviewed and fixed external links, references to code.
+
 ## 2025-03-14 Igor Semeniouk (exbiasing-V11-03-00)
 - The clang-tidy, clang-format applied on code of all GBXX examples
 

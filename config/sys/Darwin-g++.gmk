@@ -132,9 +132,6 @@ ifeq ($(G4SYSTEM),Darwin-g++)
       QTFLAGS   += -I $(QTHOME)/QtGui.framework/Headers
       QTFLAGS   += -I $(QTHOME)/QtWidgets.framework/Headers
       QTFLAGS   += -I $(QTHOME)/QtOpenGL.framework/Headers
-      QTFLAGS   += -I $(QTHOME)/Qt3DCore.framework/Headers
-      QTFLAGS   += -I $(QTHOME)/Qt3DExtras.framework/Headers
-      QTFLAGS   += -I $(QTHOME)/Qt3DRender.framework/Headers
       ifeq ($(QT_VERSION),6)
         QTFLAGS   += -I $(QTHOME)/QtOpenGLWidgets.framework/Headers
       endif
@@ -150,15 +147,6 @@ ifeq ($(G4SYSTEM),Darwin-g++)
         QTLIBS    := $(QTLIBPATH) -framework QtCore -framework QtGui
       else
         QTLIBS    := -L$(QTLPATH) -lQtCore -lQtGui
-      endif   
-    endif
-    ifndef QT3DLIBS
-      ifdef QT_AS_FRAMEWORK
-        QT3DLIBS  := $(QTLIBPATH) -framework QtCore -framework QtGui
-        QT3DLIBS  += -framework QtWidgets -framework Qt3DCore -framework Qt3DExtras -framework Qt3DRender
-      else
-        QT3DLIBS  := -L$(QTLPATH) -lQtCore -lQtGui
-        QT3DLIBS  += -lQtWidgets -lQt3DCore -lQt3DExtras -lQt3DRender
       endif   
     endif
     ifndef GLQTLIBS  
@@ -184,9 +172,6 @@ ifeq ($(G4SYSTEM),Darwin-g++)
       QTFLAGS   += -I $(QTLPATH)/QtGui.framework/Headers 
       QTFLAGS   += -I $(QTLPATH)/QtWidgets.framework/Headers
       QTFLAGS   += -I $(QTLPATH)/QtOpenGL.framework/Headers
-      QTFLAGS   += -I $(QTLPATH)/Qt3DCore.framework/Headers
-      QTFLAGS   += -I $(QTLPATH)/Qt3DExtras.framework/Headers
-      QTFLAGS   += -I $(QTLPATH)/Qt3DRender.framework/Headers
       ifeq ($(QT_VERSION),6)
         QTFLAGS   += -I $(QTHOME)/QtOpenGLWidgets.framework/Headers
       endif
@@ -195,11 +180,6 @@ ifeq ($(G4SYSTEM),Darwin-g++)
     ifndef QTLIBS
        QTLIBS    := -F$(QTLPATH) -framework QtCore -framework QtGui
        QTLIBS    += -framework QtWidgets
-    endif   
-    ifndef QT3DLIBS
-       QT3DLIBS    := -F$(QTLPATH) -framework QtCore -framework QtGui
-       QT3DLIBS    += -framework QtWidgets
-       QT3DLIBS    += -framework Qt3DCore -framework Qt3DExtras -framework Qt3DRender
     endif   
     ifndef GLQTLIBS  
       GLQTLIBS    := -F$(QTLPATH) -framework QtCore -framework QtGui

@@ -49,9 +49,6 @@ inline basket* mpi_create_basket(std::ostream& a_out,impi& a_mpi,bool a_byte_swa
   // wbasket fields set at file writing :
   //m_buf_size,m_buffer,m_nbytes,m_object_size,m_date,m_cycle,m_seek_key
 
-  //::printf("debug :  col = %d, %s, %s, %lu\n",
-  //    icol,rbasket.object_class().c_str(),rbasket.object_name().c_str(),rbasket.seek_key());
-
   basket* _basket = new basket(a_out,a_byte_swap,a_seek_directory,
                                oname,otitle,"TBasket",a_basket_size,
                                false/*verbose*/);

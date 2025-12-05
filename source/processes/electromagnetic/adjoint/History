@@ -6,6 +6,12 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2025-11-24 Vladimir Ivantchenko (emadjoint-V11-03-01)
+- G4AdjointAlongStepWeightCorrection - fixed compilation warning
+
+## 2025-07-12 Vladimir Ivantchenko (emadjoint-V11-03-00)
+- G4ContinuousGainOfEnergy - updated signature of CorrectionsAlongStep(..)
+
 ## 2024-11-01 Laurent Desorgher (emadjoint-V11-02-01)
 - Add attribute fLastFreeFlightTrackId in G4AdjointForcedInteractionForGamma 
 in order to run adjoint simulation in MT mode 

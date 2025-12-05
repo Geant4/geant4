@@ -30,8 +30,8 @@
 // These classes represent the parameterised positioning equivalent to 
 // dividing a G4Polyhedra along one of each axis Rho, Phi, Z.
 
-// 09.05.01 - P.Arce, Initial version
-// 08.04.04 - I.Hrivnacova, Implemented reflection
+// Author: Pedro Arce (CIEMAT), 09.05.2001 - Initial version
+//         Ivana Hrivnacova (Orsay), 08.04.2004 - Implemented reflection
 //---------------------------------------------------------------------
 #ifndef G4PARAMETERISATIONPOLYHEDRA_HH
 #define G4PARAMETERISATIONPOLYHEDRA_HH 1
@@ -55,41 +55,88 @@ class G4Hype;
 class G4Tubs;
 class G4Polycone;
 
+/**
+ * @brief G4VParameterisationPolyhedra is the base class for the parameterised
+ * positioning equivalent to dividing a G4Polyhedra along one of each axis Rho,
+ * Phi, Z.
+ */
+
 class G4VParameterisationPolyhedra : public G4VDivisionParameterisation
 { 
-  public:  // with description
+  public:
   
+    /**
+     * Initialises a parameterised polyhedra, given the axis of parameterisation
+     * 'axis' and the number of divided slices 'nCopies'.
+     *  @param[in] axis The axis along which apply the parameterisation.
+     *  @param[in] nCopies The total number of divided slices.
+     *  @param[in] offset Potential initial offset along the axis.
+     *  @param[in] step The width of the divided slice.
+     *  @param[in] pSolid Pointer to the original shape to parameterise.
+     *  @param[in] divType String identifier for the kind of division.
+     */
     G4VParameterisationPolyhedra( EAxis axis, G4int nCopies,
-                            G4double offset, G4double step,
-                            G4VSolid* msolid, DivisionType divType );
+                                  G4double offset, G4double step,
+                                  G4VSolid* pSolid, DivisionType divType );
   
+    /**
+     * Default Destructor.
+     */
     ~G4VParameterisationPolyhedra() override;
 
   private:
 
+    /**
+     * Converts radius of the sides to radius of the corners:
+     * i.e. - r_corners = r_sides/factor.
+     *  @returns The cosine of (0.5*phiTotal/nofSides).
+     */
     G4double ConvertRadiusFactor(const G4Polyhedra& phedra) const;
-      // Converts radius of the sides to radius of the corners:
-      // r_corners = r_sides/factor
+
 };
 
-//---------------------------------------------------------------------
-// Class G4ParameterisationPolyhedraRho
-//---------------------------------------------------------------------
+/**
+ * @brief G4ParameterisationPolyhedraRho represents the parameterised positioning
+ * equivalent to dividing a G4Polyhedra along Rho axis.
+ */
 
 class G4ParameterisationPolyhedraRho : public G4VParameterisationPolyhedra
 { 
-  public:  // with description
+  public:
 
+    /**
+     * Initialises a parameterised polyhedra, along the Rho axis.
+     *  @param[in] axis The axis along which apply the parameterisation.
+     *  @param[in] nCopies The total number of divided slices.
+     *  @param[in] offset Potential initial offset along the axis.
+     *  @param[in] step The width of the divided slice.
+     *  @param[in] pSolid Pointer to the original shape to parameterise.
+     *  @param[in] divType String identifier for the kind of division.
+     */
     G4ParameterisationPolyhedraRho( EAxis axis, G4int nCopies,
                                     G4double offset, G4double step,
-                                    G4VSolid* motherSolid,
+                                    G4VSolid* pSolid,
                                     DivisionType divType );
+
+    /**
+     * Default Destructor.
+     */
    ~G4ParameterisationPolyhedraRho() override;
 
+    /**
+     * Checks the validity of parameters given in input, issuing an exception.
+     */
     void CheckParametersValidity() override;
 
+    /**
+     * Returns the max width along Rho.
+     *  @returns The maximum width of the solid to divide along the Rho axis.
+     */
     G4double GetMaxParameter() const override;
 
+    /**
+     * Concrete methods implementing the parameterisation.
+     */
     void ComputeTransformation( const G4int copyNo,
                                       G4VPhysicalVolume* physVol ) const override;
     void ComputeDimensions( G4Polyhedra& phedra, const G4int copyNo,
@@ -123,24 +170,48 @@ class G4ParameterisationPolyhedraRho : public G4VParameterisationPolyhedra
                             const G4VPhysicalVolume*) const override {}
 };
 
-//---------------------------------------------------------------------
-// Class G4ParameterisationPolyhedraPhi
-//---------------------------------------------------------------------
+/**
+ * @brief G4ParameterisationPolyhedraPhi represents the parameterised positioning
+ * equivalent to dividing a G4Polyhedra along Phi axis.
+ */
 
 class G4ParameterisationPolyhedraPhi : public G4VParameterisationPolyhedra
 { 
-  public:  // with description
+  public:
 
+    /**
+     * Initialises a parameterised polyhedra, along the Phi axis.
+     *  @param[in] axis The axis along which apply the parameterisation.
+     *  @param[in] nCopies The total number of divided slices.
+     *  @param[in] offset Potential initial offset along the axis.
+     *  @param[in] step The width of the divided slice.
+     *  @param[in] pSolid Pointer to the original shape to parameterise.
+     *  @param[in] divType String identifier for the kind of division.
+     */
     G4ParameterisationPolyhedraPhi( EAxis axis, G4int nCopies,
-                                   G4double offset, G4double step,
-                                   G4VSolid* motherSolid,
-                                   DivisionType divType );
+                                    G4double offset, G4double step,
+                                    G4VSolid* pSolid,
+                                    DivisionType divType );
+
+    /**
+     * Default Destructor.
+     */
    ~G4ParameterisationPolyhedraPhi() override;
 
+    /**
+     * Checks the validity of parameters given in input, issuing an exception.
+     */
     void CheckParametersValidity() override;
 
+    /**
+     * Returns the max width along Phi.
+     *  @returns The maximum width of the solid to divide along the Phi axis.
+     */
     G4double GetMaxParameter() const override;
 
+    /**
+     * Concrete methods implementing the parameterisation.
+     */
     void ComputeTransformation( const G4int copyNo,
                                       G4VPhysicalVolume* physVol ) const override;
     void ComputeDimensions( G4Polyhedra& phedra, const G4int copyNo,
@@ -174,24 +245,48 @@ class G4ParameterisationPolyhedraPhi : public G4VParameterisationPolyhedra
                             const G4VPhysicalVolume*) const override {}
 };
 
-//---------------------------------------------------------------------
-// Class G4ParameterisationPolyhedraZ
-//---------------------------------------------------------------------
+/**
+ * @brief G4ParameterisationPolyhedraZ represents the parameterised positioning
+ * equivalent to dividing a G4Polyhedra along Z axis.
+ */
 
 class G4ParameterisationPolyhedraZ : public G4VParameterisationPolyhedra
 { 
-  public:  // with description
+  public:
 
+    /**
+     * Initialises a parameterised polyhedra, along the Z axis.
+     *  @param[in] axis The axis along which apply the parameterisation.
+     *  @param[in] nCopies The total number of divided slices.
+     *  @param[in] offset Potential initial offset along the axis.
+     *  @param[in] step The width of the divided slice.
+     *  @param[in] pSolid Pointer to the original shape to parameterise.
+     *  @param[in] divType String identifier for the kind of division.
+     */
     G4ParameterisationPolyhedraZ( EAxis axis, G4int nCopies,
                                   G4double offset, G4double step,
-                                  G4VSolid* motherSolid,
+                                  G4VSolid* pSolid,
                                   DivisionType divType );
+
+    /**
+     * Default Destructor.
+     */
    ~G4ParameterisationPolyhedraZ() override;
 
+    /**
+     * Checks the validity of parameters given in input, issuing an exception.
+     */
     void CheckParametersValidity() override;
 
+    /**
+     * Returns the max width along Z.
+     *  @returns The maximum width of the solid to divide along the Z axis.
+     */
     G4double GetMaxParameter() const override;
 
+    /**
+     * Concrete methods implementing the parameterisation.
+     */
     void ComputeTransformation( const G4int copyNo,
                                       G4VPhysicalVolume* physVol ) const override;
     void ComputeDimensions( G4Polyhedra& phedra, const G4int copyNo,
@@ -199,6 +294,9 @@ class G4ParameterisationPolyhedraZ : public G4VParameterisationPolyhedra
 
   private:
 
+    /**
+     * Internal accessors for the original R parameters of the solid to divide.
+     */
     G4double GetR(G4double z, G4double z1, G4double r1,
                   G4double z2, G4double r2) const;
     G4double GetRmin(G4double z, G4int nsegment) const;

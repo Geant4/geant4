@@ -23,10 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file errProp/src/ExErrorMagneticField.cc
+/// \file ExErrorMagneticField.cc
 /// \brief Implementation of the ExErrorMagneticField class
-//
 
 #include "ExErrorMagneticField.hh"
 

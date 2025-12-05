@@ -22,10 +22,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file hadronic/Hadr02/include/HadronicInelasticModelCRMC.hh
+/// \file HadronicInelasticModelCRMC.hh
 /// \brief Definition of the HadronicInelasticModelCRMC class
-//
-//
+
 // ------------------------------------------------------------
 //
 //              CRMC interface to GEANT4

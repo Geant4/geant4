@@ -117,12 +117,12 @@ LUPI_HOST GRIN_inelasticForEnergy::GRIN_inelasticForEnergy( SetupInfo &a_setupIn
                 PoPI::Database const &a_pops, GIDI::GRIN::InelasticIncidentEnergy const *inelasticIncidentEnergy ) :
         m_levelsAndProbabilities( a_setupInfo, a_pops, inelasticIncidentEnergy->table( ), true ) {
 
-    std::vector<int> indices;
+    std::vector<std::size_t> indices;
     std::vector<double> thresholds;
-    int index = 0;
+    std::size_t index = 0;
     double priorThreshold = -1;
     for( auto iter = m_levelsAndProbabilities.m_levels.begin( ); iter != m_levelsAndProbabilities.m_levels.end( ); ++iter, ++index ) {
-        NuclideGammaBranchStateInfo const *nuclideGammaBranchStateInfo = a_setupInfo.m_protare.nuclideGammaBranchStateInfos( )[*iter];
+        NuclideGammaBranchStateInfo const *nuclideGammaBranchStateInfo = a_setupInfo.m_protare.nuclideGammaBranchStateInfos( )[static_cast<std::size_t>(*iter)];
         double levelEnergy = nuclideGammaBranchStateInfo->nuclearLevelEnergy( );
 
         double threshold = ( a_projectileMass + a_targetMass + levelEnergy / 2 ) * levelEnergy / a_targetMass;
@@ -180,7 +180,7 @@ LUPI_HOST_DEVICE int GRIN_inelasticForEnergy::sampleLevelIndex( double a_project
 
 LUPI_HOST_DEVICE void GRIN_inelasticForEnergy::serialize( LUPI::DataBuffer &a_buffer, LUPI::DataBuffer::Mode a_mode ) {
 
-    DATA_MEMBER_VECTOR_INT( m_indices, a_buffer, a_mode );
+    DATA_MEMBER_VECTOR_SIZE_T( m_indices, a_buffer, a_mode );
     DATA_MEMBER_VECTOR_DOUBLE( m_thresholds, a_buffer, a_mode );
     m_levelsAndProbabilities.serialize( a_buffer, a_mode );
 }
@@ -321,7 +321,7 @@ LUPI_HOST_DEVICE GRIN_captureToCompound::GRIN_captureToCompound( ) {
  ***********************************************************************************************************/
 
 LUPI_HOST GRIN_captureToCompound::GRIN_captureToCompound( SetupInfo &a_setupInfo, PoPI::Database const &a_pops, std::string a_compoundId ) :
-        m_index( a_setupInfo.m_stateNamesToIndices[a_compoundId] ),
+        m_index( static_cast<std::size_t>( a_setupInfo.m_stateNamesToIndices[a_compoundId] ) ),
         m_continuumIndices( ) {
 
         PoPI::Nuclide const &nuclide = a_pops.get<PoPI::Nuclide const>( a_compoundId );
@@ -360,7 +360,7 @@ LUPI_HOST_DEVICE GRIN_captureToCompound::~GRIN_captureToCompound( ) {
 
 LUPI_HOST_DEVICE void GRIN_captureToCompound::serialize( LUPI::DataBuffer &a_buffer, LUPI::DataBuffer::Mode a_mode ) {
 
-    DATA_MEMBER_INT( m_index, a_buffer, a_mode );
+    DATA_MEMBER_SIZE_T( m_index, a_buffer, a_mode );
     m_continuumIndices.serialize( a_buffer, a_mode );
 }
 

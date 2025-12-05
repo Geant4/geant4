@@ -23,10 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file hadronic/Hadr02/include/UrQMDPiKBuilder.hh
+/// \file UrQMDPiKBuilder.hh
 /// \brief Definition of the UrQMDPiKBuilder class
-//
-//
+
 //---------------------------------------------------------------------------
 //
 // ClassName:   UrQMDPiKBuilder

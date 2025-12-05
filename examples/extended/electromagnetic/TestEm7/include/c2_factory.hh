@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 /**
- *  \file electromagnetic/TestEm7/include/c2_factory.hh
+ *  \file c2_factory.hh
  *  \brief Provides a factory class to avoid an infinite number of template
  *  \brief declarations.
  *

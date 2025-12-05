@@ -132,8 +132,10 @@ G4LindhardSorensenIonModel::GetChargeSquareRatio(const G4ParticleDefinition* p,
                                                  const G4Material* mat,
                                                  G4double kinEnergy)
 {
-  chargeSquare = corr->EffectiveChargeSquareRatio(p, mat, kinEnergy);
-  return chargeSquare;
+  chargeSquareRatio = corr->EffectiveChargeSquareRatio(p, mat, kinEnergy);
+  fBraggModel->SetChargeSquareRatio(chargeSquareRatio);
+  fBBModel->SetChargeSquareRatio(chargeSquareRatio);
+  return chargeSquareRatio;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -154,7 +156,6 @@ void G4LindhardSorensenIonModel::SetupParameters()
   spin = particle->GetPDGSpin();
   charge = particle->GetPDGCharge()*inveplus;
   Zin = G4lrint(std::abs(charge));
-  chargeSquare = charge*charge;
   eRatio = CLHEP::electron_mass_c2/mass;
   pRatio = CLHEP::proton_mass_c2/mass;
   const G4double aMag = 
@@ -248,18 +249,16 @@ G4LindhardSorensenIonModel::ComputeDEDXPerVolume(const G4Material* mat,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4LindhardSorensenIonModel::CorrectionsAlongStep(
-                                 const G4MaterialCutsCouple* couple,
-                                 const G4DynamicParticle* dp,
-                                 const G4double& length,
+				 const G4Material* mat,
+			         const G4ParticleDefinition* p,
+			         const G4double preKinEnergy,
+			         const G4double cut,
+				 const G4double& length,
                                        G4double& eloss)
 {
-  // no correction at the last step
-  const G4double preKinEnergy = dp->GetKineticEnergy();
   if(eloss >= preKinEnergy) { return; }
 
-  const G4ParticleDefinition* p = dp->GetDefinition();
   SetParticle(p);
-  const G4Material* mat = couple->GetMaterial();
   const G4double eDensity = mat->GetElectronDensity();
   const G4double e = std::max(preKinEnergy - eloss*0.5, preKinEnergy*0.5);
   const G4double tmax = MaxSecondaryEnergy(p, e);
@@ -269,7 +268,7 @@ void G4LindhardSorensenIonModel::CorrectionsAlongStep(
   const G4int Z = p->GetAtomicNumber();
 
   G4double res = 0.0;
-  if(escaled <= fElimit) {
+  if (escaled <= fElimit) {
     // data from ICRU73 or ICRU90
     if(Z > 2 && Z <= 80) {
       res = fIonData->GetDEDX(mat, Z, escaled, G4Log(escaled));
@@ -279,10 +278,8 @@ void G4LindhardSorensenIonModel::CorrectionsAlongStep(
 	<< e << " dEdx=" << res << G4endl;
       */
     }
-    if(res > 0.0) {
-      auto pcuts = couple->GetProductionCuts();
-      G4double cut = (nullptr == pcuts) ? tmax : pcuts->GetProductionCut(1);
-      if(cut < tmax) {
+    if (res > 0.0) {
+      if (cut < tmax) {
 	const G4double x = cut/tmax;
 	res += (G4Log(x)*(tau + 1.)*(tau + 1.)/(tau * (tau + 2.0)) + 1.0 - x) 
 	  *q2*CLHEP::twopi_mc2_rcl2*eDensity;
@@ -290,7 +287,7 @@ void G4LindhardSorensenIonModel::CorrectionsAlongStep(
       res *= length;
     } else {
       // simplified correction
-      res = eloss*q2/chargeSquare;
+      res = eloss*q2/chargeSquareRatio;
     }
   } else {
     // Lindhard-Sorensen model

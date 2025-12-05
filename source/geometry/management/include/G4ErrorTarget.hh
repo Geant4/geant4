@@ -29,10 +29,10 @@
 //
 // Base class for all error propagation targets.
 
-// Created: P.Arce, September 2004
+// Author: Pedro Arce (CIEMAT), September 2004
 // --------------------------------------------------------------------
 #ifndef G4ERRORTARGET_HH
-#define G4ERRORTARGET_HH 1
+#define G4ERRORTARGET_HH
 
 #include "globals.hh"
 #include "G4ThreeVector.hh"
@@ -43,37 +43,46 @@ enum G4ErrorTargetType{ G4ErrorTarget_PlaneSurface,
                         G4ErrorTarget_CylindricalSurface,
                         G4ErrorTarget_GeomVolume,
                         G4ErrorTarget_TrkL };
+/**
+ * @brief G4ErrorTarget is base class for all error propagation targets.
+ */
+
 class G4ErrorTarget
 {
   public:
 
+    /**
+     * Default Constructor and Destructor.
+     */
     G4ErrorTarget() = default;
     virtual ~G4ErrorTarget() = default;
 
+    /**
+     * Methods to compute the distance from the target volume.
+     */
     virtual G4double GetDistanceFromPoint( const G4ThreeVector&,
                                            const G4ThreeVector& ) const;
     virtual G4double GetDistanceFromPoint( const G4ThreeVector& ) const;
-      // For the target volume
 
+    /**
+     * Returns true if the target surface / target track length is reached.
+     */
     virtual G4bool TargetReached(const G4Step*);
-      // For the target surface and target TrackLength
+      // 
 
+    /**
+     * Dumps parameters to standard output.
+     */
     virtual void Dump( const G4String& msg ) const = 0;
 
-    // Access methods
-
-    inline G4ErrorTargetType GetType() const;
+    /**
+     * Returns the type ID of the target.
+     */
+    inline G4ErrorTargetType GetType() const { return theType; }
 
   protected:
 
     G4ErrorTargetType theType{G4ErrorTarget_GeomVolume};
 };
-
-// Inline methods
-
-inline G4ErrorTargetType G4ErrorTarget::GetType() const
-{
-  return theType;
-}
 
 #endif

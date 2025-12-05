@@ -23,11 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file optical/wls/src/WLSPhotonDetHit.cc
+/// \file WLSPhotonDetHit.cc
 /// \brief Implementation of the WLSPhotonDetHit class
-//
-//
+
 #include "WLSPhotonDetHit.hh"
 
 #include "G4UnitsTable.hh"

@@ -23,13 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm5/include/EventAction.hh
+/// \file EventAction.hh
 /// \brief Definition of the EventAction class
-//
-// $Id: EventAction.hh 76464 2013-11-11 10:22:56Z gcosmo $
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef EventAction_h
 #define EventAction_h 1
@@ -39,20 +34,15 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class EventAction : public G4UserEventAction
-{
-  public:
-    EventAction();
-    ~EventAction();
-
-  public:
-    virtual void BeginOfEventAction(const G4Event*);
-    virtual void EndOfEventAction(const G4Event*);
-
-    void AddEnergy(G4double edep) { fEnergyDeposit += edep; };
-
-  private:
-    G4double fEnergyDeposit;
+class EventAction final : public G4UserEventAction {
+public:
+  EventAction() = default;
+  ~EventAction() override = default;
+  void BeginOfEventAction(const G4Event *) override;
+  void EndOfEventAction(const G4Event *) override;
+  void AddEnergy(const G4double edep) { fEnergyDeposit += edep; };
+private:
+  G4double fEnergyDeposit = 0.;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

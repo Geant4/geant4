@@ -23,11 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file biasing/ReverseMC01/src/RMC01RunAction.cc
+/// \file RMC01RunAction.cc
 /// \brief Implementation of the RMC01RunAction class
-//
-//
-//////////////////////////////////////////////////////////////
+
 //      Class Name:        RMC01RunAction
 //        Author:               L. Desorgher
 //         Organisation:         SpaceIT GmbH
@@ -44,16 +42,14 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RMC01RunAction::RMC01RunAction() : G4UserRunAction(), fAnalysisManager(0)
-{
-  fAnalysisManager = RMC01AnalysisManager::GetInstance();
+RMC01RunAction::RMC01RunAction() : G4UserRunAction()
+{RMC01AnalysisManager::GetInstance();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RMC01RunAction::~RMC01RunAction()
-{
-  if (fAnalysisManager) delete fAnalysisManager;
+{;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -61,14 +57,14 @@ RMC01RunAction::~RMC01RunAction()
 void RMC01RunAction::BeginOfRunAction(const G4Run* aRun)
 {
   G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
-  fAnalysisManager->BeginOfRun(aRun);
+  RMC01AnalysisManager::GetInstance()->BeginOfRun(aRun);
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RMC01RunAction::EndOfRunAction(const G4Run* aRun)
-{
-  fAnalysisManager->EndOfRun(aRun);
+{ RMC01AnalysisManager::GetInstance()->EndOfRun(aRun); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

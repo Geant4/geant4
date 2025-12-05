@@ -23,18 +23,22 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-///  \file DetectorConstruction.hh
-///  \brief Example of empty world volume.
+/// \file DetectorConstruction.hh
+/// \brief Definition of the DetectorConstruction class
+///
+/// Example of empty world volume.
+
 //
 //  Author: G.Hugo, 06 January 2023
 //
 // ***************************************************************************
 //
-///      DetectorConstruction
-//
-//  Example of empty world volume.
+///  \class DetectorConstruction
+///
+///  Example of empty world volume.
 //
 // ***************************************************************************
+
 
 #ifndef DETECTOR_CONSTRUCTION_HH
 #define DETECTOR_CONSTRUCTION_HH

@@ -1,0 +1,195 @@
+\page Exampleexgps Example exgps 
+
+  exgps is created to demonstrate the usage of G4GeneralParticleSource
+  for generating  primary particle according to user defined distributions.
+  These range from simple monocromatic point source to complicated mutiple
+  sources with various biasing schemes. 
+   
+## GEOMETRY
+
+  Simple geometry consists of a "Vacuum" world and, in it, two other components:
+    - An alunimium box : 20 x 20 x 20 cm in size, cerntered at the origin.
+    - A SiO2 sphere (radius 5 cm) is placed at the centre of the aluminium box.
+
+## PHYSICS
+
+  Tranportation process only for all particles.
+
+## EVENT
+
+  The event generator is the G4GeneralParticleSource (GPS). The instantiation of
+  G4GeneralParticleSource is same as that for G4ParticleGun. 
+  See the exGPSPrimaryGeneratorAction.cc file for details.  
+  
+## VISUALIZATION
+ 
+  Visualisation of the geometry and the tracks is possible with many of the 
+  G4 visualisation packages.
+  An example of displaying the geometry and tracks using OGL is given in the 
+  macro vis.mac.  
+
+## HISTOGRAMS
+
+  This example implements an histo manager which creates histograms and
+  ntuples using Geant4 analysis tools.
+     
+  The output file can contain the following histograms and one ntuple:
+
+  - histo1D 1: energy spectrum.
+  - histo1D 2: vertex: radial distribution dN/dv.
+  - histo1D 3: angular distribution: cos(theta).
+  - histo1D 4: angular distribution: phi.
+
+  - histo2D 1: vertex position in the X-Y plane.
+  - histo2D 2: vertex position in the X-Z plane.
+  - histo2D 3: vertex position in the Y-Z plane.
+  - histo2D 4: angular distribution: phi-cos(theta).
+  - histo2D 5: angular distribution: of phi-theta.
+ 
+  In the ntuple the following data are recorded for each incident particle:  
+
+  - Particle ID
+  - Kinetic energy (Ekin);
+  - Incident Position (x,y,z);
+  - Incident Angle (theta,phi);
+  - Particle weight;
+	
+  The histograms are managed by G4AnalysisManager class and its Messenger. 
+  The histos, not activated by default, can be individually activated with the command :
+```
+  /analysis/h1/set id nbBins  valMin valMax unit
+```
+  where unit is the desired unit for the histo (MeV or keV, deg or mrad, etc..)
+   
+  One can control the name of the histograms file with the command:
+```
+  /analysis/setFileName  name  (default exgps)
+```
+   
+  It is possible to choose the format of the histogram file : root (default),
+  xml, csv, by using namespace in HistoManager.hh 
+	
+
+## GETTING STARTED
+ 
+  - Execute exgps in 'batch' mode from macro files
+```
+% ./exgps exgps.in
+% ./exgps exgps_MT.in   # larger number of events
+```
+  		
+  - Execute exgps in 'interactive mode' with visualization
+```
+% ./exgps
+....
+Idle> type your commands
+....
+Idle> exit
+```
+ 
+## FURTHER EXAMPLES of MACRO FILES
+
+ There are a number of mac files in the ./macros subdirectory, to show the 
+ various features of GPS.
+
+ - test01.mac : point source, isotropic radiation, monoenergetic
+
+ - test02.mac : square plane source, cosine-law radiation, linear energy
+
+ - test03.mac : rectangular plane source, isotropic radiation, power-law energy
+
+ - test04.mac : circular plane source, cosine-law radiation, exponential energy
+
+ - test05.mac : elliptical plane source, isotropic radiation, bremsstrahlung energy
+
+ - test06.mac : spherical surface source, isotropic radiation, black-body energy
+
+ - test07.mac : cylindrical surface source, cosine-law radiation, Cosmic diffuse energy
+
+ - test08.mac : elliptical surface source, isotropic radiation, linear energy
+
+ - test09.mac : parallepiped surface source, isotropic radiation, linear energy
+
+ - test10.mac : spherical volume source, isotropic radiation, linear energy
+
+ - test11.mac : cylindrical volume source, isotropic radiation, power-law energy
+
+ - test12.mac : elliptical volume source, isotropic radiation, power-law energy
+
+ - test13.mac : parallelepiped volume source, cosine-law radiation, exponential energy
+
+ - test14.mac : rotated circular plane source, isotropic radiation, exponential energy
+
+ - test15.mac : rotated surface cylinder source, isotropic radiation, bremsstrahlung energy
+
+ - test16.mac : rotated parallelepiped volume source, isotropic radiation, bremsstrahlung energy
+
+ - test17.mac : confined spherical volume source, isotropic radiation, exponential energy
+
+ - test18.mac : square plane source, cosine-law radiation, user-defined energy histogram
+
+ - test19.mac : square plane source, cosine-law radiation, arbitrary point-wise energy function
+ with linear interpolation.
+
+ - test20.mac : square plane source, cosine-law radiation, arbitrary point-wise energy function
+ with logarithmic interpolation.
+
+ - test21.mac : square plane source, cosine-law radiation, arbitrary point-wise energy function
+ with exponential interpolation.
+
+ - test22.mac : square plane source, cosine-law radiation, arbitrary point-wise energy function
+ with spline interpolation.
+
+ - test23.mac : square plane source with x and y biasing, user-defined theta and phi
+ distributions, user-defined EPN energy distribution.
+
+ - test24.mac : spherical volume source with z biasing, isotropic radiation with theta and phi
+ biasing, arbitrary point-wise energy function with linear interpolation.
+
+ - test25.mac : spherical volume source, isotropic radiation with theta and phi biasing,
+ user-defined energy histogram.
+
+ - test26.mac : square plane source, cosine-law radiation with lower and upper theta and phi
+ limits, linear energy with biasing.
+
+ - test27.mac : square plane source, user-defined theta, arbitrary point-wise energy function
+ with linear interpolation.
+
+ - test28.mac : particle=ion, square plane source, isotropic radiation, monoenergetic energy.
+
+ - test29.mac : plane source of type annulus, cosine-law radiation, exponential energy
+
+ - test30.mac : rotated 1d beam source, Gaussian beam energy.
+
+ - test31.mac : two-beam incidence, i.e. multiple sources with relative intensities.
+
+ - test32.mac : Sphere volume source, with biasing in theta and phi
+ Isotropic directional distribution with theta and phi biasing.
+
+ - test33.mac : Focused angular distribution.
+
+ - test34.mac : Two simultaneous sources, both fired at the same time.
+
+ - test35.mac : automatic biasing of the energy distribution sampling, original in power-law.
+
+ - test36.mac : automatic biasing of the energy distribution sampling, original in arbitrary
+ data points.
+
+ - test37.mac : automatic biasing of the energy distribution sampling, original in exponential
+ form.
+
+ - test38.mac : arbitrary energy distribution, defined using the ascii input file: spectrum.dat
+
+ All these test macros can be run via the runall.csh script and the resulting ROOT
+ files can be then analysed with the 'plotall.py' macro, calling internally
+ 'plotfiles.py':
+
+```
+% ./macros/runall.csh
+% python3 macros/plotall.py
+```
+
+ In addition, the examples of ROOT macros plotHisto.C and  plottest35.C are also available.
+
+ More information is available at:
+ https://geant4-userdoc.web.cern.ch/UsersGuides/ForApplicationDeveloper/html/GettingStarted/generalParticleSource.html

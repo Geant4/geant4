@@ -23,9 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file persistency/P01/include/RootIO.hh
+/// \file RootIO.hh
 /// \brief Definition of the RootIO class
-//
+
 #ifndef INCLUDE_ROOTIO_HH
 #define INCLUDE_ROOTIO_HH 1
 

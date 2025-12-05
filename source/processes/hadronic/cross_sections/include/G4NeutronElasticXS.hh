@@ -110,15 +110,19 @@ private:
 
   inline const G4PhysicsVector* GetPhysicsVector(G4int Z);
 
+  inline const G4PhysicsVector* GetPhysicsVectorR(G4int Z);
+
   G4PhysicsVector* RetrieveVector(std::ostringstream& in, G4bool warn);
 
   G4VComponentCrossSection* ggXsection{nullptr};
   const G4ParticleDefinition* neutron;
 
   G4bool isInitializer{false};
+  G4bool fRfilesEnabled{false};
 
   static const G4int MAXZEL = 93;
   static G4ElementData* data;
+  static G4ElementData* dataR;
   static G4double coeff[MAXZEL];
   static G4String gDataDirectory;
 };
@@ -130,6 +134,17 @@ G4PhysicsVector* G4NeutronElasticXS::GetPhysicsVector(G4int Z)
   if (pv == nullptr) { 
     InitialiseOnFly(Z);
     pv = data->GetElementData(Z);
+  }
+  return pv;
+}
+
+inline
+const G4PhysicsVector* G4NeutronElasticXS::GetPhysicsVectorR(G4int Z)
+{
+  const G4PhysicsVector* pv = dataR->GetElementData(Z);
+  if (pv == nullptr) { 
+    InitialiseOnFly(Z);
+    pv = dataR->GetElementData(Z);
   }
   return pv;
 }

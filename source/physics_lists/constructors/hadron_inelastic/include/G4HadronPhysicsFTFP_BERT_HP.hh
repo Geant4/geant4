@@ -47,7 +47,7 @@ class G4HadronPhysicsFTFP_BERT_HP : public G4HadronPhysicsFTFP_BERT
   public: 
     G4HadronPhysicsFTFP_BERT_HP(G4int verbose =1);
     G4HadronPhysicsFTFP_BERT_HP(const G4String& name, G4bool quasiElastic=false);
-    virtual ~G4HadronPhysicsFTFP_BERT_HP();
+    ~G4HadronPhysicsFTFP_BERT_HP() override = default;
 
   protected:
     //Modify the minimum needed

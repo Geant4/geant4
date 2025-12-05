@@ -25,8 +25,6 @@
 //
 /// \file SAXSSensitiveDetectorHit.hh
 /// \brief Definition of the SAXSSensitiveDetectorHit class
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef SAXSSensitiveDetectorHit_h
 #define SAXSSensitiveDetectorHit_h 1

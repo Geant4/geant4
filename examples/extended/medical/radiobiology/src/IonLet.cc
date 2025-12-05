@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file radiobiology/src/IonLet.cc
+/// \file IonLet.cc
 /// \brief Implementation of the RadioBio::IonLet class
 
 #include "IonLet.hh"

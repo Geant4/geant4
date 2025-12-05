@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file B1/src/RunAction.cc
+/// \file RunAction.cc
 /// \brief Implementation of the B1::RunAction class
 
 #include "RunAction.hh"
@@ -129,9 +128,12 @@ void RunAction::EndOfRunAction(const G4Run* run)
     G4cout << G4endl << "--------------------End of Local Run------------------------";
   }
 
-  G4cout << G4endl << " The run consists of " << nofEvents << " " << runCondition << G4endl
-         << " Cumulated dose per run, in scoring volume : " << G4BestUnit(dose, "Dose")
-         << " rms = " << G4BestUnit(rmsDose, "Dose") << G4endl
+  G4cout << G4endl << " The run is " << nofEvents << " " << runCondition << G4endl << G4endl;
+  G4cout << "  --> cumulated edep per run in scoring volume = " << G4BestUnit(edep, "Energy") 
+         << " = " << edep/joule << " joule" << G4endl;  
+  G4cout << "  --> mass of scoring volume = " << G4BestUnit(mass, "Mass") << G4endl << G4endl; 
+  G4cout << " Absorbed dose per run in scoring volume = edep/mass = " << G4BestUnit(dose, "Dose")
+         << "; rms = " << G4BestUnit(rmsDose, "Dose") << G4endl
          << "------------------------------------------------------------" << G4endl << G4endl;
 }
 

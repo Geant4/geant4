@@ -53,6 +53,8 @@
 
 #include <vector>
 
+class G4ElementDataRegistry;
+
 class G4ElementData
 {
  public:
@@ -64,6 +66,10 @@ class G4ElementData
   G4ElementData& operator=(const G4ElementData& right) = delete;
   G4ElementData(const G4ElementData&) = delete;
 
+  // reservation of memory for better data layout
+  void Reserve1D(std::size_t);
+  void Reserve2D(std::size_t);
+  
   // add cross section for the element
   void InitialiseForElement(G4int Z, G4PhysicsVector* v);
 
@@ -81,6 +87,12 @@ class G4ElementData
 
   // prepare vector of 2D components
   void Add2DComponent(G4int Z, G4int id, G4Physics2DVector* v);
+
+  // make new 1D free vector
+  G4PhysicsVector* New1DVector(G4int Z, G4int ne);
+
+  // make new 2D vector
+  G4Physics2DVector* New2DVector(G4int Z, G4int ny, G4int ne);
 
   // set name of the dataset (optional)
   inline void SetName(const G4String& nam);
@@ -141,9 +153,12 @@ class G4ElementData
 
   const G4int maxNumElm;
 
+  G4ElementDataRegistry* fRegistry{nullptr};
+
   std::vector<G4PhysicsVector*> elmData;
-  std::vector<G4Physics2DVector*> elm2Data;
   std::vector<std::vector<std::pair<G4int, G4PhysicsVector*> >* > compData;
+
+  std::vector<G4Physics2DVector*> elm2Data;
   std::vector<std::vector<std::pair<G4int, G4Physics2DVector*> >* > comp2D;
 
   G4String name{""};

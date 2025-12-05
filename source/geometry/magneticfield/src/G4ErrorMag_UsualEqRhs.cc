@@ -25,7 +25,7 @@
 //
 // G4ErrorMag_UsualEqRhs implementation
 //
-// Created: P.Arce, September 2004.
+// Author: Pedro Arce (CIEMAT), September 2004.
 // --------------------------------------------------------------------
 
 #include "G4ErrorMag_UsualEqRhs.hh"
@@ -37,8 +37,6 @@ G4ErrorMag_UsualEqRhs::G4ErrorMag_UsualEqRhs( G4MagneticField* MagField )
   : G4Mag_UsualEqRhs( MagField )
 {
 }
-
-G4ErrorMag_UsualEqRhs::~G4ErrorMag_UsualEqRhs() = default;
 
 //---------------------------------------------------------------------
 

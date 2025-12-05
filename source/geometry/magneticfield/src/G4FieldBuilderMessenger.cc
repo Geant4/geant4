@@ -23,19 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//------------------------------------------------
-// The Geant4 Virtual Monte Carlo package
-// Copyright (C) 2007 - 2014 Ivana Hrivnacova
-// All rights reserved.
+// Implementation of the G4FieldBuilderMessenger class
 //
-// For the licensing terms see geant4_vmc/LICENSE.
-// Contact: root-vmc@cern.ch
-//-------------------------------------------------
-
-/// \file G4FieldBuilderMessenger.cc
-/// \brief Implementation of the G4FieldBuilderMessenger class
-///
-/// \author I. Hrivnacova; IJCLab, Orsay
+// Author: Ivana Hrivnacova (IJCLab, Orsay), 2024
+// -------------------------------------------------------------------
 
 #include "G4FieldBuilderMessenger.hh"
 #include "G4FieldBuilder.hh"
@@ -83,7 +74,8 @@ void G4FieldBuilderMessenger::SetNewValue(
 {
   // Apply command to the associated object.
 
-  if (command == fVerboseLevelCmd) {
+  if (command == fVerboseLevelCmd)
+  {
     fFieldBuilder->SetVerboseLevel(fVerboseLevelCmd->GetNewIntValue(newValues));
     return;
   }

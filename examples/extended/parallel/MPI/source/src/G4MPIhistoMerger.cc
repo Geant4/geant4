@@ -22,7 +22,9 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
+/// @file G4MPIhistoMerger.cc
+/// @brief Histo merger
+
 // Merge G4analysis histogram objects via MPI
 //
 // History:

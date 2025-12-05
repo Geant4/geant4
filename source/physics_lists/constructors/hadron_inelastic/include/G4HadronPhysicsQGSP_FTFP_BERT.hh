@@ -39,16 +39,15 @@
 #ifndef G4HadronPhysicsQGSP_FTFP_BERT_h
 #define G4HadronPhysicsQGSP_FTFP_BERT_h 1
 
-
 #include "globals.hh"
 #include "G4HadronPhysicsQGSP_BERT.hh"
 
 class G4HadronPhysicsQGSP_FTFP_BERT : public G4HadronPhysicsQGSP_BERT 
 {
   public: 
-    G4HadronPhysicsQGSP_FTFP_BERT(G4int verbose =1);
-    G4HadronPhysicsQGSP_FTFP_BERT(const G4String& name, G4bool quasiElastic=true);
-    virtual ~G4HadronPhysicsQGSP_FTFP_BERT();
+    G4HadronPhysicsQGSP_FTFP_BERT(G4int verbose = 1);
+    G4HadronPhysicsQGSP_FTFP_BERT(const G4String& name, G4bool quasiElastic = true);
+    ~G4HadronPhysicsQGSP_FTFP_BERT() override = default;
 
     // copy constructor and hide assignment operator
     G4HadronPhysicsQGSP_FTFP_BERT(G4HadronPhysicsQGSP_FTFP_BERT &) = delete;
