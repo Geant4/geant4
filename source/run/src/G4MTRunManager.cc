@@ -32,6 +32,7 @@
 
 #include "G4AutoLock.hh"
 #include "G4CopyRandomState.hh"
+#include "G4GeometryManager.hh"
 #include "G4MTRunManagerKernel.hh"
 #include "G4ProductionCutsTable.hh"
 #include "G4Run.hh"
@@ -420,6 +421,20 @@ void G4MTRunManager::InitializeEventLoop(G4int n_event, const char* macroFile, G
   // We need a barrier here. Wait for workers to start event loop.
   // This will return only when all workers have started processing events.
   WaitForReadyWorkers();
+}
+
+// --------------------------------------------------------------------
+void G4MTRunManager::GeometryOptimisation()
+{
+  G4GeometryManager* geomManager = G4GeometryManager::GetInstance();
+  // G4bool configred = geomManager->IsParallelOptimisationConfigured();
+  // G4bool finished = geomManager->IsParallelOptimisationFinished();
+
+  geomManager->OpenGeometry();
+  geomManager->CloseGeometry(true, true);
+
+  // Force workers to execute UI command
+  RequestWorkersProcessCommandsStack();
 }
 
 // --------------------------------------------------------------------

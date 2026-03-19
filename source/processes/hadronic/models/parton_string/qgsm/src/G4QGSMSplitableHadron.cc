@@ -33,6 +33,7 @@
 #include "G4PionZero.hh"
 #include "G4KaonPlus.hh"
 #include "G4KaonMinus.hh"
+#include "G4HadronicException.hh"
 
 #include "G4Log.hh"
 #include "G4Pow.hh"

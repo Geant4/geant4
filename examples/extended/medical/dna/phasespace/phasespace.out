@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-04-ref-00    (5-December-2025)
+ Geant4 version Name: geant4-11-04-patch-01    (13-March-2026)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -60,7 +60,7 @@ Available Reference Physics Lists:
   Shielding_HPT
   ShieldingLIQMD_HPT
   ShieldingM_HPT
-##### Create analysis manager   0xd32e60
+##### Create analysis manager   0x1dd5560
 Using  analysis manager
 #
 # MT
@@ -952,7 +952,7 @@ Max 2J for sampling of angular correlations         10
 Region <DefaultRegionForTheWorld> --  -- appears in <World> world volume
  This region is in the mass world.
  Root logical volume(s) : World 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0xbb88f0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0x1c52880], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : G4_WATER 
  Production cuts :   gamma 1 nm      e- 1 nm      e+ 1 nm  proton 1 nm 
 
@@ -998,14 +998,14 @@ Setting was ignored.
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.200000s Real=0.207067s Sys=0.000000s
+  User=0.190000s Real=0.191910s Sys=0.000000s
 ... write file : psp.root - done
 ... close file : psp.root - done
 G4 kernel has come to Quit state.
 Deleting G4Run (id:0) 
-UserDetectorConstruction deleted 0xd11060
-UserPhysicsList deleted 0xb46a00
-UserActionInitialization deleted 0xd18eb0
+UserDetectorConstruction deleted 0x1db3040
+UserPhysicsList deleted 0x1be0980
+UserActionInitialization deleted 0x1dbae90
 UserWorkerInitialization deleted 0
 UserWorkerThreadInitialization deleted 0
 UserRunAction deleted.

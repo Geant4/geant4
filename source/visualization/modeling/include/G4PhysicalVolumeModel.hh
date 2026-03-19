@@ -64,7 +64,7 @@
 #include "G4VModel.hh"
 #include "G4ModelingParameters.hh"
 
-#include "G4VTouchable.hh"
+#include "G4NavigationHistory.hh"
 #include "G4Transform3D.hh"
 #include "G4Plane3D.hh"
 #include <iostream>
@@ -122,21 +122,6 @@ public: // With description
     G4int fNonCulledDepth;
     G4Transform3D fTransform;
     G4bool fDrawn;
-  };
-
-  // Nested class for handling nested parameterisations.
-  class G4PhysicalVolumeModelTouchable: public G4VTouchable {
-  public:
-    G4PhysicalVolumeModelTouchable
-    (const std::vector<G4PhysicalVolumeNodeID>& fullPVPath);
-    const G4ThreeVector& GetTranslation(G4int depth) const;
-    const G4RotationMatrix* GetRotation(G4int depth) const;
-    G4VPhysicalVolume* GetVolume(G4int depth) const;
-    G4VSolid* GetSolid(G4int depth) const;
-    G4int GetReplicaNumber(G4int depth) const;
-    G4int GetHistoryDepth() const {return G4int(fFullPVPath.size());}
-  private:
-    const std::vector<G4PhysicalVolumeNodeID>& fFullPVPath;
   };
 
   // Nested struct for encapsulating touchable properties
@@ -319,6 +304,7 @@ protected:
   std::vector<G4PhysicalVolumeNodeID> fBaseFullPVPath; // Base. May be empty.
   std::vector<G4PhysicalVolumeNodeID> fFullPVPath;     // Starts from base.
   std::vector<G4PhysicalVolumeNodeID> fDrawnPVPath;    // Omits culled volumes.
+  G4NavigationHistory fNavigationHistory;  // Starts from top PV.
   mutable G4bool     fAbort;         // Abort all further traversing.
   mutable G4bool     fCurtailDescent;// Can be set to curtail descent.
   G4VSolid*          fpClippingSolid;

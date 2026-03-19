@@ -39,10 +39,10 @@
 #include "G4VSolid.hh"
 #include "G4SubtractionSolid.hh"
 #include "G4IntersectionSolid.hh"
+#include "G4TouchableHistory.hh"
 #include "G4Material.hh"
 #include "G4VisAttributes.hh"
 #include "G4BoundingExtentScene.hh"
-#include "G4TransportationManager.hh"
 #include "G4Polyhedron.hh"
 #include "HepPolyhedronProcessor.h"
 #include "G4AttDefStore.hh"
@@ -114,6 +114,7 @@ G4PhysicalVolumeModel::G4PhysicalVolumeModel
     << " BasePath:" << fBaseFullPVPath;
     fGlobalTag = oss.str();
     fGlobalDescription = "G4PhysicalVolumeModel " + fGlobalTag;
+    fNavigationHistory.SetFirstEntry(fpTopPV);
     CalculateExtent ();
   }
 }
@@ -252,6 +253,7 @@ void G4PhysicalVolumeModel::DescribeYourselfTo
   fpCurrentMaterial = fpCurrentLV? fpCurrentLV->GetMaterial(): 0;
   fFullPVPath       = fBaseFullPVPath;
   fDrawnPVPath.clear();
+  fNavigationHistory.Reset();  // Keeps top PV
   fAbort            = false;
   fCurtailDescent   = false;
 }
@@ -323,7 +325,7 @@ void G4PhysicalVolumeModel::VisitGeometryAndGetVisReps
         // Create a touchable of current parent for ComputeMaterial.
         // fFullPVPath has not been updated yet so at this point it
         // corresponds to the parent.
-        G4PhysicalVolumeModelTouchable parentTouchable(fFullPVPath);
+        G4TouchableHistory parentTouchable(fNavigationHistory);
         pMaterial = pP -> ComputeMaterial (n, pVPV, &parentTouchable);
         DescribeAndDescend (pVPV, requestedDepth, pLV, pSol, pMaterial,
                             theAT, sceneHandler);
@@ -442,6 +444,8 @@ void G4PhysicalVolumeModel::DescribeAndDescend
 
   // Update full path of physical volumes...
   fFullPVPath.push_back(nodeID);
+  // ...and navigation history (kNormal is OK for our purposes)
+  fNavigationHistory.NewLevel(fpCurrentPV, kNormal, copyNo);
 
   const G4RotationMatrix objectRotation = pVPV -> GetObjectRotationValue ();
   const G4ThreeVector&  translation     = pVPV -> GetTranslation ();
@@ -471,7 +475,7 @@ void G4PhysicalVolumeModel::DescribeAndDescend
     if (fpMP->GetCBDAlgorithmNumber() == 1) {
       // Algorithm 1: 3 parameters: Simple rainbow mapping.
       if (fpMP->GetCBDParameters().size() != 3) {
-        G4Exception("G4PhysicalVolumeModelTouchable::DescribeAndDescend",
+        G4Exception("G4PhysicalVolumeModel::DescribeAndDescend",
                     "modeling0014",
                     FatalErrorInArgument,
                     "Algorithm-parameter mismatch for Colour By Density");
@@ -822,6 +826,7 @@ void G4PhysicalVolumeModel::DescribeAndDescend
   if (thisToBeDrawn) {
     fDrawnPVPath.pop_back();
   }
+  fNavigationHistory.BackLevel();
 }
 
 namespace
@@ -1159,72 +1164,4 @@ std::ostream& operator<<
     }
   }
   return os;
-}
-
-G4PhysicalVolumeModel::G4PhysicalVolumeModelTouchable::G4PhysicalVolumeModelTouchable
-(const std::vector<G4PhysicalVolumeNodeID>& fullPVPath):
-  fFullPVPath(fullPVPath) {}
-
-const G4ThreeVector& G4PhysicalVolumeModel::G4PhysicalVolumeModelTouchable::GetTranslation(G4int depth) const
-{
-  size_t i = fFullPVPath.size() - depth - 1;
-  if (i >= fFullPVPath.size()) {
-    G4Exception("G4PhysicalVolumeModelTouchable::GetTranslation",
-		"modeling0005",
-		FatalErrorInArgument,
-		"Index out of range. Asking for non-existent depth");
-  }
-  static G4ThreeVector tempTranslation;
-  tempTranslation = fFullPVPath[i].GetTransform().getTranslation();
-  return tempTranslation;
-}
-
-const G4RotationMatrix* G4PhysicalVolumeModel::G4PhysicalVolumeModelTouchable::GetRotation(G4int depth) const
-{
-  size_t i = fFullPVPath.size() - depth - 1;
-  if (i >= fFullPVPath.size()) {
-    G4Exception("G4PhysicalVolumeModelTouchable::GetRotation",
-		"modeling0006",
-		FatalErrorInArgument,
-		"Index out of range. Asking for non-existent depth");
-  }
-  static G4RotationMatrix tempRotation;
-  tempRotation = fFullPVPath[i].GetTransform().getRotation();
-  return &tempRotation;
-}
-
-G4VPhysicalVolume* G4PhysicalVolumeModel::G4PhysicalVolumeModelTouchable::GetVolume(G4int depth) const
-{
-  size_t i = fFullPVPath.size() - depth - 1;
-  if (i >= fFullPVPath.size()) {
-    G4Exception("G4PhysicalVolumeModelTouchable::GetVolume",
-		"modeling0007",
-		FatalErrorInArgument,
-		"Index out of range. Asking for non-existent depth");
-  }
-  return fFullPVPath[i].GetPhysicalVolume();
-}
-
-G4VSolid* G4PhysicalVolumeModel::G4PhysicalVolumeModelTouchable::GetSolid(G4int depth) const
-{
-  size_t i = fFullPVPath.size() - depth - 1;
-  if (i >= fFullPVPath.size()) {
-    G4Exception("G4PhysicalVolumeModelTouchable::GetSolid",
-		"modeling0008",
-		FatalErrorInArgument,
-		"Index out of range. Asking for non-existent depth");
-  }
-  return fFullPVPath[i].GetPhysicalVolume()->GetLogicalVolume()->GetSolid();
-}
-
-G4int G4PhysicalVolumeModel::G4PhysicalVolumeModelTouchable::GetReplicaNumber(G4int depth) const
-{
-  size_t i = fFullPVPath.size() - depth - 1;
-  if (i >= fFullPVPath.size()) {
-    G4Exception("G4PhysicalVolumeModelTouchable::GetReplicaNumber",
-		"modeling0009",
-		FatalErrorInArgument,
-		"Index out of range. Asking for non-existent depth");
-  }
-  return fFullPVPath[i].GetCopyNo();
 }

@@ -82,6 +82,7 @@
 #include "G4WorkerRunManagerKernel.hh"
 #include "G4ios.hh"
 #include "Randomize.hh"
+#include "G4MaterialScanner.hh"
 
 #include <sstream>
 
@@ -131,7 +132,9 @@ G4RunManager::G4RunManager()
   randomNumberStatusForThisRun = oss.str();
   randomNumberStatusForThisEvent = oss.str();
   runManagerType = sequentialRM;
+  materialScanner = new G4MaterialScanner();
   G4UImanager::GetUIpointer()->SetAlias("RunMode sequential");
+
 }
 
 // --------------------------------------------------------------------
@@ -157,6 +160,7 @@ G4RunManager::G4RunManager(RMType rmType)
   switch (rmType) {
     case masterRM:
       kernel = new G4MTRunManagerKernel();
+      materialScanner = new G4MaterialScanner();
       break;
     case workerRM:
       kernel = new G4WorkerRunManagerKernel();
@@ -207,6 +211,7 @@ G4RunManager::~G4RunManager()
   delete timer;
   delete runMessenger;
   delete previousEvents;
+  delete materialScanner;
 
   // The following will work for all RunManager types
   // if derived class does the correct thing in the derived
@@ -631,6 +636,17 @@ void G4RunManager::Initialize()
   if (stateManager->GetCurrentState() != G4State_Idle) {
     stateManager->SetNewState(G4State_Idle);
   }
+}
+
+// --------------------------------------------------------------------
+void G4RunManager::GeometryOptimisation()
+{
+  G4GeometryManager* geomManager = G4GeometryManager::GetInstance();
+  // G4bool configred = geomManager->IsParallelOptimisationConfigured();
+  // G4bool finished = geomManager->IsParallelOptimisationFinished();
+
+  geomManager->OpenGeometry();
+  geomManager->CloseGeometry(true, true);
 }
 
 // --------------------------------------------------------------------

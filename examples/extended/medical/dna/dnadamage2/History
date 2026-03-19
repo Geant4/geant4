@@ -6,6 +6,10 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2025-12-10 Gabriele Cosmo (dnadamage2-V11-03-03)
+- Cleanup implementation in main(): use default random engine MixMax and
+  use auto whenever appropriate.
+
 ## 2025-09-25 Gabriele Cosmo (dnadamage2-V11-03-02)
 - Delete run-manager as last in main(). Trying to fix segmentation fault
   occurring on Windows at job's closure.

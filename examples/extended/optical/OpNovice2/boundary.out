@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-04-ref-00    (5-December-2025)
+ Geant4 version Name: geant4-11-04-patch-01    (13-March-2026)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -1098,7 +1098,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.040000s Real=0.042504s Sys=0.000000s
+  User=0.040000s Real=0.041773s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -1184,7 +1184,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.030000s Real=0.033633s Sys=0.000000s
+  User=0.030000s Real=0.032070s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -1288,7 +1288,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.040000s Real=0.034857s Sys=0.000000s
+  User=0.030000s Real=0.031449s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -1398,7 +1398,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.030000s Real=0.035624s Sys=0.000000s
+  User=0.030000s Real=0.033662s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -1475,7 +1475,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.030000s Real=0.078960s Sys=0.000000s
+  User=0.040000s Real=0.036911s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -1552,7 +1552,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.080000s Real=0.073681s Sys=0.000000s
+  User=0.070000s Real=0.069120s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -1632,7 +1632,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.070000s Real=0.073351s Sys=0.000000s
+  User=0.070000s Real=0.070468s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -1718,7 +1718,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.040000s Real=0.035730s Sys=0.010000s
+  User=0.030000s Real=0.033668s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -1795,7 +1795,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.030000s Real=0.036948s Sys=0.000000s
+  User=0.040000s Real=0.035939s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -1886,7 +1886,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.030000s Real=0.032018s Sys=0.000000s
+  User=0.030000s Real=0.030875s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -1990,7 +1990,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.030000s Real=0.032384s Sys=0.000000s
+  User=0.030000s Real=0.031085s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -2102,7 +2102,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.040000s Real=0.035070s Sys=0.000000s
+  User=0.040000s Real=0.033837s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -2188,7 +2188,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.030000s Real=0.034714s Sys=0.000000s
+  User=0.030000s Real=0.035129s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -2265,7 +2265,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.040000s Real=0.040685s Sys=0.000000s
+  User=0.040000s Real=0.041353s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -2343,7 +2343,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.040000s Real=0.035205s Sys=0.000000s
+  User=0.040000s Real=0.035422s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -2423,7 +2423,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.050000s Real=0.045897s Sys=0.000000s
+  User=0.050000s Real=0.046654s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -2509,7 +2509,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.030000s Real=0.033671s Sys=0.000000s
+  User=0.030000s Real=0.033437s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -2589,7 +2589,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.040000s Real=0.035143s Sys=0.000000s
+  User=0.040000s Real=0.034942s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -2681,7 +2681,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.040000s Real=0.039520s Sys=0.000000s
+  User=0.030000s Real=0.037674s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -2761,7 +2761,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.020000s Real=0.021311s Sys=0.000000s
+  User=0.020000s Real=0.020572s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -2846,7 +2846,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.010000s Real=0.009967s Sys=0.000000s
+  User=0.010000s Real=0.009039s Sys=0.000000s
 
     Run Summary
 ---------------------------------

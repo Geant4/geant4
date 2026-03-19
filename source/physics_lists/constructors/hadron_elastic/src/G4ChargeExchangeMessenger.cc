@@ -45,11 +45,16 @@ G4ChargeExchangeMessenger::G4ChargeExchangeMessenger(G4ChargeExchangePhysics* a)
   aDir = new G4UIdirectory("/physics_lists/cex/", false);
   aDir->SetGuidance("tailoring the hadronic charge exchange processes.");
 
-  fCmd = new G4UIcmdWithADouble("/physics_lists/cex/BiasFactor",this);
-  fCmd->SetGuidance("Charge exchange cross section factor");
+  fCmd = new G4UIcmdWithADouble("/physics_lists/cex/PionBiasFactor",this);
+  fCmd->SetGuidance("Pion charge exchange cross section factor");
   fCmd->AvailableForStates(G4State_PreInit);
   fCmd->SetToBeBroadcasted(false);
 
+  fCmd1 = new G4UIcmdWithADouble("/physics_lists/cex/KaonBiasFactor",this);
+  fCmd1->SetGuidance("Kaon charge exchange cross section factor");
+  fCmd1->AvailableForStates(G4State_PreInit);
+  fCmd1->SetToBeBroadcasted(false);
+  
   lCmd = new G4UIcmdWithADoubleAndUnit("/process/cex/LowEnergyLimit",this);
   lCmd->SetGuidance("Low-energy energy limit for charge exchange process");
   lCmd->SetParameterName("cexLowE",true);
@@ -61,14 +66,18 @@ G4ChargeExchangeMessenger::G4ChargeExchangeMessenger(G4ChargeExchangePhysics* a)
 G4ChargeExchangeMessenger::~G4ChargeExchangeMessenger()
 {
   delete fCmd;
+  delete fCmd1;
   delete lCmd;
   delete aDir;
 }
 
 void G4ChargeExchangeMessenger::SetNewValue(G4UIcommand* aComm, G4String aS)
 {
-  if (aComm == fCmd)
-    theB->SetCrossSectionFactor(fCmd->GetNewDoubleValue(aS));
-  else if (aComm == lCmd)
+  if (aComm == fCmd) {
+    theB->SetPionCrossSectionFactor(fCmd->GetNewDoubleValue(aS));
+  } else if (aComm == fCmd1) {
+    theB->SetKaonCrossSectionFactor(fCmd1->GetNewDoubleValue(aS));
+  } else if (aComm == lCmd) {
     theB->SetLowEnergyLimit(lCmd->GetNewDoubleValue(aS));
+  }
 }

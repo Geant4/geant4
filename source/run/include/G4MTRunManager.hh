@@ -35,8 +35,8 @@
 
 // Original authors: X.Dong, A.Dotti - February 2013
 // --------------------------------------------------------------------
-#ifndef G4MTRunManager_hh
-#define G4MTRunManager_hh 1
+#ifndef G4MTRUNMANAGER_HH
+#define G4MTRUNMANAGER_HH
 
 #include "G4MTBarrier.hh"
 #include "G4RNGHelper.hh"
@@ -76,6 +76,9 @@ class G4MTRunManager : public G4RunManager
     void InitializeEventLoop(G4int n_event, const char* macroFile = nullptr,
                              G4int n_select = -1) override;
     virtual void InitializeThreadPool() {}
+
+    // Start parallel optimization
+    void GeometryOptimisation() override;
 
     // The following do not do anything for this runmanager
     void TerminateOneEvent() override;

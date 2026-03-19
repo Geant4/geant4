@@ -6,6 +6,16 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2026-01-21 Vladimir Ivanchenko (hadr-cross-V11-03-10)
+- G4ChargeExchangeXS - added two different biasing factors for pions and
+    kaons (urgent request NA64).
+
+## 2026-01-11 Vladimir Ivanchenko
+- G4ChargeExchangeXS - removed debug printout
+
+## 2025-12-30 Vladimir Ivanchenko
+- G4ChargeExchangeXS - fixed trivial Coverity warning
+
 ## 2025-11-24 Vladimir Ivanchenko (hadr-cross-V11-03-09)
 - G4EMDissociationCrossSection - fixed compilation warning
 

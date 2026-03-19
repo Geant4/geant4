@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-04-ref-00    (5-December-2025)
+ Geant4 version Name: geant4-11-04-patch-01    (13-March-2026)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -832,7 +832,7 @@ Index : 2     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.340000s Real=0.341072s Sys=0.000000s
+  User=0.330000s Real=0.339232s Sys=0.000000s
 
  The run is 10000 Ne24 of 0 eV  through : 
  Target   : Length = 1 cm  Radius    = 5 mm  Material = G4_CESIUM_IODIDE
@@ -854,13 +854,13 @@ Run Summary
 
  List of generated particles in target:
            Mg24:   10000  Emean =  42.533 eV 	( 41.931 eV  --> 877.14 eV )
-  Mg24[1368.667]:    9988  Emean =  169.94 eV 	( 169.78 eV  --> 334.58 eV )
-  Mg24[4122.853]:    9980  Emean =  39.411 eV 	( 98.622 meV --> 74.362 eV )
-  Mg24[5235.160]:       9  Emean =  2.2431 eV 	( 126.19 meV --> 5.646 eV )
+  Mg24[1368.66700]:    9988  Emean =  169.94 eV 	( 169.78 eV  --> 334.58 eV )
+  Mg24[4122.85300]:    9980  Emean =  39.411 eV 	( 98.622 meV --> 74.362 eV )
+  Mg24[5235.16000]:       9  Emean =  2.2431 eV 	( 126.19 meV --> 5.646 eV )
            Na24:    9989  Emean =  4.9922 eV 	( 4.9901 eV  --> 15.735 eV )
-  Na24[1346.635]:     804  Emean =  27.135 eV 	( 649.04 meV --> 51.829 eV )
-  Na24[472.207]:   10000  Emean =  68.122 eV 	( 127.74 meV --> 134.01 eV )
-  Na24[563.199]:       5  Emean =  13.735 eV 	( 13.735 eV  --> 13.735 eV )
+  Na24[1346.63500]:     804  Emean =  27.135 eV 	( 649.04 meV --> 51.829 eV )
+  Na24[472.20710]:   10000  Emean =  68.122 eV 	( 127.74 meV --> 134.01 eV )
+  Na24[563.19930]:       5  Emean =  13.735 eV 	( 13.735 eV  --> 13.735 eV )
       anti_nu_e:   20000  Emean =  976.28 keV	( 27.433 keV --> 3.241 MeV)
              e+:     186  Emean =  774.42 keV	( 1.7102 keV --> 1.6823 MeV)
              e-:   26006  Emean =   640.1 keV	( 100.71 eV  --> 4.5674 MeV)

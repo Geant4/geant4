@@ -6,6 +6,12 @@ be used as a substitute for writing good git commit messages!
 
 --------------------------------------------------------------------
 
+## 2026-02-11 John Allison (vistree-V11-03-00)
+- Move fVerbosityGuidance to G4ASCIITree factory.
+  - It was a static variable in G4ASCIITreeMessenger - static to allow access - but
+    it gives "AddressSanitizer: container-overflow" with "-fsanitize=address,undefined"
+    (as discovered by user Davide Terzani, Bug Report 2699).
+
 ## 2023-02-06 Ben Morgan (vistree-V11-01-00)
 - Isolate private headers and update dependencies
 

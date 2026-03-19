@@ -35,8 +35,8 @@
 //----------------------------------------------------------------------------
 //
 
-#ifndef G4ChargeExchangePhysics_h
-#define G4ChargeExchangePhysics_h 1
+#ifndef G4CHARGEEXCHANGEPHYSICS_HH
+#define G4CHARGEEXCHANGEPHYSICS_HH
 
 #include "globals.hh"
 #include "G4VPhysicsConstructor.hh"
@@ -55,8 +55,10 @@ public:
 
   void SetLowEnergyLimit(G4double val) { fLowEnergyLimit = val; }
 
-  void SetCrossSectionFactor(G4double val) { fXSFactor = val; }
+  void SetPionCrossSectionFactor(G4double val) { fXSFactorPi = val; }
 
+  void SetKaonCrossSectionFactor(G4double val) { fXSFactorK = val; }
+  
   G4ChargeExchangePhysics& operator=
   (const G4ChargeExchangePhysics& right) = delete;
   G4ChargeExchangePhysics(const G4ChargeExchangePhysics&) = delete;
@@ -66,13 +68,11 @@ private:
   G4ChargeExchangeMessenger* theMessenger;
   
   G4double fLowEnergyLimit;
-  G4double fXSFactor{1.0};
+  G4double fXSFactorPi{1.0};
+  G4double fXSFactorK{1.0};
 };
 
-
 #endif
-
-
 
 
 

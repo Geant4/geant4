@@ -48,8 +48,8 @@
 // where Y = KS, KL
 // 
 
-#ifndef G4ChargeExchangeXS_h
-#define G4ChargeExchangeXS_h 
+#ifndef G4CHARGEEXCHANGEXS_HH
+#define G4CHARGEEXCHANGEXS_HH
 
 #include "G4VCrossSectionDataSet.hh"
 #include "globals.hh"
@@ -86,10 +86,12 @@ public:
   
   void SetEnergyLimit(G4double val) { fEnergyLimit = val; };
 
-  void SetCrossSectionFactor(G4double val) { fFactor = val; };
+  void SetPionCrossSectionFactor(G4double val) { fFactorPi = val; };
 
+  void SetKaonCrossSectionFactor(G4double val) { fFactorK = val; };
+  
   G4double GetCrossSectionFactor() const { return fFactor; };
-
+  
   G4bool isPion() const { return findex >= 0; };
 
   G4double SampleTforPion(const G4double etot,
@@ -110,6 +112,8 @@ private:
   const G4ParticleDefinition* fPionSecPD[5];
   G4double fXSecPion[5] = {0.0, 0.0, 0.0, 0.0, 0.0};
   G4double fEnergyLimit{0.0};
+  G4double fFactorPi{1.0};
+  G4double fFactorK{1.0};
   G4double fFactor{1.0};
   G4double fMassPi;
 };

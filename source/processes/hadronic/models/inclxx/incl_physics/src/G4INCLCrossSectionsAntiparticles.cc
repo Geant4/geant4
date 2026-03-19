@@ -506,11 +506,11 @@ namespace G4INCL {
         const G4double pLab = 0.001*KinematicsUtils::momentumInLab(antinucleon, nucleon); // GeV
         
         if(iso == 2 || iso == -2){ // pnbar or npbar
-            sigma = KinematicsUtils::compute_xs(BFMM490, pLab) + KinematicsUtils::compute_xs(BFMM490, pLab) + KinematicsUtils::compute_xs(std::move(BFMM167), pLab) + KinematicsUtils::compute_xs(std::move(BFMM198), pLab);
+            sigma = KinematicsUtils::compute_xs(BFMM490, pLab) + KinematicsUtils::compute_xs(BFMM490, pLab) + KinematicsUtils::compute_xs(std::move(BFMM492), pLab) + KinematicsUtils::compute_xs(std::move(BFMM494), pLab);
             return sigma;
         }
         else{ // ppbar or nnbar
-            sigma = KinematicsUtils::compute_xs(BFMM490, pLab) + KinematicsUtils::compute_xs(BFMM490, pLab) + KinematicsUtils::compute_xs(std::move(BFMM492), pLab) + KinematicsUtils::compute_xs(std::move(BFMM494), pLab);
+            sigma = KinematicsUtils::compute_xs(BFMM490, pLab) + KinematicsUtils::compute_xs(BFMM490, pLab) + KinematicsUtils::compute_xs(std::move(BFMM167), pLab) + KinematicsUtils::compute_xs(std::move(BFMM198), pLab);
             return sigma;
         }
     }

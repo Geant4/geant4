@@ -663,14 +663,18 @@ void G4ParticleHPContAngularPar::BuildByInterpolation(G4double anEnergy,
   // interaction the existing table should be used
   if (!fCache.Get().fresh) return;
 
-  // Make copies of angpar1 and angpar2. Since these are given by reference
-  // it can not be excluded that one of them is "this". Hence this code uses
-  // potentially the old "this" for creating the new this - which leads to
-  // memory corruption if the old is not stored as separarte object for lookup
-  const G4ParticleHPContAngularPar copyAngpar1(angpar1), copyAngpar2(angpar2);
+  // Guard against self-aliasing: if either source happens to be "this",
+  // copy it before we start overwriting our own members. In the standard
+  // call path (fCacheAngular vs theAngular[]) aliasing cannot occur, so
+  // tmp1/tmp2 remain empty and the copies cost nothing.
+  std::unique_ptr<G4ParticleHPContAngularPar> tmp1, tmp2;
+  if (this == &angpar1) { tmp1 = std::make_unique<G4ParticleHPContAngularPar>(angpar1); }
+  if (this == &angpar2) { tmp2 = std::make_unique<G4ParticleHPContAngularPar>(angpar2); }
+  const G4ParticleHPContAngularPar& p1 = tmp1 ? *tmp1 : angpar1;
+  const G4ParticleHPContAngularPar& p2 = tmp2 ? *tmp2 : angpar2;
 
-  nAngularParameters = copyAngpar1.nAngularParameters;
-  theManager = copyAngpar1.theManager;
+  nAngularParameters = p1.nAngularParameters;
+  theManager = p1.theManager;
   theEnergy = anEnergy;
   theMinEner = DBL_MAX;  // min and max will be re-calculated after interpolation
   theMaxEner = -DBL_MAX;
@@ -681,8 +685,8 @@ void G4ParticleHPContAngularPar::BuildByInterpolation(G4double anEnergy,
   // needs to call the explicit Set() method instead.
 
   // First, average probabilities for those lines that are in both sets
-  const std::map<G4double, G4int> discEnerOwn1 = copyAngpar1.GetDiscreteEnergiesOwn();
-  const std::map<G4double, G4int> discEnerOwn2 = copyAngpar2.GetDiscreteEnergiesOwn();
+  const std::map<G4double, G4int> discEnerOwn1 = p1.GetDiscreteEnergiesOwn();
+  const std::map<G4double, G4int> discEnerOwn2 = p2.GetDiscreteEnergiesOwn();
   std::map<G4double, G4int>::const_iterator itedeo1;
   std::map<G4double, G4int>::const_iterator itedeo2;
   std::vector<G4ParticleHPList*> vAngular(discEnerOwn1.size());
@@ -704,18 +708,18 @@ void G4ParticleHPContAngularPar::BuildByInterpolation(G4double anEnergy,
       ie2 = itedeo2->second;
     }
     vAngular[ie1] = new G4ParticleHPList();
-    vAngular[ie1]->SetLabel(copyAngpar1.theAngular[ie1].GetLabel());
+    vAngular[ie1]->SetLabel(p1.theAngular[ie1].GetLabel());
     G4double val1, val2;
     for (G4int ip = 0; ip < nAngularParameters; ++ip) {
-      val1 = copyAngpar1.theAngular[ie1].GetValue(ip);
+      val1 = p1.theAngular[ie1].GetValue(ip);
       if (ie2 != -1) {
-        val2 = copyAngpar2.theAngular[ie2].GetValue(ip);
+        val2 = p2.theAngular[ie2].GetValue(ip);
       }
       else {
         val2 = 0.;
       }
-      G4double value = theInt.Interpolate(aScheme, anEnergy, copyAngpar1.theEnergy,
-                                          copyAngpar2.theEnergy, val1, val2);
+      G4double value = theInt.Interpolate(aScheme, anEnergy, p1.theEnergy,
+                                          p2.theEnergy, val1, val2);
       vAngular[ie1]->SetValue(ip, value);
     }
   }  // itedeo1 loop
@@ -745,7 +749,7 @@ void G4ParticleHPContAngularPar::BuildByInterpolation(G4double anEnergy,
       for (itv = vAngular.cbegin(); itv != vAngular.cend(); ++itv, ++ie) {
         if (discEner2 > (*itv)->GetLabel()) {
           itv = vAngular.insert(itv, new G4ParticleHPList);
-          (*itv)->SetLabel(copyAngpar2.theAngular[ie2].GetLabel());
+          (*itv)->SetLabel(p2.theAngular[ie2].GetLabel());
           isInserted = true;
           break;
         }
@@ -753,16 +757,16 @@ void G4ParticleHPContAngularPar::BuildByInterpolation(G4double anEnergy,
       if (!isInserted) {
         ie = (G4int)vAngular.size();
         vAngular.push_back(new G4ParticleHPList);
-        vAngular[ie]->SetLabel(copyAngpar2.theAngular[ie2].GetLabel());
+        vAngular[ie]->SetLabel(p2.theAngular[ie2].GetLabel());
         isInserted = true;
       }
 
       G4double val1, val2;
       for (G4int ip = 0; ip < nAngularParameters; ++ip) {
         val1 = 0;
-        val2 = copyAngpar2.theAngular[ie2].GetValue(ip);
-        G4double value = theInt.Interpolate(aScheme, anEnergy, copyAngpar1.theEnergy,
-                                            copyAngpar2.theEnergy, val1, val2);
+        val2 = p2.theAngular[ie2].GetValue(ip);
+        G4double value = theInt.Interpolate(aScheme, anEnergy, p1.theEnergy,
+                                            p2.theEnergy, val1, val2);
         vAngular[ie]->SetValue(ip, value);
       }
     }  // end if(notFound)
@@ -794,26 +798,25 @@ void G4ParticleHPContAngularPar::BuildByInterpolation(G4double anEnergy,
   // Get minimum and maximum energy interpolating
   // Don't use theMinEner or theMaxEner here, since the transformed energies
   // need the interpolated range from the original Angpar
-  G4double interMinEner = copyAngpar1.GetMinEner()
-                          + (theEnergy - copyAngpar1.GetEnergy())
-                              * (copyAngpar2.GetMinEner() - copyAngpar1.GetMinEner())
-                              / (copyAngpar2.GetEnergy() - copyAngpar1.GetEnergy());
-  G4double interMaxEner = copyAngpar1.GetMaxEner()
-                          + (theEnergy - copyAngpar1.GetEnergy())
-                              * (copyAngpar2.GetMaxEner() - copyAngpar1.GetMaxEner())
-                              / (copyAngpar2.GetEnergy() - copyAngpar1.GetEnergy());
-
+  G4double interMinEner = p1.GetMinEner()
+                          + (theEnergy - p1.GetEnergy())
+                              * (p2.GetMinEner() - p1.GetMinEner())
+                              / (p2.GetEnergy() - p1.GetEnergy());
+  G4double interMaxEner = p1.GetMaxEner()
+                          + (theEnergy - p1.GetEnergy())
+                              * (p2.GetMaxEner() - p1.GetMaxEner())
+                              / (p2.GetEnergy() - p1.GetEnergy());
   // Loop to energies of new set
   theEnergiesTransformed.clear();
 
-  G4int nEnergies1 = copyAngpar1.GetNEnergies();
-  G4int nDiscreteEnergies1 = copyAngpar1.GetNDiscreteEnergies();
-  G4double minEner1 = copyAngpar1.GetMinEner();
-  G4double maxEner1 = copyAngpar1.GetMaxEner();
-  G4int nEnergies2 = copyAngpar2.GetNEnergies();
-  G4int nDiscreteEnergies2 = copyAngpar2.GetNDiscreteEnergies();
-  G4double minEner2 = copyAngpar2.GetMinEner();
-  G4double maxEner2 = copyAngpar2.GetMaxEner();
+  G4int nEnergies1 = p1.GetNEnergies();
+  G4int nDiscreteEnergies1 = p1.GetNDiscreteEnergies();
+  G4double minEner1 = p1.GetMinEner();
+  G4double maxEner1 = p1.GetMaxEner();
+  G4int nEnergies2 = p2.GetNEnergies();
+  G4int nDiscreteEnergies2 = p2.GetNDiscreteEnergies();
+  G4double minEner2 = p2.GetMinEner();
+  G4double maxEner2 = p2.GetMaxEner();
 
   // First build the list of transformed energies normalized
   // to the new min max by assuming that the min-max range of
@@ -823,7 +826,7 @@ void G4ParticleHPContAngularPar::BuildByInterpolation(G4double anEnergy,
   G4double e1(0.);
   G4double eTNorm1(0.);
   for (ie1 = nDiscreteEnergies1; ie1 < nEnergies1; ++ie1) {
-    e1 = copyAngpar1.theAngular[ie1].GetLabel();
+    e1 = p1.theAngular[ie1].GetLabel();
     eTNorm1 = (e1 - minEner1);
     if (maxEner1 != minEner1) eTNorm1 /= (maxEner1 - minEner1);
     if (eTNorm1 >= 0 && eTNorm1 <= 1) theEnergiesTransformed.insert(eTNorm1);
@@ -832,7 +835,7 @@ void G4ParticleHPContAngularPar::BuildByInterpolation(G4double anEnergy,
   G4double e2(0.);
   G4double eTNorm2(0.);
   for (ie2 = nDiscreteEnergies2; ie2 < nEnergies2; ++ie2) {
-    e2 = copyAngpar2.theAngular[ie2].GetLabel();
+    e2 = p2.theAngular[ie2].GetLabel();
     eTNorm2 = (e2 - minEner2);
     if (maxEner2 != minEner2) eTNorm2 /= (maxEner2 - minEner2);
     if (eTNorm2 >= 0 && eTNorm2 <= 1) theEnergiesTransformed.insert(eTNorm2);
@@ -870,7 +873,7 @@ void G4ParticleHPContAngularPar::BuildByInterpolation(G4double anEnergy,
     e1Interp = (maxEner1 - minEner1) * eT + minEner1;
     //----- Get parameter value corresponding to this e1Interp
     for (ie1 = nDiscreteEnergies1; ie1 < nEnergies1; ++ie1) {
-      if ((copyAngpar1.theAngular[ie1].GetLabel() - e1Interp) > 1.E-10 * e1Interp) break;
+      if ((p1.theAngular[ie1].GetLabel() - e1Interp) > 1.E-10 * e1Interp) break;
     }
     ie1Prev = ie1 - 1;
     if (ie1 == 0) ++ie1Prev;
@@ -883,7 +886,7 @@ void G4ParticleHPContAngularPar::BuildByInterpolation(G4double anEnergy,
     e2Interp = (maxEner2 - minEner2) * eT + minEner2;
     //----- Get parameter value corresponding to this e2Interp
     for (ie2 = nDiscreteEnergies2; ie2 < nEnergies2; ++ie2) {
-      if ((copyAngpar2.theAngular[ie2].GetLabel() - e2Interp) > 1.E-10 * e2Interp) break;
+      if ((p2.theAngular[ie2].GetLabel() - e2Interp) > 1.E-10 * e2Interp) break;
     }
     ie2Prev = ie2 - 1;
     if (ie2 == 0) ++ie2Prev;
@@ -908,17 +911,17 @@ void G4ParticleHPContAngularPar::BuildByInterpolation(G4double anEnergy,
     G4double value(0.);
     for (G4int ip = 0; ip < nAngularParameters; ++ip) {
       val1 = theInt.Interpolate2(
-               theManager.GetScheme(ie), e1Interp, copyAngpar1.theAngular[ie1Prev].GetLabel(),
-               copyAngpar1.theAngular[ie1].GetLabel(), copyAngpar1.theAngular[ie1Prev].GetValue(ip),
-               copyAngpar1.theAngular[ie1].GetValue(ip))
+               theManager.GetScheme(ie), e1Interp, p1.theAngular[ie1Prev].GetLabel(),
+               p1.theAngular[ie1].GetLabel(), p1.theAngular[ie1Prev].GetValue(ip),
+               p1.theAngular[ie1].GetValue(ip))
              * (maxEner1 - minEner1);
       val2 = theInt.Interpolate2(
-               theManager.GetScheme(ie), e2Interp, copyAngpar2.theAngular[ie2Prev].GetLabel(),
-               copyAngpar2.theAngular[ie2].GetLabel(), copyAngpar2.theAngular[ie2Prev].GetValue(ip),
-               copyAngpar2.theAngular[ie2].GetValue(ip))
+               theManager.GetScheme(ie), e2Interp, p2.theAngular[ie2Prev].GetLabel(),
+               p2.theAngular[ie2].GetLabel(), p2.theAngular[ie2Prev].GetValue(ip),
+               p2.theAngular[ie2].GetValue(ip))
              * (maxEner2 - minEner2);
 
-      value = theInt.Interpolate(aScheme, anEnergy, copyAngpar1.theEnergy, copyAngpar2.theEnergy,
+      value = theInt.Interpolate(aScheme, anEnergy, p1.theEnergy, p2.theEnergy,
                                  val1, val2);
       if (interMaxEner != interMinEner) {
         value /= (interMaxEner - interMinEner);

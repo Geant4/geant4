@@ -97,7 +97,7 @@ namespace G4INCL{
             while (iss >>type){
                types.push_back(type);
             }
-            particle_types.push_back(types);
+            particle_types.push_back(std::move(types));
          }
       }
       else std::cout << "ERROR no fread_file " << filename << std::endl;
@@ -306,10 +306,10 @@ namespace G4INCL{
       INCL_DEBUG("Proton is the victim" << '\n');
       if(rdm < (1.-kaonicFSprob)){ // pionic FS was chosen
         INCL_DEBUG("pionic pp final state chosen" << '\n');
-        sum = read_file(dataPathnbarp, probabilities, particle_types);
+        sum = read_file(std::move(dataPathnbarp), probabilities, particle_types);
         rdm = (rdm/(1.-kaonicFSprob))*sum; //99.88 normalize by the sum of probabilities in the file
         //now get the line number in the file where the FS particles are stored:
-        G4int n = findStringNumber(rdm, probabilities)-1;
+        G4int n = findStringNumber(rdm, std::move(probabilities))-1;
         if ( n < 0 ) return starlist;
         for(G4int j = 0; j < static_cast<G4int>(particle_types[n].size()); j++){
           if(particle_types[n][j] == "pi0"){
@@ -361,10 +361,10 @@ namespace G4INCL{
       }
       else{
         INCL_DEBUG("kaonic pp final state chosen" << '\n');
-        sum = read_file(dataPathnbarpk, probabilities, particle_types);
+        sum = read_file(std::move(dataPathnbarpk), probabilities, particle_types);
         rdm = ((1-rdm)/kaonicFSprob)*sum;//2670 normalize by the sum of probabilities in the file
         //now get the line number in the file where the FS particles are stored:
-        G4int n = findStringNumber(rdm, probabilities)-1;
+        G4int n = findStringNumber(rdm, std::move(probabilities))-1;
         if ( n < 0 ) return starlist;
         for(G4int j = 0; j < static_cast<G4int>(particle_types[n].size()); j++){
           if(particle_types[n][j] == "pi0"){
@@ -417,10 +417,10 @@ namespace G4INCL{
       INCL_DEBUG("Neutron is the victim" << '\n');
       if(rdm < (1.-kaonicFSprob)){ // pionic/kaonic choice
         INCL_DEBUG("pionic np final state chosen" << '\n');
-        sum = read_file(dataPathnbarn, probabilities, particle_types);
+        sum = read_file(std::move(dataPathnbarn), probabilities, particle_types);
         rdm = (rdm/(1.-kaonicFSprob))*sum; //99.95 normalize by the sum of probabilities in the file
         //now get the line number in the file where the FS particles are stored:
-        G4int n = findStringNumber(rdm, probabilities)-1;
+        G4int n = findStringNumber(rdm, std::move(probabilities))-1;
         if ( n < 0 ) return starlist;
         for(G4int j = 0; j < static_cast<G4int>(particle_types[n].size()); j++){
           if(particle_types[n][j] == "pi0"){
@@ -472,10 +472,10 @@ namespace G4INCL{
       }
       else{
         INCL_DEBUG("kaonic np final state chosen" << '\n');
-        sum = read_file(dataPathnbarnk, probabilities, particle_types);
+        sum = read_file(std::move(dataPathnbarnk), probabilities, particle_types);
         rdm = ((1-rdm)/kaonicFSprob)*sum;//3837 normalize by the sum of probabilities in the file
         //now get the line number in the file where the FS particles are stored:
-        G4int n = findStringNumber(rdm, probabilities)-1;
+        G4int n = findStringNumber(rdm, std::move(probabilities))-1;
         if ( n < 0 ) return starlist;
         for(G4int j = 0; j < static_cast<G4int>(particle_types[n].size()); j++){
           if(particle_types[n][j] == "pi0"){

@@ -10,7 +10,7 @@
 
 
 **************************************************************
- Geant4 version Name: geant4-11-04-ref-00    (5-December-2025)
+ Geant4 version Name: geant4-11-04-patch-01    (13-March-2026)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -635,7 +635,7 @@ N=17 V[N]={906770732717044781, 629165745432651234, 1235682547346241386, 68420008
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.720000s Real=0.720803s Sys=0.000000s
+  User=0.680000s Real=0.682784s Sys=0.000000s
 
  The run consists of 10000 mu+ of 10 TeV through 1 m   of Iron (density: 7.9 g/cm3 )
 
@@ -691,7 +691,7 @@ N=17 V[N]={882454084924701664, 2270259229220857311, 818577390581940897, 14266040
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.640000s Real=0.635499s Sys=0.000000s
+  User=0.620000s Real=0.630539s Sys=0.000000s
 
  The run consists of 10000 pi+ of 10 TeV through 1 m   of Iron (density: 7.9 g/cm3 )
 
@@ -746,7 +746,7 @@ N=17 V[N]={2103257823577124208, 469380737387581810, 386042433805554138, 18024306
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.590000s Real=0.589184s Sys=0.000000s
+  User=0.590000s Real=0.589387s Sys=0.000000s
 
  The run consists of 10000 proton of 10 TeV through 1 m   of Iron (density: 7.9 g/cm3 )
 
@@ -755,8 +755,8 @@ Run Summary
 #
 G4 kernel has come to Quit state.
 Deleting G4Run (id:2) 
-UserDetectorConstruction deleted 0x11b6570
-UserPhysicsList deleted 0x11f51c8
+UserDetectorConstruction deleted 0x15c8ca0
+UserPhysicsList deleted 0x1609098
 UserActionInitialization deleted 0
 UserWorkerInitialization deleted 0
 UserWorkerThreadInitialization deleted 0

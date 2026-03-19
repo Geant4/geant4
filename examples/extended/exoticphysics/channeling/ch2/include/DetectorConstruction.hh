@@ -112,6 +112,9 @@ class DetectorConstruction : public G4VUserDetectorConstruction
     void SetLindhardAnglesMuPlus(G4double val)     {fLindhardAnglesMuPlus = val;}
     void SetLindhardAnglesMuMinus(G4double val)    {fLindhardAnglesMuMinus = val;}
 
+    //get the flag, if the channeling model is switched on/off
+    G4bool GetChannelingModel() const {return fActivateChannelingModel;}
+
   private:
     DetectorConstructionMessenger* fMessenger;
 

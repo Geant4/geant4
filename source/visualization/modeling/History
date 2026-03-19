@@ -6,6 +6,17 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2026-03-05 John Allison (modeling-V11-03-09)
+- G4PhysicalVolumeModel:
+  - Build and maintain a private G4NavigationHistory.
+    - Create a temporary G4TouchableHistory from it when required (i.e., when
+      calling nested parameterisation ComputeMaterial()).
+
+## 2026-03-03 John Apostolakis
+- G4PhysicalVolumeModel.cc:
+  - Replace helper class G4PhysicalVolumeModelTouchable with temporary 
+    G4TouchableHistory object (when calling nested parameterisation.)
+
 ## 2025-04-13 John Allison (modeling-V11-03-08)
 - G4PhysicalVolumeModel.cc:
   - Fix typo in ModelType.

@@ -53,40 +53,16 @@
 // UCRL-CODE-224807
 //
 //
-#ifndef G4fissionEvent_hh
-#define G4fissionEvent_hh
+#ifndef G4FISSIONEVENT_HH
+#define G4FISSIONEVENT_HH
 
 #include "globals.hh"
 #include <string>
 
-class G4fissionEvent {
-   private:
-      G4int neutronNu; // number of neutrons in this fission event
-      G4double* neutronEnergies; 
-      G4double* neutronVelocities; 
-      G4double* neutronDircosu; 
-      G4double* neutronDircosv; 
-      G4double* neutronDircosw; 
-      G4double* neutronAges; 
-
-      G4int photonNu; // number of photons in this fission event
-      G4double* photonEnergies; 
-      G4double* photonVelocities; 
-      G4double* photonDircosu; 
-      G4double* photonDircosv; 
-      G4double* photonDircosw; 
-      G4double* photonAges; 
-
-      // options
-      static G4int delayoption;
-      static G4int correlationoption;
-      static G4int nudistoption;
-      static G4int Cf252ndistoption;
-      static G4int Cf252nengoption;
-      static G4double (*rngdptr)(void);
-      static float (*rngfptr)(void);
-
+class G4fissionEvent
+{
    public:
+
       // These are all the methods of this class accessible to the caller of the object 
       G4fissionEvent(G4int isotope, G4double time, G4double nubar, G4double eng);
       ~G4fissionEvent();
@@ -167,6 +143,32 @@ class G4fissionEvent {
 
 
    private:
+
+      G4int neutronNu; // number of neutrons in this fission event
+      G4double* neutronEnergies; 
+      G4double* neutronVelocities; 
+      G4double* neutronDircosu; 
+      G4double* neutronDircosv; 
+      G4double* neutronDircosw; 
+      G4double* neutronAges; 
+
+      G4int photonNu; // number of photons in this fission event
+      G4double* photonEnergies; 
+      G4double* photonVelocities; 
+      G4double* photonDircosu; 
+      G4double* photonDircosv; 
+      G4double* photonDircosw; 
+      G4double* photonAges; 
+
+      // options
+      static G4int delayoption;
+      static G4int correlationoption;
+      static G4int nudistoption;
+      static G4int Cf252ndistoption;
+      static G4int Cf252nengoption;
+      static G4double (*rngdptr)(void);
+      static G4float (*rngfptr)(void);
+
       G4int G4SmpNuDistDataU232_234_236_238(G4double nubar);
       G4int G4SmpNuDistDataU232_234_236_238_MC(G4double nubar);
       G4int G4SmpNuDistDataU233_235(G4double nubar);
@@ -187,7 +189,7 @@ class G4fissionEvent {
       G4int G4SmpSpNugDistData(G4int isotope);
       G4double G4SmpTerrell(G4double nubar);
       G4double G4SmpWatt(G4double ePart, G4int iso);
-      void G4fissionerr(G4int iSever, std::string chSubNam, std::string chMsg);
+      void G4fissionerr(G4int iSever, const G4String& chSubNam, const G4String& chMsg);
       static G4double fisslibrng(void);
       static G4double rngf2d(void);
 };

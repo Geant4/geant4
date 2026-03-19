@@ -1,8 +1,17 @@
 # Category ch2 History
 
 See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
-which **must** added in reverse chronological order (newest at the top). It must **not**
-be used as a substitute for writing good git commit messages!
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
+
+-------------------------------------------------------------------------------
+
+## 2026-01-30 Alexei Sytov (ch2-V11-03-02)
+- Bug correction in ch2 (otherwise error at the end of execution at RunAction.cc
+  in the case when the G4ChannelingFastSimModel is switched off);
+- Corrections in plot labels and some comments in the python scripts;
+- Corrections cmake to copy also jupyter notebook in the build folder;
+- Small corrections in comments in macro.
 
 ## 2025-10-31 Alexei Sytov (ch2-V11-03-01)
 - Update of python analysis tools, no change in Geant4 code.

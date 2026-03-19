@@ -1,9 +1,15 @@
 # Category channeling History
 
 See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
-which **must** added in reverse chronological order (newest at the top). It must **not**
-be used as a substitute for writing good git commit messages!
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
 
+-------------------------------------------------------------------------------
+
+## 2026-02-04 Gabriele Cosmo (channeling-V11-03-00)
+- In G4ChannelingMaterialData, fixed reported Coverity defects for
+  string parameters copying. Use consistently G4 types and minor
+  code formatting.
 
 ## 2024-07-17 Vladimir Ivanchenko (channeling-V11-02-00)
 - G4ChannelingOptrMultiParticleChangeCrossSection,

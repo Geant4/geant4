@@ -90,7 +90,7 @@ G4bool ScoreLET::ProcessHits(G4Step *aStep, G4TouchableHistory * /*TH*/) {
     for (size_t lp = 0; lp < nbtrk; lp++) {
       // Store the kinetic energy of secondaries
       // which less than cutoff energy.
-      if ((*secondary)[lp]->GetKineticEnergy() / eV < fCutoff) {
+      if ((*secondary)[lp]->GetKineticEnergy() / eV < fCutoff / eV) {
         fEdep += (*secondary)[lp]->GetKineticEnergy() / keV;
       }
     }

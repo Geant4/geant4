@@ -158,6 +158,8 @@ if save_fig:
 
 ############# INPUT #############
 # Feel free to modify the collimator parameters
+# !!! related only to real secondary photons from results.root, not from Spectrum.dat
+# For Spectrum.dat, see the options in the simulation macro.
 apply_collimation = True
 coll_angle = 2.3183 #mrad
 
@@ -165,7 +167,7 @@ coll_angle = 2.3183 #mrad
 NbinE = 20
 rangeE = [0, 10] #MeV
 
-# path of the spectrum file obtained using all the Bair-Katkov integration photons
+# path of the spectrum file obtained using all the Baier-Katkov integration photons
 BK_spectrum_file = "Spectrum.dat"
 #################################
 
@@ -211,24 +213,29 @@ lw = 2
 bw = 0.6
 color0 = '#B1B3FB'
 
+# !!! The spectrum is normalized on the total radiation probability W_rad
+# (from MinPhotonEnergy to the energy of the primary particle) which is equivalent to the radiation yield.
+# The integral is equal to W_rad, not to 1!
 plt.subplot(1,2,1)
 plt.bar(Ebin, spectrum, width=bw, color=color0, linewidth=lw, alpha=1, label='secondary photons')
 plt.errorbar(Ebin, spectrum, yerr=spectrum_err, fmt='o', color='k', capsize=3)
 plt.xlim(rangeE)
 plt.plot(E_ext, S_ext, 'r-', lw=2.5, label='from '+BK_spectrum_file)
 plt.title('Emitted photon spectrum')
-plt.xlabel('E [MeV]', fontsize=fs)
-plt.ylabel('1/N dN/dE', fontsize=fs)
+plt.xlabel('$E$ [MeV]', fontsize=fs)
+plt.ylabel('$dW_{rad}/dE$ [MeV$^{-1}$]', fontsize=fs)
 plt.legend()
 #plt.yscale('log')
 
+#The spectral intensity is the spectrum above multiplied by the energy,
+#so the spectral intensity of bremsstrahlung is nearly constant.
 plt.subplot(1,2,2)
 plt.bar(Ebin, spectral_intensity, width=bw, color=color0, linewidth=lw, alpha=1, label='secondary photons')
 plt.errorbar(Ebin, spectral_intensity, yerr=spectral_intensity_err, fmt='o', color='k', capsize=3)
 plt.plot(E_ext, E_ext * S_ext, 'r-', lw=2.5, label='from '+BK_spectrum_file)
 plt.title('Emitted photon spectral intensity')
-plt.xlabel('E [MeV]', fontsize=fs)
-plt.ylabel('1/N dW/dE', fontsize=fs)
+plt.xlabel('$E$ [MeV]', fontsize=fs)
+plt.ylabel('$E dW_{rad}/dE$', fontsize=fs)
 plt.xlim(rangeE)
 plt.legend()
 #plt.yscale('log')

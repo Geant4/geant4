@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-04-ref-00    (5-December-2025)
+ Geant4 version Name: geant4-11-04-patch-01    (13-March-2026)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -888,7 +888,7 @@ G4VoxelisationHelper::ReportVoxelStats -- Voxel Statistics
  Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=2.590000s Real=2.595587s Sys=0.000000s
+  User=2.500000s Real=2.502445s Sys=0.000000s
 /control/doifInteractive /vis/enable
 #
 ########################################
@@ -909,9 +909,9 @@ Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.
 Deleting G4Run (id:0) 
-UserDetectorConstruction deleted 0x91f900
-UserPhysicsList deleted 0x91bc50
-UserActionInitialization deleted 0xadb3f0
+UserDetectorConstruction deleted 0x17558a0
+UserPhysicsList deleted 0x1751bf0
+UserActionInitialization deleted 0x19194f0
 UserWorkerInitialization deleted 0
 UserWorkerThreadInitialization deleted 0
 UserRunAction deleted.
@@ -934,10 +934,8 @@ Pool ID '15G4HCofThisEvent', size : 0.000961 MB
 Pool ID '7G4Track', size : 0.0404 MB
 Pool ID '18G4TouchableHistory', size : 0.00673 MB
 Pool ID '15G4CountedObjectIvE', size : 0.000961 MB
-Pool ID '10G4Fragment', size : 0.000961 MB
-Pool ID '17G4ReactionProduct', size : 0.000961 MB
-Number of memory pools allocated: 12 of which, static: 0
-Dynamic pools deleted: 12 / Total memory freed: 0.16 MB
+Number of memory pools allocated: 10 of which, static: 0
+Dynamic pools deleted: 10 / Total memory freed: 0.16 MB
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

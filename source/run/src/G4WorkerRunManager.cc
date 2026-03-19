@@ -132,6 +132,17 @@ G4WorkerRunManager::~G4WorkerRunManager()
 }
 
 // --------------------------------------------------------------------
+void G4WorkerRunManager::GeometryOptimisation()
+{
+  G4GeometryManager* geomManager = G4GeometryManager::GetInstance();
+  G4bool configred = geomManager->IsParallelOptimisationConfigured();
+  G4bool finished = geomManager->IsParallelOptimisationFinished();
+  if (configred && !finished) {
+    geomManager->UndertakeOptimisation();
+  }
+}
+
+// --------------------------------------------------------------------
 void G4WorkerRunManager::InitializeGeometry()
 {
   if (userDetector == nullptr) {
@@ -153,7 +164,7 @@ void G4WorkerRunManager::InitializeGeometry()
   }
   //  A barrier must ensure that all that all threads have finished this work.
   //  Currently we rely on the (later) barrier at the end of initialisation.
-  
+
   // Step1: Get pointer to the physiWorld (note: needs to get the "super
   // pointer, i.e. the one shared by all threads"
   G4RunManagerKernel* masterKernel = G4MTRunManager::GetMasterRunManagerKernel();

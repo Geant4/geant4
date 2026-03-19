@@ -38,8 +38,6 @@
 #include "G4UIcmdWithAnInteger.hh"
 #include "G4UIcmdWithAString.hh"
 
-std::vector<G4String> G4ASCIITreeMessenger::fVerbosityGuidance;
-
 G4ASCIITreeMessenger::G4ASCIITreeMessenger
 (G4ASCIITree* ASCIITree):
 fpASCIITree(ASCIITree) {
@@ -53,58 +51,8 @@ fpASCIITree(ASCIITree) {
   fpDirectorySet -> SetGuidance ("Settings for ASCIITree control.");
 
   fpCommandVerbose = new G4UIcmdWithAnInteger ("/vis/ASCIITree/verbose", this);
-  fVerbosityGuidance.push_back
-    ("  <  10: notifies but does not print details of repeated volumes.");
-  fVerbosityGuidance.push_back
-    ("  >= 10: prints all physical volumes (touchables).");
-  fVerbosityGuidance.push_back
-    ("The level of detail is given by verbosity%10:");
-  fVerbosityGuidance.push_back
-    ("  >=  0: physical volume name.");
-  fVerbosityGuidance.push_back
-    ("  >=  1: logical volume name (and names of sensitive detector"
-     " and readout geometry, if any).");
-  fVerbosityGuidance.push_back
-    ("  >=  2: solid name and type.");
-  fVerbosityGuidance.push_back
-    ("  >=  3: volume and density.");
-  fVerbosityGuidance.push_back
-    ("  >=  5: daughter-subtracted volume and mass.");
-  fVerbosityGuidance.push_back
-    ("  >=  6: physical volume dump.");
-  fVerbosityGuidance.push_back
-    ("  >=  7: polyhedron dump.");
-  fVerbosityGuidance.push_back
-    ("and in the summary at the end of printing:");
-  fVerbosityGuidance.push_back
-    ("  >=  4: daughter-included mass of top physical volume(s) in scene"
-     " to depth specified.");
-  fVerbosityGuidance.push_back
-    ("Note: by default, culling is switched off so all volumes are seen.");
-  fVerbosityGuidance.push_back
-    ("Note: the mass calculation takes into account daughters, which can be"
-     " time consuming.  If you want the mass of a particular subtree try:");
-  fVerbosityGuidance.push_back
-    ("  /vis/drawTree <subtree-physical-volume-name>");
-  fVerbosityGuidance.push_back
-    ("Or if you want more control, for example:");
-  fVerbosityGuidance.push_back
-    ("  /vis/open ATree");
-  fVerbosityGuidance.push_back
-    ("  /vis/ASCIITree/verbose 14");
-  fVerbosityGuidance.push_back
-    ("  /vis/scene/create");
-  fVerbosityGuidance.push_back
-    ("  /vis/scene/add/volume <subtree-physical-volume-name> ! <depth>");
-  fVerbosityGuidance.push_back
-    ("  /vis/sceneHandler/attach");
-  fVerbosityGuidance.push_back
-    ("  /vis/viewer/flush");
-  fVerbosityGuidance.push_back
-    ("Note: dumping the physical volumes produces a lot of output. It is"
-     " advisable to select the volume of interest, as for a sub-tree above.");
-  for (size_t i = 0; i < fVerbosityGuidance.size(); ++i) {
-    fpCommandVerbose -> SetGuidance(fVerbosityGuidance[i]);
+  for (size_t i = 0; i < fpASCIITree->GetVerbosityGuidance().size(); ++i) {
+    fpCommandVerbose -> SetGuidance(fpASCIITree->GetVerbosityGuidance()[i]);
   }
   fpCommandVerbose -> SetParameterName ("verbosity",omitable = true);
   fpCommandVerbose -> SetDefaultValue(1);

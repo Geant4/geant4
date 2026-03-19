@@ -272,6 +272,9 @@ void G4ToolsSGSceneHandler::AddPrimitive (const G4Polymarker& a_polymarker)
   auto currentNode = GetOrCreateNode();
   if (!currentNode) return;  // Node not available
 
+  tools::sg::separator* sep = new tools::sg::separator;
+  currentNode->add(sep);
+
   // Transformation
  {tools::sg::matrix* mtx = new tools::sg::matrix;
   G4Transform3D& elem = fObjectTransformation;
@@ -279,7 +282,7 @@ void G4ToolsSGSceneHandler::AddPrimitive (const G4Polymarker& a_polymarker)
                               elem(1,0),elem(1,1),elem(1,2),elem(1,3),
                               elem(2,0),elem(2,1),elem(2,2),elem(2,3),
                                       0,        0,        0,        1);
-  currentNode->add(mtx);}
+  sep->add(mtx);}
 
  {const auto& colour = GetColour(a_polymarker);
   tools::sg::rgba* mat = new tools::sg::rgba();
@@ -288,7 +291,7 @@ void G4ToolsSGSceneHandler::AddPrimitive (const G4Polymarker& a_polymarker)
                   float(colour.GetGreen()),
                   float(colour.GetBlue()),
                   float(colour.GetAlpha()));
-  currentNode->add(mat);}
+  sep->add(mat);}
 
   MarkerSizeType markerSizeType;
   G4double markerSize = GetMarkerSize(a_polymarker, markerSizeType);
@@ -300,14 +303,14 @@ void G4ToolsSGSceneHandler::AddPrimitive (const G4Polymarker& a_polymarker)
       ds->style = tools::sg::draw_points;
       ds->point_size = markerSize;
       ds->point_smooth = fpViewer->GetViewParameters().IsDotsSmooth()?true:false;
-      currentNode->add(ds);
+      sep->add(ds);
 
       tools::sg::vertices* vtxs = new tools::sg::vertices;
       vtxs->mode = tools::gl::points();
      {for (const auto& i : a_polymarker) {
         vtxs->add(float(i.x()),float(i.y()),float(i.z()));
       }}
-      currentNode->add(vtxs);
+      sep->add(vtxs);
     }break;
     case G4Polymarker::circles:{
      {tools::sg::markers* markers = new tools::sg::markers;
@@ -321,7 +324,7 @@ void G4ToolsSGSceneHandler::AddPrimitive (const G4Polymarker& a_polymarker)
       for (const auto& i : a_polymarker) {
         markers->add(float(i.x()),float(i.y()),float(i.z()));
       }
-      currentNode->add(markers);}
+      sep->add(markers);}
     }break;
   case G4Polymarker::squares:{
      {tools::sg::markers* markers = new tools::sg::markers;
@@ -335,7 +338,7 @@ void G4ToolsSGSceneHandler::AddPrimitive (const G4Polymarker& a_polymarker)
       for (const auto& i : a_polymarker) {
         markers->add(float(i.x()),float(i.y()),float(i.z()));
       }
-      currentNode->add(markers);}
+      sep->add(markers);}
   }break;
   }
 }
@@ -467,7 +470,7 @@ void G4ToolsSGSceneHandler::AddPrimitive(const G4Polyhedron& a_polyhedron)
     lines.push_back(newLine);
   };
 
-  G4bool isAuxilaryEdgeVisible = fpViewer->GetViewParameters().IsAuxEdgeVisible();
+  G4bool isAuxilaryEdgeVisible = GetAuxEdgeVisible (fpVisAttribs);
   G4bool notLastFace;
   do {
     G4int      nEdges;

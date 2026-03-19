@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-04-ref-00    (5-December-2025)
+ Geant4 version Name: geant4-11-04-patch-01    (13-March-2026)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -960,7 +960,7 @@ WARNING: G4VisManager::IsValidView(): Attempt to draw when no graphics system
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=1.540000s Real=1.545579s Sys=0.010000s
+  User=1.430000s Real=1.438375s Sys=0.000000s
 
  ======================== run summary ======================
 The run was 10000 events.

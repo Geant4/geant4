@@ -6,6 +6,10 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2026-02-19 Gabriele Cosmo (field-V11-03-10)
+- Fixed reported Coverity defect for restoring original stream precision in
+  G4FieldManager::ReportBadEpsilonValue().
+
 ## 2025-11-03 Vladimir Ivanchenko (field-V11-03-09)
 - G4TClassicalRK4 - fixed typo identified by CMS
 

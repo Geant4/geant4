@@ -1,4 +1,4 @@
-#/run/numberOfThreads 2
+/run/numberOfThreads 1
 
 /chem/phys/registerPhysics G4EmDNAPhysics_option2
 

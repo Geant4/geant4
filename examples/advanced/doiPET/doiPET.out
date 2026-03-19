@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-04-ref-00    (5-December-2025)
+ Geant4 version Name: geant4-11-04-patch-01    (13-March-2026)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -720,19 +720,19 @@ Start closing geometry.
 G4VoxelisationHelper::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   475 kByte
-    Total CPU time elapsed for geometry optimisation: 0 seconds
+    Total CPU time elapsed for geometry optimisation: 0.01 seconds
 
     Voxelisation: top CPU users:
     Percent   Total CPU    System CPU       Memory  Volume
     -------   ----------   ----------     --------  ----------
-       0.00         0.00         0.00           69k world_logicalV
+     100.00         0.01         0.00           69k world_logicalV
        0.00         0.00         0.00          406k airBox_logicalV
 
     Voxelisation: top memory users:
     Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
     -------   --------     ------   ------   --------   ----------    ----------
       85.51        406k       931     5788       8898         0.00    airBox_logicalV
-      14.49         68k       182      683       3080         0.00    world_logicalV
+      14.49         68k       182      683       3080         0.01    world_logicalV
 --------------------------------------------------------------------------------
 
 ### Run 0 starts.
@@ -776,14 +776,14 @@ N=17 V[N]={87900885656017340, 2136126672992718976, 110623987125446578, 176001763
  Run terminated.
 Run Summary
   Number of events processed : 1000000
-  User=36.890000s Real=38.061019s Sys=0.750000s
+  User=35.200000s Real=37.516046s Sys=0.740000s
 
 ### End of Run (1000000 events)
 G4 kernel has come to Quit state.
 Deleting G4Run (id:0) 
-UserDetectorConstruction deleted 0x171a430
-UserPhysicsList deleted 0x1756338
-UserActionInitialization deleted 0x18e50c0
+UserDetectorConstruction deleted 0x18113c0
+UserPhysicsList deleted 0x184d2b8
+UserActionInitialization deleted 0x19e41a0
 UserWorkerInitialization deleted 0
 UserWorkerThreadInitialization deleted 0
 UserRunAction deleted.

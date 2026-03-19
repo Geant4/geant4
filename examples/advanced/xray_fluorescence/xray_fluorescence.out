@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-04-ref-00    (5-December-2025)
+ Geant4 version Name: geant4-11-04-patch-01    (13-March-2026)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -2988,7 +2988,7 @@ Created histos
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.001473s Sys=0.000000s
+  User=0.000000s Real=0.001464s Sys=0.000000s
 Going to save histograms
 ... write file : xrayfluo.root - done
 ... close file : xrayfluo.root - done
@@ -2999,10 +2999,10 @@ Visualization Manager deleting...
 visManager deleted
 G4 kernel has come to Quit state.
 Deleting G4Run (id:0) 
-UserDetectorConstruction deleted 0x1015dd0
+UserDetectorConstruction deleted 0x1a11c70
 XrayFluoDetectorConstruction deleted
-UserPhysicsList deleted 0x1097950
-UserActionInitialization deleted 0x10edf20
+UserPhysicsList deleted 0x1a938f0
+UserActionInitialization deleted 0x1aea080
 UserWorkerInitialization deleted 0
 UserWorkerThreadInitialization deleted 0
 UserRunAction deleted.

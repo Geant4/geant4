@@ -6,6 +6,12 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2026-01-05 Vladimir Ivanchenko (hadr-cohe-V11-03-06)
+- G4ChargeExchange - fixed bug in sampling of scattering angle for kaons
+
+## 2025-12-17 Vladimir Ivanchenko
+- G4ChargeExchange, G4HadronElastic, G4LMsdGenerator - minor optimisation
+
 ## 2025-11-25 Vladimir Ivanchenko (hadr-cohe-V11-03-05)
 - G4NuclNuclDiffuseElastic, G4DiffuseElastic, G4AntiNuclElastic - fixed
     compilation warnings.

@@ -33,6 +33,7 @@
 #include "G4ParticleTable.hh"
 #include "G4IonTable.hh"
 #include "G4PhysicalConstants.hh"
+#include "G4HadronicException.hh"
 
 #include "G4Exp.hh"
 #include "G4Log.hh"

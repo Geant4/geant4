@@ -33,19 +33,15 @@
 #include "G4LogicalCrystalVolume.hh"
 #include "G4TouchableHistory.hh"
 
-G4ChannelingMaterialData::G4ChannelingMaterialData(const G4String& name):
-G4VMaterialExtension(name),
-fPotential(0),
-fElectricFieldX(0),
-fElectricFieldY(0),
-fNucleiDensity(0),
-fElectronDensity(0),
-fVectorR(0),
-bIsBent(false){;}
+G4ChannelingMaterialData::G4ChannelingMaterialData(const G4String& name)
+  : G4VMaterialExtension(name)
+{
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4ChannelingMaterialData::SetFilename(const G4String& fileName){
+void G4ChannelingMaterialData::SetFilename(const G4String& fileName)
+{
     G4String filePot = fileName + "_pot.txt";
     G4String fileEFX = fileName + "_efx.txt";
     G4String fileEFY = fileName + "_efy.txt";
@@ -67,7 +63,8 @@ void G4ChannelingMaterialData::SetFilename(const G4String& fileName){
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4ChannelingMaterialData::SetFilenameElement(const G4String& fileName,std::string elementName){
+void G4ChannelingMaterialData::SetFilenameElement(const G4String& fileName, const G4String& elementName)
+{
     G4String filePot = fileName + "_pot.txt";
     G4String fileEFX = fileName + "_efx.txt";
     G4String fileEFY = fileName + "_efy.txt";
@@ -90,7 +87,8 @@ void G4ChannelingMaterialData::SetFilenameElement(const G4String& fileName,std::
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4ChannelingMaterialData::SetBR(G4double val){
+void G4ChannelingMaterialData::SetBR(G4double val)
+{
     fVectorR = new G4PhysicsLinearVector(0,DBL_MAX,2);
     fVectorR->PutValue(0,val);
     fVectorR->PutValue(1,val);
@@ -99,17 +97,18 @@ void G4ChannelingMaterialData::SetBR(G4double val){
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4ChannelingMaterialData::SetBR(const G4String& filename){
+void G4ChannelingMaterialData::SetBR(const G4String& filename)
+{
     std::ifstream vFileIn;
-    int points;
-    float maximum;
+    G4int points;
+    G4float maximum;
     vFileIn.open(filename);
     vFileIn >> points >> maximum;
     
     fVectorR = new G4PhysicsLinearVector(0,maximum * CLHEP::millimeter,points);
-    double vTempX;
-    double maximumY = -DBL_MAX;
-    double minimumY = +DBL_MAX;
+    G4double vTempX;
+    G4double maximumY = -DBL_MAX;
+    G4double minimumY = +DBL_MAX;
     for(G4int i0=0;i0<points; i0++){
         vFileIn >> vTempX;
         if(vTempX>maximumY) maximumY = vTempX;

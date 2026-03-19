@@ -45,6 +45,7 @@
 #include "G4StateManager.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4TransportationManager.hh"
+#include "G4UImanager.hh"
 
 // --------------------------------------------------------------------
 G4MaterialScanner::G4MaterialScanner()
@@ -54,8 +55,12 @@ G4MaterialScanner::G4MaterialScanner()
   theEventManager = G4EventManager::GetEventManager();
 
   eyePosition = G4ThreeVector(0., 0., 0.);
-  thetaSpan = 90. * deg;
-  phiSpan = 360. * deg;
+  nTheta = 81;
+  thetaMin = -80.0 * deg;
+  thetaSpan = 160.0 * deg;
+  nPhi = 36;
+  phiMin = 0.0 * deg;
+  phiSpan = 350.0 * deg;
 }
 
 // --------------------------------------------------------------------
@@ -102,9 +107,6 @@ void G4MaterialScanner::StoreUserActions()
     theSDMan->Activate("/", false);
   }
 
-  G4GeometryManager* theGeomMan = G4GeometryManager::GetInstance();
-  theGeomMan->OpenGeometry();
-  theGeomMan->CloseGeometry(true);
 }
 
 // --------------------------------------------------------------------
@@ -124,20 +126,18 @@ void G4MaterialScanner::RestoreUserActions()
 // --------------------------------------------------------------------
 void G4MaterialScanner::DoScan()
 {
-  // Confirm material table is updated
+  // Confirm geometry is optimized and material table is updated
+  G4UImanager::GetUIpointer()->ApplyCommand("/run/undertakeOptimisation");
+  G4StateManager* theStateMan = G4StateManager::GetStateManager();
+  theStateMan->SetNewState(G4State_Init);
   G4RunManagerKernel::GetRunManagerKernel()->UpdateRegion();
-
-  // Close geometry and set the application state
-  G4GeometryManager* geomManager = G4GeometryManager::GetInstance();
-  geomManager->OpenGeometry();
-  geomManager->CloseGeometry(true, false);
+  theStateMan->SetNewState(G4State_Idle);
 
   G4ThreeVector center(0, 0, 0);
   G4Navigator* navigator =
     G4TransportationManager::GetTransportationManager()->GetNavigatorForTracking();
   navigator->LocateGlobalPointAndSetup(center, nullptr, false);
 
-  G4StateManager* theStateMan = G4StateManager::GetStateManager();
   theStateMan->SetNewState(G4State_GeomClosed);
 
   // Event loop
@@ -176,6 +176,7 @@ void G4MaterialScanner::DoScan()
         theMatScannerSteppingAction->PrintEachMaterialVerbose(G4cout);
       }
       G4cout << G4endl;
+      delete anEvent;
       aveLength += length / mm;
       aveX0 += x0;
       aveLambda += lambda;

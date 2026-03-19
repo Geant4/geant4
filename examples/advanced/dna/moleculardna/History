@@ -6,6 +6,9 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2026-02-11 S. Incerti (molecularDNA-V11-03-16)
+- fixed display of error for SSBm_yield in ROOT macros
+
 ## 2025-11-02 B. Munkhbaatar, S. Incerti, D. Sakata, H. Tran,  (molecularDNA-V11-03-15)
 - Fixed the wrong gap: a gap (distance between 2 hits) can be 0 (bugzilla #2681)
 - Added protection for over counting damage

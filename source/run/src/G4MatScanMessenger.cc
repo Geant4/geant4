@@ -57,6 +57,7 @@ G4MatScanMessenger::G4MatScanMessenger(G4MaterialScanner* p1)
   scanCmd->SetGuidance("Scanning range should be defined with");
   scanCmd->SetGuidance("/control/matScan/theta and /control/matSca/phi commands.");
   scanCmd->AvailableForStates(G4State_Idle);
+  scanCmd->SetToBeBroadcasted(false);
 
   thetaCmd = new G4UIcommand("/control/matScan/theta", this);
   thetaCmd->SetGuidance("Define theta range.");
@@ -76,6 +77,7 @@ G4MatScanMessenger::G4MatScanMessenger(G4MaterialScanner* p1)
   par->SetDefaultValue("deg");
   par->SetParameterCandidates(thetaCmd->UnitsList(thetaCmd->CategoryOf("deg")));
   thetaCmd->SetParameter(par);
+  thetaCmd->SetToBeBroadcasted(false);
 
   phiCmd = new G4UIcommand("/control/matScan/phi", this);
   phiCmd->SetGuidance("Define phi range.");
@@ -97,6 +99,7 @@ G4MatScanMessenger::G4MatScanMessenger(G4MaterialScanner* p1)
   par->SetDefaultValue("deg");
   par->SetParameterCandidates(phiCmd->UnitsList(phiCmd->CategoryOf("deg")));
   phiCmd->SetParameter(par);
+  phiCmd->SetToBeBroadcasted(false);
 
   singleCmd = new G4UIcommand("/control/matScan/singleMeasure", this);
   singleCmd->SetGuidance("Measure thickness for one particular direction.");
@@ -114,16 +117,19 @@ G4MatScanMessenger::G4MatScanMessenger(G4MaterialScanner* p1)
   par->SetDefaultValue("deg");
   par->SetParameterCandidates(singleCmd->UnitsList(singleCmd->CategoryOf("deg")));
   singleCmd->SetParameter(par);
+  singleCmd->SetToBeBroadcasted(false);
 
   single2Cmd = new G4UIcmdWith3Vector("/control/matScan/singleTo", this);
   single2Cmd->SetGuidance("Measure thickness for one direction defined by a unit vector.");
   single2Cmd->SetParameterName("X", "Y", "Z", false);
+  single2Cmd->SetToBeBroadcasted(false);
 
   eyePosCmd = new G4UIcmdWith3VectorAndUnit("/control/matScan/eyePosition", this);
   eyePosCmd->SetGuidance("Define the eye position.");
   eyePosCmd->SetParameterName("X", "Y", "Z", true);
   eyePosCmd->SetDefaultValue(G4ThreeVector(0., 0., 0.));
   eyePosCmd->SetDefaultUnit("m");
+  eyePosCmd->SetToBeBroadcasted(false);
 
   regSenseCmd = new G4UIcmdWithABool("/control/matScan/regionSensitive", this);
   regSenseCmd->SetGuidance("Set region sensitivity.");
@@ -131,6 +137,7 @@ G4MatScanMessenger::G4MatScanMessenger(G4MaterialScanner* p1)
   regSenseCmd->SetGuidance(" if /control/matScan/region command is issued.");
   regSenseCmd->SetParameterName("senseFlag", true);
   regSenseCmd->SetDefaultValue(false);
+  regSenseCmd->SetToBeBroadcasted(false);
 
   regionCmd = new G4UIcmdWithAString("/control/matScan/region", this);
   regionCmd->SetGuidance("Define region name to be scanned.");
@@ -138,6 +145,7 @@ G4MatScanMessenger::G4MatScanMessenger(G4MaterialScanner* p1)
   regionCmd->SetGuidance("set to TRUE with this command.");
   regionCmd->SetParameterName("region", true);
   regionCmd->SetDefaultValue("DefaultRegionForTheWorld");
+  regionCmd->SetToBeBroadcasted(false);
   
   verboseCmd = new G4UIcmdWithAnInteger("/control/matScan/verbose", this);
   verboseCmd->SetGuidance("Set verbose level of material scan");
@@ -146,6 +154,7 @@ G4MatScanMessenger::G4MatScanMessenger(G4MaterialScanner* p1)
   verboseCmd->SetGuidance("2: detailed properties per material crossed");
   verboseCmd->SetParameterName("verbose_level", false);
   verboseCmd->SetDefaultValue(0);
+  verboseCmd->SetToBeBroadcasted(false);
 }
 
 // --------------------------------------------------------------------

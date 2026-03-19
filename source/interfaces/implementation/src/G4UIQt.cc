@@ -2270,7 +2270,7 @@ QWidget* G4UIQt::CreateHelpTBWidget()
   fHelpLine = new QLineEdit();
   helpLayout->addWidget(new QLabel("Search :"));
   helpLayout->addWidget(fHelpLine);
-  connect(fHelpLine, SIGNAL(editingFinished()), this, SLOT(LookForHelpStringCallback()));
+  connect(fHelpLine, SIGNAL(textChanged(const QString&)), this, SLOT(LookForHelpStringCallback()));
 
   // Create Help tree
   FillHelpTree();
@@ -4134,20 +4134,14 @@ void G4UIQt::FillHelpTree()
   QString searchText = fHelpLine->text();
 
   if (searchText == "") {
-    // clear old help tree
-    //    fHelpTreeWidget->clear();
-  }
-  else {
+    fHelpTreeWidget->clear();
+  } else {
     return;
   }
 
   if (fParameterHelpLabel != nullptr) {
     fParameterHelpLabel->setText("Choose a command in the command tree");
     fParameterHelpTable->setVisible(false);
-  }
-
-  if (fHelpLine != nullptr) {
-    fHelpLine->setText("");
   }
 
   G4UImanager* UI = G4UImanager::GetUIpointer();
@@ -5012,7 +5006,7 @@ void G4UIQt::UpdateCommandCompleter()
   G4UIcommandTree* commandTreeTop = UI->GetTree();
   G4UIcommandTree* aTree = commandTreeTop->FindCommandTree("/");
   if (aTree != nullptr) {
-    int Ndir = aTree->GetTreeEntry();
+    G4int Ndir = aTree->GetTreeEntry();
     fCompleter->setMaxVisibleItems(Ndir);
   }
   fCommandArea->setCompleter(fCompleter);
@@ -5521,9 +5515,9 @@ void G4UIQt::FilterAllOutputTextArea()
   }
 }
 
-/**   Callback called when user give a new string to look for<br>
-   Display a list of matching commands descriptions. If no string is set,
-   will display the complete help tree
+/* Callback called when user give a new string to look for
+   Display a list of matching commands. 
+   If no string is set, will display the complete help tree
 */
 void G4UIQt::LookForHelpStringCallback()
 {
@@ -5533,92 +5527,34 @@ void G4UIQt::LookForHelpStringCallback()
   fParameterHelpLabel->setText("");
   fParameterHelpTable->setVisible(false);
   if (searchText == "") {
-    // clear old help tree
-    fHelpTreeWidget->clear();
-
     FillHelpTree();
-
     return;
   }
+
   OpenHelpTreeOnCommand(searchText);
 }
 
+
+
 void G4UIQt::OpenHelpTreeOnCommand(const QString& searchText)
 {
-  // Invoke textual help (writes guidance to output window)
-  ApplyShellCommand("help "+G4String(searchText.toStdString()), exitSession, exitPause);
 
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-  // The code below searches the help tree and offers a list of commands matching searchText.
-  // All is OK with Qt5, but there is an undiagnosed crash with Qt6, so disable this feature.
-  // FIXME : JA 8/8/25
-
-  // the help tree
+  // Get the help tree
   G4UImanager* UI = G4UImanager::GetUIpointer();
   if (UI == nullptr) return;
   G4UIcommandTree* treeTop = UI->GetTree();
 
-  G4int treeSize = treeTop->GetTreeEntry();
-
-  // clear old help tree
+  // Clear old help tree
   fHelpTreeWidget->clear();
 
-  // look for new items
+  // Look for matching commands
+  QMultiMap<G4double, QString> commandResultMap;
+  commandResultMap = LookForHelpStringInChildTree(treeTop, searchText);
 
-  int tmp = 0;
-
-#if (QT_VERSION < QT_VERSION_CHECK(5, 15, 0))
-  // Before Qt5.15
-  QMap<G4int, QString> commandResultMap;
-  QMap<G4int, QString> commandChildResultMap;
-  for (G4int a = 0; a < treeSize; ++a) {
-    G4UIcommand* command = treeTop->FindPath(treeTop->GetTree(a + 1)->GetPathName().data());
-    tmp = GetCommandList(command).count(searchText, Qt::CaseInsensitive);
-    if (tmp > 0) {
-      commandResultMap.insertMulti(
-        tmp, QString((char*)(treeTop->GetTree(a + 1)->GetPathName()).data()));
-    }
-    // look for childs
-    commandChildResultMap = LookForHelpStringInChildTree(treeTop->GetTree(a + 1), searchText);
-    // insert new childs
-    if (! commandChildResultMap.empty()) {
-      QMap<int, QString>::const_iterator i = commandChildResultMap.constBegin();
-      while (i != commandChildResultMap.constEnd()) {
-        commandResultMap.insertMulti(i.key(), i.value());
-        i++;
-      }
-      commandChildResultMap.clear();
-    }
-  }
-#else
-  // Qt5.15 and beyond
-  QMultiMap<G4int, QString> commandResultMap;
-  QMultiMap<G4int, QString> commandChildResultMap;
-  for (G4int a = 0; a < treeSize; ++a) {
-    G4UIcommand* command = treeTop->FindPath(treeTop->GetTree(a + 1)->GetPathName().data());
-    tmp = (int)GetCommandList(command).count(searchText, Qt::CaseInsensitive);
-    if (tmp > 0) {
-      commandResultMap.insert(tmp, QString((char*)(treeTop->GetTree(a + 1)->GetPathName()).data()));
-    }
-    // look for childs
-    commandChildResultMap = LookForHelpStringInChildTree(treeTop->GetTree(a + 1), searchText);
-    // insert new childs
-    if (! commandChildResultMap.empty()) {
-      auto i = commandChildResultMap.constBegin();
-      while (i != commandChildResultMap.constEnd()) {
-        commandResultMap.insert(i.key(), i.value());
-        ++i;
-      }
-      commandChildResultMap.clear();
-    }
-  }
-#endif
-
-  // build new help tree
+  // Build new help tree
   fHelpTreeWidget->setSelectionMode(QAbstractItemView::SingleSelection);
   fHelpTreeWidget->setColumnCount(2);
-  QStringList labels;
-  labels << QString("Command") << QString("Match");
+  QStringList labels = {"Command", "Match"};
   fHelpTreeWidget->setHeaderLabels(labels);
 
   if (commandResultMap.empty()) {
@@ -5627,123 +5563,101 @@ void G4UIQt::OpenHelpTreeOnCommand(const QString& searchText)
     return;
   }
 
-  auto i = commandResultMap.constEnd();
-  i--;
-  // 10 maximum progress values
-  G4float multValue = 10.0 / (G4float)(i.key());
   QString progressChar = "|";
   QString progressStr = "|";
 
   QTreeWidgetItem* newItem;
-  G4bool end = false;
-  while (! end) {
-    if (i == commandResultMap.constBegin()) {
-      end = true;
-    }
-    for (G4int a = 0; a < G4int(i.key() * multValue); ++a) {
+  G4int nItems = 0;
+ 
+  for (auto it = commandResultMap.end(); it != commandResultMap.begin();) {
+    it--;
+    if (nItems >= 50) break;
+
+    // 20 maximum progress values
+    for (G4int i = 0; i < G4int(it.key() * 10); ++i) {
       progressStr += progressChar;
     }
+
     newItem = new QTreeWidgetItem();
-    QString commandStr = i.value().trimmed();
+    QString commandStr = it.value().trimmed();
 
     if (commandStr.indexOf("/") == 0) {
-      commandStr = commandStr.right(commandStr.size() - 1);
+      commandStr.remove(0, 1);
     }
 
     newItem->setText(0, commandStr);
     newItem->setText(1, progressStr);
     fHelpTreeWidget->addTopLevelItem(newItem);
-    newItem->setForeground(1, QBrush(Qt::blue));
+    if (it.key() > 1) {
+      newItem->setForeground(1, QBrush(Qt::red));
+    } else {
+      newItem->setForeground(1, QBrush(Qt::blue));
+    }
+
     progressStr = "|";
-    i--;
+    ++nItems;
   }
+
   fHelpTreeWidget->resizeColumnToContents(0);
   fHelpTreeWidget->sortItems(1, Qt::DescendingOrder);
-  //  fHelpTreeWidget->setColumnWidth(1,10);//resizeColumnToContents (1);
-#endif
+
 }
 
-#if (QT_VERSION < QT_VERSION_CHECK(5, 15, 0))
-// Before Qt5.15
-QMap<G4int, QString> G4UIQt::LookForHelpStringInChildTree(
-  G4UIcommandTree* aCommandTree, const QString& text)
+
+QMultiMap<G4double, QString> G4UIQt::LookForHelpStringInChildTree(
+  G4UIcommandTree* aCommandTree, const QString& searchText)
 {
-  QMap<G4int, QString> commandResultMap;
-  if (aCommandTree == NULL) return commandResultMap;
-  // Get the Sub directories
-  G4int tmp = 0;
-  QMap<G4int, QString> commandChildResultMap;
-  for (G4int a = 0; a < aCommandTree->GetTreeEntry(); ++a) {
-    const G4UIcommand* command = aCommandTree->GetGuidance();
-    tmp = GetCommandList(command).count(text, Qt::CaseInsensitive);
-    if (tmp > 0) {
-      commandResultMap.insertMulti(
-        tmp, QString((char*)(aCommandTree->GetTree(a + 1)->GetPathName()).data()));
-    }
-    // look for childs
-    commandChildResultMap = LookForHelpStringInChildTree(aCommandTree->GetTree(a + 1), text);
-    if (! commandChildResultMap.empty()) {
-      // insert new childs
-      QMap<G4int, QString>::const_iterator i = commandChildResultMap.constBegin();
-      while (i != commandChildResultMap.constEnd()) {
-        commandResultMap.insertMulti(i.key(), i.value());
-        ++i;
-      }
-      commandChildResultMap.clear();
-    }
-  }
-  // Get the Commands
-  for (G4int a = 0; a < aCommandTree->GetCommandEntry(); ++a) {
-    const G4UIcommand* command = aCommandTree->GetCommand(a + 1);
-    tmp = GetCommandList(command).count(text, Qt::CaseInsensitive);
-    if (tmp > 0) {
-      commandResultMap.insertMulti(
-        tmp, QString((char*)(aCommandTree->GetCommand(a + 1)->GetCommandPath()).data()));
-    }
-  }
-  return commandResultMap;
-}
-#else
-// Qt5.15 and beyond
-QMultiMap<G4int, QString> G4UIQt::LookForHelpStringInChildTree(
-  G4UIcommandTree* aCommandTree, const QString& text)
-{
-  QMultiMap<G4int, QString> commandResultMap;
+  QMultiMap<G4double, QString> commandResultMap;
   if (aCommandTree == nullptr) return commandResultMap;
-  // Get the Sub directories
-  G4int tmp = 0;
-  QMultiMap<G4int, QString> commandChildResultMap;
-  for (G4int a = 0; a < aCommandTree->GetTreeEntry(); ++a) {
-    const G4UIcommand* command = aCommandTree->GetGuidance();
-    tmp = (int)GetCommandList(command).count(text, Qt::CaseInsensitive);
-    if (tmp > 0) {
-      commandResultMap.insert(
-        tmp, QString((char*)(aCommandTree->GetTree(a + 1)->GetPathName()).data()));
-    }
-    // look for childs
-    commandChildResultMap = LookForHelpStringInChildTree(aCommandTree->GetTree(a + 1), text);
-    if (! commandChildResultMap.empty()) {
-      // insert new childs
-      auto i = commandChildResultMap.constBegin();
-      while (i != commandChildResultMap.constEnd()) {
-        commandResultMap.insert(i.key(), i.value());
-        ++i;
-      }
-      commandChildResultMap.clear();
-    }
+
+  // Loop over sub trees
+  QMultiMap<G4double, QString> commandChildResultMap;
+  for (G4int i = 0; i < aCommandTree->GetTreeEntry(); ++i) {
+    commandChildResultMap = LookForHelpStringInChildTree(aCommandTree->GetTree(i + 1), searchText);
+    commandResultMap += commandChildResultMap;
+    commandChildResultMap.clear();
   }
-  // Get the Commands
-  for (G4int a = 0; a < aCommandTree->GetCommandEntry(); ++a) {
-    const G4UIcommand* command = aCommandTree->GetCommand(a + 1);
-    tmp = (int)GetCommandList(command).count(text, Qt::CaseInsensitive);
-    if (tmp > 0) {
-      commandResultMap.insert(
-        tmp, QString((char*)(aCommandTree->GetCommand(a + 1)->GetCommandPath()).data()));
-    }
+
+  // Loop over the commands and compute match score
+  for (G4int i = 0; i < aCommandTree->GetCommandEntry(); ++i) {
+    const G4UIcommand* command = aCommandTree->GetCommand(i + 1);
+    if (command == nullptr) continue;
+    G4double score = ComputeStringMatchScore(QString(command->GetCommandPath().data()), searchText);
+    if (score > 0) commandResultMap.insert(score, QString(command->GetCommandPath().data()));
   }
+
   return commandResultMap;
 }
-#endif
+
+
+G4double G4UIQt::ComputeStringMatchScore(const QString& string, const QString& searchText)
+{
+  if (string.contains(searchText, Qt::CaseInsensitive)) {
+    //Score (1,2] for matched string
+    return 1 + G4double(searchText.size()) / string.size();
+  
+  } else {
+
+    //Score (0,1) for similar string (Normalized Levenshtein distance)
+    const auto nSize = (G4int)string.size();
+    const auto mSize = (G4int)searchText.size();
+
+    QVector<QVector<G4int>> dp(nSize + 1, QVector<G4int>(mSize + 1));
+
+    for (G4int i = 0; i <= nSize; ++i) dp[i][0] = i;
+    for (G4int j = 0; j <= mSize; ++j) dp[0][j] = j;
+
+    for (G4int i = 1; i <= nSize; ++i) {
+      for (G4int j = 1; j <= mSize; ++j) {
+        G4int cost = (string[i - 1] == searchText[j - 1]) ? 0 : 1;
+        dp[i][j] = std::min({dp[i - 1][j] + 1, dp[i][j - 1] + 1, dp[i - 1][j - 1] + cost});
+      }
+    }
+
+    return 1.0 - G4double(dp[nSize][mSize]) / std::max(nSize, mSize);
+  }
+}
+
 
 QString G4UIQt::GetShortCommandPath(QString& commandPath)
 {

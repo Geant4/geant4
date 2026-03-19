@@ -513,27 +513,31 @@ function(geant4_add_category _name)
   __geant4_category_assert_not_exists(${_name})
   set_property(GLOBAL APPEND PROPERTY GEANT4_DEFINED_CATEGORIES ${_name})
   cmake_parse_arguments(G4ADDCAT
-    "INTERFACE"
     ""
-    "MODULES"
+    ""
+    "INTERFACE;MODULES"
     ${ARGN}
     )
   # INTERFACE/MODULES are mutually exclusive
   if(G4ADDCAT_INTERFACE AND G4ADDCAT_MODULES)
     message(FATAL_ERROR "geant4_add_category: INTERFACE and MODULES arguments are mutually exclusive")
   endif()
+  # They must have value(s) supplied
+  if(G4ADDCAT_KEYWORDS_MISSING_VALUES MATCHES "INTERFACE")
+    message(FATAL_ERROR "geant4_add_category: Empty 'INTERFACE' argument")
+  endif()
+  if(G4ADDCAT_KEYWORDS_MISSING_VALUES MATCHES "MODULES")
+    message(FATAL_ERROR "geant4_add_category: Empty 'MODULES' argument")
+  endif()
 
+  # - Have an ALIAS based category
   if(G4ADDCAT_INTERFACE)
     geant4_set_category_property(${_name} PROPERTY IS_ALIAS TRUE)
-    geant4_set_category_property(${_name} PROPERTY CATEGORIES)
+    geant4_category_interfaces(${_name} ${G4ADDCAT_INTERFACE})
     return()
   endif()
 
-  # - Modules must not be empty (Could also just be ARGN)  
-  if(NOT G4ADDCAT_MODULES)
-    message(FATAL_ERROR "geant4_add_category: Missing/empty 'MODULES' argument")
-  endif()
-
+  # - Otherwise, must be a MODULE based category
   # Default to an interface module, geant4_category_modules will update this if needed
   geant4_set_category_property(${_name} PROPERTY IS_INTERFACE TRUE)
 
@@ -623,7 +627,7 @@ function(geant4_category_interfaces _name)
   __geant4_category_assert_exists(${_name})
   geant4_category_is_alias(check ${_name})
   if(NOT check)
-    message(FATAL_ERROR "geant4_category_modules: Trying to add categories to non-ALIAS category '${_name}'")
+    message(FATAL_ERROR "geant4_category_interfaces: Trying to add categories to non-ALIAS category '${_name}'")
   endif()
 
   # ARGN must not be empty
@@ -1355,16 +1359,22 @@ function(__geant4_add_library _name _type)
   endif()
 
   # - General target creation/properties
-  add_library(${_target_name} ${_lib_cmake_type} "")
+  # Conditional on INTERFACE as CMake < 3.19 cannot create interface lib with sources
+  if(_lib_cmake_type STREQUAL "INTERFACE")
+    add_library(${_target_name} ${_lib_cmake_type})
+  else()
+    add_library(${_target_name} ${_lib_cmake_type} "")
+  endif()
   # Alias for transparent use with imported targets
   add_library(Geant4::${_target_name} ALIAS ${_target_name})
 
+  # - Determine what properties to process
   if(_lib_cmake_type STREQUAL "INTERFACE")
     target_compile_features(${_target_name} INTERFACE ${GEANT4_TARGET_COMPILE_FEATURES})
     set(_props_to_process "INTERFACE")
 
     # Shortcut: If this category is also an "alias", we just extract the link interface directly
-    if(_is_lib_is_alias)
+    if(_lib_is_alias)
       geant4_get_category_property(iface ${_name} CATEGORIES)
       if(_type STREQUAL "STATIC")
         list(TRANSFORM iface APPEND "-static")

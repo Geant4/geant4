@@ -48,7 +48,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-04-ref-00    (5-December-2025)
+ Geant4 version Name: geant4-11-04-patch-01    (13-March-2026)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -1242,7 +1242,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
  Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.000000s Real=0.002195s Sys=0.000000s
+  User=0.000000s Real=0.002111s Sys=0.000000s
 /gun/direction 0 0 -1
 /run/beamOn 20
 
@@ -1609,7 +1609,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
  Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.010000s Real=0.001885s Sys=0.000000s
+  User=0.000000s Real=0.001674s Sys=0.000000s
 /tracking/verbose 0
 /gun/direction 0.3 0.2 1
 /run/beamOn 20
@@ -1649,7 +1649,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.000000s Real=0.000877s Sys=0.000000s
+  User=0.000000s Real=0.000835s Sys=0.000000s
 /gun/direction 0.3 -0.2 1
 /run/beamOn 20
 
@@ -1688,7 +1688,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.000000s Real=0.000859s Sys=0.000000s
+  User=0.000000s Real=0.000849s Sys=0.000000s
 /gun/direction -0.3 0.2 0.6
 /run/beamOn 20
 
@@ -1727,14 +1727,14 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.000000s Real=0.000875s Sys=0.000000s
+  User=0.000000s Real=0.000859s Sys=0.000000s
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.
 Deleting G4Run (id:4) 
-UserDetectorConstruction deleted 0x2670890
-UserPhysicsList deleted 0x2670d30
-UserActionInitialization deleted 0x2801470
+UserDetectorConstruction deleted 0xdb4be0
+UserPhysicsList deleted 0xdb4210
+UserActionInitialization deleted 0xf4d940
 UserWorkerInitialization deleted 0
 UserWorkerThreadInitialization deleted 0
 UserRunAction deleted.

@@ -32,8 +32,8 @@
 
 // Author: M.Asai, May 2006
 // --------------------------------------------------------------------
-#ifndef G4MaterialScanner_hh
-#define G4MaterialScanner_hh 1
+#ifndef G4MATERIALSCANNER_HH
+#define G4MATERIALSCANNER_HH
 
 #include "G4ThreeVector.hh"
 #include "globals.hh"
@@ -104,10 +104,10 @@ class G4MaterialScanner
     G4MSSteppingAction* theMatScannerSteppingAction = nullptr;
 
     G4ThreeVector eyePosition;
-    G4int nTheta = 91;
+    G4int nTheta = 1;
     G4double thetaMin = 0.0;
     G4double thetaSpan = 0.0;
-    G4int nPhi = 37;
+    G4int nPhi = 1;
     G4double phiMin = 0.0;
     G4double phiSpan = 0.0;
 

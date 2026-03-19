@@ -2785,7 +2785,7 @@ void G4BinaryCascade::ClearAndDestroy(G4ReactionProductVector * rpv)
 }
 
 //----------------------------------------------------------------------------
-void G4BinaryCascade::PrintKTVector(G4KineticTrackVector * ktv, std::string comment)
+void G4BinaryCascade::PrintKTVector(G4KineticTrackVector * ktv, const G4String& comment)
 //----------------------------------------------------------------------------
 {
     if (comment.size() > 0 ) G4cout << "G4BinaryCascade::PrintKTVector() " << comment << G4endl;
@@ -2806,7 +2806,7 @@ void G4BinaryCascade::PrintKTVector(G4KineticTrackVector * ktv, std::string comm
     }
 }
 //----------------------------------------------------------------------------
-void G4BinaryCascade::PrintKTVector(G4KineticTrack * kt, std::string comment)
+void G4BinaryCascade::PrintKTVector(G4KineticTrack * kt, const G4String& comment)
 //----------------------------------------------------------------------------
 {
     if (comment.size() > 0 ) G4cout << "G4BinaryCascade::PrintKTVector() "<< comment << G4endl;

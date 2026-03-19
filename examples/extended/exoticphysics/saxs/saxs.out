@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-04-ref-00    (5-December-2025)
+ Geant4 version Name: geant4-11-04-patch-01    (13-March-2026)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -542,7 +542,7 @@ Setting was ignored.
  Run terminated.
 Run Summary
   Number of events processed : 1000000
-  User=9.290000s Real=9.591629s Sys=0.050000s
+  User=8.940000s Real=8.995456s Sys=0.030000s
 
 --------------------End of Global Run-----------------------
  The run had 1000000 events... write file : output.root - done
@@ -552,4 +552,4 @@ Number of memory pools allocated: 12 of which, static: 0
 Dynamic pools deleted: 12 / Total memory freed: 0.023 MB
 ============================================================
 Execution completed
-User=10.160000s Real=11.372977s Sys=0.070000s
+User=9.790000s Real=12.182693s Sys=0.060000s

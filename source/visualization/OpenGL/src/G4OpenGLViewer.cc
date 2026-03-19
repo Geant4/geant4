@@ -29,8 +29,6 @@
 // Andrew Walkden  27th March 1996
 // OpenGL view - opens window, hard copy, etc.
 
-#include "G4ios.hh"
-#include <CLHEP/Units/SystemOfUnits.h>
 #include "G4OpenGLViewer.hh"
 #include "G4OpenGLSceneHandler.hh"
 #include "G4OpenGLTransform3D.hh"

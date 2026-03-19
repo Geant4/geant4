@@ -1,8 +1,13 @@
 # Category had-theo-HE History
 
 See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
-which **must** added in reverse chronological order (newest at the top). It must **not**
-be used as a substitute for writing good git commit messages!
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
+
+-------------------------------------------------------------------------------
+
+## 2025-12-23 Vladimir Ivanchenko (had-theo-HE-V11-03-01)
+- G4TheoFSGenerator : added G4HadronicException header.
 
 ## 2025-08-14 Alberto Ribon (had-theo-HE-V11-03-00)
 - G4TheoFSGenerator : introduced the ID model identification for FTF inelastic

@@ -40,6 +40,7 @@
 #include "G4Proton.hh"
 #include "G4ThreeVector.hh"
 #include "G4Triton.hh"
+#include "G4HadronicException.hh"
 #include "Randomize.hh"
 
 G4ReactionProduct* G4ParticleHPNBodyPhaseSpace::Sample(G4double anEnergy, G4double massCode,

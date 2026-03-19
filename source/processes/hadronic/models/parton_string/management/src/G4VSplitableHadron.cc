@@ -37,9 +37,10 @@
 #include "G4VSplitableHadron.hh"
 #include "G4Nucleon.hh"
 #include "G4VKineticNucleon.hh"
+#include "G4HadronicException.hh"
 
 G4VSplitableHadron::G4VSplitableHadron()
-: theDefinition(NULL), TimeOfCreation(0.), theCollisionCount(0), curStatus(0), isSplit(false)
+: theDefinition(nullptr), TimeOfCreation(0.), theCollisionCount(0), curStatus(0), isSplit(false)
 {
 }
 

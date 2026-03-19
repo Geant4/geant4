@@ -10,7 +10,7 @@
 
 
 **************************************************************
- Geant4 version Name: geant4-11-04-ref-00    (5-December-2025)
+ Geant4 version Name: geant4-11-04-patch-01    (13-March-2026)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -613,7 +613,7 @@ G4VoxelisationHelper::ReportVoxelStats -- Voxel Statistics
 
 ### Run 0 starts.
 ### Run 0 start
-Initialisation time:  User=0.280000s Real=1.051098s Sys=0.010000s
+Initialisation time:  User=0.280000s Real=0.764216s Sys=0.000000s
 EventAction: Event #0 started
 EventAction: Event #10 started
 EventAction: Event #20 started
@@ -627,8 +627,8 @@ EventAction: Event #90 started
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.020000s Real=0.037226s Sys=0.000000s
-RunAction::EndOfRunAction:  User=0.020000s Real=0.037268s Sys=0.000000s
+  User=0.020000s Real=0.041764s Sys=0.000000s
+RunAction::EndOfRunAction:  User=0.020000s Real=0.041806s Sys=0.000000s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started
 ========================================================
@@ -660,8 +660,8 @@ Average number of pion leak          0
 #
 G4 kernel has come to Quit state.
 Deleting G4Run (id:0) 
-UserDetectorConstruction deleted 0xc708b0
-UserPhysicsList deleted 0xc93b18
+UserDetectorConstruction deleted 0xb6e830
+UserPhysicsList deleted 0xb91a88
 UserActionInitialization deleted 0
 UserWorkerInitialization deleted 0
 UserWorkerThreadInitialization deleted 0

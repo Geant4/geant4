@@ -35,8 +35,8 @@
 //----------------------------------------------------------------------------
 //
 
-#ifndef G4ChargeExchangeMessenger_h
-#define G4ChargeExchangeMessenger_h 1
+#ifndef G4CHARGEEXCHANGEMESSENGER_HH
+#define G4CHARGEEXCHANGEMESSENGER_HH
 
 #include "G4UImessenger.hh"
 #include "G4UIdirectory.hh"
@@ -62,6 +62,7 @@ private:
   G4ChargeExchangePhysics* theB;
 
   G4UIcmdWithADouble* fCmd;
+  G4UIcmdWithADouble* fCmd1;
   G4UIcmdWithADoubleAndUnit* lCmd;
   G4UIdirectory* aDir;
 };

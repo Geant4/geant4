@@ -86,11 +86,12 @@ void G4ASCIITreeSceneHandler::BeginModeling () {
       G4cout << "file \"" << outFileName << "\"";
     }
     G4cout << G4endl;
-
-    WriteHeader (G4cout); G4cout << G4endl;
   }
-  
-  if (outFileName != "G4cout") {
+
+  if (outFileName == "G4cout") {
+    WriteHeader (G4cout); G4cout << G4endl;
+  } else {
+    G4cout << "Writing to output file \"" << outFileName  << "\"" << G4endl;
     WriteHeader (fOutFile); fOutFile << std::endl;
   }
 }
@@ -101,9 +102,13 @@ void G4ASCIITreeSceneHandler::WriteHeader (std::ostream& os)
   const G4int verbosity = pSystem->GetVerbosity();
   const G4int detail = verbosity % 10;
   os << "#  Set verbosity with \"/vis/ASCIITree/verbose <verbosity>\":";
-  for (size_t i = 0;
-       i < G4ASCIITreeMessenger::fVerbosityGuidance.size(); ++i) {
-    os << "\n#  " << G4ASCIITreeMessenger::fVerbosityGuidance[i];
+  static G4bool firstTime = true;
+  if (firstTime) {
+    firstTime = false;
+    for (size_t i = 0;
+         i < pSystem->GetVerbosityGuidance().size(); ++i) {
+      os << "\n#  " << pSystem->GetVerbosityGuidance()[i];
+    }
   }
   os << "\n#  Now printing with verbosity " << verbosity;
   os << "\n#  Format is: PV:n";

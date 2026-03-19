@@ -6,6 +6,11 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2026-02-24 Vladimir Ivanchenko (phys-ctor-em-V11-03-16)
+- G4EmStandardPhysics_option4 - added a possibility to use external dEdx tables
+  for ions (problem #2703). It is done by substitution of the
+  G4LindhardSorencenIonModel model class by G4IonParameterisedModel.
+
 ## 2025-10-29 Vladimir Ivanchenko (phys-ctor-em-V11-03-15)
 - G4OpticalPhysics - instantiate a process only if it is activated,
     added option to instantiate a new G4GeneralCerenkov.

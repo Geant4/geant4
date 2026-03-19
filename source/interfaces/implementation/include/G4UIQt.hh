@@ -25,8 +25,8 @@
 //
 //
 //
-#ifndef G4UIQt_h
-#define G4UIQt_h
+#ifndef G4UIQT_HH
+#define G4UIQT_HH
 
 #include "G4VBasicShell.hh"
 #include "G4VInteractiveSession.hh"
@@ -307,11 +307,9 @@ private:
     G4int&) override;  // have to be implemeted because we heritate from G4VBasicShell
   bool eventFilter(QObject*, QEvent*) override;
   void ActivateCommand(G4String);
-#if (QT_VERSION < QT_VERSION_CHECK(5, 15, 0))
-  QMap<G4int, QString> LookForHelpStringInChildTree(G4UIcommandTree*, const QString&);
-#else
-  QMultiMap<G4int, QString> LookForHelpStringInChildTree(G4UIcommandTree*, const QString&);
-#endif
+
+  QMultiMap<G4double, QString> LookForHelpStringInChildTree(G4UIcommandTree*, const QString&);
+  G4double ComputeStringMatchScore(const QString&, const QString&);
   QWidget* CreateVisParametersTBWidget();
   QWidget* CreateHelpTBWidget();
   QWidget* CreateTimeWindowWidget();

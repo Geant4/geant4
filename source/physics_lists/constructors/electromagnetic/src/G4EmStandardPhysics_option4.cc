@@ -106,7 +106,7 @@ G4_DECLARE_PHYSCONSTR_FACTORY(G4EmStandardPhysics_option4);
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4EmStandardPhysics_option4::G4EmStandardPhysics_option4(G4int ver, 
-                                                         const G4String&)
+                                                         const G4String& nam)
   : G4VPhysicsConstructor("G4EmStandard_opt4")
 {
   SetVerboseLevel(ver);
@@ -134,11 +134,8 @@ G4EmStandardPhysics_option4::G4EmStandardPhysics_option4(G4int ver,
   param->SetMaxNIELEnergy(1*CLHEP::MeV);
   param->SetPositronAtRestModelType(fAllisonPositronium);
   SetPhysicsType(bElectromagnetic);
+  if (!nam.empty()) { fUseExternalDEDX = true; }
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4EmStandardPhysics_option4::~G4EmStandardPhysics_option4() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -318,7 +315,11 @@ void G4EmStandardPhysics_option4::ConstructProcess()
   // generic ion
   particle = G4GenericIon::GenericIon();
   G4ionIonisation* ionIoni = new G4ionIonisation();
-  ionIoni->SetEmModel(new G4LindhardSorensenIonModel());
+  if (fUseExternalDEDX) {
+    ionIoni->SetEmModel(new G4IonParametrisedLossModel());
+  } else {
+    ionIoni->SetEmModel(new G4LindhardSorensenIonModel());
+  }
   ph->RegisterProcess(hmsc, particle);
   ph->RegisterProcess(ionIoni, particle);
   if(nullptr != pnuc) { ph->RegisterProcess(pnuc, particle); }

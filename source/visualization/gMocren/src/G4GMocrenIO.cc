@@ -234,7 +234,7 @@ void GMocrenDataPrimitive<T>::getCenterPosition(float _center[3]) {
   for(int i = 0; i < 3; i++) _center[i] = kCenter[i];
 }
 template <typename T> 
-void GMocrenDataPrimitive<T>::setName(std::string & _name) {
+void GMocrenDataPrimitive<T>::setName(const std::string & _name) {
   kDataName = _name;
 }
 template <typename T> 
@@ -3659,7 +3659,7 @@ void G4GMocrenIO::getDoseDistCenterPosition(float _center[3], int _num) {
     kDose[_num].getCenterPosition(_center);
 }
 // set & get name of dose distribution
-void G4GMocrenIO::setDoseDistName(std::string _name, int _num) {
+void G4GMocrenIO::setDoseDistName(const std::string& _name, int _num) {
 
   kDose[_num].setName(_name);
 }

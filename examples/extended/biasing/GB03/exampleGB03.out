@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-04-ref-00    (5-December-2025)
+ Geant4 version Name: geant4-11-04-patch-01    (13-March-2026)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -909,7 +909,7 @@ GB03BOptrGeometryBasedBiasing : starting run with splitting factor = 2, and prob
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.030000s Real=0.035782s Sys=0.000000s
+  User=0.030000s Real=0.035527s Sys=0.000000s
 for the entire run 10
 
                   C12       1  0.000976562 Emin     0.132706 Emax     0.132706 (MeV) 
@@ -1062,7 +1062,7 @@ GB03BOptrGeometryBasedBiasing : starting run with splitting factor = 2, and prob
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.030000s Real=0.044712s Sys=0.000000s
+  User=0.030000s Real=0.030060s Sys=0.000000s
 for the entire run 10
 
                   B10       1   0.00195312 Emin      1.69626 Emax      1.69626 (MeV) 
@@ -1077,9 +1077,9 @@ Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.
 Deleting G4Run (id:1) 
-UserDetectorConstruction deleted 0x1e52a20
-UserPhysicsList deleted 0x1e908e0
-UserActionInitialization deleted 0x20213c0
+UserDetectorConstruction deleted 0x199b580
+UserPhysicsList deleted 0x19d97d0
+UserActionInitialization deleted 0x1b724b0
 UserWorkerInitialization deleted 0
 UserWorkerThreadInitialization deleted 0
 UserRunAction deleted.

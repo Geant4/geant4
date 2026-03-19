@@ -36,8 +36,6 @@
 
 #include "G4UImessenger.hh"
 
-#include <vector>
-
 class G4ASCIITree;
 class G4UIcommand;
 class G4UIcmdWithAnInteger;
@@ -49,7 +47,6 @@ public:
   virtual ~G4ASCIITreeMessenger();
   G4String GetCurrentValue (G4UIcommand* command);
   void SetNewValue (G4UIcommand* command, G4String newValue);
-  static std::vector<G4String> fVerbosityGuidance;
 private:
   G4ASCIITree* fpASCIITree;
   G4UIcommand* fpDirectory;

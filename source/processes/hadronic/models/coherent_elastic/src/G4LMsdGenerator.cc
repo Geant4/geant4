@@ -49,14 +49,10 @@ G4LMsdGenerator::G4LMsdGenerator(const G4String& name)
 {
   fPDGencoding = 0;
   secID = G4PhysicsModelCatalog::GetModelID( "model_LMsdGenerator" );
-  
-  // theParticleChange = new G4HadFinalState;
 }
 
 G4LMsdGenerator::~G4LMsdGenerator()
-{
-  // delete theParticleChange;
-}
+{}
 
 void G4LMsdGenerator::ModelDescription(std::ostream& outFile) const
 {
@@ -114,8 +110,6 @@ G4HadFinalState*
 G4LMsdGenerator::ApplyYourself( const G4HadProjectile& aTrack, 
                                       G4Nucleus& targetNucleus )
 {
-  theParticleChange.Clear();
-
   const G4HadProjectile* aParticle = &aTrack;
   G4double eTkin = aParticle->GetKineticEnergy();
 

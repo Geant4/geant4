@@ -6,12 +6,18 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
-# 2025-11-17 Ben Morgan (cmake-V11-03-17)
+## 2026-02-17 Ben Morgan (cmake-V11-03-18)
+- Use CMake 3.16-3.19 compatible construction of interface libraries.
+  - Fixes [Bugzilla 2700](https://bugzilla-geant4.kek.jp/show_bug.cgi?id=2700)
+- Fix logic error in construction of link interface to such interface
+  libraries that resulted in empty target creation/export.
+
+## 2025-11-17 Ben Morgan (cmake-V11-03-17)
 - Bump PhotonEvaporation dataset definition to v6.1.2
   - Provides fixes for Bugzilla 2685 (z75.a187).
   - See request in Issue #266.
 
-# 2025-11-10 Ben Morgan (cmake-V11-03-16)
+## 2025-11-10 Ben Morgan (cmake-V11-03-16)
 - Bump PhotonEvaporation dataset definition to v6.1.1
   - Provides fixes for Bugzilla 2682 (z94.a239), 2577 (z5.a11),
     2170 (z91.a234).

@@ -6,6 +6,18 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2026-02-20 Alberto Ribon (hadr-inclxx-V11-03-04)
+Two independent bug-fixes provided by Jean-Christophe David and Jason Hirtz :
+- G4INCLNNToNSK2piChannel.cc : replaced "if(iso==-2)" with "else if(iso==-2)".
+  (The problem was reported by Julia Yarba).
+- G4INCLCrossSectionsAntiparticles.cc : correct wrong formulae with isospins
+  concerning the cross sections N Nbar -> N Nbar + 2 pions.
+  The fix consists in exchanging the lines number 509 and 513.
+
+## 2025-12-09 Gabriele Cosmo
+- Fixed reported Coverity defects for use of std::move() in G4INCLCascade.cc
+  and G4INCLNbarAtrestEntryChannel.cc. Use G4 types consistently.
+
 ## 2025-11-06 Gabriele Cosmo (hadr-inclxx-V11-03-03)
 - Fixed compilation warning for implicit type conversion on macOS/XCode
   in G4INCLAntinucleiAtrestEntryChannel::getAnnihilationPosition().

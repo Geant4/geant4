@@ -6,6 +6,20 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2026-03-06 Ben Morgan (global-V11-03-32)
+- Always initialize G4CacheReference for a G4Cache instance on construction of latter.
+  - Prevents fatal G4Exception when only low ID G4Cache elements are accessed,
+    see Issue #281 for details.
+
+## 2026-02-12 Gabriele Cosmo
+- Protect debug warning printout from G4Cache destructor within 'g4cdebug' flag
+  as it was originally intended. Addressing long-standing false-positive issue
+  happening in MT mode (G4MTRunManager only) on macOS/clang.
+  Also problem report #2696.
+
+## 2026-01-03 Vladimir Ivantchenko
+- G4VSIntegration - fixed Coverity warning.
+
 ## 2025-12-05 Gabriele Cosmo (global-V11-03-31)
 - Updated tag IDs for geant4-11-04-ref-00.
 

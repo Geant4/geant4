@@ -39,8 +39,8 @@
 //
 // -----------------------------------------------------------------------------
 
-#ifndef G4BinaryCascade_hh
-#define G4BinaryCascade_hh
+#ifndef G4BINARYCASCADE_HH
+#define G4BINARYCASCADE_HH
 
 #include "G4VIntraNuclearTransportModel.hh"
 #include "G4ReactionProductVector.hh"
@@ -172,8 +172,8 @@ private:
 
   G4ReactionProductVector * ProductsAddFakeGamma(G4ReactionProductVector * products );
 
-  void PrintKTVector(G4KineticTrackVector * ktv, std::string comment=std::string(""));
-  void PrintKTVector(G4KineticTrack* kt, std::string comment=std::string(""));
+  void PrintKTVector(G4KineticTrackVector * ktv, const G4String& comment=G4String(""));
+  void PrintKTVector(G4KineticTrack* kt, const G4String& comment=G4String(""));
   void DebugApplyCollisionFail(G4CollisionInitialState * collision,
 		  	  	  	  	   G4KineticTrackVector * products);
   void DebugApplyCollision(G4CollisionInitialState * collision,

@@ -5,6 +5,21 @@ which **must** added in reverse chronological order (newest at the top).
 It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
+
+## 2026-02-20 Gabriele Cosmo (interfaces-V11-03-13)
+- Fix in G4UIQt::ComputeStringMatchScore(..) in setting number of elements
+  for a QVector; restored use of G4int in place of std::size_t, according
+  to QVector signature.
+
+## 2026-02-17 Gabriele Cosmo
+- G4UIQt: Use std::size_t and G4 types where appropriate.
+
+## 2026-02-16 John Allison
+- G4UIQt: Fix "Implicit conversion loses integer precision" warnings on Mac Xcode.
+
+## 2026-01-30 Andrea Barresi
+- G4UIQt: Reimplemented the command search feature for the Help tree.
+
 ## 2025-10-31 Andrea Barresi (interfaces-V11-03-12)
 -G4VInteractiveSession:
   - Added UpdateDrawingStyle, UpdateProjectionStyle, UpdateTransparencySlider 
@@ -70,16 +85,16 @@ It must **not** be used as a substitute for writing good git commit messages!
   - Introduce Time Window tab.
   - This exploits generic time windowing recently introduced in modeling an
     management.
-  - Try it with example B1. Hit “Prepare”, then “Go”. It is more spectacular
+  - Try it with example B1. Hit "Prepare", then "Go". It is more spectacular
     if you prepare, say, 100 events.
-  - However, it doesn’t work with OGL in Qt6. (Try it with Qt5 if you can.)
+  - However, it doesn't work with OGL in Qt6. (Try it with Qt5 if you can.)
     TSG works fine with both Qt5 and Qt6, except line width is not implemented.
   - I have noticed that in Qt5, mouse events seem to processed in strict order.
-    Values of boxes don’t get updated until the windowing is finished. But with
+    Values of boxes don't get updated until the windowing is finished. But with
     Qt6, events seem to be processed in parallel. Values in other boxes are
     continuously updated during time evolution. How do they do that? Is each
     slot executed on a different thread? This could cause the problem with OGL,
-    but I don’t have sufficient knowledge of Qt protocols.
+    but I don't have sufficient knowledge of Qt protocols.
   - Change "bar" to "toolbar" to avoid conflict with G4PhysicalConstants.
 
 ## 2025-01-06 John Allison (interfaces-V11-03-00)

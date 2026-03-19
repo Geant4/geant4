@@ -10,7 +10,7 @@
 
 
 **************************************************************
- Geant4 version Name: geant4-11-04-ref-00    (5-December-2025)
+ Geant4 version Name: geant4-11-04-patch-01    (13-March-2026)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -622,17 +622,17 @@ DNAMolecularIRTModel will be used
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=24.230000s Real=24.321501s Sys=0.010000s
+  User=22.310000s Real=22.370858s Sys=0.010000s
 
 --------------------End of Global Run-----------------------
-  The run has 49 events 
-Number of events recorded by the species scorer = 49
- Total energy deposited in the world volume : 4.913e+05 eV
+  The run has 51 events 
+Number of events recorded by the species scorer = 51
+ Total energy deposited in the world volume : 5.1131e+05 eV
  ------------------------------------------------------------
 
 Graphics systems deleted.
 Visualization Manager deleting...
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 15 of which, static: 0
-Dynamic pools deleted: 15 / Total memory freed: 7.9 MB
+Dynamic pools deleted: 15 / Total memory freed: 8 MB
 ============================================================

@@ -83,7 +83,6 @@ G4ChargeExchange::~G4ChargeExchange()
 G4HadFinalState* G4ChargeExchange::ApplyYourself(
 		 const G4HadProjectile& aTrack, G4Nucleus& targetNucleus)
 {
-  theParticleChange.Clear();
   auto part = aTrack.GetDefinition();
   G4double ekin = aTrack.GetKineticEnergy();
 
@@ -303,8 +302,8 @@ G4double G4ChargeExchange::SampleT(const G4ParticleDefinition*,
   }
   G4double q1 = 1.0 - G4Exp(-std::min(bb*tmax, numLimit));
   G4double q2 = 1.0 - G4Exp(-std::min(dd*tmax, numLimit));
-  G4double s1 = q1*aa;
-  G4double s2 = q2*cc;
+  G4double s1 = q1*aa/bb;
+  G4double s2 = q2*cc/dd;
   if ((s1 + s2)*G4UniformRand() < s2) {
     q1 = q2;
     bb = dd;

@@ -33,10 +33,10 @@
 // If the photons have been "tagged" as "quantum-entangled", for example by
 // G4eplusAnnihilation for annihilation into 2 photons, they are "analysed"
 // here if - and only if - both photons suffer Compton scattering. Theoretical
-// predictions from Pryce and Ward, Nature No 4065 (1947) p.435, and Snyder et al,
-// Physical Review 73 (1948) p.440. Experimental validation in "Photon quantum 
+// predictions from Pryce and Ward, Nature 160, 435 (1947), and Snyder et al,
+// Phys. Rev. 73, 440 (1948). Experimental validation in "Photon quantum
 // entanglement in the MeV regime and its application in PET imaging",
-// D. Watts, J. Allison et al., Nature Communications (2021)12:2646
+// D. Watts et al., Nature Communications 12, 2646 (2021),
 // https://doi.org/10.1038/s41467-021-22907-5.
 //
 // 02 May 2009   S Incerti as V. Ivanchenko proposed in G4LivermoreComptonModel.cc

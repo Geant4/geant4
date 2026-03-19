@@ -96,14 +96,15 @@ void G4ChargeExchangePhysics::ConstructProcess()
 {
   auto xs = new G4ChargeExchangeXS();
   xs->SetEnergyLimit(fLowEnergyLimit);
-  xs->SetCrossSectionFactor(fXSFactor);
-
+  xs->SetPionCrossSectionFactor(fXSFactorPi);
+  xs->SetKaonCrossSectionFactor(fXSFactorK);
+  
   auto model = new G4ChargeExchange(xs);
 
   if (G4HadronicParameters::Instance()->GetVerboseLevel() > 1) {
     G4cout << "### ChargeExchangePhysics Construct Processes with the model <" 
 	   << model->GetModelName() << "> and x-section <" 
-	   << xs->GetName() << ">  XSFactor=" << fXSFactor 
+	   << xs->GetName() << ">  XSFactorPi=" << fXSFactorPi << ", XSFactorK=" << fXSFactorK
 	   << G4endl;
   }
 

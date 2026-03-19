@@ -80,7 +80,7 @@ public:
   T * getImage(int _z);  // get image of each layer
   void setCenterPosition(float _center[3]);
   void getCenterPosition(float _center[3]);
-  void setName(std::string & _name);
+  void setName(const std::string & _name);
   std::string getName();
 };
 
@@ -373,7 +373,7 @@ public:
 
   // get & get name of calculated dose distribution
   std::string getDoseDistName(int _num = 0);
-  void setDoseDistName(std::string _name, int _num = 0);
+  void setDoseDistName(const std::string& _name, int _num = 0);
 
   // copy dose distributions
   void copyDoseDist(std::vector<class GMocrenDataPrimitive<double> > & _dose);

@@ -6,6 +6,11 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2026-02-18 Gabriele Cosmo (hadr-fission-V11-03-00)
+- Fixed reported Coverity defects in G4fissioner for avoiding unnecessary
+  copy of strings.
+- Fixed layout of G4fissionEvent class.
+
 ## 2024-08-21 Gabriele Cosmo (hadr-fission-V11-02-01)
 - Fixed reported Coverity defects for use of std::move().
 

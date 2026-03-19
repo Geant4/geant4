@@ -6,6 +6,10 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2025-12-23 Vladimir Ivanchenko (hadr-qgsm-V11-03-00)
+- G4GammaParticipants, G4QGSParticipants, G4QGSMSplitableHadron - added
+    G4HadronicException header.
+
 ## 2023-03-09 Vladimir Ivanchenko (hadr-qgsm-V11-01-01)
 - G4BaryonSplitter, G4MesonSplitter, G4QGSMSplittableHadron, G4SPBaryon -
     attempt make code more uniform in order to reduce probability of warnings

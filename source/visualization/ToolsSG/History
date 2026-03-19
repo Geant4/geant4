@@ -5,6 +5,18 @@ which **must** added in reverse chronological order (newest at the top).
 It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
+
+## 2026-01-30 John Allison (vis_toolssg-V11-03-13)
+- G4ToolsSGSceneHandler.cc:
+  - Obtain applicable auxiliary edge flag.
+
+## 2026-01-10 John Allison
+- G4ToolsSGSceneHandler.cc:
+  - G4ToolsSGSceneHandler::AddPrimitive (const G4Polymarker& ...
+    - Fix Bug #2691: Daughter of cloud-represented volume in wrong position.
+    - Transformation of cloud-represented volume was being accumulated with daughter's.
+    - Add and missing separator, prevent accumulation.
+
 ## 2025-10-24 Guy Barrand (vis_toolssg-V11-03-12)
 - implementation/sources.cmake: handle "-DTOOLS_USE_GL_VERSION_3_2" in case "GEANT4_USE_VTK".
 

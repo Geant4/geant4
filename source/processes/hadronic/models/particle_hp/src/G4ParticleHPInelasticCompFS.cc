@@ -65,6 +65,7 @@
 #include "G4ParticleHPDataUsed.hh"
 #include "G4ParticleHPManager.hh"
 #include "G4RandomDirection.hh"
+#include "G4HadronicException.hh"
 #include "G4SystemOfUnits.hh"
 
 #include <fstream>

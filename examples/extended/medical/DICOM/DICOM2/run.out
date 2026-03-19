@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-04-ref-00    (5-December-2025)
+ Geant4 version Name: geant4-11-04-patch-01    (13-March-2026)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -1102,7 +1102,7 @@ Index : 8     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.010000s Real=0.018295s Sys=0.000000s
+  User=0.020000s Real=0.016855s Sys=0.000000s
 
 [=========================================================== DICOM ===========================================================]
 
@@ -1144,5 +1144,5 @@ Number of memory pools allocated: 10 of which, static: 0
 Dynamic pools deleted: 10 / Total memory freed: 0.04 MB
 ============================================================
 
-[/build/jenkins/workspace/examples/extended/medical/DICOM/DICOM2/dicom2] Primary execution time: User=3.290000s Real=3.943652s Sys=0.240000s
+[/build/jenkins/workspace/examples/extended/medical/DICOM/DICOM2/dicom2] Primary execution time: User=3.090000s Real=3.674021s Sys=0.210000s
 

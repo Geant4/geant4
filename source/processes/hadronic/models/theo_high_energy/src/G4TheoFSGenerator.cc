@@ -38,7 +38,7 @@
 #include "G4HadronicParameters.hh"
 #include "G4CRCoalescence.hh"
 #include "G4HadronicInteractionRegistry.hh"
-
+#include "G4HadronicException.hh"
 
 G4TheoFSGenerator::G4TheoFSGenerator( const G4String& name )
     : G4HadronicInteraction( name )

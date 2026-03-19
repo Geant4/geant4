@@ -41,8 +41,8 @@
 // and intermediate energies
 //
 
-#ifndef G4EmStandardPhysics_option4_h
-#define G4EmStandardPhysics_option4_h 1
+#ifndef G4EMSTANDARDPHYSICS_OPTION4_HH
+#define G4EMSTANDARDPHYSICS_OPTION4_HH
 
 #include "G4VPhysicsConstructor.hh"
 #include "globals.hh"
@@ -55,10 +55,13 @@ public:
 
   explicit G4EmStandardPhysics_option4(G4int ver=1, const G4String& name="");
 
-  ~G4EmStandardPhysics_option4() override;
+  ~G4EmStandardPhysics_option4() override = default;
 
   void ConstructParticle() override;
   void ConstructProcess() override;
+
+private:
+  G4bool fUseExternalDEDX{false};
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

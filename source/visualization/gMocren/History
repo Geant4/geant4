@@ -6,6 +6,9 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2026-02-19 Gabriele Cosmo (gMocren-V11-03-00)
+- Fixed reported Coverity defect for unnecessary string copy in G4GMocrenIO.
+
 ## 2024-09-29 John Allison (gMocren-V11-02-02)
 - More Coverity fixes
 

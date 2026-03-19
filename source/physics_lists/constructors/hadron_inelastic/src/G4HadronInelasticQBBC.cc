@@ -152,7 +152,7 @@ void G4HadronInelasticQBBC::ConstructProcess()
   G4ParticleDefinition* particle = G4Proton::Proton();
   G4HadronicProcess* hp = 
     new G4HadronInelasticProcess( particle->GetParticleName()+"Inelastic", particle );
-  hp->AddDataSet( new G4BGGNucleonInelasticXS(particle) );
+  hp->AddDataSet( new G4ParticleInelasticXS(particle) );
   hp->RegisterMe(theFTFP);
   hp->RegisterMe(theBERT);
   hp->RegisterMe(theBIC);

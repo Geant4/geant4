@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-04-ref-00    (5-December-2025)
+ Geant4 version Name: geant4-11-04-patch-01    (13-March-2026)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -774,7 +774,7 @@ CoulombScat:  for pi- XStype:1 SubType=1 BuildTable=1
         Model:                      FTFP: 3 GeV ---> 100 TeV
         Model:            BertiniCascade: 1 GeV ---> 6 GeV
         Model:            Binary Cascade: 0 eV  ---> 1.5 GeV
-     Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
+     Cr_sctns:          protonParticleXS: 0 eV  ---> 100 TeV
 -----------------------------------------------------------------------
                            Hadronic Processes for sigma-
   Process: hadElastic
@@ -863,10 +863,10 @@ Max 2J for sampling of angular correlations         10
 --------------------End of Global Run-----------------------
  The run is 10000 proton of 210 MeV
 
-  --> cumulated edep per run in scoring volume = 544.411 GeV = 8.72243e-08 joule
+  --> cumulated edep per run in scoring volume = 531.521 GeV = 8.5159e-08 joule
   --> mass of scoring volume = 1.7316 kg
 
- Absorbed dose per run in scoring volume = edep/mass = 50.3721 nanoGy  rms = 463.713 picoGy 
+ Absorbed dose per run in scoring volume = edep/mass = 49.1794 nanoGy  rms = 462.91 picoGy 
 ------------------------------------------------------------
 
 Graphics systems deleted.

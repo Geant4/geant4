@@ -98,8 +98,8 @@
 
 // Original author: M.Asai, 1996
 // --------------------------------------------------------------------
-#ifndef G4RunManager_hh
-#define G4RunManager_hh 1
+#ifndef G4RUNMANAGER_HH
+#define G4RUNMANAGER_HH
 
 #include "G4Event.hh"
 #include "G4EventManager.hh"
@@ -133,6 +133,7 @@ class G4DCtable;
 class G4Run;
 class G4PrimaryTransformer;
 class G4RunManagerFactory;
+class G4MaterialScanner;
 
 class G4RunManager
 {
@@ -207,6 +208,7 @@ class G4RunManager
     // InitializeGeometry() and the G4VUserPhysicsList class will be accessed
     // from the method InitializePhysics().
     virtual void InitializeGeometry();
+    virtual void GeometryOptimisation();
     virtual void InitializePhysics();
 
     // These four methods are invoked from the BeamOn() method and they're
@@ -673,7 +675,7 @@ class G4RunManager
     static G4ThreadLocal G4RunManager* fRunManager;
 
     G4RunMessenger* runMessenger = nullptr;
-
+    G4MaterialScanner* materialScanner = nullptr;
 };
 
 #endif

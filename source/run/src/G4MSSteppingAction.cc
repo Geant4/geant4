@@ -72,13 +72,16 @@ void G4MSSteppingAction::UserSteppingAction(const G4Step* aStep)
     // calculate average mass number and atomic number
     {
       const std::vector<const G4Element*> * ElementVector_ptr = material->GetElementVector();
-      for( auto & element : *ElementVector_ptr)
+      const G4int* AtomsVector = material->GetAtomsVector();
+      G4int nAtoms = 0;
+      for( size_t i = 0; i < ElementVector_ptr->size(); i++)
       {
-        thisMaterialInfo.aveA += element->GetA();
-        thisMaterialInfo.aveZ += element->GetZ();
+        thisMaterialInfo.aveA += (*ElementVector_ptr)[i]->GetA() * AtomsVector[i];
+        thisMaterialInfo.aveZ += (*ElementVector_ptr)[i]->GetZ() * AtomsVector[i];
+        nAtoms += AtomsVector[i];
       }
-      thisMaterialInfo.aveA /= ElementVector_ptr->size();
-      thisMaterialInfo.aveZ /= ElementVector_ptr->size();
+      thisMaterialInfo.aveA /= nAtoms;
+      thisMaterialInfo.aveZ /= nAtoms;
     }
     thisMaterialInfo.density            = material->GetDensity();
     thisMaterialInfo.radiation_length   = material->GetRadlen();

@@ -39,7 +39,9 @@
 #the following can be changed or commented:
 #the low energy threshold for particle to enter the G4ChannelingFastSimModel:
 /crystal/setParticleMinKinEnergy 200 MeV # default value for all charged particles
-#the same for specific particles (has priority vs default)
+                                         # use it for the particles not in the list below,
+                                         # such as ions.
+#the same for specific particles (has priority vs default!)
 /crystal/setParticleMinKinEnergy/proton 200 MeV
 /crystal/setParticleMinKinEnergy/anti_proton 200 MeV
 /crystal/setParticleMinKinEnergy/pi+ 200 MeV

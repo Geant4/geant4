@@ -419,7 +419,7 @@ ReportBadEpsilonValue(G4ExceptionDescription& erm, G4double value, const G4Strin
       << " Its value is outside the permitted range from "
       << fMinAcceptedEpsilon << "  to " <<  fMaxAcceptedEpsilon << G4endl
       << " Clarification: " << G4endl;
-  G4long oldPrec = erm.precision();
+  G4long oldPrec = erm.precision(8);
   if(value < fMinAcceptedEpsilon )
   {
     erm << "  a) The value must be positive and enough larger than the accuracy limit"

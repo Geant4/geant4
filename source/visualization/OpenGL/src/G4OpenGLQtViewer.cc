@@ -1556,7 +1556,11 @@ void G4OpenGLQtViewer::G4wheelEvent (QWheelEvent * evnt)
   double delta = evnt->angleDelta().y();
 #endif
 
+#if (QT_VERSION < QT_VERSION_CHECK(5, 14, 0))
+  ZoomFromMouseWheel(delta, evnt->modifiers() & Qt::ShiftModifier, evnt->pos().x(), evnt->pos().y());
+#else
   ZoomFromMouseWheel(delta, evnt->modifiers() & Qt::ShiftModifier, evnt->position().x(), evnt->position().y());
+#endif
 
   updateQWidget();
 }

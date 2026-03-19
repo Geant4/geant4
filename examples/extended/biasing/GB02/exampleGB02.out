@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-04-ref-00    (5-December-2025)
+ Geant4 version Name: geant4-11-04-patch-01    (13-March-2026)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -3172,7 +3172,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0     36.5       2.8        0        0         0   test.phys initStep
     1     19.1    -91.5       27      2.67        0       94        94   test.phys biasWrapper(hadElastic)
-    2     51.2     -115 -7.11e-15      2.67        0     47.8       142       World Transportation
+    2     51.2     -115        0      2.67        0     47.8       142       World Transportation
     3    1e+04 -7.26e+03 -8.37e+03      2.67        0 1.48e+04   1.5e+04  OutOfWorld Transportation
 
 *********************************************************************************************************

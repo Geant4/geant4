@@ -243,11 +243,12 @@ G4bool G4NuDEXPSF::TakePSFFromIAEA01(const char* fname){
       PSFType_E1[nR_E1]=11;
       nR_E1++;
       in>>dum;
-      if(std::string(dum)==std::string("beta=")){
+      G4String s_dum(dum);
+      if(s_dum==G4String("beta=")){
 	in>>beta;
 	break;
       }
-      else if(std::string(dum)==std::string("Er2")){
+      else if(s_dum==G4String("Er2")){
 	in>>dum>>E_E1[nR_E1]>>dum>>dum>>G_E1[nR_E1]>>dum>>dum>>s_E1[nR_E1]>>dum>>beta;
 	PSFType_E1[nR_E1]=11;
 	nR_E1++;
@@ -309,8 +310,9 @@ G4bool G4NuDEXPSF::TakePSFFromInputFile(const char* fname){
   std::ifstream in(fname);
   while(in>>word){
     if(word[0]=='#'){in.ignore(10000,'\n');}
-    if(std::string(word)==std::string("END")){break;}
-    if(std::string(word)==std::string("PSF")){
+    G4String s_word(word);
+    if(s_word==G4String("END")){break;}
+    if(s_word==G4String("PSF")){
       result=true;
       in>>nR_E1;
       for(G4int i=0;i<nR_E1;i++){

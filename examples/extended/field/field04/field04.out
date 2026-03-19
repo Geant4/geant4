@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-04-ref-00    (5-December-2025)
+ Geant4 version Name: geant4-11-04-patch-01    (13-March-2026)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -6702,8 +6702,8 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
     2 -3.1467728 mm -1.5805447 mm  2.4724838 cm  3.8544828 MeV 3.1425452 MeV 203.83188 um  466.32239 um     Target       hIoni
     3 -3.0718942 mm -1.6240077 mm  2.4676869 cm  447.18619 keV 3.4072966 MeV 118.79937 um  585.12176 um     Target       hIoni
     4 -3.0698635 mm -1.6255582 mm  2.4675404 cm  55.431747 keV 391.75444 keV  4.087557 um  589.20931 um     Target       hIoni
-    5 -3.0697732 mm -1.6255979 mm  2.4675369 cm 1.3877788e-08 meV 55.431747 keV 299.14742 nm  589.50846 um     Target       hIoni
-    6 -3.0697732 mm -1.6255979 mm  2.4675369 cm          0 eV 1.3877788e-08 meV 3.1451605 fm  589.50846 um     Target       hIoni
+    5 -3.0697732 mm -1.6255979 mm  2.4675369 cm 6.9388939e-09 meV 55.431747 keV 299.14742 nm  589.50846 um     Target       hIoni
+    6 -3.0697732 mm -1.6255979 mm  2.4675369 cm          0 eV 6.9388939e-09 meV 2.2239643 fm  589.50846 um     Target       hIoni
     7 -3.0697732 mm -1.6255979 mm  2.4675369 cm          0 eV          0 eV          0 fm  589.50846 um     Target       Decay
 Track (trackID 4, parentID 1) is processed with stopping code 2
 
@@ -11012,12 +11012,12 @@ Terminate current event processing.
 ------- MixMaxRng engine status -------
  Current state vector is:
 mixmax state, file version 1.0
-N=17 V[N]={1901226849600236294, 1486345244359905248, 1747129918478626780, 1406066641233738698, 2225751852006256362, 884174608851708581, 714348967242539921, 620110042978399266, 742160689125070038, 1870830480466248760, 962793899392960560, 1964881786776911403, 1608551584395065785, 1975695892089736837, 833165971319758452, 2011644260807548887, 1528893711246511738} counter= 17sumtot= 1425342308234284100
+N=17 V[N]={246218468996667113, 1537074470143418716, 1207852080614355418, 1384818142663770357, 2171180567815943003, 1152899488913573498, 1337319841465640815, 2145112611657256032, 1889732641484675153, 241548542054774457, 13986410782836099, 752904004307835245, 806126567949847847, 1962765051599366616, 1059842396777019794, 2273147132222365804, 1797144280031900538} counter= 11sumtot= 1227085616558000946
 ---------------------------------------
 =====================================
   G4EventManager::ProcessOneEvent()  
 =====================================
-G4PrimaryTransformer::PrimaryVertex (-11.873097(mm),0.042463225(mm),79.140582(mm),0(nsec))
+G4PrimaryTransformer::PrimaryVertex (-12.573339(mm),1.8525085(mm),79.01711(mm),0(nsec))
 1 primary tracks are passed to the stack.
 !!!!!!! Now start processing an event !!!!!!!
 Track (trackID 1, parentID 0) is processed with stopping code 2

@@ -63,64 +63,76 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-G4int fSeed = 1234;
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
-
 int main(int argc, char** argv)
 {
-  G4UIExecutive* ui = 0;
-  if (argc == 1) {
+  // Detect interactive mode (if no arguments) and define UI session
+  //
+  G4UIExecutive* ui = nullptr;
+  if (argc == 1)
+  {
     ui = new G4UIExecutive(argc, argv);
   }
 
-  G4Random::setTheEngine(new CLHEP::RanecuEngine);
+  // Optionally: choose a different Random engine...
+  // G4Random::setTheEngine(new CLHEP::MTwistEngine);
+  G4long fSeed = 1234;
 
-  auto* runManager = G4RunManagerFactory::CreateRunManager();
+  // Construct the default run manager
+  //
+  auto runManager = G4RunManagerFactory::CreateRunManager();
 
   // Set mandatory initialization classes
-  DetectorConstruction* fpDetector = new DetectorConstruction();
-  ActionInitialization* fpActionIni = new ActionInitialization();
+  //
+  auto fpDetector = new DetectorConstruction();
+  auto fpActionIni = new ActionInitialization();
+  auto fpPhysicsList = new PhysicsList();
 
-  runManager->SetUserInitialization(new PhysicsList());
   runManager->SetUserInitialization(fpDetector);
+  runManager->SetUserInitialization(fpPhysicsList);
   runManager->SetUserInitialization(fpActionIni);
 
-  // get the pointer to the User Interface manager
-  G4UImanager* UI = G4UImanager::GetUIpointer();
-  G4VisManager* vM = new G4VisExecutive;
+  // Initialize visualization with the default graphics system
+  //
+  auto visManager = new G4VisExecutive(argc, argv);
+  visManager->Initialize();
 
+  // Get the pointer to the User Interface manager
+  //
+  auto uiManager = G4UImanager::GetUIpointer();
+
+  // Process macro or start UI session
+  //
   G4String fileName = "";
   G4String command = "/control/execute ";
 
-  if (argc == 1) {
-    vM->Initialize();
+  if (ui) // interactive mode
+  {
     G4Random::setTheSeed(fSeed);
-    UI->ApplyCommand("/control/execute init_vis.in");
+    uiManager->ApplyCommand("/control/execute init_vis.in");
     ui->SessionStart();
     delete ui;
   }
-
   else if (argc == 2)  // batch mode
   {
     fileName = argv[1];
   }
-
-  else if (argc > 2) {
+  else if (argc > 2)
+  {
     fileName = argv[1];
     fSeed = atoi(argv[2]);
   }
 
-  if (argc > 1) {
+  if (argc > 1)
+  {
     G4Random::setTheSeed(fSeed);
-    UI->ApplyCommand(command + fileName);
+    uiManager->ApplyCommand(command + fileName);
   }
 
   // Job termination
   // Free the store: user actions, physics_list and detector_description are
   // owned and deleted by the run manager, so they should not be deleted
   // in the main() program !
-  delete vM;
+  delete visManager;
   delete runManager;
 }
 

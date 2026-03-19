@@ -33,6 +33,8 @@
 #include "G4ChannelingFastSimModel.hh"
 #include "G4Threading.hh"
 
+#include "DetectorConstruction.hh"
+
 #include "G4RunManager.hh"
 #include "G4Run.hh"
 
@@ -112,35 +114,42 @@ void RunAction::EndOfRunAction(const G4Run*)
     analysisManager->Write();
     analysisManager->CloseFile();
 
-    //getting internal data of G4ChannelingFastSimModel
-    G4RegionStore* regionStore = G4RegionStore::GetInstance();
-    G4Region* regionCh = regionStore->GetRegion("Crystal");
-    G4bool someflag=false;
-    G4ChannelingFastSimModel* channeling =
-        static_cast<G4ChannelingFastSimModel*>
-        (regionCh->GetFastSimulationManager()->GetFastSimulationModel("ChannelingModel",
-                                                                      0,someflag));
+    //necessary for spectrum output
+    const DetectorConstruction* detConstruction
+      = static_cast<const DetectorConstruction*>
+        (G4RunManager::GetRunManager()->GetUserDetectorConstruction());
+    G4bool activateChannelingModel = detConstruction->GetChannelingModel();
 
-    if (!IsMaster() && channeling->GetIfRadiationModelActive())
+    if(activateChannelingModel)
     {
-        std::vector<G4double> photonEnergyInSpectrum =
-            channeling->GetRadiationModel()->GetPhotonEnergyInSpectrum();
-        std::vector<G4double> spectrum =
-            channeling->GetRadiationModel()->GetTotalSpectrum();
+        //getting internal data of G4ChannelingFastSimModel
+        G4RegionStore* regionStore = G4RegionStore::GetInstance();
+        G4Region* regionCh = regionStore->GetRegion("Crystal");
+        G4bool someflag=false;
+        G4ChannelingFastSimModel* channeling =
+            static_cast<G4ChannelingFastSimModel*>
+            (regionCh->GetFastSimulationManager()->GetFastSimulationModel("ChannelingModel",
+                                                                          0,someflag));
 
-        G4int threadID = G4Threading::G4GetThreadId();
+        if (!IsMaster() && channeling->GetIfRadiationModelActive())
+        {
+            std::vector<G4double> photonEnergyInSpectrum =
+                channeling->GetRadiationModel()->GetPhotonEnergyInSpectrum();
+            std::vector<G4double> spectrum =
+                channeling->GetRadiationModel()->GetTotalSpectrum();
 
-        std::ofstream file1;
-        file1.open("Spectrum_"+std::to_string(threadID)+".dat");
+            G4int threadID = G4Threading::G4GetThreadId();
 
-        file1 << std::setprecision(16);
-        for(std::size_t i = 0; i<spectrum.size(); i++)
-            {file1 << photonEnergyInSpectrum[i] << " " << spectrum[i] << G4endl;}
+            std::ofstream file1;
+            file1.open("Spectrum_"+std::to_string(threadID)+".dat");
 
-        file1.close();
+            file1 << std::setprecision(16);
+            for(std::size_t i = 0; i<spectrum.size(); i++)
+                {file1 << photonEnergyInSpectrum[i] << " " << spectrum[i] << G4endl;}
+
+            file1.close();
+        }
     }
-
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

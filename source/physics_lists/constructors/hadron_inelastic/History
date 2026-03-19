@@ -6,6 +6,16 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2026-01-27 Vladimir Ivanchenko (phys-ctor-hinelastic-V11-03-07)
+- G4HadronInelasticQBBC - return back cross section G4ParticleInelasticXS
+    for protons, as it was in 11.3.
+
+## 2026-01-23 Ben Morgan
+- Fix segfault on gcc15/Debug/CXX23 build caused by destruction of G4NeutronPHPBuilder
+  instance used by G4NeutronBuilder in G4HadronPhysicsShielding.
+  - Triaged and fix proposed by Gunter Folger.
+  - See Issue #270
+
 ## 2025-11-19 Vladimir Ivanchenko (phys-ctor-hinelastic-V11-03-06)
 - G4HadronPhysicsQGSP_BERT. G4HadronInelasticQBBC - return back cross section
     G4BGGNucleonInelasticXS for protons, as it was in 11.3. There are problems

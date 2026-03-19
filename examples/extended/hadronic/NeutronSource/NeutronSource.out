@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-04-ref-00    (5-December-2025)
+ Geant4 version Name: geant4-11-04-patch-01    (13-March-2026)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -423,7 +423,7 @@ Index : 2     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=1.310000s Real=1.345461s Sys=0.010000s
+  User=1.160000s Real=1.230270s Sys=0.000000s
 
  The run is 10000 Am241 of 0 eV  within BeO (D =  3 cm  L = 6 cm )
 
@@ -435,33 +435,33 @@ Run Summary
 
  List of generated particles (with meanLife != 0) :
           Ac225:    9999  Emean =  160.06 meV	( 0 eV  --> 1.0677 eV )	mean life = 14.312 d  
-  Ac225[40.100]:    6888  Emean =  357.47 meV	( 0 eV  --> 921.17 meV)	mean life = 1.0387 ns 
+  Ac225[40.10000]:    6888  Emean =  357.47 meV	( 0 eV  --> 921.17 meV)	mean life = 1.0387 ns 
           At217:    9989  Emean =  116.36 keV	( 105.02 keV --> 117.04 keV)	mean life = 47.032 ms 
           Bi209:    9999  Emean =  1.1932 eV 	( 4.9185 meV --> 2.6485 eV )	mean life = 2.9018e+19 y  
           Bi213:    9988  Emean =  132.94 keV	( 119.24 keV --> 132.95 keV)	mean life = 1.0962 h  
             C12:       2  Emean =  1.2575 MeV	( 698.36 keV --> 1.8166 MeV)	stable
           Fr221:    9999  Emean =  77.983 keV	( 3.2596 meV --> 105.65 keV)	mean life = 7.0692 min
-  Fr221[36.640]:    2577  Emean =  104.41 keV	( 94.18 keV --> 105 keV)	mean life = 2.164 ns 
+  Fr221[36.64000]:    2577  Emean =  104.41 keV	( 94.18 keV --> 105 keV)	mean life = 2.164 ns 
           Np237:   10000  Emean =  671.43 eV 	( 2.5029 meV --> 93.678 keV)	mean life = 3.0953e+06 y  
-  Np237[59.541]:    9928  Emean =  92.563 keV	( 89.991 keV --> 92.688 keV)	mean life = 96.949 ns 
+  Np237[59.54092]:    9928  Emean =  92.563 keV	( 89.991 keV --> 92.688 keV)	mean life = 96.949 ns 
           Pa233:   10000  Emean =  28.651 keV	( 7.5088 meV --> 83.755 keV)	mean life = 38.917 d  
-  Pa233[86.481]:    6505  Emean =  81.938 keV	( 77.143 keV --> 82.293 keV)	mean life = 52.658 ns 
+  Pa233[86.48100]:    6505  Emean =  81.938 keV	( 77.143 keV --> 82.293 keV)	mean life = 52.658 ns 
           Pb209:    9999  Emean =  156.91 keV	( 6.309 eV  --> 160.58 keV)	mean life = 4.6657 h  
-  Pb209[2149.430]:     228  Emean =  6.7207 eV 	( 217.09 meV --> 13.097 eV )	mean life = 5.7131 ns 
+  Pb209[2149.43000]:     228  Emean =  6.7207 eV 	( 217.09 meV --> 13.097 eV )	mean life = 5.7131 ns 
           Po213:    9770  Emean =  167.17 eV 	( 15.221 meV --> 145.62 keV)	mean life = 5.3466 us 
           Ra221:      10  Emean =  347.58 meV	( 93.19 meV --> 722.62 meV)	mean life = 40.395 s  
           Ra225:   10000  Emean =  788.58 eV 	( 1.5425 meV --> 280.77 keV)	mean life = 21.496 d  
-  Ra225[25.410]:    8054  Emean =  59.601 keV	( 0.7276 meV --> 340.58 keV)	mean life = 1.2696 ns 
-  Ra225[31.560]:     515  Emean =  88.141 keV	( 79.624 keV --> 316.22 keV)	mean life = 3.0297 ns 
-  Ra225[42.770]:    3971  Emean =    88.5 keV	( 8.0036 meV --> 335.23 keV)	mean life = 4.3281 ns 
+  Ra225[25.41000]:    8054  Emean =  59.601 keV	( 0.7276 meV --> 340.58 keV)	mean life = 1.2696 ns 
+  Ra225[31.56000]:     515  Emean =  88.141 keV	( 79.624 keV --> 316.22 keV)	mean life = 3.0297 ns 
+  Ra225[42.77000]:    3971  Emean =    88.5 keV	( 8.0036 meV --> 335.23 keV)	mean life = 4.3281 ns 
           Rn217:      11  Emean =  11.338 keV	( 75.146 meV --> 124.71 keV)	mean life = 779.06 us 
-  Rn217[149.140]:       4  Emean =  122.01 keV	( 122.01 keV --> 122.01 keV)	mean life = 2.164 ns 
-  Rn217[174.290]:       3  Emean =  121.55 keV	( 121.55 keV --> 121.55 keV)	mean life = 2.164 ns 
-  Rn217[88.890]:       1  Emean =   123.1 keV	( 123.1 keV --> 123.1 keV)	mean life = 2.164 ns 
-  Rn217[93.000]:       2  Emean =  61.513 keV	( 146.63 meV --> 123.03 keV)	mean life = 5.7708 ns 
+  Rn217[149.14000]:       4  Emean =  122.01 keV	( 122.01 keV --> 122.01 keV)	mean life = 2.164 ns 
+  Rn217[174.29000]:       3  Emean =  121.55 keV	( 121.55 keV --> 121.55 keV)	mean life = 2.164 ns 
+  Rn217[88.89000]:       1  Emean =   123.1 keV	( 123.1 keV --> 123.1 keV)	mean life = 2.164 ns 
+  Rn217[93.00000]:       2  Emean =  61.513 keV	( 146.63 meV --> 123.03 keV)	mean life = 5.7708 ns 
           Th229:    9795  Emean =  84.246 keV	( 80.637 keV --> 84.36 keV)	mean life = 11376 y  
           Tl205:    9999  Emean =  59.305 keV	( 108.67 meV --> 60.11 keV)	stable
-  Tl205[203.700]:     134  Emean =  56.206 keV	( 56.206 keV --> 56.206 keV)	mean life = 2.1063 ns 
+  Tl205[203.70000]:     134  Emean =  56.206 keV	( 56.206 keV --> 56.206 keV)	mean life = 2.1063 ns 
           Tl209:     229  Emean =  112.18 keV	( 106.15 keV --> 112.61 keV)	mean life = 3.1191 min
            U233:   10000  Emean =  402.14 meV	( 3.7544 meV --> 1.9298 eV )	mean life = 2.2982e+05 y  
           alpha:   89996  Emean =  5.6097 MeV	( 2.8774 MeV --> 8.3754 MeV)	stable

@@ -5,6 +5,29 @@ which **must** added in reverse chronological order (newest at the top).
 It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
+
+## 2026-03-06 Makoto Asai (run-V11-03-07)
+- Fixing the material scanner
+ - G4MaterialScanner.cc
+    Delete G4Event object at the end of each event.
+    Make sure geometry is optimized before starting the scan, cooping with 
+    multithreaded geometry optimization.
+ - G4MSSteppingAction.cc
+    Fix average A and average Z taking number of atoms into account.
+ - G4RunManager.cc
+    Material scanner is instantiated only for the master thread.
+ - G4MatScanMessenger.cc
+    Prevent material scanner UI commands from broadcasting to worker threads.
+    Material scanner is centrally managed by the master thread.
+
+## 2026-01-22 Igor Semeniouk
+- Introducing UI command to force geometry optimization
+ - G4RunManager, G4MTRunManager, G4WorkerRunManager : add GeometryOptimisation method 
+ - G4RunMessenger : the /run/undertakeOptimisation command added
+
+## 2026-01-16 Alvaro Tolosa-Delgado
+- Re-enable automatic instantiation of G4MaterialScanner in G4RunManager.
+
 ## 2025-11-06 Laurent Desorgher (run-V11-03-06)
 - G4AdjointPrimaryGeneratorAction : 
     Remove pointer attribute on G4AdjointPrimaryGenerator and call it by G4AdjointPrimaryGenerator::GetInstance() 

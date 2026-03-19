@@ -25,8 +25,8 @@
 //
 //
 
-#ifndef G4ChannelingMaterialData_h
-#define G4ChannelingMaterialData_h 1
+#ifndef G4CHANNELINGMATERIALDATA_HH
+#define G4CHANNELINGMATERIALDATA_HH
 
 #include "G4ios.hh"
 #include "globals.hh"
@@ -38,69 +38,53 @@
 #include <unordered_map>
 #include "G4PhysicsLinearVector.hh"
 
-class G4ChannelingMaterialData : public G4VMaterialExtension{
-public:
+class G4ChannelingMaterialData : public G4VMaterialExtension
+{
+  public:
     
     G4ChannelingMaterialData(const G4String&);
     virtual ~G4ChannelingMaterialData();
     
-public:
-    void Print() const {G4cout << "Channeling Material Data" << G4endl;};
+    void Print() const { G4cout << "Channeling Material Data" << G4endl; }
     void SetFilename(const G4String&);
-    void SetFilenameElement(const G4String&,std::string);
+    void SetFilenameElement(const G4String&, const G4String&);
     
-public:
-    G4ChannelingECHARM* GetPot() {return fPotential;};
-    G4ChannelingECHARM* GetEFX() {return fElectricFieldX;};
-    G4ChannelingECHARM* GetEFY() {return fElectricFieldY;};
-    G4ChannelingECHARM* GetNuD() {return fNucleiDensity;};
-    G4ChannelingECHARM* GetElD() {return fElectronDensity;};
+    G4ChannelingECHARM* GetPot() { return fPotential; }
+    G4ChannelingECHARM* GetEFX() { return fElectricFieldX; }
+    G4ChannelingECHARM* GetEFY() { return fElectricFieldY; }
+    G4ChannelingECHARM* GetNuD() { return fNucleiDensity; }
+    G4ChannelingECHARM* GetElD() { return fElectronDensity; }
         
-private:
-    G4ChannelingECHARM* fPotential;
-    G4ChannelingECHARM* fElectricFieldX;
-    G4ChannelingECHARM* fElectricFieldY;
-    G4ChannelingECHARM* fNucleiDensity;
-    G4ChannelingECHARM* fElectronDensity;
+    G4ChannelingECHARM* GetPotEl(const G4String& name) { return fPotentialElement[name]; }
+    G4ChannelingECHARM* GetEFXEl(const G4String& name) { return fElectricFieldXElement[name]; }
+    G4ChannelingECHARM* GetEFYEl(const G4String& name) { return fElectricFieldYElement[name]; }
+    G4ChannelingECHARM* GetNuDEl(const G4String& name) { return fNucleiDensityElement[name]; }
+    G4ChannelingECHARM* GetElDEl(const G4String& name) { return fElectronDensityElement[name]; }
     
-public:
-    G4ChannelingECHARM* GetPotEl(std::string name) {return fPotentialElement[name];};
-    G4ChannelingECHARM* GetEFXEl(std::string name) {return fElectricFieldXElement[name];};
-    G4ChannelingECHARM* GetEFYEl(std::string name) {return fElectricFieldYElement[name];};
-    G4ChannelingECHARM* GetNuDEl(std::string name) {return fNucleiDensityElement[name];};
-    G4ChannelingECHARM* GetElDEl(std::string name) {return fElectronDensityElement[name];};
+    virtual G4bool IsBent() { return bIsBent; }
     
-private:
-    std::unordered_map<std::string,G4ChannelingECHARM*> fPotentialElement;
-    std::unordered_map<std::string,G4ChannelingECHARM*> fElectricFieldXElement;
-    std::unordered_map<std::string,G4ChannelingECHARM*> fElectricFieldYElement;
-    std::unordered_map<std::string,G4ChannelingECHARM*> fNucleiDensityElement;
-    std::unordered_map<std::string,G4ChannelingECHARM*> fElectronDensityElement;
-    
-public:
-    virtual G4bool IsBent() {
-        return bIsBent;
-    };
-    
-    virtual G4ThreeVector GetBR(G4ThreeVector& v3) {
-        return G4ThreeVector(fVectorR->Value(v3.z()),0.,0.);
-    };
+    virtual G4ThreeVector GetBR(const G4ThreeVector& v3) { return G4ThreeVector(fVectorR->Value(v3.z()),0.,0.); }
     virtual void SetBR(const G4String&);
     virtual void SetBR(G4double);
 
-protected:
-    G4PhysicsVector* fVectorR;
-    G4bool bIsBent;
+  protected:
+
+    G4PhysicsVector* fVectorR = nullptr;
+    G4bool bIsBent = false;
+
+  private:
+
+    G4ChannelingECHARM* fPotential = nullptr;
+    G4ChannelingECHARM* fElectricFieldX = nullptr;
+    G4ChannelingECHARM* fElectricFieldY = nullptr;
+    G4ChannelingECHARM* fNucleiDensity = nullptr;
+    G4ChannelingECHARM* fElectronDensity = nullptr;
+
+    std::unordered_map<std::string, G4ChannelingECHARM*> fPotentialElement;
+    std::unordered_map<std::string, G4ChannelingECHARM*> fElectricFieldXElement;
+    std::unordered_map<std::string, G4ChannelingECHARM*> fElectricFieldYElement;
+    std::unordered_map<std::string, G4ChannelingECHARM*> fNucleiDensityElement;
+    std::unordered_map<std::string, G4ChannelingECHARM*> fElectronDensityElement;
 };
 
 #endif
-
-
-
-
-
-
-
-
-
-

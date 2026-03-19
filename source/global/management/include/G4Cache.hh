@@ -211,6 +211,7 @@ G4Cache<V>::G4Cache()
 {
   G4AutoLock l(G4TypeMutex<G4Cache<V>>());
   id = instancesctr++;
+  theCache.Initialize(id);
 #ifdef g4cdebug
   std::cout << "G4Cache id: " << id << std::endl;
 #endif
@@ -290,15 +291,15 @@ G4Cache<V>::~G4Cache()
   } catch(std::system_error& e)
   {
     // the error that comes from locking an unavailable mutex
-#ifdef G4VERBOSE
-    G4cout << "Non-critical error: mutex lock failure in ~G4Cache<"
-           << typeid(V).name() << ">. " << G4endl
+#ifdef g4cdebug
+    std::cout << "Non-critical error: mutex lock failure in ~G4Cache<"
+           << typeid(V).name() << ">. " << std::endl
            << "If the RunManagerKernel has been deleted, it failed to "
-           << "delete an allocated resource" << G4endl
+           << "delete an allocated resource" << std::endl
            << "and this destructor is being called after the statics "
-           << "were destroyed." << G4endl;
-    G4cout << "Exception: [code: " << e.code() << "] caught: " << e.what()
-           << G4endl;
+           << "were destroyed." << std::endl;
+    std::cout << "Exception: [code: " << e.code() << "] caught: " << e.what()
+           << std::endl;
 #endif
   }
   ++dstrctr;

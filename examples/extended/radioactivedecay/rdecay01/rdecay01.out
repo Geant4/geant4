@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-04-ref-00    (5-December-2025)
+ Geant4 version Name: geant4-11-04-patch-01    (13-March-2026)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -83,7 +83,7 @@ Step#       X          Y          Z         KineE         dEStep    StepLeng   T
     1       0 fm       0 fm       0 fm       0 eV           0 eV       0 fm       0 fm      World   RadioactiveDecay
 
     :----- List of secondaries ----------------
-   Ni60[2505.753]:  energy = 3.228 eV   time = 1.348 y  
+   Ni60[2505.75300]:  energy = 3.228 eV   time = 1.348 y  
        anti_nu_e:  energy = 36.43 keV  time = 1.348 y  
               e-:  energy = 277.2 keV  time = 1.348 y  
     :------------------------------------------
@@ -106,17 +106,17 @@ Step#       X          Y          Z         KineE         dEStep    StepLeng   T
     1      -1 cm  -1.283 mm  -8.419 mm   36.43 keV          0 eV   1.313 cm   1.313 cm      World   OutOfWorld
 
 *********************************************************************************************************
-* G4Track Information:   Particle = Ni60[2505.753],   Track ID = 2,   Parent ID = 1
+* G4Track Information:   Particle = Ni60[2505.75300],   Track ID = 2,   Parent ID = 1
 *********************************************************************************************************
 
 Step#       X          Y          Z         KineE         dEStep    StepLeng   TrakLeng    Volume     Process
     0       0 fm       0 fm       0 fm   3.228 eV           0 eV       0 fm       0 fm      World   initStep
-    End of event. Decay chain: Co60 ---> Ni60[2505.753]
+    End of event. Decay chain: Co60 ---> Ni60[2505.75300]
 
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.002324s Sys=0.000000s
+  User=0.000000s Real=0.000887s Sys=0.000000s
 
  ======================== run summary ======================
  The run was 1 Co60 of 0 eV 
@@ -125,7 +125,7 @@ Run Summary
  Nb of generated particles: 
 
              Co60:       1  Emean =      0 eV 	( 0 eV  --> 0 eV )	mean life = 7.61 y  
-   Ni60[2505.753]:       1  Emean =  3.228 eV 	( 3.228 eV  --> 3.228 eV )
+  Ni60[2505.75300]:       1  Emean =  3.228 eV 	( 3.228 eV  --> 3.228 eV )
         anti_nu_e:       1  Emean =  36.43 keV	( 36.43 keV --> 36.43 keV)	stable
                e-:       1  Emean =  277.2 keV	( 277.2 keV --> 277.2 keV)	stable
 
@@ -158,39 +158,39 @@ Index : 0     used in the geometry : Yes
 
 ### Run 1 starts.
 --> Event 0 starts.
-    End of event. Decay chain: Co60 ---> Ni60[2505.753]
+    End of event. Decay chain: Co60 ---> Ni60[2505.75300]
 
 --> Event 10000 starts.
-    End of event. Decay chain: Co60 ---> Ni60[2505.753]
+    End of event. Decay chain: Co60 ---> Ni60[2505.75300]
 
 --> Event 20000 starts.
-    End of event. Decay chain: Co60 ---> Ni60[2505.753]
+    End of event. Decay chain: Co60 ---> Ni60[2505.75300]
 
 --> Event 30000 starts.
-    End of event. Decay chain: Co60 ---> Ni60[2505.753]
+    End of event. Decay chain: Co60 ---> Ni60[2505.75300]
 
 --> Event 40000 starts.
-    End of event. Decay chain: Co60 ---> Ni60[2505.753]
+    End of event. Decay chain: Co60 ---> Ni60[2505.75300]
 
 --> Event 50000 starts.
-    End of event. Decay chain: Co60 ---> Ni60[2505.753]
+    End of event. Decay chain: Co60 ---> Ni60[2505.75300]
 
 --> Event 60000 starts.
-    End of event. Decay chain: Co60 ---> Ni60[2505.753]
+    End of event. Decay chain: Co60 ---> Ni60[2505.75300]
 
 --> Event 70000 starts.
-    End of event. Decay chain: Co60 ---> Ni60[2505.753]
+    End of event. Decay chain: Co60 ---> Ni60[2505.75300]
 
 --> Event 80000 starts.
-    End of event. Decay chain: Co60 ---> Ni60[2505.753]
+    End of event. Decay chain: Co60 ---> Ni60[2505.75300]
 
 --> Event 90000 starts.
-    End of event. Decay chain: Co60 ---> Ni60[2505.753]
+    End of event. Decay chain: Co60 ---> Ni60[2505.75300]
 
  Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=0.440000s Real=0.446223s Sys=0.000000s
+  User=0.420000s Real=0.418635s Sys=0.000000s
 
  ======================== run summary ======================
  The run was 100000 Co60 of 0 eV 
@@ -199,8 +199,8 @@ Run Summary
  Nb of generated particles: 
 
              Co60:  100000  Emean =      0 eV 	( 0 eV  --> 0 eV )	mean life = 7.61 y  
-   Ni60[1332.514]:     118  Emean =  18.86 eV 	( 604.8 meV --> 32.92 eV )
-   Ni60[2505.753]:   99882  Emean =  1.467 eV 	( 0 eV  --> 3.748 eV )
+  Ni60[1332.51400]:     118  Emean =  18.86 eV 	( 604.8 meV --> 32.92 eV )
+  Ni60[2505.75300]:   99882  Emean =  1.467 eV 	( 0 eV  --> 3.748 eV )
         anti_nu_e:  100000  Emean =  218.2 keV	( 1 eV  --> 1.461 MeV)	stable
                e-:  100000  Emean =  96.82 keV	( 7.341 eV  --> 1.413 MeV)	stable
 
@@ -232,39 +232,39 @@ Index : 0     used in the geometry : Yes
 
 ### Run 2 starts.
 --> Event 0 starts.
-    End of event. Decay chain: Co60 ---> Ni60[2505.753] ---> Ni60[1332.514] ---> Ni60
+    End of event. Decay chain: Co60 ---> Ni60[2505.75300] ---> Ni60[1332.51400] ---> Ni60
 
 --> Event 10000 starts.
-    End of event. Decay chain: Co60 ---> Ni60[2505.753] ---> Ni60[1332.514] ---> Ni60
+    End of event. Decay chain: Co60 ---> Ni60[2505.75300] ---> Ni60[1332.51400] ---> Ni60
 
 --> Event 20000 starts.
-    End of event. Decay chain: Co60 ---> Ni60[2505.753] ---> Ni60[1332.514] ---> Ni60
+    End of event. Decay chain: Co60 ---> Ni60[2505.75300] ---> Ni60[1332.51400] ---> Ni60
 
 --> Event 30000 starts.
-    End of event. Decay chain: Co60 ---> Ni60[2505.753] ---> Ni60[1332.514] ---> Ni60
+    End of event. Decay chain: Co60 ---> Ni60[2505.75300] ---> Ni60[1332.51400] ---> Ni60
 
 --> Event 40000 starts.
-    End of event. Decay chain: Co60 ---> Ni60[2505.753] ---> Ni60[1332.514] ---> Ni60
+    End of event. Decay chain: Co60 ---> Ni60[2505.75300] ---> Ni60[1332.51400] ---> Ni60
 
 --> Event 50000 starts.
-    End of event. Decay chain: Co60 ---> Ni60[2505.753] ---> Ni60[1332.514] ---> Ni60
+    End of event. Decay chain: Co60 ---> Ni60[2505.75300] ---> Ni60[1332.51400] ---> Ni60
 
 --> Event 60000 starts.
-    End of event. Decay chain: Co60 ---> Ni60[2505.753] ---> Ni60[1332.514] ---> Ni60
+    End of event. Decay chain: Co60 ---> Ni60[2505.75300] ---> Ni60[1332.51400] ---> Ni60
 
 --> Event 70000 starts.
-    End of event. Decay chain: Co60 ---> Ni60[2505.753] ---> Ni60[1332.514] ---> Ni60
+    End of event. Decay chain: Co60 ---> Ni60[2505.75300] ---> Ni60[1332.51400] ---> Ni60
 
 --> Event 80000 starts.
-    End of event. Decay chain: Co60 ---> Ni60[2505.753] ---> Ni60[1332.514] ---> Ni60
+    End of event. Decay chain: Co60 ---> Ni60[2505.75300] ---> Ni60[1332.51400] ---> Ni60
 
 --> Event 90000 starts.
-    End of event. Decay chain: Co60 ---> Ni60[2505.753] ---> Ni60[1332.514] ---> Ni60
+    End of event. Decay chain: Co60 ---> Ni60[2505.75300] ---> Ni60[1332.51400] ---> Ni60
 
  Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=1.040000s Real=1.038794s Sys=0.000000s
+  User=0.970000s Real=0.974130s Sys=0.000000s
 
  ======================== run summary ======================
  The run was 100000 Co60 of 0 eV 
@@ -274,9 +274,9 @@ Run Summary
 
              Co60:  100000  Emean =      0 eV 	( 0 eV  --> 0 eV )	mean life = 7.61 y  
              Ni60:  100000  Emean =  15.91 eV 	( 15.91 eV  --> 41.74 eV )	stable
-   Ni60[1332.514]:   99999  Emean =  12.34 eV 	( 1.227 eV  --> 30.74 eV )
-   Ni60[2158.632]:      16  Emean =   1.27 eV 	( 1.079 eV  --> 4.128 eV )
-   Ni60[2505.753]:   99884  Emean =   1.47 eV 	( 2.394 meV --> 3.687 eV )
+  Ni60[1332.51400]:   99999  Emean =  12.34 eV 	( 1.227 eV  --> 30.74 eV )
+  Ni60[2158.63200]:      16  Emean =   1.27 eV 	( 1.079 eV  --> 4.128 eV )
+  Ni60[2505.75300]:   99884  Emean =   1.47 eV 	( 2.394 meV --> 3.687 eV )
         anti_nu_e:  100000  Emean =  217.8 keV	( 3.332 keV --> 1.483 MeV)	stable
                e-:  100030  Emean =  97.45 keV	( 524.8 meV --> 1.36 MeV)	stable
             gamma:  199869  Emean =  1.253 MeV	( 347.1 keV --> 2.159 MeV)	stable
@@ -346,7 +346,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=0.780000s Real=0.804824s Sys=0.030000s
+  User=0.760000s Real=0.780533s Sys=0.010000s
 
  ======================== run summary ======================
  The run was 100000 Ca47 of 0 eV 

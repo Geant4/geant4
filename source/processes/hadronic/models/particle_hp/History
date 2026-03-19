@@ -6,6 +6,17 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2026-02-23 Dmitri Konstantinov (hadr-hpp-V11-03-06)
+- G4ParticleHPContAngularPar - reduced allocator fragmentation and memory
+  churn in BuildByInterpolation() by removing unconditional deep copies
+  of input angular distributions. Copies are now created only in case of
+  self-aliasing (this == &angparX), preserving correctness while avoiding
+  excessive per-call heap allocations.
+
+## 2025-12-23 Vladimir Ivanchenko (hadr-hpp-V11-03-05)
+- G4ParticleHPNBodyPhaseSpace, G4ParticleHPInelasticCompFS - added
+  G4HadronicException header.
+
 ## 2025-09-27 Vladimir Ivanchenko (hadr-hpp-V11-03-04)
 - G4FissionFragmentGenerator, G4FissionFragmentGenerator, G4ParticleHPElementData,
   G4ParticleHPKallbachMannSyst, G4ParticleHPThermalScattering,

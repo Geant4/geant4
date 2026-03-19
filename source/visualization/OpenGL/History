@@ -5,6 +5,19 @@ which **must** added in reverse chronological order (newest at the top).
 It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
+
+## 2026-02-01 John Allison (opengl-V11-03-10)
+- G4OpenGLViewer.cc:
+  - Remove archaic and unnecessary 20th-century #include statements. The first
+    raises a warning on some platforms.
+    - #include "G4ios.hh"
+    - #include <CLHEP/Units/SystemOfUnits.h>
+
+## 2025-12-26 John Allison
+- G4OpenGLQtViewer.cc: Fix bug 2688: 
+  - In G4OpenGLQtViewer::G4wheelEvent:
+    - Fix for Qt version < 5.14.
+
 ## 2025-10-31 Andrea Barresi (opengl-V11-03-09)
 - G4OpenGLQtViewer
   - Improved context menu behavior for picking

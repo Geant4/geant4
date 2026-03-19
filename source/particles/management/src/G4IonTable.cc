@@ -826,7 +826,7 @@ G4String G4IonTable::GetIonName(G4int Z, G4int A, G4double E,
   if (E > 0 || flb != G4Ions::G4FloatLevelBase::no_Float) {
     std::ostringstream os;
     os.setf(std::ios::fixed);
-    os.precision(3);
+    os.precision(5);
     // Excited nucleus
     os << '[' << E / keV;
     if (flb != G4Ions::G4FloatLevelBase::no_Float) {

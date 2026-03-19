@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-04-ref-00    (5-December-2025)
+ Geant4 version Name: geant4-11-04-patch-01    (13-March-2026)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -19,7 +19,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
                              WWW : http://geant4.org/
 **************************************************************
 
-##### Create analysis manager   0xaa95d0
+##### Create analysis manager   0x1fd7960
 Using  analysis manager
 #
 # MT
@@ -797,14 +797,14 @@ Setting was ignored.
  Run terminated.
 Run Summary
   Number of events processed : 2
-  User=1.030000s Real=1.045908s Sys=0.010000s
+  User=0.950000s Real=0.955671s Sys=0.010000s
 ... write file : dna.root - done
 ... close file : dna.root - done
 G4 kernel has come to Quit state.
 Deleting G4Run (id:0) 
-UserDetectorConstruction deleted 0x946c40
-UserPhysicsList deleted 0x8e3a48
-UserActionInitialization deleted 0xa9ca70
+UserDetectorConstruction deleted 0x1e6cbb0
+UserPhysicsList deleted 0x1e099b8
+UserActionInitialization deleted 0x1fcab40
 UserWorkerInitialization deleted 0
 UserWorkerThreadInitialization deleted 0
 UserRunAction deleted.

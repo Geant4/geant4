@@ -178,7 +178,8 @@ G4fissionEvent::G4fissionEvent(G4int isotope, G4double time,
    }
 }
 
-G4fissionEvent::~G4fissionEvent() {
+G4fissionEvent::~G4fissionEvent()
+{
    if (neutronNu > 0) {
       delete [] neutronEnergies;
       delete [] neutronVelocities;

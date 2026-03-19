@@ -6,6 +6,9 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2025-12-23 Vladimir Ivanchenko (hadr-partonstring-mgt-V11-03-00)
+- G4VSplitableHadron - added G4HadronicException header.
+
 ## 2022-11-11 Alberto Ribon (hadr-partonstring-mgt-V11-00-03)
 - G4VPartonStringModel : added debugging information on the number of lambdas
   for residual projectile hypernuclei.

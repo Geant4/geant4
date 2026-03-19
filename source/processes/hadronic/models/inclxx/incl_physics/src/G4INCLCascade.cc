@@ -219,7 +219,7 @@ namespace G4INCL {
 
     //G4double AnnihilationBarrier = kineticEnergy;
     if((projectileSpecies.theType == antiProton && kineticEnergy <= theConfig->getAtrestThreshold()) || (projectileSpecies.theType == antiNeutron && kineticEnergy <= theConfig->getnbAtrestThreshold())){
-      double SpOverSn;
+      G4double SpOverSn;
       if(projectileSpecies.theType == antiProton)
         SpOverSn = 1.331;//from experiments with deuteron (E.Klempt)
       else if(projectileSpecies.theType == antiNeutron)
@@ -258,16 +258,16 @@ namespace G4INCL {
       if(Z > 30)
         isModelA=false;
       else if(Z > 9 && Z <=30){ //Maybe change and add another dependance than Z
-        double rndmA = Random::shoot();
+        G4double rndmA = Random::shoot();
         if(rndmA > 0.5)//Random threshold : should be improved to take into account the orbit in which the separation takes place.
           isModelA=false;
       }
       if(isModelA){
         //Antideuteron Model A case : 2 annihilation at the same time
-        double pbarSpOverSn = 1.331;
-        double nbarSpOverSn = 1./1.331;
-        double pbarneutronprob;
-        double nbarneutronprob;
+        G4double pbarSpOverSn = 1.331;
+        G4double nbarSpOverSn = 1./1.331;
+        G4double pbarneutronprob;
+        G4double nbarneutronprob;
         if(theConfig->isNaturalTarget()){
           theA = ParticleTable::drawRandomNaturalIsotope(Z) - 2;
           nbarneutronprob = (theA + 2 - Z)/(theA + 2 - Z + nbarSpOverSn*Z);  
@@ -299,8 +299,8 @@ namespace G4INCL {
           }
         }
       } else if (!isModelA){//Model B : Antiproton is detached from antideuteron
-        double SpOverSn = 1.331;
-        double neutronprob;
+        G4double SpOverSn = 1.331;
+        G4double neutronprob;
         if(theConfig->isNaturalTarget()){
           theA = ParticleTable::drawRandomNaturalIsotope(Z) - 1; 
           neutronprob = (theA + 1 - Z)/(theA + 1 - Z + SpOverSn*Z);  
@@ -312,7 +312,7 @@ namespace G4INCL {
 
         theS = S;
       
-        double rndm = Random::shoot();
+        G4double rndm = Random::shoot();
         if(rndm >= neutronprob){     //proton is annihilated
           theEventInfo.annihilationP = true;
           theZ = Z - 1;
@@ -649,7 +649,7 @@ namespace G4INCL {
         G4double SpOverSn = 1./1.331;  //from experiments with deuteron (E.Klempt)
 
         ThreeVector dummy(0.,0.,0.);
-        double rndm = Random::shoot()*(SpOverSn+1);
+        G4double rndm = Random::shoot()*(SpOverSn+1);
         if (rndm <= SpOverSn) {  //proton is annihilated
           theEventInfo.annihilationP = true;
           Particle *p2 = new Particle(Neutron, dummy, dummy);
@@ -690,27 +690,27 @@ namespace G4INCL {
       INCL_DEBUG("Reading nbarp kaonic final states" << dataPathnbarpk << '\n');
 #endif
       //read probabilities and particle types from file
-      std::vector<double> probabilities;  //will store each FS yield
+      std::vector<G4double> probabilities;  //will store each FS yield
       std::vector<std::vector<G4String>> particle_types;  //will store particle names
-      double sum = 0.0;  //will contain a sum of probabilities of all FS in the file
-      double kaonicFSprob=0.05;  //probability to kave kaonic FS
+      G4double sum = 0.0;  //will contain a sum of probabilities of all FS in the file
+      G4double kaonicFSprob=0.05;  //probability to kave kaonic FS
 
       ParticleList starlist;
       ThreeVector mommy;  //momentum to be assigned later
 
-      double rdm = Random::shoot();
+      G4double rdm = Random::shoot();
       ThreeVector annihilationPosition(0.,0.,0.);
       if (rdm < (1.-kaonicFSprob)) {  // pionic FS was chosen
         INCL_DEBUG("pionic nn final state chosen" << '\n');
         if (targetA==1 || (targetA==2 && theEventInfo.annihilationP)) 
-          {sum = read_file(dataPathnbarp, probabilities, particle_types);}
+          {sum = read_file(std::move(dataPathnbarp), probabilities, particle_types);}
         else
-          {sum = read_file(dataPathnbarn, probabilities, particle_types);}
+          {sum = read_file(std::move(dataPathnbarn), probabilities, particle_types);}
         rdm = (rdm/(1.-kaonicFSprob))*sum;  //99.88 normalize by the sum of probabilities in the file
         //now get the line number in the file where the FS particles are stored:
-        G4int n = findStringNumber(rdm, probabilities)-1;
+        G4int n = findStringNumber(rdm, std::move(probabilities))-1;
         if ( n < 0 ) return theEventInfo;
-        for (G4int j = 0; j < static_cast<int>(particle_types[n].size()); j++) {
+        for (G4int j = 0; j < static_cast<G4int>(particle_types[n].size()); j++) {
           if (particle_types[n][j] == "pi0") {
             Particle *p = new Particle(PiZero, mommy, annihilationPosition);
             starlist.push_back(p);
@@ -743,7 +743,7 @@ namespace G4INCL {
             starlist.push_back(pp);
           } else {
             INCL_ERROR("Some non-existing FS particle detected when reading pbar FS files");
-            for (int jj = 0; jj < static_cast<int>(particle_types[n].size()); jj++) {
+            for (G4int jj = 0; jj < static_cast<G4int>(particle_types[n].size()); jj++) {
 #ifdef INCLXX_IN_GEANT4_MODE
               G4cout << "gotcha! " << particle_types[n][jj] << G4endl;
 #else
@@ -760,14 +760,14 @@ namespace G4INCL {
       } else {
         INCL_DEBUG("kaonic pp final state chosen" << '\n');
         if (targetA==1 || (targetA==2 && theEventInfo.annihilationP)) 
-          {sum = read_file(dataPathnbarpk, probabilities, particle_types);}
+          {sum = read_file(std::move(dataPathnbarpk), probabilities, particle_types);}
         else
-          {sum = read_file(dataPathnbarnk, probabilities, particle_types);}
+          {sum = read_file(std::move(dataPathnbarnk), probabilities, particle_types);}
         rdm = ((1.-rdm)/kaonicFSprob)*sum;  //2670 normalize by the sum of probabilities in the file
         //now get the line number in the file where the FS particles are stored:
-        G4int n = findStringNumber(rdm, probabilities)-1;
+        G4int n = findStringNumber(rdm, std::move(probabilities))-1;
         if ( n < 0 ) return theEventInfo;
-        for (G4int j = 0; j < static_cast<int>(particle_types[n].size()); j++) {
+        for (G4int j = 0; j < static_cast<G4int>(particle_types[n].size()); j++) {
           if (particle_types[n][j] == "pi0") {
             Particle *p = new Particle(PiZero, mommy, annihilationPosition);
             starlist.push_back(p);
@@ -797,7 +797,7 @@ namespace G4INCL {
             starlist.push_back(p);
           } else {
             INCL_ERROR("Some non-existing FS particle detected when reading pbar FS files");
-            for (int jj = 0; jj < static_cast<int>(particle_types[n].size()); jj++) {
+            for (G4int jj = 0; jj < static_cast<G4int>(particle_types[n].size()); jj++) {
 #ifdef INCLXX_IN_GEANT4_MODE
               G4cout << "gotcha! " << particle_types[n][jj] << G4endl;
 #else

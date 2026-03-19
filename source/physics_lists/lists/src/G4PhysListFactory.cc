@@ -146,7 +146,7 @@ G4PhysListFactory::GetReferencePhysList(const G4String& name)
     for (std::size_t i=1; i<nlists_em; ++i) { 
       if (listnames_em[i] == ss) { 
 	em_opt = i;
-	em_name = ss;
+	em_name = std::move(ss);
         n -= 4;
         break; 
       }

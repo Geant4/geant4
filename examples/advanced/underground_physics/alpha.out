@@ -1,4 +1,4 @@
 Evt     Eprim   Etot    LXe     LXeTime PMT     PMTTime Seed1           Seed2           First   Flags
 #       MeV     MeV     hits    ns      hits    ns                                      hit
 
-0     	5.4860	5.0030	1195	0x1.8952f62d4283p-14	5146	0x1.81ee54d067a38p+4	1	12504328	alpha	gamma electron other 
+0     	5.4860	5.0030	1195	0x1.8952f62d4283p-14	5146	0x1.81ee54d067a38p+4	1	34904328	alpha	gamma electron other 

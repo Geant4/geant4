@@ -230,8 +230,9 @@ G4double G4VSIntegration::SampleValue()
     if ((gg > gmax || n >= nmax) && fVerbose > 0) {
       ++fnWarn;
       if (fnWarn < fWarnLimit) {
+	G4double xg = (gmax > 0.0) ? gg/gmax : 0.0;
 	G4cout << "### G4VSIntegration::SampleValue() for " << ModelName()
-	       << " in area=" << idx << " n=" << n << " gg/gmax=" << gg/gmax
+	       << " in area=" << idx << " n=" << n << " gg/gmax=" << xg
 	       << " prob=" << gg << " gmax=" << gmax << G4endl; 
 	G4cout << "    E=" << e << " Emin=" << fEmin << " Emax=" << fEmax
 	       << " E1=" << fE1 << " E2=" << fE2 << " E3=" << E3

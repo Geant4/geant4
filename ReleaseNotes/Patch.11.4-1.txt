@@ -1,0 +1,192 @@
+
+                 Geant4 11.4 - patch-01 Release Notes
+                 ------------------------------------
+
+                                                           13 March 2026
+
+List of fixes included in this public patch since release 11.4.0:
+
+o CMake
+  -----
+  + Use CMake 3.16-3.19 compatible construction of interface libraries.
+    Addresses problem report #2700.
+    Fixed logic error in construction of link interface to such interface
+    libraries that resulted in empty target creation/export.
+
+o Geometry
+  --------
+  + magneticfield:
+    o Fixed reported Coverity defect for restoring original stream
+      precision in G4FieldManager::ReportBadEpsilonValue().
+
+o Global
+  ------
+  + Always initialize G4CacheReference for a G4Cache instance on construction
+    of latter; prevents fatal G4Exception when only low ID G4Cache elements
+    are accessed.
+    Protect debug warning printout from G4Cache destructor within 'g4cdebug'
+    flag as it was originally intended. Addressing long-standing false-positive
+    issue happening in MT mode (G4MTRunManager only) on macOS/clang.
+    Also addressing problem report #2696.
+  + G4VSIntegration: fixed reported Coverity defect.
+  + Updated date and version for 11.4.1.
+
+o Interfaces
+  ----------
+  + G4UIQt: reimplemented the command search feature for the Help tree,
+    addressing problem report #2683.
+    Fix in ComputeStringMatchScore(..) in setting number of elements for a
+    QVector; use G4 types where appropriate. Fixed compilation warning for
+    implicit type conversion on macOS/XCode.
+
+o Particles
+  ---------
+  + Fixed energy conservation in G4MuonDecayChannel.
+    Addressing problem report #2678.
+  + Extented excited isomer name from 3 to 5 digits after dot; also
+    addressing problem report #2680.
+
+o Physics Lists
+  -------------
+  + constructors/electromagnetic:
+    o G4EmStandardPhysics_option4: added possibility to use external dEdx
+      tables for ions, through substitution of the G4LindhardSorencenIonModel
+      model class by G4IonParameterisedModel. Addressing problem report #2703.
+  + constructors/hadron_elastic:
+    o G4ChargeExchangePhysics, G4ChargeExchangemessenger: added two different
+      biasing factors for pions and kaons (request by NA64).
+  + constructors/hadron_inelastic:
+    o In G4HadronInelasticQBBC, return back cross-section
+      G4ParticleInelasticXS for protons as it was in release 11.3.
+    o Fixed segmentation fault occurring on Linux/gcc15/Debug/CXX23, caused
+      by in-scope destruction of G4NeutronPHPBuilder instance used by
+      G4NeutronBuilder in G4HadronPhysicsShielding.
+  + lists:
+    o G4PhysListFactory: trivial fix for reported Coverity defect.
+
+o Processes - Electromagnetic
+  ---------------------------
+  + lowenergy:
+    o G4LivermorePolarizedComptonModel: improved/corrected references to
+      quantum entanglement papers.
+ 
+o Processes - Hadronic
+  --------------------
+  + cross_sections:
+    o G4ChargeExchangeXS: added two different biasing factors for pions and
+      kaons (requested by NA64). Removed debug printout and fixed reported
+      Coverity defect.
+  + models/binary_cascade:
+    o Fixed reported Coverity defects to avoid parameter string copy in
+      G4BinaryCascade.
+    o G4GeneratorPrecompoundInterface: added G4HadronicException header.
+  + models/cascade:
+    o Directly use std::cbrt(double) in G4InuclSpecialFunctions, as now
+      standard and available in <cmath>, replacing old ad-hoc implementation.
+      Minor code formatting.
+  + models/coherent_elastic:
+    o G4ChargeExchange: fixed bug in sampling of scattering angle for kaons.
+    o G4ChargeExchange, G4HadronElastic, G4LMsdGenerator: minor optimisation.
+  + models/fission:
+    o Fixed reported Coverity defects in G4fissioner for avoiding unnecessary
+      copy of strings.
+    o Fixed layout of G4fissionEvent class.
+  + models/inclxx:
+    o In G4INCLCrossSectionsAntiparticles, corrected wrong formulae with
+      isospins concerning the cross-sections N Nbar -> N Nbar + 2 pions.
+    o In G4INCLNNToNSK2piChannel, fixed 'iso' condition.
+    o Fixed reported Coverity defects for use of std::move() in G4INCLCascade
+      and G4INCLNbarAtrestEntryChannel. Use G4 types consistently.
+  + models/nudex:
+    o Fixed reported Coverity defects in G4NuDEXPSF for avoiding unnecessary
+      copy of strings.
+  + models/particle_hp:
+    o G4ParticleHPContAngularPar: reduced allocator fragmentation and memory
+      churn in BuildByInterpolation() by removing unconditional deep copies
+      of input angular distributions. Copies are now created only in case of
+      self-aliasing, preserving correctness while avoiding excessive per-call
+      heap allocations. Addressing problem report #2630.
+    o G4ParticleHPNBodyPhaseSpace, G4ParticleHPInelasticCompFS: added
+      G4HadronicException header.
+  + models/parton_string:
+    o Added G4HadronicException header where missing for self-consistency.
+  + models/theo_high_energy:
+    o G4TheoFSGenerator: added G4HadronicException header.
+  + stopping:
+    o G4HadronStoppingProcess, G4MuonicAtomDecay: added G4HadronicException
+      header.
+
+o Processes - Solid state
+  -----------------------
+  + channeling:
+    o In G4ChannelingMaterialData, fixed reported Coverity defects for string
+      parameters copying. Use consistently G4 types and minor code formatting.
+
+o Run
+  ---
+  + Introduced UI command "/run/undertakeOptimisation" to force geometry
+    optimisation and added to G4RunMessenger.
+  + Re-enabled automatic instantiation of G4MaterialScanner in G4RunManager;
+    material scanner is instantiated only for the master thread.
+    Fix in G4MaterialScanner to delete G4Event object at the end of each
+    event and make sure geometry is optimized before starting the scan.
+    In G4MSSteppingAction, fixed average A and average Z taking number of
+    atoms into account. In G4MatScanMessenger, prevent material scanner
+    UI commands from broadcasting to worker threads; material scanner is
+    centrally managed by the master thread.
+
+o Visualization
+  -------------
+  + modeling:
+    o In G4PhysicalVolumeModel, fix to replace the helper class
+      G4PhysicalVolumeModelTouchable with a temporary G4TouchableHistory
+      object when calling a nested parameterisation, building and maintaining
+      a private G4NavigationHistory.
+  + gMocren:
+    o Fixed reported Coverity defect for unnecessary string copy in G4GMocrenIO.
+  + OpenGL:
+    o In G4OpenGLQtViewer, fix in G4wheelEvent() for Qt version < 5.14.
+      Addressing problem report #2688.
+    o G4OpenGLViewer: removed unnecessary #include statements.
+  + ToolsSG:
+    o G4ToolsSGSceneHandler: obtain applicable auxiliary edge flag.
+      In AddPrimitive(..), fixed position of daughter of cloud-represented
+      volumes. Addressing problem report #2691.
+  + Tree:
+    o Moved 'fVerbosityGuidance' to G4ASCIITree factory to fix sanitizer
+      warnings. Addressing problem report #2699.
+ 
+o Examples
+  --------
+  + advanced/dna/moleculardna:
+    o Fixed display of error for 'SSBm_yield' in analysis macros.
+  + extended/exoticphysics/channeling/ch2:
+    o Correction in main() for fixing error at the end of execution when
+      G4ChannelingFastSimModel is switched off.
+    o Corrections in plot labels and some comments in the python scripts.
+    o Fixed CMake script to copy also Jupyter notebook in the build folder.
+    o Small corrections in comments in macro.
+  + extended/medical/dna/chem6:
+    o Fixed energy unit for LET(100).
+    o Cleanup implementation in main(): use default random engine MixMax and
+      use auto whenever appropriate.
+    o Set 1 as number of threads in beam.in to clear run-time warnings and
+      fix Windows crash on exit.
+  + extended/medical/dna/dnadamage2:
+    o Cleanup implementation in main(): use default random engine MixMax and
+      use auto whenever appropriate.
+
+ ----------------------------------------------------------------------------
+
+                             Technical Notes
+                             --------------- 
+
+  o  This patch should be applied on top of release 11.4 series.
+  o  Technical notes distributed for release 11.4 are also applicable and
+     valid for this patch.
+
+The code and rebuilt binary libraries for release 11.4.1 are available
+through the Geant4 "Download" Web page.
+
+Please refer to the Geant4 User Documentation for further information about
+using Geant4.

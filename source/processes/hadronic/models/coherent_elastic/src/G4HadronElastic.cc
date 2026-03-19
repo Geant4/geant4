@@ -66,7 +66,6 @@ G4HadronElastic::G4HadronElastic(const G4String& name)
 G4HadronElastic::~G4HadronElastic()
 {}
 
-
 void G4HadronElastic::ModelDescription(std::ostream& outFile) const
 {
   outFile << "G4HadronElastic is the base class for all hadron-nucleus\n" 
@@ -81,8 +80,6 @@ void G4HadronElastic::ModelDescription(std::ostream& outFile) const
 G4HadFinalState* G4HadronElastic::ApplyYourself(
 		 const G4HadProjectile& aTrack, G4Nucleus& targetNucleus)
 {
-  theParticleChange.Clear();
-
   const G4HadProjectile* aParticle = &aTrack;
   G4double ekin = aParticle->GetKineticEnergy();
 

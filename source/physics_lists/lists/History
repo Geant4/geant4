@@ -6,6 +6,9 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2025-12-07 Vladimir Ivanchenko (phys-list-V11-03-06)
+- G4PhysListFactory - fixed trivial Coverity warning
+
 ## 2025-11-12 Vladimir Ivanchenko (phys-list-V11-03-05)
 - G4PhysListFactory - for HP physics use the default EM constructor as it was
     in Geant4 11.3.

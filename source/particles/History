@@ -5,6 +5,14 @@ which **must** added in reverse chronological order (newest at the top).
 It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
+
+## 2026-02-25 Vladimir Ivanchenko (particles-V11-03-02)
+- Attempt to fixed data race in ion creation (Bugzilla #2680) by extention
+  of excited isomer name from 3 to 5 digits after dot.
+
+## 2026-01-14 Shogo Okada
+- Fixed energy conservation in G4MuonDecayChannel (Bugzilla #2678).
+
 ## 2025-11-4 Shogo Okada (particles-V11-03-01)
 - Scanned all mesons and baryons, including their resonances, to compare their
   particle properties with PDG-2025. Then, updated mass, decay width, and

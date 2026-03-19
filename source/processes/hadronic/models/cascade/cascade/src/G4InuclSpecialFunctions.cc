@@ -23,17 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4InuclSpecialFunctions namespace implementation
 //
-// 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
-// 20100914  M. Kelsey -- Migrate to integer A and Z.  Discard pointless
-//		verbosity.
-// 20120608  M. Kelsey -- Fix variable-name "shadowing" compiler warnings.
-// 20130308  M. Kelsey -- New function to compute INUCL-style random value
-// 20130314  M. Kelsey -- Restore null initializer and if-block for _TLS_.
-// 20130924  M. Kelsey -- Use G4Log, G4Exp, G4Pow for CPU speedup
-// 20150619  M. Kelsey -- Define G4cbrt(int) to use G4Pow::Z13, rearrange
-//		FermiEnergy() to use G4Pow::Z23.
-// 20150622  M. Kelsey -- Use G4AutoDelete for _TLS_ buffers.
+// Original Author: Aatos Heikkinen, 2002
+// --------------------------------------------------------------------
 
 #include <cmath>
 
@@ -52,7 +45,8 @@
 
 G4double 
 G4InuclSpecialFunctions::randomInuclPowers(G4double ekin, 
-					   const G4double (&coeff)[4][4]) {
+					   const G4double (&coeff)[4][4])
+{
   G4Pow* theG4Pow = G4Pow::GetInstance();
 
   G4double S = G4UniformRand();		// Random fraction for expansion
@@ -75,11 +69,13 @@ G4InuclSpecialFunctions::randomInuclPowers(G4double ekin,
 
 
 
-G4double G4InuclSpecialFunctions::getAL(G4int A) {
+G4double G4InuclSpecialFunctions::getAL(G4int A)
+{
   return 0.76 + 2.2 / G4cbrt(A);
 }
 
-G4double G4InuclSpecialFunctions::csNN(G4double e) {
+G4double G4InuclSpecialFunctions::csNN(G4double e)
+{
   G4double snn;
 
   if (e < 40.0) {
@@ -91,7 +87,8 @@ G4double G4InuclSpecialFunctions::csNN(G4double e) {
   return snn; 
 }
 
-G4double G4InuclSpecialFunctions::csPN(G4double e) {
+G4double G4InuclSpecialFunctions::csPN(G4double e)
+{
   G4double spn;
 
   if (e < 40.0) {
@@ -105,7 +102,8 @@ G4double G4InuclSpecialFunctions::csPN(G4double e) {
 
 // calculates the nuclei Fermi energy for 0 - neutron and 1 - proton
 
-G4double G4InuclSpecialFunctions::FermiEnergy(G4int A, G4int Z, G4int ntype) {
+G4double G4InuclSpecialFunctions::FermiEnergy(G4int A, G4int Z, G4int ntype)
+{
   G4Pow* g4pow = G4Pow::GetInstance();
   const G4double C = 55.4 / g4pow->Z23(A);
   G4double arg = (ntype==0) ? g4pow->Z23(A-Z) : g4pow->Z23(Z);
@@ -113,16 +111,18 @@ G4double G4InuclSpecialFunctions::FermiEnergy(G4int A, G4int Z, G4int ntype) {
   return C * arg;
 }
 
-G4double G4InuclSpecialFunctions::G4cbrt(G4double x) {
-  return x==0 ? 0. : (x<0?-1.:1.)*G4Exp(G4Log(std::fabs(x))/3.);
+G4double G4InuclSpecialFunctions::G4cbrt(G4double x)
+{
+  return std::cbrt(x);
 }
 
-G4double G4InuclSpecialFunctions::G4cbrt(G4int n) {
+G4double G4InuclSpecialFunctions::G4cbrt(G4int n)
+{
   return n==0 ? 0. : (n<0?-1.:1.)*G4Pow::GetInstance()->Z13(std::abs(n));
 }
 
-
-G4double G4InuclSpecialFunctions::randomGauss(G4double sigma) {
+G4double G4InuclSpecialFunctions::randomGauss(G4double sigma)
+{
   const G4double eps = 1.0e-6;
   G4double r1 = G4UniformRand();
   r1 = r1 > eps ? r1 : eps;
@@ -133,11 +133,13 @@ G4double G4InuclSpecialFunctions::randomGauss(G4double sigma) {
   return sigma * std::sin(twopi * r1) * std::sqrt(-2.0 * G4Log(r2)); 
 } 
 
-G4double G4InuclSpecialFunctions::randomPHI() { 
+G4double G4InuclSpecialFunctions::randomPHI()
+{ 
   return twopi*G4UniformRand();
 } 
 
-std::pair<G4double, G4double> G4InuclSpecialFunctions::randomCOS_SIN() {
+std::pair<G4double, G4double> G4InuclSpecialFunctions::randomCOS_SIN()
+{
   G4double CT = 1.0 - 2.0*G4UniformRand();
 
   return std::pair<G4double, G4double>(CT, std::sqrt(1.0 - CT*CT));
@@ -145,7 +147,8 @@ std::pair<G4double, G4double> G4InuclSpecialFunctions::randomCOS_SIN() {
 
 G4LorentzVector 
 G4InuclSpecialFunctions::generateWithFixedTheta(G4double ct, G4double p, 
-						G4double mass) {
+						G4double mass)
+{
   G4double phi = randomPHI();
   G4double pt = p * std::sqrt(std::fabs(1.0 - ct * ct));
 
@@ -171,7 +174,8 @@ G4InuclSpecialFunctions::generateWithFixedTheta(G4double ct, G4double p,
 }
 
 G4LorentzVector 
-G4InuclSpecialFunctions::generateWithRandomAngles(G4double p, G4double mass) {
+G4InuclSpecialFunctions::generateWithRandomAngles(G4double p, G4double mass)
+{
   std::pair<G4double, G4double> COS_SIN = randomCOS_SIN();
   G4double phi = randomPHI();
   G4double pt = p * COS_SIN.second;

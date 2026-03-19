@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-04-ref-00    (5-December-2025)
+ Geant4 version Name: geant4-11-04-patch-01    (13-March-2026)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -19,7 +19,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
                              WWW : http://geant4.org/
 **************************************************************
 
-##### Create analysis manager   0x1d7cae0
+##### Create analysis manager   0x2152e70
 #
 # MT
 /run/numberOfThreads 10
@@ -920,24 +920,24 @@ Start closing geometry.
 G4VoxelisationHelper::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   85604 kByte
-    Total CPU time elapsed for geometry optimisation: 13.31 seconds
+    Total CPU time elapsed for geometry optimisation: 12.89 seconds
 
     Voxelisation: top CPU users:
     Percent   Total CPU    System CPU       Memory  Volume
     -------   ----------   ----------     --------  ----------
-      99.85        13.29         0.08        85604k World
+      99.84        12.87         0.06        85604k World
 
     Voxelisation: top memory users:
     Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
     -------   --------     ------   ------   --------   ----------    ----------
-     100.00      85604k     38029   108047    9966820        13.29    World
+     100.00      85604k     38029   108047    9966820        12.87    World
 --------------------------------------------------------------------------------
 
 ### Run 0 starts.
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=38.720000s Real=39.305917s Sys=0.010000s
+  User=36.940000s Real=37.271061s Sys=0.010000s
 
 - Summary --------------------------------------------------
 
@@ -946,9 +946,9 @@ Run Summary
 ------------------------------------------------------------
 G4 kernel has come to Quit state.
 Deleting G4Run (id:0) 
-UserDetectorConstruction deleted 0x1d677d0
-UserPhysicsList deleted 0x1916a30
-UserActionInitialization deleted 0x1d704b0
+UserDetectorConstruction deleted 0x213d890
+UserPhysicsList deleted 0x1ce49b0
+UserActionInitialization deleted 0x2146460
 UserWorkerInitialization deleted 0
 UserWorkerThreadInitialization deleted 0
 UserRunAction deleted.

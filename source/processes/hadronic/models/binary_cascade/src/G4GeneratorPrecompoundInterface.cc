@@ -92,6 +92,7 @@
 #include "G4PhysicsModelCatalog.hh"
 #include "G4HyperNucleiProperties.hh"
 //---------------------------------------------------------------------
+#include "G4HadronicException.hh"
 #include "Randomize.hh"
 #include "G4Log.hh"
 

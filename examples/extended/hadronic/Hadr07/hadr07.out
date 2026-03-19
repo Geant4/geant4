@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-04-ref-00    (5-December-2025)
+ Geant4 version Name: geant4-11-04-patch-01    (13-March-2026)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -388,7 +388,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=2.490000s Real=3.514847s Sys=0.000000s
+  User=2.350000s Real=2.799897s Sys=0.000000s
 
  ======================== run summary =====================
 
@@ -409,7 +409,7 @@ Run Summary
  Energy total       = 11.6 MeV	(347 keV-->32.2 MeV)
 
  List of created particles in absorber 1:
-  Be8[3030.000]:       4  Emean =    7.63 keV	( 3.18 keV --> 10.8 keV)	mean life = 0 ps 
+  Be8[3030.00000]:       4  Emean =    7.63 keV	( 3.18 keV --> 10.8 keV)	mean life = 0 ps 
             He6:     163  Emean =    1.27 MeV	( 866 keV --> 1.34 MeV)	mean life = 1.16 s  
             Li6:     163  Emean =     777 eV 	( 27.1 eV  --> 1.4 keV)	stable
             Li7:   99076  Emean =     564 keV	( 1.79 meV --> 6.22 MeV)	stable

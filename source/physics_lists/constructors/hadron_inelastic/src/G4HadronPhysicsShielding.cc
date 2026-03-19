@@ -126,8 +126,8 @@ void G4HadronPhysicsShielding::Neutron()
   bertneu.SetMinEnergy( minBERT_neutron );
   neu.RegisterMe( &bertneu );
 
+  G4NeutronPHPBuilder hpneu;
   if ( !useLEND_) {
-    G4NeutronPHPBuilder hpneu;
     neu.RegisterMe( &hpneu );
   }
   neu.Build();

@@ -6,6 +6,11 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2025-12-16 Gabriele Cosmo (hadr-casc-V11-03-02)
+- Directly use std::cbrt(double) in G4InuclSpecialFunctions, as now standard
+  and available in <cmath>, replacing old ad-hoc implementation.
+  Minor code formatting.
+
 ## 2025-11-26 Vladimir ivanchenko (hadr-casc-V11-03-01)
 - G4BigBanger - fixed typo in the computation of probability, which is
     identified by the new compiler and should not change any result.

@@ -10,7 +10,7 @@
 
 
 **************************************************************
- Geant4 version Name: geant4-11-04-ref-00    (5-December-2025)
+ Geant4 version Name: geant4-11-04-patch-01    (13-March-2026)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -1285,7 +1285,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
  Run terminated.
 Run Summary
   Number of events processed : 200
-  User=0.000000s Real=0.001304s Sys=0.000000s
+  User=0.000000s Real=0.001461s Sys=0.000000s
 RunAction::EndOfRunAction() 
 G4IAEAphspWriter object constructed.
 G4IAEAphspWriter::fFileName = psf_z
@@ -1537,7 +1537,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.000000s Real=0.000444s Sys=0.000000s
+  User=0.000000s Real=0.000509s Sys=0.000000s
 RunAction::EndOfRunAction() 
 G4IAEAphspWriter object constructed.
 G4IAEAphspWriter::fFileName = psf_z

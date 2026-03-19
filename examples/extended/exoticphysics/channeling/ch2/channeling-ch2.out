@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-04-ref-00    (5-December-2025)
+ Geant4 version Name: geant4-11-04-patch-01    (13-March-2026)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -853,4 +853,4 @@ Max 2J for sampling of angular correlations         10
 Graphics systems deleted.
 Visualization Manager deleting...
 Execution terminated
-User=30.470000s Real=31.238877s Sys=0.050000s
+User=29.390000s Real=30.201438s Sys=0.040000s

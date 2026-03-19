@@ -247,6 +247,13 @@ G4RunMessenger::G4RunMessenger(G4RunManager* runMgr) : runManager(runMgr)
   geomRebCmd->SetDefaultValue(false);
   geomRebCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
 
+  undertakeOptCmd = new G4UIcmdWithoutParameter("/run/undertakeOptimisation", this);
+  undertakeOptCmd->SetGuidance("Force geometry optimisation.");
+  undertakeOptCmd->SetGuidance("May be used before the command which use geometry navigation");
+  undertakeOptCmd->SetGuidance("e.g. /vis/scene/add/magneticField command.");
+  undertakeOptCmd->SetToBeBroadcasted(true);
+  undertakeOptCmd->AvailableForStates(G4State_Idle);
+
   physCmd = new G4UIcmdWithoutParameter("/run/physicsModified", this);
   physCmd->SetGuidance("Force all physics tables recalculated again.");
   physCmd->SetGuidance("This command must be applied");
@@ -400,6 +407,7 @@ G4RunMessenger::~G4RunMessenger()
   delete initCmd;
   delete geomCmd;
   delete geomRebCmd;
+  delete undertakeOptCmd;
   delete physCmd;
   delete randEvtCmd;
   delete constScoreCmd;
@@ -546,6 +554,9 @@ void G4RunMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
   }
   else if (command == geomRebCmd) {
     runManager->ReinitializeGeometry(geomRebCmd->GetNewBoolValue(newValue), false);
+  }
+  else if (command == undertakeOptCmd) {
+    runManager->GeometryOptimisation();
   }
   else if (command == physCmd) {
     runManager->PhysicsHasBeenModified();

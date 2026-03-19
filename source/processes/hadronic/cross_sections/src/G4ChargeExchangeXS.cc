@@ -121,6 +121,7 @@ G4double G4ChargeExchangeXS::GetCrossSection(const G4ParticleDefinition* part,
 					     G4int ZZ, G4double pEtot)
 {
   G4double result = 0.0;
+  fFactor = fFactorK;
   G4int pdg = part->GetPDGEncoding();   
 
   // Get or calculate the proton mass, particle mass, and s(Lorentz invariant) 
@@ -145,6 +146,7 @@ G4double G4ChargeExchangeXS::GetCrossSection(const G4ParticleDefinition* part,
 
   // pi- + p -> n + meson (0- pi0, 1- eta, 2- eta', 3- omega, 4- f2(1270))
   if (pdg == -211) {
+    fFactor = fFactorPi;
     G4double z23 = g4calc->Z23(Z);
     G4double x = lorentz_s*inv1e7;
     G4double logX = G4Log(x);
@@ -163,6 +165,7 @@ G4double G4ChargeExchangeXS::GetCrossSection(const G4ParticleDefinition* part,
 
   // pi+ + n -> p + meson (0- pi0, 1- eta, 2- eta', 3- omega, 4- f2(1270))
   else if (pdg == 211) {
+    fFactor = fFactorPi;
     G4double n23 = g4calc->Z23(A - Z);
     G4double x = lorentz_s*inv1e7;
     G4double logX = G4Log(x);
@@ -227,8 +230,7 @@ G4ChargeExchangeXS::SampleSecondaryType(const G4ParticleDefinition* part,
   GetCrossSection(part, mat, Z, etot);
   
   const G4ParticleDefinition* pd = nullptr;
-  G4int pdg = std::abs(part->GetPDGEncoding());  
-  G4cout << pdg << G4endl;
+  G4int pdg = std::abs(part->GetPDGEncoding());
   // pi- + p /  pi+ + n  
   if (pdg == 211) {
     pd = fPionSecPD[0];
@@ -262,7 +264,7 @@ G4ChargeExchangeXS::SampleSecondaryType(const G4ParticleDefinition* part,
       pd = G4KaonPlus::KaonPlus();
     }
   }
-  if (verboseLevel > 1) {
+  if (verboseLevel > 1 && nullptr != pd) {
     G4cout << "G4ChargeExchangeXS::SampleSecondaryType for "
 	   << pd->GetParticleName() << "  findex=" << findex
 	   << G4endl;
