@@ -80,6 +80,7 @@ if(GEANT4_USE_VTK)
     CommonColor
     InteractionStyle
     IOExport
+    IOImport
     IOGeometry
     IOLegacy
     IOPLY
