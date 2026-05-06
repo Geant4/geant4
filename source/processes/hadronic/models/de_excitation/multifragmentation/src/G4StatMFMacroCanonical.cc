@@ -167,7 +167,7 @@ G4double G4StatMFMacroCanonical::ChooseA(G4int A, std::vector<G4int>& ANumbers)
     G4int SumA = 0;
     G4int ThisOne = 0;
     multiplicity = 0.0;
-    ANumbers.resize(A, 0);
+    ANumbers.assign(A, 0);
     do {
       G4double RandNumber = G4UniformRand()*pMeanMultiplicity;
       for (G4int i = 0; i < A; ++i) {
