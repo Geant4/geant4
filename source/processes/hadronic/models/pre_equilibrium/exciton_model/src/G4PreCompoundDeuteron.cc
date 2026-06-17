@@ -50,7 +50,7 @@ G4PreCompoundDeuteron::G4PreCompoundDeuteron()
  
 G4double G4PreCompoundDeuteron::FactorialFactor(G4int N, G4int P) const
 {
-  return static_cast<G4double>((N-1)*(N-2)*(P-1)*P)*0.5;
+  return 0.5 * G4double((N - 1) * (N - 2) * (P - 1) * P);
 }
   
 G4double G4PreCompoundDeuteron::CoalescenceFactor(G4int A) const

@@ -103,6 +103,7 @@ G4bool G4NuDEXInternalConversion::SampleInternalConversion(G4double Ene,G4int mu
 	    std::cout<<j<<"  "<<GetICC(Ene,multipolarity,j)<<std::endl;
 	  }
 	  Eele[0]=0;
+	  return false;
 	}
 	return true;
       }
@@ -130,7 +131,7 @@ void G4NuDEXInternalConversion::FillElectronHole(G4int i_shell){
     //Hubbell et al. (1994) formula for the fluorescence yield:
     G4double C0=0.0370,C1=0.03112,C2=5.44e-5,C3=-1.25e-6;
     G4double w_fac=std::pow(C0+C1*theZ+C2*theZ*theZ+C3*theZ*theZ*theZ,4);
-    fluoyield=w_fac/(1.+w_fac);
+    if(w_fac>0.0){fluoyield=w_fac/(1.+w_fac);}
   }
   else if(i_shell>=2 && i_shell<=4){ //L-shell
     //Hubbell et al. (1994) formula for the fluorescence yield:
@@ -140,7 +141,7 @@ void G4NuDEXInternalConversion::FillElectronHole(G4int i_shell){
     else if(theZ>36){
       G4double C0=0.17765,C1=0.00298937,C2=8.91297e-5,C3=-2.67184e-7;
       G4double w_fac=std::pow(C0+C1*theZ+C2*theZ*theZ+C3*theZ*theZ*theZ,4);
-      fluoyield=w_fac/(1.+w_fac);
+      if(w_fac>0.0){fluoyield=w_fac/(1.+w_fac);}
     }
   }
 
@@ -213,8 +214,6 @@ G4double G4NuDEXInternalConversion::GetICC(G4double Ene,G4int multipolarity,G4in
 
 G4NuDEXInternalConversion::G4NuDEXInternalConversion(G4int Z){
   theZ=Z;
-  NShells=0;
-  Ne=Ng=0;
   for(G4int i=0;i<ICC_MAXNSHELLS;i++){
     Eg[i]=0; np[i]=0;  BindingEnergy[i]=0;
     for(G4int j=0;j<ICC_NMULTIP;j++){

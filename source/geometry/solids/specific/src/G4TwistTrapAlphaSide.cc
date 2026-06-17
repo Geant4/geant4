@@ -77,15 +77,15 @@ G4TwistTrapAlphaSide(const G4String& name,
   fTheta = pTheta ;
   fPhi   = pPhi ;
 
-  // precalculate frequently used parameters
+  // Precalculate frequently used, construction-time invariant parameters.
   fDx4plus2  = fDx4 + fDx2 ;
   fDx4minus2 = fDx4 - fDx2 ;
-  fDx3plus1  = fDx3 + fDx1 ; 
+  fDx3plus1  = fDx3 + fDx1 ;
   fDx3minus1 = fDx3 - fDx1 ;
   fDy2plus1  = fDy2 + fDy1 ;
   fDy2minus1 = fDy2 - fDy1 ;
 
-  fa1md1 = 2*fDx2 - 2*fDx1  ; 
+  fa1md1 = 2*fDx2 - 2*fDx1 ;
   fa2md2 = 2*fDx4 - 2*fDx3 ;
 
   fPhiTwist = PhiTwist ;    // dphi
@@ -131,18 +131,10 @@ G4TwistTrapAlphaSide::GetNormal(const G4ThreeVector& tmpxx,
    if (isGlobal)
    {
       xx = ComputeLocalPoint(tmpxx);
-      if ((xx - fCurrentNormal.p).mag() < 0.5 * kCarTolerance)
-      {
-         return ComputeGlobalDirection(fCurrentNormal.normal);
-      }
    }
    else
    {
       xx = tmpxx;
-      if (xx == fCurrentNormal.p)
-      {
-         return fCurrentNormal.normal;
-      }
    }
 
    G4double phi ;
@@ -159,14 +151,9 @@ G4TwistTrapAlphaSide::GetNormal(const G4ThreeVector& tmpxx,
 
    if (isGlobal)
    {
-      fCurrentNormal.normal = ComputeGlobalDirection(normal.unit());
+      return ComputeGlobalDirection(normal.unit());
    }
-   else
-   {
-      fCurrentNormal.normal = normal.unit();
-   }
-
-   return fCurrentNormal.normal;
+   return normal.unit();
 }
 
 //=====================================================================
@@ -188,20 +175,6 @@ G4TwistTrapAlphaSide::DistanceToSurface(const G4ThreeVector& gp,
   G4bool IsConverged =  false ;
 
   G4int nxx = 0 ;  // number of physical solutions
-
-  fCurStatWithV.ResetfDone(validate, &gp, &gv);
-
-  if (fCurStatWithV.IsDone())
-  {
-    for (G4int i=0; i<fCurStatWithV.GetNXX(); ++i)
-    {
-      gxx[i] = fCurStatWithV.GetXX(i);
-      distance[i] = fCurStatWithV.GetDistance(i);
-      areacode[i] = fCurStatWithV.GetAreacode(i);
-      isvalid[i]  = fCurStatWithV.IsValid(i);
-    }
-    return fCurStatWithV.GetNXX();
-  }
 
   // initialise
   for (G4int j=0; j<G4VSURFACENXX ; ++j)
@@ -269,9 +242,6 @@ G4TwistTrapAlphaSide::DistanceToSurface(const G4ThreeVector& gp,
       gxx[0].set(kInfinity,kInfinity,kInfinity);
       isvalid[0] = false ;
       areacode[0] = sOutside ;
-      fCurStatWithV.SetCurrentStatus(0, gxx[0], distance[0],
-                                     areacode[0], isvalid[0],
-                                     0, validate, &gp, &gv);
       return 0;
     }  // end std::fabs(p.z() <= L 
   } // end v.z() == 0
@@ -281,7 +251,7 @@ G4TwistTrapAlphaSide::DistanceToSurface(const G4ThreeVector& gp,
     G4double c[8],srd[7],si[7] ;  
 
     c[7] = 57600*
-      fDy1*(fa1md1*phiyz + 
+      fDy1*(fa1md1*phiyz +
             fDy1*(-4*phixz + 4*fTAlph*phiyz
                  + (fDx3plus1 + fDx4plus2)*fPhiTwist*v.z())) ;
     c[6] = -57600*
@@ -290,7 +260,7 @@ G4TwistTrapAlphaSide::DistanceToSurface(const G4ThreeVector& gp,
                   - 2*fdeltaY*fTAlph)*v.z()
           + fa1md1*(phixz - 2*fDz*v.y() + fdeltaY*v.z()));
     c[5] = 4800*
-      fDy1*(fa1md1*(-5*phiyz - 24*fDz*v.x() + 12*fdeltaX*v.z()) + 
+      fDy1*(fa1md1*(-5*phiyz - 24*fDz*v.x() + 12*fdeltaX*v.z()) +
             fDy1*(20*phixz - 4*(5*fTAlph*phiyz + 24*fDz*fTAlph*v.x()
                    + 24*fDz*v.y()) + (48*fdeltaY + (fDx3plus1 + fDx4plus2)
                                     *fPhiTwist + 48*fdeltaX*fTAlph)*v.z()));
@@ -343,7 +313,7 @@ G4TwistTrapAlphaSide::DistanceToSurface(const G4ThreeVector& gp,
                      - ((fDx3plus1 + fDx4plus2)*fPhiTwist
                        + 2*(fDx3minus1 + fDx4minus2)*phi)*v.z()*std::sin(phi)))
              /(fPhiTwist*v.z()*(4*fDy1*std::cos(phi)
-                             + (fa1md1 + 4*fDy1*fTAlph)*std::sin(phi)));        
+                             + (fa1md1 + 4*fDy1*fTAlph)*std::sin(phi)));
         xbuftmp.phi = phi ;
         xbuftmp.u = u ;
         xbuftmp.areacode = sOutside ;
@@ -635,8 +605,6 @@ G4TwistTrapAlphaSide::DistanceToSurface(const G4ThreeVector& gp,
     areacode[i] = xbuf[i].areacode ;
     isvalid[i]  = xbuf[i].isvalid ;
     
-    fCurStatWithV.SetCurrentStatus(i, gxx[i], distance[i], areacode[i],
-                                     isvalid[i], nxx, validate, &gp, &gv);
 #ifdef G4TWISTDEBUG
     G4cout << "element Nr. " << i 
            << ", local Intersection = " << xbuf[i].xx 
@@ -674,19 +642,6 @@ G4TwistTrapAlphaSide::DistanceToSurface(const G4ThreeVector& gp,
                                               G4int          areacode[])
 {  
    const G4double ctol = 0.5 * kCarTolerance;
-
-   fCurStat.ResetfDone(kDontValidate, &gp);
-
-   if (fCurStat.IsDone())
-   {
-      for (G4int i=0; i<fCurStat.GetNXX(); ++i)
-      {
-         gxx[i] = fCurStat.GetXX(i);
-         distance[i] = fCurStat.GetDistance(i);
-         areacode[i] = fCurStat.GetAreacode(i);
-      }
-      return fCurStat.GetNXX();
-   }
 
    // initialize
    for (G4int i=0; i<G4VSURFACENXX; ++i)
@@ -750,7 +705,6 @@ G4TwistTrapAlphaSide::DistanceToSurface(const G4ThreeVector& gp,
    G4cout << "X = " << xx << G4endl ;
 #endif
 
-   G4bool isvalid = true;
    gxx[0]      = ComputeGlobalPoint(xx);
    
 #ifdef G4TWISTDEBUG
@@ -758,8 +712,6 @@ G4TwistTrapAlphaSide::DistanceToSurface(const G4ThreeVector& gp,
    G4cout << "distance = " << distance[0] << G4endl ;
 #endif
 
-   fCurStat.SetCurrentStatus(0, gxx[0], distance[0], areacode[0],
-                            isvalid, 1, kDontValidate, &gp);
    return 1;
 }
 

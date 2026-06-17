@@ -125,6 +125,7 @@ void G4SubEvtRunManager::RunInitialization()
 void G4SubEvtRunManager::ProcessOneEvent(G4int i_event)
 {
   currentEvent = GenerateEvent(i_event);
+  currentEvent->MasterEventForSubEventMode();
   eventManager->ProcessOneEvent(currentEvent);
   
   // Following two lines should not be executed here, as spawned sub-events may 

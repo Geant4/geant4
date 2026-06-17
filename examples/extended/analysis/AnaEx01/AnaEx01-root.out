@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-04-patch-01    (13-March-2026)
+ Geant4 version Name: geant4-11-04-patch-02    (12-June-2026)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -934,20 +934,20 @@ LGap: mean = 25.4593 cm  rms = 0 fm
 
 --------------------End of Run------------------------------
 
- mean Energy in Absorber : 187.729 MeV +- 50.1943 MeV
- mean Energy in Gap      : 46.0401 MeV +- 13.1672 MeV
+ mean Energy in Absorber : 187.059 MeV +- 49.9278 MeV
+ mean Energy in Gap      : 46.253 MeV +- 13.4786 MeV
 
- mean trackLength in Absorber : 46.3759 cm  +- 12.4411 cm 
- mean trackLength in Gap      : 23.3634 cm  +- 6.72305 cm 
+ mean trackLength in Absorber : 46.159 cm  +- 12.3585 cm 
+ mean trackLength in Gap      : 23.4326 cm  +- 6.86803 cm 
 ------------------------------------------------------------
 
 
  ----> print histograms statistic 
 
-EAbs: mean = 187.729 MeV rms = 50.1943 MeV
-EGap: mean = 46.0401 MeV rms = 13.1672 MeV
-LAbs: mean = 46.3759 cm  rms = 12.4411 cm 
-LGap: mean = 23.3634 cm  rms = 6.72305 cm 
+EAbs: mean = 187.059 MeV rms = 49.9278 MeV
+EGap: mean = 46.253 MeV rms = 13.4786 MeV
+LAbs: mean = 46.159 cm  rms = 12.3585 cm 
+LGap: mean = 23.4326 cm  rms = 6.86803 cm 
 ... write file : AnaEx01.root - done
 ... close file : AnaEx01.root - done
 

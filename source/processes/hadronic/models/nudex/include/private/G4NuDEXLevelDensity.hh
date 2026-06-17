@@ -64,7 +64,12 @@ public:
   G4int ReadLDParameters(const char* dirname,const char* inputfname=0,const char* defaultinputfname=0);
   G4int CalculateLDParameters_BSFG(const char* dirname);
   G4int SearchLDParametersInInputFile(const char* inputfname);
-  void GetSnD0I0Vals(G4double &aSn,G4double &aD0,G4double &aI0){aSn=Sn; aD0=D0; aI0=I0;}
+  double GetSn(){return Sn;}
+  double GetD0(){return D0;}
+  double GetI0(){return I0;}
+  void SetSn(double val){Sn=val;}
+  void SetD0(double val){D0=val;}
+  void SetI0(double val){I0=val;}
 
   G4int GetLDType(){return LDType;}
   G4double GetNucleusTemperature(G4double ExcEnergy);

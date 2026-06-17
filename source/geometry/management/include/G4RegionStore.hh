@@ -58,6 +58,8 @@ class G4VPhysicalVolume;
 /**
  * @brief G4RegionStore is a singleton class, acting as container
  * for all geometrical regions, with functionality derived from std::vector<T>.
+ * @ingroup geometry_management
+ *
  * All regions should be registered with G4RegionStore, and removed on their
  * destruction. The underlying container initially has a capacity of 20.
  * A map indexed by volume names is also recorded for fast search; pointers
@@ -169,6 +171,8 @@ class G4RegionStore : public std::vector<G4Region*>
 
   private:
 
+    void CleanStore();
+  
     static G4RegionStore* fgInstance;
     static G4ThreadLocal G4VStoreNotifier* fgNotifier;
     static G4ThreadLocal G4bool locked;

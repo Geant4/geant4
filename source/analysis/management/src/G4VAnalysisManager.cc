@@ -492,9 +492,9 @@ G4int G4VAnalysisManager::CreateH1(const G4String& name,  const G4String& title,
                                const G4String& binSchemeName)
 {
   std::array<G4HnDimension, kDim1> bins = {
-    G4HnDimension(nbins, xmin, xmax)};
+    { G4HnDimension(nbins, xmin, xmax) } };
   std::array<G4HnDimensionInformation, kDim1> info = {
-    G4HnDimensionInformation(unitName, fcnName, binSchemeName) };
+    { G4HnDimensionInformation(unitName, fcnName, binSchemeName) } };
 
   return fVH1Manager->Create(name, title, bins, info);
 }
@@ -505,9 +505,9 @@ G4int G4VAnalysisManager::CreateH1(const G4String& name,  const G4String& title,
                                const G4String& unitName, const G4String& fcnName)
 {
   std::array<G4HnDimension, kDim1> bins = {
-    G4HnDimension(edges)};
+    { G4HnDimension(edges) } };
   std::array<G4HnDimensionInformation, kDim1> info = {
-    G4HnDimensionInformation(unitName, fcnName, "user")};
+    { G4HnDimensionInformation(unitName, fcnName, "user") } };
 
   return fVH1Manager->Create(name, title, bins, info);
 }
@@ -523,11 +523,11 @@ G4int G4VAnalysisManager::CreateH2(const G4String& name,  const G4String& title,
 
 {
   std::array<G4HnDimension, kDim2> bins = {
-    G4HnDimension(nxbins, xmin, xmax),
-    G4HnDimension(nybins, ymin, ymax) };
+    { G4HnDimension(nxbins, xmin, xmax),
+      G4HnDimension(nybins, ymin, ymax) } };
   std::array<G4HnDimensionInformation, kDim2> info = {
-    G4HnDimensionInformation(xunitName, xfcnName, xbinSchemeName),
-    G4HnDimensionInformation(yunitName, yfcnName, ybinSchemeName)};
+    { G4HnDimensionInformation(xunitName, xfcnName, xbinSchemeName),
+      G4HnDimensionInformation(yunitName, yfcnName, ybinSchemeName) } };
 
   return fVH2Manager->Create(name, title, bins, info);
 }
@@ -541,10 +541,10 @@ G4int G4VAnalysisManager::CreateH2(const G4String& name,  const G4String& title,
 
 {
   std::array<G4HnDimension, kDim2> bins = {
-    G4HnDimension(xedges), G4HnDimension(yedges)};
+    { G4HnDimension(xedges), G4HnDimension(yedges) } };
   std::array<G4HnDimensionInformation, kDim2> info = {
-    G4HnDimensionInformation(xunitName, xfcnName, "user"),
-    G4HnDimensionInformation(yunitName, yfcnName, "user")};
+    { G4HnDimensionInformation(xunitName, xfcnName, "user"),
+      G4HnDimensionInformation(yunitName, yfcnName, "user") } };
 
   return fVH2Manager->Create(name, title, bins, info);
 }
@@ -564,13 +564,13 @@ G4int G4VAnalysisManager::CreateH3(const G4String& name,  const G4String& title,
 
 {
   std::array<G4HnDimension, kDim3> bins = {
-    G4HnDimension(nxbins, xmin, xmax),
-    G4HnDimension(nybins, ymin, ymax),
-    G4HnDimension(nzbins, zmin, zmax)};
+    { G4HnDimension(nxbins, xmin, xmax),
+      G4HnDimension(nybins, ymin, ymax),
+      G4HnDimension(nzbins, zmin, zmax) } };
   std::array<G4HnDimensionInformation, kDim3> info = {
-    G4HnDimensionInformation(xunitName, xfcnName, xbinSchemeName),
-    G4HnDimensionInformation(yunitName, yfcnName, ybinSchemeName),
-    G4HnDimensionInformation(zunitName, zfcnName, zbinSchemeName)};
+    { G4HnDimensionInformation(xunitName, xfcnName, xbinSchemeName),
+      G4HnDimensionInformation(yunitName, yfcnName, ybinSchemeName),
+      G4HnDimensionInformation(zunitName, zfcnName, zbinSchemeName) } };
 
   return fVH3Manager->Create(name, title, bins, info);
 }
@@ -587,11 +587,11 @@ G4int G4VAnalysisManager::CreateH3(const G4String& name,  const G4String& title,
 
 {
   std::array<G4HnDimension, kDim3> bins = {
-    G4HnDimension(xedges),  G4HnDimension(yedges), G4HnDimension(zedges) };
+    { G4HnDimension(xedges),  G4HnDimension(yedges), G4HnDimension(zedges) } };
   std::array<G4HnDimensionInformation, kDim3> info = {
-    G4HnDimensionInformation(xunitName, xfcnName, "user"),
-    G4HnDimensionInformation(yunitName, yfcnName, "user"),
-    G4HnDimensionInformation(zunitName, zfcnName, "user")};
+    { G4HnDimensionInformation(xunitName, xfcnName, "user"),
+      G4HnDimensionInformation(yunitName, yfcnName, "user"),
+      G4HnDimensionInformation(zunitName, zfcnName, "user") } };
 
   return fVH3Manager->Create(name, title, bins, info);
 }
@@ -603,9 +603,9 @@ G4bool G4VAnalysisManager::SetH1(G4int id,
                                 const G4String& binSchemeName)
 {
   std::array<G4HnDimension, kDim1> bins = {
-    G4HnDimension(nbins, xmin, xmax)};
+    { G4HnDimension(nbins, xmin, xmax) } };
   std::array<G4HnDimensionInformation, kDim1> info = {
-    G4HnDimensionInformation(unitName, fcnName, binSchemeName) };
+    { G4HnDimensionInformation(unitName, fcnName, binSchemeName) } };
 
   return fVH1Manager->Set(id, bins, info);
 }
@@ -616,9 +616,9 @@ G4bool G4VAnalysisManager::SetH1(G4int id,
                                 const G4String& unitName, const G4String& fcnName)
 {
   std::array<G4HnDimension, kDim1> bins = {
-    G4HnDimension(edges)};
+    { G4HnDimension(edges) } };
   std::array<G4HnDimensionInformation, kDim1> info = {
-    G4HnDimensionInformation(unitName, fcnName, "user")};
+    { G4HnDimensionInformation(unitName, fcnName, "user") } };
 
   return fVH1Manager->Set(id, bins, info);
 }
@@ -633,11 +633,11 @@ G4bool G4VAnalysisManager::SetH2(G4int id,
                                 const G4String& ybinSchemeName)
 {
   std::array<G4HnDimension, kDim2> bins = {
-    G4HnDimension(nxbins, xmin, xmax),
-    G4HnDimension(nybins, ymin, ymax) };
+    { G4HnDimension(nxbins, xmin, xmax),
+      G4HnDimension(nybins, ymin, ymax) } };
   std::array<G4HnDimensionInformation, kDim2> info = {
-    G4HnDimensionInformation(xunitName, xfcnName, xbinSchemeName),
-    G4HnDimensionInformation(yunitName, yfcnName, ybinSchemeName)};
+    { G4HnDimensionInformation(xunitName, xfcnName, xbinSchemeName),
+      G4HnDimensionInformation(yunitName, yfcnName, ybinSchemeName) } };
 
   return fVH2Manager->Set(id, bins, info);
 }
@@ -650,10 +650,10 @@ G4bool G4VAnalysisManager::SetH2(G4int id,
                                 const G4String& xfcnName, const G4String& yfcnName)
 {
   std::array<G4HnDimension, kDim2> bins = {
-    G4HnDimension(xedges), G4HnDimension(yedges)};
+    { G4HnDimension(xedges), G4HnDimension(yedges) } };
   std::array<G4HnDimensionInformation, kDim2> info = {
-    G4HnDimensionInformation(xunitName, xfcnName, "user"),
-    G4HnDimensionInformation(yunitName, yfcnName, "user")};
+    { G4HnDimensionInformation(xunitName, xfcnName, "user"),
+      G4HnDimensionInformation(yunitName, yfcnName, "user") } };
 
   return fVH2Manager->Set(id, bins, info);
 }
@@ -672,13 +672,13 @@ G4bool G4VAnalysisManager::SetH3(G4int id,
                                 const G4String& zbinSchemeName)
 {
   std::array<G4HnDimension, kDim3> bins = {
-    G4HnDimension(nxbins, xmin, xmax),
-    G4HnDimension(nybins, ymin, ymax),
-    G4HnDimension(nzbins, zmin, zmax)};
+    { G4HnDimension(nxbins, xmin, xmax),
+      G4HnDimension(nybins, ymin, ymax),
+      G4HnDimension(nzbins, zmin, zmax) } };
   std::array<G4HnDimensionInformation, kDim3> info = {
-    G4HnDimensionInformation(xunitName, xfcnName, xbinSchemeName),
-    G4HnDimensionInformation(yunitName, yfcnName, ybinSchemeName),
-    G4HnDimensionInformation(zunitName, zfcnName, zbinSchemeName)};
+    { G4HnDimensionInformation(xunitName, xfcnName, xbinSchemeName),
+      G4HnDimensionInformation(yunitName, yfcnName, ybinSchemeName),
+      G4HnDimensionInformation(zunitName, zfcnName, zbinSchemeName) } };
 
   return fVH3Manager->Set(id, bins, info);
 }
@@ -694,11 +694,11 @@ G4bool G4VAnalysisManager::SetH3(G4int id,
                                 const G4String& zfcnName)
 {
   std::array<G4HnDimension, kDim3> bins = {
-    G4HnDimension(xedges), G4HnDimension(yedges), G4HnDimension(zedges) };
+    { G4HnDimension(xedges), G4HnDimension(yedges), G4HnDimension(zedges) } };
   std::array<G4HnDimensionInformation, kDim3> info = {
-    G4HnDimensionInformation(xunitName, xfcnName, "user"),
-    G4HnDimensionInformation(yunitName, yfcnName, "user"),
-    G4HnDimensionInformation(zunitName, zfcnName, "user")};
+    { G4HnDimensionInformation(xunitName, xfcnName, "user"),
+      G4HnDimensionInformation(yunitName, yfcnName, "user"),
+      G4HnDimensionInformation(zunitName, zfcnName, "user") } };
 
   return fVH3Manager->Set(id, bins, info);
 }
@@ -730,11 +730,11 @@ G4int G4VAnalysisManager::CreateP1(const G4String& name,  const G4String& title,
                                const G4String& xbinSchemeName)
 {
   std::array<G4HnDimension, kDim2> bins = {
-    G4HnDimension(nbins, xmin, xmax),
-    G4HnDimension(0, ymin, ymax) };
+    { G4HnDimension(nbins, xmin, xmax),
+      G4HnDimension(0, ymin, ymax) } };
   std::array<G4HnDimensionInformation, kDim2> info = {
-    G4HnDimensionInformation(xunitName, xfcnName, xbinSchemeName),
-    G4HnDimensionInformation(yunitName, yfcnName)};
+    { G4HnDimensionInformation(xunitName, xfcnName, xbinSchemeName),
+      G4HnDimensionInformation(yunitName, yfcnName) } };
 
   return fVP1Manager->Create(name, title, bins, info);
 }
@@ -747,10 +747,10 @@ G4int G4VAnalysisManager::CreateP1(const G4String& name,  const G4String& title,
                                const G4String& xfcnName, const G4String& yfcnName)
 {
   std::array<G4HnDimension, kDim2> bins = {
-    G4HnDimension(edges), G4HnDimension(0, ymin, ymax)};
+    { G4HnDimension(edges), G4HnDimension(0, ymin, ymax) } };
   std::array<G4HnDimensionInformation, kDim2> info = {
-    G4HnDimensionInformation(xunitName, xfcnName),
-    G4HnDimensionInformation(yunitName, yfcnName)};
+    { G4HnDimensionInformation(xunitName, xfcnName),
+      G4HnDimensionInformation(yunitName, yfcnName) } };
 
   return fVP1Manager->Create(name, title, bins, info);
 }
@@ -768,13 +768,13 @@ G4int G4VAnalysisManager::CreateP2(const G4String& name, const G4String& title,
                               const G4String& ybinSchemeName)
 {
   std::array<G4HnDimension, kDim3> bins = {
-    G4HnDimension(nxbins, xmin, xmax),
-    G4HnDimension(nybins, ymin, ymax),
-    G4HnDimension(0, zmin, zmax)};
+    { G4HnDimension(nxbins, xmin, xmax),
+      G4HnDimension(nybins, ymin, ymax),
+      G4HnDimension(0, zmin, zmax) } };
   std::array<G4HnDimensionInformation, kDim3> info = {
-    G4HnDimensionInformation(xunitName, xfcnName, xbinSchemeName),
-    G4HnDimensionInformation(yunitName, yfcnName, ybinSchemeName),
-    G4HnDimensionInformation(zunitName, zfcnName)};
+    { G4HnDimensionInformation(xunitName, xfcnName, xbinSchemeName),
+      G4HnDimensionInformation(yunitName, yfcnName, ybinSchemeName),
+      G4HnDimensionInformation(zunitName, zfcnName) } };
 
   return fVP2Manager->Create(name, title, bins, info);
 }
@@ -790,11 +790,11 @@ G4int G4VAnalysisManager::CreateP2(const G4String& name, const G4String& title,
                               const G4String& zfcnName)
 {
   std::array<G4HnDimension, kDim3> bins = {
-    G4HnDimension(xedges),  G4HnDimension(yedges), G4HnDimension(0, zmin, zmax)};
+    { G4HnDimension(xedges),  G4HnDimension(yedges), G4HnDimension(0, zmin, zmax) } };
   std::array<G4HnDimensionInformation, kDim3> info = {
-    G4HnDimensionInformation(xunitName, xfcnName),
-    G4HnDimensionInformation(yunitName, yfcnName),
-    G4HnDimensionInformation(zunitName, zfcnName)};
+    { G4HnDimensionInformation(xunitName, xfcnName),
+      G4HnDimensionInformation(yunitName, yfcnName),
+      G4HnDimensionInformation(zunitName, zfcnName) } };
 
   return fVP2Manager->Create(name, title, bins, info);
 }
@@ -808,11 +808,11 @@ G4bool G4VAnalysisManager::SetP1(G4int id,
                                 const G4String& xbinSchemeName)
 {
   std::array<G4HnDimension, kDim2> bins = {
-    G4HnDimension(nbins, xmin, xmax),
-    G4HnDimension(0, ymin, ymax) };
+    { G4HnDimension(nbins, xmin, xmax),
+      G4HnDimension(0, ymin, ymax) } };
   std::array<G4HnDimensionInformation, kDim2> info = {
-    G4HnDimensionInformation(xunitName, xfcnName, xbinSchemeName),
-    G4HnDimensionInformation(yunitName, yfcnName)};
+    { G4HnDimensionInformation(xunitName, xfcnName, xbinSchemeName),
+      G4HnDimensionInformation(yunitName, yfcnName) } };
 
   return fVP1Manager->Set(id, bins, info);
 }
@@ -825,10 +825,10 @@ G4bool G4VAnalysisManager::SetP1(G4int id,
                                 const G4String& xfcnName, const G4String& yfcnName)
 {
   std::array<G4HnDimension, kDim2> bins = {
-    G4HnDimension(edges), G4HnDimension(0, ymin, ymax)};
+    { G4HnDimension(edges), G4HnDimension(0, ymin, ymax) } };
   std::array<G4HnDimensionInformation, kDim2> info = {
-    G4HnDimensionInformation(xunitName, xfcnName),
-    G4HnDimensionInformation(yunitName, yfcnName)};
+    { G4HnDimensionInformation(xunitName, xfcnName),
+      G4HnDimensionInformation(yunitName, yfcnName) } };
 
   return fVP1Manager->Set(id, bins, info);
 }
@@ -846,13 +846,13 @@ G4bool G4VAnalysisManager::SetP2(G4int id,
                               const G4String& ybinSchemeName)
 {
   std::array<G4HnDimension, kDim3> bins = {
-    G4HnDimension(nxbins, xmin, xmax),
-    G4HnDimension(nybins, ymin, ymax),
-    G4HnDimension(0, zmin, zmax)};
+    { G4HnDimension(nxbins, xmin, xmax),
+      G4HnDimension(nybins, ymin, ymax),
+      G4HnDimension(0, zmin, zmax) } };
   std::array<G4HnDimensionInformation, kDim3> info = {
-    G4HnDimensionInformation(xunitName, xfcnName, xbinSchemeName),
-    G4HnDimensionInformation(yunitName, yfcnName, ybinSchemeName),
-    G4HnDimensionInformation(zunitName, zfcnName)};
+    { G4HnDimensionInformation(xunitName, xfcnName, xbinSchemeName),
+      G4HnDimensionInformation(yunitName, yfcnName, ybinSchemeName),
+      G4HnDimensionInformation(zunitName, zfcnName) } };
 
   return fVP2Manager->Set(id, bins, info);
 }
@@ -870,11 +870,11 @@ G4bool G4VAnalysisManager::SetP2(G4int id,
                               const G4String& zfcnName)
 {
   std::array<G4HnDimension, kDim3> bins = {
-    G4HnDimension(xedges), G4HnDimension(yedges), G4HnDimension(0, zmin, zmax)};
+    { G4HnDimension(xedges), G4HnDimension(yedges), G4HnDimension(0, zmin, zmax) } };
   std::array<G4HnDimensionInformation, kDim3> info = {
-    G4HnDimensionInformation(xunitName, xfcnName),
-    G4HnDimensionInformation(yunitName, yfcnName),
-    G4HnDimensionInformation(zunitName, zfcnName)};
+    { G4HnDimensionInformation(xunitName, xfcnName),
+      G4HnDimensionInformation(yunitName, yfcnName),
+      G4HnDimensionInformation(zunitName, zfcnName) } };
 
   return fVP2Manager->Set(id, bins, info);
 }

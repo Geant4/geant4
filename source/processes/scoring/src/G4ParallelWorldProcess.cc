@@ -96,12 +96,10 @@ G4ParallelWorldProcess::~G4ParallelWorldProcess()
   }
 }
 
-void G4ParallelWorldProcess::SetParallelWorld(G4String parallelWorldName)
+void G4ParallelWorldProcess::SetParallelWorld(const G4String& parallelWorldName)
 {
   fGhostWorldName = parallelWorldName;
-  fGhostWorld = fTransportationManager->GetParallelWorld(fGhostWorldName);
-  fGhostNavigator = fTransportationManager->GetNavigator(fGhostWorld);
-  fGhostNavigator->SetPushVerbosity(false);
+  SetParallelWorldNavigator(true);
 }
 
 void G4ParallelWorldProcess::SetParallelWorld(G4VPhysicalVolume* parallelWorld)
@@ -109,11 +107,22 @@ void G4ParallelWorldProcess::SetParallelWorld(G4VPhysicalVolume* parallelWorld)
   fGhostWorldName = parallelWorld->GetName();
   fGhostWorld = parallelWorld;
   fGhostNavigator = fTransportationManager->GetNavigator(fGhostWorld);
-  fGhostNavigator->SetPushVerbosity(false);
+  if (fGhostNavigator != nullptr) { fGhostNavigator->SetPushVerbosity(false); }
+}
+
+void G4ParallelWorldProcess::SetParallelWorldNavigator(G4bool createIfMissing)
+{
+  fGhostWorld = createIfMissing ? fTransportationManager->GetParallelWorld(fGhostWorldName)
+                                : fTransportationManager->IsWorldExisting(fGhostWorldName);
+  fGhostNavigator = (fGhostWorld != nullptr)
+                    ? fTransportationManager->GetNavigator(fGhostWorld)
+                    : nullptr;
+  if (fGhostNavigator != nullptr) { fGhostNavigator->SetPushVerbosity(false); }
 }
 
 void G4ParallelWorldProcess::StartTracking(G4Track* trk)
 {
+  SetParallelWorldNavigator();
   if (fGhostNavigator != nullptr) {
     fNavigatorID = fTransportationManager->ActivateNavigator(fGhostNavigator);
   }

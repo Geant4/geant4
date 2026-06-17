@@ -26,8 +26,8 @@
 //
 // P. Arce, June-2014 Conversion neutron_hp to particle_hp
 //
-#ifndef G4ParticleHPFissionFS_h
-#define G4ParticleHPFissionFS_h 1
+#ifndef G4PARTICLEHPFISSIONFS_HH
+#define G4PARTICLEHPFISSIONFS_HH
 
 #include "G4HadFinalState.hh"
 #include "G4HadProjectile.hh"
@@ -64,9 +64,7 @@ class G4ParticleHPFissionFS : public G4ParticleHPFinalState
     G4ParticleHPSCFissionFS theSC;
     G4ParticleHPTCFissionFS theTC;
     G4ParticleHPLCFissionFS theLC;
-
     G4ParticleHPFFFissionFS theFF;
-    G4bool produceFissionFragments;
 };
 
 #endif

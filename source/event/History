@@ -5,6 +5,16 @@ which **must** added in reverse chronological order (newest at the top). It must
 be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
+
+## 2026-06-04 Makoto Asai (event-V11-03-05) 
+- G4Event::GetNumberOfRemainingSubEvents() : use Mutex only for the G4Event used
+  in the master thread in sub-event parallel mode. Addressing to Bug Report #2734.
+
+## 2026-05-07 Makoto Asai (event-V11-03-04)
+- G4StackManager::PushOneTrack() : remove the check for generic ion having
+  proper process manager. This is to avoid rare race condition issue of 
+  G4ParticleDefinition::GetParticleDefinitionID() method.
+
 ## 2025-11-06 Laurent Desorgher (event-V11-03-03) 
 - G4AdjointPrimaryGenerator: Make it G4ThreadLocal and add GetInstance() method
   to solve a bug in Reverse MC  simulation in MT mode.

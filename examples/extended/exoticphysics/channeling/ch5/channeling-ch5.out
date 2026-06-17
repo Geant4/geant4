@@ -1,4 +1,4 @@
-Random seed: 1773843723
+Random seed: 1781369799
 Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Forcing G4RunManager type...
 
         ############################################
@@ -12,7 +12,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-04-patch-01    (13-March-2026)
+ Geant4 version Name: geant4-11-04-patch-02    (12-June-2026)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -851,11 +851,11 @@ Number of events to be processed: 10
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=159.260000s Real=170.307012s Sys=0.050000s
+  User=97.100000s Real=108.098049s Sys=0.070000s
 
 --------------------End of Global Run-----------------------
  The run had 10 events
- Edep in the Radiator Crystal (made of G4_W): 89.739024 +/- 22.202027 MeV
+ Edep in the Radiator Crystal (made of G4_W): 149.23976 +/- 29.674712 MeV
 ------------------------------------------------------------
 
 
@@ -863,8 +863,8 @@ Run Summary
 ------------------------------------------------------------
 
 ================== Deleting memory pools ===================
-Number of memory pools allocated: 14 of which, static: 0
-Dynamic pools deleted: 14 / Total memory freed: 0.13 MB
+Number of memory pools allocated: 12 of which, static: 0
+Dynamic pools deleted: 12 / Total memory freed: 0.13 MB
 ============================================================
 Execution terminated
-User=164.350000s Real=186.815060s Sys=10.960000s
+User=102.950000s Real=125.953986s Sys=11.460000s

@@ -119,6 +119,7 @@ G4double G4EmCalculator::GetDEDX(G4double kinEnergy,
 	auto const v =
 	  G4ProductionCutsTable::GetProductionCutsTable()->GetEnergyCutsVector(1);
 	G4double cut = (*v)[couple->GetIndex()];
+        currentModel->GetChargeSquareRatio(p, mat, kinEnergy);
 	currentModel->CorrectionsAlongStep(mat, p, kinEnergy, cut, length, eloss);
 	res = std::max(eloss/length, 0.0);
       } else {
@@ -417,6 +418,7 @@ G4double G4EmCalculator::ComputeDEDX(G4double kinEnergy,
       }
       if (isIon) {
 	G4double eloss = res*length;
+        currentModel->GetChargeSquareRatio(p, mat, kinEnergy);
 	currentModel->CorrectionsAlongStep(mat, p, kinEnergy, cut, length, eloss);
 	res = std::max(eloss/length, 0.0);
       }

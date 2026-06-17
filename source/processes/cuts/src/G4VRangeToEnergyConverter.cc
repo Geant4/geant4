@@ -41,8 +41,8 @@ namespace
   G4Mutex theREMutex = G4MUTEX_INITIALIZER;
 }
 
-G4double G4VRangeToEnergyConverter::sEmin = CLHEP::keV;
-G4double G4VRangeToEnergyConverter::sEmax = 10.*CLHEP::GeV;
+G4double G4VRangeToEnergyConverter::sEmin = 0.0;
+G4double G4VRangeToEnergyConverter::sEmax = 0.0;
 
 std::vector<G4double>* G4VRangeToEnergyConverter::sEnergy = nullptr;
 
@@ -52,31 +52,18 @@ G4int G4VRangeToEnergyConverter::sNbin = 350;
 // --------------------------------------------------------------------
 G4VRangeToEnergyConverter::G4VRangeToEnergyConverter()
 {
-  if(nullptr == sEnergy)
-  {
-    G4AutoLock l(&theREMutex);
-    if(nullptr == sEnergy)
-    {
-      isFirstInstance = true;
-    }
-    l.unlock();
-  }
-  // this method defines lock itself
-  if(isFirstInstance)
-  {
-    FillEnergyVector(CLHEP::keV, 10.0*CLHEP::GeV);
-  }
+  if(sEnergy==nullptr) FillEnergyVector(0.99*CLHEP::keV, 10.0*CLHEP::GeV);
 }
 
 // --------------------------------------------------------------------
 G4VRangeToEnergyConverter::~G4VRangeToEnergyConverter()
 {
-  if(isFirstInstance)
-  { 
+  if (nullptr != sEnergy)
+  {
+    G4AutoLock l(&theREMutex);
     delete sEnergy;
-    sEnergy = nullptr; 
-    sEmin = CLHEP::keV;
-    sEmax = 10.*CLHEP::GeV;
+    sEnergy = nullptr;
+    l.unlock();
   }
 }
 
@@ -159,18 +146,21 @@ void G4VRangeToEnergyConverter::SetMaxEnergyCut(const G4double value)
 void G4VRangeToEnergyConverter::FillEnergyVector(const G4double emin, 
                                                  const G4double emax)
 {
-  if(emin != sEmin || emax != sEmax || nullptr == sEnergy) 
-  {
-    sEmin = emin;
-    sEmax = emax;
-    sNbin = sNbinPerDecade*G4lrint(std::log10(emax/emin));
-    if(nullptr == sEnergy) { sEnergy = new std::vector<G4double>; }
-    sEnergy->resize(sNbin + 1);
-    (*sEnergy)[0] = emin;
-    (*sEnergy)[sNbin] = emax;
-    G4double fact = G4Log(emax/emin)/sNbin;
-    for(G4int i=1; i<sNbin; ++i) { (*sEnergy)[i] = emin*G4Exp(i * fact); }
-  }
+  // sanity check
+  if ((sEmin == emin && sEmax == emax) || emin <= 0.0 || emax <= emin) { return; }
+
+  // fill energy vector
+  G4AutoLock l(&theREMutex);
+  sEmin = emin;
+  sEmax = emax;
+  sNbin = sNbinPerDecade*G4lrint(std::log10(emax/emin));
+  delete sEnergy;
+  sEnergy = new std::vector<G4double>(sNbin + 1);
+  (*sEnergy)[0] = emin;
+  (*sEnergy)[sNbin] = emax;
+  G4double fact = G4Log(emax/emin)/sNbin;
+  for (G4int i=1; i<sNbin; ++i) { (*sEnergy)[i] = emin*G4Exp(i * fact); }
+  l.unlock();
 }
 
 // --------------------------------------------------------------------

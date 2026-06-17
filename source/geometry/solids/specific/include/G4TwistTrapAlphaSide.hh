@@ -41,6 +41,7 @@
 /**
  * @brief G4TwistTrapAlphaSide describes a twisted boundary surface
  * for a trapezoid.
+ * @ingroup geometry_solids_specific
  */
 
 class G4TwistTrapAlphaSide : public G4VTwistSurface
@@ -208,7 +209,7 @@ class G4TwistTrapAlphaSide : public G4VTwistSurface
     G4double fDy2plus1;  // fDy2 + fDy1  == b2/2 + b1/2
     G4double fDy2minus1; // fDy2 - fDy1          -
     G4double fa1md1;     // 2 fDx2 - 2 fDx1  == a1 - d1
-    G4double fa2md2;     // 2 fDx4 - 2 fDx3 
+    G4double fa2md2;     // 2 fDx4 - 2 fDx3
 
     G4double fdeltaX;
     G4double fdeltaY;

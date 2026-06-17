@@ -6,6 +6,29 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2026-05-22 Gabriele Cosmo (hadr-deex-V11-03-26)
+- Fixed MT data race in G4NuclearLevelData, by removing the separate
+  std::vector<G4bool> loaded flag and making the manager pointer itself
+  the loaded state, protected by the existing 'nuclearLevelDataMutex'.
+  GetLevelManager() now locks before checking/publishing fLevelManagers[Z][idx].
+  UploadNuclearLevelData() now checks 'fInitialized' under the same mutex too.
+  The key issue was double-checked locking on non-atomic state. The reported
+  line is the vector<bool> store, but the pointer publication/read was also
+  unsynchronized. Using the pointer as the sentinel avoids the packed
+  vector<bool> specialization entirely and gives a clear lock happens-before
+  relation.
+
+## 2026-05-16 Vladimir Ivanchenko
+- G4StatMFMacroCanonical - fixed problem proposed in github PR #100
+- G4FermiBreakUpVI - minor cleanup
+
+## 2026-05-10 Seth R Johnson
+- Fix crash when G4LEVELGAMMADATA environment variable is not set
+
+## 2026-04-29 D. Konstantinov
+- G4FermiBreakUpVI - protect initialisation of the shared static Fermi
+    fragments pool with G4AutoLock.
+
 ## 2025-11-09 Vladimir Ivanchenko (hadr-deex-V11-03-25)
 - G4LevelReader, G4GammaTransition, G4photonEvaporation - fixed Bugzilla
     problems #2672, #2588, #2451. The vector of IC probabilities is limited by

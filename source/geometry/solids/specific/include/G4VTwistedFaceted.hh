@@ -33,7 +33,7 @@
 // Author: Oliver Link (CERN), 27.10.2004 - Created
 // --------------------------------------------------------------------
 #ifndef G4VTWISTEDFACETED_HH
-#define G4VTWISTEDFACETED_HH 1
+#define G4VTWISTEDFACETED_HH
 
 #include "G4VSolid.hh"
 #include "G4TwoVector.hh"
@@ -48,6 +48,7 @@ class G4ClippablePolygon;
 /**
  * @brief G4VTwistedFaceted is a base class for twisted boxoids:
  * G4TwistedTrd, G4TwistedTrap and G4TwistedBox.
+ * @ingroup geometry_solids_specific
  */
 
 class G4VTwistedFaceted: public G4VSolid
@@ -88,14 +89,6 @@ class G4VTwistedFaceted: public G4VSolid
      * Destructor.
      */
     ~G4VTwistedFaceted() override;
-
-    /**
-     * Dispatch method for parameterisation replication mechanism and
-     * dimension computation.
-     */
-    void ComputeDimensions(G4VPVParameterisation*,
-                           const G4int,
-                           const G4VPhysicalVolume*  ) override;
 
     /**
      * Computes the bounding limits of the solid.

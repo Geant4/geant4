@@ -25,4 +25,5 @@ geant4_module_link_libraries(G4had_string_man
     G4hepgeometry
     G4partman
   PRIVATE
-    G4shortlived)
+    G4shortlived
+    G4mesons)

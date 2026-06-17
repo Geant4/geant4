@@ -46,7 +46,6 @@ G4ParticleHPFissionFS::G4ParticleHPFissionFS()
 {
   secID = G4PhysicsModelCatalog::GetModelID("model_NeutronHPFission");
   hasXsec = false;
-  produceFissionFragments = false;
 }
 
 void G4ParticleHPFissionFS::Init(G4double A, G4double Z, G4int M, const G4String& dirName,
@@ -65,14 +64,14 @@ void G4ParticleHPFissionFS::Init(G4double A, G4double Z, G4int M, const G4String
     G4cout << "As currently modeled this option precludes production of delayed neutrons from "
               "fission fragments."
            << G4endl;
-    produceFissionFragments = true;
   }
 }
 
 G4HadFinalState* G4ParticleHPFissionFS::ApplyYourself(const G4HadProjectile& theTrack)
 {
   // Because it may change by UI command
-  produceFissionFragments = G4ParticleHPManager::GetInstance()->GetProduceFissionFragments();
+  const G4bool produceFissionFragments =
+    G4ParticleHPManager::GetInstance()->GetProduceFissionFragments() && theFF.HasFSData();
 
   // prepare neutron
   if (theResult.Get() == nullptr) theResult.Put(new G4HadFinalState);

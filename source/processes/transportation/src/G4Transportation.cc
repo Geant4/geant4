@@ -221,10 +221,7 @@ G4double G4Transportation::AlongStepGetPhysicalInteractionLength(
       currentSafety = fPreviousSafety - std::sqrt(MagSqShift);
   }
 
-  // Is the particle charged or has it a magnetic moment?
-  //
   const G4DynamicParticle* pParticle = track.GetDynamicParticle();
-
   const G4double particleMass   = pParticle->GetMass();
   const G4double particleCharge = pParticle->GetCharge();
   const G4double kineticEnergy = pParticle->GetKineticEnergy();
@@ -238,30 +235,9 @@ G4double G4Transportation::AlongStepGetPhysicalInteractionLength(
 
   // Check if the particle has a force, EM or gravitational, exerted on it
   //
-
-  G4bool eligibleEM =
-    (particleCharge != 0.0) || ((magneticMoment != 0.0) && fUseMagneticMoment);
-  G4bool eligibleGrav = (particleMass != 0.0) && fUseGravity;
-
-  fFieldExertedForce = false;
-
-  if(eligibleEM || eligibleGrav)
-  {
-    if(G4FieldManager* fieldMgr =
-         fFieldPropagator->FindAndSetFieldManager(track.GetVolume()))
-    {
-      // User can configure the field Manager for this track
-      fieldMgr->ConfigureForTrack(&track);
-      // Called here to allow a transition from no-field pointer
-      // to finite field (non-zero pointer).
-
-      // If the field manager has no field ptr, the field is zero
-      //   by definition ( = there is no field ! )
-      if(const G4Field* ptrField = fieldMgr->GetDetectorField())
-        fFieldExertedForce =
-          eligibleEM || (eligibleGrav && ptrField->IsGravityActive());
-    }
-  }
+  fFieldExertedForce = fNewTrack
+                     ? fFieldExertedForceAtTrackStart
+                     : ConfigureFieldForTrack(track);
 
   G4double geometryStepLength = currentMinimumStep;
 
@@ -815,6 +791,11 @@ G4Transportation::StartTracking(G4Track* aTrack)
        // Resets all state of field propagator class (ONLY) including safety
        // values (in case of overlaps and to wipe for first track).
   }
+
+  // Configure the equation before chord finders notify their integration
+  // drivers that tracking is starting.
+  //
+  fFieldExertedForceAtTrackStart = ConfigureFieldForTrack(*aTrack);
 
   // Make sure to clear the chord finders of all fields (i.e. managers)
   //

@@ -141,7 +141,7 @@ void G4EmParameters::Initialise()
   f3GammaAnnihilationOnFly = false;
   fUseRiGePairProductionModel = false;
   fDNA = false;
-  fIsPrinted = false;
+  fIsPrinted.store(false);
 
   minKinEnergy = 0.1*CLHEP::keV;
   maxKinEnergy = 100.0*CLHEP::TeV;
@@ -581,12 +581,12 @@ void G4EmParameters::ActivateDNA()
 
 void G4EmParameters::SetIsPrintedFlag(G4bool val)
 {
-  fIsPrinted = val;
+  fIsPrinted.store(val);
 }
 
 G4bool G4EmParameters::IsPrintLocked() const
 {
-  return fIsPrinted;
+  return fIsPrinted.load();
 }
 
 G4EmSaturation* G4EmParameters::GetEmSaturation()
@@ -1589,7 +1589,7 @@ void G4EmParameters::StreamInfo(std::ostream& os) const
 
 void G4EmParameters::Dump()
 {
-  if(fIsPrinted) return;
+  if (fIsPrinted.load()) return;
 
 #ifdef G4MULTITHREADED
   G4MUTEXLOCK(&emParametersMutex);

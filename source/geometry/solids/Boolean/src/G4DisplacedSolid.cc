@@ -173,6 +173,8 @@ G4DisplacedSolid& G4DisplacedSolid::operator = (const G4DisplacedSolid& rhs)
   return *this;
 }  
 
+/////////////////////////////////////////////////////////////////////////////
+
 void G4DisplacedSolid::CleanTransformations()
 {
   if(fPtrTransform != nullptr)
@@ -182,10 +184,14 @@ void G4DisplacedSolid::CleanTransformations()
   }
 }
 
+/////////////////////////////////////////////////////////////////////////////
+
 const G4DisplacedSolid* G4DisplacedSolid::GetDisplacedSolidPtr() const   
 {
   return this;
 }
+
+/////////////////////////////////////////////////////////////////////////////
 
 G4DisplacedSolid* G4DisplacedSolid::GetDisplacedSolidPtr() 
 {
@@ -204,6 +210,8 @@ G4AffineTransform  G4DisplacedSolid::GetTransform() const
   G4AffineTransform aTransform = *fPtrTransform;
   return aTransform;
 }
+
+/////////////////////////////////////////////////////////////////////////////
 
 void G4DisplacedSolid::SetTransform(G4AffineTransform& transform) 
 {
@@ -246,6 +254,8 @@ G4ThreeVector  G4DisplacedSolid::GetFrameTranslation() const
   return fPtrTransform->NetTranslation();
 }
 
+/////////////////////////////////////////////////////////////////////////////
+
 void G4DisplacedSolid::SetFrameTranslation(const G4ThreeVector& vector)
 {
   fPtrTransform->SetNetTranslation(vector);
@@ -260,6 +270,8 @@ G4RotationMatrix G4DisplacedSolid::GetObjectRotation() const
   return Rotation;
 }
 
+/////////////////////////////////////////////////////////////////////////////
+
 void G4DisplacedSolid::SetObjectRotation(const G4RotationMatrix& matrix)
 {
   fPtrTransform->SetNetRotation(matrix);
@@ -272,6 +284,8 @@ G4ThreeVector  G4DisplacedSolid::GetObjectTranslation() const
 {
   return fDirectTransform->NetTranslation();
 }
+
+/////////////////////////////////////////////////////////////////////////////
 
 void G4DisplacedSolid::SetObjectTranslation(const G4ThreeVector& vector)
 {
@@ -341,7 +355,7 @@ G4DisplacedSolid::CalculateExtent( const EAxis pAxis,
  
 /////////////////////////////////////////////////////
 //
-// SurfaceNormal
+// Inside
 
 EInside G4DisplacedSolid::Inside(const G4ThreeVector& p) const
 {
@@ -351,7 +365,7 @@ EInside G4DisplacedSolid::Inside(const G4ThreeVector& p) const
 
 //////////////////////////////////////////////////////////////
 //
-//
+// SurfaceNormal
 
 G4ThreeVector 
 G4DisplacedSolid::SurfaceNormal( const G4ThreeVector& p ) const 
@@ -418,21 +432,6 @@ G4DisplacedSolid::DistanceToOut( const G4ThreeVector& p ) const
 {
   G4ThreeVector newPoint = fPtrTransform->TransformPoint(p) ;
   return fPtrSolid->DistanceToOut(newPoint) ;   
-}
-
-//////////////////////////////////////////////////////////////
-//
-// ComputeDimensions
-
-void 
-G4DisplacedSolid::ComputeDimensions(       G4VPVParameterisation*,
-                                     const G4int,
-                                     const G4VPhysicalVolume* ) 
-{
-  DumpInfo();
-  G4Exception("G4DisplacedSolid::ComputeDimensions()",
-              "GeomSolids0001", FatalException,
-              "Method not applicable in this context!");
 }
 
 //////////////////////////////////////////////////////////////

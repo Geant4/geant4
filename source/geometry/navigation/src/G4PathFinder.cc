@@ -134,6 +134,7 @@ G4PathFinder::EnableParallelNavigation(G4bool enableChoice)
       fpTransportManager->GetSafetyHelper()->EnableParallelNavigation(false);
    }
    fpFieldPropagator->SetNavigatorForPropagating(navigatorForPropagation);
+   fpMultiNavigator->SetNavigatorForTracking();
 }
 
 // ----------------------------------------------------------------------------

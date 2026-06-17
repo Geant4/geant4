@@ -23,18 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
-//
-//        Inline function implementation.
+// G4Transportation inline functions implementation.
 
 // =======================================================================
 // Created:  9 June 1998, J. Apostolakis
 // =======================================================================
-
-#include <CLHEP/Units/SystemOfUnits.h>
-#include "G4TransportationLogger.hh"
 
 inline void
 G4Transportation::SetPropagatorInField( G4PropagatorInField* pFieldPropagator)
@@ -45,6 +38,32 @@ G4Transportation::SetPropagatorInField( G4PropagatorInField* pFieldPropagator)
 inline G4PropagatorInField* G4Transportation::GetPropagatorInField()
 {
    return fFieldPropagator;
+}
+
+inline G4bool G4Transportation::ConfigureFieldForTrack(const G4Track& track)
+{
+  // Configure the field before any AlongStep process can ask the shared
+  // PathFinder to compute the first step of this track
+
+  const G4DynamicParticle* particle = track.GetDynamicParticle();
+  const G4bool eligibleEM = (particle->GetCharge() != 0.0)
+        || (fUseMagneticMoment && (particle->GetMagneticMoment() != 0.0));
+  const G4bool eligibleGrav = fUseGravity && (particle->GetMass() != 0.0);
+  G4bool exForce = false;
+
+  if(eligibleEM || eligibleGrav)
+  {
+    if(auto fieldMgr = fFieldPropagator->FindAndSetFieldManager(track.GetVolume()))
+    {
+      fieldMgr->ConfigureForTrack(&track);
+
+      // If the field manager has no field ptr, the field is zero
+      // by definition ( = there is no field ! )
+      if(const G4Field* ptrField = fieldMgr->GetDetectorField())
+        exForce = eligibleEM || (eligibleGrav && ptrField->IsGravityActive());
+    }
+  }
+  return exForce;
 }
 
 inline G4double G4Transportation::GetThresholdWarningEnergy() const

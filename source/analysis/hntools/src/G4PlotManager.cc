@@ -136,6 +136,20 @@ bool load_embeded_styles(tools::xml::styles& a_styles) {
   return toolx::xml::load_style_string(a_styles,ss);
 }
 
+//_____________________________________________________________________________
+const toolx::sg::text_freetype& GetTextFreetype()
+{
+  static const toolx::sg::text_freetype ttf = [] {
+    toolx::sg::text_freetype value;
+    value.add_embedded_font(tools::sg::font_lato_regular_ttf(),
+                            tools::font::lato_regular_ttf);
+    value.add_embedded_font(tools::sg::font_roboto_bold_ttf(),
+                            tools::font::roboto_bold_ttf);
+    return value;
+  }();
+  return ttf;
+}
+
 }
 #endif
 
@@ -158,10 +172,7 @@ G4PlotManager::G4PlotManager(const G4AnalysisManagerState& state)
   // unsigned int ww = 2000; //to have better antialising on freetype fonts.
   // float A4 = 29.7f/21.0f;
   // unsigned int wh = (unsigned int)(float(ww)*A4*0.80);
-  static toolx::sg::text_freetype ttf;
-  ttf.add_embedded_font(tools::sg::font_lato_regular_ttf(),tools::font::lato_regular_ttf);
-  ttf.add_embedded_font(tools::sg::font_roboto_bold_ttf(),tools::font::roboto_bold_ttf);
-  fViewer = std::make_unique<tools::viewplot>(G4cout, ttf,
+  fViewer = std::make_unique<tools::viewplot>(G4cout, GetTextFreetype(),
                                     fPlotParameters.GetColumns(),
                                     fPlotParameters.GetRows(),
                                     fPlotParameters.GetWidth(),

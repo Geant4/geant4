@@ -173,7 +173,12 @@ void G4ParticleHPChannel::UpdateData(G4int A, G4int Z, G4int M, G4int index,
                                                    theDir, tString);
     if (active[index]) theBuffer = theIsotopeWiseData[index].MakeChannelData();
   }
-  if (theBuffer != nullptr) Harmonise(theChannelData, theBuffer);
+  if (theBuffer != nullptr) {
+    if (auto elasticFS = dynamic_cast<G4ParticleHPElasticFS*>(theFinalStates[index])) {
+      elasticFS->RegisterCrossSection(theIsotopeWiseData[index].MakeChannelData());
+    }
+    Harmonise(theChannelData, theBuffer);
+  }
 }
 
 void G4ParticleHPChannel::Harmonise(G4ParticleHPVector*& theStore,
@@ -232,7 +237,7 @@ G4WendtFissionFragmentGenerator* G4ParticleHPChannel::GetWendtFissionGenerator()
 
 G4HadFinalState*
 G4ParticleHPChannel::ApplyYourself(const G4HadProjectile& theTrack,
-				   G4int anIsotope, G4bool isElastic)
+				   G4int anIsotope, G4bool /* isElastic */)
 {
   //G4cout << "G4ParticleHPChannel::ApplyYourself niso=" << niso
   //	 << " ni=" << anIsotope << " isElastic=" << isElastic <<G4endl;
@@ -303,12 +308,6 @@ G4ParticleHPChannel::ApplyYourself(const G4HadProjectile& theTrack,
         G4cout << "Loop-counter exceeded the threshold value at " 
                << __LINE__ << "th line of " << __FILE__ << "." << G4endl;
         break;
-      }
-      if (isElastic) {
-        // Register 0 K cross-section for DBRC for Doppler broadened elastic scattering kernel
-        G4ParticleHPVector* xsforFS = theIsotopeWiseData[it].MakeChannelData();
-        // Only G4ParticleHPElasticFS has the RegisterCrossSection method
-        static_cast<G4ParticleHPElasticFS*>(theFinalStates[it])->RegisterCrossSection(xsforFS);
       }
       theFinalState = theFinalStates[it]->ApplyYourself(theTrack);
     }

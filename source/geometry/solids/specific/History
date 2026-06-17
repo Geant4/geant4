@@ -6,6 +6,27 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2026-05-29 Gabriele Cosmo (geom-specific-V11-03-12)
+- Fixed data races in twisted solids implementation; solids now remain
+  read-only after construction and navigation queries are stateless:
+  o Removed CurrentStatus caches in G4VTwistSurface and the shared
+    'fCurStatWithV' and 'fCurStat' query caches.
+  o Removed the shared 'fCurrentNormal' cache and made GetNormal() compute
+    from local query data instead.
+  o Updated all affected twist side classes so DistanceToSurface() now
+    writes only to caller-provided arrays.
+  o Removed remaining cache 'fInside' in G4TwistTubsHypeSide and its use
+    within Inside(); Inside() now computes and returns the result locally.
+  o Removed cached 'fAmIOnLeftSide' in G4VTwistSurface and its cached query
+    struct. AmIOnLeftSide() now uses a local result.
+  Addressing problem reports #2654 and #2704.
+
+## 2026-04-24 Gabriele Cosmo
+- Removed redundant disabled specialisation of ComputeDimensions()
+  in twisted solids. Dispatching for ComputeDimensions() is enabled only
+  for solids where full parameterisation is allowed, for all others it is
+  simply disabled and performing no actions.
+
 ## 2025-11-12 Gabriele Cosmo (geom-specific-V11-03-11)
 - Fixed potential thread-safety issue in GetCubicVolume() and GetSurfaceArea()
   on all solids in case those functions are called from worker threads.

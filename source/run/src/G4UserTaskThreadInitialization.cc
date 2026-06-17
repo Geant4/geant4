@@ -82,16 +82,20 @@ void G4UserTaskThreadInitialization::SetupRNGEngine(const CLHEP::HepRandomEngine
     retRNG = new CLHEP::MixMaxRng;
   else if (dynamic_cast<const CLHEP::RanecuEngine*>(aNewRNG) != nullptr)
     retRNG = new CLHEP::RanecuEngine;
-  else if (dynamic_cast<const CLHEP::Ranlux64Engine*>(aNewRNG) != nullptr)
-    retRNG = new CLHEP::Ranlux64Engine;
+  else if (dynamic_cast<const CLHEP::Ranlux64Engine*>(aNewRNG) != nullptr) {
+    const CLHEP::Ranlux64Engine* theRNG = dynamic_cast<const CLHEP::Ranlux64Engine*>(aNewRNG);
+    retRNG= new CLHEP::Ranlux64Engine(123,theRNG->getLuxury());
+  }
   else if (dynamic_cast<const CLHEP::RanluxppEngine*>(aNewRNG) != nullptr)
     retRNG = new CLHEP::RanluxppEngine;
   else if (dynamic_cast<const CLHEP::MTwistEngine*>(aNewRNG) != nullptr)
     retRNG = new CLHEP::MTwistEngine;
   else if (dynamic_cast<const CLHEP::DualRand*>(aNewRNG) != nullptr)
     retRNG = new CLHEP::DualRand;
-  else if (dynamic_cast<const CLHEP::RanluxEngine*>(aNewRNG) != nullptr)
-    retRNG = new CLHEP::RanluxEngine;
+  else if (dynamic_cast<const CLHEP::RanluxEngine*>(aNewRNG) != nullptr) {
+    const CLHEP::RanluxEngine* theRNG = dynamic_cast<const CLHEP::RanluxEngine*>(aNewRNG);
+    retRNG= new CLHEP::RanluxEngine(123,theRNG->getLuxury());
+  }
   else if (dynamic_cast<const CLHEP::RanshiEngine*>(aNewRNG) != nullptr)
     retRNG = new CLHEP::RanshiEngine;
 

@@ -6,6 +6,11 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2026-03-29 Dmitri Konstantinov (had-hadronization-V11-03-00)
+- G4VLongitudinalStringDecay: fixed wrong MesonWeight indices in the d-dbar
+  neutral-meson table in SetMinMasses(); eta and eta' weights now match their
+  proper state indices.
+
 ## 2024-08-21 Gabriele Cosmo (had-hadronization-V11-02-01)
 - Fixed reported Coverity defect in G4NucleiModel for redundant assignment
   in G4LundStringFragmentation::Sample4Momentum().

@@ -85,9 +85,8 @@ public:
   bool fill(const std::vector<T>& a_values) {
     size_t dsize = a_values.size();
     size_t di = 0;
-    unsigned int index = 0;
 
-    for(auto it=m_vector.begin();it!=m_vector.end();++it,index++) {
+    for(auto it=m_vector.begin();it!=m_vector.end();++it) {
       if(di>=dsize) return false; //a_values exhausted too early
       *it = a_values[di];
       di++;

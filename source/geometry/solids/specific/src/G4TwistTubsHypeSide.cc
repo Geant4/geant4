@@ -61,8 +61,6 @@ G4TwistTubsHypeSide::G4TwistTubsHypeSide(const G4String&         name,
                   "GeomSolids0002", FatalErrorInArgument,
                   "Should swap axis0 and axis1!");
    }
-   fInside.gp.set(kInfinity, kInfinity, kInfinity);
-   fInside.inside = kOutside;
    fIsValidNorm = false;
    SetCorners();
    SetBoundaries();
@@ -109,9 +107,6 @@ G4TwistTubsHypeSide::G4TwistTubsHypeSide(const G4String& name,
    fTrans.set(0, 0, 0);
    fIsValidNorm = false;
 
-   fInside.gp.set(kInfinity, kInfinity, kInfinity);
-   fInside.inside = kOutside;
-   
    SetCorners(EndInnerRadius, EndOuterRadius, DPhi, EndPhi, EndZ) ; 
 
    SetBoundaries();
@@ -139,21 +134,11 @@ G4ThreeVector G4TwistTubsHypeSide::GetNormal(const G4ThreeVector& tmpxx,
    if (isGlobal)
    {
       xx = ComputeLocalPoint(tmpxx);
-      if ((xx - fCurrentNormal.p).mag() < 0.5 * kCarTolerance)
-      {
-         return ComputeGlobalDirection(fCurrentNormal.normal);
-      }
    }
    else
    {
       xx = tmpxx;
-      if (xx == fCurrentNormal.p)
-      {
-         return fCurrentNormal.normal;
-      }
    }
-   
-   fCurrentNormal.p = xx;
 
    G4ThreeVector normal( xx.x(), xx.y(), -xx.z() * fTan2Stereo);
    normal *= fHandedness;
@@ -161,13 +146,9 @@ G4ThreeVector G4TwistTubsHypeSide::GetNormal(const G4ThreeVector& tmpxx,
 
    if (isGlobal)
    {
-      fCurrentNormal.normal = ComputeLocalDirection(normal);
+      return ComputeGlobalDirection(normal);
    }
-   else
-   {
-      fCurrentNormal.normal = normal;
-   }
-   return fCurrentNormal.normal;
+   return normal;
 }
 
 //=====================================================================
@@ -179,19 +160,11 @@ EInside G4TwistTubsHypeSide::Inside(const G4ThreeVector& gp)
    const G4double halftol
      = 0.5 * G4GeometryTolerance::GetInstance()->GetRadialTolerance();
 
-   if (fInside.gp == gp)
-   {
-      return fInside.inside;
-   }
-   fInside.gp = gp;
-   
    G4ThreeVector p = ComputeLocalPoint(gp);
-  
 
    if (p.mag() < DBL_MIN)
    {
-      fInside.inside = kOutside;
-      return fInside.inside;
+      return kOutside;
    }
    
    G4double rhohype = GetRhoAtPZ(p);
@@ -200,41 +173,33 @@ EInside G4TwistTubsHypeSide::Inside(const G4ThreeVector& gp)
 
    if (distanceToOut < -halftol)
    {
-     fInside.inside = kOutside;
-   }
-   else
-   {
-      G4int areacode = GetAreaCode(p);
-      if (IsOutside(areacode))
-      {
-         fInside.inside = kOutside;
-      }
-      else if (IsBoundary(areacode))
-      {
-         fInside.inside = kSurface;
-      }
-      else if (IsInside(areacode))
-      {
-         if (distanceToOut <= halftol)
-         {
-            fInside.inside = kSurface;
-         }
-         else
-         {
-            fInside.inside = kInside;
-         }
-      }
-      else
-      {
-         G4cout << "WARNING - G4TwistTubsHypeSide::Inside()" << G4endl
-                << "          Invalid option !" << G4endl
-                << "          name, areacode, distanceToOut = "
-                << GetName() << ", " << std::hex << areacode
-                << std::dec << ", " << distanceToOut << G4endl;
-      }
+     return kOutside;
    }
 
-   return fInside.inside; 
+   G4int areacode = GetAreaCode(p);
+   if (IsOutside(areacode))
+   {
+      return kOutside;
+   }
+   if (IsBoundary(areacode))
+   {
+      return kSurface;
+   }
+   if (IsInside(areacode))
+   {
+      if (distanceToOut <= halftol)
+      {
+         return kSurface;
+      }
+      return kInside;
+   }
+
+   G4cout << "WARNING - G4TwistTubsHypeSide::Inside()" << G4endl
+          << "          Invalid option !" << G4endl
+          << "          name, areacode, distanceToOut = "
+          << GetName() << ", " << std::hex << areacode
+          << std::dec << ", " << distanceToOut << G4endl;
+   return kOutside; 
 }
 
 //=====================================================================
@@ -283,20 +248,6 @@ G4int G4TwistTubsHypeSide::DistanceToSurface(const G4ThreeVector& gp,
    //
    //  c = x0**2 + y0**2 - r**2 - (z0*tanPhi)**2
    //
-      
-   fCurStatWithV.ResetfDone(validate, &gp, &gv);
-
-   if (fCurStatWithV.IsDone())
-   {
-      for (G4int i=0; i<fCurStatWithV.GetNXX(); ++i)
-      {
-         gxx[i] = fCurStatWithV.GetXX(i);
-         distance[i] = fCurStatWithV.GetDistance(i);
-         areacode[i] = fCurStatWithV.GetAreacode(i);
-         isvalid[i]  = fCurStatWithV.IsValid(i);
-      }
-      return fCurStatWithV.GetNXX();
-   }
 
    // initialize
    for (auto i=0; i<2; ++i)
@@ -337,8 +288,6 @@ G4int G4TwistTubsHypeSide::DistanceToSurface(const G4ThreeVector& gp,
       {
          // vz/vrho is bigger than slope of asymptonic line
          distance[0] = kInfinity;
-         fCurStatWithV.SetCurrentStatus(0, gxx[0], distance[0], areacode[0],
-                                        isvalid[0], 0, validate, &gp, &gv);
          return 0;
       }
        
@@ -378,9 +327,6 @@ G4int G4TwistTubsHypeSide::DistanceToSurface(const G4ThreeVector& gp,
          areacode[0] = sInside;
             if (distance[0] >= 0) { isvalid[0] = true; }
       }
-                 
-      fCurStatWithV.SetCurrentStatus(0, gxx[0], distance[0], areacode[0],
-                                     isvalid[0], 1, validate, &gp, &gv);
       return 1;
    }
 
@@ -424,9 +370,6 @@ G4int G4TwistTubsHypeSide::DistanceToSurface(const G4ThreeVector& gp,
             areacode[0] = sInside;
                if (distance[0] >= 0) { isvalid[0] = true; }
          }
-                 
-         fCurStatWithV.SetCurrentStatus(0, gxx[0], distance[0], areacode[0],
-                                        isvalid[0], 1, validate, &gp, &gv);
          vout = 1;
       }
       else
@@ -434,9 +377,6 @@ G4int G4TwistTubsHypeSide::DistanceToSurface(const G4ThreeVector& gp,
         // if a=b=0 and c != 0, p is origin and v is parallel to asymptotic line
         // if a=b=c=0, p is on surface and v is paralell to stereo wire.
         // return distance = infinity
-
-         fCurStatWithV.SetCurrentStatus(0, gxx[0], distance[0], areacode[0],
-                                        isvalid[0], 0, validate, &gp, &gv);
          vout = 0;
       }
    }
@@ -507,20 +447,12 @@ G4int G4TwistTubsHypeSide::DistanceToSurface(const G4ThreeVector& gp,
           isvalid[0]  = tmpisvalid[1];
           isvalid[1]  = tmpisvalid[0];
       }
-         
-      fCurStatWithV.SetCurrentStatus(0, gxx[0], distance[0], areacode[0],
-                                     isvalid[0], 2, validate, &gp, &gv);
-      fCurStatWithV.SetCurrentStatus(1, gxx[1], distance[1], areacode[1],
-                                     isvalid[1], 2, validate, &gp, &gv);
       vout = 2;
    }
    else
    {
       // if D<0, no solution
       // if D=0, just grazing the surfaces, return kInfinity
-
-      fCurStatWithV.SetCurrentStatus(0, gxx[0], distance[0], areacode[0],
-                                     isvalid[0], 0, validate, &gp, &gv);
       vout = 0;
    }
    return vout;
@@ -545,19 +477,6 @@ G4int G4TwistTubsHypeSide::DistanceToSurface(const G4ThreeVector& gp,
    const G4double halftol
      = 0.5 * G4GeometryTolerance::GetInstance()->GetRadialTolerance();
 
-   fCurStat.ResetfDone(kDontValidate, &gp);
-
-   if (fCurStat.IsDone())
-   {
-      for (G4int i=0; i<fCurStat.GetNXX(); ++i)
-      {
-         gxx[i] = fCurStat.GetXX(i);
-         distance[i] = fCurStat.GetDistance(i);
-         areacode[i] = fCurStat.GetAreacode(i);
-      }
-      return fCurStat.GetNXX();
-   }
-
    // initialize
    for (auto i=0; i<2; ++i)
    {
@@ -569,33 +488,6 @@ G4int G4TwistTubsHypeSide::DistanceToSurface(const G4ThreeVector& gp,
    G4ThreeVector p = ComputeLocalPoint(gp);
    G4ThreeVector xx;
 
-   //
-   // special case!
-   // If p is on surface, return distance = 0 immediatery .
-   //
-   G4ThreeVector  lastgxx[2];
-   for (auto i=0; i<2; ++i)
-   {
-      lastgxx[i] = fCurStatWithV.GetXX(i);
-   }
-
-   if ((gp - lastgxx[0]).mag() < halftol || (gp - lastgxx[1]).mag() < halftol)
-   {
-      // last winner, or last poststep point is on the surface.
-      xx = p;             
-      gxx[0] = gp;
-      distance[0] = 0;      
-
-      G4bool isvalid = true;
-      fCurStat.SetCurrentStatus(0, gxx[0], distance[0], areacode[0],
-                                isvalid, 1, kDontValidate, &gp);
-
-      return 1;
-   }
-   //
-   // special case end
-   //
-       
    G4double prho       = p.getRho();
    G4double pz         = std::fabs(p.z());           // use symmetry
    G4double r1         = std::sqrt(fR02 + pz * pz * fTan2Stereo);
@@ -682,9 +574,6 @@ G4int G4TwistTubsHypeSide::DistanceToSurface(const G4ThreeVector& gp,
        
    gxx[0] = ComputeGlobalPoint(xx);
    areacode[0]    = sInside;
-   G4bool isvalid = true;
-   fCurStat.SetCurrentStatus(0, gxx[0], distance[0], areacode[0],
-                             isvalid, 1, kDontValidate, &gp);
    return 1;
 }
 

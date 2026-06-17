@@ -57,6 +57,13 @@ G4MultiNavigator::G4MultiNavigator()
 
   pTransportManager= G4TransportationManager::GetTransportationManager();
 
+  SetNavigatorForTracking();
+}
+
+// -----------------------------------------------------------------------
+
+void G4MultiNavigator::SetNavigatorForTracking()
+{
   G4Navigator* massNav= pTransportManager->GetNavigatorForTracking();
   if( massNav != nullptr )
   { 

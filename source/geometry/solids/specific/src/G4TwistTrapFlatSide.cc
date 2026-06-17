@@ -63,8 +63,6 @@ G4TwistTrapFlatSide::G4TwistTrapFlatSide( const G4String& name,
 
    fPhiTwist = PhiTwist ;
 
-   fCurrentNormal.normal.set( 0, 0, (fHandedness < 0 ? -1 : 1)); 
-         // Unit vector, in local coordinate system
    fRot.rotateZ( fHandedness > 0 
                  ? 0.5 * fPhiTwist
                  : -0.5 * fPhiTwist );
@@ -104,11 +102,12 @@ G4TwistTrapFlatSide::G4TwistTrapFlatSide( __void__& a )
 G4ThreeVector G4TwistTrapFlatSide::GetNormal(const G4ThreeVector& /* xx */, 
                                              G4bool isGlobal)
 {
+   G4ThreeVector normal(0, 0, (fHandedness < 0 ? -1 : 1));
    if (isGlobal)
    {
-      return ComputeGlobalDirection(fCurrentNormal.normal);
+      return ComputeGlobalDirection(normal);
    }
-   return fCurrentNormal.normal;
+   return normal;
 }
 
 //=====================================================================
@@ -122,20 +121,6 @@ G4int G4TwistTrapFlatSide::DistanceToSurface(const G4ThreeVector& gp,
                                                    G4bool         isvalid[],
                                                    EValidate      validate) 
 {
-   fCurStatWithV.ResetfDone(validate, &gp, &gv);
-   
-   if (fCurStatWithV.IsDone())
-   {
-      for (G4int i=0; i<fCurStatWithV.GetNXX(); ++i)
-      {
-         gxx[i] = fCurStatWithV.GetXX(i);
-         distance[i] = fCurStatWithV.GetDistance(i);
-         areacode[i] = fCurStatWithV.GetAreacode(i);
-         isvalid[i]  = fCurStatWithV.IsValid(i);
-      }
-      return fCurStatWithV.GetNXX();
-   }
-
    // initialize
    for (auto i=0; i<2; ++i)
    {
@@ -188,8 +173,6 @@ G4int G4TwistTrapFlatSide::DistanceToSurface(const G4ThreeVector& gp,
    
    if (v.z() == 0)
    {
-      fCurStatWithV.SetCurrentStatus(0, gxx[0], distance[0], areacode[0], 
-                                     isvalid[0], 0, validate, &gp, &gv);
       return 0;
    }
    
@@ -220,9 +203,6 @@ G4int G4TwistTrapFlatSide::DistanceToSurface(const G4ThreeVector& gp,
          if (distance[0] >= 0) { isvalid[0] = true; }
    }
 
-   fCurStatWithV.SetCurrentStatus(0, gxx[0], distance[0], areacode[0],
-                                  isvalid[0], 1, validate, &gp, &gv);
-
 #ifdef G4TWISTDEBUG
    G4cerr << "ERROR - G4TwistTrapFlatSide::DistanceToSurface(p,v)" << G4endl;
    G4cerr << "        Name        : " << GetName() << G4endl;
@@ -246,19 +226,6 @@ G4int G4TwistTrapFlatSide::DistanceToSurface(const G4ThreeVector& gp,
    // Calculate distance to plane in local coordinate,
    // then return distance and global intersection points.
    //  
-
-   fCurStat.ResetfDone(kDontValidate, &gp);
-
-   if (fCurStat.IsDone())
-   {
-      for (G4int i=0; i<fCurStat.GetNXX(); ++i)
-      {
-         gxx[i] = fCurStat.GetXX(i);
-         distance[i] = fCurStat.GetDistance(i);
-         areacode[i] = fCurStat.GetAreacode(i);
-      }
-      return fCurStat.GetNXX();
-   }
 
    // initialize
    for (auto i=0; i<2; ++i)
@@ -286,9 +253,6 @@ G4int G4TwistTrapFlatSide::DistanceToSurface(const G4ThreeVector& gp,
 
    gxx[0] = ComputeGlobalPoint(xx);
    areacode[0] = sInside;
-   G4bool isvalid = true;
-   fCurStat.SetCurrentStatus(0, gxx[0], distance[0], areacode[0],
-                             isvalid, 1, kDontValidate, &gp);
    return 1;
 
 }

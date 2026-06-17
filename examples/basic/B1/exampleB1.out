@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-04-patch-01    (13-March-2026)
+ Geant4 version Name: geant4-11-04-patch-02    (12-June-2026)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -842,10 +842,10 @@ Max 2J for sampling of angular correlations         10
 --------------------End of Global Run-----------------------
  The run is 10000 gamma of 6 MeV
 
-  --> cumulated edep per run in scoring volume = 4.72293 GeV = 7.56697e-10 joule
+  --> cumulated edep per run in scoring volume = 4.69408 GeV = 7.52075e-10 joule
   --> mass of scoring volume = 1.7316 kg
 
- Absorbed dose per run in scoring volume = edep/mass = 436.993 picoGy  rms = 12.3978 picoGy 
+ Absorbed dose per run in scoring volume = edep/mass = 434.324 picoGy  rms = 12.4101 picoGy 
 ------------------------------------------------------------
 
 ### Run 1 starts.
@@ -863,10 +863,10 @@ Max 2J for sampling of angular correlations         10
 --------------------End of Global Run-----------------------
  The run is 10000 proton of 210 MeV
 
-  --> cumulated edep per run in scoring volume = 531.521 GeV = 8.5159e-08 joule
+  --> cumulated edep per run in scoring volume = 534.24 GeV = 8.55946e-08 joule
   --> mass of scoring volume = 1.7316 kg
 
- Absorbed dose per run in scoring volume = edep/mass = 49.1794 nanoGy  rms = 462.91 picoGy 
+ Absorbed dose per run in scoring volume = edep/mass = 49.431 nanoGy  rms = 463.452 picoGy 
 ------------------------------------------------------------
 
 Graphics systems deleted.

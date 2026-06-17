@@ -54,6 +54,8 @@
 /**
  * @brief G4PhysicalVolumeStore is a singleton class, acting as container
  * for all physical volumes, with functionality derived from std::vector<T>.
+ * @ingroup geometry_management
+ *
  * All physical volumes should be registered with G4PhysicalVolumeStore, and
  * removed on their destruction. The underlying container initially has a
  * capacity of 100. A map indexed by volume names is also recorded for fast
@@ -139,6 +141,8 @@ class G4PhysicalVolumeStore : public std::vector<G4VPhysicalVolume*>
     G4PhysicalVolumeStore();
 
   private:
+
+    void CleanStore();
 
     static G4PhysicalVolumeStore* fgInstance;
     static G4ThreadLocal G4VStoreNotifier* fgNotifier;

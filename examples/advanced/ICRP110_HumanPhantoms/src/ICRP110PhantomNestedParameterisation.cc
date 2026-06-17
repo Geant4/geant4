@@ -142,12 +142,12 @@ ComputeMaterial(G4VPhysicalVolume* physVol, const G4int iz,
 
 G4int ICRP110PhantomNestedParameterisation::GetMaterialIndex( G4int copyNo ) const
 {
-	return fMaterialIndices[copyNo];
+	return static_cast<G4int>(fMaterialIndices[copyNo]);
 }
 
 G4int ICRP110PhantomNestedParameterisation::GetNumberOfMaterials() const
 {
-    return fMaterials.size();
+    return static_cast<G4int>(fMaterials.size());
 }
 
 G4Material* ICRP110PhantomNestedParameterisation::GetMaterial(G4int i) const

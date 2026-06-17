@@ -67,7 +67,7 @@ G4double G4NuDEXRandom::Exp(G4double tau){
 G4double G4NuDEXRandom::Gaus(G4double mean,G4double sigma){
   return theRandom->Gaus(mean,sigma);
 }
-G4int G4NuDEXRandom::Poisson(G4double mean){
+G4long G4NuDEXRandom::Poisson(G4double mean){
   return theRandom->Poisson(mean);
 }
 //==============================================================================

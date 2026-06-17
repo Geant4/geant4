@@ -54,6 +54,8 @@
 /**
  * @brief G4LogicalVolumeStore is a singleton class, acting as container
  * for all solids primitives, with functionality derived from std::vector<T>.
+ * @ingroup geometry_management
+ *
  * All solids should be registered with G4SolidStore, and removed on their
  * destruction. The underlying container initially has a capacity of 100.
  * A map indexed by solid names is also recorded for fast search; pointers
@@ -137,6 +139,8 @@ class G4SolidStore : public std::vector<G4VSolid*>
     G4SolidStore();
 
   private:
+
+    void CleanStore();
 
     static G4SolidStore* fgInstance;
     static G4ThreadLocal G4VStoreNotifier* fgNotifier;

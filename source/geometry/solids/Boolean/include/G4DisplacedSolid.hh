@@ -44,8 +44,10 @@
 
 /**
  * @brief G4DisplacedSolid is a solid that has been shifted from its original
- * frame of reference to a new one. It is meant to be used **internally only**,
- * for simplifying the implementation of "Boolean solids".
+ * frame of reference to a new one.
+ * @ingroup geometry_solids_boolean
+ *
+ * It is meant to be used **internally only**, for simplifying the implementation of "Boolean solids".
  */
 
 class G4DisplacedSolid : public G4VSolid
@@ -179,14 +181,6 @@ class G4DisplacedSolid : public G4VSolid
      * an inside point "p". The distance can be an underestimate.
      */
     G4double DistanceToOut( const G4ThreeVector& p ) const override ;
-
-
-    /**
-     * Throws an exception as paramterisations are not allowed for these solids.
-     */
-    void ComputeDimensions(       G4VPVParameterisation* p,
-                            const G4int n,
-                            const G4VPhysicalVolume* pRep ) override ;
 
     /**
      * Deletes cached transformations. Used in destructor.

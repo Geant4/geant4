@@ -43,8 +43,8 @@
 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
-#ifndef G4VTrackTerminator_hh
-#define G4VTrackTerminator_hh G4VTrackTerminator_hh
+#ifndef G4VTRACKTERMINATOR_HH
+#define G4VTRACKTERMINATOR_HH
 
 #include "G4Types.hh"
 #include "G4String.hh"

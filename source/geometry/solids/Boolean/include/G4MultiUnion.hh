@@ -53,6 +53,8 @@ class G4Polyhedron;
 
 /**
  * @brief An instance of G4MultiUnion constitutes a grouping of several solids.
+ * @ingroup geometry_solids_boolean
+ *
  * The constituent solids are stored with their respective location in a node
  * instance. An instance of G4MultiUnion is subsequently composed of one or
  * several nodes.
@@ -110,11 +112,16 @@ class G4MultiUnion : public G4VSolid
     inline G4int GetNumberOfSolids()const;
 
     /**
-     * Returns if the given point "aPoint" is inside or not the solid.
+     * Returning if the given point "aPoint" is inside or not the solid,
+     * either using or not using the optimisation structure.
      */
     EInside Inside(const G4ThreeVector& aPoint) const override;
+    EInside InsideNoVoxels(const G4ThreeVector& aPoint) const;
 
-    // Safety methods
+    /**
+     * Methods to compute the accurate or not accurate (the default)
+     * safety distance, given point "aPoint".
+     */
     G4double DistanceToIn(const G4ThreeVector& aPoint) const override;
     G4double DistanceToOut(const G4ThreeVector& aPoint) const override;
     inline void SetAccurateSafety(G4bool flag);
@@ -265,7 +272,6 @@ class G4MultiUnion : public G4VSolid
     /**
      * Utility methods for safety and distance computation.
      */
-    EInside InsideNoVoxels(const G4ThreeVector& aPoint) const;
     EInside InsideWithExclusion(const G4ThreeVector& aPoint,
                                       G4SurfBits* bits = nullptr) const;
     G4int SafetyFromOutsideNumberNode(const G4ThreeVector& aPoint,

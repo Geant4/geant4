@@ -43,6 +43,8 @@
 /**
  * @brief G4GeomSplitter is an utility class for splitting of R/W data
  * for thread-safety from geometry classes.
+ * @ingroup geometry_management
+ *
  * T is the private data from the object to be split
  */
 
@@ -65,8 +67,15 @@ class G4GeomSplitter
      */
     T* Reallocate(G4int size)
     {
-       totalspace = size;
-       return (T *) std::realloc(offset, totalspace * sizeof(T));
+      G4int oldspace = totalspace;
+      totalspace = size;
+      T* newoffset = (T *) std::realloc(offset, totalspace*sizeof(T));
+      if (newoffset != nullptr && totalspace > oldspace)
+      {
+        std::uninitialized_value_construct(newoffset+oldspace,
+                                           newoffset+totalspace);
+      }
+      return newoffset;
     }
 
     /**

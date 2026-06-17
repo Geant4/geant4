@@ -54,6 +54,8 @@ class G4ClippablePolygon;
 
 /**
  * @brief G4TwistedTubs is a sector of a twisted hollow cylinder.
+ * @ingroup geometry_solids_specific
+ *
  * A twisted cylinder which is placed along with Z axis and is separated into
  * phi-segments should become a hyperboloid, and its each segmented piece
  * should be tilted with a stereo angle.
@@ -141,13 +143,6 @@ class G4TwistedTubs : public G4VSolid
      */
     ~G4TwistedTubs() override;
              
-    /**
-     * Thows a fatal exception. Parameterisations are not allowed on this shape.
-     */
-    void ComputeDimensions(G4VPVParameterisation*    /* p  */ ,
-                           const G4int               /* n  */ ,
-                           const G4VPhysicalVolume*  /* prep */ ) override;
-
     /**
      * Computes the bounding limits of the solid.
      *  @param[out] pMin The minimum bounding limit point.

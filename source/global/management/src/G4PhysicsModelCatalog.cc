@@ -27,22 +27,28 @@
 //
 // Author: M.Asai (SLAC), 26 September 2013
 //
-// Revised in August 2021 by A.Ribon (CERN).
+// Revised in August 2021 and May 2026 by A.Ribon (CERN).
 // --------------------------------------------------------------------------
 
 #include "G4PhysicsModelCatalog.hh"
 #include "G4Threading.hh"
+#include "G4AutoLock.hh"
 
 G4bool G4PhysicsModelCatalog::isInitialized = false;
 std::vector< G4int >*    G4PhysicsModelCatalog::theVectorOfModelIDs   = nullptr;
 std::vector< G4String >* G4PhysicsModelCatalog::theVectorOfModelNames = nullptr;
+std::vector< G4String >* G4PhysicsModelCatalog::theVectorOfCustomModelNames = nullptr;
+
+namespace {
+  G4Mutex physicsModelCatalogMutex = G4MUTEX_INITIALIZER;
+}
 
 // --------------------------------------------------------------------------
 void G4PhysicsModelCatalog::Initialize() {
-  if(isInitialized)
-  {
-    return;
-  }
+  if ( isInitialized ) return;
+
+  G4AutoLock lk( physicsModelCatalogMutex );
+  
   if ( theVectorOfModelIDs == nullptr  &&  theVectorOfModelNames == nullptr ) {
     static std::vector< G4int > aVectorOfInts;
     theVectorOfModelIDs = &aVectorOfInts;
@@ -50,33 +56,44 @@ void G4PhysicsModelCatalog::Initialize() {
     theVectorOfModelNames = &aVectorOfStrings;
 
     // NOTE:
-    // The goal is that, starting from Geant4 version 11.0, all the three
-    // identifiers (modelID, index, name) remain the same regardless of the
-    // physics list, application, and version of Geant4.
+    // For Geant4 native physics models, starting from Geant4 version 11.0,
+    // all the three identifiers (modelID, index, name) remain the same
+    // regardless of the physics list, application, and version of Geant4.
     // Therefore, after Geant4 11.0, you can only add an entry - e.g. when
-    // a new model is added, or when a pre-existing model not yet present
-    // in this catalogue is included - at the bottom of this method
-    // (rather than inserting it in the middle), and do NOT delete anything.
+    // a new Geant4 native physics model is added, or when a pre-existing one
+    // not yet present in this catalogue is included - at the bottom of this
+    // method (rather than inserting it in the middle), and do NOT delete
+    // anything.
     //
     // For the modelID values, these are the considerations and choices made:
     // - Values below 1000 are excluded because reserved to process and
     //   sub-process ID values.
     // - Whenever resonable, modelID values should have free spaces between
     //   them, to allow for eventual, future variants - e.g. different
-    //   tunings of the same model - to keep modelID values close to the
-    //   original model.
+    //   tunings of the same Geant4 native physics model - to keep modelID
+    //   values close to the original native physics model.
     // - modelID values are between 10'000 and 39'999, with the following
     //   subdivision in 3 categories (identified by the most significant
     //   digit):
-    //   *  Values between 10'000 and 19'999 are for EM models
-    //   *  Values between 20'000 and 29'999 are for HAD models
-    //   *  Values between 30'000 and 39'999 are for all the other models
-    //      (i.e. included neither in EM models nor in HAD models).
+    //   *  Values between 10'000 and 19'999 are for native EM physics models
+    //   *  Values between 20'000 and 29'999 are for native HAD physics models
+    //   *  Values between 30'000 and 39'999 are for all the other native
+    //      physics models (i.e. included neither in EM models nor in HAD models).
     //   Note that larger values of modelID are neither more difficult to
     //   handle nor less computing performant with respect to smaller values
     //   (we remind that, for plotting, the index of the model, rather than
     //    its modelID, should be conveniently used, whereas for all the rest
     //    the modelID is recommended).
+    //
+    // Custom/user-defined physics models were forgotten from Geant4 version
+    // 11.0 to 11.4.
+    // Starting with version 11.4.2, the method "RegisterCustomModel" has been
+    // introduced: this method should be called by users to register
+    // custom/user-defined physics models, providing their name.
+    // This method returns the modelID assigned to a given custom/user-defined
+    // physics model : this value is guaranteed to be unique in any Geant4
+    // application, but NOT invariant, i.e. its value can be different
+    // depending on the Geant4 version, physics list and application.
     
     // =======================================================================
     // ================= 1st EM MODELS : from 10'000 to 19'999 ===============
@@ -618,8 +635,8 @@ void G4PhysicsModelCatalog::Initialize() {
 
     // ...
     
-    SanityCheck();
     isInitialized = true;
+    SanityCheck();
 
     // The following call is commented out because it should be protected by
     // the verbosity level, but this would imply a dependency of the global
@@ -629,10 +646,34 @@ void G4PhysicsModelCatalog::Initialize() {
     // Geant4 classes).
     //PrintAllInformation();
   }
+
+  if ( theVectorOfCustomModelNames == nullptr ) {
+    static std::vector< G4String > anotherVectorOfStrings;
+    theVectorOfCustomModelNames = &anotherVectorOfStrings;
+  }
+
+  //lk.unlock();  // Not needed: it unlocks automatically when the object lk is destroyed.
 }
 
 // --------------------------------------------------------------------------
-void G4PhysicsModelCatalog::SanityCheck() {
+G4int G4PhysicsModelCatalog::RegisterCustomModel( const G4String& customModelName ) {
+  G4int modelID = GetModelID( customModelName );
+  if ( modelID >= 0 ) {
+    G4cout << "G4PhysicsModelCatalog::RegisterCustomModel : the model named " << customModelName
+	   << " has been already registered with modelID=" << modelID << " => Ignored" << G4endl;
+    return modelID;
+  }
+  G4AutoLock lk( physicsModelCatalogMutex );  
+  theVectorOfCustomModelNames->push_back( customModelName );
+  // Custom models have ID numbers starting from 40'000
+  modelID = GetMaxAllowedModelIDValue() + G4int( theVectorOfCustomModelNames->size() );
+  //lk.unlock();  // Not needed: it unlocks automatically when the object lk is destroyed.
+  return modelID;
+}
+
+// --------------------------------------------------------------------------
+G4bool G4PhysicsModelCatalog::SanityCheck() {
+  if ( ! isInitialized ) return false;
   if ( theVectorOfModelIDs->size() != theVectorOfModelNames->size() ) {
     G4ExceptionDescription ed;
     ed << "theVectorOfModelIDs' size=" << theVectorOfModelIDs->size()
@@ -643,64 +684,64 @@ void G4PhysicsModelCatalog::SanityCheck() {
     G4bool isModelIDOutsideRange = false;
     G4bool isModelIDRepeated = false;
     G4bool isModelNameRepeated = false;
-    for ( int idx = 0; idx < Entries(); ++idx ) {
+    for ( G4int idx = 0; idx < Entries(); ++idx ) {
       G4int modelID = (*theVectorOfModelIDs)[ idx ];
       G4String modelName = (*theVectorOfModelNames)[ idx ];
       if ( modelID < GetMinAllowedModelIDValue() || modelID > GetMaxAllowedModelIDValue() ) {
 	isModelIDOutsideRange = true;
       }
-      for ( int jdx = idx + 1; jdx < Entries(); ++jdx ) {
-        if(modelID == (*theVectorOfModelIDs)[jdx])
-        {
+      for ( G4int jdx = idx + 1; jdx < Entries(); ++jdx ) {
+        if ( modelID == (*theVectorOfModelIDs)[ jdx ] ) {
           isModelIDRepeated = true;
         }
-        if(modelName == (*theVectorOfModelNames)[jdx])
-        {
+        if ( modelName == (*theVectorOfModelNames)[ jdx ] ) {
           isModelNameRepeated = true;
         }
       }
     }
     if ( isModelIDOutsideRange || isModelIDRepeated || isModelNameRepeated ) {
       G4ExceptionDescription ed;
-      if(isModelIDOutsideRange)
-      {
+      if ( isModelIDOutsideRange ) {
         ed << "theVectorOfModelIDs has NOT all entries between "
            << GetMinAllowedModelIDValue() << " and "
            << GetMaxAllowedModelIDValue();
       }
-      if(isModelIDRepeated)
-      {
+      if ( isModelIDRepeated ) {
         ed << "theVectorOfModelIDs has NOT all unique IDs !";
       }
-      if(isModelNameRepeated)
-      {
+      if ( isModelNameRepeated ) {
         ed << "theVectorOfModelNames has NOT all unique names !";
       }
       G4Exception( "G4PhysicsModelCatalog::SanityCheck()", "PhysModelCatalog002",
 		   FatalException, ed, "cannot continue!" );
     }
+    // Note that there is no need to check for name repetitions in the custom/user-defined
+    // physics models, because by construction it returns the modelID already assigned
+    // to that model name, with a message.
   }
-  return;
+  return true;
 }
-
-// --------------------------------------------------------------------------
 
 // --------------------------------------------------------------------------
 const G4String G4PhysicsModelCatalog::GetModelNameFromID( const G4int modelID ) {
   G4String modelName = "Undefined";
   if ( modelID >= GetMinAllowedModelIDValue()  &&  modelID <= GetMaxAllowedModelIDValue() ) {
-    for ( int idx = 0; idx < Entries(); ++idx ) {
+    for ( G4int idx = 0; idx < Entries(); ++idx ) {
       if ( (*theVectorOfModelIDs)[ idx ] == modelID ) {
 	modelName = (*theVectorOfModelNames)[ idx ];
 	break;
       }
     }
+  } else if ( modelID > GetMaxAllowedModelIDValue()  &&
+	      modelID <= GetMaxAllowedModelIDValue() + G4int( theVectorOfCustomModelNames->size() ) ) {
+    modelName = (*theVectorOfCustomModelNames)[ modelID - GetMaxAllowedModelIDValue() - 1 ];
   }
   return modelName;
 }
 
 // --------------------------------------------------------------------------
 const G4String G4PhysicsModelCatalog::GetModelNameFromIndex( const G4int modelIndex ) {
+  // This method is not supposed to be used for custom/user-defined physics models.
   return ( modelIndex >= 0  &&  modelIndex < Entries() )
        ? (*theVectorOfModelNames)[ modelIndex ] : G4String("Undefined");
 }
@@ -713,10 +754,7 @@ G4int G4PhysicsModelCatalog::GetModelID( const G4int modelIndex ) {
 
 // --------------------------------------------------------------------------
 G4int G4PhysicsModelCatalog::GetModelID( const G4String& modelName ) {
-  if(!isInitialized)
-  {
-    Initialize();
-  }
+  if ( ! isInitialized ) Initialize();
   G4int modelID = -1;
   for ( G4int idx = 0; idx < Entries(); ++idx ) {
     if ( (*theVectorOfModelNames)[ idx ] == modelName ) {
@@ -724,11 +762,22 @@ G4int G4PhysicsModelCatalog::GetModelID( const G4String& modelName ) {
       break;
     }
   }
+  if ( modelID == -1 ) {
+    for ( G4int idx = 0; idx < G4int( theVectorOfCustomModelNames->size() ); ++idx ) {
+      if ( (*theVectorOfCustomModelNames)[ idx ] == modelName ) {
+	modelID = GetMaxAllowedModelIDValue() + 1 + idx;
+	break;
+      }
+    }
+  }
   return modelID;
 }
 
 // --------------------------------------------------------------------------
 G4int G4PhysicsModelCatalog::GetModelIndex( const G4int modelID ) {
+  // This method is not supposed to be used for custom/user-defined physics models:
+  // however, if this method is called with the modelID of a custom/user-defined physics model
+  // then -1 is returned (because modelID is > GetMaxAllowedModelIDValue() )
   G4int modelIndex = -1;
   if ( modelID >= GetMinAllowedModelIDValue()  &&  modelID <= GetMaxAllowedModelIDValue() ) {
     for ( G4int idx = 0; idx < Entries(); ++idx ) {
@@ -743,6 +792,9 @@ G4int G4PhysicsModelCatalog::GetModelIndex( const G4int modelID ) {
 
 // --------------------------------------------------------------------------
 G4int G4PhysicsModelCatalog::GetModelIndex( const G4String& modelName ) {
+  // This method is not supposed to be used for custom/user-defined physics models:
+  // however, if this method is called with a name of a custom/user-defined physics model
+  // then -1 is returned (because it is not found in the list of native physics models).
   G4int modelIndex = -1;
   for ( G4int idx = 0; idx < Entries(); ++idx ) {
     if ( (*theVectorOfModelNames)[ idx ] == modelName ) {
@@ -765,13 +817,27 @@ void G4PhysicsModelCatalog::PrintAllInformation() {
 	 << " ==================================================== " << G4endl
 	 << " === G4PhysicsModelCatalog::PrintAllInformation() === " << G4endl
 	 << " ==================================================== " << G4endl
-	 << " SIZE (i.e. number of models in the catalog)=" << Entries() << G4endl;
-  for ( int idx = 0; idx < Entries(); ++idx ) {
+         << " ***************************** " << G4endl
+	 << " *** Native physics models *** " << G4endl
+         << " ***************************** " << G4endl
+	 << " SIZE (i.e. number of Geant4 native models in the catalog)=" << Entries() << G4endl;
+  for ( G4int idx = 0; idx < Entries(); ++idx ) {
     G4int modelID = (*theVectorOfModelIDs)[ idx ];
     G4String modelName = (*theVectorOfModelNames)[ idx ];
     G4cout << "\t index=" << idx << "\t modelName=" << modelName
 	   << "\t modelID=" << modelID << G4endl;
   }
+  G4cout << G4endl
+         << " ****************************************** " << G4endl
+	 << " *** Custom/user-defined physics models *** " << G4endl
+         << " ****************************************** " << G4endl
+	 << " SIZE (i.e. number of custom/user-defined models)="
+	 << theVectorOfCustomModelNames->size() << G4endl;
+  for ( G4int idx = 0; idx < G4int( theVectorOfCustomModelNames->size() ); ++idx ) {
+    G4String customModelName = (*theVectorOfCustomModelNames)[ idx ];
+    G4int modelID = GetModelID( customModelName );
+    G4cout << "\t customModelName=" << customModelName << "\t modelID=" << modelID << G4endl;
+  }  
   G4cout << " ==================================================== " << G4endl
 	 << " ==================================================== " << G4endl
 	 << " ==================================================== " << G4endl

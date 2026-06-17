@@ -61,6 +61,7 @@
 #include "G4EmSaturation.hh"
 #include "G4ThreeVector.hh"
 #include "G4ChemTimeStepModel.hh"
+#include <atomic>
 #include <vector>
 #include <map>
 enum G4eSingleScatteringType
@@ -469,7 +470,7 @@ private:
   G4bool fUseRiGePairProductionModel;
   G4bool onIsolated; // 5d model conversion on free ions
   G4bool fDNA;
-  G4bool fIsPrinted;
+  std::atomic<G4bool> fIsPrinted;
   
   G4double minKinEnergy;
   G4double maxKinEnergy;

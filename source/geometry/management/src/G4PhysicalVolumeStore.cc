@@ -65,7 +65,7 @@ G4PhysicalVolumeStore::G4PhysicalVolumeStore()
 //
 G4PhysicalVolumeStore::~G4PhysicalVolumeStore()
 {
-  Clean();  // Delete all volumes in the store
+  CleanStore();  // Delete all volumes in the store
   G4VPhysicalVolume::Clean();  // Delete allocated sub-instance data
 }
 
@@ -75,7 +75,7 @@ G4PhysicalVolumeStore::~G4PhysicalVolumeStore()
 //
 void G4PhysicalVolumeStore::Clean()
 {
-  // Do nothing if geometry is closed
+  // Do nothing if geometry is closed 
   //
   if (G4GeometryManager::GetInstance()->IsGeometryClosed())
   {
@@ -83,7 +83,15 @@ void G4PhysicalVolumeStore::Clean()
            << " while geometry closed !" << G4endl;
     return;
   }
+  GetInstance()->CleanStore();
+}
 
+// ***************************************************************************
+// Delete all elements from the store
+// ***************************************************************************
+//
+void G4PhysicalVolumeStore::CleanStore()
+{
   // Locks store for deletion of volumes. De-registration will be
   // performed at this stage. G4VPhysicalVolumes will not de-register
   // themselves.

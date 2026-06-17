@@ -40,7 +40,6 @@
 #include "G4VtkUtility.hh"
 #include "G4VtkVisContext.hh"
 
-#include <vtk3DSImporter.h>
 #include <vtkBMPWriter.h>
 #include <vtkIVExporter.h>  // open inventor
 #include <vtkImageWriter.h>
@@ -49,7 +48,6 @@
 #include <vtkJPEGWriter.h>
 #include <vtkLightCollection.h>
 #include <vtkOBJExporter.h>
-#include <vtkOBJImporter.h>
 #include <vtkGLTFExporter.h>
 #include <vtkOOGLExporter.h>
 #include <vtkX3DExporter.h>
@@ -65,7 +63,6 @@
 #include <vtkSingleVTPExporter.h>
 #include <vtkTIFFWriter.h>
 #include <vtkVRMLExporter.h>
-#include <vtkVRMLImporter.h>
 #include <vtkWindowToImageFilter.h>
 #include <vtkX3DExporter.h>
 

@@ -79,10 +79,6 @@ G4VTwistSurface::G4VTwistSurface(const G4String &name)
       fNeighbours[i] = nullptr;
    }
 
-   fCurrentNormal.p.set(kInfinity, kInfinity, kInfinity);
-   
-   fAmIOnLeftSide.me.set(kInfinity, kInfinity, kInfinity);
-   fAmIOnLeftSide.vec.set(kInfinity, kInfinity, kInfinity);
    kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
 }
 
@@ -114,10 +110,6 @@ G4VTwistSurface::G4VTwistSurface(const G4String& name,
       fNeighbours[i] = nullptr;
    }
 
-   fCurrentNormal.p.set(kInfinity, kInfinity, kInfinity);
-   
-   fAmIOnLeftSide.me.set(kInfinity, kInfinity, kInfinity);
-   fAmIOnLeftSide.vec.set(kInfinity, kInfinity, kInfinity);
    kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
 }
 
@@ -157,17 +149,6 @@ G4int G4VTwistSurface::AmIOnLeftSide(const G4ThreeVector& me,
    const G4RotationMatrix rottol    = unitrot.rotateZ(0.5*kAngTolerance);
    const G4RotationMatrix invrottol = unitrot.rotateZ(-1.*kAngTolerance);
 
-   if (fAmIOnLeftSide.me == me 
-       && fAmIOnLeftSide.vec == vec
-       && fAmIOnLeftSide.withTol == withtol)
-   {
-      return fAmIOnLeftSide.amIOnLeftSide;
-   }
-   
-   fAmIOnLeftSide.me      = me;
-   fAmIOnLeftSide.vec     = vec;
-   fAmIOnLeftSide.withTol = withtol;
-   
    G4ThreeVector met   = (G4ThreeVector(me.x(), me.y(), 0.)).unit();
    G4ThreeVector vect  = (G4ThreeVector(vec.x(), vec.y(), 0.)).unit();
    
@@ -175,27 +156,28 @@ G4int G4VTwistSurface::AmIOnLeftSide(const G4ThreeVector& me,
    G4ThreeVector rvect = rottol * vect;
 
    G4double metcrossvect = met.x() * vect.y() - met.y() * vect.x();
+   G4int amIOnLeftSide = 0;
    
    if (withtol)
    {
       if (met.x() * ivect.y() - met.y() * ivect.x() > 0 && 
           metcrossvect >= 0)  {
-         fAmIOnLeftSide.amIOnLeftSide = 1;
+         amIOnLeftSide = 1;
       } else if (met.x() * rvect.y() - met.y() * rvect.x() < 0 &&
                  metcrossvect <= 0)  {
-         fAmIOnLeftSide.amIOnLeftSide = -1;
+         amIOnLeftSide = -1;
       } else {
-         fAmIOnLeftSide.amIOnLeftSide = 0;
+         amIOnLeftSide = 0;
       }
    }
    else
    {
       if (metcrossvect > 0) {    
-         fAmIOnLeftSide.amIOnLeftSide = 1;
+         amIOnLeftSide = 1;
       } else if (metcrossvect < 0 ) {
-         fAmIOnLeftSide.amIOnLeftSide = -1;
+         amIOnLeftSide = -1;
       } else {       
-         fAmIOnLeftSide.amIOnLeftSide = 0;
+         amIOnLeftSide = 0;
       }
    }
 
@@ -203,7 +185,7 @@ G4int G4VTwistSurface::AmIOnLeftSide(const G4ThreeVector& me,
    G4cout << "         === G4VTwistSurface::AmIOnLeftSide() =============="
           << G4endl;
    G4cout << "             Name , returncode  : " << fName << " " 
-                       << fAmIOnLeftSide.amIOnLeftSide <<  G4endl;
+                       << amIOnLeftSide <<  G4endl;
    G4cout << "             me, vec    : " << std::setprecision(14) << me 
                                           << " " << vec  << G4endl;
    G4cout << "             met, vect  : " << met << " " << vect  << G4endl;
@@ -215,7 +197,7 @@ G4int G4VTwistSurface::AmIOnLeftSide(const G4ThreeVector& me,
           << G4endl;
 #endif
 
-   return fAmIOnLeftSide.amIOnLeftSide;
+   return amIOnLeftSide;
 }
 
 //=====================================================================
@@ -1105,114 +1087,6 @@ void G4VTwistSurface::DebugPrint() const
    G4cout << "/* Cornar point sC0Min1Max = " << D << G4endl;
    G4cout << "/*---------------------------------------------------------"
           << G4endl;
-}
-
-//=====================================================================
-// G4VTwistSurface::CurrentStatus class
-//=====================================================================
-
-//=====================================================================
-//* CurrentStatus::CurrentStatus --------------------------------------
-
-G4VTwistSurface::CurrentStatus::CurrentStatus() 
-{
-  for (size_t i=0; i<G4VSURFACENXX; ++i)
-  {
-    fDistance[i] = kInfinity;
-    fAreacode[i] = sOutside;
-    fIsValid[i]  = false;
-    fXX[i].set(kInfinity, kInfinity, kInfinity);
-  }
-  fNXX   = 0;
-  fLastp.set(kInfinity, kInfinity, kInfinity);
-  fLastv.set(kInfinity, kInfinity, kInfinity);
-  fLastValidate = kUninitialized;
-  fDone = false;
-}
-
-//=====================================================================
-//* CurrentStatus::~CurrentStatus -------------------------------------
-
-G4VTwistSurface::CurrentStatus::~CurrentStatus() 
-= default;
-
-//=====================================================================
-//* CurrentStatus::SetCurrentStatus -----------------------------------
-
-void
-G4VTwistSurface::CurrentStatus::SetCurrentStatus(G4int i, 
-                                                 G4ThreeVector& xx, 
-                                                 G4double& dist, 
-                                                 G4int& areacode, 
-                                                 G4bool& isvalid,
-                                                 G4int nxx,
-                                                 EValidate validate,
-                                           const G4ThreeVector* p, 
-                                           const G4ThreeVector* v)
-{
-  fDistance[i]  = dist;
-  fAreacode[i]  = areacode;
-  fIsValid[i]   = isvalid;
-  fXX[i]        = xx;
-  fNXX          = nxx;
-  fLastValidate = validate;
-  if (p != nullptr)
-  {
-    fLastp = *p;
-  }
-  else
-  {
-    G4Exception("G4VTwistSurface::CurrentStatus::SetCurrentStatus()",
-                "GeomSolids0003", FatalException, "SetCurrentStatus: p = 0!");
-  }
-  if (v != nullptr) 
-  {
-    fLastv = *v;
-  }
-  else
-  {
-    fLastv.set(kInfinity, kInfinity, kInfinity);
-  }
-  fDone = true;
-}
-
-//=====================================================================
-//* CurrentStatus::ResetfDone -----------------------------------------
-
-void
-G4VTwistSurface::CurrentStatus::ResetfDone(EValidate validate,
-                                     const G4ThreeVector* p, 
-                                     const G4ThreeVector* v)
-
-{
-  if (validate == fLastValidate && p != nullptr && *p == fLastp)
-  {
-     if (v == nullptr || (*v == fLastv)) { return; }
-  }         
-  G4ThreeVector xx(kInfinity, kInfinity, kInfinity);
-  for (size_t i=0; i<G4VSURFACENXX; ++i)
-  {
-    fDistance[i] = kInfinity;
-    fAreacode[i] = sOutside;
-    fIsValid[i]  = false;
-    fXX[i] = xx;   // bug in old code ( was fXX[i] =  xx[i]  )
-  }
-  fNXX = 0;
-  fLastp.set(kInfinity, kInfinity, kInfinity);
-  fLastv.set(kInfinity, kInfinity, kInfinity);
-  fLastValidate = kUninitialized;
-  fDone = false;
-}
-
-//=====================================================================
-//* CurrentStatus::DebugPrint -----------------------------------------
-
-void
-G4VTwistSurface::CurrentStatus::DebugPrint() const
-{
-  G4cout << "CurrentStatus::Dist0,1= " << fDistance[0] 
-         << " " << fDistance[1] << " areacode = " << fAreacode[0] 
-         << " " << fAreacode[1] << G4endl;
 }
 
 //=====================================================================

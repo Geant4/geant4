@@ -54,8 +54,8 @@
 //
 // -------------------------------------------------------------------
 
-#ifndef G4NistManager_h
-#define G4NistManager_h 1
+#ifndef G4NISTMANAGER_HH
+#define G4NISTMANAGER_HH
 
 #include "G4ICRU90StoppingData.hh"
 #include "G4Material.hh"
@@ -77,6 +77,11 @@ class G4NistManager
  public:
   static G4NistManager* Instance();
   ~G4NistManager();
+
+  // Deleted copy-ctor and assignment operator
+  //
+  G4NistManager(const G4NistManager&) = delete;
+  G4NistManager& operator=(const G4NistManager&) = delete;
 
   // Get G4Element by index
   //
@@ -258,9 +263,6 @@ class G4NistManager
 
  private:
   G4NistManager();
-
-  std::vector<G4Element*> elements;
-  std::vector<G4Material*> materials;
 
   G4ICRU90StoppingData* fICRU90;
   G4NistElementBuilder* elmBuilder;

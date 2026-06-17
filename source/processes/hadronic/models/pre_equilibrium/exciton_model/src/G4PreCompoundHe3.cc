@@ -51,8 +51,8 @@ G4PreCompoundHe3::G4PreCompoundHe3()
 
 G4double G4PreCompoundHe3::FactorialFactor(G4int N, G4int P) const
 {
-  return static_cast<G4double>(((N-3)*(P-2)*(N-2))*((P-1)*(N-1)*P))
-    /6.0;
+  return G4double((N - 3) * (P - 2) * (N - 2)) *
+         G4double((P - 1) * (N - 1) * P) / 6.0;
 }
   
 G4double G4PreCompoundHe3::CoalescenceFactor(G4int A) const

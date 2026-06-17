@@ -139,8 +139,28 @@
     leaf_string_ref* m_leaf;
   };
 
-  class column_string : public column_string_ref {
+  class column_string_data {
+  protected:
+    column_string_data(const std::string& a_def)
+    :m_def(a_def),m_value(a_def)
+    {}
+    column_string_data(const column_string_data& a_from)
+    :m_def(a_from.m_def),m_value(a_from.m_value)
+    {}
+    column_string_data& operator=(const column_string_data& a_from){
+      if(&a_from==this) return *this;
+      m_def = a_from.m_def;
+      m_value = a_from.m_value;
+      return *this;
+    }
+  protected:
+    std::string m_def;
+    std::string m_value;
+  };
+
+  class column_string : protected column_string_data, public column_string_ref {
     typedef column_string_ref parent;
+    typedef column_string_data data_parent;
   public:
     static cid id_class() {
       static const std::string s_v;
@@ -155,8 +175,8 @@
     virtual void set_def() {m_value = m_def;}
   public:
     column_string(branch& a_branch,const std::string& a_name,const std::string& a_def)
-    :parent(a_branch,a_name,m_value)
-    ,m_def(a_def),m_value(a_def)
+    :data_parent(a_def)
+    ,parent(a_branch,a_name,m_value)
     {
     }
     virtual ~column_string(){
@@ -164,27 +184,38 @@
   protected:
     column_string(const column_string& a_from)
     :icol(a_from)
+    ,data_parent(a_from)
     ,parent(a_from)
-    ,m_def(a_from.m_def)
-    ,m_value(a_from.m_value)
     {}
     column_string& operator=(const column_string& a_from){
       if(&a_from==this) return *this;
       parent::operator=(a_from);
-      m_def = a_from.m_def;
-      m_value = a_from.m_value;
+      data_parent::operator=(a_from);
       return *this;
     }
   public:
     column_string& operator=(const std::string& a_value){m_value = a_value;return *this;}
     bool fill(const std::string& a_value) {m_value = a_value;return true;}
-  protected:
-    std::string m_def;
-    std::string m_value;
   };
 
-  class column_vector_string_ref : public column_string_ref {
+  class column_vector_string_buffer {
+  protected:
+    column_vector_string_buffer(){}
+    column_vector_string_buffer(const column_vector_string_buffer& a_from)
+    :m_string(a_from.m_string)
+    {}
+    column_vector_string_buffer& operator=(const column_vector_string_buffer& a_from){
+      if(&a_from==this) return *this;
+      m_string = a_from.m_string;
+      return *this;
+    }
+  protected:
+    std::string m_string;
+  };
+
+  class column_vector_string_ref : protected column_vector_string_buffer, public column_string_ref {
     typedef column_string_ref parent;
+    typedef column_vector_string_buffer string_parent;
   public:
     static cid id_class() {return _cid_std_vector<std::string>()+10000;}
     virtual void* cast(cid a_class) const {
@@ -203,7 +234,8 @@
     }
   public:
     column_vector_string_ref(branch& a_branch,const std::string& a_name,const std::vector<std::string>& a_ref,char a_sep)
-    :parent(a_branch,a_name,m_string)
+    :string_parent()
+    ,parent(a_branch,a_name,m_string)
     ,m_ref(a_ref)
     ,m_sep(a_sep)
     {
@@ -213,12 +245,14 @@
   protected:
     column_vector_string_ref(const column_vector_string_ref& a_from)
     :icol(a_from)
+    ,string_parent(a_from)
     ,parent(a_from)
     ,m_ref(a_from.m_ref)
     ,m_sep(a_from.m_sep)
     {}
     column_vector_string_ref& operator=(const column_vector_string_ref& a_from){
       if(&a_from==this) return *this;
+      string_parent::operator=(a_from);
       m_sep = a_from.m_sep;
       return *this;
     }
@@ -228,11 +262,30 @@
   protected:
     const std::vector<std::string>& m_ref;
     char m_sep;
-    std::string m_string;
   };
 
-  class column_vector_string : public column_vector_string_ref {
+  class column_vector_string_data {
+  protected:
+    column_vector_string_data(const std::vector<std::string>& a_def)
+    :m_def(a_def),m_value(a_def)
+    {}
+    column_vector_string_data(const column_vector_string_data& a_from)
+    :m_def(a_from.m_def),m_value(a_from.m_value)
+    {}
+    column_vector_string_data& operator=(const column_vector_string_data& a_from){
+      if(&a_from==this) return *this;
+      m_def = a_from.m_def;
+      m_value = a_from.m_value;
+      return *this;
+    }
+  protected:
+    std::vector<std::string> m_def;
+    std::vector<std::string> m_value;
+  };
+
+  class column_vector_string : protected column_vector_string_data, public column_vector_string_ref {
     typedef column_vector_string_ref parent;
+    typedef column_vector_string_data data_parent;
   public:
     static cid id_class() {return _cid_std_vector<std::string>();}
     virtual void* cast(cid a_class) const {
@@ -244,8 +297,8 @@
     virtual void set_def() {m_value = m_def;}
   public:
     column_vector_string(branch& a_branch,const std::string& a_name,const std::vector<std::string>& a_def,char a_sep)
-    :parent(a_branch,a_name,m_value,a_sep)
-    ,m_def(a_def),m_value(a_def)
+    :data_parent(a_def)
+    ,parent(a_branch,a_name,m_value,a_sep)
     {
     }
     virtual ~column_vector_string(){
@@ -253,23 +306,18 @@
   protected:
     column_vector_string(const column_vector_string& a_from)
     :icol(a_from)
+    ,data_parent(a_from)
     ,parent(a_from)
-    ,m_def(a_from.m_def)
-    ,m_value(a_from.m_value)
     {}
     column_vector_string& operator=(const column_vector_string& a_from){
       if(&a_from==this) return *this;
       parent::operator=(a_from);
-      m_def = a_from.m_def;
-      m_value = a_from.m_value;
+      data_parent::operator=(a_from);
       return *this;
     }
   public:
     column_vector_string& operator=(const std::vector<std::string>& a_value){m_value = a_value;return *this;}
     bool fill(const std::vector<std::string>& a_value) {m_value = a_value;return true;}
-  protected:
-    std::vector<std::string> m_def;
-    std::vector<std::string> m_value;
   };
 
   template <class T>

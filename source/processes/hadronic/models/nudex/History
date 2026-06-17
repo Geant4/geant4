@@ -6,6 +6,20 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2026-06-10 Alberto Ribon (hadr-nudex-V11-03-02)
+- G4NuDEXStatisticalNucleus : replacing vector::reserve with vector::resize
+  in two methods, InsertHighEnergyKnownLevels and ReadKnownLevels.
+  Thanks to Dmitri Konstantinov for spotting this.
+
+## 2026-05-12 Alberto Ribon
+- Various corrections made to the code, mainly fixing minor bugs and
+  improving certain parts.
+- Modifications were made to the code to be able to produce capture cascades
+  of very light nuclei, such as H-1, H-2, etc.
+Development made by Emilio Mendoza, affecting the following classes:
+G4NuDEXInternalConversion, G4NuDEXLevelDensity, G4NuDEXStatisticalNucleus,
+G4NuDEXPSF, and G4NuDEXRandom.
+
 ## 2026-02-18 Gabriele Cosmo (hadr-nudex-V11-03-01)
 - Fixed reported Coverity defects in G4NuDEXPSF for avoiding unnecessary
   copy of strings.

@@ -43,7 +43,7 @@
 // 
 
 #ifndef G4NUCLEARLEVELDATA_HH
-#define G4NUCLEARLEVELDATA_HH 1
+#define G4NUCLEARLEVELDATA_HH
 
 #include "globals.hh"
 #include "G4DeexPrecoParameters.hh"
@@ -129,7 +129,6 @@ private:
   static const G4int LEVELIDX[ZMAX];
 
   std::vector<const G4LevelManager*> fLevelManagers[ZMAX];
-  std::vector<G4bool> fLevelManagerFlags[ZMAX];
 };
 
 #endif

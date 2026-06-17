@@ -6,6 +6,54 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2026-06-04 Makoto Asai (run-V11-03-09)
+- G4SubEvtRunManager.cc
+ - G4Event::GetNumberOfRemainingSubEvents() uses Mutex only for the G4Event used
+  in the master thread in sub-event parallel mode. Addressing to Bug Report #2734.
+
+## 2026-05-22 Gabriele Cosmo (run-V11-03-08)
+- Fixed data race in G4MTRunManager detected by Valgrind/DRD when running
+  with G4RUN_MANAGER_TYPE set to "MT", by moving UI command-stack preparation
+  behind the same action-request barrier that wakes the workers.
+  The race window is: master leaves WaitForEndEventLoopWorkers(), then can
+  call PrepareCommandsStack() while workers have finished the event loop
+  barrier but are still unwinding from BeamOn() and destroying locals in
+  DoWork(). The actual next-action handoff is synchronized, but command-stack
+  preparation happened just before that synchronization.
+  In G4MTRunManager, NewActionRequest() now waits until workers are at
+  ThisWorkerWaitForNextAction(); prepares the UI command stack for
+  NEXTITERATION or PROCESSUI; publishes nextActionRequest and releases
+  the barrier. Removed the earlier unsynchronized PrepareCommandsStack()
+  calls before CreateAndStartWorkers() and before PROCESSUI.
+
+## 2026-05-15 Alberto Ribon
+-  G4VUserPhysicsList : in the method Construct(), removed the condition
+   to be the master-thread for calling G4PhysicsModelCatalog::Initialize().
+   This is possible with the revised thread-safe version of G4PhysicsModelCatalog,
+   and it is consistent with the possibility of parallel initialisation.
+
+## 2026-05-13 Gabriele Cosmo
+- In G4UserTaskThreadInitialization, correct initialisation of Ranlux random
+  engines in SetupRNGEngine(), to take in consideration the luxury level.
+  Further addressing problem report #2184.
+
+## 2026-05-11 Makoto Asai
+- G4WorkerTaskRunManager
+   Add a check not to start a new event if the current run of the master run
+   manager is aborted.
+   Further addressing to the bug report #2729.
+
+## 2026-05-07 Makoto Asai
+- G4RunManagerKernel::PropagateGenericIonID()
+   Add a new Mutex lock to protect race condition problem .
+- G4TaskRunManager, G4WorkerTaskRunManager
+   Add protection not to start a new task if the current run is aborted.
+   Addressing to the bug report #2729.
+
+## 2026-03-10 Gabriele Cosmo
+- Set verbosity in call to G4GeometryManager::CloseGeometry(..) only if
+  level greater than 1 in G4MTRunManager and G4RunManager.
+
 ## 2026-03-06 Makoto Asai (run-V11-03-07)
 - Fixing the material scanner
  - G4MaterialScanner.cc

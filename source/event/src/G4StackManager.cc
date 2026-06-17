@@ -87,35 +87,6 @@ G4StackManager::~G4StackManager()
 G4int G4StackManager::
 PushOneTrack(G4Track* newTrack, G4VTrajectory* newTrajectory)
 {
-  const G4ParticleDefinition* pd = newTrack->GetParticleDefinition();
-  if(pd->GetParticleDefinitionID() < 0)
-  {
-    G4ExceptionDescription ED;
-    ED << "A track without proper process manager is pushed \
-           into the track stack.\n"
-       << " Particle name : " << pd->GetParticleName() << " -- ";
-    if(newTrack->GetParentID()==0)
-    {
-      ED << "created by a primary particle generator.";
-    }
-    else
-    { 
-      const G4VProcess* vp = newTrack->GetCreatorProcess();
-      if(vp != nullptr)
-      {
-        ED << "created by " << vp->GetProcessName() << ".";
-      }
-      else
-      {
-        ED << "creaded by unknown process.";
-      }
-    }
-    G4Exception("G4StackManager::PushOneTrack","Event10051",
-                 FatalException,ED);
-    delete newTrack;
-    return GetNUrgentTrack();
-  }
-    
   DefineDefaultClassification( newTrack );
   G4ClassificationOfNewTrack classification = fDefaultClassification;
   if(userStackingAction!=nullptr)

@@ -169,7 +169,7 @@ GetDaughtersRegularStructureId(const G4LogicalVolume *pLog) const
 // ********************************************************************
 // GetGlobalToLocalTransform
 //
-// Returns local to global transformation.
+// Returns global to local transformation.
 // I.e. transformation that will take point or axis in world coord system
 // and return one in the local coord system
 // ********************************************************************
@@ -183,7 +183,7 @@ const G4AffineTransform& G4Navigator::GetGlobalToLocalTransform() const
 // ********************************************************************
 // GetLocalToGlobalTransform
 //
-// Returns global to local transformation 
+// Returns local to global transformation 
 // ********************************************************************
 //
 inline

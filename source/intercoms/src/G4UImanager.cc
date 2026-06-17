@@ -34,6 +34,7 @@
 #include "G4MTcoutDestination.hh"
 #include "G4StateManager.hh"
 #include "G4Threading.hh"
+#include "G4AutoLock.hh"
 #include "G4Tokenizer.hh"
 #include "G4UIaliasList.hh"
 #include "G4UIbatch.hh"
@@ -52,6 +53,11 @@
 
 G4bool G4UImanager::doublePrecisionStr = false;
 G4int G4UImanager::igThreadID = -1;
+
+namespace
+{
+  G4Mutex uiCommandTreeMutex = G4MUTEX_INITIALIZER;
+}
 
 // --------------------------------------------------------------------
 G4UImanager*& G4UImanager::fUImanager()
@@ -252,7 +258,9 @@ G4double G4UImanager::GetCurrentDoubleValue(const char* aCommand, G4int paramete
 // --------------------------------------------------------------------
 void G4UImanager::AddNewCommand(G4UIcommand* newCommand)
 {
+  G4AutoLock l(uiCommandTreeMutex);
   treeTop->AddNewCommand(newCommand);
+  l.unlock();
   if (fMasterUImanager() != nullptr && G4Threading::G4GetThreadId() == 0) {
     fMasterUImanager()->AddWorkerCommand(newCommand);
   }
@@ -261,13 +269,16 @@ void G4UImanager::AddNewCommand(G4UIcommand* newCommand)
 // --------------------------------------------------------------------
 void G4UImanager::AddWorkerCommand(G4UIcommand* newCommand)
 {
+  G4AutoLock l(uiCommandTreeMutex);
   treeTop->AddNewCommand(newCommand, true);
 }
 
 // --------------------------------------------------------------------
 void G4UImanager::RemoveCommand(G4UIcommand* aCommand)
 {
+  G4AutoLock l(uiCommandTreeMutex);
   treeTop->RemoveCommand(aCommand);
+  l.unlock();
   if (fMasterUImanager() != nullptr && G4Threading::G4GetThreadId() == 0) {
     fMasterUImanager()->RemoveWorkerCommand(aCommand);
   }
@@ -276,6 +287,7 @@ void G4UImanager::RemoveCommand(G4UIcommand* aCommand)
 // --------------------------------------------------------------------
 void G4UImanager::RemoveWorkerCommand(G4UIcommand* aCommand)
 {
+  G4AutoLock l(uiCommandTreeMutex);
   treeTop->RemoveCommand(aCommand, true);
 }
 
@@ -999,4 +1011,3 @@ G4int G4UImanager::EndRecording()
   }
   return retVal;
 }
-

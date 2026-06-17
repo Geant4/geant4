@@ -6,6 +6,15 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2026-05-20 Ben Morgan (expar04-V11-03-06)
+- Bump idna from 3.7 to 3.15.
+  - Addresses security vulnerabilities tagged by GitHub's dependabot
+    in [GitHub PR 101](https://github.com/Geant4/geant4/pull/101).
+
+## 2026-02-13 Gabriele Cosmo
+- Bump keras from 3.12.0 to 3.12.1 and protobuf from 4.25.8 to 5.29.6.
+  - Addresses security vulnerabilities tagged by GitHub's dependabot.
+
 ## 2025-12-02 Gabriele Cosmo (expar04-V11-03-05)
 - Bump scikit-learn from 1.1.1 to 1.5.0
   - Addresses security vulnerabilities tagged by GitHub's dependabot.

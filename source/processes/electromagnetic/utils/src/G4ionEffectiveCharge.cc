@@ -61,17 +61,18 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+namespace
+{
+  constexpr G4double energyHighLimit = 20.0*CLHEP::MeV;
+  constexpr G4double energyLowLimit = 1.0*CLHEP::keV;
+  constexpr G4double energyBohr = 25.*CLHEP::keV;
+  constexpr G4double massFactor = CLHEP::amu_c2/(CLHEP::proton_mass_c2*CLHEP::keV);
+  constexpr G4double inveplus = 1.0/CLHEP::eplus;
+  constexpr G4double minCharge = 1.0;
+}
+
 G4ionEffectiveCharge::G4ionEffectiveCharge()
 {
-  chargeCorrection = 1.0;
-  energyHighLimit  = 20.0*CLHEP::MeV;
-  energyLowLimit   = 1.0*CLHEP::keV;
-  energyBohr       = 25.*CLHEP::keV;
-  massFactor       = CLHEP::amu_c2/(CLHEP::proton_mass_c2*CLHEP::keV);
-  minCharge        = 1.0;
-  lastKinEnergy    = 0.0;
-  effCharge        = CLHEP::eplus;
-  inveplus         = 1.0/CLHEP::eplus;
   g4calc = G4Pow::GetInstance();
 }
 
@@ -79,20 +80,25 @@ G4ionEffectiveCharge::G4ionEffectiveCharge()
 
 G4double G4ionEffectiveCharge::EffectiveCharge(const G4ParticleDefinition* p,
                                                const G4Material* material,
-                                               G4double kineticEnergy)
+                                               const G4double kineticEnergy) const
 {
-  if(p == lastPart && material == lastMat && kineticEnergy == lastKinEnergy)
-    return effCharge;
+  G4double cc;
+  return CLHEP::eplus*ComputeCharge(p, material, kineticEnergy, cc);
+}
 
-  lastPart      = p;
-  lastMat       = material;
-  lastKinEnergy = kineticEnergy;
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-  G4double mass = p->GetPDGMass();
-  effCharge = p->GetPDGCharge();
-  G4int Zi = G4lrint(effCharge*inveplus);
+G4double G4ionEffectiveCharge::ComputeCharge(const G4ParticleDefinition* p,
+                                             const G4Material* material,
+                                             const G4double kineticEnergy,
+                                             G4double& chargeCorrection) const
+{
+  G4double effCharge = p->GetPDGCharge()*inveplus;
   chargeCorrection = 1.0;
-  if(Zi <= 1) { return effCharge; }
+  if (effCharge <= 1.5) { return effCharge; }
+  
+  G4int Zi = G4lrint(effCharge);
+  G4double mass = p->GetPDGMass();
 
   // The aproximation of ion effective charge from:
   // J.F.Ziegler, J.P. Biersack, U. Littmark
@@ -100,18 +106,18 @@ G4double G4ionEffectiveCharge::EffectiveCharge(const G4ParticleDefinition* p,
   // Vol.1, Pergamon Press, 1985
   // Fast ions or hadrons
   G4double reducedEnergy = kineticEnergy * CLHEP::proton_mass_c2/mass;
-
-  //G4cout << "e= " << reducedEnergy << " Zi= " << Zi << "  " 
-  //<< material->GetName() << G4endl;
-
-  if(reducedEnergy > effCharge*energyHighLimit ) {
+  /*
+  G4cout << "  e=" << reducedEnergy << " Zi=" << Zi << " " 
+         << material->GetName() << G4endl;
+  */
+  if (reducedEnergy > effCharge*energyHighLimit ) {
     return effCharge;
   }
   G4double z = material->GetIonisation()->GetZeffective();
   reducedEnergy = std::max(reducedEnergy,energyLowLimit);
 
   // Helium ion case
-  if( Zi <= 2 ) {
+  if ( Zi == 2 ) {
 
     static const G4double c[6] = 
       {0.2865,0.1266,-0.001429,0.02402,-0.01135,0.001475};

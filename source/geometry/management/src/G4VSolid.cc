@@ -47,7 +47,7 @@
 
 std::ostream& operator<< ( std::ostream& os, const G4VSolid& e )
 {
-    return e.StreamInfo(os);
+  return e.StreamInfo(os);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -59,11 +59,11 @@ std::ostream& operator<< ( std::ostream& os, const G4VSolid& e )
 G4VSolid::G4VSolid(const G4String& name)
   : fshapeName(name)
 {
-    kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
+  kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
 
-    // Register to store
-    //
-    G4SolidStore::GetInstance()->Register(this);
+  // Register to store
+  //
+  G4SolidStore::GetInstance()->Register(this);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -73,9 +73,9 @@ G4VSolid::G4VSolid(const G4String& name)
 G4VSolid::G4VSolid(const G4VSolid& rhs)
   : kCarTolerance(rhs.kCarTolerance), fshapeName(rhs.fshapeName)
 {
-    // Register to store
-    //
-    G4SolidStore::GetInstance()->Register(this);
+  // Register to store
+  //
+  G4SolidStore::GetInstance()->Register(this);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -86,9 +86,9 @@ G4VSolid::G4VSolid(const G4VSolid& rhs)
 G4VSolid::G4VSolid( __void__& )
   : fshapeName("")
 {
-    // Register to store
-    //
-    G4SolidStore::GetInstance()->Register(this);
+  // Register to store
+  //
+  G4SolidStore::GetInstance()->Register(this);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -98,7 +98,7 @@ G4VSolid::G4VSolid( __void__& )
 
 G4VSolid::~G4VSolid()
 {
-    G4SolidStore::GetInstance()->DeRegister(this);
+  G4SolidStore::GetInstance()->DeRegister(this);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -107,16 +107,16 @@ G4VSolid::~G4VSolid()
 
 G4VSolid& G4VSolid::operator = (const G4VSolid& rhs)
 {
-   // Check assignment to self
-   //
-   if (this == &rhs)  { return *this; }
+  // Check assignment to self
+  //
+  if (this == &rhs)  { return *this; }
 
-   // Copy data
-   //
-   kCarTolerance = rhs.kCarTolerance;
-   fshapeName = rhs.fshapeName;
+  // Copy data
+  //
+  kCarTolerance = rhs.kCarTolerance;
+  fshapeName = rhs.fshapeName;
 
-   return *this;
+  return *this;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -131,17 +131,14 @@ void G4VSolid::SetName(const G4String& name)
 
 //////////////////////////////////////////////////////////////////////////
 //
-// Throw exception if ComputeDimensions called for illegal derived class
+// Empty dispatch for ComputeDimensions for solids where parameterisation
+// of dimensions is not allowed. Overloaded and enabled in derived classes
+// for those solids implementing such feature
 
 void G4VSolid::ComputeDimensions(G4VPVParameterisation*,
                                  const G4int,
                                  const G4VPhysicalVolume*)
 {
-    std::ostringstream message;
-    message << "Illegal call to G4VSolid::ComputeDimensions()" << G4endl
-            << "Method not overloaded by derived class !";
-    G4Exception("G4VSolid::ComputeDimensions()", "GeomMgt0003",
-                FatalException, message);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -150,13 +147,13 @@ void G4VSolid::ComputeDimensions(G4VPVParameterisation*,
 
 G4ThreeVector G4VSolid::GetPointOnSurface() const
 {
-    std::ostringstream message;
-    message << "Not implemented for solid: "
-            << GetEntityType() << " !" << G4endl
-            << "Returning origin.";
-    G4Exception("G4VSolid::GetPointOnSurface()", "GeomMgt1001",
-                JustWarning, message);
-    return {0,0,0};
+  std::ostringstream message;
+  message << "Not implemented for solid: "
+          << GetEntityType() << " !" << G4endl
+          << "Returning origin.";
+  G4Exception("G4VSolid::GetPointOnSurface()", "GeomMgt1001",
+              JustWarning, message);
+  return {0,0,0};
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -443,7 +440,6 @@ void G4VSolid::ClipCrossSection(       G4ThreeVectorList* pVertices,
                                  const EAxis pAxis,
                                        G4double& pMin, G4double& pMax) const
 {
-
   G4ThreeVectorList polygon;
   polygon.reserve(4);
   polygon.push_back((*pVertices)[pSectionIndex]);

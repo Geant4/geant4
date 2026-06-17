@@ -43,6 +43,7 @@
 #include "G4NucLevel.hh"
 #include "G4NuclearLevelData.hh"
 #include "G4DeexPrecoParameters.hh"
+#include "G4String.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4Pow.hh"
 #include <fstream>
@@ -62,7 +63,9 @@ G4LevelReader::G4LevelReader(G4NuclearLevelData* ptr)
 {
   fAlphaMax = (G4float)1.e15;
   fTimeFactor = CLHEP::second/G4Pow::GetInstance()->logZ(2);
-  fDirectory = G4String(G4FindDataDir("G4LEVELGAMMADATA"));
+  if (auto* dataDir = G4FindDataDir("G4LEVELGAMMADATA")) {
+    fDirectory = G4String(dataDir);
+  }
   if (fDirectory.empty()) {
     G4Exception("G4LevelReader::G4LevelReader()", "had014", FatalException,
       "G4LEVELGAMMADATA environment variable not set");

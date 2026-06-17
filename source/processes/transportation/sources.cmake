@@ -28,10 +28,10 @@ geant4_module_link_libraries(G4transportation
   PUBLIC
     G4globman
     G4intercoms
+    G4navigation
     G4partman
     G4procman
     G4track
   PRIVATE
     G4cuts
-    G4magneticfield
-    G4navigation)
+    G4magneticfield)

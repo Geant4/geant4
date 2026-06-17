@@ -327,6 +327,7 @@ ExciteParticipants(G4VSplitableHadron *projectile, G4VSplitableHadron *target) c
           y=G4UniformRand();
 	  if ( y < 1.0-0.7 * x/sqrtTPlusMax ) break;
 	}
+	TPlusNew = sqr(x);
       } 
       else
       { 

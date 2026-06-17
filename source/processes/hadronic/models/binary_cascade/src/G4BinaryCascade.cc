@@ -3033,8 +3033,7 @@ G4ReactionProductVector * G4BinaryCascade::FillVoidNucleusProducts(G4ReactionPro
     // reverse_iterator reverse - start to correct last added first
     while ( SumMom.mag() > 0.1*MeV && loopcount++ < 10)           /* Loop checking, 31.08.2015, G.Folger */
     {
-      G4int index=(G4int)products->size();
-      for (auto reverse=products->crbegin(); reverse!=products->crend(); ++reverse, --index){
+      for (auto reverse=products->crbegin(); reverse!=products->crend(); ++reverse){
         SumMom=initial4Mom.vect();
         for (rpiter=products->cbegin(); rpiter!=products->cend(); ++rpiter){
           SumMom-=(*rpiter)->GetMomentum();

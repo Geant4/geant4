@@ -646,7 +646,7 @@ void G4RunManager::GeometryOptimisation()
   // G4bool finished = geomManager->IsParallelOptimisationFinished();
 
   geomManager->OpenGeometry();
-  geomManager->CloseGeometry(true, true);
+  geomManager->CloseGeometry(true, verboseLevel > 1);
 }
 
 // --------------------------------------------------------------------

@@ -33,8 +33,8 @@
 
 // Author: H.Kurashige, 05 October 2002 - First implementation
 // --------------------------------------------------------------------
-#ifndef G4VRangeToEnergyConverter_hh
-#define G4VRangeToEnergyConverter_hh 1
+#ifndef G4VRANGETOENERGYCONVERTER_HH
+#define G4VRANGETOENERGYCONVERTER_HH
 
 #include <vector>
 
@@ -46,7 +46,7 @@ class G4VRangeToEnergyConverter
 {
 public:
 
-  explicit G4VRangeToEnergyConverter();
+  G4VRangeToEnergyConverter();
 
   virtual ~G4VRangeToEnergyConverter();
 
@@ -114,7 +114,6 @@ private:
   static G4int sNbin;
 
   G4int verboseLevel = 1;
-  G4bool isFirstInstance = false;
 };
 
 // ------------------

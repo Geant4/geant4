@@ -51,8 +51,8 @@ G4PreCompoundTriton::G4PreCompoundTriton()
 
 G4double G4PreCompoundTriton::FactorialFactor(G4int N, const G4int P) const
 {
-  return static_cast<G4double>(((N-3)*(P-2)*(N-2))*((P-1)*(N-1)*P))
-    /6.;
+  return G4double((N - 3) * (P - 2) * (N - 2)) *
+         G4double((P - 1) * (N - 1) * P) / 6.;
 }
   
 G4double G4PreCompoundTriton::CoalescenceFactor(G4int A) const

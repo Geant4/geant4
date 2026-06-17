@@ -278,9 +278,13 @@ G4int G4Event::GetNumberOfRemainingSubEvents() const
 // Number of sub-events that are either still waiting to be processed by worker
 // threads or sent to worker threads but not yet completed.
 {
-  G4AutoLock lock(&SubEventMutex);
-  auto  tot = (G4int)fSubEvtVector.size(); 
-  for(auto& sem : fSubEvtStackMap)
-  { tot += (G4int)sem.second->size(); }
-  return tot;
+  if(ifMasterEventForSubEventMode)
+  {
+    G4AutoLock lock(&SubEventMutex);
+    auto tot = (G4int)fSubEvtVector.size(); 
+    for(auto& sem : fSubEvtStackMap)
+    { tot += (G4int)sem.second->size(); }
+    return tot;
+  }
+  return 0;
 }

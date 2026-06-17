@@ -144,6 +144,8 @@ void G4RootPNtupleManager::CreateNtupleFromMain(
   if (mainNtuple == nullptr) {
     ntupleDescription->SetNtuple(nullptr);
     ntupleDescription->SetBasePNtuple(nullptr);
+    // Keep fNtupleVector in sync with fNtupleDescriptionVector
+    fNtupleVector.push_back(nullptr);
     return;
   }
 
@@ -153,6 +155,8 @@ void G4RootPNtupleManager::CreateNtupleFromMain(
   if ( ! file ) {
     Warn("Cannot create pntuple. Main ntuple file does not exist.",
       fkClass, "CreateNtupleFromMain");
+    // Keep fNtupleVector in sync with fNtupleDescriptionVector
+    fNtupleVector.push_back(nullptr);
     return;
   }
 
@@ -452,7 +456,9 @@ G4bool G4RootPNtupleManager::Delete(G4int id)
 
   // Update ntuple vector
   auto index = id - GetFirstId();
-  fNtupleVector[index] = nullptr;
+  if (index < G4int(fNtupleVector.size())) {
+    fNtupleVector[index] = nullptr;
+  }
 
   Message(G4Analysis::kVL2, "delete", "pntuple ntupleId " + to_string(id));
 

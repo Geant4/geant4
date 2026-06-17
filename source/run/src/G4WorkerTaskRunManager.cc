@@ -188,6 +188,7 @@ void G4WorkerTaskRunManager::DoEventLoop(G4int n_event, const char* macroFile, G
     ProcessOneEvent(i_event);
     if (eventLoopOnGoing) {
       TerminateOneEvent();
+      if (G4MTRunManager::GetMasterRunManager()->IfAborted()) AbortRun();
       if (runAborted) eventLoopOnGoing = false;
     }
     if (!eventLoopOnGoing) break;
@@ -427,6 +428,9 @@ void G4WorkerTaskRunManager::DoCleanup()
 
 void G4WorkerTaskRunManager::DoWork()
 {
+  // Do not start this task if the current run has already aborted.
+  if(runAborted) return;
+
   G4TaskRunManager* mrm = G4TaskRunManager::GetMasterRunManager();
   G4bool newRun = false;
   const G4Run* run = mrm->GetCurrentRun();

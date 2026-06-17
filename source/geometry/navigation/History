@@ -6,6 +6,19 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2026-06-03 Gabriele Cosmo (geomnav-V11-03-03)
+- Added rounding protection in ComputeSafety() of G4ParameterisedNavigation
+  in the computation of the current voxel node for the 1D optimisation case.
+  Addressing problem report #2735.
+
+## 2026-04-28 Gabriele Cosmo
+- Refresh navigator for tracking and mass world in G4MultiNavigator from
+  G4PathFinder whenever geometry is modified/rebuilt to avoid stale pointers.
+  Addresses problem report #2714.
+
+## 2026-03-21 Gabriele Cosmo
+- Fixed inverted comments in G4Navigator.icc.
+
 ## 2025-08-19 Gabriele Cosmo (geomnav-V11-03-02)
 - Applied clang-tidy fixes: modernize-use-default-member-init,
   readability-redundant-member-init, modernize-use-emplace,

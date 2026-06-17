@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-04-patch-01    (13-March-2026)
+ Geant4 version Name: geant4-11-04-patch-02    (12-June-2026)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -636,34 +636,34 @@ N=17 V[N]={906770732717044781, 629165745432651234, 1235682547346241386, 68420008
  Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=0.600000s Real=0.601292s Sys=0.000000s
+  User=0.680000s Real=0.677448s Sys=0.000000s
 
  ======================== run summary ======================
 
  The run is: 2000 e- of 100 MeV through 10 m   of Aluminium (density: 2.7 g/cm3 )
 
- Energy deposit:   99.825 MeV
- Energy leakage:   174.7 keV
+ Energy deposit:   99.821 MeV
+ Energy leakage:   178.87 keV
  Edep + Eleak:     100 MeV
  
  NIEL energy calculated: 0 eV 
 
- Nb tracks/event   neutral:  25.233   charged:  136.96
- Nb  steps/event   neutral:  139.22   charged:  202.53
+ Nb tracks/event   neutral:  25.351   charged:  138.18
+ Nb  steps/event   neutral:  140.53   charged:  203.89
 
  Process calls frequency :
-          CoulombScat=      1                  Rayl=  17841        Transportation=   1744
-              annihil=   2770                 compt= 210126                  conv=   2756
-                eBrem=  46093                 eIoni= 356088                   msc=    105
-                 phot=  45970 
+                 Rayl=  18000        Transportation=   1710               annihil=   2900
+                compt= 212353                  conv=   2889                 eBrem=  46048
+                eIoni= 358734                   msc=     91                  phot=  46102
+
 
 ---------------------------------------------------------
  Primary particle : 
- true Range = 11.195 cm    rms = 3.8373 cm 
- proj Range = 9.7421 cm    rms = 3.5666 cm 
- proj/true  = 0.87022
- transverse dispersion at end = 1.6174 cm 
-      mass true Range from simulation = 30.226 g/cm2 
+ true Range = 11.023 cm    rms = 3.7347 cm 
+ proj Range = 9.5867 cm    rms = 3.4649 cm 
+ proj/true  = 0.86973
+ transverse dispersion at end = 1.5862 cm 
+      mass true Range from simulation = 29.761 g/cm2 
        from PhysicsTable (csda range) = 32.101 g/cm2 
 ---------------------------------------------------------
 
@@ -671,7 +671,7 @@ Run Summary
 ------- MixMaxRng engine status -------
  Current state vector is:
 mixmax state, file version 1.0
-N=17 V[N]={2204704700215511942, 1704475241333781852, 1152036325638390116, 382284643487265242, 908284428552197266, 1844649111230106554, 716434537514665914, 2181596265840606189, 1797085839663638694, 2000987945612039860, 153649884734446175, 197968976667762189, 1479286561913217005, 666748462381689408, 1012181014210310564, 2222020765206517576, 226539335501886528} counter= 17sumtot= 98346956780787515
+N=17 V[N]={580208979041827235, 1332645398352364613, 193075699479058046, 62679130215940605, 1018085692164921878, 425893823871916493, 1387177515467449976, 1777959448926304523, 1774858285888876579, 1928614490813346936, 3639127296164345, 1334994290144392062, 1979197886332695688, 2138604841590846326, 1724411611553346293, 13578063842040690, 946049242203187062} counter= 8sumtot= 174929453475127742
 ---------------------------------------
 #
 /gun/particle proton
@@ -693,7 +693,7 @@ Index : 0     used in the geometry : Yes
 ------- MixMaxRng engine status -------
  Current state vector is:
 mixmax state, file version 1.0
-N=17 V[N]={2204704700215511942, 1704475241333781852, 1152036325638390116, 382284643487265242, 908284428552197266, 1844649111230106554, 716434537514665914, 2181596265840606189, 1797085839663638694, 2000987945612039860, 153649884734446175, 197968976667762189, 1479286561913217005, 666748462381689408, 1012181014210310564, 2222020765206517576, 226539335501886528} counter= 17sumtot= 98346956780787515
+N=17 V[N]={580208979041827235, 1332645398352364613, 193075699479058046, 62679130215940605, 1018085692164921878, 425893823871916493, 1387177515467449976, 1777959448926304523, 1774858285888876579, 1928614490813346936, 3639127296164345, 1334994290144392062, 1979197886332695688, 2138604841590846326, 1724411611553346293, 13578063842040690, 946049242203187062} counter= 8sumtot= 174929453475127742
 ---------------------------------------
 --> Event 0 starts.
 --> Event 200 starts.
@@ -708,7 +708,7 @@ N=17 V[N]={2204704700215511942, 1704475241333781852, 1152036325638390116, 382284
  Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=0.030000s Real=0.033664s Sys=0.000000s
+  User=0.040000s Real=0.037121s Sys=0.000000s
 
  ======================== run summary ======================
 
@@ -718,22 +718,22 @@ Run Summary
  Energy leakage:   0 eV 
  Edep + Eleak:     100 MeV
  
- NIEL energy calculated: 167.38 eV 
+ NIEL energy calculated: 168.8 eV 
 
- Nb tracks/event   neutral:       0   charged:   1.011
- Nb  steps/event   neutral:       0   charged:  19.074
+ Nb tracks/event   neutral:       0   charged:  1.0105
+ Nb  steps/event   neutral:       0   charged:  19.079
 
  Process calls frequency :
-          CoulombScat=     45             NoProcess=     22                 hIoni=  38059
-              ionIoni=     22 
+          CoulombScat=     42             NoProcess=     21                 hIoni=  38075
+              ionIoni=     21 
 
 ---------------------------------------------------------
  Primary particle : 
- true Range = 3.7132 cm    rms = 407.22 um 
- proj Range = 3.705 cm    rms = 420.14 um 
- proj/true  = 0.99779
- transverse dispersion at end = 1.1181 mm 
-      mass true Range from simulation = 10.026 g/cm2 
+ true Range = 3.7129 cm    rms = 405.56 um 
+ proj Range = 3.7048 cm    rms = 412.15 um 
+ proj/true  = 0.99782
+ transverse dispersion at end = 1.0972 mm 
+      mass true Range from simulation = 10.025 g/cm2 
        from PhysicsTable (csda range) = 10.012 g/cm2 
 ---------------------------------------------------------
 
@@ -741,7 +741,7 @@ Run Summary
 ------- MixMaxRng engine status -------
  Current state vector is:
 mixmax state, file version 1.0
-N=17 V[N]={1120886391458240773, 1168661967546458364, 965130051979669458, 1225466068298067703, 635493586742307257, 1739073022758069151, 1048870775384294139, 1820979206692573380, 1053163655585474045, 1824939031300577365, 299889952524606006, 1538375319653973701, 814383766236139394, 1947653451662752991, 1672162330603756087, 1391486027223531346, 738332628840072452} counter= 6sumtot= 252360151567318053
+N=17 V[N]={411236661504730436, 45360860816559573, 2300474236730874732, 436967572575564846, 1421635463300838830, 1639106182234468036, 50658455263798842, 712547256364027106, 545171509978593916, 7039672123322784, 1331126804927397851, 547080094387924454, 716428459092172828, 841816799393564746, 2239567394386982088, 522593647857378881, 1710483130631128273} counter= 11sumtot= 1644236146287164516
 ---------------------------------------
 #
 ================== Deleting memory pools ===================

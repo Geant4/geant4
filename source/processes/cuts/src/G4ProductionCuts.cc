@@ -30,8 +30,14 @@
 
 #include "G4ProductionCuts.hh"
 #include "G4ProductionCutsTable.hh"
+#include "G4AutoLock.hh"
 
 #include <sstream>
+
+namespace
+{
+  G4Mutex productionCutsMutex = G4MUTEX_INITIALIZER;
+}
 
 G4ProductionCuts::G4ProductionCuts()
 {
@@ -59,6 +65,7 @@ G4ProductionCuts& G4ProductionCuts::operator=(const G4ProductionCuts& right)
 {
   if (&right==this) return *this;
 
+  G4AutoLock lock(productionCutsMutex);
   for (G4int i=0; i<NumberOfG4CutIndex; ++i)
   {
     fRangeCuts[i] = right.fRangeCuts[i];
@@ -81,6 +88,7 @@ void G4ProductionCuts::SetProductionCut(G4double cut, G4int index)
 {
   if(index >= 0 && index < NumberOfG4CutIndex)
   {
+    G4AutoLock lock(productionCutsMutex);
     fRangeCuts[index] = cut;
     isModified = true;
   }
@@ -96,6 +104,7 @@ void G4ProductionCuts::SetProductionCut(G4double cut, G4int index)
 
 void G4ProductionCuts::SetProductionCut(G4double cut)
 {
+  G4AutoLock lock(productionCutsMutex);
   for(G4int i = 0; i < NumberOfG4CutIndex; ++i)
   {
     fRangeCuts[i] = cut;
@@ -118,6 +127,7 @@ G4double G4ProductionCuts::GetProductionCut(G4int index) const
   G4double cut = -1.0;
   if (index>=0 && index<NumberOfG4CutIndex)
   {
+    G4AutoLock lock(productionCutsMutex);
     cut = fRangeCuts[index];
   }
   return cut;
@@ -128,19 +138,20 @@ G4double G4ProductionCuts::GetProductionCut(const G4String& name) const
   return GetProductionCut(GetIndex(name));
 }
 
-
-const std::vector<G4double>&   G4ProductionCuts::GetProductionCuts() const
+const std::vector<G4double>& G4ProductionCuts::GetProductionCuts() const
 {
   return fRangeCuts;
 }
 
 G4bool G4ProductionCuts::IsModified() const
 {
+  G4AutoLock lock(productionCutsMutex);
   return isModified;
 }
 
 void G4ProductionCuts::PhysicsTableUpdated()
 {
+  G4AutoLock lock(productionCutsMutex);
   isModified = false;
 }
 
@@ -187,6 +198,7 @@ void G4ProductionCuts::SetProductionCuts(std::vector<G4double>& cut)
                  JustWarning, "Given vector size is inconsistent ");
     if (NumberOfG4CutIndex<vSize)  { vSize = NumberOfG4CutIndex; }
   }
+  G4AutoLock lock(productionCutsMutex);
   for(G4int i = 0; i<vSize; ++i)
   {
     fRangeCuts[i] = cut[i];

@@ -30,6 +30,7 @@
 // --------------------------------------------------------------------
 
 #include <iomanip>
+#include <memory>
 
 #include "G4ios.hh"
 #include "G4Timer.hh"
@@ -66,11 +67,10 @@ namespace
 //
 G4ThreadLocal G4GeometryManager* G4GeometryManager::fgInstance = nullptr;
 
-G4VoxelisationHelper* G4GeometryManager::fParallelVoxeliser = nullptr;
- // Only one instance created by the master thread's G4GeometryManager
- // Expected Future: data member (when only one instance)
+std::shared_ptr<G4VoxelisationHelper> G4GeometryManager::fParallelVoxeliser;
+  // Only one instance created by the master thread's G4GeometryManager
+  // Expected Future: data member (when only one instance)
 
-// Static *global* class data
 G4bool G4GeometryManager::fParallelVoxelOptimisationRequested = true;
   // Records User choice to use parallel voxel optimisation (or not)
 
@@ -92,7 +92,7 @@ G4GeometryManager::G4GeometryManager()
   G4AutoLock lock(createHelperMutex);
   if( fParallelVoxeliser == nullptr )
   {
-    fParallelVoxeliser= new G4VoxelisationHelper();
+    fParallelVoxeliser = std::make_shared<G4VoxelisationHelper>();
   }
 }
 
@@ -104,18 +104,6 @@ G4GeometryManager::~G4GeometryManager()
 {
   fgInstance = nullptr;
   fIsClosed = false;
-
-  // Only the master thread can delete the helper objects
-  //  - a different mechanism is needed for setups with no master
-  // TODO: See if shared_ptr could help here?
-  if( G4Threading::IsMasterThread() )
-  {
-    if( fParallelVoxeliser != nullptr )
-    {
-      delete fParallelVoxeliser;
-      fParallelVoxeliser = nullptr;
-    }
-  }
 }
 
 // ***************************************************************************
@@ -165,7 +153,7 @@ G4bool G4GeometryManager::IsGeometryClosed()
 //
 void G4GeometryManager::OpenGeometry(G4VPhysicalVolume* pVolume)
 {
-  if (fIsClosed && G4Threading::IsMasterThread())
+  if (IsGeometryClosed() && G4Threading::IsMasterThread())
   {
     if (pVolume != nullptr)
     {
@@ -175,8 +163,8 @@ void G4GeometryManager::OpenGeometry(G4VPhysicalVolume* pVolume)
     {
       DeleteOptimisations();
     }
+    fOptimiseInParallelConfigured = false;
     fIsClosed = false;
-    // fGeometryCloseRequested= false;
   }
 }
 
@@ -220,7 +208,6 @@ G4bool G4GeometryManager::IsParallelOptimisationFinished()
 { 
   return fParallelVoxeliser->IsParallelOptimisationFinished(); 
 }
-
 
 // ***************************************************************************
 // Respond whether parallel optimisation is configured
@@ -371,7 +358,7 @@ void G4GeometryManager::RequestParallelOptimisation(G4bool flag, G4bool verbose)
   fParallelVoxelOptimisationRequested = flag;
   if( flag )
   {
-     fParallelVoxeliser->SetVerbosity(verbose);
+    fParallelVoxeliser->SetVerbosity(verbose);
   }
 }
 
@@ -381,7 +368,7 @@ void G4GeometryManager::RequestParallelOptimisation(G4bool flag, G4bool verbose)
 //
 void G4GeometryManager::UndertakeOptimisation()
 {
-   fParallelVoxeliser->UndertakeOptimisation();
+  fParallelVoxeliser->UndertakeOptimisation();
 }
 
 
@@ -501,12 +488,12 @@ void G4GeometryManager::SetWorldMaximumExtent(G4double extent)
 {
   if (!G4SolidStore::GetInstance()->empty())
   {
-     // Sanity check to assure that extent is fixed BEFORE creating
-     // any geometry object (solids in this case)
-     //
-     G4Exception("G4GeometryManager::SetMaximumExtent()",
-                 "GeomMgt0003", FatalException,
-                 "Extent can be set only BEFORE creating any geometry object!");
+    // Sanity check to assure that extent is fixed BEFORE creating
+    // any geometry object (solids in this case)
+    //
+    G4Exception("G4GeometryManager::SetMaximumExtent()",
+                "GeomMgt0003", FatalException,
+                "Extent can be set only BEFORE creating any geometry object!");
   }
   G4GeometryTolerance::GetInstance()->SetSurfaceTolerance(extent);
 }

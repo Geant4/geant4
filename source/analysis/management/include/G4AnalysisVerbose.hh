@@ -28,8 +28,8 @@
 
 // Author: Ivana Hrivnacova, 17/10/2011  (ivana@ipno.in2p3.fr)
 
-#ifndef G4AnalysisVerbose_h
-#define G4AnalysisVerbose_h 1
+#ifndef G4ANALYSISVERBOSE_HH
+#define G4ANALYSISVERBOSE_HH
 
 #include "globals.hh"
 
@@ -53,9 +53,9 @@ class G4AnalysisVerbose
 
     // Data members
     std::array<G4String, fkMaxLevel> fDoneText 
-      { G4String("- done"), G4String("- done"), G4String(), G4String() };
+      { { G4String("- done"), G4String("- done"), G4String(), G4String() } };
     std::array<G4String, fkMaxLevel> fToBeDoneText 
-      { G4String(), G4String(), G4String("done "), G4String("going to ") };
+      { { G4String(), G4String(), G4String("done "), G4String("going to ") } };
     G4String fFailureText
       { "has failed" };
 };

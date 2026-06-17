@@ -71,7 +71,10 @@ using G4GeometryType = G4String;
 
 /**
  * @brief G4VSolid is an abstract base class for solids, physical shapes that
- * can be tracked through. Each solid has a name, and the constructors and
+ * can be tracked through.
+ * @ingroup geometry_management
+ *
+ * Each solid has a name, and the constructors and
  * destructors automatically add and subtract them from the G4SolidStore, a
  * singleton 'master' list of available solids.
  */
@@ -207,8 +210,10 @@ class G4VSolid
 
     /**
      * Dispatch method for parameterisation replication mechanism and
-     * dimension computation. Throws exception if ComputeDimensions() is
-     * called from an illegal derived class.
+     * dimension computation. Default implementation does nothing,
+     * therefore dispatching is disabled. The method is overloaded and
+     * dispatching enabled in derived classes for those solids
+     * implementing such feature.
      */
     virtual void ComputeDimensions(G4VPVParameterisation* p,
 	                           const G4int n,

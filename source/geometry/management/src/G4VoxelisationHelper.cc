@@ -55,8 +55,6 @@ G4VoxelisationHelper::~G4VoxelisationHelper()
 // Setup up state to enable parallel optimisation by workers.
 // ***************************************************************************
 //
-// Method's Old Name: ConfigureParallelOptimisation
-//
 void G4VoxelisationHelper::ReSetParallelOptimisation(G4bool verbose)
 {
   if(verbose)
@@ -65,7 +63,6 @@ void G4VoxelisationHelper::ReSetParallelOptimisation(G4bool verbose)
     << " All the work (of voxel optimisation) WAS LEFT to the threads/tasks !"
     << G4endl << "   Clearing the state for this work." << G4endl;
   }
-  // fParallelVoxelOptimisationRequested = true;
   fParallelVoxelOptimisationUnderway = false;
   fParallelVoxelOptimisationFinished = false;
   
@@ -79,8 +76,8 @@ void G4VoxelisationHelper::ReSetParallelOptimisation(G4bool verbose)
 
   fWallClockStarted = false;  // Will need to restart it!
 
-  fLogVolumeIterator = fVolumesToOptimise.cbegin();
   // Reset the iterator -- else to be sure that work is done correctly
+  fLogVolumeIterator = fVolumesToOptimise.cbegin();
 }
 
 // ***************************************************************************
@@ -108,7 +105,7 @@ G4VoxelisationHelper::CreateListOfVolumesToOptimise(G4bool allOpts, G4bool verbo
   
   for (auto & n : *Store)
   {
-    G4LogicalVolume* volume=n;
+    G4LogicalVolume* volume = n;
     
     if (    ( (volume->IsToOptimise())
              && (volume->GetNoDaughters()>=kMinVoxelVolumesLevel1&&allOpts) )
@@ -126,23 +123,27 @@ G4VoxelisationHelper::CreateListOfVolumesToOptimise(G4bool allOpts, G4bool verbo
       
 #ifdef G4GEOMETRY_VOXELDEBUG
       G4cout << "- Booking  logical volume with " << volume->GetNoDaughters()
-      << " daughters and name = '" << volume->GetName() << "' "
-      << " -- for optimisation (ie voxels will be built for it). " << G4endl;
+             << " daughters and name = '" << volume->GetName() << "' "
+             << " -- for optimisation (ie voxels will be built for it). "
+             << G4endl;
 #endif
     }
     else
     {
 #ifdef G4GEOMETRY_VOXELDEBUG
       G4cout << "- Skipping logical volume with " << volume->GetNoDaughters()
-      << " daughters and name = '" << volume->GetName() << "' " << G4endl;
+             << " daughters and name = '" << volume->GetName() << "' "
+             << G4endl;
 #endif
     }
   }
   
   if(verbose)
+  {
     G4cout << "** G4VoxelisationHelper::PrepareOptimisationWork: "
            << "  Number of volumes for voxelisation = "
            << fVolumesToOptimise.size() << G4endl;
+  }
   
   fLogVolumeIterator = fVolumesToOptimise.cbegin();
 }
@@ -162,8 +163,6 @@ void G4VoxelisationHelper::PrepareParallelOptimisation(G4bool allOpts, G4bool ve
   CreateListOfVolumesToOptimise(allOpts, verbose);
   ReSetParallelOptimisation(verbose);
 }
-
-
 
 // ***************************************************************************
 // Data structures / mutexes for parallel optimisation
@@ -187,14 +186,12 @@ namespace
   G4Mutex outputDbgMutex = G4MUTEX_INITIALIZER;
 }
 
-
 // ***************************************************************************
 // Method for a thread/task to contribute dynamically to Optimisation
 // ***************************************************************************
 //
 void G4VoxelisationHelper::UndertakeOptimisation()
 {
-  G4bool verbose = fVerboseParallel;
   G4LogicalVolume* logVolume = nullptr;
 
   // Use a mutex to protect parallel writes, but may be better to use atomic,
@@ -205,7 +202,7 @@ void G4VoxelisationHelper::UndertakeOptimisation()
   }
 
   // Start timer - if not already done
-  if( ( !fWallClockStarted ) && verbose )
+  if( ( !fWallClockStarted ) && fVerboseParallel )
   {
     G4AutoLock startTimeLock(wallClockTimerMutex);
     if( !fWallClockStarted )
@@ -220,7 +217,7 @@ void G4VoxelisationHelper::UndertakeOptimisation()
   
   while( (logVolume = ObtainVolumeToOptimise()) != nullptr )
   {
-    if (verbose) fetimer.Start();
+    if (fVerboseParallel) { fetimer.Start(); }
 
     G4SmartVoxelHeader* head = logVolume->GetVoxelHeader();
     delete head;
@@ -244,7 +241,7 @@ void G4VoxelisationHelper::UndertakeOptimisation()
                   "GeomMgt0003", FatalException, message);
     }
 
-    if(verbose)
+    if(fVerboseParallel)
     {
       fetimer.Stop();
       auto feRealElapsed = fetimer.GetRealElapsed();
@@ -260,7 +257,7 @@ void G4VoxelisationHelper::UndertakeOptimisation()
   }
 
   G4bool allDone = false;
-  G4int myCount= -1;
+  G4int myCount = -1;
 
   myCount = ReportWorkerIsDoneOptimising(numVolumesOptimised);
   allDone = IsParallelOptimisationFinished();
@@ -275,12 +272,12 @@ void G4VoxelisationHelper::UndertakeOptimisation()
              << "but found that voxels headers are missing in "
              << badVolumes << " volumes.";
       G4Exception("G4VoxelisationHelper::UndertakeOptimisation()",
-                  "GeomMng002", FatalException, errmsg);
+                  "GeomMgt0002", FatalException, errmsg);
     }
     
     // Create report
 
-    if( verbose )
+    if( fVerboseParallel )
     {
       fWallClockTimer->Stop();
 
@@ -306,7 +303,6 @@ void G4VoxelisationHelper::UndertakeOptimisation()
     WaitForVoxelisationFinish(false);
   }
 }
-
 
 // ***************************************************************************
 // Obtain a logical volume from the list of volumes to optimise
@@ -369,51 +365,62 @@ G4VoxelisationHelper::ReportWorkerIsDoneOptimising(unsigned int numVolumesOptimi
   fTotalNumberVolumesOptimised += numVolumesOptimised;
 
   if( fVerboseParallel )
-    std::cout << "G4GeometryManager: the " << orderReporting << " worker has finished.  "
-         <<  "  Total volumes voxelised = " << fTotalNumberVolumesOptimised
-         <<  " out of " << fVolumesToOptimise.size() << G4endl;
+  {
+    std::cout << "G4GeometryManager: the " << orderReporting
+              << " worker has finished.  "
+              <<  "  Total volumes voxelised = " << fTotalNumberVolumesOptimised
+              <<  " out of " << fVolumesToOptimise.size() << G4endl;
+  }
 
   if (fNumberThreadsReporting == G4Threading::GetNumberOfRunningWorkerThreads()
       || fTotalNumberVolumesOptimised == fVolumesToOptimise.size()
       )
   {
-    const auto TotalThreads = G4Threading::GetNumberOfRunningWorkerThreads();
-    auto tid= G4Threading::G4GetThreadId();
+    if( fVerboseParallel )
+    {
+      const auto TotalThreads = G4Threading::GetNumberOfRunningWorkerThreads();
+      auto tid = G4Threading::G4GetThreadId();
 
-    // -- Some Checks
-    if( fTotalNumberVolumesOptimised != fVolumesToOptimise.size() )
-    {
-      G4ExceptionDescription errmsg;
-      errmsg << " [thread " << tid << " ] "
-             << " WARNING: Number of volumes 'voxelised' = " << fTotalNumberVolumesOptimised
-             << " is not equal to the total number requested " << fVolumesToOptimise.size() << " !! " << G4endl;
-      G4Exception("G4GeometryManager::ReportWorkerIsDoneOptimising", "G4GeomMgr0999",
-                  FatalException, errmsg);
-    }
+      // -- Some Checks
+      if( fTotalNumberVolumesOptimised != fVolumesToOptimise.size() )
+      {
+        G4ExceptionDescription errmsg;
+        errmsg << " [thread " << tid << " ] "
+               << " ERROR: Number of volumes 'voxelised' = "
+               << fTotalNumberVolumesOptimised
+               << " is not equal to the total number requested "
+               << fVolumesToOptimise.size() << " !! " << G4endl;
+        G4Exception("G4GeometryManager::ReportWorkerIsDoneOptimising()",
+                    "G4GeomMgt0002", FatalException, errmsg);
+      }
     
-    if( fNumberThreadsReporting > TotalThreads )
-    {
-       G4ExceptionDescription errmsg;
-       errmsg << " [thread " << tid << " ] "
-              << " WARNING: Number of threads 'reporting' = " << fNumberThreadsReporting
-              << " exceeds the total number of threads " << TotalThreads << " !! " << G4endl
-              << " *Missed* calling the method ConfigureParallelOptimisation() to reset. ";
-       G4Exception("G4GeometryManager::ReportWorkerIsDoneOptimising", "G4GeomMgr0999",
-                   JustWarning, errmsg);
-    }
-    else
-    {
-       if( fTotalNumberVolumesOptimised == fVolumesToOptimise.size()
-         && ( fNumberThreadsReporting < TotalThreads ) )
-       {
+      if( fNumberThreadsReporting > TotalThreads )
+      {
+        G4ExceptionDescription errmsg;
+        errmsg << " [thread " << tid << " ] "
+               << " WARNING: Number of threads 'reporting' = "
+               << fNumberThreadsReporting
+               << " exceeds the total number of threads "
+               << TotalThreads << " !! " << G4endl
+               << " *Missed* calling the method ConfigureParallelOptimisation() to reset. ";
+        G4Exception("G4GeometryManager::ReportWorkerIsDoneOptimising()",
+                    "G4GeomMgt1002", JustWarning, errmsg);
+      }
+      else
+      {
+        if( fTotalNumberVolumesOptimised == fVolumesToOptimise.size()
+          && ( fNumberThreadsReporting < TotalThreads ) )
+        {
           G4ExceptionDescription errmsg;
           errmsg << " [thread " << tid << " ] "
                  << " WARNING: All volumes optimised, yet only "
-                 << fNumberThreadsReporting << " threads reported out of " << TotalThreads;
-         G4Exception("G4GeometryManager::ReportWorkerIsDoneOptimising", "G4GeomMgr099",
-                     JustWarning, errmsg);
-       }
-    } // -- End of Checks
+                 << fNumberThreadsReporting
+                 << " threads reported out of " << TotalThreads;
+          G4Exception("G4GeometryManager::ReportWorkerIsDoneOptimising()",
+                      "G4GeomMgt1002", JustWarning, errmsg);
+        }
+      } // -- End of Checks
+    }
 
     // Report the end
     if( fNumberThreadsReporting <= G4Threading::GetNumberOfRunningWorkerThreads() )
@@ -446,9 +453,8 @@ void G4VoxelisationHelper::RecordOptimisationIsFinished(G4bool verbose)
   }
   assert ( fTotalNumberVolumesOptimised == fVolumesToOptimise.size() );
 
-  fParallelVoxelOptimisationFinished  = true;
-  // fParallelVoxelOptimisationRequested = false; // Maintain request for next one!
-  fParallelVoxelOptimisationUnderway  = false; // It's no longer underway!
+  fParallelVoxelOptimisationFinished = true;
+  fParallelVoxelOptimisationUnderway = false; // It's no longer underway!
 }
 
 // ***************************************************************************
@@ -480,7 +486,6 @@ void G4VoxelisationHelper::WaitForVoxelisationFinish(G4bool verbose)
     out_stream.flush();
   }
 }
-
 
 // ***************************************************************************
 // Report about Voxel(isation) of a logical volume.
@@ -566,16 +571,16 @@ G4VoxelisationHelper::ReportVoxelStats( std::vector<G4SmartVoxelStat> & stats,
       { perc = total*100/totalCpuTime; }
 
     os << std::setprecision(2) 
-           << std::setiosflags(std::ios::fixed|std::ios::right)
-           << std::setw(11) << perc
-           << std::setw(13) << total
-           << std::setw(13) << system
-           << std::setw(13) << (stats[i].GetMemoryUse()+512)/1024
-           << "k " << std::setiosflags(std::ios::left)
-           << stats[i].GetVolume()->GetName()
-           << std::resetiosflags(std::ios::floatfield|std::ios::adjustfield)
-           << std::setprecision(6)
-           << G4endl;
+       << std::setiosflags(std::ios::fixed|std::ios::right)
+       << std::setw(11) << perc
+       << std::setw(13) << total
+       << std::setw(13) << system
+       << std::setw(13) << (stats[i].GetMemoryUse()+512)/1024
+       << "k " << std::setiosflags(std::ios::left)
+       << stats[i].GetVolume()->GetName()
+       << std::resetiosflags(std::ios::floatfield|std::ios::adjustfield)
+       << std::setprecision(6)
+       << G4endl;
   }
  
   //

@@ -64,7 +64,7 @@ G4SolidStore::G4SolidStore()
 //
 G4SolidStore::~G4SolidStore() 
 {
-  Clean();
+  CleanStore();
 }
 
 // ***************************************************************************
@@ -81,7 +81,15 @@ void G4SolidStore::Clean()
            << " while geometry closed !" << G4endl;
     return;
   }
+  GetInstance()->CleanStore();
+}
 
+// ***************************************************************************
+// Delete all elements from the store
+// ***************************************************************************
+//
+void G4SolidStore::CleanStore()
+{
   // Locks store for deletion of solids. De-registration will be
   // performed at this stage. G4VSolids will not de-register themselves.
   //

@@ -179,7 +179,7 @@ G4VRadioactiveDecay::~G4VRadioactiveDecay()
   delete photonEvaporation;
   delete decayIT;
   if (nullptr != master_dkmap) {
-    G4AutoLock lk(&radioactiveDecayMutex);
+    G4AutoLock lk(radioactiveDecayMutex);
     if (nullptr != master_dkmap) {
       for (auto const & i : *master_dkmap) {
 	delete i.second;
@@ -249,10 +249,9 @@ void G4VRadioactiveDecay::ProcessDescription(std::ostream& outFile) const
 }
 
 
-
-
 G4DecayTable* G4VRadioactiveDecay::GetDecayTable(const G4ParticleDefinition* aNucleus)
 {
+  G4AutoLock lk(radioactiveDecayMutex);
   G4String key = aNucleus->GetParticleName();
   auto ptr = master_dkmap->find(key);
 
@@ -266,6 +265,7 @@ G4DecayTable* G4VRadioactiveDecay::GetDecayTable(const G4ParticleDefinition* aNu
   } else {
     theDecayTable = ptr->second;
   }
+  lk.unlock();
   return theDecayTable;
 }
 
@@ -518,11 +518,9 @@ G4VRadioactiveDecay::StreamInfo(std::ostream& os, const G4String& endline)
 
 G4DecayTable* G4VRadioactiveDecay::LoadDecayTable(const G4Ions* theIon)
 {
-  G4AutoLock lk(&radioactiveDecayMutex);
   const G4String key = theIon->GetParticleName();
   auto dtptr = master_dkmap->find(key);
   if (dtptr != master_dkmap->end()) {
-    lk.unlock();
     return dtptr->second;
   }
 
@@ -887,7 +885,6 @@ G4DecayTable* G4VRadioactiveDecay::LoadDecayTable(const G4Ions* theIon)
 
   // store in master library 
   (*master_dkmap)[theIon->GetParticleName()] = theDecayTable;
-  lk.unlock();
   return theDecayTable;
 }
 

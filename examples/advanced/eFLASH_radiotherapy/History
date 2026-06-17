@@ -4,6 +4,13 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
+## 2026-03-20 Dmitri Konstantinov (eFLASH_radiotherapy-V11-03-01)
+- Fixed PVDF material composition in FlashApplicator: replaced incorrect
+  mass fractions (34/33/33%) with atom counts (2/2/2).
+- Fixed integer division bug in MonitorChamber (FlashApplicator): 1/2
+  evaluated to 0, causing wrong PVDF layer positioning.
+- These have minor effect on results but are fixed for the sake of correctness
+
 ## 2025-11-04 G. Milluzzo (eFLASH_radiotherapy-V11-03-00)
 - Added the new class FlashMinibeamTemplate implementing the geometry of collimatiors for minibeam production, including the different geometrical configurations (grid and planar)
 - Modified FlashDetectorConstruction accordigly

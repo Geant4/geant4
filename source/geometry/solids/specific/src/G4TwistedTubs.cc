@@ -281,18 +281,6 @@ G4TwistedTubs& G4TwistedTubs::operator = (const G4TwistedTubs& rhs)
 }
 
 //=====================================================================
-//* ComputeDimensions -------------------------------------------------
-
-void G4TwistedTubs::ComputeDimensions(G4VPVParameterisation* /* p */ ,
-                                      const G4int            /* n  */ ,
-                                      const G4VPhysicalVolume* /* pRep */ )
-{
-  G4Exception("G4TwistedTubs::ComputeDimensions()",
-              "GeomSolids0001", FatalException,
-              "G4TwistedTubs does not support Parameterisation.");
-}
-
-//=====================================================================
 //* BoundingLimits ----------------------------------------------------
 
 void G4TwistedTubs::BoundingLimits(G4ThreeVector& pMin,

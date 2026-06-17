@@ -69,10 +69,13 @@ G4NuDEXStatisticalNucleus::G4NuDEXStatisticalNucleus(G4int Z,G4int A){
   Ecrit=-1;
   
   hasBeenInitialized=false;
+  Sn=-1000;
+  D0=-1000;
+  I0=-1000;
   NBands=-1;
   theLevels=0;
-  theKnownLevels=0;
   NKnownLevels=0; NUnknownLevels=0; NLevels=0; KnownLevelsVectorSize=0;
+  hasThermalLevel=false;
   theRandom1=0;
   theRandom2=0;
   theRandom3=0;
@@ -138,7 +141,6 @@ G4NuDEXStatisticalNucleus::~G4NuDEXStatisticalNucleus(){
   for(G4int i=0;i<KnownLevelsVectorSize;i++){
     if(theKnownLevels[i].Ndecays>0){
       delete [] theKnownLevels[i].decayFraction;
-      delete [] theKnownLevels[i].decayMode;
     }
     if(theKnownLevels[i].NGammas>0){
       delete [] theKnownLevels[i].FinalLevelID;
@@ -150,7 +152,6 @@ G4NuDEXStatisticalNucleus::~G4NuDEXStatisticalNucleus(){
       delete [] theKnownLevels[i].Icc;
     }
   }
-  if(theKnownLevels!=0){delete [] theKnownLevels;}
   if(theRandom1!=0){delete theRandom1;}
   if(theRandom2!=0){delete theRandom2;}
   if(theRandom3!=0){delete theRandom3;}
@@ -174,17 +175,17 @@ G4int G4NuDEXStatisticalNucleus::Init(const char* dirname,const char* inputfname
   //-------------------------------------------------------------------
   //First, we read data from files:
   G4int check=0;
-  char fname[1000],defaultinputfname[1000];
+  char fname[10000],defaultinputfname[10000];
   theLibDir=std::string(dirname);
 
   //Special (default) input file:
-  snprintf(defaultinputfname,1000,"%s/SpecialInputs/ZA_%d.dat",dirname,Z_Int*1000+A_Int);
+  snprintf(defaultinputfname,10000,"%s/SpecialInputs/ZA_%d.dat",dirname,Z_Int*1000+A_Int);
   G4int HasDefaultInput=ReadSpecialInputFile(defaultinputfname);
   char* definputfn=0;
   if(HasDefaultInput>0){definputfn=defaultinputfname;}
   
   //General statistical parameters:
-  snprintf(fname,1000,"%s/GeneralStatNuclParameters.dat",dirname);
+  snprintf(fname,10000,"%s/GeneralStatNuclParameters.dat",dirname);
   check=ReadGeneralStatNuclParameters(fname); if(check<0){return -1;}
 
   //Some default, if not initialized yet:
@@ -193,7 +194,7 @@ G4int G4NuDEXStatisticalNucleus::Init(const char* dirname,const char* inputfname
   if(PrimaryGammasIntensityNormFactor<0){PrimaryGammasIntensityNormFactor=1;}
   if(PrimaryGammasEcut<0){PrimaryGammasEcut=0;} 
   if(Ecrit<0){
-    snprintf(fname,1000,"%s/KnownLevels/levels-param.data",dirname);
+    snprintf(fname,10000,"%s/KnownLevels/levels-param.data",dirname);
     check=ReadEcrit(fname); if(check<0){return -1;}
   }
 
@@ -204,30 +205,40 @@ G4int G4NuDEXStatisticalNucleus::Init(const char* dirname,const char* inputfname
   LevelDensityType=theLD->GetLDType(); //because it can be changed by inputfname or due to lack of data
   if(check<0){
     delete theLD; theLD=0;
-    Sn=-1; D0=-1; I0=-1000;
   }
   else{
-    theLD->GetSnD0I0Vals(Sn,D0,I0);
+    Sn=theLD->GetSn();
+    D0=theLD->GetD0();
+    I0=theLD->GetI0();
   }
 
   //Known level sheme:
-  snprintf(fname,1000,"%s/KnownLevels/z%03d.dat",dirname,Z_Int);
+  snprintf(fname,10000,"%s/KnownLevels/z%03d.dat",dirname,Z_Int);
   check=ReadKnownLevels(fname); if(check<0){return -1;}  //here we get/crosscheck Sn
   I0=TakeTargetNucleiI0(fname,check); if(check<0){return -1;} //if no I0 --> out
-
-  if(MaxExcEnergy<=0){
-    if(Sn>0){
-      MaxExcEnergy=Sn-MaxExcEnergy;
-    }
-    else{
-      MaxExcEnergy=1-MaxExcEnergy;
+  if(theLD){
+    if(theLD->GetSn()<-500){ //then theLD has not found Sn and I0 values
+      theLD->SetSn(Sn);
+      theLD->SetI0(I0);
     }
   }
 
+  if(MaxExcEnergy<=0){  //then MaxExcEnergy is required to be Sn+abs(MaxExcEnergy)
+    MaxExcEnergy=std::max(Sn,1.)-MaxExcEnergy;
+  }
+
+  /*
   //If we don't have level density and the known level scheme is not complete, then we can do nothing ...
   if(theLD==0 && Ecrit<MaxExcEnergy){
     std::cout<<" ###### WARNING: No level density and level scheme not complete for ZA="<<1000*Z_Int+A_Int<<" --> Ecrit="<<Ecrit<<" MeV and MaxExcEnergy = "<<MaxExcEnergy<<" MeV ######"<<std::endl;
     return -1;
+  }
+  */
+  if(theLD==0){
+#if COMPILATIONTYPE == 1
+    std::cout<<" ###### WARNING: No level density for ZA="<<1000*Z_Int+A_Int<<" --> Ecrit="<<Ecrit<<" MeV, MaxExcEnergy = "<<MaxExcEnergy<<" MeV and NLevels="<<NKnownLevels<<"  ######"<<std::endl;
+#endif
+    Ecrit=MaxExcEnergy+1;
   }
   //-------------------------------------------------------------------
 
@@ -269,7 +280,7 @@ G4int G4NuDEXStatisticalNucleus::Init(const char* dirname,const char* inputfname
 
   //Internal conversion:
   theICC=new G4NuDEXInternalConversion(Z_Int);
-  snprintf(fname,1000,"%s/ICC_factors.dat",dirname);
+  snprintf(fname,10000,"%s/ICC_factors.dat",dirname);
   theICC->Init(fname);
   theICC->SetRandom4Seed(theRandom3->GetSeed()); //same seed as for generating the cascades
 
@@ -282,7 +293,7 @@ G4int G4NuDEXStatisticalNucleus::Init(const char* dirname,const char* inputfname
 
   //Init TotalGammaRho:
   TotalGammaRho=new G4double[NLevels];
-  for(G4int i=0;i<NLevels-1;i++){
+  for(G4int i=0;i<NLevels;i++){
     TotalGammaRho[i]=-1;
   }
 
@@ -369,7 +380,7 @@ G4int G4NuDEXStatisticalNucleus::GenerateCascade(G4int InitialLevel,G4double Exc
   G4int Npar=0;
   G4int f_level=0,multipol=0;
   G4double alpha=0.0,E_trans=0.0,Exc_ene_i=0.0,Exc_ene_f=0.0; //icc factor, energy of the transition, initial/final excitation energy
-  G4double EmissionTime=0; //in seconds
+  G4double EmissionTime=0.0; //in seconds
   G4int NTransition=0;
   //G4double TotalCascadeEnergy1=0,TotalCascadeEnergy2=0;
   
@@ -430,13 +441,18 @@ G4int G4NuDEXStatisticalNucleus::GenerateCascade(G4int InitialLevel,G4double Exc
     }
     E_trans=Exc_ene_i-Exc_ene_f;
     if(E_trans<=0){
-      //std::cout<<"Exc_ene_i = "<<Exc_ene_i<<"  Exc_ene_f = "<<Exc_ene_f<<std::endl;
-      //std::cout<<" ####### WARNING: E_trans = "<<E_trans<<" for i="<<i_level<<" with E = "<<theLevels[std::max(i_level,0)].Energy<<" to  f="<<f_level<<" with E = "<<theLevels[f_level].Energy<<" ########"<<std::endl;  
-      return -1;
+#if COMPILATIONTYPE == 1
+      std::cout<<"Exc_ene_i = "<<Exc_ene_i<<"  Exc_ene_f = "<<Exc_ene_f<<std::endl;
+      std::cout<<" ####### WARNING: E_trans = "<<E_trans<<" for i="<<i_level<<" with E = "<<theLevels[std::max(i_level,0)].Energy<<" to  f="<<f_level<<" with E = "<<theLevels[f_level].Energy<<" ########"<<std::endl;
+      //return -1;
+#endif
+      //In reality this could be possible if the levels are well separated and the transition is from the entrance level, with a certain spin and parity, and another level which is still above the initial excitation energy.
+      Exc_ene_f=Exc_ene_i;
+      E_trans=0;
     }
     //------------------------------------------------------------
     //Emission time:
-    if(i_level<NKnownLevels && i_level>0){
+    if(i_level<NKnownLevels && i_level>0 && E_trans>0.0){
       if(theKnownLevels[i_level].T12>0){
 	EmissionTime+=theRandom3->Exp(theKnownLevels[i_level].T12/std::log(2));
       }
@@ -446,7 +462,7 @@ G4int G4NuDEXStatisticalNucleus::GenerateCascade(G4int InitialLevel,G4double Exc
     //------------------------------------------------------------
     //calculate electron conversion:
     G4bool ele_conv=false;
-    if(ElectronConversionFlag>0){
+    if(ElectronConversionFlag>0 && E_trans>0.0){
       if(i_level<NKnownLevels && i_level>0){ //ElectronConversionFlag=1,2
 	ele_conv=theICC->SampleInternalConversion(E_trans,multipol,alpha); //use the alpha value from the know level value
       }
@@ -475,10 +491,12 @@ G4int G4NuDEXStatisticalNucleus::GenerateCascade(G4int InitialLevel,G4double Exc
       }
     }
     else{
-      pType.push_back('g');
-      pEnergy.push_back(E_trans);
-      pTime.push_back(EmissionTime);	      
-      Npar++;
+      if(E_trans>0.0){
+	pType.push_back('g');
+	pEnergy.push_back(E_trans);
+	pTime.push_back(EmissionTime);	      
+	Npar++;
+      }
     }
     //------------------------------------------------------------
     i_level=f_level;
@@ -585,7 +603,9 @@ void G4NuDEXStatisticalNucleus::ChangeLevelSpinParityAndBR(G4int i_level,G4int n
 
   //Do not apply to known levels:
   if(i_level<NKnownLevels || theLevels[i_level].KnownLevelID>0){
+#if COMPILATIONTYPE == 1
     std::cout<<" ####### WARNING: you are trying to change the BR, spin, parity, etc. of a known level --> nothing is done ############"<<std::endl;
+#endif
     return;
     //NuDEXException(__FILE__,std::to_string(__LINE__).c_str(),"##### Error in NuDEX #####");
   }
@@ -1027,7 +1047,7 @@ void G4NuDEXStatisticalNucleus::CreateLevelScheme(){
 
 void G4NuDEXStatisticalNucleus::CreateThermalCaptureLevel(unsigned int seed){
 
- 
+  hasThermalLevel=true;
   G4int capturespinx2=((std::fabs(I0)+0.5)*2+0.01); //this spin is always possible ...
   G4bool capturepar=true; if(I0<0){capturepar=false;}
   theThermalCaptureLevel.Energy=Sn;
@@ -1379,7 +1399,8 @@ G4int G4NuDEXStatisticalNucleus::InsertHighEnergyKnownLevels(){
 
 
 
-  G4bool* HasBeenInserted=new G4bool[KnownLevelsVectorSize];
+  std::vector<G4bool> HasBeenInserted;
+  HasBeenInserted.resize(KnownLevelsVectorSize);
   for(G4int i=0;i<KnownLevelsVectorSize;i++){
     HasBeenInserted[i]=false;
   }
@@ -1418,7 +1439,6 @@ G4int G4NuDEXStatisticalNucleus::InsertHighEnergyKnownLevels(){
       }
     }
   }
-  delete [] HasBeenInserted;
 
   //We re-order the levels:
   qsort(theLevels,NLevels,sizeof(Level), ComparisonLevels);
@@ -1604,7 +1624,7 @@ G4double G4NuDEXStatisticalNucleus::ReadKnownLevels(const char* fname){
   in.ignore(10000,'\n');
 
   NKnownLevels=0;
-  theKnownLevels=new KnownLevel[KnownLevelsVectorSize];
+  theKnownLevels.resize(KnownLevelsVectorSize);
   for(G4int i=0;i<KnownLevelsVectorSize;i++){theKnownLevels[i].NGammas=0;}
   G4double spin,par;
   for(G4int i=0;i<KnownLevelsVectorSize;i++){
@@ -1615,7 +1635,9 @@ G4double G4NuDEXStatisticalNucleus::ReadKnownLevels(const char* fname){
     in.get(buffer,6);   spin=atof(buffer); 
     in.get(buffer,4);   par=atof(buffer); 
     if((spin<0 || par==0) && theKnownLevels[i].Energy<Ecrit){
+#if COMPILATIONTYPE == 1
       std::cout<<" ######## WARNING: Spin and parity for level "<<i<<" is s="<<spin<<" p="<<par<<" for Z="<<Z_Int<<", A="<<A_Int<<" ########"<<std::endl;
+#endif
       if(spin<0){
 	spin=0;
 	if(i>1){ //Random spin, same as one of the levels below this one:
@@ -1654,7 +1676,6 @@ G4double G4NuDEXStatisticalNucleus::ReadKnownLevels(const char* fname){
     G4int decays=theKnownLevels[i].Ndecays=atoi(buffer);
     if(decays>0){
       theKnownLevels[i].decayFraction=new G4double[decays];
-      theKnownLevels[i].decayMode=new std::string[decays];
     }
     for(G4int j=0;j<decays;j++){
       in.get(buffer,5);
@@ -1662,7 +1683,8 @@ G4double G4NuDEXStatisticalNucleus::ReadKnownLevels(const char* fname){
       theKnownLevels[i].decayFraction[j]=atof(buffer);
       in.get(buffer,2);
       in.get(buffer,8);
-      theKnownLevels[i].decayMode[j]=std::string(buffer);
+      //theKnownLevels[i].decayMode[j]=std::string(buffer);
+      theKnownLevels[i].decayMode.push_back(std::string(buffer));
     }
     //----------------------------------
 
@@ -1884,8 +1906,7 @@ G4int G4NuDEXStatisticalNucleus::ReadGeneralStatNuclParameters(const char* fname
 
 void G4NuDEXStatisticalNucleus::GenerateThermalCaptureLevelBR(const char* dirname){
 
-  char fname[1000];
-  snprintf(fname,1000,"%s/PrimaryCaptureGammas.dat",dirname);
+  std::string fname=std::string(dirname)+std::string("/PrimaryCaptureGammas.dat");
 
   G4int aZA,ng=0;
   char word[200];
@@ -1894,7 +1915,7 @@ void G4NuDEXStatisticalNucleus::GenerateThermalCaptureLevelBR(const char* dirnam
   //G4double TotalThI=0;
 
   //We read the gamma intensities from the file, if they are there:
-  std::ifstream in(fname);
+  std::ifstream in(fname.c_str());
   while(in>>word){
     if(word[0]=='Z' && word[1]=='A'){
       in>>aZA;
@@ -2074,19 +2095,19 @@ void G4NuDEXStatisticalNucleus::PrintKnownLevels(std::ostream &out){
   out<<" ########################################################################################################## "<<std::endl;
   out<<" KNOWN_LEVEL_SCHEME "<<std::endl;
   out<<" NKnownLevels = "<<NKnownLevels<<std::endl;
-  char buffer[1000];
+  char buffer[10000];
 
   //for(G4int i=0;i<NKnownLevels;i++){
   for(G4int i=0;i<KnownLevelsVectorSize;i++){
-    snprintf(buffer,1000,"%3d %10.4g %5g %2d %10.4g %3d %3d",theKnownLevels[i].id+1,theKnownLevels[i].Energy,theKnownLevels[i].spinx2/2.,2*(G4int)theKnownLevels[i].parity-1,theKnownLevels[i].T12,theKnownLevels[i].NGammas,theKnownLevels[i].Ndecays);
+    snprintf(buffer,10000,"%3d %10.4g %5g %2d %10.4g %3d %3d",theKnownLevels[i].id+1,theKnownLevels[i].Energy,theKnownLevels[i].spinx2/2.,2*(G4int)theKnownLevels[i].parity-1,theKnownLevels[i].T12,theKnownLevels[i].NGammas,theKnownLevels[i].Ndecays);
     out<<buffer;
     for(G4int j=0;j<theKnownLevels[i].Ndecays;j++){
-      snprintf(buffer,1000,"    %10.4g %7s",theKnownLevels[i].decayFraction[j],theKnownLevels[i].decayMode[j].c_str());
+      snprintf(buffer,10000,"    %10.4g %7s",theKnownLevels[i].decayFraction[j],theKnownLevels[i].decayMode.at(j).c_str());
       out<<buffer;
     }
     out<<std::endl;
     for(G4int j=0;j<theKnownLevels[i].NGammas;j++){
-      snprintf(buffer,1000,"                                      %4d %10.4g %10.4g %10.4g %10.4g %10.4g %2d",theKnownLevels[i].FinalLevelID[j]+1,theKnownLevels[i].Eg[j],theKnownLevels[i].Pg[j],theKnownLevels[i].Pe[j],theKnownLevels[i].Icc[j],theKnownLevels[i].cumulPtot[j],theKnownLevels[i].multipolarity[j]);
+      snprintf(buffer,10000,"                                      %4d %10.4g %10.4g %10.4g %10.4g %10.4g %2d",theKnownLevels[i].FinalLevelID[j]+1,theKnownLevels[i].Eg[j],theKnownLevels[i].Pg[j],theKnownLevels[i].Pe[j],theKnownLevels[i].Icc[j],theKnownLevels[i].cumulPtot[j],theKnownLevels[i].multipolarity[j]);
       out<<buffer<<std::endl;
     }
   }
@@ -2099,7 +2120,7 @@ void G4NuDEXStatisticalNucleus::PrintKnownLevelsInDEGENformat(std::ostream &out)
   out<<" ########################################################################################################## "<<std::endl;
   out<<" KNOWN_LEVES_DEGEN "<<std::endl;
   out<<" NKnownLevels = "<<NKnownLevels<<std::endl;
-  char buffer[1000];
+  char buffer[10000];
 
   for(G4int i=0;i<NKnownLevels;i++){
     G4double MaxIntens=-100;
@@ -2108,9 +2129,8 @@ void G4NuDEXStatisticalNucleus::PrintKnownLevelsInDEGENformat(std::ostream &out)
       if(theKnownLevels[i].Pg[j]>MaxIntens){MaxIntens=theKnownLevels[i].Pg[j];}
     }
     for(G4int j=0;j<theKnownLevels[i].NGammas;j++){
-      //snprintf(buffer,1000,"%10.3f %9.3f %9.3f %9.3f %9.3f %9.3f %9.3f %9.3f",theKnownLevels[i].Energy*1000.,theKnownLevels[i].spinx2/2.,2.*(G4int)theKnownLevels[i].parity-1,theKnownLevels[i].Eg[j]*1000.,0.,theKnownLevels[i].Pg[j]/MaxIntens*100.,0.,theKnownLevels[i].Icc[j]);
       GammaEnergy=theKnownLevels[i].Energy-theKnownLevels[theKnownLevels[i].FinalLevelID[j]].Energy;
-      snprintf(buffer,1000,"%10.3f %9.3f %9.3f %9.3f %9.3f %9.3f %9.3f %9.3f",theKnownLevels[i].Energy*1000.,theKnownLevels[i].spinx2/2.,2.*(G4int)theKnownLevels[i].parity-1,GammaEnergy*1000.,0.,theKnownLevels[i].Pg[j]/MaxIntens*100.,0.,theKnownLevels[i].Icc[j]);
+      snprintf(buffer,10000,"%10.3f %9.3f %9.3f %9.3f %9.3f %9.3f %9.3f %9.3f",theKnownLevels[i].Energy*1000.,theKnownLevels[i].spinx2/2.,2.*(G4int)theKnownLevels[i].parity-1,GammaEnergy*1000.,0.,theKnownLevels[i].Pg[j]/MaxIntens*100.,0.,theKnownLevels[i].Icc[j]);
       out<<buffer<<std::endl;
     }
   }  
@@ -2172,7 +2192,7 @@ void G4NuDEXStatisticalNucleus::PrintLevelDensity(std::ostream &out){
 void G4NuDEXStatisticalNucleus::PrintLevelSchemeInDEGENformat(const char* fname,G4int MaxLevelID){
 
   std::ofstream out(fname);
-  char buffer[1000];
+  char buffer[10000];
   for(G4int i=0;i<NLevels;i++){
     if(theLevels[i].Energy>Ecrit && (MaxLevelID>0 && i<=MaxLevelID)){
       snprintf(buffer,1000,"%13.5f %17.8f %17.8f ",theLevels[i].Energy*1000.,theLevels[i].spinx2/2.,2.*(G4int)theLevels[i].parity-1);
@@ -2275,7 +2295,7 @@ void G4NuDEXStatisticalNucleus::PrintPSF(std::ostream &out){
     out<<"  "<<EnePSF[i];
   }
   out<<std::endl;
-  char word[1000];
+  char word[10000];
   out<<"    E          E1        M1        E2 "<<std::endl;
   for(G4int i=0;i<nEnePSF;i++){
     for(G4int j=0;j<NVals;j++){
@@ -2284,7 +2304,7 @@ void G4NuDEXStatisticalNucleus::PrintPSF(std::ostream &out){
       e1=thePSF->GetE1(xval,EnePSF[i]);
       m1=thePSF->GetM1(xval,EnePSF[i]);
       e2=thePSF->GetE2(xval,EnePSF[i]);
-      snprintf(word,1000," %10.4E %10.4E %10.4E %10.4E",xval,e1,m1,e2);
+      snprintf(word,10000," %10.4E %10.4E %10.4E %10.4E",xval,e1,m1,e2);
       out<<word<<std::endl;
     }
   }
@@ -2335,7 +2355,7 @@ void G4NuDEXStatisticalNucleus::PrintInput01(std::ostream &out){
   out<<"PRIMARYTHCAPGAMNORM "<<PrimaryGammasIntensityNormFactor<<std::endl;
   out<<"PRIMARYGAMMASECUT "<<PrimaryGammasEcut<<std::endl;
   out<<std::endl;
-  theLD->PrintParametersInInputFileFormat(out);
+  if(theLD){theLD->PrintParametersInInputFileFormat(out);}
   thePSF->PrintPSFParametersInInputFileFormat(out);
   out<<std::endl;
   out<<"END"<<std::endl;

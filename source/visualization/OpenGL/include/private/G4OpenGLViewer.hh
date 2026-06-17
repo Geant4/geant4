@@ -76,7 +76,7 @@ class G4OpenGLViewerPickMap {
     return fPickName;
   }
 
-  inline std::vector <G4String > getAttributes() {
+  inline const std::vector <G4String >& getAttributes() const {
     return fAttributes;
   }
 

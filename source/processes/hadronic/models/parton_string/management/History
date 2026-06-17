@@ -6,6 +6,20 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2026-05-25 Alberto Ribon (hadr-partonstring-mgt-V11-03-01)
+- G4VPartonStringModel : if at least one extra pion, the lightest hadron type,
+  is produced during the string fragmentation phase, then the interaction
+  between the projectile hadron and the target nucleus is not quasi-elastic
+  (even if all its projectile hadron - target nucleon interactions are elastic).
+  Moreover, to be a quasi-elastic interaction, no Delta resonances should be
+  formed by any of the interactions between the hadron projectile and the target
+  nucleons (because, otherwise, these interactions are not all of elastic type,
+  as by definition of quasi-elastic).
+  These checks were not included in the first implementation released in Geant4
+  version 11.4 : for this reason, this change should be included also in the
+  next patch, 11.4.2.
+  Thanks to Dmitri Konstantinov for reporting it.  
+
 ## 2025-12-23 Vladimir Ivanchenko (hadr-partonstring-mgt-V11-03-00)
 - G4VSplitableHadron - added G4HadronicException header.
 

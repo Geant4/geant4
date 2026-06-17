@@ -131,9 +131,6 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
          << "  newTrack= " << fNewTrack << G4endl;
 #endif
   
-  // fLastStepInVolume= false;
-  fNewTrack = false;
-
   // Get initial Energy/Momentum of the track
   //
   const G4DynamicParticle*    pParticle  = track.GetDynamicParticle() ;
@@ -188,37 +185,12 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
 
   // Check if the particle has a force, EM or gravitational, exerted on it
   //
-  G4FieldManager* fieldMgr= nullptr;
-  G4bool          fieldExertsForce = false ;
-
-  const G4Field* ptrField= nullptr;
-
-  fieldMgr = fFieldPropagator->FindAndSetFieldManager( track.GetVolume() );
-  G4bool eligibleEM = (particleCharge != 0.0)
-                   || ( fUseMagneticMoment && (magneticMoment != 0.0) );
-  G4bool eligibleGrav =  fUseGravity && (restMass != 0.0) ;
-
-  if( (fieldMgr!=nullptr) && (eligibleEM||eligibleGrav) )
-  {
-     // Message the field Manager, to configure it for this track
-     //
-     fieldMgr->ConfigureForTrack( &track );
-
-     // The above call can transition from a null field-ptr oto a finite field.
-     // If the field manager has no field ptr, the field is zero 
-     // by definition ( = there is no field ! )
-     //
-     ptrField= fieldMgr->GetDetectorField();
- 
-     if( ptrField != nullptr)
-     { 
-        fieldExertsForce = eligibleEM
-              || ( eligibleGrav && ptrField->IsGravityActive() );
-     }
-  }
+  fFieldExertedForce = fNewTrack
+                     ? fFieldExertedForceAtTrackStart
+                     : ConfigureFieldForTrack(track);
   G4double momentumMagnitude = pParticle->GetTotalMomentum() ;
 
-  if( fieldExertsForce )
+  if( fFieldExertedForce )
   {
      auto equationOfMotion= fFieldPropagator->GetCurrentEquationOfMotion();
  
@@ -257,6 +229,7 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
   ELimited limitedStep; 
   G4FieldTrack endTrackState('a');  //  Default values
 
+  fNewTrack = false;
   fMassGeometryLimitedStep = false ;    //  default
   fGeometryLimitedStep     = false;
   if( currentMinimumStep > 0 )
@@ -342,7 +315,7 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
   }
   // G4FieldTrack aTrackState(endTrackState);  
 
-  if( !fieldExertsForce ) 
+  if( !fFieldExertedForce )
   { 
       fParticleIsLooping         = false ; 
       fMomentumChanged           = false ; 

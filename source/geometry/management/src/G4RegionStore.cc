@@ -67,7 +67,7 @@ G4RegionStore::G4RegionStore()
 //
 G4RegionStore::~G4RegionStore() 
 {
-  Clean();  // Delete all regions in the store
+  CleanStore();  // Delete all regions in the store
   G4Region::Clean();  // Delete allocated sub-instance data
 }
 
@@ -85,7 +85,15 @@ void G4RegionStore::Clean()
            << " while geometry closed !" << G4endl;
     return;
   }
+  GetInstance()->CleanStore();
+}
 
+// ***************************************************************************
+// Delete all regions from the store except for the world region
+// ***************************************************************************
+//
+void G4RegionStore::CleanStore()
+{
   // Locks store for deletion of regions. De-registration will be
   // performed at this stage. G4Regions will not de-register themselves.
   //

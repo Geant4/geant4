@@ -40,7 +40,7 @@ using G4Analysis::Warn;
 //_____________________________________________________________________________
 template <unsigned int DIM, typename HT>
 const std::array<std::string, kMaxDim> G4THnToolsManager<DIM, HT>::fkKeyAxisTitle =
-{ "axis_x.title", "axis_y.title", "axis_z.title" };
+  { { "axis_x.title", "axis_y.title", "axis_z.title" } };
 
 //_____________________________________________________________________________
 template <unsigned int DIM, typename HT>

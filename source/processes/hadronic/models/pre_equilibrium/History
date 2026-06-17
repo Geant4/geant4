@@ -6,6 +6,17 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2026-05-16 Vladimir Ivanchenko (hadr-pre-V11-03-09)
+- G4LowEGammaNuclearModel - fixed Bugzilla problem #2731
+
+## 2026-03-21 Dmitri Konstantinov
+- G4PreCompoundDeuteron, G4PreCompoundTriton, G4PreCompoundHe3,
+  G4PreCompoundAlpha - promote combinatorial products to G4double before
+  multiplication to avoid intermediate integer overflow in precompound
+  fragment-emission probability calculations. In heavy-target cases, this bug
+  could generate negative alpha-emission probabilities and thereby alter
+  precompound fragment selection
+
 ## 2025-11-04 Vladimir Ivanchenko (hadr-pre-V11-03-08)
 - G4PreCompoundModel - send to evaporation all fragments with excitation energy
     exceed energy limit

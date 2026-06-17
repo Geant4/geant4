@@ -273,7 +273,7 @@ G4ScaledSolid::DistanceToOut( const G4ThreeVector& p,
   if(calcNorm)
   {
     G4ThreeVector normal;
-    fScale->TransformNormal(solNorm, normal);
+    fScale->InverseTransformNormal(solNorm, normal);
     *n = normal.unit();
   }
 
@@ -295,21 +295,6 @@ G4ScaledSolid::DistanceToOut( const G4ThreeVector& p ) const
   // Compute unscaled safety, then scale it
   G4double dist = fPtrSolid->DistanceToOut(newPoint);
   return fScale->InverseTransformDistance(dist);
-}
-
-//////////////////////////////////////////////////////////////
-//
-// ComputeDimensions
-//
-void
-G4ScaledSolid::ComputeDimensions( G4VPVParameterisation*,
-                                  const G4int,
-                                  const G4VPhysicalVolume* ) 
-{
-  DumpInfo();
-  G4Exception("G4ScaledSolid::ComputeDimensions()",
-              "GeomSolids0001", FatalException,
-              "Method not applicable in this context!");
 }
 
 //////////////////////////////////////////////////////////////////////////

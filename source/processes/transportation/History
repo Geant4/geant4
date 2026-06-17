@@ -6,6 +6,18 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2026-06-10 Gabriele Cosmo (transport-V11-03-00)
+- In G4CoupledTransportation, fixed field configuration in StartTracking(..)
+  before any AlongStep process can ask the shared G4PathFinder to compute the
+  first step of a track. GPIL order was reversed, so a parallel-world process
+  can trigger G4PathFinder integration before G4CoupledTransportation reaches
+  its existing configuration call; this is now fixed by invoking
+  ConfigureForTrack() during StartTracking(), before PrepareNewTrack() and
+  any integration. The per-step call remains for dynamic field changes.
+  Addressing problem report #2732.
+- Refactor code in G4Transportation adding a new protected helper method
+  ConfigureFieldForTrack(..) used in AlongStepGetPhysicalInteractionLength(..).
+
 ## 2024-10-08 Jonas Hahnfeld (transport-V11-02-00)
 - Introduce `TRANSPORTATION_WITH_MSC` process sub type
 

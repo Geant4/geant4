@@ -121,7 +121,7 @@ void G4NistManager::PrintElement(const G4String& symbol) const
 
 void G4NistManager::PrintG4Element(const G4String& name) const
 {
-  for (auto const & elm : *G4Element::GetElementTable()) {
+  for (auto const & elm : *theElementTable) {
     if (name == elm->GetName() || "all" == name) {
       G4cout << *elm << G4endl;
     }
@@ -132,7 +132,7 @@ void G4NistManager::PrintG4Element(const G4String& name) const
 
 void G4NistManager::PrintG4Material(const G4String& name) const
 {
-  for (auto const & mat : *G4Material::GetMaterialTable()) {
+  for (auto const & mat : *theMaterialTable) {
     if (name == mat->GetName() || "all" == name) {
       G4cout << *mat << G4endl;
     }
@@ -196,7 +196,7 @@ G4ICRU90StoppingData* G4NistManager::GetICRU90StoppingData()
 void G4NistManager::SetDensityEffectCalculatorFlag(const G4String& mname, G4bool val)
 {
   if (mname == "all") {
-    for (auto mat : materials) {
+    for (auto mat : *theMaterialTable) {
       SetDensityEffectCalculatorFlag(mat, val);
     }
   }

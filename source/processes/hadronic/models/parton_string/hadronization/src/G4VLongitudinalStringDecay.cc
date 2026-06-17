@@ -698,8 +698,8 @@ void G4VLongitudinalStringDecay::SetMinMasses()
     //dd1 ->                     Pi0                                             Eta                       Eta'
 
     Meson[0][0][0] = 111; MesonWeight[0][0][0] = (   pspin_meson[0]) * (  scalarMesonMix[0]                  );  // Pi0
-    Meson[0][0][2] = 221; MesonWeight[0][0][3] = (   pspin_meson[0]) * (1-scalarMesonMix[0]-scalarMesonMix[1]);  // Eta
-    Meson[0][0][3] = 331; MesonWeight[0][0][4] = (   pspin_meson[0]) * (                    scalarMesonMix[1]);  // Eta'
+    Meson[0][0][2] = 221; MesonWeight[0][0][2] = (   pspin_meson[0]) * (1-scalarMesonMix[0]-scalarMesonMix[1]);  // Eta
+    Meson[0][0][3] = 331; MesonWeight[0][0][3] = (   pspin_meson[0]) * (                    scalarMesonMix[1]);  // Eta'
 
     //dd3 -> (1-vectorMesonMix[1] * 113 + vectorMesonMix[1] * 223                                                  (001)
     //dd3 ->                       rho_0                     omega

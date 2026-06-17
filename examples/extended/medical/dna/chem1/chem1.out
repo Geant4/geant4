@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-04-patch-01    (13-March-2026)
+ Geant4 version Name: geant4-11-04-patch-02    (12-June-2026)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -824,12 +824,12 @@ ___________________________________
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=42.540000s Real=42.642842s Sys=0.010000s
+  User=46.360000s Real=47.891618s Sys=0.040000s
 G4 kernel has come to Quit state.
 Deleting G4Run (id:0) 
-UserDetectorConstruction deleted 0x13d7aa0
-UserPhysicsList deleted 0x13d7e58
-UserActionInitialization deleted 0x144caa0
+UserDetectorConstruction deleted 0x24dbaa0
+UserPhysicsList deleted 0x24dbe58
+UserActionInitialization deleted 0x254fbe0
 UserWorkerInitialization deleted 0
 UserWorkerThreadInitialization deleted 0
 UserRunAction deleted.
@@ -850,7 +850,7 @@ Pool ID '15G4PrimaryVertex', size : 0.000961 MB
 Pool ID '17G4PrimaryParticle', size : 0.000961 MB
 Pool ID '17G4DynamicParticle', size : 0.156 MB
 Pool ID '7G4Track', size : 0.311 MB
-Pool ID '18G4TouchableHistory', size : 0.0904 MB
+Pool ID '18G4TouchableHistory', size : 0.0807 MB
 Pool ID '15G4CountedObjectIvE', size : 0.0288 MB
 Pool ID '10G4Molecule', size : 0.0932 MB
 Pool ID '8G4KDTree', size : 0.000961 MB
@@ -858,7 +858,7 @@ Pool ID '8G4KDNodeI4G4ITE', size : 0.0519 MB
 Pool ID '14G4KDTreeResult', size : 0.000961 MB
 Pool ID '8G4KDNodeI10G4MoleculeE', size : 0.000961 MB
 Number of memory pools allocated: 15 of which, static: 0
-Dynamic pools deleted: 15 / Total memory freed: 2.1 MB
+Dynamic pools deleted: 15 / Total memory freed: 2 MB
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

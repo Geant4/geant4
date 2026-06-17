@@ -81,15 +81,15 @@ private:
 
 
 private:
-  G4int theZ,NShells;
+  G4int theZ=0,NShells=0;
   G4double BindingEnergy[ICC_MAXNSHELLS];
   G4double *Eg[ICC_MAXNSHELLS],*Icc_E[ICC_NMULTIP][ICC_MAXNSHELLS],*Icc_M[ICC_NMULTIP][ICC_MAXNSHELLS];
   G4int np[ICC_MAXNSHELLS];
   std::string OrbitalName[ICC_MAXNSHELLS];
-  G4NuDEXRandom* theRandom4;  
+  G4NuDEXRandom* theRandom4=nullptr;  
 
 public:
-  G4int Ne,Ng;
+  G4int Ne=0,Ng=0;
   G4double Eele[100],Egam[100];
 };
 

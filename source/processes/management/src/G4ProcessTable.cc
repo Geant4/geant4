@@ -635,14 +635,13 @@ void G4ProcessTable::SetProcessActivation( G4ProcessType   processType,
 void G4ProcessTable::DumpInfo(G4VProcess* process, 
                               const G4ParticleDefinition* particle)
 {
-  G4int idxTbl=0;
   G4ProcTblElement* anElement = nullptr;
   G4bool isFoundInTbl = false;
   G4ProcessManager* manager = nullptr;
   G4int idx;
   // loop over all elements
   for (auto itr=fProcTblVector->cbegin();
-            itr!=fProcTblVector->cend(); ++itr, ++idxTbl)
+            itr!=fProcTblVector->cend(); ++itr)
   {
     anElement = (*itr);
     if ( anElement == nullptr ) continue;

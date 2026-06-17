@@ -393,7 +393,9 @@ void G4ParticleDefinition::SetParticleDefinitionID(G4int id)
   }
   else {
     if (isGeneralIon || isMuonicAtom) {
-      g4particleDefinitionInstanceID = id;
+      if (g4particleDefinitionInstanceID != id) {
+        g4particleDefinitionInstanceID = id;
+      }
     }
     else {
       G4ExceptionDescription ed;

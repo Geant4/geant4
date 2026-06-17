@@ -85,6 +85,14 @@
 #  undef theParticleIterator
 #endif
 
+// --------------------------------------------------------------------
+namespace
+{
+G4Mutex initphysicsmutex = G4MUTEX_INITIALIZER;
+G4Mutex propGenericIonMutex = G4MUTEX_INITIALIZER;
+}
+
+// --------------------------------------------------------------------
 G4ThreadLocal G4RunManagerKernel* G4RunManagerKernel::fRunManagerKernel = nullptr;
 
 // --------------------------------------------------------------------
@@ -544,12 +552,6 @@ void G4RunManagerKernel::SetupPhysics()
 }
 
 // --------------------------------------------------------------------
-namespace
-{
-G4Mutex initphysicsmutex = G4MUTEX_INITIALIZER;
-}
-
-// --------------------------------------------------------------------
 void G4RunManagerKernel::InitializePhysics()
 {
   G4StateManager* stateManager = G4StateManager::GetStateManager();
@@ -658,6 +660,7 @@ G4bool G4RunManagerKernel::RunInitialization(G4bool fakeRun)
 // --------------------------------------------------------------------
 void G4RunManagerKernel::PropagateGenericIonID()
 {
+  G4AutoLock l(&propGenericIonMutex);
   G4ParticleDefinition* gion = G4ParticleTable::GetParticleTable()->GetGenericIon();
   if (gion != nullptr) {
     G4int gionId = gion->GetParticleDefinitionID();

@@ -44,7 +44,7 @@ class G4VPhysicalVolume;
 class G4VSolid;
 class G4Material;
 
-// Entities which may be parameterised/replicated
+// Entities which may be parameterised/replicated by dimension
 //
 class G4Box;
 class G4Tubs;
@@ -66,6 +66,7 @@ class G4VVolumeMaterialScanner;
  * @brief G4VPVParameterisation ia an abstract base class for Parameterisation,
  * able to compute the transformation and (indirectly) the dimensions of
  * parameterised volumes, given a replication number.
+ * @ingroup geometry_management
  */
 
 class G4VPVParameterisation
@@ -118,7 +119,7 @@ class G4VPVParameterisation
 
     /**
      * Dispatch methods for the specific solids where parameterisation
-     * is allowed.
+     * in solid's dimensions is allowed.
      */
     virtual void ComputeDimensions(G4Box &,
                                    const G4int,

@@ -674,6 +674,7 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid(const G4tgrSolid* sol)
       solidTS->AddFacet(facet);
       jj += nPoints * 3 + 2;
     }
+    solidTS->SetSolidClosed(true);
   }
   else if(stype == "EXTRUDED")
   {

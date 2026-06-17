@@ -40,6 +40,7 @@
 
 /**
  * @brief G4TwistTubsFlatSide describes a flat boundary surface for a cylinder.
+ * @ingroup geometry_solids_specific
  */
 
 class G4TwistTubsFlatSide : public G4VTwistSurface
@@ -173,6 +174,7 @@ class G4TwistTubsFlatSide : public G4VTwistSurface
 
   private:
 
+    G4ThreeVector fNormal{kInfinity, kInfinity, kInfinity};
     G4double fSurfaceArea = 0.0;
 };
 

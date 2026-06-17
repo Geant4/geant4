@@ -93,6 +93,5 @@ G4bool G4VSensitiveDetector::operator!=(const G4VSensitiveDetector& right) const
 
 G4int G4VSensitiveDetector::GetCollectionID(G4int i)
 {
-  return G4SDManager::GetSDMpointer()->GetCollectionID(
-    SensitiveDetectorName + "/" + collectionName[i]);
+  return G4SDManager::GetSDMpointer()->GetCollectionID(SensitiveDetectorName, collectionName[i]);
 }

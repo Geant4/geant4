@@ -55,6 +55,8 @@
 /**
  * @brief G4LogicalVolumeStore is a singleton class, acting as container
  * for all logical volumes, with functionality derived from std::vector<T>.
+ * @ingroup geometry_management
+ *
  * All logical volumes should be registered with G4LogicalVolumeStore,
  * and removed on their destruction. The underlying container initially has
  * a capacity of 100. A map indexed by volume names is also recorded for fast
@@ -138,6 +140,8 @@ class G4LogicalVolumeStore : public std::vector<G4LogicalVolume*>
     G4LogicalVolumeStore();
 
   private:
+
+    void CleanStore();
 
     static G4LogicalVolumeStore* fgInstance;
     static G4ThreadLocal G4VStoreNotifier* fgNotifier;

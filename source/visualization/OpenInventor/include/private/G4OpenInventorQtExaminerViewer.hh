@@ -232,7 +232,7 @@ public:
 
    bool abbrOutputFlag;
    bool pickRefPathFlag;
-   bool viewingBeforePickRef;
+   SbBool viewingBeforePickRef;
 
 #if 0x060000 <= QT_VERSION
    void addInTab();

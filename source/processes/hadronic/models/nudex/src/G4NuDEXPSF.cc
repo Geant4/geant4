@@ -77,7 +77,7 @@ G4int G4NuDEXPSF::Init(const char* dirname,G4NuDEXLevelDensity* aLD,const char* 
 
   //Three options: very detailed model, if not --> gdr-parameters&errors-exp-MLO.dat (RIPL-3), if not --> theorethical values
 
-  char fname[500];
+  std::string fname;
   G4bool IsDone=false;
 
   //input:
@@ -93,14 +93,14 @@ G4int G4NuDEXPSF::Init(const char* dirname,G4NuDEXLevelDensity* aLD,const char* 
   }
 
   //Detailed model
-  snprintf(fname,500,"%s/PSF/PSF_param.dat",dirname);
-  IsDone=TakePSFFromDetailedParFile(fname);
+  fname=std::string(dirname)+std::string("/PSF/PSF_param.dat");
+  IsDone=TakePSFFromDetailedParFile(fname.c_str());
   if(IsDone){return 0;}
 
   //IAEA - 2019 values:
   if(PSFflag==0){
-    snprintf(fname,500,"%s/PSF/CRP_IAEA_SMLO_E1_v01.dat",dirname);
-    IsDone=TakePSFFromIAEA01(fname);
+    fname=std::string(dirname)+std::string("/PSF/CRP_IAEA_SMLO_E1_v01.dat");
+    IsDone=TakePSFFromIAEA01(fname.c_str());
     if(IsDone){return 0;}
   }
   else if(PSFflag!=1){
@@ -108,13 +108,13 @@ G4int G4NuDEXPSF::Init(const char* dirname,G4NuDEXLevelDensity* aLD,const char* 
   }
   
   //RIPL-MLO values:
-  snprintf(fname,500,"%s/PSF/gdr-parameters&errors-exp-MLO.dat",dirname);
-  IsDone=TakePSFFromRIPL01(fname);
+  fname=std::string(dirname)+std::string("/PSF/gdr-parameters&errors-exp-MLO.dat");
+  IsDone=TakePSFFromRIPL01(fname.c_str());
   if(IsDone){return 0;}
 
   //RIPL-Theorethical values:
-  snprintf(fname,500,"%s/PSF/gdr-parameters-theor.dat",dirname);
-  IsDone=TakePSFFromRIPL02(fname);
+  fname=std::string(dirname)+std::string("/PSF/gdr-parameters-theor.dat");
+  IsDone=TakePSFFromRIPL02(fname.c_str());
   if(IsDone){return 0;}
 
   //Theorethical values:
@@ -165,7 +165,7 @@ G4bool G4NuDEXPSF::TakePSFFromRIPL02(const char* fname){
   G4bool result=false;
   G4int aA,aZ;
   std::ifstream in(fname);
-  char dum[200];
+  std::string dum;
 
   for(G4int i=0;i<4;i++){in.ignore(10000,'\n');}
   while(in>>aZ>>aA){
@@ -199,7 +199,7 @@ G4bool G4NuDEXPSF::TakePSFFromRIPL01(const char* fname){
   G4bool result=false;
   G4int aA,aZ;
   std::ifstream in(fname);
-  char dum[200];
+  std::string dum;
 
   for(G4int i=0;i<7;i++){in.ignore(10000,'\n');}
   while(in>>aZ>>aA){
@@ -213,7 +213,7 @@ G4bool G4NuDEXPSF::TakePSFFromRIPL01(const char* fname){
       //sometimes there is a second resonance:
       in>>E_E1[nR_E1]>>dum>>G_E1[nR_E1];
       if(dum[0]!='-'){ //there is a second resonance
-	s_E1[nR_E1]=std::atof(dum);
+	s_E1[nR_E1]=std::stod(dum);
 	PSFType_E1[nR_E1]=2;
 	nR_E1++;
       }
@@ -232,7 +232,7 @@ G4bool G4NuDEXPSF::TakePSFFromIAEA01(const char* fname){
 
   G4bool result=false;
   G4int aA,aZ;
-  char dum[200];
+  std::string dum;
   G4double beta=0;
   std::ifstream in(fname);
   while(in>>aZ>>aA){
@@ -243,12 +243,11 @@ G4bool G4NuDEXPSF::TakePSFFromIAEA01(const char* fname){
       PSFType_E1[nR_E1]=11;
       nR_E1++;
       in>>dum;
-      G4String s_dum(dum);
-      if(s_dum==G4String("beta=")){
+      if(dum=="beta="){
 	in>>beta;
 	break;
       }
-      else if(s_dum==G4String("Er2")){
+      else if(dum=="Er2"){
 	in>>dum>>E_E1[nR_E1]>>dum>>dum>>G_E1[nR_E1]>>dum>>dum>>s_E1[nR_E1]>>dum>>beta;
 	PSFType_E1[nR_E1]=11;
 	nR_E1++;
@@ -306,13 +305,12 @@ G4bool G4NuDEXPSF::TakePSFFromIAEA01(const char* fname){
 G4bool G4NuDEXPSF::TakePSFFromInputFile(const char* fname){
 
   G4bool result=false;
-  char word[1000];
+  std::string word;
   std::ifstream in(fname);
   while(in>>word){
     if(word[0]=='#'){in.ignore(10000,'\n');}
-    G4String s_word(word);
-    if(s_word==G4String("END")){break;}
-    if(s_word==G4String("PSF")){
+    if(word=="END"){break;}
+    if(word=="PSF"){
       result=true;
       in>>nR_E1;
       for(G4int i=0;i<nR_E1;i++){
@@ -372,44 +370,44 @@ G4bool G4NuDEXPSF::TakePSFFromInputFile(const char* fname){
 void G4NuDEXPSF::Renormalize(){
 
   G4int npIntegral=1000;
-  G4double Integral=0,x_eval,y_eval;
+  G4double Integral=0.0,x_eval,y_eval;
   G4double binWidth=(NormEmax-NormEmin)/npIntegral;
 
   //-------------------------------------------------
-  if(E1_normFac>0){
-    Integral=0;
+  if(E1_normFac>0.0){
+    Integral=0.0;
     for(G4int i=0;i<npIntegral;i++){
       x_eval=NormEmin+binWidth*(i+0.5);
       y_eval=GetE1(x_eval,NormEmax);
       Integral+=y_eval;
     }
     Integral*=binWidth;
-    ScaleFactor_E1=E1_normFac/Integral;
+    if(Integral>0.0){ScaleFactor_E1=E1_normFac/Integral;}
   }
   //-------------------------------------------------
   //-------------------------------------------------
-  if(M1_normFac>0){
-    Integral=0;
+  if(M1_normFac>0.0){
+    Integral=0.0;
     for(G4int i=0;i<npIntegral;i++){
       x_eval=NormEmin+binWidth*(i+0.5);
       y_eval=GetM1(x_eval,NormEmax);
       Integral+=y_eval;
     }
     Integral*=binWidth;
-    ScaleFactor_M1=M1_normFac/Integral;
+    if(Integral>0.0){ScaleFactor_M1=M1_normFac/Integral;}
     //std::cout<<M1_normFac<<"  "<<Integral<<"  "<<ScaleFactor_M1<<std::endl; getchar();
   }
   //-------------------------------------------------
   //-------------------------------------------------
-  if(E2_normFac>0){
-    Integral=0;
+  if(E2_normFac>0.0){
+    Integral=0.0;
     for(G4int i=0;i<npIntegral;i++){
       x_eval=NormEmin+binWidth*(i+0.5);
       y_eval=GetE2(x_eval,NormEmax);
       Integral+=y_eval;
     }
     Integral*=binWidth;
-    ScaleFactor_E2=E2_normFac/Integral;
+    if(Integral>0.0){ScaleFactor_E2=E2_normFac/Integral;}
   }
   //-------------------------------------------------
 
@@ -724,8 +722,9 @@ G4double G4NuDEXPSF::SMLO(G4double Eg,G4double Er,G4double Gr,G4double sr,G4doub
   if(theLD!=0){
     Tf=theLD->GetNucleusTemperature(ExcitationEnergy-Eg);
   }
-  
-  G4double Lambda=1/(1.-std::exp(-Eg/Tf)); 
+
+  G4double Lambda=1.0;
+  if(Tf>0){Lambda=1.0/(1.0-std::exp(-Eg/Tf));}
   G4double Gk_Eg=Gr/Er*ExcitationEnergy;
 
   return Lambda*sr*Gr*Eg*Gk_Eg/((Eg*Eg-Er*Er)*(Eg*Eg-Er*Er)+Eg*Eg*Gk_Eg*Gk_Eg);
@@ -739,7 +738,8 @@ G4double G4NuDEXPSF::SMLO_v2(G4double Eg,G4double Er,G4double Gr,G4double sr,G4d
     Tf=std::sqrt((ExcitationEnergy-Eg)/(A_Int/10.));
   }
   
-  G4double Lambda=1/(1.-std::exp(-Eg/Tf));
+  G4double Lambda=1.0;
+  if(Tf>0){Lambda=1.0/(1.0-std::exp(-Eg/Tf));}
   G4double sig_trk=60.*(A_Int-Z_Int)*Z_Int/(G4double)A_Int;
   G4double Gk_Eg=Gr/Er*(Eg+4*3.141592*3.141592*Tf*Tf/Er);
 
@@ -890,7 +890,7 @@ void G4NuDEXPSF::PrintPSFParameters(std::ostream &out){
 void G4NuDEXPSF::PrintPSFParametersInInputFileFormat(std::ostream &out){
 
   out<<" PSF"<<std::endl;
-  G4long oldprc = out.precision(15);
+  std::streamsize oldprc=out.precision(15);
   out<<nR_E1<<std::endl;
   for(G4int i=0;i<nR_E1;i++){
     out<<"   "<<PSFType_E1[i]<<"  "<<E_E1[i]<<"  "<<G_E1[i]<<"  "<<s_E1[i];
@@ -926,7 +926,7 @@ void G4NuDEXPSF::PrintPSFParametersInInputFileFormat(std::ostream &out){
 
 G4double G4NuDEXPSF::EvaluateFunction(G4double xval,G4int np,G4double* x,G4double* y){
 
-  if(xval<x[0]){return y[0];}
+  if(xval<x[0] || np==1){return y[0];}
   if(xval>x[np-1]){return y[np-1];}
 
   G4double m,b;

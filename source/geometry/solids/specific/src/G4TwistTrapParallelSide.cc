@@ -127,18 +127,10 @@ G4ThreeVector G4TwistTrapParallelSide::GetNormal(const G4ThreeVector& tmpxx,
    if (isGlobal)
    {
       xx = ComputeLocalPoint(tmpxx);
-      if ((xx - fCurrentNormal.p).mag() < 0.5 * kCarTolerance)
-      {
-         return ComputeGlobalDirection(fCurrentNormal.normal);
-      }
    }
    else
    {
       xx = tmpxx;
-      if (xx == fCurrentNormal.p)
-      {
-         return fCurrentNormal.normal;
-      }
    }
 
    G4double phi ;
@@ -154,16 +146,11 @@ G4ThreeVector G4TwistTrapParallelSide::GetNormal(const G4ThreeVector& tmpxx,
 #endif
 
    //    normal = normal/normal.mag() ;
-
    if (isGlobal)
    {
-      fCurrentNormal.normal = ComputeGlobalDirection(normal.unit());
+      return ComputeGlobalDirection(normal.unit());
    }
-   else
-   {
-      fCurrentNormal.normal = normal.unit();
-   }
-   return fCurrentNormal.normal;
+   return normal.unit();
 }
 
 //=====================================================================
@@ -184,20 +171,6 @@ G4int G4TwistTrapParallelSide::DistanceToSurface(const G4ThreeVector& gp,
   G4bool IsConverged =  false ;
 
   G4int nxx = 0 ;  // number of physical solutions
-
-  fCurStatWithV.ResetfDone(validate, &gp, &gv);
-
-  if (fCurStatWithV.IsDone())
-  {
-    for (G4int i=0; i<fCurStatWithV.GetNXX(); ++i)
-    {
-      gxx[i] = fCurStatWithV.GetXX(i);
-      distance[i] = fCurStatWithV.GetDistance(i);
-      areacode[i] = fCurStatWithV.GetAreacode(i);
-      isvalid[i]  = fCurStatWithV.IsValid(i);
-    }
-    return fCurStatWithV.GetNXX();
-  }
 
   // initialize
   for (G4int i=0; i<G4VSURFACENXX ; ++i)
@@ -262,9 +235,6 @@ G4int G4TwistTrapParallelSide::DistanceToSurface(const G4ThreeVector& gp,
       gxx[0].set(kInfinity,kInfinity,kInfinity);
       isvalid[0] = false ;
       areacode[0] = sOutside ;
-      fCurStatWithV.SetCurrentStatus(0, gxx[0], distance[0],
-                                     areacode[0], isvalid[0],
-                                     0, validate, &gp, &gv);
       
       return 0;
     }  // end std::fabs(p.z() <= L 
@@ -596,9 +566,6 @@ G4int G4TwistTrapParallelSide::DistanceToSurface(const G4ThreeVector& gp,
     gxx[i]      = ComputeGlobalPoint(xbuf[i].xx);
     areacode[i] = xbuf[i].areacode ;
     isvalid[i]  = xbuf[i].isvalid ;
-    
-    fCurStatWithV.SetCurrentStatus(i, gxx[i], distance[i], areacode[i],
-                                     isvalid[i], nxx, validate, &gp, &gv);
 #ifdef G4TWISTDEBUG
     G4cout << "element Nr. " << i 
            << ", local Intersection = " << xbuf[i].xx 
@@ -633,19 +600,6 @@ G4int G4TwistTrapParallelSide::DistanceToSurface(const G4ThreeVector& gp,
                                                  G4int         areacode[])
 {  
   const G4double ctol = 0.5 * kCarTolerance;
-
-  fCurStat.ResetfDone(kDontValidate, &gp);
-
-   if (fCurStat.IsDone())
-   {
-      for (G4int i=0; i<fCurStat.GetNXX(); ++i)
-      {
-         gxx[i] = fCurStat.GetXX(i);
-         distance[i] = fCurStat.GetDistance(i);
-         areacode[i] = fCurStat.GetAreacode(i);
-      }
-      return fCurStat.GetNXX();
-   }
 
    // initialize
    for (G4int i=0; i<G4VSURFACENXX; ++i)
@@ -709,17 +663,12 @@ G4int G4TwistTrapParallelSide::DistanceToSurface(const G4ThreeVector& gp,
    G4cout << "distance = " << distance[0] << G4endl ;
    G4cout << "X = " << xx << G4endl ;
 #endif
-
-   G4bool isvalid = true;
    gxx[0]      = ComputeGlobalPoint(xx);
    
 #ifdef G4TWISTDEBUG
    G4cout << "intersection Point found: " << gxx[0] << G4endl ;
    G4cout << "distance = " << distance[0] << G4endl ;
 #endif
-
-   fCurStat.SetCurrentStatus(0, gxx[0], distance[0], areacode[0],
-                            isvalid, 1, kDontValidate, &gp);
    return 1;
 }
 

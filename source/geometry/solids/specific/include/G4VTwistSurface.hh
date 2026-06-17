@@ -47,6 +47,7 @@
 
 /**
  * @brief G4VTwistSurface is a base class for boundary surface of a G4VSolid.
+ * @ingroup geometry_solids_specific
  */
 
 class G4VTwistSurface
@@ -372,57 +373,11 @@ class G4VTwistSurface
 
   protected:
  
-    class CurrentStatus 
-    {
-      /**
-       * @brief Internal class defining the surface status.
-       */
-      public:
-
-        CurrentStatus();
-        virtual ~CurrentStatus();
-      
-        inline G4ThreeVector GetXX(G4int i) const { return fXX[i]; }
-        inline G4double GetDistance(G4int i) const { return fDistance[i]; }
-        inline G4int GetAreacode(G4int i) const { return fAreacode[i]; }
-        inline G4int GetNXX() const { return fNXX; }
-        inline G4bool IsDone() const { return fDone; }
-        inline G4bool IsValid(G4int i) const { return fIsValid[i]; }
-
-        void SetCurrentStatus(G4int  i, 
-                              G4ThreeVector& xx, 
-                              G4double& dist, 
-                              G4int& areacode, 
-                              G4bool& isvalid,
-                              G4int nxx,
-                              EValidate validate,
-                        const G4ThreeVector* p, 
-                        const G4ThreeVector* v = nullptr);
-
-        void ResetfDone(EValidate validate,
-                  const G4ThreeVector* p, 
-                  const G4ThreeVector* v = nullptr);
-
-
-        void DebugPrint() const;
-
-      private:
-
-        G4double fDistance[G4VSURFACENXX];
-        G4ThreeVector fXX[G4VSURFACENXX];
-        G4int fAreacode[G4VSURFACENXX];
-        G4bool fIsValid[G4VSURFACENXX];
-        G4int fNXX;
-        G4ThreeVector fLastp;
-        G4ThreeVector fLastv;
-        EValidate fLastValidate;
-        G4bool fDone;
-    };
-      
     class Boundary 
     {
       /**
        * @brief Internal class defining a surface boundary type.
+       * @ingroup geometry_solids_specific
        */
       public:
 
@@ -452,21 +407,9 @@ class G4VTwistSurface
     EAxis fAxis[2];
     G4double fAxisMin[2];
     G4double fAxisMax[2];
-    CurrentStatus fCurStatWithV;
-    CurrentStatus fCurStat;
     G4RotationMatrix fRot;
     G4ThreeVector fTrans;
     G4int fHandedness;
-
-    class G4SurfCurNormal
-    {
-      public:
-
-        G4ThreeVector p;
-        G4ThreeVector normal;
-    };
-
-    G4SurfCurNormal fCurrentNormal;
     G4bool fIsValidNorm;
     G4double kCarTolerance;
 
@@ -477,17 +420,6 @@ class G4VTwistSurface
     G4ThreeVector fCorners[4]; // corners of the surface in local coordinate
     Boundary fBoundaries[4];   // boundaries of the surface.
     G4String fName;
-   
-    class G4SurfSideQuery
-    {
-      public:
-
-        G4ThreeVector me;
-        G4ThreeVector vec;
-        G4bool  withTol;
-        G4int amIOnLeftSide;
-    };
-    G4SurfSideQuery fAmIOnLeftSide;
 };
 
 //========================================================

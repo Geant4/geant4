@@ -1,4 +1,4 @@
-%global geant4_version 11.4.1
+%global geant4_version 11.4.2
 
 %global NEUTRONHPDATA G4NDL.4.7.1
 %global LEDATA G4EMLOW.8.8
@@ -40,11 +40,10 @@ Source14: https://geant4-data.web.cern.ch/datasets/%{NUDEXLIBDATA}.tar.gz
 Source15: https://geant4-data.web.cern.ch/datasets/%{URRPTDATA}.tar.gz
 
 %undefine __cmake_in_source_build
-%undefine __cmake3_in_source_build
 
 %bcond_with vtk
 %bcond_without examples
-%bcond_without qt5
+%bcond_without qt6
 %bcond_without threads
 %bcond_without trajectories
 
@@ -77,8 +76,8 @@ BuildRequires: hdf5-devel
 BuildRequires: SoQt-devel
 %endif
 
-%if %{with qt5}
-BuildRequires: qt5-qtbase-devel
+%if %{with qt6}
+BuildRequires: qt6-qtbase-devel qt6-qt3d-devel
 %endif
 
 %if %{with tbb}
@@ -135,8 +134,8 @@ Requires: hdf5-devel
 Requires: SoQt-devel
 %endif
 
-%if %{with qt5}
-Requires: qt5-qtbase-devel
+%if %{with qt6}
+Requires: qt6-qtbase-devel qt6-qt3d-devel
 %endif
 
 %if %{with tbb}
@@ -175,7 +174,7 @@ Geant4 user examples
 . /opt/rh/devtoolset-7/enable
 %endif
 
-%cmake3 \
+%cmake \
   -DCMAKE_INSTALL_PREFIX:PATH=%{_prefix} \
   -DCMAKE_INSTALL_DATADIR:PATH=%{_datadir}/%{name} \
   -DGEANT4_BUILD_BUILTIN_BACKTRACE:BOOL=OFF \
@@ -194,7 +193,7 @@ Geant4 user examples
   -DGEANT4_USE_INVENTOR:BOOL=OFF \
   -DGEANT4_USE_INVENTOR_QT:BOOL=%{with inventor} \
   -DGEANT4_USE_OPENGL_X11:BOOL=ON \
-  -DGEANT4_USE_QT:BOOL=%{with qt5} \
+  -DGEANT4_USE_QT:BOOL=%{with qt6} \
   -DGEANT4_USE_RAYTRACER_X11:BOOL=ON \
   -DGEANT4_USE_SMARTSTACK:BOOL=OFF \
   -DGEANT4_USE_SYSTEM_CLHEP:BOOL=OFF \
@@ -205,13 +204,13 @@ Geant4 user examples
   -DGEANT4_USE_VTK:BOOL=%{with vtk} \
   -DGEANT4_USE_XM:BOOL=ON
 
-%cmake3_build
+%cmake_build
 
 %install
 %if %{?rhel}%{!?rhel:0} == 7
 . /opt/rh/devtoolset-7/enable
 %endif
-%cmake3_install
+%cmake_install
 rm -f %{buildroot}/%{_bindir}/geant4.sh
 rm -f %{buildroot}/%{_bindir}/geant4.csh
 
@@ -262,6 +261,12 @@ tar xzf %{SOURCE15} -C %{buildroot}/%{_datadir}/%{name}/data
 %endif
 
 %changelog
+* Fri Jun 12 2026 Gabriele Cosmo <Gabriele.Cosmo@cern.ch> - 11.4.2
+- Update to version 11.4.2
+
+* Fri Apr 24 2026 Nicolas Rodriguez-Alvarez <nicolas.rodalv@educa.jcyl.es> - 11.4.1-1
+- Fix spec for modern Fedora (cmake, Qt6, changelog dates)
+
 * Fri Mar 13 2026 Gabriele Cosmo <Gabriele.Cosmo@cern.ch> - 11.4.1
 - Update to version 11.4.1
 
@@ -299,7 +304,7 @@ tar xzf %{SOURCE15} -C %{buildroot}/%{_datadir}/%{name}/data
 * Fri Jun 21 2024 Gabriele Cosmo <Gabriele.Cosmo@cern.ch> - 11.2.2
 - Update to version 11.2.2
 
-* Fri June 7 2024 Ben Morgan <bmorgan@cern.ch> - 11.2.1-2
+* Fri Jun 07 2024 Ben Morgan <bmorgan@cern.ch> - 11.2.1-2
 - Add install of new URRPT dataset
 
 * Fri May 17 2024 Ben Morgan <bmorgan@cern.ch> - 11.2.1-1
@@ -308,7 +313,7 @@ tar xzf %{SOURCE15} -C %{buildroot}/%{_datadir}/%{name}/data
 * Fri Feb 16 2024 Gabriele Cosmo <Gabriele.Cosmo@cern.ch> - 11.2.1
 - Update to version 11.2.1
 
-* Wed Dec 12 2023 Guilherme Amadio <amadio@cern.ch> - 11.2.0
+* Tue Dec 12 2023 Guilherme Amadio <amadio@cern.ch> - 11.2.0
 - Update to version 11.2.0
 
 * Wed Jun 28 2023 Guilherme Amadio <amadio@cern.ch> - 11.1.2

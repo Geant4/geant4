@@ -98,50 +98,51 @@ Max 2J for sampling of angular correlations         10
 	 Collision 2  projectile=proton  Ekin[MeV]=7e+06  direction=(0,0,1)  material=G4_C
 	 --> #secondaries=25  impactParameter[fm]=2.71982  #projectileSpectatorNucleons=0  #targetSpectatorNucleons=11  #NNcollisions=1
 	 Collision 3  projectile=proton  Ekin[MeV]=7e+06  direction=(0,0,1)  material=G4_C
-	 --> #secondaries=48  impactParameter[fm]=2.52266  #projectileSpectatorNucleons=0  #targetSpectatorNucleons=9  #NNcollisions=3
+	 --> #secondaries=45  impactParameter[fm]=2.52266  #projectileSpectatorNucleons=0  #targetSpectatorNucleons=9  #NNcollisions=3
 	 Collision 4  projectile=proton  Ekin[MeV]=7e+06  direction=(0,0,1)  material=G4_C
-	 --> #secondaries=30  impactParameter[fm]=3.02647  #projectileSpectatorNucleons=0  #targetSpectatorNucleons=11  #NNcollisions=1
+	 --> #secondaries=63  impactParameter[fm]=1.4258  #projectileSpectatorNucleons=0  #targetSpectatorNucleons=7  #NNcollisions=4
 	 Collision 5  projectile=proton  Ekin[MeV]=7e+06  direction=(0,0,1)  material=G4_C
-	 --> #secondaries=36  impactParameter[fm]=2.86202  #projectileSpectatorNucleons=0  #targetSpectatorNucleons=11  #NNcollisions=1
+	 --> #secondaries=61  impactParameter[fm]=0.909995  #projectileSpectatorNucleons=0  #targetSpectatorNucleons=9  #NNcollisions=3
 	 Collision 6  projectile=proton  Ekin[MeV]=7e+06  direction=(0,0,1)  material=G4_C
-	 --> #secondaries=27  impactParameter[fm]=1.53806  #projectileSpectatorNucleons=0  #targetSpectatorNucleons=10  #NNcollisions=1
+	 --> #secondaries=38  impactParameter[fm]=3.10393  #projectileSpectatorNucleons=0  #targetSpectatorNucleons=11  #NNcollisions=1
 	 Collision 7  projectile=proton  Ekin[MeV]=7e+06  direction=(0,0,1)  material=G4_C
-	 --> #secondaries=5  impactParameter[fm]=3.0326  #projectileSpectatorNucleons=0  #targetSpectatorNucleons=11  #NNcollisions=0
+	 --> #secondaries=28  impactParameter[fm]=3.1706  #projectileSpectatorNucleons=0  #targetSpectatorNucleons=11  #NNcollisions=1
 	 Collision 8  projectile=proton  Ekin[MeV]=7e+06  direction=(0,0,1)  material=G4_C
-	 --> #secondaries=58  impactParameter[fm]=1.60709  #projectileSpectatorNucleons=0  #targetSpectatorNucleons=7  #NNcollisions=4
+	 --> #secondaries=49  impactParameter[fm]=1.95857  #projectileSpectatorNucleons=0  #targetSpectatorNucleons=9  #NNcollisions=2
 	 Collision 9  projectile=proton  Ekin[MeV]=7e+06  direction=(0,0,1)  material=G4_C
-	 --> #secondaries=33  impactParameter[fm]=2.85122  #projectileSpectatorNucleons=0  #targetSpectatorNucleons=10  #NNcollisions=2
+	 --> #secondaries=41  impactParameter[fm]=1.91343  #projectileSpectatorNucleons=0  #targetSpectatorNucleons=9  #NNcollisions=3
 ========================================================
 Number of events                     10
 
+Average (per event) number of Be6              0.1
 Average (per event) number of He3              0.1
-Average (per event) number of Li6              0.2
-Average (per event) number of alpha              1.4
-Average (per event) number of anti_proton              0.1
-Average (per event) number of anti_xi0              0.1
+Average (per event) number of alpha              1.5
+Average (per event) number of anti_neutron              0.2
+Average (per event) number of anti_proton              0.2
 Average (per event) number of deuteron              0.2
 Average (per event) number of eta              1
-Average (per event) number of eta_prime              0.4
+Average (per event) number of eta_prime              1.2
 Average (per event) number of gamma              0.2
-Average (per event) number of kaon+              0.9
-Average (per event) number of kaon-              0.7
+Average (per event) number of kaon+              1
+Average (per event) number of kaon-              0.6
 Average (per event) number of kaon0L              0.7
-Average (per event) number of kaon0S              0.4
-Average (per event) number of neutron              2.1
-Average (per event) number of pi+              7.4
-Average (per event) number of pi-              7.4
-Average (per event) number of pi0              8.1
-Average (per event) number of proton              2.9
-Average (per event) number of sigma0              0.1
-Average (per event) number of triton              0.2
-Average (per event) number of xi0              0.1
+Average (per event) number of kaon0S              0.7
+Average (per event) number of lambda              0.2
+Average (per event) number of neutron              2.8
+Average (per event) number of pi+              10
+Average (per event) number of pi-              9.8
+Average (per event) number of pi0              10
+Average (per event) number of proton              2.7
+Average (per event) number of sigma+              0.1
+Average (per event) number of sigma-              0.1
+Average (per event) number of triton              0.1
 ========================================================
 
 ### All histograms saved to all_secondaries.root
 ### All histograms saved to all_secondaries.hist
 
- Final random number = 0.0802362
+ Final random number = 0.772647
 
-Processed 10 events (collisions) in 4.978610e-01 seconds. Average: 49.7861 ms / event.
+Processed 10 events (collisions) in 1.187519e+00 seconds. Average: 118.752 ms / event.
 
 === End of test ===

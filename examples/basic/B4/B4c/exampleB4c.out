@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-04-patch-01    (13-March-2026)
+ Geant4 version Name: geant4-11-04-patch-02    (12-June-2026)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -864,17 +864,17 @@ Setting was ignored.
 ... open analysis file : B4.root - done
 Using 
 --> Event 0 starts.
-   Absorber: total energy: 272.002 MeV       total track length: 19.8684 cm 
-        Gap: total energy: 18.8093 MeV       total track length: 10.1507 cm 
+   Absorber: total energy: 277.548 MeV       total track length: 19.9191 cm 
+        Gap: total energy: 10.3396 MeV       total track length: 4.76384 cm 
 --> End of event: 0
 
 
  ----> print histograms statistic for the entire run 
 
- EAbs : mean = 272.002 MeV rms = 0 eV 
- EGap : mean = 18.8093 MeV rms = 0 eV 
- LAbs : mean = 19.8684 cm  rms = 0 fm 
- LGap : mean = 10.1507 cm  rms = 0 fm 
+ EAbs : mean = 277.548 MeV rms = 0 eV 
+ EGap : mean = 10.3396 MeV rms = 0 eV 
+ LAbs : mean = 19.9191 cm  rms = 0 fm 
+ LGap : mean = 4.76384 cm  rms = 0 fm 
 ... write file : B4.root - done
 ... close file : B4.root - done
      Transportation,   GammaGeneralProc,                msc,              eIoni
@@ -937,17 +937,17 @@ hFritiofCaptureAtRest,hBertiniCaptureAtRest,muMinusCaptureAtRest,         dInela
 ... open analysis file : B4.root - done
 Using 
 --> Event 0 starts.
-   Absorber: total energy: 279.218 MeV       total track length: 19.9689 cm 
-        Gap: total energy: 15.6063 MeV       total track length: 8.05553 cm 
+   Absorber: total energy: 280.405 MeV       total track length: 19.8653 cm 
+        Gap: total energy: 15.8204 MeV       total track length: 7.84531 cm 
 --> End of event: 0
 
 
  ----> print histograms statistic for the entire run 
 
- EAbs : mean = 279.218 MeV rms = 0 eV 
- EGap : mean = 15.6063 MeV rms = 0 eV 
- LAbs : mean = 19.9689 cm  rms = 0 fm 
- LGap : mean = 8.05553 cm  rms = 0 fm 
+ EAbs : mean = 280.405 MeV rms = 0 eV 
+ EGap : mean = 15.8204 MeV rms = 0 eV 
+ LAbs : mean = 19.8653 cm  rms = 0 fm 
+ LGap : mean = 7.84531 cm  rms = 0 fm 
 ... write file : B4.root - done
 ... close file : B4.root - done
 ### Run 2 starts.
@@ -956,17 +956,17 @@ Using
 ... open analysis file : B4.root - done
 Using 
 --> Event 0 starts.
-   Absorber: total energy: 461.252 MeV       total track length: 32.7167 cm 
-        Gap: total energy: 20.8926 MeV       total track length: 10.5882 cm 
+   Absorber: total energy: 450.143 MeV       total track length: 32.5487 cm 
+        Gap: total energy: 36.1879 MeV       total track length: 17.8779 cm 
 --> End of event: 0
 
 
  ----> print histograms statistic for the entire run 
 
  EAbs : mean = 0 eV  rms = 0 eV 
- EGap : mean = 20.8926 MeV rms = 0 eV 
- LAbs : mean = 32.7167 cm  rms = 0 fm 
- LGap : mean = 10.5882 cm  rms = 0 fm 
+ EGap : mean = 0 eV  rms = 0 eV 
+ LAbs : mean = 32.5487 cm  rms = 0 fm 
+ LGap : mean = 17.8779 cm  rms = 0 fm 
 ... write file : B4.root - done
 ... close file : B4.root - done
 Graphics systems deleted.

@@ -38,6 +38,7 @@
 #ifndef G4GEOMETRYMANAGER_HH
 #define G4GEOMETRYMANAGER_HH
 
+#include <memory>
 #include <vector>
 
 #include "G4Types.hh"
@@ -51,6 +52,7 @@ class G4VoxelisationHelper;
 /**
  * @brief G4GeometryManager is a singleton class responsible for high level
  * geometrical functions, and for high level objects in the geometry subdomain.
+ * @ingroup geometry_management
  */
 
 class G4GeometryManager
@@ -175,9 +177,10 @@ class G4GeometryManager
     /** The static instance. */
     static G4ThreadLocal G4GeometryManager* fgInstance;
 
-    /** Pointer to the voxelisation helper. */
-    static G4VoxelisationHelper* fParallelVoxeliser;
+    /** Shared ownership of voxelisation helper across thread-local instances. */
+    static std::shared_ptr<G4VoxelisationHelper> fParallelVoxeliser;
 
+    /** Flag indicating if geometry is closed or not. */
     G4bool fIsClosed = false;
 
     // Flags for parallel initialization

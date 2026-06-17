@@ -417,7 +417,7 @@ std::vector<G4String> OrganNames;
 //--------------------the phantom organ massess----------------------//
 //-------------------------------------------------------------------//
 
-G4int NOrganIDs = OrganNames.size();
+G4int NOrganIDs = static_cast<G4int>(OrganNames.size());
 
 std::ifstream OrganMasses;
 

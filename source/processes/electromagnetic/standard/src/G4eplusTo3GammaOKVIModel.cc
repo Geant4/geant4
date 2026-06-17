@@ -281,7 +281,7 @@ G4eplusTo3GammaOKVIModel::SampleSecondaries(vector<G4DynamicParticle*>* vdp,
 
   G4ThreeVector phot1Direction(0, 0, 1);
   G4ThreeVector phot2Direction(0, std::sin(psi12), std::cos(psi12));
-  G4ThreeVector phot3Direction(0, std::sin(psi13), std::cos(psi13));
+  G4ThreeVector phot3Direction(0, -std::sin(psi13), std::cos(psi13));
 
   G4LorentzVector lv1(phot1Energy*phot1Direction, phot1Energy);
   G4LorentzVector lv2(phot2Energy*phot2Direction, phot2Energy);

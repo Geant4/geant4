@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-04-patch-01    (13-March-2026)
+ Geant4 version Name: geant4-11-04-patch-02    (12-June-2026)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -19,7 +19,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
                              WWW : http://geant4.org/
 **************************************************************
 
-##### Create analysis manager   0x1f0a470
+##### Create analysis manager   0x18a75d0
 Using  analysis manager
 *** /run/numberOfThreads command is issued in sequential mode.
 Command is ignored.
@@ -556,7 +556,7 @@ Setting was ignored.
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.470000s Real=1.469933s Sys=0.000000s
+  User=1.590000s Real=1.591880s Sys=0.000000s
 
  ======================== run summary =====================
 
@@ -581,7 +581,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.950000s Real=1.947508s Sys=0.000000s
+  User=2.060000s Real=2.121385s Sys=0.000000s
 
  ======================== run summary =====================
 
@@ -606,7 +606,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=2.390000s Real=2.395998s Sys=0.000000s
+  User=2.580000s Real=2.582846s Sys=0.000000s
 
  ======================== run summary =====================
 
@@ -631,7 +631,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=2.500000s Real=2.503525s Sys=0.000000s
+  User=2.780000s Real=2.780565s Sys=0.000000s
 
  ======================== run summary =====================
 
@@ -656,7 +656,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=2.540000s Real=2.563032s Sys=0.000000s
+  User=2.920000s Real=2.917987s Sys=0.000000s
 
  ======================== run summary =====================
 

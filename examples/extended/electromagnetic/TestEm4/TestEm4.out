@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-04-patch-01    (13-March-2026)
+ Geant4 version Name: geant4-11-04-patch-02    (12-June-2026)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -220,24 +220,24 @@ G4VoxelisationHelper::ReportVoxelStats -- Voxel Statistics
  Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=0.380000s Real=0.379041s Sys=0.000000s
+  User=0.360000s Real=0.361074s Sys=0.000000s
 
 --------------------End of Global Run------------------------
  The run consists of 100000 gamma of 9 MeV in a volume of C6F6 
- Energy deposit per event:  mean = 946.135 keV    rms = 2.37382 MeV
+ Energy deposit per event:  mean = 939.757 keV    rms = 2.36803 MeV
 ------------------------------------------------------------
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1968343725, 544366099
+ Current couple of seeds = 103626573, 990920412
 ----------------------------------------
 ... write file : testem4.root - done
 ... close file : testem4.root - done
 G4 kernel has come to Quit state.
 Deleting G4Run (id:0) 
-UserDetectorConstruction deleted 0x105b1c0
-UserPhysicsList deleted 0x105b530
-UserActionInitialization deleted 0x10bfbd0
+UserDetectorConstruction deleted 0x25b91c0
+UserPhysicsList deleted 0x25b9530
+UserActionInitialization deleted 0x261cd10
 UserWorkerInitialization deleted 0
 UserWorkerThreadInitialization deleted 0
 UserRunAction deleted.
@@ -256,11 +256,11 @@ Pool ID '7G4Event', size : 0.000961 MB
 Pool ID '15G4PrimaryVertex', size : 0.000961 MB
 Pool ID '17G4PrimaryParticle', size : 0.000961 MB
 Pool ID '17G4DynamicParticle', size : 0.00288 MB
-Pool ID '7G4Track', size : 0.00577 MB
+Pool ID '7G4Track', size : 0.00481 MB
 Pool ID '18G4TouchableHistory', size : 0.000961 MB
 Pool ID '15G4CountedObjectIvE', size : 0.000961 MB
 Number of memory pools allocated: 9 of which, static: 0
-Dynamic pools deleted: 9 / Total memory freed: 0.021 MB
+Dynamic pools deleted: 9 / Total memory freed: 0.02 MB
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

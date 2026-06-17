@@ -277,15 +277,13 @@ G4bool G4GeomTools::CheckSnip(const G4TwoVectorList& contour,
                               G4int a, G4int b, G4int c,
                               G4int n, const G4int* V)
 {
-  static const G4double kCarTolerance =
-         G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
-
   // check orientation of Triangle
   G4double Ax = contour[V[a]].x(), Ay = contour[V[a]].y();
   G4double Bx = contour[V[b]].x(), By = contour[V[b]].y();
   G4double Cx = contour[V[c]].x(), Cy = contour[V[c]].y();
-  if ((Bx-Ax)*(Cy-Ay) - (By-Ay)*(Cx-Ax) < kCarTolerance) { return false; }
-
+  if ((Bx-Ax)*(Cy-Ay) - (By-Ay)*(Cx-Ax) <= 0) { return false; }
+  if (n <= 3) { return true; }
+  
   // check that there is no point inside Triangle
   G4double xmin = std::min(std::min(Ax,Bx),Cx);
   G4double xmax = std::max(std::max(Ax,Bx),Cx);

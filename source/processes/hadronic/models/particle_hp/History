@@ -6,12 +6,56 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2026-05-18 Gabriele Cosmo (hadr-hpp-V11-03-07)
+- Fixed MT data race in G4ParticleHPFissionFS, by removing the shared mutable
+  'produceFissionFragments' member and making the decision local to each
+  ApplyYourself() call. The race was from every worker writing the same
+  G4ParticleHPFissionFS heap object. The fix preserves the UI-controlled
+  behavior while keeping the theFF.HasFSData() guard, and avoids serializing
+  the whole final-state sampling path.
+- Fixed MT data race in G4ParticleHPLabAngularEnergy, by moving the lazy
+  G4ParticleHPVector::Integrate() work out of the worker-thread sampling path.
+  The reported race is at GetIntegral() in G4ParticleHPLabAngularEnergy,
+  which lazily writes 'totalIntegral'; these 'theData' vectors are built
+  once in Init() and then shared across workers, so changed Init() to
+  precompute the integral immediately after each vector is loaded. This
+  makes later GetIntegral() calls read-only in event processing.
+  Also fixed a nearby latent race in the same class: 'currentMeanEnergy' was
+  a shared member written by Sample(); changed it to G4Cache<G4double> in
+  G4ParticleHPLabAngularEnergy, matching the pattern already used by related
+  HP classes.
+
+## 2026-05-15 Gabriele Cosmo
+- Fixed MT data race in G4ParticleHPElasticFS; moved initialization of
+  SVT/DBRC scattering-kernel parameters from GetBiasedThermalNucleus(), called
+  during event processing, to Init(), called during final-state setup. Worker
+  threads now only read these cached parameters.
+  This is better than adding a lock, as the values are global configuration
+  copied into the final-state object, so they should be setup-time state, not
+  per-collision mutable state.
+
+## 2026-05-04 Gabriele Cosmo
+- Fixed MT data race in G4ParticleHPChannel; patched UpdateData() so the elastic
+  final state registers its isotope-wise cross-section once in UpdateData(),
+  after the cross-section vector is created; then removed the racing write from
+  ApplyYourself() at tracking time. This fixes a data race reported by sanitizer
+  for threads both calling RegisterCrossSection() on the same shared
+  G4ParticleHPElasticFS object during event processing; now workers only read
+  the pointer and the write happens during channel initialization.
+
+## 2026-04-07 Alberto Ribon
+- G4ParticleHPLegendreTable : add protection in the inlined method Init
+  to protect against the possibility of negative input parameter (which
+  could cause writing on a zero-size allocated buffer).
+  This problem and its solution have been reported to the Computer.Security@cern.ch
+  by Sebastian Alba Vives of the Instituto Tecnologico de Costa Rica (TEC).
+
 ## 2026-02-23 Dmitri Konstantinov (hadr-hpp-V11-03-06)
 - G4ParticleHPContAngularPar - reduced allocator fragmentation and memory
   churn in BuildByInterpolation() by removing unconditional deep copies
   of input angular distributions. Copies are now created only in case of
   self-aliasing (this == &angparX), preserving correctness while avoiding
-  excessive per-call heap allocations.
+  excessive per-call heap allocations. Also addressing problem report #2630.
 
 ## 2025-12-23 Vladimir Ivanchenko (hadr-hpp-V11-03-05)
 - G4ParticleHPNBodyPhaseSpace, G4ParticleHPInelasticCompFS - added

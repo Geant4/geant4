@@ -186,6 +186,7 @@ class G4MTRunManager : public G4RunManager
 
     void AbortRun(G4bool softAbort = false) override;
     void AbortEvent() override;
+    inline G4bool IfAborted() const { return runAborted; }
 
     static G4int SeedOncePerCommunication();
     static void SetSeedOncePerCommunication(G4int val);

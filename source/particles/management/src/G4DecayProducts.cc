@@ -61,7 +61,7 @@ G4DecayProducts::G4DecayProducts(const G4DecayProducts& right)
     auto pDaughter = new G4DynamicParticle(*daughter);
 
     G4double properTime = daughter->GetPreAssignedDecayProperTime();
-    if (properTime > 0.0) pDaughter->SetPreAssignedDecayProperTime(properTime);
+    if (properTime >= 0.0) pDaughter->SetPreAssignedDecayProperTime(properTime);
 
     const G4DecayProducts* pPreAssigned = daughter->GetPreAssignedDecayProducts();
     if (pPreAssigned != nullptr) {
@@ -94,7 +94,7 @@ G4DecayProducts& G4DecayProducts::operator=(const G4DecayProducts& right)
       auto pDaughter = new G4DynamicParticle(*daughter);
 
       G4double properTime = daughter->GetPreAssignedDecayProperTime();
-      if (properTime > 0.0) pDaughter->SetPreAssignedDecayProperTime(properTime);
+      if (properTime >= 0.0) pDaughter->SetPreAssignedDecayProperTime(properTime);
 
       const G4DecayProducts* pPreAssigned = daughter->GetPreAssignedDecayProducts();
       if (pPreAssigned != nullptr) {

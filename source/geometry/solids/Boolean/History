@@ -6,6 +6,19 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 ------------------------------------------------------------------------------
 
+## 2026-05-05 Gabriele Cosmo (geom-bool-V11-03-03)
+- Moved back method InsideNoVoxels(p) in G4MultiUnion to public section.
+
+## 2026-04-24 Gabriele Cosmo
+- Removed redundant specialisations of ComputeDimensions() in Boolean solids.
+  Dispatching for ComputeDimensions() is enabled only for solids where full
+  parameterisation is allowed, for all others it is simply disabled and
+  performing no actions.
+
+## 2026-03-24 Gabriele Cosmo
+- Fixed calculation of normal in G4ScaledSolid::DistanceToOut(p,v,..) to
+  use inverse transformation. Addressing problem report #2709.
+
 ## 2025-11-12 Gabriele Cosmo (geom-bool-V11-03-02)
 - Fixed potential thread-safety issue in GetCubicVolume() and GetSurfaceArea()
   on Boolean solids in case those functions are called from worker threads.

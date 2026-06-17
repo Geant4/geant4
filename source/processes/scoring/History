@@ -6,6 +6,11 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2026-06-03 Gabriele Cosmo, Dmitri Konstantinov (procscore-V11-03-01)
+- Fixed setting of parallel world navigator in G4ParallelWorldProcess to avoid
+  reported cases of stale pointers when geometry gets rebuilt/reinitialised.
+- Avoid string copy in input in G4ParallelWorldProcess::SetParallelWorld(..).
+
 ## 2025-02-12 Ben Morgan (procscore-V11-03-00)
 - Apply [GitHub PR 80](https://github.com/Geant4/geant4/pull/80)
   - Changes to `G4EnergySplitter` to ensure that each call to `SplitEnergyInVolumes()` 

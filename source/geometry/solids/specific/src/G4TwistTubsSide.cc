@@ -113,33 +113,20 @@ G4ThreeVector G4TwistTubsSide::GetNormal(const G4ThreeVector& tmpxx,
    if (isGlobal)
    {
       xx = ComputeLocalPoint(tmpxx);
-      if ((xx - fCurrentNormal.p).mag() < 0.5 * kCarTolerance)
-      {
-         return ComputeGlobalDirection(fCurrentNormal.normal);
-      }
    }
    else
    {
       xx = tmpxx;
-      if (xx == fCurrentNormal.p)
-      {
-         return fCurrentNormal.normal;
-      }
    }
    
    G4ThreeVector er(1, fKappa * xx.z(), 0);
    G4ThreeVector ez(0, fKappa * xx.x(), 1);
    G4ThreeVector normal = fHandedness*(er.cross(ez));
-
    if (isGlobal)
    {
-      fCurrentNormal.normal = ComputeGlobalDirection(normal.unit());
+      return ComputeGlobalDirection(normal.unit());
    }
-   else
-   {
-      fCurrentNormal.normal = normal.unit();
-   }
-   return fCurrentNormal.normal;
+   return normal.unit();
 }
 
 //=====================================================================
@@ -196,20 +183,6 @@ G4int G4TwistTubsSide::DistanceToSurface(const G4ThreeVector& gp,
    //    the one that gives a positive rho(z=0).
    //
    //
-      
-   fCurStatWithV.ResetfDone(validate, &gp, &gv);
-
-   if (fCurStatWithV.IsDone())
-   {
-      for (G4int i=0; i<fCurStatWithV.GetNXX(); ++i)
-      {
-         gxx[i] = fCurStatWithV.GetXX(i);
-         distance[i] = fCurStatWithV.GetDistance(i);
-         areacode[i] = fCurStatWithV.GetAreacode(i);
-         isvalid[i]  = fCurStatWithV.IsValid(i);
-      }
-      return fCurStatWithV.GetNXX();
-   }
 
    // initialize
    for (auto i=0; i<2; ++i)
@@ -236,8 +209,6 @@ G4int G4TwistTubsSide::DistanceToSurface(const G4ThreeVector& gp,
       // no intersection
 
       isvalid[0] = false;
-      fCurStat.SetCurrentStatus(0, gxx[0], distance[0], areacode[0],
-                                isvalid[0], 0, validate, &gp, &gv);
       return 0;
    } 
    
@@ -288,15 +259,9 @@ G4int G4TwistTubsSide::DistanceToSurface(const G4ThreeVector& gp,
             else
             {
                distance[0] = kInfinity;
-               fCurStatWithV.SetCurrentStatus(0, gxx[0], distance[0],
-                                              areacode[0], isvalid[0],
-                                              0, validate, &gp, &gv);
                return vout;
             } 
          }
-                 
-         fCurStatWithV.SetCurrentStatus(0, gxx[0], distance[0], areacode[0],
-                                        isvalid[0], 1, validate, &gp, &gv);
          vout = 1;
       }
       else
@@ -307,9 +272,6 @@ G4int G4TwistTubsSide::DistanceToSurface(const G4ThreeVector& gp,
          //    if v.z=0 && p.z=0, no intersection unless p is on x-axis
          //    (in that case, v is paralell to surface). 
          // return distance = infinity.
-
-         fCurStatWithV.SetCurrentStatus(0, gxx[0], distance[0], areacode[0],
-                                        isvalid[0], 0, validate, &gp, &gv);
       }
    }
    else if (D > DBL_MIN)
@@ -402,12 +364,6 @@ G4int G4TwistTubsSide::DistanceToSurface(const G4ThreeVector& gp,
          isvalid[0]  = tmpisvalid[1];
          isvalid[1]  = tmpisvalid[0];
       }
-         
-      fCurStatWithV.SetCurrentStatus(0, gxx[0], distance[0], areacode[0],
-                                     isvalid[0], 2, validate, &gp, &gv);
-      fCurStatWithV.SetCurrentStatus(1, gxx[1], distance[1], areacode[1],
-                                     isvalid[1], 2, validate, &gp, &gv);
-
       // protection against roundoff error
 
       for (G4int k=0; k<2; ++k)
@@ -453,9 +409,6 @@ G4int G4TwistTubsSide::DistanceToSurface(const G4ThreeVector& gp,
    {
       // if D<0, no solution
       // if D=0, just grazing the surfaces, return kInfinity
-
-      fCurStatWithV.SetCurrentStatus(0, gxx[0], distance[0], areacode[0],
-                                     isvalid[0], 0, validate, &gp, &gv);
    }
 
    return vout;
@@ -469,18 +422,6 @@ G4int G4TwistTubsSide::DistanceToSurface(const G4ThreeVector& gp,
                                                G4double       distance[],
                                                G4int          areacode[])
 {  
-   fCurStat.ResetfDone(kDontValidate, &gp);
-   if (fCurStat.IsDone())
-   {
-      for (G4int i=0; i<fCurStat.GetNXX(); ++i)
-      {
-         gxx[i] = fCurStat.GetXX(i);
-         distance[i] = fCurStat.GetDistance(i);
-         areacode[i] = fCurStat.GetAreacode(i);
-      }
-      return fCurStat.GetNXX();
-   }
-
    // initialize
    for (auto i=0; i<2; ++i)
    {
@@ -502,33 +443,12 @@ G4int G4TwistTubsSide::DistanceToSurface(const G4ThreeVector& gp,
    // return here immediatery.
    //
    
-   G4ThreeVector  lastgxx[2];
-   for (auto i=0; i<2; ++i)
-   {
-      lastgxx[i] = fCurStatWithV.GetXX(i);
-   } 
-
-   if  ((gp - lastgxx[0]).mag() < halftol
-     || (gp - lastgxx[1]).mag() < halftol)
-   { 
-      // last winner, or last poststep point is on the surface.
-      xx = p;
-      distance[0] = 0;
-      gxx[0] = gp;
-
-      G4bool isvalid = true;
-      fCurStat.SetCurrentStatus(0, gxx[0], distance[0], areacode[0],
-                             isvalid, 1, kDontValidate, &gp);
-      return 1;
-   }
-          
    if (p.getRho() == 0)
    { 
       // p is on z-axis. Namely, p is on twisted surface (invalid area).
       // We must return here, however, returning distance to x-minimum
       // boundary is better than return 0-distance.
       //
-      G4bool isvalid = true;
       if (fAxis[0] == kXAxis && fAxis[1] == kZAxis)
       {
          distance[0] = DistanceToBoundary(sAxis0 & sAxisMin, xx, p);
@@ -540,8 +460,6 @@ G4int G4TwistTubsSide::DistanceToSurface(const G4ThreeVector& gp,
          xx.set(0., 0., 0.);
       }
       gxx[0] = ComputeGlobalPoint(xx);
-      fCurStat.SetCurrentStatus(0, gxx[0], distance[0], areacode[0],
-                                isvalid, 0, kDontValidate, &gp);
       return 1;
    } 
 
@@ -620,10 +538,6 @@ G4int G4TwistTubsSide::DistanceToSurface(const G4ThreeVector& gp,
          xx = p;
          distance[0] = 0;
          gxx[0] = gp;
-
-         G4bool isvalid = true;
-         fCurStat.SetCurrentStatus(0, gxx[0], distance[0], areacode[0],
-                                   isvalid, 1, kDontValidate, &gp);
          return 1;
       }
 
@@ -632,9 +546,6 @@ G4int G4TwistTubsSide::DistanceToSurface(const G4ThreeVector& gp,
       distance[0] = DistanceToLine(p, A, d[0], xx);
       areacode[0] = sInside;
       gxx[0] = ComputeGlobalPoint(xx);
-      G4bool isvalid = true;
-      fCurStat.SetCurrentStatus(0, gxx[0], distance[0], areacode[0],
-                                isvalid, 1, kDontValidate, &gp);
       return 1;
    }
    if (test < 0)  // wrong diagonal. vector AC is crossing the surface! 
@@ -672,9 +583,6 @@ G4int G4TwistTubsSide::DistanceToSurface(const G4ThreeVector& gp,
       areacode[0] = sInside;
       gxx[0] = ComputeGlobalPoint(xx);
       distance[0] = 0;
-      G4bool isvalid = true;
-      fCurStat.SetCurrentStatus(0, gxx[0], distance[0] , areacode[0],
-                                isvalid, 1, kDontValidate, &gp);
       return 1;
    }
    
@@ -720,9 +628,6 @@ G4int G4TwistTubsSide::DistanceToSurface(const G4ThreeVector& gp,
    }
    areacode[0] = sInside;
    gxx[0]      = ComputeGlobalPoint(xx);
-   G4bool isvalid = true;
-   fCurStat.SetCurrentStatus(0, gxx[0], distance[0], areacode[0],
-                             isvalid, 1, kDontValidate, &gp);
    return 1;
 }
 

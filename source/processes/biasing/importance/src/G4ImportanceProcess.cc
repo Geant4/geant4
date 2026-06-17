@@ -110,9 +110,22 @@ void G4ImportanceProcess::SetParallelWorld(const G4String& parallelWorldName)
 // Get pointers of the parallel world and its navigator
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   fGhostWorldName = parallelWorldName;
-  fGhostWorld = fTransportationManager->GetParallelWorld(fGhostWorldName);
-  fGhostNavigator = fTransportationManager->GetNavigator(fGhostWorld);
+  SetParallelWorldNavigator(true);
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+}
+
+//------------------------------------------------------
+//
+// SetParallelWorldNavigator
+//
+//------------------------------------------------------
+void G4ImportanceProcess::SetParallelWorldNavigator(G4bool createIfMissing)
+{
+  fGhostWorld = createIfMissing ? fTransportationManager->GetParallelWorld(fGhostWorldName)
+                                : fTransportationManager->IsWorldExisting(fGhostWorldName);
+  fGhostNavigator = (fGhostWorld != nullptr)
+                    ? fTransportationManager->GetNavigator(fGhostWorld)
+                    : nullptr;
 }
 
 //------------------------------------------------------
@@ -128,6 +141,7 @@ void G4ImportanceProcess::StartTracking(G4Track* trk)
 
   if(fParaflag)
   {
+    SetParallelWorldNavigator();
     if(fGhostNavigator != nullptr)
     {
       fNavigatorID = fTransportationManager->ActivateNavigator(fGhostNavigator);

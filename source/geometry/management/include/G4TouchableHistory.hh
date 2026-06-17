@@ -30,48 +30,42 @@
 // Object representing a touchable detector element, and its history in the
 // geometrical hierarchy, including its net resultant local->global transform.
 //
-// Touchables are objects capable of maintaining an
-// association between parts of the geometrical hierarchy (volumes
-// &/or solids) and their resultant transformation.
+// Touchables are objects capable of maintaining an association between parts
+// of the geometrical hierarchy (volumes) and their resultant transformation.
 //
 // Utilisation:
 // -----------
-// A touchable is a geometrical volume (solid) which has a unique
-// placement in a detector description.
-// It must respond to the two following "requests": 
+// A touchable is a geometrical volume which has a unique placement in a
+// detector description. It must respond to the two following "requests": 
 //
-//   1) GetTranslation and GetRotation that return the components of the
+//   1) GetTranslation() and GetRotation() that return the components of the
 //      volume's transformation.
 //
-//   2) GetSolid that gives the solid of this touchable.
-//
-// Additional capabilities are available from implementations with more
-// information. These have a default implementation that causes an exception. 
+//   2) GetSolid() that gives the solid of this touchable.
 //
 // Several capabilities are available from touchables with physical volumes:
 //
-//   3) GetVolume gives the physical volume.
+//   3) GetVolume() gives the physical volume.
 //
-//   4) GetReplicaNumber or GetCopyNumber gives the copy number of the
+//   4) GetReplicaNumber() or GetCopyNumber() gives the copy number of the
 //      physical volume, either if it is replicated or not.
 //
 // Touchables that store volume hierarchy (history) have the whole stack of
-// parent volumes available. Thus it is possible to add a little more state
-// in order to extend its functionality. We add a "pointer" to a level and a
-// member function to move the level in this stack. Then calling the above
-// member functions for another level, the information for that level can be
+// parent volumes available. We add a "pointer" to a level and a member
+// function to move the level in this stack. Then calling the above member
+// functions for another level, the information for that level can be
 // retrieved.  
 //
 // The top of the history tree is, by convention, the world volume.
 //
-//   5) GetHistoryDepth gives the depth of the history tree.
+//   5) GetHistoryDepth() gives the depth of the history tree.
 //
-//   6) GetReplicaNumber/GetCopyNumber, GetVolume, GetTranslation and
-//      GetRotation each can be called with a depth argument.
+//   6) GetReplicaNumber()/GetCopyNumber(), GetVolume(), GetTranslation() and
+//      GetRotation() each can be called with a depth argument.
 //      They return the value of the respective level of the touchable.
 // 
 //   7) MoveUpHistory(num) moves the current pointer inside the touchable
-//      to point "num" levels up the history tree. Thus, eg, calling 
+//      to point "num" levels up the history tree. Thus, e.g., calling 
 //      it with num=1 will cause the internal pointer to move to the mother 
 //      of the current volume.
 //      NOTE: this method MODIFIES the touchable.
@@ -79,10 +73,10 @@
 // An update method, with different arguments is available, so that the
 // information in a touchable can be updated: 
 //
-//   8) UpdateYourself takes a physical volume pointer and can additionally
+//   8) UpdateYourself() takes a physical volume pointer and can additionally
 //      take a NavigationHistory.
 
-// Author: Paul Kent (CERN), August 1996
+// Original author: Paul Kent (CERN), August 1996
 // ----------------------------------------------------------------------
 #ifndef G4TOUCHABLEHISTORY_HH
 #define G4TOUCHABLEHISTORY_HH
@@ -99,6 +93,8 @@
  * @brief G4TouchableHistory is an object representing a touchable detector
  * element, and its history in the geometrical hierarchy, including its net
  * resultant local->global transform.
+ * @ingroup geometry_management
+ *
  * A touchable is a geometrical volume (solid) which has a unique placement
  * in a detector description.
  */
@@ -114,11 +110,11 @@ class G4TouchableHistory
     G4TouchableHistory(); 
 
     /**
-     * Default Destructor. Virtual, as it is a reference-counted object,
-     * but there is no provision for this class to be subclassed; if subclassed,
+     * Default Destructor.
+     * There is no provision for this class to be subclassed; if subclassed,
      * it may fail and not give explicit errors!
      */
-    virtual ~G4TouchableHistory() = default;
+    ~G4TouchableHistory() = default;
 
     /**
      * Copy constructor.

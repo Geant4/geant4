@@ -412,9 +412,6 @@ void G4MTRunManager::InitializeEventLoop(G4int n_event, const char* macroFile, G
     userWorkerThreadInitialization = new G4UserWorkerThreadInitialization();
   }
 
-  // Prepare UI commands for threads
-  PrepareCommandsStack();
-
   // Start worker threads
   CreateAndStartWorkers();
 
@@ -431,7 +428,7 @@ void G4MTRunManager::GeometryOptimisation()
   // G4bool finished = geomManager->IsParallelOptimisationFinished();
 
   geomManager->OpenGeometry();
-  geomManager->CloseGeometry(true, true);
+  geomManager->CloseGeometry(true, verboseLevel > 1);
 
   // Force workers to execute UI command
   RequestWorkersProcessCommandsStack();
@@ -704,6 +701,10 @@ void G4MTRunManager::ThisWorkerEndEventLoop()
 void G4MTRunManager::NewActionRequest(G4MTRunManager::WorkerActionRequest newRequest)
 {
   nextActionRequestBarrier.Wait((G4int)GetNumberActiveThreads());
+  if (newRequest == WorkerActionRequest::NEXTITERATION ||
+      newRequest == WorkerActionRequest::PROCESSUI) {
+    PrepareCommandsStack();
+  }
   // nextActionRequest is a shared resource, but there is no
   // data-race thanks to the barrier: all threads are waiting
   nextActionRequest = newRequest;
@@ -720,7 +721,6 @@ G4MTRunManager::WorkerActionRequest G4MTRunManager::ThisWorkerWaitForNextAction(
 // --------------------------------------------------------------------
 void G4MTRunManager::RequestWorkersProcessCommandsStack()
 {
-  PrepareCommandsStack();
   NewActionRequest(WorkerActionRequest::PROCESSUI);
   processUIBarrier.SetActiveThreads((G4int)GetNumberActiveThreads());
   processUIBarrier.WaitForReadyWorkers();

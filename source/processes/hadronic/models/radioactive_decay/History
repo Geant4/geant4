@@ -6,6 +6,11 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2026-05-04 Gabriele Cosmo (radioactive_decay-V11-03-01)
+- In G4VRadioactiveDecay, fixed MT data race in GetDecayTable(), adding a mutex.
+  Removed mutex from LoadDecayTable(), only called from GetDecayTable() and
+  made it private.
+
 ## 2025-01-10 Vladimir Ivanchenko (radioactive_decay-V11-03-00)
 - G4RadioactiveDecay - fixed problem 2592 - enable biasing in radioactive decay
 

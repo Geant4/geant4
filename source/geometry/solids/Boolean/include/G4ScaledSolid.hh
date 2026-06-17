@@ -45,6 +45,7 @@ class G4ScaleTransform;
 /**
  * @brief G4ScaledSolid is a solid that has been scaled in dimensions
  * in X, Y or Z, from its original description.
+ * @ingroup geometry_solids_boolean
  */
 
 class G4ScaledSolid : public G4VSolid
@@ -155,13 +156,6 @@ class G4ScaledSolid : public G4VSolid
      * an inside point "p". The distance can be an underestimate.
      */
     G4double DistanceToOut( const G4ThreeVector& p ) const override;
-
-    /**
-     * Throws an exception as paramterisations are not allowed for these solids.
-     */
-    void ComputeDimensions(       G4VPVParameterisation* p,
-                            const G4int n,
-                            const G4VPhysicalVolume* pRep ) override;
 
     /**
      * Methods returning an estimation of the solid volume (capacity) and

@@ -44,6 +44,7 @@
 
 /**
  * @brief G4UnionSolid is a solid describing the Boolean union of two solids.
+ * @ingroup geometry_solids_boolean
  */
 
 class G4UnionSolid : public G4BooleanSolid
@@ -197,13 +198,6 @@ class G4UnionSolid : public G4BooleanSolid
      */
     G4double DistanceToOut( const G4ThreeVector& p ) const override ;
 
-    /**
-     * Throws an exception as paramterisations are not allowed for these solids.
-     */
-    void ComputeDimensions(       G4VPVParameterisation* p,
-                            const G4int n,
-                            const G4VPhysicalVolume* pRep ) override ;
-                                   
     /**
      * Methods for creating graphical representations (i.e. for visualisation).
      */

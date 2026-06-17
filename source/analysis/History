@@ -6,6 +6,26 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2026-05-26 Gabriele Cosmo (analysis-V11-03-08)
+- Fixed MT data race in G4PlotManager, by making the shared FreeType object
+  immutable after one-time initialization.
+  The race was in: static toolx::sg::text_freetype ttf; this was initialized
+  safely, but every worker constructor then called ttf.add_embedded_font(...),
+  which mutates base_freetype::m_fonts. Since tools::viewplot keeps references
+  to this FreeType object, locking only the two writes would be a weak fix.
+  The patch adds a function GetTextFreetype(), passed by the constructor to
+  tools::viewplot. C++ guarantees thread-safe initialization of that
+  function-local static, and after that all threads only read it.
+
+## 2026-05-23 Ben Morgan
+- Fixed bounds-check errors in G4RootPNtupleManager.
+  - Ensure ntuple description and pointer vectors are kept in sync.
+
+## 2026-05-19 I. Hrivnacova
+- Fixed compilation warnings "missing braces around initializer",
+  observed with gcc v11.5
+  - addressing the problem report #2705.
+
 ## 2025-11-17 I. Hrivnacova (analysis-V11-03-07)
 - Fixing a problem observed in the rdecay02 example reported in User Forum,
   which happens when all created ntuples are inactivated, and a file is not open:

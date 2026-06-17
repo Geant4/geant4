@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-04-patch-01    (13-March-2026)
+ Geant4 version Name: geant4-11-04-patch-02    (12-June-2026)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -550,31 +550,31 @@ Index : 2     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.710000s Real=0.703590s Sys=0.000000s
+  User=0.820000s Real=0.828821s Sys=0.000000s
 
 ------------------------------------------------------------
       material   Edep       RMS         sqrt(E0(GeV))*rmsE/Emean     total tracklen 
  
-         G4_Pb: 774.03 MeV :  14.58 MeV     1.883 +- 0.1883 %      54.6 cm  +- 1.17 cm 
-        G4_lAr: 215.74 MeV :  13.37 MeV     6.199 +- 0.6199 %      1.06 m   +- 6.84 cm 
+         G4_Pb: 775.53 MeV :  15.71 MeV     2.026 +- 0.2026 %      54.8 cm  +- 1.12 cm 
+        G4_lAr: 214.27 MeV :  14.66 MeV     6.842 +- 0.6842 %      1.06 m   +- 7.38 cm 
 
- Total energy deposited = 989.8 MeV +- 6.905 MeV
- Energy leakage = 10.22 MeV +- 6.905 MeV
- Total energy :  Edep + Eleak = 1 GeV +- 61.04 eV 
+ Total energy deposited = 989.8 MeV +- 6.988 MeV
+ Energy leakage = 10.19 MeV +- 6.988 MeV
+ Total energy :  Edep + Eleak = 1 GeV +- 57.09 eV 
 ------------------------------------------------------------
  Beam particle e-  E = 1 GeV
- Mean number of gamma       508.8
- Mean number of e-          870
- Mean number of e+          53.89
- Mean number of charged steps  3710.83
- Mean number of neutral steps  3715.22
+ Mean number of gamma       507.9
+ Mean number of e-          867.6
+ Mean number of e+          53.43
+ Mean number of charged steps  3670.55
+ Mean number of neutral steps  3665.86
 ------------------------------------------------------------
 
  Energy deposition from Energy flow balance : 
   material 	 Total Edep 
  
-     G4_Pb:	 774.038 MeV
-    G4_lAr:	 215.736 MeV
+     G4_Pb:	 775.533 MeV
+    G4_lAr:	 214.21 MeV
 
 ------------------------------------------------------------
 
@@ -625,36 +625,36 @@ Index : 2     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.580000s Real=0.589049s Sys=0.000000s
+  User=0.660000s Real=0.669261s Sys=0.000000s
 
 ------------------------------------------------------------
       material   Edep       RMS         sqrt(E0(GeV))*rmsE/Emean     total tracklen 
  
-         G4_Pb: 778.62 MeV :  23.49 MeV     3.017 +- 0.3017 %      52.3 cm  +- 1.35 cm 
-        G4_lAr: 214.09 MeV :  18.28 MeV      8.54 +- 0.854 %      1.01 m   +-  8.3 cm 
+         G4_Pb: 778.37 MeV :  21.67 MeV     2.783 +- 0.2783 %      52.2 cm  +- 1.23 cm 
+        G4_lAr: 212.97 MeV :  16.89 MeV     7.932 +- 0.7932 %         1 m   +-  7.9 cm 
 
- Total energy deposited = 992.7 MeV +- 16.58 MeV
- Energy leakage = 8.722 MeV +- 5.448 MeV
- Total energy :  Edep + Eleak = 1.001 GeV +- 15.52 MeV
+ Total energy deposited = 991.3 MeV +- 16.24 MeV
+ Energy leakage = 9.793 MeV +- 6.877 MeV
+ Total energy :  Edep + Eleak = 1.001 GeV +- 15.16 MeV
 ------------------------------------------------------------
  Beam particle e-  E = 1 GeV
- Mean number of gamma       292.4
- Mean number of e-          557.7
- Mean number of e+          53.54
- Mean number of charged steps  3140.74
- Mean number of neutral steps  2920.78
+ Mean number of gamma       294.5
+ Mean number of e-          562.7
+ Mean number of e+          53.98
+ Mean number of charged steps  3150.81
+ Mean number of neutral steps  2963.84
 ------------------------------------------------------------
 
  Energy deposition from Energy flow balance : 
   material 	 Total Edep 
  
-     G4_Pb:	 775.556 MeV
-    G4_lAr:	 215.711 MeV
+     G4_Pb:	 775.71 MeV
+    G4_lAr:	 214.472 MeV
 
 ------------------------------------------------------------
 
 #
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 9 of which, static: 0
-Dynamic pools deleted: 9 / Total memory freed: 0.088 MB
+Dynamic pools deleted: 9 / Total memory freed: 0.092 MB
 ============================================================

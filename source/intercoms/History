@@ -6,6 +6,14 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2026-05-26 Gabriele Cosmo (intercoms-V11-03-01)
+- Fixed MT data race in G4UImanager, by adding a file-local mutex and guarded
+  the four command-tree mutation paths AddNewCommand(), AddWorkerCommand(),
+  RemoveCommand(), RemoveWorkerCommand().
+  The lock is scoped only around the direct 'treeTop' mutation, so
+  AddNewCommand() does not hold it while forwarding to AddWorkerCommand()
+  on the master UI manager.
+
 ## 2025-04-11 Makoto Asai (intercoms-V11-03-00)
 - G4UImanager, G4UIcontrolMessenger
   - Introducing "@@" keyword that can be placed in any UI command that takes

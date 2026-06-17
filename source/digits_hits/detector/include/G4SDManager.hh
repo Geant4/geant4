@@ -35,8 +35,8 @@
 //
 // Author: Makoto Asai
 // --------------------------------------------------------------------
-#ifndef G4SDManager_h
-#define G4SDManager_h 1
+#ifndef G4SDMANAGER_HH
+#define G4SDMANAGER_HH
 
 #include "G4HCtable.hh"
 #include "G4SDStructure.hh"
@@ -75,6 +75,10 @@ class G4SDManager
 
   // Return ID number of sensitive detector with given name
   G4int GetCollectionID(const G4String& colName);
+
+  // Return ID number of sensitive detector with subdetector and name
+  // equivelant to GetCollectionID(detSubName+'/'+colSubName)
+  G4int GetCollectionID(const G4String& detSubName, const G4String& colSubName );
 
   // Return ID number of sensitive detector creating given hits collection
   G4int GetCollectionID(G4VHitsCollection* aHC);

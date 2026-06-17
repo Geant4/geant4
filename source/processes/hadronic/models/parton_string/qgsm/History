@@ -6,6 +6,15 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2026-04-02 Dmitri Konstantinov (hadr-qgsm-V11-03-01)
+- G4QuarkExchange: fixed a missing line in the target-diffraction
+  branch for kaon projectiles. The sampled value x was not stored
+  in TPlusNew, so this branch could not complete successfully.
+
+## 2026-03-29 Dmitri Konstantinov
+- G4SPBaryon: fixed wrong antidiquark code in the anti-Delta0 (PDG = -2114)
+  QGSM splitting table; changed -2103 to -1103.
+
 ## 2025-12-23 Vladimir Ivanchenko (hadr-qgsm-V11-03-00)
 - G4GammaParticipants, G4QGSParticipants, G4QGSMSplitableHadron - added
     G4HadronicException header.

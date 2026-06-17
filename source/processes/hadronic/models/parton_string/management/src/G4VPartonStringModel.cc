@@ -44,6 +44,11 @@
 #include "G4ParticleTable.hh"
 #include "G4IonTable.hh"
 
+#include "G4PionPlus.hh"
+#include "G4PionMinus.hh"
+#include "G4PionZero.hh"
+
+
 G4VPartonStringModel::G4VPartonStringModel(const G4String& modelName)
     : G4VHighEnergyGenerator(modelName),
       stringFragmentationModel(nullptr)
@@ -409,6 +414,47 @@ G4KineticTrackVector * G4VPartonStringModel::Scatter(const G4Nucleus &theNucleus
 
     if(theResult == 0) {Success=false; continue;}
 
+    // In the case that the interaction projectile hadron - target nucleus appears as quasi-elastic
+    // so far, i.e. all of its projectile hadron - target nucleon interactions are elastic,
+    // we need to check that no pions are produced by the string fragmentation, else the
+    // interaction projectile hadron - target nucleus is not quasi-elastic.
+    // Notice that we are assuming that only pions - the lightest hadron type - can be produced
+    // by the strings formed by the elastic interactions between the projectile hadron and the
+    // target nucleons; moreover, in the case of a projectile pion, we need to consider that the
+    // projectile pion will appear in the final state in the case of a quasi-elastic interaction.
+    // Moreover, to be a quasi-elastic interaction, no Delta resonance should be formed in any
+    // of the interactions between the hadron projectile and the target nucleons (because,
+    // otherwise, these interactions will not be all of elastic type, as by definition of
+    // quasi-elastic). These Delta resonances will then decay to pions, but later in the workflow,
+    // not after the string fragmentation, therefore we need to explicit check here for the
+    // presence of Delta resonances.
+    if ( fIsQuasiElasticInteraction ) {
+      G4int numberOfPionsProduced = 0;
+      const G4ParticleDefinition* primaryDef = thePrimary.GetDefinition();
+      if ( primaryDef == G4PionPlus::Definition() || primaryDef == G4PionMinus::Definition() ||
+           primaryDef == G4PionZero::Definition() ) {
+	// In a quasi-elastic interaction the projectile pion appears in the final state.
+	numberOfPionsProduced = -1;
+      }
+      G4bool isDeltaPresent = false;
+      // Loop over the particles produced by the string fragmentation, counting the pions
+      // and checking whether either Delta0 or Delta+ resonances are present.
+      for ( unsigned int i = 0; i < theResult->size(); ++i ) {
+        const G4ParticleDefinition* secDef = (*theResult)[i]->GetDefinition();
+        if ( secDef == G4PionPlus::Definition() || secDef == G4PionMinus::Definition() ||
+             secDef == G4PionZero::Definition() ) {
+	  numberOfPionsProduced++;
+        }
+	if ( secDef != nullptr &&
+	     ( secDef->GetPDGEncoding() == 2114 || secDef->GetPDGEncoding() == 2214 ) ) {
+	  isDeltaPresent = true;
+	  break;
+	}
+      }
+      // A quasi-elastic interaction must have neither extra pions, nor Delta resonances in the final state.
+      if ( numberOfPionsProduced > 0 || isDeltaPresent ) fIsQuasiElasticInteraction = false; 
+    }
+    
     #ifdef debug_PartonStringModel
     G4cout<<"Parton-String model: Number of produced particles "<<theResult->size()<<G4endl;
     SumPsecondr = G4LorentzVector(0.,0.,0.,0.);

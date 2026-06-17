@@ -439,7 +439,6 @@ G4NuclearLevelData::G4NuclearLevelData()
   fLevelReader = new G4LevelReader(this);
   for(G4int Z=0; Z<ZMAX; ++Z) {
     (fLevelManagers[Z]).resize(AMAX[Z]-AMIN[Z]+1,nullptr);
-    (fLevelManagerFlags[Z]).resize(AMAX[Z]-AMIN[Z]+1,false);
   }
   fShellCorrection = new G4ShellCorrection();
   fPairingCorrection = new G4PairingCorrection();
@@ -465,15 +464,13 @@ G4NuclearLevelData::GetLevelManager(G4int Z, G4int A)
 {
   if(Z < 1 || Z >= ZMAX || A < AMIN[Z] || A > AMAX[Z]) { return nullptr; } 
   const G4int idx = A - AMIN[Z];
-  if( !(fLevelManagerFlags[Z])[idx] ) {
-    G4AutoLock l(&nuclearLevelDataMutex);
-    if( !(fLevelManagerFlags[Z])[idx] ) {
-      (fLevelManagers[Z])[idx] = fLevelReader->CreateLevelManager(Z, A);
-      (fLevelManagerFlags[Z])[idx] = true;
-    }
-    l.unlock();
+  G4AutoLock l(&nuclearLevelDataMutex);
+  if(nullptr == (fLevelManagers[Z])[idx]) {
+    (fLevelManagers[Z])[idx] = fLevelReader->CreateLevelManager(Z, A);
   }
-  return (fLevelManagers[Z])[idx];
+  const G4LevelManager* man = (fLevelManagers[Z])[idx];
+  l.unlock();
+  return man;
 }
 
 G4bool
@@ -494,7 +491,6 @@ G4NuclearLevelData::AddPrivateData(G4int Z, G4int A, const G4String& fname)
       const G4int idx = A - AMIN[Z];
       delete (fLevelManagers[Z])[idx]; 
       (fLevelManagers[Z])[idx] = newman;
-      (fLevelManagerFlags[Z])[idx] = true;
     }
     l.unlock();
   } else {
@@ -519,19 +515,19 @@ G4int G4NuclearLevelData::GetMaxA(G4int Z) const
 
 void G4NuclearLevelData::UploadNuclearLevelData(G4int Zlim)
 {
-  if(fInitialized) return;
   G4AutoLock l(&nuclearLevelDataMutex);
-  if(!fInitialized) {
-    fInitialized = true;
-    G4int mZ = Zlim + 1;
-    if(mZ > ZMAX) { mZ = ZMAX; }
-    for(G4int Z=1; Z<mZ; ++Z) {
-      for(G4int A=AMIN[Z]; A<=AMAX[Z]; ++A) {
-	G4int idx = A - AMIN[Z];
-	if( !(fLevelManagerFlags[Z])[idx] ) {
-	  (fLevelManagers[Z])[idx] = fLevelReader->CreateLevelManager(Z, A);
-	  (fLevelManagerFlags[Z])[idx] = true;
-	}
+  if(fInitialized) {
+    l.unlock();
+    return;
+  }
+  fInitialized = true;
+  G4int mZ = Zlim + 1;
+  if(mZ > ZMAX) { mZ = ZMAX; }
+  for(G4int Z=1; Z<mZ; ++Z) {
+    for(G4int A=AMIN[Z]; A<=AMAX[Z]; ++A) {
+      G4int idx = A - AMIN[Z];
+      if(nullptr == (fLevelManagers[Z])[idx]) {
+	(fLevelManagers[Z])[idx] = fLevelReader->CreateLevelManager(Z, A);
       }
     }
   }

@@ -498,21 +498,6 @@ G4VSolid* G4UnionSolid::Clone() const
 
 //////////////////////////////////////////////////////////////////////////
 //
-// ComputeDimensions
-
-void 
-G4UnionSolid::ComputeDimensions(       G4VPVParameterisation*,
-                                 const G4int,
-                                 const G4VPhysicalVolume* ) 
-{
-  DumpInfo();
-  G4Exception("G4UnionSolid::ComputeDimensions()",
-              "GeomSolids0001", FatalException,
-              "Method not applicable in this context!");
-}
-
-//////////////////////////////////////////////////////////////////////////
-//
 // DescribeYourselfTo
 
 void 

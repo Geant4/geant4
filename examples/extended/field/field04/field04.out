@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-04-patch-01    (13-March-2026)
+ Geant4 version Name: geant4-11-04-patch-02    (12-June-2026)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -10998,7 +10998,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
  2669 -21.508078 cm  19.707951 cm  77.724853 cm  45.014014 MeV4.9322449e-17 meV         1 mm  2.6716173 m  CaptureMgnt  StepLimiter
  2670  -21.41786 cm  19.742111 cm  77.751192 cm  45.014014 MeV4.9322449e-17 meV         1 mm  2.6726173 m  CaptureMgnt  StepLimiter
  2671 -21.327432 cm  19.775712 cm  77.777531 cm  45.014014 MeV4.9322449e-17 meV         1 mm  2.6736173 m  CaptureMgnt  StepLimiter
- 2672 -21.236797 cm   19.80875 cm  77.803871 cm  45.014014 MeV4.9322449e-17 meV    
+ 2672 -21.236797 cm   19.80875 cm  77.803871 cm  45.014014 MeV4.9322449e-17 meV     
 ============================================================================================
 ================= lines above cut to keep file within limits ===============================
 ============================================================================================

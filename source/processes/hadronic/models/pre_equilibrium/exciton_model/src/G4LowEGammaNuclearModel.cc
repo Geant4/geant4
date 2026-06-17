@@ -58,8 +58,7 @@ G4LowEGammaNuclearModel::G4LowEGammaNuclearModel()
   if(!fPreco) { fPreco = new G4PreCompoundModel(); }
 }
 
-G4LowEGammaNuclearModel::~G4LowEGammaNuclearModel()
-{}
+G4LowEGammaNuclearModel::~G4LowEGammaNuclearModel() = default;
 
 void G4LowEGammaNuclearModel::InitialiseModel()
 {}
@@ -77,7 +76,8 @@ G4HadFinalState* G4LowEGammaNuclearModel::ApplyYourself(
   lab4mom += aTrack.Get4Momentum();
 
   G4Fragment frag(A, Z, lab4mom);
-
+  frag.SetNumberOfExcitedParticle(1, 1);
+  frag.SetNumberOfHoles(1,1);
   frag.SetCreatorModelID(secID);
 
   if (verboseLevel > 1) {

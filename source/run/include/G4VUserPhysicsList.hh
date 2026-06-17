@@ -37,8 +37,8 @@
 
 // Original author: H.Kurashige (Kobe University), 9 January 1998
 // --------------------------------------------------------------------
-#ifndef G4VUserPhysicsList_hh
-#define G4VUserPhysicsList_hh 1
+#ifndef G4VUSERPHYSICSLIST_HH
+#define G4VUSERPHYSICSLIST_HH
 
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
@@ -305,7 +305,7 @@ inline void G4VUserPhysicsList::Construct()
   if (verboseLevel > 1) G4cout << "G4VUserPhysicsList::Construct()" << G4endl;
 #endif
 
-  if (G4Threading::IsMasterThread()) G4PhysicsModelCatalog::Initialize();
+  G4PhysicsModelCatalog::Initialize();
 
   InitializeProcessManager();
 

@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-04-patch-01    (13-March-2026)
+ Geant4 version Name: geant4-11-04-patch-02    (12-June-2026)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -840,7 +840,7 @@ Max 2J for sampling of angular correlations         10
 
 --------------------End of Global Run-----------------------
  The run consists of 1000 gamma of 6 MeV
- Dose in scoring volume : 46.6079 picoGy  +- 4.16361 picoGy 
+ Dose in scoring volume : 42.5852 picoGy  +- 3.83641 picoGy 
 ------------------------------------------------------------
 
 ### Run 1 starts.
@@ -857,7 +857,7 @@ Max 2J for sampling of angular correlations         10
 
 --------------------End of Global Run-----------------------
  The run consists of 1000 proton of 210 MeV
- Dose in scoring volume : 5.08954 nanoGy  +- 147.047 picoGy 
+ Dose in scoring volume : 4.85938 nanoGy  +- 146.621 picoGy 
 ------------------------------------------------------------
 
 Graphics systems deleted.

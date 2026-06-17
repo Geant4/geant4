@@ -51,8 +51,8 @@ G4PreCompoundAlpha::G4PreCompoundAlpha()
 
 G4double G4PreCompoundAlpha::FactorialFactor(G4int N, G4int P) const
 {
-  return static_cast<G4double>(((N-4)*(P-3)*(N-3)*(P-2))*((N-2)*(P-1)*(N-1)*P))
-    /12.0;
+  return G4double((N - 4) * (P - 3) * (N - 3) * (P - 2)) *
+         G4double((N - 2) * (P - 1) * (N - 1) * P) / 12.0;
 }
   
 G4double G4PreCompoundAlpha::CoalescenceFactor(G4int A) const

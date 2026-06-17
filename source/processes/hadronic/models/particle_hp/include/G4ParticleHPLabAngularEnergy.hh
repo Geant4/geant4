@@ -26,8 +26,8 @@
 //
 // P. Arce, June-2014 Conversion neutron_hp to particle_hp
 //
-#ifndef G4ParticleHPLabAngularEnergy_h
-#define G4ParticleHPLabAngularEnergy_h 1
+#ifndef G4PARTICLEHPLABANGULARENERGY_HH
+#define G4PARTICLEHPLABANGULARENERGY_HH
 
 #include "G4InterpolationManager.hh"
 #include "G4Neutron.hh"
@@ -50,7 +50,7 @@ class G4ParticleHPLabAngularEnergy : public G4VParticleHPEnergyAngular
       nCosTh = nullptr;
       theSecondManager = nullptr;
       nEnergies = -1;
-      currentMeanEnergy = -1.0;
+      currentMeanEnergy.Put(-1.0);
     }
     ~G4ParticleHPLabAngularEnergy() override
     {
@@ -67,7 +67,7 @@ class G4ParticleHPLabAngularEnergy : public G4VParticleHPEnergyAngular
   public:
     void Init(std::istream& aDataFile) override;
     G4ReactionProduct* Sample(G4double anEnergy, G4double massCode, G4double mass) override;
-    G4double MeanEnergyOfThisInteraction() override { return currentMeanEnergy; }
+    G4double MeanEnergyOfThisInteraction() override { return currentMeanEnergy.Get(); }
 
   private:
     // number of incoming neutron energies
@@ -87,6 +87,6 @@ class G4ParticleHPLabAngularEnergy : public G4VParticleHPEnergyAngular
     G4ParticleHPInterpolator theInt;
 
     // cashed value of mean secondary energy in this event.
-    G4double currentMeanEnergy;
+    G4Cache<G4double> currentMeanEnergy;
 };
 #endif

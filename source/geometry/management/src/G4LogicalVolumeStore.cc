@@ -64,7 +64,7 @@ G4LogicalVolumeStore::G4LogicalVolumeStore()
 //
 G4LogicalVolumeStore::~G4LogicalVolumeStore()
 {
-  Clean();  // Delete all volumes in the store
+  CleanStore();  // Delete all volumes in the store
   G4LogicalVolume::Clean();  // Delete allocated sub-instance data
 }
 
@@ -82,7 +82,15 @@ void G4LogicalVolumeStore::Clean()
            << " while geometry closed !" << G4endl;
     return;
   }
+  GetInstance()->CleanStore();
+}
 
+// ***************************************************************************
+// Delete all elements from the store
+// ***************************************************************************
+//
+void G4LogicalVolumeStore::CleanStore()
+{
   // Locks store for deletion of volumes. De-registration will be
   // performed at this stage. G4LogicalVolumes will not de-register themselves.
   //

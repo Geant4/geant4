@@ -398,7 +398,7 @@ if(finDF.good() != 1 ) //check that the file is good and working
     finDF >> mateName;
     
     // This allows to skip empty spaces and tabs in the string 
-    if( mateName[0] == '"' && mateName[mateName.length()-1] == '"' ) 
+    if( mateName[0] == '"' && mateName[static_cast<G4int>(mateName.length())-1] == '"' ) 
     {
       mateName = mateName.substr(1,mateName.length()-2); 
     }

@@ -6,6 +6,11 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2026-05-31 Ben Morgan (opengl-V11-03-11)
+- Fix Alma9/GCC15 bounds check warnings.
+  - Triaged to GCC15 false positive due to temporary creation in a loop.
+  - Fix by making `G4OpenGLViewerPickMap::getAttributes()` return by reference.
+
 ## 2026-02-01 John Allison (opengl-V11-03-10)
 - G4OpenGLViewer.cc:
   - Remove archaic and unnecessary 20th-century #include statements. The first

@@ -43,7 +43,7 @@ G4WeightWindowConfigurator(const G4VPhysicalVolume* worldvolume,
     fPlacer(particlename),
     fWeightWindowStore(wwstore),
     fDeleteWWalg( ( ! wwAlg) ),
-    fWWalgorithm(( (fDeleteWWalg == false) ? new G4WeightWindowAlgorithm(5,3,5) : wwAlg)),
+    fWWalgorithm(( fDeleteWWalg ? new G4WeightWindowAlgorithm(5,3,5) : wwAlg )),
     fPlaceOfAction(placeOfAction)
 {
   paraflag = para;

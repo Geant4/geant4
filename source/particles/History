@@ -6,6 +6,18 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2026-05-20 Gabriele Cosmo (particles-V11-03-03)
+- In G4ParticleDefinition, added idempotent guard in SetParticleDefinitionID()
+  for setting the 'g4particleDefinitionInstanceID' index and cure an MT data
+  race through G4RunManagerKernel::PropagateGenericIonID() which is otherwise
+  generating pointless cross-thread writes on shared particle definitions.
+
+## 2026-04-07 Makoto Asai
+- G4DecayProducts.cc:
+  - Fix the check of absolute zero decay time of the pre-assigned daughter 
+  particle. Left-over from changes made with particles-V10-05-00. Addressing
+  to UR-89.
+
 ## 2026-02-25 Vladimir Ivanchenko (particles-V11-03-02)
 - Attempt to fixed data race in ion creation (Bugzilla #2680) by extention
   of excited isomer name from 3 to 5 digits after dot.

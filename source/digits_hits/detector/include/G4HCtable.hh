@@ -39,8 +39,8 @@
 //
 // Author: Makoto Asai
 // ---------------------------------------------------------------------
-#ifndef G4HCtable_H
-#define G4HCtable_H 1
+#ifndef G4HCTABLE_HH
+#define G4HCTABLE_HH
 
 #include "globals.hh"
 
@@ -58,6 +58,9 @@ class G4HCtable
   G4int Registor(const G4String& SDname, const G4String& HCname);
   G4int GetCollectionID(const G4String& HCname) const;
   G4int GetCollectionID(G4VSensitiveDetector* aSD) const;
+  // Return ID number given subdetector and name
+  // equivelant to GetCollectionID(detSubName+'/'+colSubName)
+  G4int GetCollectionID(const G4String& detSubName, const G4String& collSubName) const;
 
   inline G4int entries() const { return G4int(HClist.size()); }
 

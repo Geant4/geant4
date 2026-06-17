@@ -87,6 +87,9 @@ void G4ParticleHPElasticFS::Init(G4double A, G4double Z, G4int M,
     theNames.GetName(theBaseA, theBaseZ, M, dirName, tString, dbool);
   const G4String& filename = aFile.GetName();
   SetAZMs(aFile);
+
+  InitializeScatteringKernelParameters(); // Initialize DBRC variables
+
   if (!dbool) {
     hasAnyData = false;
     hasFSData = false;
@@ -424,8 +427,6 @@ G4ReactionProduct G4ParticleHPElasticFS::GetBiasedThermalNucleus(const G4double 
   // While the SVT algorithm is still present also in G4Nucleus::GetBiasedThermalNucleus,
   // the DBRC algorithm on top of the SVT one has been moved in this new method, in
   // order to avoid a cycle dependency between hadronic/util and hadronic/model/particle_hp.
-
-  InitializeScatteringKernelParameters();
 
   // Set threshold for SVT algorithm
   G4double E_threshold = svtEmax;

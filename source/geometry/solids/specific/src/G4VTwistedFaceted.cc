@@ -261,19 +261,6 @@ G4VTwistedFaceted& G4VTwistedFaceted::operator = (const G4VTwistedFaceted& rhs)
 
 
 //=====================================================================
-//* ComputeDimensions -------------------------------------------------
-
-void G4VTwistedFaceted::ComputeDimensions(G4VPVParameterisation* ,
-                                          const G4int ,
-                                          const G4VPhysicalVolume* )
-{
-  G4Exception("G4VTwistedFaceted::ComputeDimensions()",
-              "GeomSolids0001", FatalException,
-              "G4VTwistedFaceted does not support Parameterisation.");
-}
-
-
-//=====================================================================
 //* Extent ------------------------------------------------------------
 
 void G4VTwistedFaceted::BoundingLimits(G4ThreeVector& pMin,

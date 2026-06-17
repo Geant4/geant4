@@ -57,7 +57,7 @@ G4NuDEXLevelDensity::G4NuDEXLevelDensity(G4int aZ,G4int aA,G4int ldtype){
   }
   HasData=false;
 
-  Sn=-1; D0=-1; I0=-1000;
+  Sn=-1000; D0=-1000; I0=-1000;
   Ed=0; 
   ainf_ldpar=0; gamma_ldpar=0; dW_ldpar=0; Delta_ldpar=0; T_ldpar=0; E0_ldpar=0; Ex_ldpar=0;
 }
@@ -65,16 +65,16 @@ G4NuDEXLevelDensity::G4NuDEXLevelDensity(G4int aZ,G4int aA,G4int ldtype){
 
 G4int G4NuDEXLevelDensity::ReadLDParameters(const char* dirname,const char* inputfname,const char* defaultinputfname){
 
-  char fname[100];
+  std::string fname(dirname);
   if(LDType==1 || LDType==3){ // Back-Shifted-Fermi-Gas model
-    snprintf(fname,100,"%s/LevelDensities/level-densities-bfmeff.dat",dirname);
+    fname.append("/LevelDensities/level-densities-bfmeff.dat");
   }
   else{ //  Constant Temperature
-    snprintf(fname,100,"%s/LevelDensities/level-densities-ctmeff.dat",dirname);
+    fname.append("/LevelDensities/level-densities-ctmeff.dat");
   }
   G4double EL=0,EU=0;
   
-  std::ifstream in(fname);
+  std::ifstream in(fname.c_str());
   if(!in.good()){
     std::cout<<" ######## Error opening file "<<fname<<" ########"<<std::endl;
     NuDEXException(__FILE__,std::to_string(__LINE__).c_str(),"##### Error in NuDEX #####");
@@ -157,9 +157,9 @@ G4int G4NuDEXLevelDensity::CalculateLDParameters_BSFG(const char* dirname){
   gamma_ldpar=gamma0/std::pow(A_mass,1./3.);
 
   //dW_ldpar --> from data file
-  char fname[100];
-  snprintf(fname,100,"%s/LevelDensities/shellcor-ms.dat",dirname);
-  std::ifstream in(fname);
+  std::string fname(dirname);
+  fname.append("/LevelDensities/shellcor-ms.dat");
+  std::ifstream in(fname.c_str());
   if(!in.good()){
     std::cout<<" ######## Error opening file "<<fname<<" ########"<<std::endl;
     NuDEXException(__FILE__,std::to_string(__LINE__).c_str(),"##### Error in NuDEX #####");
@@ -235,7 +235,7 @@ void G4NuDEXLevelDensity::PrintParametersInInputFileFormat(std::ostream &out){
 
   out<<"LDPARAMETERS"<<std::endl;
   out<<LDType<<std::endl;
-  G4long oldprc = out.precision(15);
+  std::streamsize oldprc=out.precision(15);
   if(LDType==1){
     out<<dW_ldpar<<"  "<<gamma_ldpar<<"  "<<ainf_ldpar<<"  "<<Delta_ldpar<<std::endl;
   }
@@ -273,7 +273,6 @@ G4double G4NuDEXLevelDensity::GetNucleusTemperature(G4double ExcEnergy){
 }
 
 
-//Gilbert-Cameron:
 G4double G4NuDEXLevelDensity::GetLevelDensity(G4double ExcEnergy,G4double spin,G4bool ,G4bool TotalLevelDensity){
 
   if(!HasData){
@@ -285,8 +284,9 @@ G4double G4NuDEXLevelDensity::GetLevelDensity(G4double ExcEnergy,G4double spin,G
     return 0;
   }
 
+  G4double minUval=0.1; //Uval cannot be <=0, for the moment ...
   G4double Uval=ExcEnergy-Delta_ldpar;
-  if(Uval<0){Uval=1.e-6;}
+  if(Uval<minUval){Uval=minUval;}
 
   //----------------------------------------------------------------
   // Back shifted: von Egidy et al., NP A481 (1988) 189
@@ -303,11 +303,11 @@ G4double G4NuDEXLevelDensity::GetLevelDensity(G4double ExcEnergy,G4double spin,G
 
   //--------------------------------------------------------------------------------
   //statistical factor from eq. 39 of RIPL-3 manual, and sigma2 from eqs. 57-60
-  G4double Uval_Sn=Sn-Delta_ldpar;
+  G4double Uval_Sn=Sn-Delta_ldpar; if(Uval_Sn<minUval){Uval_Sn=minUval;}
   G4double a_ldpar=ainf_ldpar*(1.+dW_ldpar/Uval*(1.-std::exp(-gamma_ldpar*Uval)));
   G4double a_ldpar_Sn=ainf_ldpar*(1.+dW_ldpar/Uval_Sn*(1.-std::exp(-gamma_ldpar*Uval_Sn)));
   G4double sigma2_f=0.01389*std::pow(A_mass,5./3.)/ainf_ldpar*std::sqrt(a_ldpar*Uval);
-  G4double sigma2_f_Sn=0.01389*std::pow(A_mass,5./3.)/ainf_ldpar*std::sqrt(a_ldpar_Sn*Uval);
+  G4double sigma2_f_Sn=0.01389*std::pow(A_mass,5./3.)/ainf_ldpar*std::sqrt(a_ldpar_Sn*Uval_Sn);
   G4double sigma2_d=(0.83*std::pow(A_mass,0.26))*(0.83*std::pow(A_mass,0.26));
 
   G4double sigma2;
@@ -374,8 +374,8 @@ G4double G4NuDEXLevelDensity::Integrate(G4double Emin,G4double Emax,G4double spi
   G4int nb=1000;
   G4double Integral=0,x1,x2,y1,y2;
   for(G4int i=0;i<nb;i++){
-    x1=Emin+(Emax-Emin)*i/(G4double)(nb-1.);
-    x2=Emin+(Emax-Emin)*(i+1.)/(G4double)(nb-1.);
+    x1=Emin+(Emax-Emin)*i/(G4double)nb;
+    x2=Emin+(Emax-Emin)*(i+1.)/(G4double)nb;
     y1=GetLevelDensity(x1,spin,parity);
     y2=GetLevelDensity(x2,spin,parity);
     Integral+=(y1+y2)/2.*(x2-x1);

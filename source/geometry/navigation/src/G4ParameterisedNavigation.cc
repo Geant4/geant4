@@ -408,7 +408,7 @@ G4ParameterisedNavigation::ComputeSafety(const G4ThreeVector& localPoint,
   G4LogicalVolume *motherLogical;
   G4VSolid *motherSolid, *sampleSolid;
   G4double motherSafety, ourSafety;
-  G4int sampleNo, curVoxelNodeNo;
+  G4int sampleNo, curVoxelNodeNo, curVoxelNoSlices;
 
   G4SmartVoxelNode *curVoxelNode;
   G4long curNoVolumes, contentNo;
@@ -454,6 +454,18 @@ G4ParameterisedNavigation::ComputeSafety(const G4ThreeVector& localPoint,
   {
     curVoxelNodeNo = G4int((localPoint(fVoxelAxis)
                            -fVoxelHeader->GetMinExtent()) / fVoxelSliceWidth );
+    curVoxelNoSlices = G4int(fVoxelHeader->GetNoSlices());
+
+    // Rounding protection
+    //
+    if ( curVoxelNodeNo<0 )
+    {
+      curVoxelNodeNo = 0;
+    }
+    else if ( curVoxelNodeNo>=curVoxelNoSlices )
+    {
+      curVoxelNodeNo = curVoxelNoSlices-1;
+    }
     curVoxelNode = fVoxelHeader->GetSlice(curVoxelNodeNo)->GetNode();
     fVoxelNodeNo = curVoxelNodeNo;
     fVoxelNode = curVoxelNode;

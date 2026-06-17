@@ -495,21 +495,6 @@ G4IntersectionSolid::DistanceToOut( const G4ThreeVector& p ) const
 
 //////////////////////////////////////////////////////////////////////////
 //
-// ComputeDimensions
-
-void 
-G4IntersectionSolid::ComputeDimensions( G4VPVParameterisation*,
-                                        const G4int,
-                                        const G4VPhysicalVolume* ) 
-{
-  DumpInfo();
-  G4Exception("G4IntersectionSolid::ComputeDimensions()",
-              "GeomSolids0001", FatalException,
-              "Method not applicable in this context!");
-}
-
-//////////////////////////////////////////////////////////////////////////
-//
 // GetEntityType
 
 G4GeometryType G4IntersectionSolid::GetEntityType() const 

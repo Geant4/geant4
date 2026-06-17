@@ -2004,10 +2004,9 @@ void G4OpenInventorQtExaminerViewer::sortElements()
    SoGetBoundingBoxAction bAction(getViewportRegion());
    SbVec3f elementCoord;
    std::vector<sceneElement>::iterator itEl;
-   int elementIndex;
    elementForSorting el;
-   for(itEl = sceneElements.begin(), elementIndex = 0;
-       itEl != sceneElements.end(); ++itEl, ++elementIndex) {
+   for(itEl = sceneElements.begin();
+       itEl != sceneElements.end(); ++itEl) {
       bAction.apply(itEl->path);
 
       // FWJ sceneElement already has a center

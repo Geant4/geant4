@@ -1,0 +1,322 @@
+
+                 Geant4 11.4 - patch-02 Release Notes
+                 ------------------------------------
+
+                                                           12 June 2026
+
+List of fixes included in this public patch since release 11.4.1:
+
+o Analysis
+  --------
+  + Fixed MT data race in G4PlotManager, by making the shared FreeType object
+    immutable after one-time initialization.
+  + Fixed bounds-check errors in G4RootPNtupleManager; ensure n-tuple
+    description and pointer vectors are kept in sync.
+  + Fixed compilation warnings "missing braces around initializer",
+    observed with gcc-11.5. Addressing problem report #2705.
+
+o Digits_Hits
+  -----------
+  + Improved performance of GetCollectionID() in G4SDManager and G4HCTable by
+    avoiding unneeded memory allocations; further improve it by adding a second
+    interface, avoiding the need to concatenate strings together and then take
+    them apart again.
+
+o Event
+  -----
+  + In G4StackManager::PushOneTrack(), removed check for generic ion having
+    proper process manager. This is to avoid rare race condition issue of 
+    G4ParticleDefinition::GetParticleDefinitionID() method.
+  + Fixed lock contention in G4Event::GetNumberOfRemainingSubEvents() by using
+    a lock only in sub-event parallel mode for the event in the master thread.
+    Addressing problem report #2734.
+
+o Externals
+  ---------
+  + g4tools
+    o Fixed compilation warning on gcc-16.1 for variable set but not used in
+      array::fill(). Fixed compilation warning in columns.icc; implemented
+      construction-order fix.
+  
+o Geometry
+  --------
+  + management
+    o In G4GeometryManager, fixed resetting of flags in function OpenGeometry()
+      to allow for proper destruction of voxelisation data and geometry rebuild.
+      Addressing problem report #2733.
+    o Updated Reallocate() function in G4GeomSplitter to zero-initialise any
+      slots added beyond the previous allocated space, ensuring that uninitialised
+      slots in the master array contain null pointers, which then propagate
+      correctly via CopyMasterContents() to all workers. Addressing potential
+      crash in MT mode in setups with relatively complex geometry being re-
+      initialised between runs.
+    o Removed G4Exception in G4VSolid implementation of ComputeDimensions().
+      Dispatching for ComputeDimensions() is enabled only for solids where full
+      parameterisation is allowed, for all others it is simply disabled and
+      performing no actions.
+    o Use shared_ptr for the shared voxelisation helper in G4GeometryManager
+      and simplified the destructor.
+    o G4PhysicsVolumeStore, G4LogicalVolumeStore, G4SolidStore, G4RegionStore
+      added CleanStore private method called from class destructor and from
+      method Clean() in order to avoid minor memory leak at exit. The problem
+      was in call to the singleton G4GeometryManager in class destructor,
+      but this manager may be already deleted and a new instance of it is
+      created and never deleted.
+    o Fixed tolerance treatment in G4GeomTools::TriangulatePolygon().
+    o Removed redundant virtual destructor in G4TouchableHistory, as no longer
+      necessary. Updated comments and descriptions.
+    o In G4VoxelisationHelper, moved checks printouts in method
+      ReportWorkerIsDoneOptimising(..) under verbosity control.
+      Fixed error/warning codes and minor cleanup.
+  + navigation:
+    o Added rounding protection in ComputeSafety() of G4ParameterisedNavigation
+      in the computation of the current voxel node for the 1D optimisation case.
+      Addressing problem report #2735.
+    o Refresh navigator for tracking and mass world in G4MultiNavigator from
+      G4PathFinder whenever geometry is modified/rebuilt, to avoid stale pointers.
+      Addresses problem report #2714.
+  + solids/Boolean:
+    o Fixed calculation of normal in G4ScaledSolid::DistanceToOut(p,v,..) to
+      use inverse transformation. Addressing problem report #2709.
+    o Moved back method InsideNoVoxels(p) in G4MultiUnion to public section.
+    o Removed redundant specialisations of ComputeDimensions() in Boolean solids.
+      Dispatching for ComputeDimensions() is enabled only for solids where full
+      parameterisation is allowed, for all others it is simply disabled and
+      performing no actions.
+  + solids/specific
+    o Fixed data races in twisted solids implementation; solids now remain
+      read-only after construction and navigation queries are stateless.
+      Addressing problem reports #2654 and #2704.
+    o Removed redundant disabled specialisation of ComputeDimensions()
+      in twisted solids. Dispatching for ComputeDimensions() is enabled only
+      for solids where full parameterisation is allowed, for all others it is
+      simply disabled and performing no actions.
+
+o Global
+  ------
+  + In G4PhysicsModelCatalog, added the possibility to register
+    custom/user-defined physics models by calling the new method
+    RegisterCustomModel(). Made the class thread-safe, also in the case of
+    parallel initialisation.
+  + Updated date and version for 11.4.2.
+
+o Intercoms
+  ---------
+  + Fixed possible MT data race in G4UImanager, by adding a file-local mutex
+    and guarded the four command-tree mutation paths AddNewCommand(),
+    AddWorkerCommand(), RemoveCommand(), RemoveWorkerCommand().
+
+o Materials
+  ---------
+  + In G4NistManager, fixed implementation of SetDensityEffectCalculatorFlag(..)
+    and removed redundant unused vectors data members for elements and materials.
+    Addressing problem report #2739.
+  + Added explicitly deleted copy constructor and assignment operator for
+    G4NistManager. Addressing problem report #2738.
+
+o Particles
+  ---------
+  + In G4DecayProducts, fixed check of absolute zero decay time of the
+    pre-assigned daughter particle.
+  + In G4ParticleDefinition, added idempotent guard in method
+    SetParticleDefinitionID() to cure potential MT data race through
+    PropagateGenericIonID() in G4RunManagerKernel.
+
+o Persistency
+  -----------
+  + ascii
+    o Fix in G4tgbVolume::FindOrConstructG4Solid() to close tessellated
+      solid at construction. Addressing problem report #2718.
+
+o Processes - Generic
+  -------------------
+  + Biasing
+    o Fixed setting of parallel world navigator in G4ImportanceProcess to avoid
+      reported cases of stale pointers when geometry gets rebuilt/reinitialised.
+    o In G4WeightWindowConfigurator constructor, fixed the inverted ternary in
+      the initialiser list. Addressing problem report #2694.
+  + Cuts
+    o In G4VRangeToEnergyConverter, instantiate energy bin vector object only
+      once unless it is requested to rebuild by methods such as SetEnergyRange().
+      This fix enables the use of UI command such as "/cuts/setLowEdge" at the
+      Pre_Init state before initialising the run manager.
+      Restored low energy cut limit as it was originally, i.e. 990 eV instead of
+      1 keV. It was an overlooked leftover since version 11.0.
+      Fixed minor memory leak at exit.
+    o Fixed MT data race in G4ProductionCuts, which can be caused in MT mode by
+      workers replaying broadcast UI commands in G4WorkerRunManager; added a
+      mutex around G4ProductionCuts state access.
+  + Management
+    o In G4ProcessTable, fixed compilation warning on gcc-16.1 for variable
+      set but not used in DumpInfo().
+  + Scoring
+    o Fixed setting of parallel world navigator in G4ParallelWorldProcess to
+      avoid reported cases of stale pointers when geometry gets rebuilt/
+      reinitialised.
+    o Avoid string copy in input in G4ParallelWorldProcess::SetParallelWorld(..).
+  + Transportation
+    o In G4CoupledTransportation, fixed field configuration in StartTracking(..)
+      before any AlongStep process can ask the shared G4PathFinder to compute the
+      first step of a track.  Addressing problem report #2732.
+    o Refactored code in G4Transportation adding a new protected helper method
+      ConfigureFieldForTrack(..) used in AlongStepGetPhysicalInteractionLength(..).
+
+o Processes - Electromagnetic
+  ---------------------------
+  + standard:
+    o Fix in G4eeToTwoGammaModel and G4eplusTo2or3GammaModel on gamma
+      spectra in annihilation on fly, by restoring algorithm which was used
+      in release 11.2.2. Addressing problem report #2730.
+    o In G4eplusTo3GammaOKVIModel, fixed the transverse direction sign of
+      the third photon in on-fly 3-gamma positron annihilation.
+      This restores zero total photon momentum in the CMS before boosting
+      to the lab frame and prevents unphysical energy non-conservation in
+      EM option4. Addressing problem report #2737.
+  + utils:
+    o G4EmCalculator: fixed computation of EM corrections for ion ionisation
+      in the G4BetaBlockModel. Addressing problem report #2712.
+    o Fixed MT data race in G4EmParameters::fIsPrinted, by making the shared
+      print-suppression flag atomic.
+    o G4ionEffectiveCharge: fixed event non reproducibility on Windows by
+      removing hidden mutable 'chargeCorrection' member state.
+      Return unit-less charge square ratio and effective charge in units of
+      charge.
+
+o Processes - Hadronic
+  --------------------
+  + models/binary_cascade:
+    o In G4BinaryCascade, fixed compilation warning on gcc-16.1 for variable
+      set but not used in FillVoidNucleusProducts().
+  + models/de_excitation:
+    o Fixed MT data race in G4NuclearLevelData, by removing the separate
+      std::vector<G4bool> loaded flag and making the manager pointer itself
+      the loaded state, protected by the existing mutex.
+    o G4StatMFMacroCanonical: fix in ChooseA() function to use assign() in
+      place of resize() for the mass distribution vector. Fix proposed in
+      in [GitHub PR#100](https://github.com/Geant4/geant4/pull/100).
+    o Fix in G4LevelReader for checking when G4LEVELGAMMADATA environment
+      variable is not set.
+    o In G4FermiBreakUpVI, protected initialisation of the shared static Fermi
+      fragments pool with G4AutoLock. Addressing problem report #2724.
+      Minor code cleanup.
+  + models/nudex:
+    o Updated to produce capture cascades of very light nuclei, such as H-1,
+      H-2, etc. Minor bug-fixes.
+  + models/particle_hp:
+    o Fixed MT data race in G4ParticleHPFissionFS, by removing the shared
+      mutable 'produceFissionFragments' member and making the decision local
+      to each ApplyYourself() call.
+    o Fixed MT data race in G4ParticleHPLabAngularEnergy, by moving the lazy
+      G4ParticleHPVector::Integrate() work out of the worker-thread sampling
+      path. Also fixed a nearby latent race in the same class.
+    o Fixed MT data race in G4ParticleHPElasticFS; moved initialization of
+      SVT/DBRC scattering-kernel parameters from GetBiasedThermalNucleus(),
+      called during event processing, to Init(), called during final-state
+      setup. Worker threads now only read these cached parameters.
+    o Fixed MT data race in G4ParticleHPChannel; patched UpdateData() so the
+      elastic final state registers its isotope-wise cross-section once in
+      UpdateData(), after the cross-section vector is created; then removed the
+      racing write from ApplyYourself() at tracking time. This fixes a data race
+      reported by sanitizer for threads both calling RegisterCrossSection() on
+      the same shared G4ParticleHPElasticFS object during event processing;
+      now workers only read the pointer and the write happens during channel
+      initialization.
+    o In G4ParticleHPLegendreTable, added protection in the inlined method
+      Init() to protect against the possibility of negative input parameter,
+      which could cause writing on a zero-size allocated buffer.
+  + models/parton_string:
+    o In G4VLongitudinalStringDecay, fixed wrong MesonWeight indices in the
+      d-dbar neutral-meson table in SetMinMasses(); eta and eta' weights now
+      match their proper state indices.
+    o Fix in G4VPartonStringModel: if at least one extra pion, the lightest
+      hadron type, is produced during the string fragmentation phase, then the
+      interaction between the projectile hadron and the target nucleus is not
+      quasi-elastic; in addition, to be a quasi-elastic interaction, no Delta
+      resonances should be formed by any of the interactions between the hadron
+      projectile and the target nucleons as, otherwise, these interactions are
+      not all of elastic type, as by definition of quasi-elastic.
+    o In G4QuarkExchange, fixed a missing line in the target-diffraction branch
+      for kaon projectiles. The sampled value x was not stored in TPlusNew, so
+      this branch could not complete successfully.
+    o In G4SPBaryon, fixed wrong anti-diquark code in the anti-Delta0 (PDG=-2114)
+      QGSM splitting table; changed -2103 to -1103.
+  + models/pre_equilibrium:
+    o Fixed initialisation of fragments in G4LowEGammaNuclearModel.
+      Addresses problem report #2731.
+    o In G4PreCompoundDeuteron, G4PreCompoundTriton, G4PreCompoundHe3, and
+      G4PreCompoundAlpha, promoted combinatorial products to G4double before
+      multiplication to avoid intermediate integer overflow in precompound
+      fragment-emission probability calculations. In heavy-target cases, this
+      could have generated negative alpha-emission probabilities and thereby
+      alter precompound fragment selection.
+  + models/radioactive_decay:
+    o In G4VRadioactiveDecay, fixed MT data race in GetDecayTable(), adding a
+      mutex. Removed mutex from LoadDecayTable(), only called from
+      GetDecayTable().
+
+o Run
+  ---
+  + In G4VUserPhysicsList::Construct(), removed the condition to be the
+    master-thread for calling G4PhysicsModelCatalog::Initialize(). This is now
+    possible with the revised thread-safe version of G4PhysicsModelCatalog,
+    and it is consistent with the possibility of parallel initialisation.
+  + In G4UserTaskThreadInitialization, corrected initialisation of Ranlux
+    random engines in SetupRNGEngine(), to take in consideration the luxury
+    level. Further addressing problem report #2184.
+  + In G4TaskRunManager and G4WorkerTaskRunManager, added protection not to
+    start a new task if the current run is aborted. In G4WorkerTaskRunManager,
+    added a check not to start a new event if the current run of the master run
+    manager is aborted. Addressing problem report #2729.
+  + In G4RunManagerKernel::PropagateGenericIonID(), added a new mutex lock to
+    protect race condition problem.
+  + Fixed data race in G4MTRunManager detected by Valgrind/DRD when running
+    with G4RUN_MANAGER_TYPE set to "MT", by moving UI command-stack preparation
+    behind the same action-request barrier that wakes the workers.
+  + In G4SubEvtRunManager, in ProccessOneEvent(), set flag for using mutex in
+    G4Event::GetNumberOfRemainingSubEvents() only for the event used in the
+    master thread in sub-event parallel mode. Addressing problem report #2734.
+  + Set verbosity in call to G4GeometryManager::CloseGeometry(..) only if
+    level greater than 1 in G4MTRunManager and G4RunManager.
+
+o Visualization
+  -------------
+  + OpenGL:
+    o Fixed bounds-check compilation warnings on Alma9/GCC15.
+  + OpenInventor:
+    o Fixed compilation warning on Windows/VC for SbBool/bool type comparison
+      in G4OpenInventorQtExaminerViewer. Fixed compilation warning on gcc-16.1
+      for variable set but not used in sortElements().
+  + Vtk:
+    o Removed inclusion of unused Vtk headers in G4VtkViewer. Addresses problem
+      reported in [GitHub PR#99](https://github.com/Geant4/geant4/pull/99).
+ 
+o Examples
+  --------
+  + advanced/eFLASH_radiotherapy:
+    o Fixed PVDF material composition in FlashApplicator: replaced incorrect
+      mass fractions (34/33/33%) with atom counts (2/2/2).
+    o Fixed integer division bug in MonitorChamber (FlashApplicator):
+      1/2 evaluated to 0, causing wrong PVDF layer positioning.
+  + advanced/ICRP110_HumanPhantoms:
+    o In ICRP110PhantomConstruction, ICRP110PhantomNestedParameterisation and
+      ICRP110UserScoreWriter, fixed compilation warnings on macOS/XCode for
+      implicit type conversions.
+  + extended/parameterisations/Par04:
+    o Bumped idna version from 3.7 to 3.15; keras from 3.12.0 to 3.12.1
+      and protobuf from 4.25.8 to 5.29.6. Addresses security vulnerabilities
+      tagged by GitHub's dependabot.
+
+ ----------------------------------------------------------------------------
+
+                             Technical Notes
+                             --------------- 
+
+  o  This patch should be applied on top of release 11.4 series.
+  o  Technical notes distributed for release 11.4 are also applicable and
+     valid for this patch.
+
+The code and rebuilt binary libraries for release 11.4.2 are available
+through the Geant4 "Download" Web page.
+
+Please refer to the Geant4 User Documentation for further information about
+using Geant4.

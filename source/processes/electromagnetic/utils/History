@@ -6,6 +6,30 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2026-05-19 G.Cosmo (emutils-V11-03-16)
+- Fixed MT data race in G4EmParameters::fIsPrinted, by making the shared
+  print-suppression flag atomic. Worker threads can concurrently call
+  G4LossTableManager::ResetParameters() and write SetIsPrintedFlag(true)
+  on the singleton. Since this flag is just shared Boolean state, the narrow
+  fix is to use std::atomic<G4bool> with atomic load/store, rather than a
+  broader lock around table preparation.
+
+## 2026-05-11 V.Ivanchenko
+- G4EmCalculator - fixed problem #2712 - computation of EM corrections for
+    ion ionisation in the G4BetaBlockModel
+
+## 2026-04-02 V.Ivanchenko
+- G4ionEffectiveCharge - renamed private method EffectiveCharge(...) ->
+  ComputeCharge(..); return unitless charge square ratio and effective charge
+  in units of charge; added comments to all methods in header file.
+
+## 2026-03-26 D.Konstantinov
+- G4ionEffectiveCharge - removed hidden mutable chargeCorrection member state.
+  EffectiveChargeSquareRatio() depended on a member variable written as a side
+  effect by EffectiveCharge(). This was sensitive to compiler optimization and
+  inlining, causing wrong q2 values for ions and breaking event reproducibility
+  on Windows MSVC. chargeCorrection is now returned via an output parameter.
+
 ## 2025-11-06 V.Ivanchenko (emutils-V11-03-15)
 - G4EmParameters - fixed typo in printout
 

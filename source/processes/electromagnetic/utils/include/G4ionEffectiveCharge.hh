@@ -49,8 +49,8 @@
 // -------------------------------------------------------------------
 //
 
-#ifndef G4ionEffectiveCharge_h
-#define G4ionEffectiveCharge_h 1
+#ifndef G4IONEFFECTIVECHARGE_HH
+#define G4IONEFFECTIVECHARGE_HH
 
 #include "globals.hh"
 #include "G4ParticleDefinition.hh"
@@ -63,18 +63,20 @@ class G4ionEffectiveCharge
 
 public:
 
-  explicit G4ionEffectiveCharge();
+  G4ionEffectiveCharge();
 
   ~G4ionEffectiveCharge() = default;
 
-  G4double EffectiveChargeSquareRatio(
+  // unitless effective charge square of an ion
+  inline G4double EffectiveChargeSquareRatio(
                            const G4ParticleDefinition* p,
                            const G4Material* material,
-			         G4double kineticEnergy);
+                           const G4double kineticEnergy) const;
 
+  // effective charge in units of charge
   G4double EffectiveCharge(const G4ParticleDefinition* p,
                            const G4Material* material,
-			         G4double kineticEnergy);
+                           const G4double kineticEnergy) const;
 
   // hide assignment operator
   G4ionEffectiveCharge & operator=(const G4ionEffectiveCharge &right) = delete;
@@ -82,22 +84,15 @@ public:
 
 private:
 
-  G4Pow*                      g4calc;
+  // Computation of unitless effective change that returns chargeCorrection via
+  // output parameter, which is the safest implementation for different compilers
+  // and compiler options.
+  G4double ComputeCharge(const G4ParticleDefinition* p,
+                         const G4Material* material,
+                         const G4double kineticEnergy,
+                         G4double& chargeCorrection) const;
 
-  const G4ParticleDefinition* lastPart = nullptr;
-  const G4Material*           lastMat = nullptr;
-
-  G4double                    inveplus;
-  G4double                    lastKinEnergy;
-
-  G4double                    chargeCorrection;
-  G4double                    effCharge;
-
-  G4double                    energyHighLimit;
-  G4double                    energyLowLimit;
-  G4double                    energyBohr;
-  G4double                    massFactor;
-  G4double                    minCharge;
+  G4Pow* g4calc;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -106,11 +101,12 @@ private:
 inline G4double G4ionEffectiveCharge::EffectiveChargeSquareRatio(
                            const G4ParticleDefinition* p,
                            const G4Material* material,
-			         G4double kineticEnergy)
+                           const G4double kineticEnergy) const
 {
-  const G4double aCharge = 
-    EffectiveCharge(p,material,kineticEnergy)*chargeCorrection*inveplus;
-  return aCharge*aCharge;
+  G4double cc;
+  G4double effQ = ComputeCharge(p, material, kineticEnergy, cc);
+  G4double aCharge = effQ * cc;
+  return aCharge * aCharge;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

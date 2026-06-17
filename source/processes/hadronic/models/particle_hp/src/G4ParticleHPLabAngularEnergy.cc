@@ -69,6 +69,7 @@ void G4ParticleHPLabAngularEnergy::Init(std::istream& aDataFile)
       aDataFile >> label;
       theData[i][ii].SetLabel(label);
       theData[i][ii].Init(aDataFile, eV);
+      theData[i][ii].Integrate();
     }
   }
 }
@@ -164,7 +165,7 @@ G4ReactionProduct* G4ParticleHPLabAngularEnergy::Sample(G4double anEnergy, G4dou
     G4ParticleHPVector theStore;
     theStore.Merge(&theBuff1a, &theBuff2a);
     secEnergy = theStore.Sample();
-    currentMeanEnergy = theStore.GetMeanX();
+    currentMeanEnergy.Put(theStore.GetMeanX());
     //---------------------------------------------------------
   }
   else  // this is the small big else.
@@ -320,7 +321,7 @@ G4ReactionProduct* G4ParticleHPLabAngularEnergy::Sample(G4double anEnergy, G4dou
     theOne.Merge(&theOne1, &theOne2);  // both correct, complete binning
 
     secEnergy = theOne.Sample();
-    currentMeanEnergy = theOne.GetMeanX();
+    currentMeanEnergy.Put(theOne.GetMeanX());
   }
 
   // now do random direction in phi, and fill the result.

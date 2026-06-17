@@ -43,8 +43,8 @@
 // =======================================================================
 // Created:  17 May 2006, J. Apostolakis
 // =======================================================================
-#ifndef G4CoupledTransportation_hh
-#define G4CoupledTransportation_hh 1
+#ifndef G4COUPLEDTRANSPORTATION_HH
+#define G4COUPLEDTRANSPORTATION_HH
 
 #include "G4Transportation.hh"
 

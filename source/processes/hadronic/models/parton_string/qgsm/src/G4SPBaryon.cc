@@ -361,7 +361,7 @@ G4SPBaryon(G4ParticleDefinition * aDefinition)
   else if (theDefinition == G4ParticleTable::GetParticleTable()->FindParticle(-2114)) // anti Delta0
   {
     thePartonInfo.push_back(new G4SPPartonInfo(-2103, -1, 2./3.));
-    thePartonInfo.push_back(new G4SPPartonInfo(-2103, -2, 1./3.));
+    thePartonInfo.push_back(new G4SPPartonInfo(-1103, -2, 1./3.));
   }
   else if (theDefinition == G4ParticleTable::GetParticleTable()->FindParticle(1114)) // Delta-
   {

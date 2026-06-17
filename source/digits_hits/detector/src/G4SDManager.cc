@@ -138,11 +138,21 @@ G4int G4SDManager::GetCollectionID(const G4String& colName)
 
 G4int G4SDManager::GetCollectionID(G4VHitsCollection* aHC)
 {
-  G4String HCname = aHC->GetSDname();
-  HCname += "/";
-  HCname += aHC->GetName();
-  return GetCollectionID(HCname);
+  return GetCollectionID(aHC->GetSDname(), aHC->GetName());
 }
+
+G4int G4SDManager::GetCollectionID(const G4String& detSubName, const G4String& colSubName ) {
+  G4int id = HCtable->GetCollectionID(detSubName, colSubName);
+  if (id > 0 ) return id;
+  if (id == -1) {
+    G4cout << "<" << detSubName << "/" << colSubName <<  "> is not found." << G4endl;
+  }
+  else if (id == -2) {
+    G4cout << "<" << detSubName << "/" << colSubName << "> is ambiguous." << G4endl;
+  }
+  return id;
+}
+
 
 void G4SDManager::RegisterSDFilter(G4VSDFilter* filter) { FilterList.push_back(filter); }
 

@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-04-patch-01    (13-March-2026)
+ Geant4 version Name: geant4-11-04-patch-02    (12-June-2026)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -644,21 +644,21 @@ Start closing geometry.
 G4VoxelisationHelper::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   84655 kByte
-    Total CPU time elapsed for geometry optimisation: 22.49 seconds
+    Total CPU time elapsed for geometry optimisation: 25.96 seconds
 
     Voxelisation: top CPU users:
     Percent   Total CPU    System CPU       Memory  Volume
     -------   ----------   ----------     --------  ----------
-      50.20        11.29         0.06        42138k CellLogical
-      49.67        11.17         0.07        42138k DNAPhysLV
-       0.04         0.01         0.00          380k prism
+      50.31        13.06         0.06        42138k DNAPhysLV
+      49.54        12.86         0.06        42138k CellLogical
+       0.08         0.02         0.00          380k prism
 
     Voxelisation: top memory users:
     Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
     -------   --------     ------   ------   --------   ----------    ----------
-      49.78      42137k    311671   314256     703064        11.29    CellLogical
-      49.78      42137k    311671   314256     703064        11.17    DNAPhysLV
-       0.45        379k      1273     3780      14482         0.01    prism
+      49.78      42137k    311671   314256     703064        13.06    DNAPhysLV
+      49.78      42137k    311671   314256     703064        12.86    CellLogical
+       0.45        379k      1273     3780      14482         0.02    prism
 --------------------------------------------------------------------------------
 
 ### Run 0 starts.
@@ -685,14 +685,14 @@ DNAIndependentReactionTimeModel will be used ==========================
  Run terminated.
 Run Summary
   Number of events processed : 99
-  User=6.350000s Real=6.360780s Sys=0.000000s
+  User=7.470000s Real=7.615405s Sys=0.010000s
 ... write file : molecular-dna.root - done
 ... close file : molecular-dna.root - done
 G4 kernel has come to Quit state.
 Deleting G4Run (id:0) 
-UserDetectorConstruction deleted 0x116b260
-UserPhysicsList deleted 0x11af1a0
-UserActionInitialization deleted 0x11e72a0
+UserDetectorConstruction deleted 0x2483260
+UserPhysicsList deleted 0x24c71a0
+UserActionInitialization deleted 0x24fe3e0
 UserWorkerInitialization deleted 0
 UserWorkerThreadInitialization deleted 0
 UserRunAction deleted.
@@ -714,13 +714,13 @@ Pool ID '17G4PrimaryParticle', size : 0.000961 MB
 Pool ID '13ChromosomeHit', size : 0.000961 MB
 Pool ID '17G4DynamicParticle', size : 0.134 MB
 Pool ID '7G4Track', size : 0.266 MB
-Pool ID '18G4TouchableHistory', size : 0.0692 MB
+Pool ID '18G4TouchableHistory', size : 0.0615 MB
 Pool ID '15G4CountedObjectIvE', size : 0.789 MB
 Pool ID '10G4Molecule', size : 0.0798 MB
 Pool ID '8G4OctreeI19G4FastList_iteratorI7G4TrackE9ExtractorI10G4FastListIS1_EEN5CLHEP10Hep3VectorEE', size : 0.000961 MB
 Pool ID '6DNAHit', size : 0.025 MB
 Number of memory pools allocated: 14 of which, static: 0
-Dynamic pools deleted: 14 / Total memory freed: 2.5 MB
+Dynamic pools deleted: 14 / Total memory freed: 2.4 MB
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

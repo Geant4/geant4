@@ -396,6 +396,7 @@ void G4TaskRunManager::CreateAndStartWorkers()
 
     G4int remaining = numberOfEventToBeProcessed;
     for (G4int nt = 0; nt < numberOfTasks + 1; ++nt) {
+      if (runAborted) break;
       if (remaining > 0) AddEventTask(nt);
       remaining -= numberOfEventsPerTask;
     }

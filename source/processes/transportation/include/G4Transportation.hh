@@ -40,17 +40,19 @@
 // =======================================================================
 // Created:  19 March 1997, J. Apostolakis
 // =======================================================================
-#ifndef G4Transportation_hh
-#define G4Transportation_hh 1
+#ifndef G4TRANSPORTATION_HH
+#define G4TRANSPORTATION_HH
+
+#include <CLHEP/Units/SystemOfUnits.h>
 
 #include "G4VProcess.hh"
-
 #include "G4Track.hh"
 #include "G4Step.hh"
 #include "G4ParticleChangeForTransport.hh"
+#include "G4TransportationLogger.hh"
+#include "G4PropagatorInField.hh"
 
 class G4Navigator;
-class G4PropagatorInField;
 class G4SafetyHelper; 
 class G4TransportationLogger;
 
@@ -58,12 +60,12 @@ class G4Transportation : public G4VProcess
 {
   // Concrete class that does the geometrical transport 
 
-  public:  // with description
+  public:
 
      G4Transportation( G4int verbosityLevel= 1, const G4String& aName = "Transportation");
      ~G4Transportation(); 
 
-     G4double      AlongStepGetPhysicalInteractionLength(
+     G4double AlongStepGetPhysicalInteractionLength(
                              const G4Track& track,
                                    G4double  previousStepSize,
                                    G4double  currentMinimumStep, 
@@ -131,12 +133,9 @@ class G4Transportation : public G4VProcess
      // Do not warn (or throw exception) about 'looping' particles
      static G4bool GetSilenceLooperWarnings();
    
-  public: // without description    
      static G4bool EnableUseMagneticMoment(G4bool useMoment=true)
      { return EnableMagneticMoment(useMoment); }  // Old name - will be deprecated
    
-  public:  // without description
-
      G4double AtRestGetPhysicalInteractionLength( const G4Track&,
                                                   G4ForceCondition*)
        { return -1.0; }  // No operation in AtRestGPIL
@@ -151,6 +150,10 @@ class G4Transportation : public G4VProcess
      void PrintStatistics( std::ostream& outStr) const;
    
   protected:
+
+     inline G4bool ConfigureFieldForTrack(const G4Track& track);
+       // Configure the field before propagation and report whether it
+       // exerts a force on the track
 
      void SetTouchableInformation(const G4TouchableHandle& touchable);
 
@@ -183,7 +186,8 @@ class G4Transportation : public G4VProcess
      G4bool fGeometryLimitedStep= true;
        // Flag to determine whether a boundary was reached
 
-     G4bool fFieldExertedForce= false; // During current step
+     G4bool fFieldExertedForce= false;  // During current step
+     G4bool fFieldExertedForceAtTrackStart= false; // Saved until the first AlongStep GPIL
 
      G4TouchableHandle fCurrentTouchableHandle;
      

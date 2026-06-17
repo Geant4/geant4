@@ -26,8 +26,8 @@
 //
 // P. Arce, June-2014 Conversion neutron_hp to particle_hp
 //
-#ifndef G4ParticleHPLegendreTable_h
-#define G4ParticleHPLegendreTable_h 1
+#ifndef G4PARTICLEHPLEGENDRETABLE_HH
+#define G4PARTICLEHPLEGENDRETABLE_HH
 
 #include "G4InterpolationManager.hh"
 #include "G4ios.hh"
@@ -81,6 +81,7 @@ class G4ParticleHPLegendreTable
 
     inline void Init(G4double e, G4int n)
     {
+      if ( n < 0 ) n = 0;
       nCoeff = n + 1;
       theCoeff = new G4double[nCoeff];
       for (G4int i = 0; i < nCoeff; i++)

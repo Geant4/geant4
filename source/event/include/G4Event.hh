@@ -262,6 +262,9 @@ class G4Event
 
     void MergeSubEventResults(const G4Event* se);
 
+    inline void MasterEventForSubEventMode(G4bool flg = true)
+    { ifMasterEventForSubEventMode = flg; }
+
   private:
   // These containers are for sub-event objects.
   // - fSubEvtStackMap stores sub-events that are yet to be sent to the worker thread
@@ -283,6 +286,7 @@ class G4Event
     G4Event* motherEvent = nullptr;
     G4int subEventType = -1;
     const G4SubEvent* fSubEvent = nullptr;
+    G4bool ifMasterEventForSubEventMode = false;
 
   public:
     void FlagAsSubEvent(G4Event* me, G4int ty, const G4SubEvent* se)

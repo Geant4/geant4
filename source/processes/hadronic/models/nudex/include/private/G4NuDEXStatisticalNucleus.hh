@@ -63,13 +63,13 @@ class G4NuDEXPSF;
 //Some of the class methods could be functions out of the class
 
 struct Level{
-  G4double Energy;
-  G4int spinx2;
-  G4bool parity; //true/false --> positive,negative
-  unsigned int seed;
-  G4int KnownLevelID;
-  G4int NLevels;
-  G4double Width;
+  G4double Energy=0.0;
+  G4int spinx2=0;
+  G4bool parity=true; //true/false --> positive,negative
+  unsigned int seed=0;
+  G4int KnownLevelID=-1;
+  G4int NLevels=0;
+  G4double Width=0.0;
 };
 
 
@@ -77,17 +77,17 @@ struct Level{
 //multipolarity of a transition is ...,-2,-1,0,1,2,... --> ...,M2,M1,Unk,E1,E2,...
 
 struct KnownLevel{
-  G4int id;
-  G4double Energy;
-  G4int spinx2;
-  G4bool parity; //true/false --> positive,negative
-  G4double T12; //half life - seconds
-  G4int Ndecays;
-  G4double* decayFraction;
-  std::string* decayMode;
-  G4int NGammas;
-  G4int *FinalLevelID,*multipolarity;
-  G4double *Eg,*cumulPtot,*Pg,*Pe,*Icc;
+  G4int id=0;
+  G4double Energy=0.0;
+  G4int spinx2=0;
+  G4bool parity=true; //true/false --> positive,negative
+  G4double T12=0.0; //half life - seconds
+  G4int Ndecays=0;
+  G4double* decayFraction=nullptr;
+  std::vector<std::string> decayMode;
+  G4int NGammas=0;
+  G4int *FinalLevelID=nullptr,*multipolarity=nullptr;
+  G4double *Eg=nullptr,*cumulPtot=nullptr,*Pg=nullptr,*Pe=nullptr,*Icc=nullptr;
 };
 
 
@@ -130,6 +130,7 @@ public:
   
   G4NuDEXRandom* GetRandom3(){return theRandom3;}
   G4bool HasBeenInitialized(){return hasBeenInitialized;}
+  G4bool HasThermalLevel(){return hasThermalLevel;}
 
 
   //-------------------------------------------------------
@@ -219,8 +220,9 @@ private:
   //--------------------------------------------------------------------------
   //Level scheme:
   Level* theLevels; //known+unknown levels
-  KnownLevel* theKnownLevels; // known levels
+  std::vector<KnownLevel> theKnownLevels; // known levels
   G4int NKnownLevels,NUnknownLevels,NLevels,KnownLevelsVectorSize;
+  G4bool hasThermalLevel;
   Level theThermalCaptureLevel;
   G4int NLevelsBelowThermalCaptureLevel; //excluding the last one
   G4int KnownLevelsFlag;

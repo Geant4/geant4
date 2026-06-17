@@ -533,21 +533,6 @@ G4VSolid* G4SubtractionSolid::Clone() const
 
 //////////////////////////////////////////////////////////////////////////
 //
-// ComputeDimensions
-
-void 
-G4SubtractionSolid::ComputeDimensions(       G4VPVParameterisation*,
-                                       const G4int,
-                                       const G4VPhysicalVolume* ) 
-{
-  DumpInfo();
-  G4Exception("G4SubtractionSolid::ComputeDimensions()",
-              "GeomSolids0001", FatalException,
-              "Method not applicable in this context!");
-}
-
-//////////////////////////////////////////////////////////////////////////
-//
 // DescribeYourselfTo
 
 void 

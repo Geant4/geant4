@@ -36,8 +36,8 @@
 //
 // Author: M.Asai (SLAC), 2010.
 //---------------------------------------------------------------------
-#ifndef G4ParallelWorldProcess_h
-#define G4ParallelWorldProcess_h 1
+#ifndef G4PARALLELWORLDPROCESS_HH
+#define G4PARALLELWORLDPROCESS_HH
 
 #include "G4FieldTrack.hh"
 #include "G4MultiNavigator.hh"
@@ -62,14 +62,14 @@ class G4ParallelWorldProcess : public G4VProcess
     ~G4ParallelWorldProcess() override;
 
     //--------------------------------------------------------------
-    // Set Paralle World
+    // Set Parallel World
     //--------------------------------------------------------------
 
-    void SetParallelWorld(G4String parallelWorldName);
+    void SetParallelWorld(const G4String& parallelWorldName);
     void SetParallelWorld(G4VPhysicalVolume* parallelWorld);
 
     //--------------------------------------------------------------
-    //     Process interface
+    // Process interface
     //--------------------------------------------------------------
 
     void StartTracking(G4Track*) override;
@@ -117,6 +117,7 @@ class G4ParallelWorldProcess : public G4VProcess
 
   protected:
 
+    void SetParallelWorldNavigator(G4bool createIfMissing = false);
     void CopyStep(const G4Step& step);
     void SwitchMaterial(G4StepPoint*);
 

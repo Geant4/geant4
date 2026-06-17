@@ -34,8 +34,8 @@
 
 // Author: Michael Dressel, 2002
 // --------------------------------------------------------------------
-#ifndef G4ImportanceProcess_hh
-#define G4ImportanceProcess_hh 1
+#ifndef G4IMPORTANCEPROCESS_HH
+#define G4IMPORTANCEPROCESS_HH
 
 #include "G4VProcess.hh"
 #include "G4VTrackTerminator.hh"
@@ -116,6 +116,7 @@ class G4ImportanceProcess : public G4VProcess, public G4VTrackTerminator
   
  private:
 
+  void SetParallelWorldNavigator(G4bool createIfMissing = false);
   void CopyStep(const G4Step& step);
 
   G4Step* fGhostStep = nullptr;

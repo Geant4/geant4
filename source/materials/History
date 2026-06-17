@@ -6,6 +6,13 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2026-06-15 Gabriele Cosmo (materials-V11-03-06)
+- In G4NistManager, fixed implementation of SetDensityEffectCalculatorFlag(..)
+  and removed redundant unused vectors data members for elements and materials.
+  Addressing problem report #2739.
+- Added explicitly deleted copy constructor and assignment operator for
+  G4NistManager. Addressing problem report #2738.
+
 ## 2025-10-16 Dmitri Konstantinov (materials-V11-03-05)
 - G4AtomicFormFactor: corrected k conversion and 4*pi factor.
 - Fixed s computation in Cromer-Mann form f(s)=E a_i*exp(-b_i*s^2)+c 

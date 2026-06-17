@@ -6,6 +6,21 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2026-05-27 Gabriele Cosmo (g4tools-V11-03-14)
+- Fixed compilation warning on gcc-16.1; implemented construction-order fix
+  in columns.icc: added column_string_data so column_string::m_value exists
+  before column_string_ref binds a leaf_string_ref to it.
+  Added column_vector_string_buffer so column_vector_string_ref::m_string
+  exists before the base leaf stores its reference.
+  Added column_vector_string_data so column_vector_string::m_value exists
+  before column_vector_string_ref binds through to it.
+  Updated copy/assignment paths to preserve the previous behavior while moving
+  storage into these early-constructed bases.
+
+## 2026-05-12 Gabriele Cosmo
+- Fixed compilation warning on gcc-16.1 for variable set but not used in
+  array::fill().
+
 ## 2025-10-17 Guy Barrand (g4tools-V11-03-13)
 - toolx/sg/GL_manager, GL_action, GL_viewer: template the access to the OpenGL functions.
   By default, the code still use a OpenGL-1.1 logic.

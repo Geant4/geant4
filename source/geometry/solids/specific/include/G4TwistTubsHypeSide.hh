@@ -43,6 +43,7 @@
 /**
  * @brief G4TwistTubsHypeSide describes hyperbolic boundary surface
  * for a cylinder.
+ * @ingroup geometry_solids_specific
  */
 
 class G4TwistTubsHypeSide : public G4VTwistSurface
@@ -216,15 +217,6 @@ class G4TwistTubsHypeSide : public G4VTwistSurface
     G4double fR0;           // radius at z = 0
     G4double fR02;          // radius**2 at z = 0
     G4double fDPhi ;        // segment
-
-    class Insidetype
-    {
-      public:
-
-        G4ThreeVector gp;
-        EInside       inside;
-    };
-    Insidetype fInside;
 };
 
 //========================================================

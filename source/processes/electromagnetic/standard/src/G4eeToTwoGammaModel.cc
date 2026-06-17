@@ -164,33 +164,86 @@ void G4eeToTwoGammaModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp
   fParticleChange->SetProposedKineticEnergy(0.0);
   fParticleChange->ProposeTrackStatus(fStopAndKill);
 
-  // Case at rest not considered anymore inside this model
-  G4LorentzVector lv(dp->GetMomentum(),
-		     dp->GetKineticEnergy() + 2*CLHEP::electron_mass_c2);
-  G4double eGammaCMS = 0.5 * lv.mag();
+  G4ThreeVector posiDirection = dp->GetMomentumDirection();
+  G4double posiKinEnergy = dp->GetKineticEnergy();
 
-  G4ThreeVector dir1 = G4RandomDirection();
-  G4double phi = CLHEP::twopi * G4UniformRand();
+  G4double tau     = posiKinEnergy/electron_mass_c2;
+  G4double gam     = tau + 1.0;
+  G4double tau2    = tau + 2.0;
+  G4double sqgrate = sqrt(tau/tau2)*0.5;
+  G4double sqg2m1  = sqrt(tau*tau2);
+
+  // limits of the energy sampling
+  G4double epsilmin = 0.5 - sqgrate;
+  G4double epsilmax = 0.5 + sqgrate;
+  G4double epsilqot = epsilmax/epsilmin;
+
+  //
+  // sample the energy rate of the created gammas
+  //
+  G4double epsil, greject;
+
+  do {
+    epsil = epsilmin*G4Exp(G4Log(epsilqot)*G4UniformRand());
+    greject = 1. - epsil + (2.*gam*epsil-1.)/(epsil*tau2*tau2);
+    // Loop checking, 03-Aug-2015, Vladimir Ivanchenko
+  } while( greject < G4UniformRand());
+
+  //
+  // scattered Gamma angles. ( Z - axis along the parent positron)
+  //
+
+  G4double cost = (epsil*tau2-1.)/(epsil*sqg2m1);
+  if (std::abs(cost) > 1.0) {
+    G4cout << "### G4eeToTwoGammaModel WARNING cost= " << cost
+	   << " positron Ekin(MeV)= " << posiKinEnergy
+	   << " gamma epsil= " << epsil
+	   << G4endl;
+    if (cost > 1.0) cost = 1.0;
+    else cost = -1.0; 
+  }
+  G4double sint = std::sqrt((1.+cost)*(1.-cost));
+  G4double phi  = CLHEP::twopi * G4UniformRand();
+
+  //
+  // kinematic of the created pair
+  //
+  G4double totalEnergy = posiKinEnergy + 2.0*CLHEP::electron_mass_c2;
+  G4double phot1Energy = epsil*totalEnergy;
+
+  G4ThreeVector phot1Direction(sint*std::cos(phi), sint*std::sin(phi), cost);
+  phot1Direction.rotateUz(posiDirection);
+  auto aGamma1 = new G4DynamicParticle (theGamma,phot1Direction, phot1Energy);
+  phi = CLHEP::twopi * G4UniformRand();
   G4double cosphi = std::cos(phi);
   G4double sinphi = std::sin(phi);
-  G4ThreeVector pol1(cosphi, sinphi, 0.0);
-  pol1.rotateUz(dir1);
-  G4LorentzVector lv1(eGammaCMS*dir1, eGammaCMS);
-  
-  G4ThreeVector pol2(-sinphi, cosphi, 0.0);
-  pol2.rotateUz(dir1);
+  G4ThreeVector pol(cosphi, sinphi, 0.0);
+  pol.rotateUz(phot1Direction);
+  aGamma1->SetPolarization(pol.x(),pol.y(),pol.z());
 
-  // transformation to lab system
-  lv1.boost(lv.boostVector());
-  lv -= lv1;
+  G4double phot2Energy = (1.-epsil)*totalEnergy;
+  G4double posiP = std::sqrt(posiKinEnergy*(posiKinEnergy+2.*electron_mass_c2));
+  G4ThreeVector dir = posiDirection*posiP - phot1Direction*phot1Energy;
+  G4ThreeVector phot2Direction = dir.unit();
 
-  //!!! boost of polarisation vector is not yet implemented
-  
-  // use constructors optimal for massless particle
-  auto aGamma1 = new G4DynamicParticle(G4Gamma::Gamma(), lv1.vect());
-  aGamma1->SetPolarization(pol1);
-  auto aGamma2 = new G4DynamicParticle(G4Gamma::Gamma(), lv.vect());
-  aGamma2->SetPolarization(pol2);
+  // create G4DynamicParticle object for the particle2
+  auto aGamma2 = new G4DynamicParticle (theGamma, phot2Direction, phot2Energy);
+
+  //!!! likely problematic direction to be checked
+  pol.set(-sinphi, cosphi, 0.0);
+  pol.rotateUz(phot1Direction);
+  cost = pol*phot2Direction;
+  pol -= cost*phot2Direction;
+  pol = pol.unit();
+  aGamma2->SetPolarization(pol.x(),pol.y(),pol.z());
+  /*
+    G4cout << "Annihilation on fly: e0= " << posiKinEnergy
+           << " m= " << electron_mass_c2
+           << " e1= " << phot1Energy 
+           << " e2= " << phot2Energy << " dir= " <<  dir 
+           << " -> " << phot1Direction << " " 
+           << phot2Direction << G4endl;
+    */  
  
   vdp->push_back(aGamma1);
   vdp->push_back(aGamma2);

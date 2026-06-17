@@ -33,7 +33,7 @@
 // Author: John Apostolakis (CERN), November 2006
 // --------------------------------------------------------------------
 #ifndef G4MULTINAVIGATOR_HH
-#define G4MULTINAVIGATOR_HH 1
+#define G4MULTINAVIGATOR_HH
 
 #include <iostream>
 
@@ -53,6 +53,7 @@ class G4VPhysicalVolume;
 /**
  * @brief G4MultiNavigator is a utility class for polling the navigators
  * of several geometries to identify the next boundary.
+ * @ingroup geometry_navigation
  */
 
 class G4MultiNavigator : public G4Navigator
@@ -208,6 +209,11 @@ class G4MultiNavigator : public G4Navigator
      * Returns a pointer to a navigator, given its index.
      */
     inline G4Navigator* GetNavigator( G4int n ) const;
+
+    /**
+     * Sets the navigator for tracking and mass world if changed.
+     */
+    void SetNavigatorForTracking();
 
   protected:
 
