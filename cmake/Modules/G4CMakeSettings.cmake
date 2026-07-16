@@ -179,8 +179,11 @@ endforeach()
 # - ``CMAKE_INSTALL_MESSAGE`` : ``LAZY``
 #
 #   - Only report new or updated files installed by the ``install`` target.
+#   - Can be overridden at the command line with e.g. -DCMAKE_INSTALL_MESSAGE=NEVER
 #
-set(CMAKE_INSTALL_MESSAGE LAZY)
+if(NOT DEFINED CMAKE_INSTALL_MESSAGE)
+    set(CMAKE_INSTALL_MESSAGE LAZY)
+endif()
 
 #.rst:
 # An `uninstall` target is provided to assist in removing previously installed
