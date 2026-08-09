@@ -10,7 +10,7 @@
    The setup consists of a an envelope of box shape containing two
    volumes: a spherical cone and a trapezoid.
 
-   In this example we use  some common materials materials for medical
+   In this example we use  some common materials for medical
    applications. The envelope is made of water and the two inner volumes
    are made from tissue and bone materials.
    The materials are created with the help of the G4NistManager class,
@@ -45,7 +45,7 @@
    A newly introduced class, B1::ActionInitialization, instantiates and registers
    to Geant4 kernel all user action classes.
 
-   While in sequential mode the action classes are instatiated just once,
+   While in sequential mode the action classes are instantiated just once,
    via invoking the method:
       B1::ActionInitialization::Build()
    in multi-threading mode the same method is invoked for each thread worker
