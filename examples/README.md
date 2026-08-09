@@ -33,7 +33,7 @@ See more on each examples category pages:
 
 And more on what is common for all examples:
 - [How to build and run an example](\ref README_HowToRun)
-- [Tips how to run an example in multi-threading mode](\ref README_HowToRunMT)
+- [Tips on how to run an example in multi-threading mode](\ref README_HowToRunMT)
 - [How to navigate in the examples documentation](\ref README_HowToNavigate)
 
 Web: https://geant4-userdoc.web.cern.ch/Doxygen/examples_doc/html/index.html
