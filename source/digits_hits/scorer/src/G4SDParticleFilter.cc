@@ -28,9 +28,12 @@
 // G4VSensitiveDetector
 #include "G4SDParticleFilter.hh"
 
+#include "G4IonTable.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 #include "G4Step.hh"
+
+#include <string>
 
 ////////////////////////////////////////////////////////////////////////////////
 // class description:
@@ -124,6 +127,24 @@ void G4SDParticleFilter::add(const G4String& particleName)
     if (i == pd) return;
   }
   thePdef.push_back(pd);
+}
+
+void G4SDParticleFilter::addIon(G4int Z, G4int A, G4double E, char flb)
+{
+  G4ParticleDefinition* ion = G4IonTable::GetIonTable()->GetIon(Z, A, E, flb);
+  if (ion == nullptr)
+  {
+    G4String msg = "Ion <";
+    msg += "Z=" + std::to_string(Z) + ", A=" + std::to_string(A);
+    msg += ", E=" + std::to_string(E) + ", flb=" + flb;
+    msg += "> not found.";
+    G4Exception("G4SDParticleFilter::addIon()", "DetPS0104", FatalException, msg);
+  }
+  for (auto& i : thePdef)
+  {
+    if (i == ion) return;
+  }
+  thePdef.push_back(ion);
 }
 
 void G4SDParticleFilter::addIon(G4int Z, G4int A)
