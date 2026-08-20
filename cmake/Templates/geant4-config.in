@@ -337,6 +337,23 @@ print_datasets_csh()
 }
 
 #-----------------------------------------------------------------------
+# function dataset_effective_path
+#          Print the directory Geant4 will actually use for a dataset. Geant4
+#          reads the dataset environment variables at runtime and only falls
+#          back to the configured location, so honour the same order here.
+#
+dataset_effective_path()
+{
+  ds_envvar=$(echo $1 | cut -d "|" -f2)
+  ds_path=$(echo $1 | cut -d "|" -f3)
+  eval ds_envvar_value=\"\${${ds_envvar}:-}\"
+  if test "x${ds_envvar_value}" != "x" ; then
+    ds_path=${ds_envvar_value}
+  fi
+  echo ${ds_path}
+}
+
+#-----------------------------------------------------------------------
 # function check_datasets
 #          Check whether datasets exist as directories at the expected
 #          location. Print dataset name, path and install status
@@ -345,7 +362,7 @@ check_datasets()
 {
   for ds in ${dataset_list} ; do
     dataset_name=$(echo $ds | cut -d "|" -f1)
-    dataset_path=$(echo $ds | cut -d "|" -f3)
+    dataset_path=$(dataset_effective_path "$ds")
     dataset_status="NOTFOUND"
     if test -d ${dataset_path} ; then
       dataset_status="INSTALLED"
@@ -387,7 +404,7 @@ install_datasets()
 
   datasets_to_install=''
   for ds in ${dataset_list} ; do
-    dataset_path=$(echo $ds | cut -d "|" -f3)
+    dataset_path=$(dataset_effective_path "$ds")
     if test ! -d ${dataset_path} ; then
       datasets_to_install="${datasets_to_install} ${ds}"
     fi
