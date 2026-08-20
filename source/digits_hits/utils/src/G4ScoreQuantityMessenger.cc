@@ -458,6 +458,39 @@ void G4ScoreQuantityMessenger::FilterCommands()
   param->SetDefaultValue("");
   fparticleCmd->SetParameter(param);
   //
+  fionCmd = new G4UIcommand("/score/filter/ion", this);
+  fionCmd->SetGuidance("Ion filter using Z A [E flb]");
+  fionCmd->SetGuidance("[usage] /score/filter/ion fname Z A [E flb]");
+  fionCmd->SetGuidance("  fname     :(String) Filter Name ");
+  fionCmd->SetGuidance("  Z         :(int) AtomicNumber");
+  fionCmd->SetGuidance("  A         :(int) AtomicMass");
+  fionCmd->SetGuidance("  E         :(double) Excitation energy (in keV)");
+  fionCmd->SetGuidance("  flb       :(String) Floating level base");
+  param = new G4UIparameter("fname", 's', false);
+  fionCmd->SetParameter(param);
+  param = new G4UIparameter("Z", 'i', false);
+  fionCmd->SetParameter(param);
+  param = new G4UIparameter("A", 'i', false);
+  fionCmd->SetParameter(param);
+  param = new G4UIparameter("E", 'd', true);
+  param->SetDefaultValue(0.0);
+  fionCmd->SetParameter(param);
+  param = new G4UIparameter("flb", 's', true);
+  param->SetDefaultValue("noFloat");
+  param->SetParameterCandidates("noFloat X Y Z U V W R S T A B C D E");
+  fionCmd->SetParameter(param);
+  //
+  fionsCmd = new G4UIcommand("/score/filter/ions", this);
+  fionsCmd->SetGuidance("Ion filter using Z, A.");
+  fionsCmd->SetGuidance("[usage] /score/filter/ions fname Z0 A0 .. Zn An");
+  fionsCmd->SetGuidance("  fname           :(String) Filter Name ");
+  fionsCmd->SetGuidance("  Z0 A0 .. Zn AN  :(Int) Z and A of ions");
+  param = new G4UIparameter("fname", 's', false);
+  fionsCmd->SetParameter(param);
+  param = new G4UIparameter("ionlist", 's', false);
+  param->SetDefaultValue("");
+  fionsCmd->SetParameter(param);
+  //
   //
   //
   fparticleKinECmd = new G4UIcommand("/score/filter/particleWithKineticEnergy", this);
@@ -524,6 +557,8 @@ G4ScoreQuantityMessenger::~G4ScoreQuantityMessenger()
   delete fneutralCmd;
   delete fkinECmd;
   delete fparticleCmd;
+  delete fionCmd;
+  delete fionsCmd;
   delete fparticleKinECmd;
 }
 
@@ -1022,6 +1057,40 @@ void G4ScoreQuantityMessenger::SetNewValue(G4UIcommand* command, G4String newVal
       command->CommandFailed(ed);
     }
   }
+  else if (command == fionCmd)
+  {
+    if (!mesh->IsCurrentPrimitiveScorerNull())
+    {
+      if (!FIonCommand(mesh, newVal))
+      {
+        ed << "ERROR : Invalid definition of ion filter.";
+        command->CommandFailed(ed);
+      }
+    }
+    else
+    {
+      ed << "WARNING[" << fionCmd->GetCommandPath()
+         << "] : Current quantity is not set. Set or touch a quantity first.";
+      command->CommandFailed(ed);
+    }
+  }
+  else if (command == fionsCmd)
+  {
+    if (!mesh->IsCurrentPrimitiveScorerNull())
+    {
+      if (!FIonsCommand(mesh, token))
+      {
+        ed << "ERROR : Invalid definition of ion filter.";
+        command->CommandFailed(ed);
+      }
+    }
+    else
+    {
+      ed << "WARNING[" << fionsCmd->GetCommandPath()
+         << "] : Current quantity is not set. Set or touch a quantity first.";
+      command->CommandFailed(ed);
+    }
+  }
 }
 
 G4String G4ScoreQuantityMessenger::GetCurrentValue(G4UIcommand* /*command*/)
@@ -1056,6 +1125,61 @@ void G4ScoreQuantityMessenger::FParticleCommand(G4VScoringMesh* mesh, G4TokenVec
   //
   // Attach Filter
   mesh->SetFilter(new G4SDParticleFilter(name, pnames));
+}
+
+G4bool G4ScoreQuantityMessenger::FIonCommand(G4VScoringMesh* mesh, const G4String& newValues)
+{
+  // taken from G4ParticleGunMessenger::IonCommand
+  G4Tokenizer next(newValues);
+  G4String name = next();
+  G4int atomicNumber = StoI(next());
+  G4int atomicMass = StoI(next());
+  G4double ionExciteEnergy = 0.0;
+  char ionFloatingLevelBase = '\0';
+  G4String sQ = next();
+  if (!(sQ.empty()))
+  {
+    ionExciteEnergy = StoD(sQ) * CLHEP::keV;
+    sQ = next();
+    if (sQ.empty() || sQ == "noFloat")
+    {
+      ionFloatingLevelBase = '\0';
+    }
+    else
+    {
+      ionFloatingLevelBase = sQ[(std::size_t)0];
+    }
+  }
+
+  // Attach Filter
+  auto filter = new G4SDParticleFilter(name);
+  filter->addIon(atomicNumber, atomicMass, ionExciteEnergy, ionFloatingLevelBase);
+  mesh->SetFilter(filter);
+  return true;
+}
+
+G4bool G4ScoreQuantityMessenger::FIonsCommand(G4VScoringMesh* mesh, G4TokenVec& token)
+{
+  //
+  // Filter name
+  G4String name = token[0];
+  //
+  // ion list
+  std::vector<G4int> ionAZ;
+  for (G4int i = 1; i < (G4int)token.size(); i++)
+  {
+    ionAZ.push_back(StoI(token[i]));
+  }
+  //
+  // Check A,Z pairs
+  if (ionAZ.size() % 2) return false;
+
+  // Attach Filter
+  auto filter = new G4SDParticleFilter(name);
+  for (G4int i = 0; i < (G4int)ionAZ.size(); i = i + 2)
+    filter->addIon(ionAZ[i], ionAZ[i + 1]);
+  mesh->SetFilter(filter);
+  return true;
 }
 
 void G4ScoreQuantityMessenger::FParticleWithEnergyCommand(G4VScoringMesh* mesh, G4TokenVec& token)

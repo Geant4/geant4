@@ -66,6 +66,8 @@ class G4ScoreQuantityMessenger : public G4UImessenger
     void FillTokenVec(const G4String& newValues, G4TokenVec& token);
 
     void FParticleCommand(G4VScoringMesh* mesh, G4TokenVec& token);
+    G4bool FIonCommand(G4VScoringMesh* mesh, const G4String& newValues);
+    G4bool FIonsCommand(G4VScoringMesh* mesh, G4TokenVec& token);
     void FParticleWithEnergyCommand(G4VScoringMesh* mesh, G4TokenVec& token);
 
     G4bool CheckMeshPS(G4VScoringMesh* mesh, const G4String& psname, G4UIcommand* command);
@@ -113,6 +115,8 @@ class G4ScoreQuantityMessenger : public G4UImessenger
     G4UIcmdWithAString* fneutralCmd;
     G4UIcommand* fkinECmd;
     G4UIcommand* fparticleCmd;
+    G4UIcommand* fionCmd;
+    G4UIcommand* fionsCmd;
     G4UIcommand* fparticleKinECmd;
     //
 };
