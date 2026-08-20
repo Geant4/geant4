@@ -67,6 +67,7 @@ class G4SDParticleFilter : public G4VSDFilter
     void add(const G4String& particleName);
     // set method for acceptable particle name.
     //
+    void addIon(G4int Z, G4int A, G4double E, char flb);
     void addIon(G4int Z, G4int A);
     void show();
 
