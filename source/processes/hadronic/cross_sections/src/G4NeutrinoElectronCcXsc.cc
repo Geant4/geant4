@@ -83,7 +83,7 @@ G4bool G4NeutrinoElectronCcXsc::IsElementApplicable(const G4DynamicParticle* aPa
   else
     fmass = emass;
 
-  minEnergy = (fmass - emass) * (fmass + emass) / emass;
+  minEnergy = (fmass - emass) * (fmass + emass) / (2 * emass);
 
   if ((pName == "nu_mu" || pName == "anti_nu_mu" || pName == "nu_tau" || pName == "anti_nu_tau")
       && energy > minEnergy)

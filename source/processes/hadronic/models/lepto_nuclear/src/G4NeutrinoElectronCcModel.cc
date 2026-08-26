@@ -106,7 +106,7 @@ G4bool G4NeutrinoElectronCcModel::IsApplicable(const G4HadProjectile& aPart, G4N
   else
     fmass = emass;
 
-  minEnergy = (fmass - emass) * (fmass + emass) / emass;
+  minEnergy = (fmass - emass) * (fmass + emass) / (2 * emass);
   SetMinEnergy(minEnergy);
 
   if ((pName == "nu_mu" || pName == "nu_tau" || pName == "anti_nu_e") && energy > minEnergy)
@@ -138,7 +138,7 @@ G4HadFinalState* G4NeutrinoElectronCcModel::ApplyYourself(const G4HadProjectile&
   else
     fmass = emass;
 
-  minEnergy = (fmass - emass) * (fmass + emass) / emass;
+  minEnergy = (fmass - emass) * (fmass + emass) / (2 * emass);
 
   if (energy <= minEnergy)
   {
