@@ -82,7 +82,7 @@ G4bool G4NeutrinoElectronNcModel::IsApplicable(const G4HadProjectile& aTrack, G4
   {
     minEnergy = 0.5 * (fCutEnergy + sqrt(fCutEnergy * (fCutEnergy + 2. * electron_mass_c2)));
   }
-  if ((pName == "nu_e" || pName == "anti_nu_e" || pName == "nu_mu" || pName == "anti_nu_nu"
+  if ((pName == "nu_e" || pName == "anti_nu_e" || pName == "nu_mu" || pName == "anti_nu_mu"
        || pName == "nu_tau" || pName == "anti_nu_tau")
       && energy > minEnergy)
   {
