@@ -33,6 +33,7 @@
 #include "G4BooleanSolid.hh"
 #include "G4Box.hh"
 #include "G4Cons.hh"
+#include "G4CutTubs.hh"
 #include "G4Element.hh"
 #include "G4Ellipsoid.hh"
 #include "G4EllipticalCone.hh"
@@ -803,6 +804,26 @@ std::vector<G4double> G4tgbGeometryDumper::GetSolidParams(const G4VSolid* so)
       params.push_back(tu->GetZHalfLength());
       params.push_back(tu->GetStartPhiAngle() / deg);
       params.push_back(tu->GetDeltaPhiAngle() / deg);
+    }
+  }
+  else if (solidType == "CUTTUBS")
+  {
+    const G4CutTubs* ctu = dynamic_cast<const G4CutTubs*>(so);
+    if (ctu != nullptr)
+    {
+      G4ThreeVector lowNorm(ctu->GetLowNorm());
+      G4ThreeVector highNorm(ctu->GetHighNorm());
+      params.push_back(ctu->GetInnerRadius());
+      params.push_back(ctu->GetOuterRadius());
+      params.push_back(ctu->GetZHalfLength());
+      params.push_back(ctu->GetStartPhiAngle() / deg);
+      params.push_back(ctu->GetDeltaPhiAngle() / deg);
+      params.push_back(lowNorm.x());
+      params.push_back(lowNorm.y());
+      params.push_back(lowNorm.z());
+      params.push_back(highNorm.x());
+      params.push_back(highNorm.y());
+      params.push_back(highNorm.z());
     }
   }
   else if (solidType == "TRAP")

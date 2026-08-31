@@ -33,6 +33,7 @@
 #include "G4AssemblyVolume.hh"
 #include "G4Box.hh"
 #include "G4Cons.hh"
+#include "G4CutTubs.hh"
 #include "G4Ellipsoid.hh"
 #include "G4EllipticalCone.hh"
 #include "G4EllipticalTube.hh"
@@ -253,6 +254,20 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid(const G4tgrSolid* sol)
       phiDelta = twopi;
     }
     solid = new G4Tubs(sname, solParam[0], solParam[1], solParam[2], solParam[3], phiDelta);
+  }
+  else if (stype == "CUTTUBS")
+  {
+    CheckNoSolidParams(stype, 11, (G4int)solParam.size());
+    G4double phiDelta = solParam[4];
+    if (std::fabs(phiDelta - twopi) < angularTolerance)
+    {
+      phiDelta = twopi;
+    }
+    G4ThreeVector lowNorm(solParam[5], solParam[6], solParam[7]);
+    G4ThreeVector highNorm(solParam[8], solParam[9], solParam[10]);
+    solid = new G4CutTubs(sname, solParam[0], solParam[1], solParam[2],  // rmin, rmax, dz
+                          solParam[3], solParam[4],  // sphi, dphi
+                          lowNorm, highNorm);
   }
   else if (stype == "TRAP")
   {
