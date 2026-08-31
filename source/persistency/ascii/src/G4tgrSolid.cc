@@ -95,6 +95,10 @@ void G4tgrSolid::FillSolidParams(const std::vector<G4String>& wl)
   apar.insert(4);
   angleParams["TUBS"] = apar;
   apar.clear();
+  apar.insert(3);
+  apar.insert(4);
+  angleParams["CUTTUBS"] = apar;
+  apar.clear();
   apar.insert(5);
   apar.insert(6);
   angleParams["CONS"] = apar;
