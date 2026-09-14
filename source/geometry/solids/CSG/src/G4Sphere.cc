@@ -1955,8 +1955,12 @@ G4double G4Sphere::DistanceToOut(const G4ThreeVector& p, const G4ThreeVector& v,
                 return snxt = 0.;
               }
             }
-            stheta = -0.5 * dist2STheta / t2;
-            sidetheta = kSTheta;
+            sd = -0.5 * dist2STheta / t2;
+            if (sd >= 0.)  // ignore root behind the starting point
+            {
+              stheta = sd;
+              sidetheta = kSTheta;
+            }
           }
         }  // 2nd order equation, 1st root of fSTheta cone,
         else  // 2nd if 1st root -ve
@@ -2098,7 +2102,7 @@ G4double G4Sphere::DistanceToOut(const G4ThreeVector& p, const G4ThreeVector& v,
             }
             sd = -0.5 * dist2ETheta / t2;
 
-            if (sd < stheta)
+            if ((sd >= 0.) && (sd < stheta))  // ignore root behind the start
             {
               stheta = sd;
               sidetheta = kETheta;
