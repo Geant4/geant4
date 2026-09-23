@@ -763,8 +763,13 @@ G4int G4ErrorFreeTrajState::PropagateErrorMSC(const G4Track* aTrack)
     G4cout << std::setw(6) << "G4EP:MSC: RI " << RI << " S1 " << S1 << " S2 " << S2 << " S3 " << S3
            << " CLA " << CLA << G4endl;
 #endif
+  // The block is added at the step exit, after the transport above. The
+  // angle-offset correlation S3 then has the sign of the transport lever arm,
+  // which is positive in both projections (transf[3][2] = +L*cos(lambda),
+  // transf[4][1] = +L): a positive lambda kick moves the track towards +zPerp,
+  // exactly as a positive phi kick moves it towards +yPerp.
   fError[1][1] += S2;
-  fError[1][4] -= S3;
+  fError[1][4] += S3;
   fError[2][2] += S2 / CLA / CLA;
   fError[2][3] += S3 / CLA;
   fError[3][3] += S1;
