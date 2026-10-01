@@ -1,8 +1,13 @@
 # Example stim_pixe_tomography History
 
 See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
-which **must** added in reverse chronological order (newest at the top). It must **not**
-be used as a substitute for writing good git commit messages!
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
+
+-------------------------------------------------------------------------------
+
+## 2026-09-02 J. Apostolakis (stim_pixe_tomography-V11-03-00)
+- Corrected world volume dimensions to enclose rotated tomographic beam positions.
 
 ## 2023-11-15 I. Hrivnacova (stim_pixe_tomography-V11-01-02)
 - Updated vis.mac:

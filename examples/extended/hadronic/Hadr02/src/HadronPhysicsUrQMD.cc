@@ -45,6 +45,21 @@
 #  include "G4ChipsKaonPlusInelasticXS.hh"
 #  include "G4ChipsKaonZeroInelasticXS.hh"
 #  include "G4CrossSectionDataSetRegistry.hh"
+#  include "G4VCrossSectionDataSet.hh"
+#  include "G4PhysListUtil.hh"
+#  include "G4KaonMinus.hh"
+#  include "G4KaonPlus.hh"
+#  include "G4KaonZeroShort.hh"
+#  include "G4KaonZeroLong.hh"
+#  include "G4Proton.hh"
+#  include "G4Neutron.hh"
+#  include "G4PionPlus.hh"
+#  include "G4PionMinus.hh"
+#  include "G4BGGNucleonInelasticXS.hh"
+#  include "G4BGGPionInelasticXS.hh"
+#  include "G4HadParticles.hh"
+#  include "G4HadronInelasticProcess.hh"
+#  include "G4PhysicsListHelper.hh"
 #  include "G4MesonConstructor.hh"
 #  include "G4ParticleDefinition.hh"
 #  include "G4ParticleTable.hh"
@@ -69,7 +84,7 @@ HadronPhysicsUrQMD::HadronPhysicsUrQMD(G4int) : G4VPhysicsConstructor("hInelasti
   fUrQMDPro = 0;
   fHyperon = 0;
   fFTFPHyperon = 0;
-  fAntiBaryon = 0;
+  fUrQMDAntiBaryon = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -93,9 +108,10 @@ void HadronPhysicsUrQMD::CreateModels()
   fFTFPHyperon = new G4HyperonFTFPBuilder;
   fHyperon->RegisterMe(fFTFPHyperon);
 
-  fAntiBaryon = new G4AntiBarionBuilder;
+  // Anti-baryons via UrQMD. G4AntiBarionBuilder no longer accepts a custom
+  // sub-builder (RegisterMe was removed in 11.x), so the anti-baryon inelastic
+  // processes are built directly in ConstructProcess() using this sub-builder.
   fUrQMDAntiBaryon = new UrQMDAntiBarionBuilder();
-  fAntiBaryon->RegisterMe(fUrQMDAntiBaryon);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -113,7 +129,6 @@ HadronPhysicsUrQMD::~HadronPhysicsUrQMD()
 
   delete fHyperon;
   delete fFTFPHyperon;
-  delete fAntiBaryon;
   delete fUrQMDAntiBaryon;
 }
 
@@ -140,13 +155,28 @@ void HadronPhysicsUrQMD::ConstructProcess()
   fPro->Build();
   fPiK->Build();
 
-  // use CHIPS cross sections also for Kaons
-  ChipsKaonMinus = G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(
-    G4ChipsKaonMinusInelasticXS::Default_Name());
-  ChipsKaonPlus = G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(
-    G4ChipsKaonPlusInelasticXS::Default_Name());
-  ChipsKaonZero = G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(
-    G4ChipsKaonZeroInelasticXS::Default_Name());
+  // Modern base builders delegate cross-section registration to the sub-builders,
+  // but the UrQMD sub-builders only register the model. Add the standard inelastic
+  // cross sections here so the processes have data (fixes had001 "no cross section").
+  G4PhysListUtil::FindInelasticProcess(G4Proton::Proton())
+    ->AddDataSet(new G4BGGNucleonInelasticXS(G4Proton::Proton()));
+  G4PhysListUtil::FindInelasticProcess(G4Neutron::Neutron())
+    ->AddDataSet(new G4BGGNucleonInelasticXS(G4Neutron::Neutron()));
+  G4PhysListUtil::FindInelasticProcess(G4PionPlus::PionPlus())
+    ->AddDataSet(new G4BGGPionInelasticXS(G4PionPlus::PionPlus()));
+  G4PhysListUtil::FindInelasticProcess(G4PionMinus::PionMinus())
+    ->AddDataSet(new G4BGGPionInelasticXS(G4PionMinus::PionMinus()));
+
+  // use CHIPS cross sections also for Kaons (local datasets)
+  G4VCrossSectionDataSet* ChipsKaonMinus =
+    G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(
+      G4ChipsKaonMinusInelasticXS::Default_Name());
+  G4VCrossSectionDataSet* ChipsKaonPlus =
+    G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(
+      G4ChipsKaonPlusInelasticXS::Default_Name());
+  G4VCrossSectionDataSet* ChipsKaonZero =
+    G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(
+      G4ChipsKaonZeroInelasticXS::Default_Name());
   //
 
   G4PhysListUtil::FindInelasticProcess(G4KaonMinus::KaonMinus())->AddDataSet(ChipsKaonMinus);
@@ -155,7 +185,20 @@ void HadronPhysicsUrQMD::ConstructProcess()
   G4PhysListUtil::FindInelasticProcess(G4KaonZeroLong::KaonZeroLong())->AddDataSet(ChipsKaonZero);
 
   fHyperon->Build();
-  fAntiBaryon->Build();
+
+  // Anti-baryons via UrQMD (faithful to the original list; the default
+  // G4AntiBarionBuilder would use FTFP). Build each anti-baryon inelastic
+  // process directly and register the UrQMD model + anti-nucleon cross section.
+  // Set covers pbar, nbar and the light anti-ions (anti d/t/He3/alpha).
+  G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();
+  G4ParticleTable* table = G4ParticleTable::GetParticleTable();
+  for (auto pdg : G4HadParticles::GetLightAntiIons()) {
+    G4ParticleDefinition* part = table->FindParticle(pdg);
+    if (part == nullptr) continue;
+    auto* hadi = new G4HadronInelasticProcess(part->GetParticleName() + "Inelastic", part);
+    fUrQMDAntiBaryon->Build(hadi);  // registers UrQMD model + anti-nucleon XS
+    ph->RegisterProcess(hadi, part);
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

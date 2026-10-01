@@ -28,13 +28,13 @@
 // Class description:
 //
 // A helper class to undertake voxelisation in parallel, aiding
-// and off-loading the work of G4GeometryManager.  
-// 
-// Only one instance must exist, and it must be owned by G4GeometryManager 
+// and off-loading the work of G4GeometryManager.
+//
+// Only one instance must exist, and it must be owned by G4GeometryManager
 // -- by the master thread's instance for the time being.
 //
-// It is designed to be thread safe, and its methods re-entrant.  
-// The following methods are expected to be called asynchronously 
+// It is designed to be thread safe, and its methods re-entrant.
+// The following methods are expected to be called asynchronously
 // by threads safely.
 
 // Author: John Apostolakis (CERN), 10.02.2025
@@ -42,18 +42,19 @@
 #ifndef G4VOXELISATIONHELPER_HH
 #define G4VOXELISATIONHELPER_HH
 
-#include <vector>
-
-#include "G4Types.hh"
 #include "G4SmartVoxelStat.hh"
+#include "G4Timer.hh"
+#include "G4Types.hh"
 #include "G4ios.hh"
 
+#include <vector>
+
 class G4VPhysicalVolume;
-class G4Timer;
 
 /**
  * @brief G4VoxelisationHelper is a helper class to undertake voxelisation
  * in parallel, aiding and off-loading the work of G4GeometryManager.
+ * @ingroup geometry_management
  */
 
 class G4VoxelisationHelper
@@ -61,10 +62,10 @@ class G4VoxelisationHelper
   public:
 
     /**
-     * Constructor & Destructor.
+     * Constructor & default destructor.
      */
     G4VoxelisationHelper();
-    ~G4VoxelisationHelper();
+    ~G4VoxelisationHelper() = default;
 
     /**
      * Key method that creates a list of volumes and resets the state
@@ -84,15 +85,20 @@ class G4VoxelisationHelper
     /**
      * Methods to report statistics on the voxelisation process.
      */
-    static void ReportVoxelStats( std::vector<G4SmartVoxelStat>& stats,
-                                  G4double totalCpuTime,
-                                  std::ostream &os = G4cout );
+    static void ReportVoxelStats(std::vector<G4SmartVoxelStat>& stats, G4double totalCpuTime,
+                                 std::ostream& os = G4cout);
     void ReportVoxelInfo(G4LogicalVolume* logVolume, std::ostream& os);
 
     /**
-     * Sets verbosity mode.
+     * Prints collected statistics once, if verbose optimisation is complete.
+     * To be called by the master after synchronising with the workers.
      */
-    inline void SetVerbosity(G4bool verbose) { fVerboseParallel = verbose; }
+    void ReportParallelOptimisationStats();
+
+    /**
+     * Sets voxel statistics verbosity, also retained for subsequent preparations.
+     */
+    inline void SetVerbosity(G4bool verbose);
 
     /**
      * Returns true if all workers are finished (or all work is done).
@@ -107,13 +113,13 @@ class G4VoxelisationHelper
      */
     G4int CheckOptimisation();
 
-  private: // Methods used to implement the parallel optimisation
+  private:  // Methods used to implement the parallel optimisation
 
     /**
      * Builds a vector of relevant volumes.
      */
     void CreateListOfVolumesToOptimise(G4bool allOpts, G4bool verbose);
-    
+
     /**
      * Returns a pointer to the logical volume to optimise.
      */
@@ -123,7 +129,7 @@ class G4VoxelisationHelper
      * Prepares for doing the work in parallel.
      * Called in preparation (not MT safe).
      */
-    void ReSetParallelOptimisation(G4bool verbose); 
+    void ReSetParallelOptimisation(G4bool verbose);
 
     /**
      * Resets (empties) the list of candidate volumes for optimisation.
@@ -134,13 +140,13 @@ class G4VoxelisationHelper
     /**
      * Thread-safe method for a worker to report it's finished its work.
      * It counts the number of workers that finished, and returns count.
-     * It counts the number of volumes optimised; if all workers have
-     * reported, it results in a 'Finished' state.
+     * It counts the number of volumes optimised and records completion
+     * once all volumes have been optimised.
      */
     G4int ReportWorkerIsDoneOptimising(unsigned int numVolumesOptimised);
 
     /**
-     * Method called when all work is done -- all workers are finished.
+     * Method called once when all volumes are optimised, under the results lock.
      */
     void RecordOptimisationIsFinished(G4bool verbose);
 
@@ -159,25 +165,36 @@ class G4VoxelisationHelper
 
     /** Statistics container shared by all workers. */
     std::vector<G4SmartVoxelStat> fGlobVoxelStats;
-  
+
     // Flags for parallel initialization
     // ---------------------------------
 
+    /** Explicit verbosity request, independent of each geometry closure. */
+    G4bool fRequestedVerboseParallel = false;
     G4bool fVerboseParallel = false;
-    G4bool fParallelVoxelOptimisationUnderway = false; // It has started
-    G4bool fParallelVoxelOptimisationFinished = false; // It is done
+    G4bool fVoxelStatsReported = false;
+
+    G4bool fParallelVoxelOptimisationUnderway = false;  // It has started
+    G4bool fParallelVoxelOptimisationFinished = false;  // It is done
 
     // Statistics for parallel Optimisation - used in 'verbose' mode
     // ------------------------------------
 
     /** Counters. */
     G4double fSumVoxelTime = -9999999.9999;
-    G4int fNumberThreadsReporting = -99999; // Must be set correctly later
+    G4int fNumberThreadsReporting = -99999;  // Must be set correctly later
     unsigned long fTotalNumberVolumesOptimised = -9999999;
-  
-    /** For Wall Clock time in parallel mode ... */
-    G4Timer* fWallClockTimer = nullptr;
-    G4bool fWallClockStarted = false;
+
+    /** Global voxelisation timer, started and stopped under the results lock. */
+    G4Timer fWallClockTimer;
 };
+
+// Inline methods
+
+inline void G4VoxelisationHelper::SetVerbosity(G4bool verbose)
+{
+  fRequestedVerboseParallel = verbose;
+  fVerboseParallel = verbose;
+}
 
 #endif

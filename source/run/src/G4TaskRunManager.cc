@@ -29,6 +29,7 @@
 
 #include "G4AutoLock.hh"
 #include "G4EnvironmentUtils.hh"
+#include "G4GeometryManager.hh"
 #include "G4ProductionCutsTable.hh"
 #include "G4Run.hh"
 #include "G4ScoringManager.hh"
@@ -515,6 +516,7 @@ void G4TaskRunManager::InitializeEventLoop(G4int n_event, const char* macroFile,
 
   // Start worker threads
   CreateAndStartWorkers();
+  G4GeometryManager::GetInstance()->ReportParallelOptimisationStats();
 }
 
 //============================================================================//

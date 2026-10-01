@@ -60,7 +60,7 @@ using namespace std;
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 IonUrQMDPhysics::IonUrQMDPhysics(G4int ver)
-  : G4VHadronPhysics("ionInelasticUrQMD"), verbose(ver), fWasActivated(false)
+  : G4VHadronPhysics("ionInelasticUrQMD", ver), fVerbose(ver), fWasActivated(false)
 {
   fIonXS = nullptr;
   fModel = nullptr;

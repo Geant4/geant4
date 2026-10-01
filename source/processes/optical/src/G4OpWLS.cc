@@ -119,7 +119,7 @@ G4VParticleChange* G4OpWLS::PostStepDoIt(const G4Track& aTrack,
   G4double primaryEnergy = aTrack.GetDynamicParticle()->GetKineticEnergy();
   // No WLS photons are produced if the primary photon's energy is below
   // the lower bound of the WLS integral range
-  if(primaryEnergy < WLSIntegral->GetMinValue())
+  if(primaryEnergy < WLSIntegral->GetMinEnergy())
   {
     return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
   }

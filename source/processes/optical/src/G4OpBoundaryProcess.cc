@@ -120,6 +120,7 @@ G4OpBoundaryProcess::G4OpBoundaryProcess(const G4String& processName,
   fMaterial1      = nullptr;
   fMaterial2      = nullptr;
   fOpticalSurface = nullptr;
+  fOpticalSurfaceLast = nullptr;
   fCarTolerance   = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
 
   f_iTE = f_iTM   = 0;
@@ -993,9 +994,12 @@ void G4OpBoundaryProcess::DielectricDichroic()
   // Round it to closest integer
   G4double angleIncident = std::floor(180. / pi * anglePhotonToNormal + 0.5);
 
-  if(!fDichroicVector && fOpticalSurface)
+  // Refresh fDichroicVector when the current optical surface differs from the
+  // one used on the previous call including when fOpticalSurface becomes null
+  if (fOpticalSurface != fOpticalSurfaceLast)
   {
-    fDichroicVector = fOpticalSurface->GetDichroicVector();
+    fDichroicVector = fOpticalSurface ? fOpticalSurface->GetDichroicVector() : nullptr;
+    fOpticalSurfaceLast = fOpticalSurface;
   }
 
   if(fDichroicVector)

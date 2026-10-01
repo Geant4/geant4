@@ -215,6 +215,7 @@ class G4OpBoundaryProcess : public G4VDiscreteProcess
   const G4Material* fMaterial2;
 
   G4OpticalSurface* fOpticalSurface;
+  G4OpticalSurface* fOpticalSurfaceLast;
 
   G4MaterialPropertyVector* fRealRIndexMPV;
   G4MaterialPropertyVector* fImagRIndexMPV;

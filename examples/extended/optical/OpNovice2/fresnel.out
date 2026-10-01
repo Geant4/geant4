@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-04-patch-02    (12-June-2026)
+ Geant4 version Name: geant4-11-04-patch-03    (01-October-2026)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -979,7 +979,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 500000
-  User=1.930000s Real=1.942728s Sys=0.000000s
+  User=2.020000s Real=2.030495s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -995,30 +995,30 @@ Average number of photons absorbed by WLS2 per event: 0
 Average number of photons created by WLS2 per event: 0
 Average energy of WLS2 photons created per event: 0 eV.
 Average number of OpRayleigh per event:   0
-Average number of OpAbsorption per event: 0.5
+Average number of OpAbsorption per event: 0.51
 
 Surface events (on +X surface, maximum one per photon) this run:
 # of primary particles:         5e+05
-OpAbsorption before surface:     1439
-Total # of surface events:     498561
+OpAbsorption before surface:     1427
+Total # of surface events:     498573
 Unaccounted for:                    0
 
 Surface events by process:
-  Fresnel refraction:          248420
-  Fresnel reflection:            7200
-  Total internal reflection:   242941
- Sum:                          498561
+  Fresnel refraction:          247643
+  Fresnel reflection:            7493
+  Total internal reflection:   243437
+ Sum:                          498573
  Unaccounted for:                   0
 ---------------------------------
 Polarization of primary optical photons: 0 deg.
-Reflectance shows a minimum at: 35.5 +/- 0.5 deg. Expected Brewster angle: 35.7109 deg. 
+Reflectance shows a minimum at: 36.5 +/- 0.5 deg. Expected Brewster angle: 35.7109 deg. 
 Fresnel transmission goes to 0 at: 45.5 +/- 0.5 deg. Expected: 45.9605 deg.
 
  Histogram statistics for the entire run:
 
- Angle of Fresnel-reflected photons: mean = 0.0054932 rms = 0.466856
- Angle of total internal reflected photons: mean = 0.0123515 rms = 0.932971
- Angle of Fresnel-refracted photons: mean = 0.0041039 rms = 0.352892
+ Angle of Fresnel-reflected photons: mean = 0.00541596 rms = 0.463058
+ Angle of total internal reflected photons: mean = 0.0123245 rms = 0.931904
+ Angle of Fresnel-refracted photons: mean = 0.00409217 rms = 0.351946
 
 ... write file : fresnel_0.root - done
 ... close file : fresnel_0.root - done
@@ -1056,7 +1056,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 500000
-  User=1.860000s Real=1.875160s Sys=0.000000s
+  User=2.070000s Real=2.083764s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -1076,15 +1076,15 @@ Average number of OpAbsorption per event: 0.54
 
 Surface events (on +X surface, maximum one per photon) this run:
 # of primary particles:         5e+05
-OpAbsorption before surface:     1364
-Total # of surface events:     498636
+OpAbsorption before surface:     1310
+Total # of surface events:     498690
 Unaccounted for:                    0
 
 Surface events by process:
-  Fresnel refraction:          232117
-  Fresnel reflection:           22473
-  Total internal reflection:   244046
- Sum:                          498636
+  Fresnel refraction:          232368
+  Fresnel reflection:           22609
+  Total internal reflection:   243713
+ Sum:                          498690
  Unaccounted for:                   0
 ---------------------------------
 Polarization of primary optical photons: 90 deg.
@@ -1092,9 +1092,9 @@ Fresnel transmission goes to 0 at: 45.5 +/- 0.5 deg. Expected: 45.9605 deg.
 
  Histogram statistics for the entire run:
 
- Angle of Fresnel-reflected photons: mean = 0.00626284 rms = 0.493134
- Angle of total internal reflected photons: mean = 0.0122848 rms = 0.930132
- Angle of Fresnel-refracted photons: mean = 0.00394519 rms = 0.340483
+ Angle of Fresnel-reflected photons: mean = 0.00624227 rms = 0.492325
+ Angle of total internal reflected photons: mean = 0.0123158 rms = 0.931721
+ Angle of Fresnel-refracted photons: mean = 0.00393817 rms = 0.339996
 
 ... write file : fresnel_90.root - done
 ... close file : fresnel_90.root - done

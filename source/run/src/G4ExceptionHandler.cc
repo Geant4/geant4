@@ -140,6 +140,50 @@ G4bool G4ExceptionHandler::Notify(const char* originOfException, const char* exc
 // --------------------------------------------------------------------
 void G4ExceptionHandler::DumpTrackInfo()
 {
+  auto dumpStepPoint = [](const char* label, const G4StepPoint* stepPoint)
+  {
+    G4cerr << " " << label << " : ";
+    if (stepPoint == nullptr)
+    {
+      G4cerr << "not available" << G4endl;
+      return;
+    }
+
+    G4cerr << stepPoint->GetPosition();
+    G4cerr << " - Physical volume : ";
+    G4VPhysicalVolume* physicalVolume = nullptr;
+    if (stepPoint->GetTouchableHandle())
+    {
+      physicalVolume = stepPoint->GetPhysicalVolume();
+    }
+    if (physicalVolume != nullptr)
+    {
+      G4cerr << physicalVolume->GetName();
+      if (stepPoint->GetMaterial() != nullptr)
+      {
+        G4cerr << " (" << stepPoint->GetMaterial()->GetName() << ")";
+      }
+      else
+      {
+        G4cerr << " (material not available)";
+      }
+    }
+    else
+    {
+      G4cerr << "not available";
+    }
+    G4cerr << G4endl;
+    if (stepPoint->GetProcessDefinedStep() != nullptr)
+    {
+      G4cerr << " - defined by : " << stepPoint->GetProcessDefinedStep()->GetProcessName()
+             << " - step status : " << stepPoint->GetStepStatus() << G4endl;
+    }
+    else
+    {
+      G4cerr << " - defined by : not available" << G4endl;
+    }
+  };
+
   const G4Track* theTrack = nullptr;
   const G4Step* theStep = nullptr;
   if (G4StateManager::GetStateManager()->GetCurrentState() == G4State_EventProc) {
@@ -174,52 +218,9 @@ void G4ExceptionHandler::DumpTrackInfo()
     G4cerr << " Step length : " << G4BestUnit(theStep->GetStepLength(), "Length")
            << " - total energy deposit : " << G4BestUnit(theStep->GetTotalEnergyDeposit(), "Energy")
            << G4endl;
-    G4cerr << " Pre-step point : " << theStep->GetPreStepPoint()->GetPosition();
-    G4cerr << " - Physical volume : ";
-    if (theStep->GetPreStepPoint()->GetPhysicalVolume() != nullptr) {
-      G4cerr << theStep->GetPreStepPoint()->GetPhysicalVolume()->GetName();
-      if (theStep->GetPreStepPoint()->GetMaterial() != nullptr) {
-        G4cerr << " (" << theStep->GetPreStepPoint()->GetMaterial()->GetName() << ")";
-      }
-      else {
-        G4cerr << " (material not available)";
-      }
-    }
-    else {
-      G4cerr << "not available";
-    }
-    G4cerr << G4endl;
-    if (theStep->GetPreStepPoint()->GetProcessDefinedStep() != nullptr) {
-      G4cerr << " - defined by : "
-             << theStep->GetPreStepPoint()->GetProcessDefinedStep()->GetProcessName()
-             << " - step status : " << theStep->GetPreStepPoint()->GetStepStatus() << G4endl;
-    }
-    else {
-      G4cerr << " - defined by : not available" << G4endl;
-    }
-    G4cerr << " Post-step point : " << theStep->GetPostStepPoint()->GetPosition();
-    G4cerr << " - Physical volume : ";
-    if (theStep->GetPostStepPoint()->GetPhysicalVolume() != nullptr) {
-      G4cerr << theStep->GetPostStepPoint()->GetPhysicalVolume()->GetName();
-      if (theStep->GetPostStepPoint()->GetMaterial() != nullptr) {
-        G4cerr << " (" << theStep->GetPostStepPoint()->GetMaterial()->GetName() << ")";
-      }
-      else {
-        G4cerr << " (material not available)";
-      }
-    }
-    else {
-      G4cerr << "not available";
-    }
-    G4cerr << G4endl;
-    if (theStep->GetPostStepPoint()->GetProcessDefinedStep() != nullptr) {
-      G4cerr << " - defined by : "
-             << theStep->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName()
-             << " - step status : " << theStep->GetPostStepPoint()->GetStepStatus() << G4endl;
-    }
-    else {
-      G4cerr << " - defined by : not available" << G4endl;
-    }
+
+    dumpStepPoint("Pre-step point", theStep->GetPreStepPoint());
+    dumpStepPoint("Post-step point", theStep->GetPostStepPoint());
     G4cerr << " *** Note: Step information might not be properly updated." << G4endl;
   }
 }

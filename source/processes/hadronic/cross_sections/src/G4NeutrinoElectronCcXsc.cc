@@ -83,7 +83,7 @@ G4NeutrinoElectronCcXsc::IsElementApplicable( const G4DynamicParticle* aPart, G4
   else if( pName == "nu_tau"  || pName == "anti_nu_tau" ) fmass = theTauMinus->GetPDGMass(); 
   else fmass = emass;
 
-  minEnergy = (fmass-emass)*(fmass+emass)/emass;
+  minEnergy = (fmass - emass) * (fmass + emass) / (2 * emass);
   
   if( ( pName == "nu_mu"  || pName == "anti_nu_mu"  || 
         pName == "nu_tau" || pName == "anti_nu_tau"   ) &&

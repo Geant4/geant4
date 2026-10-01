@@ -80,6 +80,18 @@ namespace
 {
   constexpr G4double lambdaFactor = 0.8;
   constexpr G4double invLambdaFactor = 1.0/lambdaFactor;
+
+  // A rejected final state is model-owned, but its untransferred dynamic
+  // particles have no other owner.
+  void DeleteSecondariesAndClear(G4HadFinalState& result)
+  {
+    const auto numberOfSecondaries = result.GetNumberOfSecondaries();
+    for (std::size_t i = 0; i < numberOfSecondaries; ++i)
+    {
+      delete result.GetSecondary(i)->GetParticle();
+    }
+    result.Clear();
+  }
 }
 
 //////////////////////////////////////////////////////////////////
@@ -624,8 +636,6 @@ G4HadFinalState* G4HadronicProcess::CheckResult(const G4HadProjectile & aPro,
              std::abs(mass_pdg - mass_dyn) < 3.0*pdyn->GetDefinition()->GetPDGWidth() ) {
           continue;
         }
-	result->Clear();
-	result = nullptr;
 	G4ExceptionDescription desc;
 	desc << "Warning: Secondary with off-shell dynamic mass detected:  " 
 	     << G4endl
@@ -641,6 +651,8 @@ G4HadFinalState* G4HadronicProcess::CheckResult(const G4HadProjectile & aPro,
 	     << " E= " <<  aPro.Get4Momentum().e()
 	     << ", target nucleus (" << aNucleus.GetZ_asInt() << ", "
 	     << aNucleus.GetA_asInt() << ")" << G4endl;
+        DeleteSecondariesAndClear(*result);
+        result = nullptr;
 	G4Exception("G4HadronicProcess:CheckResult()", "had012",
 		    epReportLevel<0 ? EventMustBeAborted : JustWarning,desc);
 	// must return here.....
@@ -653,9 +665,8 @@ G4HadFinalState* G4HadronicProcess::CheckResult(const G4HadProjectile & aPro,
       theModel->GetFatalEnergyCheckLevels();	// (relative, absolute)
     if (std::abs(deltaE) > checkLevels.second && 
         std::abs(deltaE) > checkLevels.first*aPro.GetKineticEnergy()){
-      // do not delete result, this is a pointer to a data member;
-      result->Clear();
-      result = nullptr;
+      // Do not delete result: it is model-owned. Its untransferred secondary
+      // particles must nevertheless be destroyed.
       G4ExceptionDescription desc;
       desc << "Warning: Bad energy non-conservation detected, will "
 	   << (epReportLevel<0 ? "abort the event" 
@@ -668,6 +679,8 @@ G4HadFinalState* G4HadronicProcess::CheckResult(const G4HadProjectile & aPro,
 	   << ", target nucleus (" << aNucleus.GetZ_asInt() << ", "
 	   << aNucleus.GetA_asInt() << ")" << G4endl
 	   << " E(initial - final) = " << deltaE << " MeV." << G4endl;
+      DeleteSecondariesAndClear(*result);
+      result = nullptr;
       G4Exception("G4HadronicProcess:CheckResult()", "had012", 
 		  epReportLevel<0 ? EventMustBeAborted : JustWarning,desc);
     }

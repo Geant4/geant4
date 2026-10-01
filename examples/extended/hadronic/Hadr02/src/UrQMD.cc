@@ -86,7 +86,7 @@ UrQMD::UrQMD(G4int)
   G4ExceptionDescription de;
   de << "Support for UrQMD not enabled" << G4endl;
   G4Exception(__FILE__, "UrQMD-01", FatalException, de,
-              "Code should be compiled with G4_USE_URQMD environment variable set.");
+              "Build Hadr02 with the G4_USE_URQMD CMake option enabled.");
 }
 
 #endif  // G4_USE_URQMD

@@ -69,6 +69,7 @@ G4String G4GammaNuclearXS::gDataDirectory = "";
 
 namespace
 {
+  G4Mutex gNuclearXSMutex = G4MUTEX_INITIALIZER;
   // Upper limit of the linear transition between IAEA database and CHIPS model
   const G4double eTransitionBound = 150.*CLHEP::MeV;
   // A limit energy to correct CHIPS parameterisation for light isotopes 
@@ -91,6 +92,7 @@ G4GammaNuclearXS::G4GammaNuclearXS()
   SetForAllAtomsAndEnergies(true);
 
   // full data set is uploaded once
+  G4AutoLock lock(&gNuclearXSMutex);
   if (nullptr == data) { 
     data = new G4ElementData(MAXZGAMMAXS);
     data->SetName("gNuclear");
@@ -355,4 +357,3 @@ G4GammaNuclearXS::RetrieveVector(std::ostringstream& ost, G4bool warn, G4int Z)
   }
   return v;
 }
-

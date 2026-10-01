@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-04-patch-02    (12-June-2026)
+ Geant4 version Name: geant4-11-04-patch-03    (01-October-2026)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -960,17 +960,17 @@ WARNING: G4VisManager::IsValidView(): Attempt to draw when no graphics system
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=1.570000s Real=1.576881s Sys=0.010000s
+  User=1.790000s Real=1.806855s Sys=0.000000s
 
  ======================== run summary ======================
 The run was 10000 events.
-Number of hits per event:	 13.57 +- 0.09792
-Number of hits per event above threshold:	 12.13 +- 0.08376
+Number of hits per event:	 13.41 +- 0.09775
+Number of hits per event above threshold:	 11.98 +- 0.08372
 Number of scintillation photons per event :	 0 +- 0
-Number of Cerenkov photons per event:	 53.71 +- 0.3455
-Number of absorbed photons per event :	 33.64 +- 0.2214
-Number of photons absorbed at boundary per event:	 6.502 +- 0.04411
-Total energy deposition in scintillator per event:	 6766 +- 40.07 keV.
+Number of Cerenkov photons per event:	 53.12 +- 0.3441
+Number of absorbed photons per event :	 33.3 +- 0.2204
+Number of photons absorbed at boundary per event:	 6.415 +- 0.04356
+Total energy deposition in scintillator per event:	 6693 +- 40 keV.
 
 ... write file : cerenkov.root - done
 ... close file : cerenkov.root - done
@@ -978,5 +978,5 @@ Graphics systems deleted.
 Visualization Manager deleting...
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 15 of which, static: 0
-Dynamic pools deleted: 15 / Total memory freed: 0.096 MB
+Dynamic pools deleted: 15 / Total memory freed: 0.098 MB
 ============================================================

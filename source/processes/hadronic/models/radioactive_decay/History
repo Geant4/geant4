@@ -6,6 +6,11 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2026-08-04 Laurent Desorgher, Dmitri Konstantinov (radioactive_decay-V11-03-02)
+- G4BetaMinusDecay, G4BetaPlusDecay: fixed low-energy step artifacts at Q/100
+  boundaries, a regression from radioactive_decay-V11-01-04, by including the
+  non-zero lower-endpoint density when constructing the CDF.
+
 ## 2026-05-04 Gabriele Cosmo (radioactive_decay-V11-03-01)
 - In G4VRadioactiveDecay, fixed MT data race in GetDecayTable(), adding a mutex.
   Removed mutex from LoadDecayTable(), only called from GetDecayTable() and

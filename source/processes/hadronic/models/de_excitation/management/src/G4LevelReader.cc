@@ -51,9 +51,12 @@
 
 namespace
 {
+#ifdef G4VERBOSE
   const G4int countmax = 4;
+#endif
   const G4int nfloting = 13;
   const G4double eTolarence = 2*CLHEP::eV;
+  const G4double numLim = 1.e+8;
   const G4String fFloatingLevels[13] = {
   "-", "+X", "+Y", "+Z", "+U", "+V", "+W", "+R", "+S", "+T", "+A", "+B", "+C"};
 }
@@ -61,7 +64,6 @@ namespace
 G4LevelReader::G4LevelReader(G4NuclearLevelData* ptr) 
   : fData(ptr)
 {
-  fAlphaMax = (G4float)1.e15;
   fTimeFactor = CLHEP::second/G4Pow::GetInstance()->logZ(2);
   if (auto* dataDir = G4FindDataDir("G4LEVELGAMMADATA")) {
     fDirectory = G4String(dataDir);
@@ -322,7 +324,7 @@ G4LevelReader::LevelManager(G4int Z, G4int A, std::ifstream& infile)
 	vGammaProbability.resize(fTransMax);
 	vShellProbability.resize(fTransMax);
       }
-      fNorm1 = 0.0f;
+      fNorm1 = 0.0;
       for (G4int j=0; j<ntrans; ++j) {
        
 	if (!(ReadDataItem(infile, i2) &&
@@ -352,14 +354,15 @@ G4LevelReader::LevelManager(G4int Z, G4int A, std::ifstream& infile)
 	  }
 #endif
 	  isTransOK = false;
-	  fProb = 0.0f;
+	  fProb = 0.0;
 	}
 	vTrans[j] = i2*10000 + tnum;
-        fAlpha = std::min(std::max(fAlpha,0.f), fAlphaMax);
-	G4float x = 1.0f + fAlpha;
+        fAlpha = std::max(fAlpha, 0.);
+        G4double x = fAlpha;
+	if (x < numLim) { x += 1.0; }
 	fNorm1 += x*fProb;
-	vGammaCumProbability[j] = fNorm1;
-	vGammaProbability[j] = 1.0f/x;
+        vGammaCumProbability[j] = (G4float)fNorm1;
+        vGammaProbability[j] = (G4float)(1.0/x);
 	vShellProbability[j] = nullptr;
 	if (fVerbose > 2) { 
 	  G4long prec = G4cout.precision(4);
@@ -370,7 +373,7 @@ G4LevelReader::LevelManager(G4int Z, G4int A, std::ifstream& infile)
 		 << G4endl;
 	  G4cout.precision(prec);
 	}
-	if (fAlpha > 0.0f) {
+	if (fAlpha > 0.0) {
 	  for (k=0; k<10; ++k) {
 	    if (!ReadDataItem(infile,fICC[k])) {
 	      isTransOK = false;
@@ -399,9 +402,9 @@ G4LevelReader::LevelManager(G4int Z, G4int A, std::ifstream& infile)
 		 << " isOK=" << isTransOK
 	         << G4endl;
         }
-	fNorm1 = (FLT_MIN < fNorm1) ? 1.0f/fNorm1 : 0.0f; 
+        G4float norm2 = (0.0 < fNorm1) ? (G4float)(1.0/fNorm1) : 0.f;
 	for (k=0; k<nt; ++k) {
-	  vGammaCumProbability[k] *= fNorm1;
+	  vGammaCumProbability[k] *= norm2;
 #ifdef G4VERBOSE
 	  if (fVerbose > 3) {
 	    G4cout << "Probabilities[" << k 

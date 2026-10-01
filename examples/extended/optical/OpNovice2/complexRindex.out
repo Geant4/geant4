@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-04-patch-02    (12-June-2026)
+ Geant4 version Name: geant4-11-04-patch-03    (01-October-2026)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -1001,20 +1001,20 @@ Average number of OpAbsorption per event: 0.0097
 
 Surface events (on +X surface, maximum one per photon) this run:
 # of primary particles:         5e+05
-OpAbsorption before surface:       89
-Total # of surface events:     499911
+OpAbsorption before surface:       72
+Total # of surface events:     499928
 Unaccounted for:                    0
 
 Surface events by process:
-  Spike reflection:            449293
-  Absorption:                   50618
- Sum:                          499911
+  Spike reflection:            449476
+  Absorption:                   50452
+ Sum:                          499928
  Unaccounted for:                   0
 ---------------------------------
 
  Histogram statistics for the entire run:
 
- Angle of absorbed photons: mean = 0.00892093 rms = 0.742389
+ Angle of absorbed photons: mean = 0.00890297 rms = 0.74147
 
 ... write file : complexRindex_0.root - done
 ... close file : complexRindex_0.root - done
@@ -1049,20 +1049,20 @@ Average number of OpAbsorption per event: 0.011
 
 Surface events (on +X surface, maximum one per photon) this run:
 # of primary particles:         5e+05
-OpAbsorption before surface:       93
-Total # of surface events:     499907
+OpAbsorption before surface:       62
+Total # of surface events:     499938
 Unaccounted for:                    0
 
 Surface events by process:
-  Spike reflection:            474561
-  Absorption:                   25346
- Sum:                          499907
+  Spike reflection:            474370
+  Absorption:                   25568
+ Sum:                          499938
  Unaccounted for:                   0
 ---------------------------------
 
  Histogram statistics for the entire run:
 
- Angle of absorbed photons: mean = 0.00681253 rms = 0.613944
+ Angle of absorbed photons: mean = 0.00673159 rms = 0.60995
 
 ... write file : complexRindex_90.root - done
 ... close file : complexRindex_90.root - done

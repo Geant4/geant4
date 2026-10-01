@@ -95,11 +95,11 @@ private:
   G4double fTimeFactor;
   G4double fSpin = 0.;
 
-  G4float fProb = 0.f;
-  G4float fAlpha = 0.f;
-  G4float fAlphaMax;
-  G4float fRatio = 0.f;
-  G4float fNorm1 = 0.f;
+  G4double fProb = 0.;
+  G4double fAlpha = 0.;
+  G4double fRatio = 0.;
+  G4double fNorm1 = 0.;
+
   G4float fICC[10] = {0.f};
 
   G4int nbufmax = 20;

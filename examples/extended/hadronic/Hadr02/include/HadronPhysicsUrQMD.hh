@@ -36,15 +36,14 @@
 // 07.02.2012 A. Dotti: First version
 //----------------------------------------------------------------------------
 //
-#ifndef HadronPhysicsUrQMD_h
-#define HadronPhysicsUrQMD_h 1
+#ifndef HADRONPHYSICSURQMD_H
+#define HADRONPHYSICSURQMD_H
 
 #include "UrQMDAntiBarionBuilder.hh"
 #include "UrQMDNeutronBuilder.hh"
 #include "UrQMDPiKBuilder.hh"
 #include "UrQMDProtonBuilder.hh"
 
-#include "G4AntiBarionBuilder.hh"
 #include "G4HyperonBuilder.hh"
 #include "G4HyperonFTFPBuilder.hh"
 #include "G4NeutronBuilder.hh"
@@ -52,6 +51,9 @@
 #include "G4ProtonBuilder.hh"
 #include "G4ios.hh"
 #include "globals.hh"
+
+#include "G4VPhysicsConstructor.hh"
+#include "G4HadronicProcess.hh"
 
 class HadronPhysicsUrQMD : public G4VPhysicsConstructor
 {
@@ -78,7 +80,6 @@ class HadronPhysicsUrQMD : public G4VPhysicsConstructor
     G4HyperonBuilder* fHyperon;
     G4HyperonFTFPBuilder* fFTFPHyperon;
 
-    G4AntiBarionBuilder* fAntiBaryon;
     UrQMDAntiBarionBuilder* fUrQMDAntiBaryon;
 };
 

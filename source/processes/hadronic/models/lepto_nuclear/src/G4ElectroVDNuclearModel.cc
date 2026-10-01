@@ -28,10 +28,10 @@
 // Date:    1 May 2012
 //
 // Description: model for electron and positron interaction with nuclei
-//              using the equivalent photon spectrum.  A real gamma is 
-//              produced from the virtual photon spectrum and is then 
+//              using the equivalent photon spectrum.  A real gamma is
+//              produced from the virtual photon spectrum and is then
 //              interacted hadronically by the Bertini cascade at low
-//              energies.  At high energies the gamma is treated as a 
+//              energies.  At high energies the gamma is treated as a
 //              pi0 and interacted with the nucleus using the FTFP model.
 //              The electro- and photo-nuclear cross sections of
 //              M. Kossov are used to generate the virtual photon
@@ -40,64 +40,62 @@
 
 #include "G4ElectroVDNuclearModel.hh"
 
-#include "G4PhysicalConstants.hh"
-#include "G4SystemOfUnits.hh"
-
-#include "G4ElectroNuclearCrossSection.hh"
-#include "G4PhotoNuclearCrossSection.hh"
-#include "G4CrossSectionDataSetRegistry.hh"
-
 #include "G4CascadeInterface.hh"
-#include "G4TheoFSGenerator.hh"
-#include "G4GeneratorPrecompoundInterface.hh"
+#include "G4CrossSectionDataSetRegistry.hh"
+#include "G4ElectroNuclearCrossSection.hh"
 #include "G4ExcitationHandler.hh"
-#include "G4PreCompoundModel.hh"
-#include "G4LundStringFragmentation.hh"
 #include "G4ExcitedStringDecay.hh"
 #include "G4FTFModel.hh"
-
+#include "G4GammaNuclearXS.hh"
+#include "G4GeneratorPrecompoundInterface.hh"
 #include "G4HadFinalState.hh"
 #include "G4HadronicInteractionRegistry.hh"
-#include "G4PhysicsModelCatalog.hh"
-
-#include "G4ElectroNuclearCrossSection.hh"
+#include "G4LundStringFragmentation.hh"
 #include "G4PhotoNuclearCrossSection.hh"
-#include "G4GammaNuclearXS.hh"
-
+#include "G4PhysicalConstants.hh"
+#include "G4PhysicsModelCatalog.hh"
+#include "G4PreCompoundModel.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4TheoFSGenerator.hh"
 
 G4ElectroVDNuclearModel::G4ElectroVDNuclearModel()
- : G4HadronicInteraction("G4ElectroVDNuclearModel"),
-   leptonKE(0.0), photonEnergy(0.0), photonQ2(0.0), secID(-1)
+  : G4HadronicInteraction("G4ElectroVDNuclearModel"),
+    leptonKE(0.0),
+    photonEnergy(0.0),
+    photonQ2(0.0),
+    secID(-1)
 {
   SetMinEnergy(0.0);
-  SetMaxEnergy(1*PeV);
+  SetMaxEnergy(1 * PeV);
 
-  electroXS = 
-    (G4ElectroNuclearCrossSection*)G4CrossSectionDataSetRegistry::Instance()->
-    GetCrossSectionDataSet(G4ElectroNuclearCrossSection::Default_Name());
-  if ( electroXS == nullptr ) {
+  electroXS = (G4ElectroNuclearCrossSection*)G4CrossSectionDataSetRegistry::Instance()
+                ->GetCrossSectionDataSet(G4ElectroNuclearCrossSection::Default_Name());
+  if (electroXS == nullptr)
+  {
     electroXS = new G4ElectroNuclearCrossSection;
   }
 
-  gammaXS = 
-    (G4PhotoNuclearCrossSection*)G4CrossSectionDataSetRegistry::Instance()->
-    GetCrossSectionDataSet(G4PhotoNuclearCrossSection::Default_Name());
-  if ( gammaXS == nullptr ) {
-    gammaXS = 
-      (G4GammaNuclearXS*)G4CrossSectionDataSetRegistry::Instance()->
-      GetCrossSectionDataSet(G4GammaNuclearXS::Default_Name());
-    if ( gammaXS == nullptr ) {
+  gammaXS =
+    (G4PhotoNuclearCrossSection*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(
+      G4PhotoNuclearCrossSection::Default_Name());
+  if (gammaXS == nullptr)
+  {
+    gammaXS = (G4GammaNuclearXS*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(
+      G4GammaNuclearXS::Default_Name());
+    if (gammaXS == nullptr)
+    {
       gammaXS = new G4PhotoNuclearCrossSection;
     }
-  } 
+  }
 
   // reuse existing pre-compound model
-  G4GeneratorPrecompoundInterface* precoInterface 
-    = new G4GeneratorPrecompoundInterface();
-  G4HadronicInteraction* p =
-    G4HadronicInteractionRegistry::Instance()->FindModel("PRECO");
+  G4GeneratorPrecompoundInterface* precoInterface = new G4GeneratorPrecompoundInterface();
+  G4HadronicInteraction* p = G4HadronicInteractionRegistry::Instance()->FindModel("PRECO");
   G4VPreCompoundModel* pre = static_cast<G4VPreCompoundModel*>(p);
-  if(!pre) { pre = new G4PreCompoundModel(); }
+  if (!pre)
+  {
+    pre = new G4PreCompoundModel();
+  }
   precoInterface->SetDeExcitation(pre);
 
   // string model
@@ -108,12 +106,12 @@ G4ElectroVDNuclearModel::G4ElectroVDNuclearModel()
   G4FTFModel* theStringModel = new G4FTFModel();
   theStringModel->SetFragmentationModel(theStringDecay);
   ftfp->SetHighEnergyGenerator(theStringModel);
-    
+
   // Build Bertini model
   bert = new G4CascadeInterface();
 
   // Creator model ID
-  secID = G4PhysicsModelCatalog::GetModelID( "model_" + GetModelName() );
+  secID = G4PhysicsModelCatalog::GetModelID("model_" + GetModelName());
 }
 
 G4ElectroVDNuclearModel::~G4ElectroVDNuclearModel()
@@ -121,8 +119,8 @@ G4ElectroVDNuclearModel::~G4ElectroVDNuclearModel()
   delete theFragmentation;
   delete theStringDecay;
 }
-    
-void G4ElectroVDNuclearModel::ModelDescription(std::ostream& outFile) const 
+
+void G4ElectroVDNuclearModel::ModelDescription(std::ostream& outFile) const
 {
   outFile << "G4ElectroVDNuclearModel handles the inelastic scattering\n"
           << "of e- and e+ from nuclei using the equivalent photon\n"
@@ -136,125 +134,130 @@ void G4ElectroVDNuclearModel::ModelDescription(std::ostream& outFile) const
           << "M. Kossov are used to generate the virtual photon spectrum\n";
 }
 
-
-G4HadFinalState*
-G4ElectroVDNuclearModel::ApplyYourself(const G4HadProjectile& aTrack,
-                                       G4Nucleus& targetNucleus)
+G4HadFinalState* G4ElectroVDNuclearModel::ApplyYourself(const G4HadProjectile& aTrack,
+                                                        G4Nucleus& targetNucleus)
 {
-    // Set up default particle change (just returns initial state)
-    theParticleChange.Clear();
-    theParticleChange.SetStatusChange(isAlive);
-    leptonKE = aTrack.GetKineticEnergy();
-    theParticleChange.SetEnergyChange(leptonKE);
-    theParticleChange.SetMomentumChange(aTrack.Get4Momentum().vect().unit() );
-    
-    // Set up sanity checks for real photon production
-    G4DynamicParticle lepton(aTrack.GetDefinition(), aTrack.Get4Momentum() );
-    
-    // Need to call GetElementCrossSection before calling GetEquivalentPhotonEnergy.
-    const G4Material* mat = aTrack.GetMaterial();
-    G4int targZ = targetNucleus.GetZ_asInt();
-    electroXS->GetElementCrossSection(&lepton, targZ, mat);
-    
-    photonEnergy = electroXS->GetEquivalentPhotonEnergy();
-    // Photon energy cannot exceed lepton energy
-    if (photonEnergy < leptonKE) {
-        photonQ2 = electroXS->GetEquivalentPhotonQ2(photonEnergy);
-        G4double dM = G4Proton::Proton()->GetPDGMass() + G4Neutron::Neutron()->GetPDGMass();
-        // Photon
-        if (photonEnergy > photonQ2/dM) {
-            // Produce recoil lepton and transferred photon
-            G4DynamicParticle* transferredPhoton = CalculateEMVertex(aTrack, targetNucleus);
-            // Interact gamma with nucleus
-            if (transferredPhoton) CalculateHadronicVertex(transferredPhoton, targetNucleus);
-        }
+  // Set up default particle change (just returns initial state)
+  theParticleChange.Clear();
+  theParticleChange.SetStatusChange(isAlive);
+  leptonKE = aTrack.GetKineticEnergy();
+  theParticleChange.SetEnergyChange(leptonKE);
+  theParticleChange.SetMomentumChange(aTrack.Get4Momentum().vect().unit());
+
+  // Set up sanity checks for real photon production
+  G4DynamicParticle lepton(aTrack.GetDefinition(), aTrack.Get4Momentum());
+
+  // Need to call GetElementCrossSection before calling GetEquivalentPhotonEnergy.
+  const G4Material* mat = aTrack.GetMaterial();
+  G4int targZ = targetNucleus.GetZ_asInt();
+  electroXS->GetElementCrossSection(&lepton, targZ, mat);
+
+  photonEnergy = electroXS->GetEquivalentPhotonEnergy();
+  // Photon energy cannot exceed lepton energy
+  if (photonEnergy < leptonKE)
+  {
+    photonQ2 = electroXS->GetEquivalentPhotonQ2(photonEnergy);
+    G4double dM = G4Proton::Proton()->GetPDGMass() + G4Neutron::Neutron()->GetPDGMass();
+    // Photon
+    if (photonEnergy > photonQ2 / dM)
+    {
+      // Produce recoil lepton and transferred photon
+      G4DynamicParticle* transferredPhoton = CalculateEMVertex(aTrack, targetNucleus);
+      // Interact gamma with nucleus
+      if (transferredPhoton) CalculateHadronicVertex(transferredPhoton, targetNucleus);
     }
-    return &theParticleChange;
+  }
+  return &theParticleChange;
 }
 
-
-G4DynamicParticle*
-G4ElectroVDNuclearModel::CalculateEMVertex(const G4HadProjectile& aTrack,
-                                           G4Nucleus& targetNucleus)
+G4DynamicParticle* G4ElectroVDNuclearModel::CalculateEMVertex(const G4HadProjectile& aTrack,
+                                                              G4Nucleus& targetNucleus)
 {
-  G4DynamicParticle photon(G4Gamma::Gamma(), photonEnergy,
-                           G4ThreeVector(0.,0.,1.) );
+  G4DynamicParticle photon(G4Gamma::Gamma(), photonEnergy, G4ThreeVector(0., 0., 1.));
 
   // Get gamma cross section at Q**2 = 0 (real gamma)
   G4int targZ = targetNucleus.GetZ_asInt();
   const G4Material* mat = aTrack.GetMaterial();
-  G4double sigNu =
-    gammaXS->GetElementCrossSection(&photon, targZ, mat);
+  G4double sigNu = gammaXS->GetElementCrossSection(&photon, targZ, mat);
 
-  // Change real gamma energy to equivalent energy and get cross section at that energy 
+  // Change real gamma energy to equivalent energy and get cross section at that energy
   G4double dM = G4Proton::Proton()->GetPDGMass() + G4Neutron::Neutron()->GetPDGMass();
-  photon.SetKineticEnergy(photonEnergy - photonQ2/dM);      
-  G4double sigK =
-    gammaXS->GetElementCrossSection(&photon, targZ, mat);
+  photon.SetKineticEnergy(photonEnergy - photonQ2 / dM);
+  G4double sigK = gammaXS->GetElementCrossSection(&photon, targZ, mat);
   G4double rndFraction = electroXS->GetVirtualFactor(photonEnergy, photonQ2);
 
   // No gamma produced, return null ptr
-  if (sigNu*G4UniformRand() > sigK*rndFraction) return 0;
+  if (sigNu * G4UniformRand() > sigK * rndFraction) return 0;
 
-  // Scatter the lepton
+  // Scatter the electron.
+  // Note that the electron is treated as if it were flying along the z-axis :
+  // the method G4HadronicProcess::FillResult takes care of rotating the
+  // final-state secondaries to take into account the original direction
+  // of the electron.
   G4double mProj = aTrack.GetDefinition()->GetPDGMass();
-  G4double mProj2 = mProj*mProj;
-  G4double iniE = leptonKE + mProj;               // Total energy of incident lepton
-  G4double finE = iniE - photonEnergy;            // Total energy of scattered lepton
-  theParticleChange.SetEnergyChange(finE-mProj);
-  G4double iniP = std::sqrt(iniE*iniE-mProj2);    // Incident lepton momentum
-  G4double finP = std::sqrt(finE*finE-mProj2);    // Scattered lepton momentum
-  G4double cost = (iniE*finE - mProj2 - photonQ2/2.)/iniP/finP;  // cos(theta) from Q**2
-  if (cost > 1.) cost= 1.;
-  if (cost < -1.) cost=-1.;
-  G4double sint = std::sqrt(1.-cost*cost);
-
-  G4ThreeVector dir = aTrack.Get4Momentum().vect().unit();
-  G4ThreeVector ortx = dir.orthogonal().unit();   // Ortho-normal to scattering plane
-  G4ThreeVector orty = dir.cross(ortx);           // Third unit vector
-  G4double phi = twopi*G4UniformRand();
-  G4double sinx = sint*std::sin(phi);
-  G4double siny = sint*std::cos(phi);
-  G4ThreeVector findir = cost*dir+sinx*ortx+siny*orty;
-  theParticleChange.SetMomentumChange(findir);    // change lepton direction
+  G4double mProj2 = mProj * mProj;
+  G4double iniE = leptonKE + mProj;  // Total energy of incident lepton
+  G4double finE = iniE - photonEnergy;  // Total energy of scattered lepton
+  theParticleChange.SetEnergyChange(finE - mProj);
+  G4double iniP = std::sqrt(iniE * iniE - mProj2);  // Incident lepton momentum
+  G4double finP = std::sqrt(finE * finE - mProj2);  // Scattered lepton momentum
+  G4double cost = (iniE * finE - mProj2 - photonQ2 / 2.) / iniP / finP;  // cos(theta) from Q**2
+  if (cost > 1.) cost = 1.;
+  if (cost < -1.) cost = -1.;
+  G4double sint = std::sqrt(1. - cost * cost);
+  G4double phi = twopi * G4UniformRand();
+  G4ThreeVector findir(sint*std::cos(phi), sint*std::sin(phi), cost);
+  theParticleChange.SetMomentumChange(findir);  // change lepton direction
 
   // Create a gamma with momentum equal to momentum transfer
-  G4ThreeVector photonMomentum = iniP*dir - finP*findir;
-  G4DynamicParticle* gamma = new G4DynamicParticle(G4Gamma::Gamma(),
-                                                   photonEnergy, photonMomentum);
+  G4ThreeVector dir = aTrack.Get4Momentum().vect().unit();
+  G4ThreeVector photonMomentum = iniP * dir - finP * findir;
+  G4DynamicParticle* gamma = new G4DynamicParticle(G4Gamma::Gamma(), photonEnergy, photonMomentum);
   return gamma;
 }
 
-
-void
-G4ElectroVDNuclearModel::CalculateHadronicVertex(G4DynamicParticle* incident,
-                                                 G4Nucleus& target)
+void G4ElectroVDNuclearModel::CalculateHadronicVertex(G4DynamicParticle* incident,
+                                                      G4Nucleus& target)
 {
-  G4HadFinalState* hfs = 0;
+  G4HadFinalState* hfs = nullptr;
   G4double gammaE = incident->GetTotalEnergy();
 
-  if (gammaE < 10*GeV) {
+  if (gammaE < 10.0*GeV)
+  {
     G4HadProjectile projectile(*incident);
     hfs = bert->ApplyYourself(projectile, target);
-  } else {
+  }
+  else
+  {
     // At high energies convert incident gamma to a pion
     G4double piMass = G4PionZero::PionZero()->GetPDGMass();
-    G4double piMom = std::sqrt(gammaE*gammaE - piMass*piMass);
-    G4ThreeVector piMomentum(incident->GetMomentumDirection() );
+    G4double piMom = std::sqrt(gammaE * gammaE - piMass * piMass);
+    G4ThreeVector piMomentum(incident->GetMomentumDirection());
     piMomentum *= piMom;
     G4DynamicParticle theHadron(G4PionZero::PionZero(), piMomentum);
     G4HadProjectile projectile(theHadron);
     hfs = ftfp->ApplyYourself(projectile, target);
   }
 
-  delete incident;
-
-  // Assign the creator model ID to the secondaries
-  for ( size_t i = 0; i < hfs->GetNumberOfSecondaries(); ++i ) {
-    hfs->GetSecondary( i )->SetCreatorModelID( secID );
+ if ( hfs != nullptr ) {
+    const G4ThreeVector& dir = incident->GetMomentumDirection();
+    for ( size_t i = 0; i < hfs->GetNumberOfSecondaries(); ++i ) {
+      // Rotate direction of the final-state secondaries : the real-gamma/pi0
+      // that undergoes the inelastic nuclear interaction was assumed to be
+      // along the z-axis by the BERT/FTFP ApplyYourself, but this cannot be
+      // because the electron (that emitted the virtual gamma from which the
+      // real-gamma/pi0 derives from) was already assumed to be along the
+      // z-axis by the method G4ElectroVDNuclearModel::ApplyYourself.
+      G4DynamicParticle* secondaryDynamicParticle = hfs->GetSecondary( i )->GetParticle();
+      G4ThreeVector newDir = secondaryDynamicParticle->GetMomentumDirection();
+      newDir.rotateUz( dir );
+      secondaryDynamicParticle->SetMomentumDirection( newDir );
+      // Assign the creator model ID to the secondaries
+      hfs->GetSecondary( i )->SetCreatorModelID( secID ); 
+    }  
+    // Copy secondaries from sub-model to model
+    theParticleChange.AddSecondaries( hfs );
   }
-  
-  // Copy secondaries from sub-model to model
-  theParticleChange.AddSecondaries(hfs);
-}
 
+  delete incident;
+}

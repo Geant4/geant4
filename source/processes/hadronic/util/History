@@ -7,6 +7,9 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2026-09-1 Alvaro Tolosa-Delgado (hadr-util-V11-03-07)
+- G4HadFinalState::GetSecondary: fix condition for exception
+
 ## 2025-11-06 Vladimir Ivanchenko (hadr-util-V11-03-06)
 - G4HadronicParameters: added extra flag to enable/disable usage of precise
     XS data for neutrons in resonance energy region.

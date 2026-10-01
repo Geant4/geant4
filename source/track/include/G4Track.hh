@@ -196,6 +196,9 @@ class G4Track
 
     inline G4int GetCurrentStepNumber() const;
     inline void IncrementCurrentStepNumber();
+    inline void IncrementCurrentStepNumber(const G4int nSteps);
+      // Increment current step number by nSteps. The argument is expected
+      // to be positive.
 
     inline G4double GetStepLength() const;
     inline void SetStepLength(G4double value);

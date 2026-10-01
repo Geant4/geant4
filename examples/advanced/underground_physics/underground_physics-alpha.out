@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-04-patch-02    (12-June-2026)
+ Geant4 version Name: geant4-11-04-patch-03    (01-October-2026)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -784,14 +784,14 @@ Particle name: alpha
 ---> Begin of event: 0
 
      Primary Energy: 5.486 MeV
-     LXe collection: 1195 hits
-     PMT collection: 5146 hits
+     LXe collection: 1187 hits
+     PMT collection: 5242 hits
      First hit in LXe: alpha
-     Number of hits in LXe: 1195
+     Number of hits in LXe: 1187
      Total energy in LXe: 5.00298 MeV
-     Average light collection time: 24.1207 ns 
-     Number of PMT hits (photoelectron equivalent): 5146
-     5146 PMT hits in alpha_pmt.out
+     Average light collection time: 23.8847 ns 
+     Number of PMT hits (photoelectron equivalent): 5242
+     5242 PMT hits in alpha_pmt.out
      Event summary in file alpha.out
 /vis/scene/notifyHandlers
 WARNING: Scene "none" not found.
@@ -809,10 +809,10 @@ WARNING: G4VisManager::IsValidView(): Attempt to draw when no graphics system
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.790000s Real=1.017351s Sys=0.040000s
+  User=0.710000s Real=0.957979s Sys=0.050000s
 Graphics systems deleted.
 Visualization Manager deleting...
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 18 of which, static: 0
-Dynamic pools deleted: 18 / Total memory freed: 39 MB
+Dynamic pools deleted: 18 / Total memory freed: 38 MB
 ============================================================

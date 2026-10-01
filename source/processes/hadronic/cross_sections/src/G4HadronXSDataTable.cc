@@ -41,16 +41,11 @@
 
 #include "G4HadronXSDataTable.hh"
 
-G4HadronXSDataTable* G4HadronXSDataTable::sInstance = nullptr;
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4HadronXSDataTable* G4HadronXSDataTable::Instance() {
-  if ( sInstance == nullptr ) {
-    static G4HadronXSDataTable theObject;
-    sInstance = &theObject;
-  }
-  return sInstance;
+  static G4HadronXSDataTable theObject;
+  return &theObject;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

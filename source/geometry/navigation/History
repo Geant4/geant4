@@ -6,6 +6,10 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+# 2026-09-02 John Apostolakis (geomnav-V11-03-04)
+- G4Navigator: fixed a bug in CreateTouchableHistory() when the 
+  current location is outside the world volume.
+
 ## 2026-06-03 Gabriele Cosmo (geomnav-V11-03-03)
 - Added rounding protection in ComputeSafety() of G4ParameterisedNavigation
   in the computation of the current voxel node for the 1D optimisation case.

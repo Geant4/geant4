@@ -99,10 +99,17 @@ class G4ParticleHPParticleYield
       }
     }
 
+    // The interpolating G4ParticleHPVector::GetY(G4double) overload is
+    // non-const, so on the const-qualified member vectors below overload
+    // resolution used to fall back silently to GetY(G4int) const via an
+    // implicit double->int conversion: the fission neutron yield was read
+    // as "y of table point floor(E)" - i.e. the thermal nubar for all
+    // reactor-relevant energies - instead of nubar(E). The const_casts
+    // restore the energy-interpolating lookup.
     inline G4double GetMean(G4double anEnergy) const
     {
       if (simpleMean) {
-        return theSimpleMean.GetY(anEnergy);
+        return const_cast<G4ParticleHPVector&>(theSimpleMean).GetY(anEnergy);
       }
       return theMean.GetValue(anEnergy);
     }
@@ -113,7 +120,7 @@ class G4ParticleHPParticleYield
       if (spontPrompt) {
         return theSpontPrompt;
       }
-      return thePrompt.GetY(anEnergy);
+      return const_cast<G4ParticleHPVector&>(thePrompt).GetY(anEnergy);
     }
 
     inline G4double GetDelayed(G4double anEnergy) const
@@ -122,7 +129,7 @@ class G4ParticleHPParticleYield
       if (spontDelayed) {
         return theSpontDelayed;
       }
-      return theDelayed.GetY(anEnergy);
+      return const_cast<G4ParticleHPVector&>(theDelayed).GetY(anEnergy);
     }
 
     inline G4double GetDecayConstant(G4int i) const

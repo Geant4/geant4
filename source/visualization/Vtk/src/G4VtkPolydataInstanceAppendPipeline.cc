@@ -37,7 +37,7 @@
 #include <vtkPolyData.h>
 #include <vtkPolyDataMapper.h>
 #include <vtkProperty.h>
-#include <vtkTransformPolyDataFilter.h>
+#include <vtkTransformFilter.h>
 
 std::size_t G4VtkPolydataInstanceAppendPipeline::MakeHash(const G4Polyhedron& polyhedron,
                                                           const G4VtkVisContext& vc)
@@ -122,8 +122,8 @@ void G4VtkPolydataInstanceAppendPipeline::addInstance(G4double dx, G4double dy, 
   transform->Update();
 
   // Create transform filter and add to local filter map
-  vtkSmartPointer<vtkTransformPolyDataFilter> tf =
-    vtkSmartPointer<vtkTransformPolyDataFilter>::New();
+  vtkSmartPointer<vtkTransformFilter> tf =
+    vtkSmartPointer<vtkTransformFilter>::New();
   tf->SetTransform(transform);
   tf->SetInputConnection(GetFilter(GetNumberOfFilters() - 2)->GetOutputPort());
   tf->Update();

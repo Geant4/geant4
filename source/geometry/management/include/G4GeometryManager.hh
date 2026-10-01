@@ -38,12 +38,12 @@
 #ifndef G4GEOMETRYMANAGER_HH
 #define G4GEOMETRYMANAGER_HH
 
+#include "G4SmartVoxelStat.hh"
+#include "G4Types.hh"
+#include "G4ios.hh"
+
 #include <memory>
 #include <vector>
-
-#include "G4Types.hh"
-#include "G4SmartVoxelStat.hh"
-#include "G4ios.hh"
 
 class G4VPhysicalVolume;
 class G4Timer;
@@ -58,7 +58,7 @@ class G4VoxelisationHelper;
 class G4GeometryManager
 {
   public:
-  
+
     /**
      * Destructor; called by G4RunManagerKernel.
      */
@@ -85,10 +85,9 @@ class G4GeometryManager
      *             optimisation.
      *  @returns true if process succeeds.
      */
-    G4bool CloseGeometry(G4bool pOptimise = true,
-                         G4bool verbose = false,
+    G4bool CloseGeometry(G4bool pOptimise = true, G4bool verbose = false,
                          G4VPhysicalVolume* vol = nullptr);
- 
+
     /**
      * Opens ('unlocks') the geometry and removes the optimisation structure if
      * present. Applies to just a specific subtree if a physical volume is
@@ -116,7 +115,7 @@ class G4GeometryManager
      * Requests optimisation using threads (if MT is enabled & used ).
      */
     void OptimiseInParallel(G4bool val = true);
-  
+
     /**
      * Method that contributes to (voxel) optimisation until all work is done.
      * To be called by a worker thread initialisation - not by the user.
@@ -141,6 +140,12 @@ class G4GeometryManager
      */
     G4bool IsParallelOptimisationFinished();
 
+    /**
+     * Reports verbose parallel voxel statistics once optimisation is complete.
+     * To be called by the master after synchronising with the workers.
+     */
+    void ReportParallelOptimisationStats();
+
   private:
 
     /**
@@ -154,7 +159,7 @@ class G4GeometryManager
     /**
      * Optimises all volumes or just multi-volumes (parameterisations, etc. ).
      */
-    G4bool BuildOptimisations(G4bool allOpt, G4bool verbose = false);  
+    G4bool BuildOptimisations(G4bool allOpt, G4bool verbose = false);
 
     /**
      * Optimises one volume or subtree only.
@@ -185,8 +190,10 @@ class G4GeometryManager
 
     // Flags for parallel initialization
     // ---------------------------------
+
+    /** Request parallel optimisation. */
     static G4bool fParallelVoxelOptimisationRequested;
-   
+
     /** Not just requested, but adopted (i.e. also in MT/tasking mode). */
     static G4bool fOptimiseInParallelConfigured;
 };

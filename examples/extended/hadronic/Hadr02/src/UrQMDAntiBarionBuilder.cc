@@ -40,6 +40,7 @@
 
 #  include "G4ComponentAntiNuclNuclearXS.hh"  // For anti-ions
 #  include "G4CrossSectionInelastic.hh"
+#  include "G4HadronInelasticProcess.hh"
 #  include "G4HadronicParameters.hh"
 #  include "G4ParticleDefinition.hh"
 #  include "G4ParticleTable.hh"

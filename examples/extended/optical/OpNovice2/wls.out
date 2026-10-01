@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-04-patch-02    (12-June-2026)
+ Geant4 version Name: geant4-11-04-patch-03    (01-October-2026)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -1280,7 +1280,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.310000s Real=0.313028s Sys=0.010000s
+  User=0.290000s Real=0.290178s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -1298,15 +1298,15 @@ Average number of photons absorbed by WLS2 per event: 4.1
  Average energy per photon: 3.4 eV.
 Average number of photons created by WLS2 per event: 12
  Average energy per photon: 2.8 eV.
-Average energy of WLS2 photons created per event: 34 eV.
+Average energy of WLS2 photons created per event: 35 eV.
 Average number of OpRayleigh per event:   11
-Average number of OpAbsorption per event: 9.1
+Average number of OpAbsorption per event: 9.2
 
 Surface events (on +X surface, maximum one per photon) this run:
 # of primary particles:         1e+04
-OpAbsorption before surface:    91305
+OpAbsorption before surface:    92127
 Total # of surface events:          0
-Unaccounted for:              8.1e+04
+Unaccounted for:              8.2e+04
 
 Surface events by process:
  Sum:                               0
@@ -1315,12 +1315,12 @@ Surface events by process:
 
  Histogram statistics for the entire run:
 
- WLS absorption spectrum: mean = 6.91158 eV rms = 0.230403 eV.
- WLS emission spectrum: mean = 5.085 eV rms = 0.975371 eV.
- WLS emission time: mean = 1.19352 ns rms = 0.444392 ns.
- WLS emission time: mean = 3.44691 ns rms = 0.460011 ns.
- WLS2 emission spectrum: mean = 2.79598 eV rms = 0.500362 eV.
- WLS2 emission time: mean = 8.43487 ns rms = 5.22108 ns.
+ WLS absorption spectrum: mean = 6.90928 eV rms = 0.239196 eV.
+ WLS emission spectrum: mean = 5.07912 eV rms = 0.981236 eV.
+ WLS emission time: mean = 1.18781 ns rms = 0.440866 ns.
+ WLS emission time: mean = 3.44379 ns rms = 0.456117 ns.
+ WLS2 emission spectrum: mean = 2.79705 eV rms = 0.499239 eV.
+ WLS2 emission time: mean = 8.44632 ns rms = 5.26658 ns.
 
 ... write file : wls.root - done
 ... close file : wls.root - done
@@ -1328,5 +1328,5 @@ Graphics systems deleted.
 Visualization Manager deleting...
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 10 of which, static: 0
-Dynamic pools deleted: 10 / Total memory freed: 0.028 MB
+Dynamic pools deleted: 10 / Total memory freed: 0.029 MB
 ============================================================

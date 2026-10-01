@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-04-patch-02    (12-June-2026)
+ Geant4 version Name: geant4-11-04-patch-03    (01-October-2026)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -912,8 +912,8 @@ Index : 3     used in the geometry : Yes
 ### Run 0 starts.
 --> Event 0 starts.
 --> Event 10 starts.
---> Event 20 starts.
---> Event 30 starts.
+"./currentEvent.rndm" is copied to "./run0evt15.rndm--> Event 20 starts.
+"./currentEvent.rndm" is copied to "./run0evt24.rndm--> Event 30 starts.
 --> Event 40 starts.
 --> Event 50 starts.
 --> Event 60 starts.
@@ -924,26 +924,26 @@ Index : 3     used in the geometry : Yes
 --> Event 110 starts.
 --> Event 120 starts.
 --> Event 130 starts.
-"./currentEvent.rndm" is copied to "./run0evt134.rndm--> Event 140 starts.
+--> Event 140 starts.
 --> Event 150 starts.
---> Event 160 starts.
+"./currentEvent.rndm" is copied to "./run0evt157.rndm--> Event 160 starts.
 --> Event 170 starts.
 --> Event 180 starts.
 --> Event 190 starts.
  Run terminated.
 Run Summary
   Number of events processed : 200
-  User=4.700000s Real=4.819694s Sys=0.020000s
+  User=4.540000s Real=4.702330s Sys=0.020000s
 
  ======================== run summary ======================
 The run was 200 events.
-Number of hits per event:	 1311 +- 12.17
-Number of hits per event above threshold:	 31.82 +- 0.1598
-Number of scintillation photons per event :	 4360 +- 0
-Number of Cerenkov photons per event:	 0.63 +- 0.06975
-Number of absorbed photons per event :	 3050 +- 25.93
+Number of hits per event:	 1283 +- 15.6
+Number of hits per event above threshold:	 31.61 +- 0.2304
+Number of scintillation photons per event :	 4304 +- 0
+Number of Cerenkov photons per event:	 0.59 +- 0.06789
+Number of absorbed photons per event :	 3022 +- 34.57
 Number of photons absorbed at boundary per event:	 0 +- 0
-Total energy deposition in scintillator per event:	 519.8 +- 4.274 keV.
+Total energy deposition in scintillator per event:	 512.7 +- 5.704 keV.
 
 /vis/enable
 WARNING: G4VisManager::IsValidView(): Attempt to draw when no graphics system
@@ -997,70 +997,70 @@ Index : 3     used in the geometry : Yes
 
 ### Run 1 starts.
 --> Event 0 starts.
-	Energy weighted position of hits in LXe : (13.3047,-1.91426,-49.9472)
-	Total energy deposition in scintillator : 532.03 (keV)
-	Reconstructed position of hits in LXe : (4.44356,0.571138,-18.6485)
-	Number of photons that hit PMTs in this event : 1334
+	Energy weighted position of hits in LXe : (0.00197504,-0.0138641,-107.751)
+	Total energy deposition in scintillator : 534.846 (keV)
+	Reconstructed position of hits in LXe : (0.065917,1.08564,-20.1576)
+	Number of photons that hit PMTs in this event : 1355
 	Number of PMTs above threshold(4) : 32
-	Number of photons produced by scintillation in this event : 4309
-	Number of photons produced by cerenkov in this event : 0
-	Number of photons absorbed (OpAbsorption) in this event : 2975
-	Number of photons absorbed at boundaries (OpBoundary) in this event : 0
-Unaccounted for photons in this event : 0
-	Energy weighted position of hits in LXe : (22.6147,5.70001,-52.4621)
-	Total energy deposition in scintillator : 533.59 (keV)
-	Reconstructed position of hits in LXe : (6.81385,0.73399,-20.1179)
-	Number of photons that hit PMTs in this event : 1394
-	Number of PMTs above threshold(4) : 32
-	Number of photons produced by scintillation in this event : 4589
-	Number of photons produced by cerenkov in this event : 0
-	Number of photons absorbed (OpAbsorption) in this event : 3195
-	Number of photons absorbed at boundaries (OpBoundary) in this event : 0
-Unaccounted for photons in this event : 0
-	Energy weighted position of hits in LXe : (0.860532,-0.664512,-39.7963)
-	Total energy deposition in scintillator : 533.153 (keV)
-	Reconstructed position of hits in LXe : (-3.09845,2.53909,-16.1628)
-	Number of photons that hit PMTs in this event : 1353
-	Number of PMTs above threshold(4) : 32
-	Number of photons produced by scintillation in this event : 4487
+	Number of photons produced by scintillation in this event : 4727
 	Number of photons produced by cerenkov in this event : 1
-	Number of photons absorbed (OpAbsorption) in this event : 3135
+	Number of photons absorbed (OpAbsorption) in this event : 3373
 	Number of photons absorbed at boundaries (OpBoundary) in this event : 0
 Unaccounted for photons in this event : 0
-	Energy weighted position of hits in LXe : (-15.7497,12.7894,-97.4041)
-	Total energy deposition in scintillator : 532.658 (keV)
-	Reconstructed position of hits in LXe : (-7.5931,3.40214,-26.6951)
-	Number of photons that hit PMTs in this event : 1345
+	Energy weighted position of hits in LXe : (0.297363,-0.772319,-53.5211)
+	Total energy deposition in scintillator : 532.888 (keV)
+	Reconstructed position of hits in LXe : (-1.94149,-0.82105,-14.6901)
+	Number of photons that hit PMTs in this event : 1360
 	Number of PMTs above threshold(4) : 32
-	Number of photons produced by scintillation in this event : 4407
-	Number of photons produced by cerenkov in this event : 2
-	Number of photons absorbed (OpAbsorption) in this event : 3064
+	Number of photons produced by scintillation in this event : 4456
+	Number of photons produced by cerenkov in this event : 0
+	Number of photons absorbed (OpAbsorption) in this event : 3096
 	Number of photons absorbed at boundaries (OpBoundary) in this event : 0
 Unaccounted for photons in this event : 0
-	Energy weighted position of hits in LXe : (-5.96705,3.25641,-103.418)
-	Total energy deposition in scintillator : 533.579 (keV)
-	Reconstructed position of hits in LXe : (-5.15874,-2.09175,-18.3896)
-	Number of photons that hit PMTs in this event : 1262
+	Energy weighted position of hits in LXe : (-3.07243,0.409735,-65.6928)
+	Total energy deposition in scintillator : 532.94 (keV)
+	Reconstructed position of hits in LXe : (-2.19728,2.36814,-25.4916)
+	Number of photons that hit PMTs in this event : 1319
 	Number of PMTs above threshold(4) : 32
-	Number of photons produced by scintillation in this event : 4455
+	Number of photons produced by scintillation in this event : 4423
+	Number of photons produced by cerenkov in this event : 0
+	Number of photons absorbed (OpAbsorption) in this event : 3104
+	Number of photons absorbed at boundaries (OpBoundary) in this event : 0
+Unaccounted for photons in this event : 0
+	Energy weighted position of hits in LXe : (0.117812,-0.0110695,-73.7053)
+	Total energy deposition in scintillator : 533.597 (keV)
+	Reconstructed position of hits in LXe : (-1.78185,0.831224,-21.8916)
+	Number of photons that hit PMTs in this event : 1403
+	Number of PMTs above threshold(4) : 32
+	Number of photons produced by scintillation in this event : 4598
 	Number of photons produced by cerenkov in this event : 1
-	Number of photons absorbed (OpAbsorption) in this event : 3194
+	Number of photons absorbed (OpAbsorption) in this event : 3196
+	Number of photons absorbed at boundaries (OpBoundary) in this event : 0
+Unaccounted for photons in this event : 0
+	Energy weighted position of hits in LXe : (-0.0965435,0.361925,33.4441)
+	Total energy deposition in scintillator : 251.222 (keV)
+	Reconstructed position of hits in LXe : (-1.2204,2.65101,10.829)
+	Number of photons that hit PMTs in this event : 623
+	Number of PMTs above threshold(4) : 32
+	Number of photons produced by scintillation in this event : 2148
+	Number of photons produced by cerenkov in this event : 0
+	Number of photons absorbed (OpAbsorption) in this event : 1525
 	Number of photons absorbed at boundaries (OpBoundary) in this event : 0
 Unaccounted for photons in this event : 0
  Run terminated.
 Run Summary
   Number of events processed : 5
-  User=0.110000s Real=0.109929s Sys=0.000000s
+  User=0.100000s Real=0.097280s Sys=0.000000s
 
  ======================== run summary ======================
 The run was 5 events.
-Number of hits per event:	 1338 +- 19.18
+Number of hits per event:	 1212 +- 132.2
 Number of hits per event above threshold:	 32 +- 0
-Number of scintillation photons per event :	 4449 +- 41.2
-Number of Cerenkov photons per event:	 0.8 +- 0.3347
-Number of absorbed photons per event :	 3113 +- 37.53
+Number of scintillation photons per event :	 4070 +- 432.6
+Number of Cerenkov photons per event:	 0.4 +- 0.2191
+Number of absorbed photons per event :	 2859 +- 301.6
 Number of photons absorbed at boundary per event:	 0 +- 0
-Total energy deposition in scintillator per event:	 533 +- 0.2657 keV.
+Total energy deposition in scintillator per event:	 477.1 +- 50.51 keV.
 
 /tracking/verbose 1
 /LXe/forceDrawPhotons true
@@ -1116,774 +1116,795 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     0        0        0     -200     0.511        0        0         0     expHall initStep
     1        0        0     -114     0.511        0     86.4      86.4     housing Transportation
     2        0        0     -113     0.511        0    0.635        87 scintillator Transportation
-    3        0        0     8.71     0.481  1.1e-05      122       209 scintillator compt
-    4    -4.26     0.41     20.2     0.367 6.78e-05     12.2       221 scintillator compt
-    5    -77.6     8.17     48.2         0  0.00478     78.9       300 scintillator phot
+    3        0        0      -70     0.283 0.000208       43       130 scintillator compt
+    4    -9.96     3.69    -67.7         0  0.00478     10.9       141 scintillator phot
 
 *********************************************************************************************************
-* G4Track Information:   Particle = gamma,   Track ID = 5,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -77.6     8.17     48.2    0.0298        0        0         0 scintillator initStep
-    1    -77.5     8.14     47.5    0.0298        0    0.718     0.718 scintillator Rayl
-    2    -77.5     8.17     47.4         0  0.00511    0.115     0.834 scintillator phot
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 6,   Parent ID = 5
+* G4Track Information:   Particle = opticalphoton,   Track ID = 5,   Parent ID = 1
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -77.5     8.17     47.4    0.0247        0        0         0 scintillator initStep
-    1    -77.5     8.17     47.4         0   0.0247  0.00838   0.00838 scintillator eIoni
-    2    -77.5     8.17     47.4         0        0        0   0.00838 scintillator NoProcess
+    0    -9.96     3.69    -67.7  7.06e-06        0        0         0 scintillator initStep
+    1     77.4       89    -7.05  7.06e-06        0      136       136     housing Transportation
+    2     77.4       89    -7.05  7.06e-06        0        0       136 scintillator Transportation
+    3       89     77.6     1.02  7.06e-06        0     18.1       154     housing Transportation
+    4       89     77.6     1.02  7.06e-06        0        0       154 scintillator Transportation
+    5     6.46    -2.98     58.4  7.06e-06 7.06e-06      129       283 scintillator OpAbsorption
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 4,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0    -9.96     3.69    -67.7    0.0298        0        0         0 scintillator initStep
+    1    -10.9     3.42    -68.2    0.0298        0     1.12      1.12 scintillator Rayl
+    2      -11      3.4    -68.2         0    0.001   0.0722      1.19 scintillator phot
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 6,   Parent ID = 4
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0      -11      3.4    -68.2    0.0288        0        0         0 scintillator initStep
+    1      -11      3.4    -68.2    0.0095   0.0193   0.0108    0.0108 scintillator eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = opticalphoton,   Track ID = 9,   Parent ID = 6
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0      -11      3.4    -68.2   7.1e-06        0        0         0 scintillator initStep
+    1    -15.3      7.7     -113   7.1e-06        0     45.2      45.2     housing Transportation
+    2    -15.3      7.7     -113   7.1e-06        0        0      45.2 scintillator Transportation
+    3    -26.4     18.8      2.8   7.1e-06  7.1e-06      117       162 scintillator OpAbsorption
+
+*********************************************************************************************************
+* G4Track Information:   Particle = opticalphoton,   Track ID = 8,   Parent ID = 6
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0      -11      3.4    -68.2  7.06e-06        0        0         0 scintillator initStep
+    1     69.8       89     29.6  7.06e-06        0      153       153     housing Transportation
+    2     69.8       89     29.6  7.06e-06        0        0       153 scintillator Transportation
+    3       89     68.6     52.9  7.06e-06        0     36.4       189     housing Transportation
+    4       89     68.6     52.9  7.06e-06        0        0       189 scintillator Transportation
+    5     39.3       16      113  7.06e-06        0     94.1       284     housing Transportation
+    6     39.3       16      113  7.06e-06        0        0       284 scintillator Transportation
+    7    -59.8      -89    -7.04  7.06e-06        0      188       471         pmt Transportation
+    8    -60.1    -89.3    -7.43  7.06e-06 7.06e-06    0.598       472   photocath Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = opticalphoton,   Track ID = 7,   Parent ID = 6
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -77.5     8.17     47.4  7.08e-06        0        0         0 scintillator initStep
-    1      -89     13.2     43.3  7.08e-06        0     13.2      13.2     housing Transportation
-    2      -89     13.2     43.3  7.08e-06        0        0      13.2 scintillator Transportation
-    3    -86.6     14.2     42.4  7.08e-06 7.08e-06     2.71        16 scintillator OpAbsorption
+    0      -11      3.4    -68.2  7.06e-06        0        0         0 scintillator initStep
+    1    -1.22     31.4     -113  7.06e-06        0     53.7      53.7     housing Transportation
+    2    -1.22     31.4     -113  7.06e-06        0        0      53.7 scintillator Transportation
+    3     1.73     39.9    -99.5  7.06e-06 7.06e-06     16.2        70 scintillator OpAbsorption
 
 *********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 4,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -77.6     8.17     48.2     0.332        0        0         0 scintillator initStep
-    1    -77.7     8.14     48.2     0.294   0.0384    0.131     0.131 scintillator eIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 11,   Parent ID = 4
+* G4Track Information:   Particle = e-,   Track ID = 6,   Parent ID = 4
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -77.6     8.14     48.2  7.13e-06        0        0         0 scintillator initStep
-    1    -63.8    -5.99      113  7.13e-06        0     67.7      67.7     housing Transportation
-    2    -63.8    -5.99      113  7.13e-06        0        0      67.7 scintillator Transportation
-    3    -15.5    -55.3     -113  7.13e-06        0      236       304     housing Transportation
-    4    -15.5    -55.3     -113  7.13e-06        0        0       304 scintillator Transportation
-    5     17.5      -89     41.4  7.13e-06        0      161       466     housing Transportation
-    6     17.5      -89     41.4  7.13e-06        0        0       466 scintillator Transportation
-    7     32.8    -73.4      113  7.13e-06        0     74.8       540     housing Transportation
-    8     32.8    -73.4      113  7.13e-06        0        0       540 scintillator Transportation
-    9     64.8    -40.7    -36.9  7.13e-06 7.13e-06      157       697 scintillator OpAbsorption
-
-*********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 10,   Parent ID = 4
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -77.6     8.16     48.2  7.12e-06        0        0         0 scintillator initStep
-    1      -89     38.5    -22.1  7.12e-06        0     77.3      77.3         pmt Transportation
-    2      -89     38.5    -22.1  7.12e-06        0        0      77.3 scintillator Transportation
-    3    -74.3     77.7     -113  7.12e-06        0      100       177     housing Transportation
-    4    -74.3     77.7     -113  7.12e-06        0        0       177 scintillator Transportation
-    5    -70.1       89    -86.9  7.12e-06        0     28.7       206     housing Transportation
-    6    -70.1       89    -86.9  7.12e-06        0        0       206 scintillator Transportation
-    7    -62.7     69.3    -41.2  7.12e-06 7.12e-06     50.4       257 scintillator OpAbsorption
-
-*********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 9,   Parent ID = 4
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -77.7     8.14     48.2  7.02e-06        0        0         0 scintillator initStep
-    1      -31       89     46.5  7.02e-06        0     93.4      93.4     housing Transportation
-    2      -31       89     46.5  7.02e-06        0        0      93.4 scintillator Transportation
-    3     55.6    -61.2     43.4  7.02e-06 7.02e-06      173       267 scintillator OpAbsorption
-
-*********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 8,   Parent ID = 4
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -77.6     8.16     48.2  7.02e-06        0        0         0 scintillator initStep
-    1      -89     8.21     52.2  7.02e-06        0     12.1      12.1     housing Transportation
-    2      -89     8.21     52.2  7.02e-06        0        0      12.1 scintillator Transportation
-    3    -85.8     8.23     53.4  7.02e-06 7.02e-06     3.42      15.5 scintillator OpAbsorption
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 4,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    1    -77.7     8.14     48.2     0.294        0        0     0.131 scintillator initStep
-    2    -77.6     8.16     48.3     0.265   0.0287    0.112     0.242 scintillator eIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 14,   Parent ID = 4
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -77.6     8.15     48.3  7.01e-06        0        0         0 scintillator initStep
-    1      -89      1.9     53.3  7.01e-06        0     13.9      13.9     housing Transportation
-    2      -89      1.9     53.3  7.01e-06        0        0      13.9 scintillator Transportation
-    3    -23.9    -33.9     81.9  7.01e-06 7.01e-06     79.7      93.5 scintillator OpAbsorption
-
-*********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 13,   Parent ID = 4
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -77.6     8.15     48.2  7.01e-06        0        0         0 scintillator initStep
-    1      -89     10.6     67.7  7.01e-06        0     22.6      22.6     housing Transportation
-    2      -89     10.6     67.7  7.01e-06        0        0      22.6 scintillator Transportation
-    3    -84.4     11.6     75.5  7.01e-06 7.01e-06     9.09      31.7 scintillator OpAbsorption
-
-*********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 12,   Parent ID = 4
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -77.7     8.14     48.2  7.13e-06        0        0         0 scintillator initStep
-    1      -60      -89      -33  7.13e-06        0      128       128     housing Transportation
-    2      -60      -89      -33  7.13e-06        0        0       128 scintillator Transportation
-    3    -42.6     6.66     -113  7.13e-06        0      126       254     housing Transportation
-    4    -42.6     6.66     -113  7.13e-06        0        0       254 scintillator Transportation
-    5    -27.6       89    -44.1  7.13e-06        0      108       362     housing Transportation
-    6    -27.6       89    -44.1  7.13e-06        0        0       362 scintillator Transportation
-    7     4.77      -89      105  7.13e-06        0      234       596     housing Transportation
-    8     4.77      -89      105  7.13e-06        0        0       596 scintillator Transportation
-    9     6.57    -79.1      113  7.13e-06        0       13       609     housing Transportation
-   10     6.57    -79.1      113  7.13e-06        0        0       609 scintillator Transportation
-   11     37.1       89    -27.6  7.13e-06        0      221       831     housing Transportation
-   12     37.1       89    -27.6  7.13e-06        0        0       831 scintillator Transportation
-   13     41.1     67.4    -45.7  7.13e-06 7.13e-06     28.5       859 scintillator OpAbsorption
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 4,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    2    -77.6     8.16     48.3     0.265        0        0     0.242 scintillator initStep
-    3    -77.7     8.15     48.3     0.233   0.0316   0.0981     0.341 scintillator eIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 16,   Parent ID = 4
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -77.7     8.15     48.3  7.07e-06        0        0         0 scintillator initStep
-    1       89     28.4     39.2  7.07e-06        0      168       168     housing Transportation
-    2       89     28.4     39.2  7.07e-06        0        0       168 scintillator Transportation
-    3    -61.9     46.7       31  7.07e-06 7.07e-06      152       320 scintillator OpAbsorption
-
-*********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 15,   Parent ID = 4
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -77.7     8.15     48.3  7.13e-06        0        0         0 scintillator initStep
-    1      -89     10.3     45.6  7.13e-06        0     11.8      11.8     housing Transportation
-    2      -89     10.3     45.6  7.13e-06        0        0      11.8 scintillator Transportation
-    3       89     44.4     3.98  7.13e-06        0      186       198         pmt Transportation
-    4     89.3     44.5     3.91  7.13e-06 7.13e-06    0.332       198   photocath Transportation
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 4,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    3    -77.7     8.15     48.3     0.233        0        0     0.341 scintillator initStep
-    4    -77.7     8.18     48.3     0.197    0.036   0.0837     0.424 scintillator eIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 18,   Parent ID = 4
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -77.7     8.17     48.3  7.08e-06        0        0         0 scintillator initStep
-    1    -69.1     55.7     -113  7.08e-06        0      168       168     housing Transportation
-    2    -69.1     55.7     -113  7.08e-06        0        0       168 scintillator Transportation
-    3      -63       89   0.0733  7.08e-06        0      118       286         pmt Transportation
-    4    -62.9     89.3     1.47  7.08e-06 7.08e-06     1.43       288   photocath Transportation
-
-*********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 17,   Parent ID = 4
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -77.7     8.16     48.3  7.12e-06        0        0         0 scintillator initStep
-    1      -89     46.1     80.5  7.12e-06        0       51        51         pmt Transportation
-    2    -89.3     47.4     81.6  7.12e-06        0     1.71      52.7   photocath Transportation
-    3    -89.3     47.4     81.6  7.12e-06        0        0      52.7         pmt Transportation
-    4      -89     48.6     82.7  7.12e-06        0     1.71      54.5 scintillator Transportation
-    5    -78.4     84.3      113  7.12e-06        0       48       102     housing Transportation
-    6    -78.4     84.3      113  7.12e-06        0        0       102 scintillator Transportation
-    7      -77       89      109  7.12e-06        0     6.35       109     housing Transportation
-    8      -77       89      109  7.12e-06        0        0       109 scintillator Transportation
-    9    -23.8      -89    -42.3  7.12e-06        0      240       348     housing Transportation
-   10    -23.8      -89    -42.3  7.12e-06        0        0       348 scintillator Transportation
-   11    -2.99    -19.2     -102  7.12e-06 7.12e-06       94       442 scintillator OpAbsorption
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 4,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    4    -77.7     8.18     48.3     0.197        0        0     0.424 scintillator initStep
-    5    -77.7     8.18     48.3     0.146   0.0515   0.0682     0.493 scintillator eIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 27,   Parent ID = 4
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -77.7     8.18     48.3  7.13e-06        0        0         0 scintillator initStep
-    1     46.1     66.3      113  7.13e-06        0      151       151         pmt Transportation
-    2     46.8     66.6      113  7.13e-06 7.13e-06    0.758       152   photocath Transportation
-
-*********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 26,   Parent ID = 4
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -77.7     8.18     48.3  7.12e-06        0        0         0 scintillator initStep
-    1       89     48.7     19.5  7.12e-06        0      174       174         pmt Transportation
-    2     89.3     48.8     19.4  7.12e-06        0    0.332       174   photocath Transportation
-    3     89.3     48.8     19.4  7.12e-06        0        0       174         pmt Transportation
-    4       89     48.8     19.4  7.12e-06        0    0.332       175 scintillator Transportation
-    5    -76.2       89    -9.23  7.12e-06        0      172       347     housing Transportation
-    6    -76.2       89    -9.23  7.12e-06        0        0       347 scintillator Transportation
-    7      -89     85.9    -11.4  7.12e-06        0     13.3       360     housing Transportation
-    8      -89     85.9    -11.4  7.12e-06        0        0       360 scintillator Transportation
-    9      -76     82.7    -13.7  7.12e-06 7.12e-06     13.6       374 scintillator OpAbsorption
-
-*********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 25,   Parent ID = 4
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -77.7     8.18     48.3  7.09e-06        0        0         0 scintillator initStep
-    1      -89    -34.9     34.3  7.09e-06        0     46.6      46.6     housing Transportation
-    2      -89    -34.9     34.3  7.09e-06        0        0      46.6 scintillator Transportation
-    3    -74.8      -89     16.8  7.09e-06        0     58.7       105     housing Transportation
-    4    -74.8      -89     16.8  7.09e-06        0        0       105 scintillator Transportation
-    5      -28       89      -41  7.09e-06        0      193       298     housing Transportation
-    6      -28       89      -41  7.09e-06        0        0       298 scintillator Transportation
-    7     18.7      -89    -98.8  7.09e-06        0      193       491     housing Transportation
-    8     18.7      -89    -98.8  7.09e-06        0        0       491 scintillator Transportation
-    9     30.2    -45.2     -113  7.09e-06        0     47.4       539         pmt Transportation
-   10     30.6    -44.1     -113  7.09e-06        0     1.26       540   photocath Transportation
-   11     30.6    -44.1     -113  7.09e-06        0        0       540         pmt Transportation
-   12     30.9    -42.9     -113  7.09e-06        0     1.26       541 scintillator Transportation
-   13     32.2    -37.9     -111  7.09e-06 7.09e-06     5.34       546 scintillator OpAbsorption
-
-*********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 24,   Parent ID = 4
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -77.7     8.18     48.3  7.01e-06        0        0         0 scintillator initStep
-    1    -54.1     73.6      113  7.01e-06        0       95        95     housing Transportation
-    2    -54.1     73.6      113  7.01e-06        0        0        95 scintillator Transportation
-    3    -48.5       89     97.8  7.01e-06        0     22.3       117         pmt Transportation
-    4    -48.4     89.3     97.5  7.01e-06 7.01e-06    0.478       118   photocath Transportation
-
-*********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 23,   Parent ID = 4
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -77.7     8.18     48.3  7.07e-06        0        0         0 scintillator initStep
-    1    -76.9    -1.11     27.1  7.07e-06 7.07e-06     23.2      23.2 scintillator OpAbsorption
-
-*********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 22,   Parent ID = 4
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -77.7     8.18     48.3  7.13e-06        0        0         0 scintillator initStep
-    1      -89    -11.7     50.9  7.13e-06        0       23        23     housing Transportation
-    2      -89    -11.7     50.9  7.13e-06        0        0        23 scintillator Transportation
-    3      -45      -89     61.2  7.13e-06        0     89.5       113         pmt Transportation
-    4    -44.8    -89.3     61.3  7.13e-06        0    0.368       113   photocath Transportation
-    5    -44.8    -89.3     61.3  7.13e-06        0        0       113         pmt Transportation
-    6    -44.7      -89     61.3  7.13e-06        0    0.368       113 scintillator Transportation
-    7    -19.3    -44.4     67.2  7.13e-06 7.13e-06     51.6       165 scintillator OpAbsorption
-
-*********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 21,   Parent ID = 4
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -77.7     8.18     48.3  7.03e-06        0        0         0 scintillator initStep
-    1    -55.4       89       88  7.03e-06        0     92.8      92.8         pmt Transportation
-    2    -55.4     89.3     88.2  7.03e-06 7.03e-06    0.368      93.1   photocath Transportation
-
-*********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 20,   Parent ID = 4
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -77.7     8.18     48.3  7.03e-06        0        0         0 scintillator initStep
-    1       89     75.8     15.5  7.03e-06        0      183       183     housing Transportation
-    2       89     75.8     15.5  7.03e-06        0        0       183 scintillator Transportation
-    3     56.6       89     9.16  7.03e-06        0     35.6       218         pmt Transportation
-    4     55.6     89.3     8.96  7.03e-06 7.03e-06     1.08       220   photocath Transportation
-
-*********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 19,   Parent ID = 4
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -77.7     8.18     48.3  7.14e-06        0        0         0 scintillator initStep
-    1    -16.9    -43.3      113  7.14e-06        0      103       103     housing Transportation
-    2    -16.9    -43.3      113  7.14e-06        0        0       103 scintillator Transportation
-    3       37      -89     55.6  7.14e-06        0       91       194         pmt Transportation
-    4     37.4    -89.3     55.2  7.14e-06        0    0.636       194   photocath Transportation
-    5     37.4    -89.3     55.2  7.14e-06        0        0       194         pmt Transportation
-    6     37.8      -89     54.8  7.14e-06        0    0.636       195 scintillator Transportation
-    7       89    -45.6      0.3  7.14e-06        0     86.5       281         pmt Transportation
-    8     89.3    -45.3  -0.0394  7.14e-06 7.14e-06    0.538       282   photocath Transportation
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 4,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    5    -77.7     8.18     48.3     0.146        0        0     0.493 scintillator initStep
-    6    -77.7      8.2     48.3     0.116   0.0298   0.0481     0.541 scintillator eIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 28,   Parent ID = 4
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -77.7     8.19     48.3  7.01e-06        0        0         0 scintillator initStep
-    1    -82.7    -63.5     30.6  7.01e-06 7.01e-06       74        74 scintillator OpAbsorption
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 4,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    6    -77.7      8.2     48.3     0.116        0        0     0.541 scintillator initStep
-    7    -77.7     8.19     48.3    0.0964   0.0198   0.0378     0.578 scintillator eIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 33,   Parent ID = 4
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -77.7     8.19     48.3  7.04e-06        0        0         0 scintillator initStep
-    1    -20.1     2.84      113  7.04e-06        0     86.8      86.8     housing Transportation
-    2    -20.1     2.84      113  7.04e-06        0        0      86.8 scintillator Transportation
-    3       89    -7.31     -9.5  7.04e-06        0      164       251     housing Transportation
-    4       89    -7.31     -9.5  7.04e-06        0        0       251 scintillator Transportation
-    5    -3.18    -15.9     -113  7.04e-06        0      139       390     housing Transportation
-    6    -3.18    -15.9     -113  7.04e-06        0        0       390 scintillator Transportation
-    7      -89    -23.9    -16.6  7.04e-06        0      129       519     housing Transportation
-    8      -89    -23.9    -16.6  7.04e-06        0        0       519 scintillator Transportation
-    9    -84.5    -24.3    -11.6  7.04e-06 7.04e-06     6.79       526 scintillator OpAbsorption
-
-*********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 32,   Parent ID = 4
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -77.7      8.2     48.3  7.01e-06        0        0         0 scintillator initStep
-    1      -89     5.94     48.6  7.01e-06        0     11.5      11.5     housing Transportation
-    2      -89     5.94     48.6  7.01e-06        0        0      11.5 scintillator Transportation
-    3       89    -29.7     52.6  7.01e-06        0      182       193     housing Transportation
-    4       89    -29.7     52.6  7.01e-06        0        0       193 scintillator Transportation
-    5      -89    -65.4     56.6  7.01e-06        0      182       375     housing Transportation
-    6      -89    -65.4     56.6  7.01e-06        0        0       375 scintillator Transportation
-    7     28.8      -89     59.2  7.01e-06        0      120       495         pmt Transportation
-    8     28.8      -89     59.2  7.01e-06        0        0       495 scintillator Transportation
-    9       89    -76.9     60.6  7.01e-06        0     61.4       556     housing Transportation
-   10       89    -76.9     60.6  7.01e-06        0        0       556 scintillator Transportation
-   11      -89    -41.3     64.6  7.01e-06        0      182       738         pmt Transportation
-   12    -89.3    -41.2     64.6  7.01e-06        0    0.324       738   photocath Transportation
-   13    -89.3    -41.2     64.6  7.01e-06        0        0       738         pmt Transportation
-   14      -89    -41.1     64.6  7.01e-06        0    0.324       738 scintillator Transportation
-   15       89    -5.47     68.7  7.01e-06        0      182       920     housing Transportation
-   16       89    -5.47     68.7  7.01e-06        0        0       920 scintillator Transportation
-   17     45.1     3.32     69.6  7.01e-06 7.01e-06     44.7       965 scintillator OpAbsorption
-
-*********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 31,   Parent ID = 4
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -77.7      8.2     48.3  7.11e-06        0        0         0 scintillator initStep
-    1    -66.3    -2.68     55.3  7.11e-06 7.11e-06     17.2      17.2 scintillator OpAbsorption
-
-*********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 30,   Parent ID = 4
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -77.7     8.19     48.3  7.13e-06        0        0         0 scintillator initStep
-    1    -8.06      -89     55.3  7.13e-06        0      120       120     housing Transportation
-    2    -8.06      -89     55.3  7.13e-06        0        0       120 scintillator Transportation
-    3       89     46.4     65.1  7.13e-06        0      167       287         pmt Transportation
-    4     89.3     46.9     65.1  7.13e-06 7.13e-06    0.551       287   photocath Transportation
-
-*********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 29,   Parent ID = 4
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -77.7     8.19     48.3  7.06e-06        0        0         0 scintillator initStep
-    1    -77.7     8.02     48.2  7.06e-06 7.06e-06    0.192     0.192 scintillator OpAbsorption
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 4,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    7    -77.7     8.19     48.3    0.0964        0        0     0.578 scintillator initStep
-    8    -77.7      8.2     48.3    0.0787   0.0177   0.0316      0.61 scintillator eIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 34,   Parent ID = 4
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -77.7      8.2     48.3  7.02e-06        0        0         0 scintillator initStep
-    1      -89    -4.61     79.7  7.02e-06        0     35.8      35.8     housing Transportation
-    2      -89    -4.61     79.7  7.02e-06        0        0      35.8 scintillator Transportation
-    3    -85.5    -8.61     89.5  7.02e-06 7.02e-06     11.1      46.9 scintillator OpAbsorption
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 4,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    8    -77.7      8.2     48.3    0.0787        0        0      0.61 scintillator initStep
-    9    -77.7      8.2     48.3    0.0613   0.0174   0.0265     0.637 scintillator eIoni
-   10    -77.7     8.19     48.3    0.0358   0.0254   0.0218     0.658 scintillator eIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 36,   Parent ID = 4
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -77.7     8.19     48.3  7.11e-06        0        0         0 scintillator initStep
-    1      -89    -8.69     42.2  7.11e-06        0     21.2      21.2     housing Transportation
-    2      -89    -8.69     42.2  7.11e-06        0        0      21.2 scintillator Transportation
-    3    -35.3      -89     13.3  7.11e-06        0      101       122         pmt Transportation
-    4    -35.1    -89.3     13.2  7.11e-06 7.11e-06    0.401       122   photocath Transportation
-
-*********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 35,   Parent ID = 4
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -77.7     8.19     48.3   7.1e-06        0        0         0 scintillator initStep
-    1      -89     6.86     50.8   7.1e-06        0     11.6      11.6     housing Transportation
-    2      -89     6.86     50.8   7.1e-06        0        0      11.6 scintillator Transportation
-    3     47.9    -9.33     81.5   7.1e-06  7.1e-06      141       153 scintillator OpAbsorption
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 4,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-   10    -77.7     8.19     48.3    0.0358        0        0     0.658 scintillator initStep
-   11    -77.7     8.19     48.3    0.0127   0.0231   0.0141     0.672 scintillator eIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 38,   Parent ID = 4
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -77.7     8.19     48.3  7.02e-06        0        0         0 scintillator initStep
-    1      -88       89    -23.8  7.02e-06        0      109       109     housing Transportation
-    2      -88       89    -23.8  7.02e-06        0        0       109 scintillator Transportation
-    3      -89     80.8    -31.1  7.02e-06        0       11       120     housing Transportation
-    4      -89     80.8    -31.1  7.02e-06        0        0       120 scintillator Transportation
-    5    -77.4      -11     -113  7.02e-06        0      124       243     housing Transportation
-    6    -77.4      -11     -113  7.02e-06        0        0       243 scintillator Transportation
-    7    -67.5      -89    -43.4  7.02e-06        0      105       348     housing Transportation
-    8    -67.5      -89    -43.4  7.02e-06        0        0       348 scintillator Transportation
-    9    -57.5    -10.8     26.3  7.02e-06 7.02e-06      105       454 scintillator OpAbsorption
-
-*********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 37,   Parent ID = 4
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -77.7     8.19     48.3  7.12e-06        0        0         0 scintillator initStep
-    1      -89     8.11     59.4  7.12e-06        0     15.8      15.8     housing Transportation
-    2      -89     8.11     59.4  7.12e-06        0        0      15.8 scintillator Transportation
-    3    -34.6      7.7      113  7.12e-06        0     76.4      92.2     housing Transportation
-    4    -34.6      7.7      113  7.12e-06        0        0      92.2 scintillator Transportation
-    5       89     6.78     -8.8  7.12e-06        0      174       266     housing Transportation
-    6       89     6.78     -8.8  7.12e-06        0        0       266 scintillator Transportation
-    7    -3.48     6.09    -99.9  7.12e-06 7.12e-06      130       396 scintillator OpAbsorption
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 4,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-   11    -77.7     8.19     48.3    0.0127        0        0     0.672 scintillator initStep
-   12    -77.7     8.19     48.3         0   0.0127  0.00276     0.675 scintillator eIoni
-   13    -77.7     8.19     48.3         0        0        0     0.675 scintillator NoProcess
-
-*********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 39,   Parent ID = 4
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -77.7     8.19     48.3  7.06e-06        0        0         0 scintillator initStep
-    1    -26.7       89     92.2  7.06e-06        0      105       105     housing Transportation
-    2    -26.7       89     92.2  7.06e-06        0        0       105 scintillator Transportation
-    3    -2.58     50.8      113  7.06e-06        0     49.7       155     housing Transportation
-    4    -2.58     50.8      113  7.06e-06        0        0       155 scintillator Transportation
-    5     42.5    -20.6     74.2  7.06e-06 7.06e-06       93       248 scintillator OpAbsorption
+    1      -11      3.4    -68.2    0.0095        0        0    0.0108 scintillator initStep
+    2      -11      3.4    -68.2         0   0.0095  0.00171    0.0125 scintillator eIoni
+    3      -11      3.4    -68.2         0        0        0    0.0125 scintillator NoProcess
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 3,   Parent ID = 1
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -4.26     0.41     20.2     0.114        0        0         0 scintillator initStep
-    1    -4.26     0.41     20.2    0.0507   0.0635   0.0372    0.0372 scintillator eIoni
+    0    -9.96     3.69    -67.7     0.248        0        0         0 scintillator initStep
+    1      -10     3.68    -67.7     0.208   0.0404   0.0904    0.0904 scintillator eIoni
 
 *********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 47,   Parent ID = 3
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -4.26     0.41     20.2  7.14e-06        0        0         0 scintillator initStep
-    1     55.1       89    -7.47  7.14e-06        0      110       110         pmt Transportation
-    2     55.3     89.3    -7.57  7.14e-06 7.14e-06    0.395       111   photocath Transportation
-
-*********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 46,   Parent ID = 3
+* G4Track Information:   Particle = opticalphoton,   Track ID = 17,   Parent ID = 3
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -4.26     0.41     20.2  7.07e-06        0        0         0 scintillator initStep
-    1      -80     78.7      113  7.07e-06        0      143       143     housing Transportation
-    2      -80     78.7      113  7.07e-06        0        0       143 scintillator Transportation
-    3      -89       88      102  7.07e-06        0       17       160     housing Transportation
-    4      -89       88      102  7.07e-06        0        0       160 scintillator Transportation
-    5      -88       89      101  7.07e-06        0     1.83       162     housing Transportation
-    6      -88       89      101  7.07e-06        0        0       162 scintillator Transportation
-    7     84.2      -89     -110  7.07e-06        0      325       487     housing Transportation
-    8     84.2      -89     -110  7.07e-06        0        0       487 scintillator Transportation
-    9     86.4    -86.7     -113  7.07e-06        0     4.23       492     housing Transportation
-   10     86.4    -86.7     -113  7.07e-06        0        0       492 scintillator Transportation
-   11       89      -84     -110  7.07e-06        0     4.88       496     housing Transportation
-   12       89      -84     -110  7.07e-06        0        0       496 scintillator Transportation
-   13     19.3      -12    -24.5  7.07e-06 7.07e-06      132       628 scintillator OpAbsorption
+    0    -9.96     3.69    -67.7  7.08e-06        0        0         0 scintillator initStep
+    1      -89     70.4     99.9  7.08e-06        0      197       197     housing Transportation
+    2      -89     70.4     99.9  7.08e-06        0        0       197 scintillator Transportation
+    3    -82.8     75.6      113  7.08e-06        0     15.4       212     housing Transportation
+    4    -82.8     75.6      113  7.08e-06        0        0       212 scintillator Transportation
+    5    -66.9       89     79.3  7.08e-06        0     39.6       252         pmt Transportation
+    6    -66.5     89.3     78.4  7.08e-06        0     1.11       253   photocath Transportation
+    7    -66.5     89.3     78.4  7.08e-06        0        0       253         pmt Transportation
+    8      -66       89     77.4  7.08e-06        0     1.11       254 scintillator Transportation
+    9     8.87     25.8    -81.5  7.08e-06 7.08e-06      187       441 scintillator OpAbsorption
 
 *********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 45,   Parent ID = 3
+* G4Track Information:   Particle = opticalphoton,   Track ID = 16,   Parent ID = 3
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -4.26     0.41     20.2  7.09e-06        0        0         0 scintillator initStep
-    1    -26.8       89     68.2  7.09e-06        0      103       103         pmt Transportation
-    2    -26.9     89.3     68.3  7.09e-06 7.09e-06    0.372       104   photocath Transportation
+    0    -9.97     3.69    -67.7  7.05e-06        0        0         0 scintillator initStep
+    1    -19.2       20    -81.6  7.05e-06 7.05e-06     23.3      23.3 scintillator OpAbsorption
 
 *********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 44,   Parent ID = 3
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -4.26     0.41     20.2  7.03e-06        0        0         0 scintillator initStep
-    1    -15.1      -89    -16.7  7.03e-06        0     97.3      97.3     housing Transportation
-    2    -15.1      -89    -16.7  7.03e-06        0        0      97.3 scintillator Transportation
-    3    -21.3    -37.1      -38  7.03e-06 7.03e-06     56.5       154 scintillator OpAbsorption
-
-*********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 43,   Parent ID = 3
+* G4Track Information:   Particle = opticalphoton,   Track ID = 15,   Parent ID = 3
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -4.26     0.41     20.2   7.1e-06        0        0         0 scintillator initStep
-    1       89    -44.8    -62.6   7.1e-06        0      133       133         pmt Transportation
-    2     89.3      -45    -62.9   7.1e-06        0    0.457       133   photocath Transportation
-    3     89.3      -45    -62.9   7.1e-06        0        0       133         pmt Transportation
-    4       89    -45.1    -63.2   7.1e-06        0    0.457       134 scintillator Transportation
-    5     32.9    -72.3     -113   7.1e-06        0     79.8       213     housing Transportation
-    6     32.9    -72.3     -113   7.1e-06        0        0       213 scintillator Transportation
-    7    -1.55      -89    -82.4   7.1e-06        0       49       262     housing Transportation
-    8    -1.55      -89    -82.4   7.1e-06        0        0       262 scintillator Transportation
-    9      -89    -46.6    -4.81   7.1e-06        0      124       387         pmt Transportation
-   10    -89.3    -46.5    -4.52   7.1e-06  7.1e-06    0.457       387   photocath Transportation
+    0    -9.98     3.68    -67.7  7.13e-06        0        0         0 scintillator initStep
+    1       -5     12.3     -113  7.13e-06        0     46.4      46.4     housing Transportation
+    2       -5     12.3     -113  7.13e-06        0        0      46.4 scintillator Transportation
+    3     9.79       38     21.3  7.13e-06 7.13e-06      138       184 scintillator OpAbsorption
 
 *********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 42,   Parent ID = 3
+* G4Track Information:   Particle = opticalphoton,   Track ID = 14,   Parent ID = 3
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -4.26     0.41     20.2  7.02e-06        0        0         0 scintillator initStep
-    1     19.8    -7.41     32.5  7.02e-06 7.02e-06     28.2      28.2 scintillator OpAbsorption
+    0    -9.97     3.69    -67.7  7.07e-06        0        0         0 scintillator initStep
+    1       89     10.8     -109  7.07e-06        0      107       107     housing Transportation
+    2       89     10.8     -109  7.07e-06        0        0       107 scintillator Transportation
+    3     79.5     11.5     -113  7.07e-06        0     10.3       118     housing Transportation
+    4     79.5     11.5     -113  7.07e-06        0        0       118 scintillator Transportation
+    5    -29.6     19.4    -67.5  7.07e-06 7.07e-06      118       236 scintillator OpAbsorption
+
+*********************************************************************************************************
+* G4Track Information:   Particle = opticalphoton,   Track ID = 13,   Parent ID = 3
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0    -9.98     3.68    -67.7  7.07e-06        0        0         0 scintillator initStep
+    1     77.2    -35.6     -113  7.07e-06        0      106       106     housing Transportation
+    2     77.2    -35.6     -113  7.07e-06        0        0       106 scintillator Transportation
+    3       89    -40.9     -107  7.07e-06        0     14.3       120     housing Transportation
+    4       89    -40.9     -107  7.07e-06        0        0       120 scintillator Transportation
+    5    -17.9      -89    -51.4  7.07e-06        0      130       250     housing Transportation
+    6    -17.9      -89    -51.4  7.07e-06        0        0       250 scintillator Transportation
+    7    -83.9    -59.3    -17.1  7.07e-06 7.07e-06     80.1       330 scintillator OpAbsorption
+
+*********************************************************************************************************
+* G4Track Information:   Particle = opticalphoton,   Track ID = 12,   Parent ID = 3
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0    -9.96     3.69    -67.7  7.07e-06        0        0         0 scintillator initStep
+    1    -23.2       89    -46.9  7.07e-06        0     88.8      88.8     housing Transportation
+    2    -23.2       89    -46.9  7.07e-06        0        0      88.8 scintillator Transportation
+    3    -24.9     78.1    -44.2  7.07e-06 7.07e-06     11.3       100 scintillator OpAbsorption
+
+*********************************************************************************************************
+* G4Track Information:   Particle = opticalphoton,   Track ID = 11,   Parent ID = 3
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0    -9.98     3.68    -67.7   7.1e-06        0        0         0 scintillator initStep
+    1    -36.4      -89    -98.6   7.1e-06        0      101       101     housing Transportation
+    2    -36.4      -89    -98.6   7.1e-06        0        0       101 scintillator Transportation
+    3    -48.7    -45.7     -113   7.1e-06        0     47.3       148         pmt Transportation
+    4      -49    -44.6     -113   7.1e-06  7.1e-06     1.19       150   photocath Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = opticalphoton,   Track ID = 10,   Parent ID = 3
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0    -9.98     3.68    -67.7  7.07e-06        0        0         0 scintillator initStep
+    1    -20.6       19     -113  7.07e-06        0       49        49     housing Transportation
+    2    -20.6       19     -113  7.07e-06        0        0        49 scintillator Transportation
+    3    -69.5       89     94.5  7.07e-06        0      224       273     housing Transportation
+    4    -69.5       89     94.5  7.07e-06        0        0       273 scintillator Transportation
+    5    -73.9     82.8      113  7.07e-06        0       20       293     housing Transportation
+    6    -73.9     82.8      113  7.07e-06        0        0       293 scintillator Transportation
+    7    -77.6     77.3     96.9  7.07e-06 7.07e-06     17.4       311 scintillator OpAbsorption
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 3,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    1      -10     3.68    -67.7     0.208        0        0    0.0904 scintillator initStep
+    2      -10     3.66    -67.7     0.179   0.0289   0.0726     0.163 scintillator eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = opticalphoton,   Track ID = 23,   Parent ID = 3
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0      -10     3.67    -67.7  7.03e-06        0        0         0 scintillator initStep
+    1     5.23    -2.69     -113  7.03e-06        0     48.2      48.2     housing Transportation
+    2     5.23    -2.69     -113  7.03e-06        0        0      48.2 scintillator Transportation
+    3     26.6    -11.6    -49.5  7.03e-06 7.03e-06     67.5       116 scintillator OpAbsorption
+
+*********************************************************************************************************
+* G4Track Information:   Particle = opticalphoton,   Track ID = 22,   Parent ID = 3
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0      -10     3.67    -67.7  7.04e-06        0        0         0 scintillator initStep
+    1    -7.28      -19     -113  7.04e-06        0     50.7      50.7     housing Transportation
+    2    -7.28      -19     -113  7.04e-06        0        0      50.7 scintillator Transportation
+    3   -0.494    -75.5   -0.177  7.04e-06 7.04e-06      126       177 scintillator OpAbsorption
+
+*********************************************************************************************************
+* G4Track Information:   Particle = opticalphoton,   Track ID = 21,   Parent ID = 3
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0      -10     3.68    -67.7  7.05e-06        0        0         0 scintillator initStep
+    1      -89    -66.4     -112  7.05e-06        0      115       115     housing Transportation
+    2      -89    -66.4     -112  7.05e-06        0        0       115 scintillator Transportation
+    3    -87.7    -67.5     -113  7.05e-06        0     1.88       116     housing Transportation
+    4    -87.7    -67.5     -113  7.05e-06        0        0       116 scintillator Transportation
+    5    -63.5      -89    -99.3  7.05e-06        0     35.2       152     housing Transportation
+    6    -63.5      -89    -99.3  7.05e-06        0        0       152 scintillator Transportation
+    7       89     46.2    -13.4  7.05e-06        0      221       373         pmt Transportation
+    8     89.3     46.5    -13.2  7.05e-06 7.05e-06    0.474       373   photocath Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = opticalphoton,   Track ID = 20,   Parent ID = 3
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0      -10     3.68    -67.7  7.14e-06        0        0         0 scintillator initStep
+    1      -89    -65.4     27.9  7.14e-06        0      142       142     housing Transportation
+    2      -89    -65.4     27.9  7.14e-06        0        0       142 scintillator Transportation
+    3    -87.5    -66.7     29.7  7.14e-06 7.14e-06     2.74       145 scintillator OpAbsorption
+
+*********************************************************************************************************
+* G4Track Information:   Particle = opticalphoton,   Track ID = 19,   Parent ID = 3
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0      -10     3.67    -67.7     7e-06        0        0         0 scintillator initStep
+    1    -65.8      -89    -38.3     7e-06        0      112       112     housing Transportation
+    2    -65.8      -89    -38.3     7e-06        0        0       112 scintillator Transportation
+    3      -89    -50.4      -26     7e-06        0     46.7       159     housing Transportation
+    4      -89    -50.4      -26     7e-06        0        0       159 scintillator Transportation
+    5    -36.5     36.9     1.69     7e-06    7e-06      106       264 scintillator OpAbsorption
+
+*********************************************************************************************************
+* G4Track Information:   Particle = opticalphoton,   Track ID = 18,   Parent ID = 3
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0      -10     3.67    -67.7  7.03e-06        0        0         0 scintillator initStep
+    1    -25.6    -12.3    -91.6  7.03e-06 7.03e-06     32.7      32.7 scintillator OpAbsorption
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 3,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    2      -10     3.66    -67.7     0.179        0        0     0.163 scintillator initStep
+    3    -9.99     3.67    -67.7     0.156    0.023   0.0348     0.198 scintillator Cerenkov
+
+*********************************************************************************************************
+* G4Track Information:   Particle = opticalphoton,   Track ID = 27,   Parent ID = 3
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0    -9.99     3.67    -67.7  7.11e-06        0        0         0 scintillator initStep
+    1       89     43.2    -40.5  7.11e-06        0      110       110     housing Transportation
+    2       89     43.2    -40.5  7.11e-06        0        0       110 scintillator Transportation
+    3     73.8     49.3    -36.4  7.11e-06 7.11e-06     16.9       127 scintillator OpAbsorption
+
+*********************************************************************************************************
+* G4Track Information:   Particle = opticalphoton,   Track ID = 26,   Parent ID = 3
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0      -10     3.66    -67.7   7.1e-06        0        0         0 scintillator initStep
+    1      -89     46.7    -63.6   7.1e-06        0       90        90         pmt Transportation
+    2    -89.3     46.8    -63.6   7.1e-06  7.1e-06    0.363      90.4   photocath Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = opticalphoton,   Track ID = 25,   Parent ID = 3
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0    -9.99     3.67    -67.7  7.04e-06        0        0         0 scintillator initStep
+    1      -89     2.78    -98.3  7.04e-06        0     84.7      84.7     housing Transportation
+    2      -89     2.78    -98.3  7.04e-06        0        0      84.7 scintillator Transportation
+    3    -51.1     2.35     -113  7.04e-06        0     40.7       125     housing Transportation
+    4    -51.1     2.35     -113  7.04e-06        0        0       125 scintillator Transportation
+    5       89     0.76    -58.8  7.04e-06        0      150       276     housing Transportation
+    6       89     0.76    -58.8  7.04e-06        0        0       276 scintillator Transportation
+    7      -89    -1.26     10.2  7.04e-06        0      191       466     housing Transportation
+    8      -89    -1.26     10.2  7.04e-06        0        0       466 scintillator Transportation
+    9       89    -3.27     79.1  7.04e-06        0      191       657     housing Transportation
+   10       89    -3.27     79.1  7.04e-06        0        0       657 scintillator Transportation
+   11     64.7    -3.55     88.5  7.04e-06 7.04e-06       26       683 scintillator OpAbsorption
+
+*********************************************************************************************************
+* G4Track Information:   Particle = opticalphoton,   Track ID = 24,   Parent ID = 3
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0    -9.99     3.67    -67.7  7.13e-06        0        0         0 scintillator initStep
+    1     1.65     57.6     -113  7.13e-06        0     71.4      71.4     housing Transportation
+    2     1.65     57.6     -113  7.13e-06        0        0      71.4 scintillator Transportation
+    3     8.42       89    -86.7  7.13e-06        0     41.5       113     housing Transportation
+    4     8.42       89    -86.7  7.13e-06        0        0       113 scintillator Transportation
+    5     46.8      -89     62.7  7.13e-06        0      236       348         pmt Transportation
+    6     46.9    -89.3     62.9  7.13e-06        0    0.421       349   photocath Transportation
+    7     46.9    -89.3     62.9  7.13e-06        0        0       349         pmt Transportation
+    8       47      -89     63.2  7.13e-06        0    0.421       349 scintillator Transportation
+    9     59.8    -29.7      113  7.13e-06        0     78.5       428         pmt Transportation
+   10     59.9    -29.3      113  7.13e-06        0    0.503       428   photocath Transportation
+   11     59.9    -29.3      113  7.13e-06        0        0       428         pmt Transportation
+   12     59.9    -28.9      113  7.13e-06        0    0.503       429 scintillator Transportation
+   13     85.4       89     14.1  7.13e-06        0      156       585     housing Transportation
+   14     85.4       89     14.1  7.13e-06        0        0       585 scintillator Transportation
+   15       89     72.3   0.0661  7.13e-06        0     22.1       607     housing Transportation
+   16       89     72.3   0.0661  7.13e-06        0        0       607 scintillator Transportation
+   17     59.9    -62.5     -113  7.13e-06        0      178       785     housing Transportation
+   18     59.9    -62.5     -113  7.13e-06        0        0       785 scintillator Transportation
+   19     54.2      -89    -90.7  7.13e-06        0     35.1       820         pmt Transportation
+   20     54.1    -89.3    -90.5  7.13e-06 7.13e-06    0.421       821   photocath Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 3,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    3    -9.99     3.67    -67.7     0.156        0        0     0.198 scintillator initStep
+    4      -10     3.67    -67.7     0.132   0.0244   0.0518      0.25 scintillator eIoni
+    5      -10     3.67    -67.7    0.0994   0.0323    0.043     0.293 scintillator eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = opticalphoton,   Track ID = 28,   Parent ID = 3
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0      -10     3.67    -67.7   7.1e-06        0        0         0 scintillator initStep
+    1    -5.22    -4.39     -113   7.1e-06        0     46.2      46.2     housing Transportation
+    2    -5.22    -4.39     -113   7.1e-06        0        0      46.2 scintillator Transportation
+    3   -0.649    -12.1    -69.9   7.1e-06  7.1e-06       44      90.3 scintillator OpAbsorption
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 3,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    5      -10     3.67    -67.7    0.0994        0        0     0.293 scintillator initStep
+    6      -10     3.67    -67.7    0.0772   0.0222   0.0325     0.325 scintillator eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = opticalphoton,   Track ID = 29,   Parent ID = 3
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0      -10     3.67    -67.7  7.01e-06        0        0         0 scintillator initStep
+    1      -89    -60.5    -6.71  7.01e-06        0      119       119         pmt Transportation
+    2    -89.3    -60.8    -6.45  7.01e-06 7.01e-06    0.497       119   photocath Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 3,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    6      -10     3.67    -67.7    0.0772        0        0     0.325 scintillator initStep
+    7      -10     3.67    -67.7    0.0648   0.0124   0.0261     0.351 scintillator eIoni
+    8      -10     3.67    -67.7    0.0482   0.0166   0.0227     0.374 scintillator eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = opticalphoton,   Track ID = 33,   Parent ID = 3
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0      -10     3.67    -67.7  7.07e-06        0        0         0 scintillator initStep
+    1    -17.4    -4.15    -3.51  7.07e-06 7.07e-06     65.1      65.1 scintillator OpAbsorption
+
+*********************************************************************************************************
+* G4Track Information:   Particle = opticalphoton,   Track ID = 32,   Parent ID = 3
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0      -10     3.67    -67.7  7.04e-06        0        0         0 scintillator initStep
+    1       36       89     2.62  7.04e-06        0      120       120         pmt Transportation
+    2     36.1     89.3     2.89  7.04e-06        0    0.457       120   photocath Transportation
+    3     36.1     89.3     2.89  7.04e-06        0        0       120         pmt Transportation
+    4     36.3       89     3.17  7.04e-06        0    0.457       121 scintillator Transportation
+    5     54.6       55     31.2  7.04e-06        0     47.7       168      sphere Transportation
+    6     54.6       55     31.2  7.04e-06        0        0       168 scintillator Transportation
+    7     67.1     47.8     19.9  7.04e-06 7.04e-06     18.3       187 scintillator OpAbsorption
+
+*********************************************************************************************************
+* G4Track Information:   Particle = opticalphoton,   Track ID = 31,   Parent ID = 3
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0      -10     3.67    -67.7  7.13e-06        0        0         0 scintillator initStep
+    1    -9.45       22     -113  7.13e-06        0     48.9      48.9     housing Transportation
+    2    -9.45       22     -113  7.13e-06        0        0      48.9 scintillator Transportation
+    3    -7.75     76.4     21.3  7.13e-06 7.13e-06      145       194 scintillator OpAbsorption
+
+*********************************************************************************************************
+* G4Track Information:   Particle = opticalphoton,   Track ID = 30,   Parent ID = 3
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0      -10     3.67    -67.7  7.08e-06        0        0         0 scintillator initStep
+    1     80.5     67.8     18.6  7.08e-06 7.08e-06      141       141 scintillator OpAbsorption
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 3,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    8      -10     3.67    -67.7    0.0482        0        0     0.374 scintillator initStep
+    9      -10     3.67    -67.7    0.0258   0.0224   0.0181     0.392 scintillator eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = opticalphoton,   Track ID = 38,   Parent ID = 3
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0      -10     3.67    -67.7  7.09e-06        0        0         0 scintillator initStep
+    1    -59.1      -89     87.3  7.09e-06        0      187       187         pmt Transportation
+    2    -59.3    -89.3     87.9  7.09e-06        0    0.674       188   photocath Transportation
+    3    -59.3    -89.3     87.9  7.09e-06        0        0       188         pmt Transportation
+    4    -59.5      -89     88.5  7.09e-06        0    0.674       189 scintillator Transportation
+    5    -67.3    -74.3      113  7.09e-06        0     29.6       218     housing Transportation
+    6    -67.3    -74.3      113  7.09e-06        0        0       218 scintillator Transportation
+    7      -89    -33.3     44.4  7.09e-06        0     82.8       301     housing Transportation
+    8      -89    -33.3     44.4  7.09e-06        0        0       301 scintillator Transportation
+    9    -39.2     60.7     -113  7.09e-06        0      190       491         pmt Transportation
+   10      -39     60.9     -113  7.09e-06 7.09e-06    0.386       491   photocath Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = opticalphoton,   Track ID = 37,   Parent ID = 3
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0      -10     3.67    -67.7  7.09e-06        0        0         0 scintillator initStep
+    1    -29.5    -14.9     -113  7.09e-06        0     52.6      52.6     housing Transportation
+    2    -29.5    -14.9     -113  7.09e-06        0        0      52.6 scintillator Transportation
+    3      -89    -71.5     25.5  7.09e-06        0      161       214     housing Transportation
+    4      -89    -71.5     25.5  7.09e-06        0        0       214 scintillator Transportation
+    5    -70.7      -89     68.2  7.09e-06        0     49.6       263     housing Transportation
+    6    -70.7      -89     68.2  7.09e-06        0        0       263 scintillator Transportation
+    7    -55.5    -74.5      104  7.09e-06 7.09e-06     41.1       304 scintillator OpAbsorption
+
+*********************************************************************************************************
+* G4Track Information:   Particle = opticalphoton,   Track ID = 36,   Parent ID = 3
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0      -10     3.67    -67.7  7.09e-06        0        0         0 scintillator initStep
+    1    -59.2    -22.6    -39.5  7.09e-06 7.09e-06     62.5      62.5 scintillator OpAbsorption
+
+*********************************************************************************************************
+* G4Track Information:   Particle = opticalphoton,   Track ID = 35,   Parent ID = 3
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0      -10     3.67    -67.7  7.02e-06        0        0         0 scintillator initStep
+    1     17.7       89    -7.36  7.02e-06        0      108       108     housing Transportation
+    2     17.7       89    -7.36  7.02e-06        0        0       108 scintillator Transportation
+    3       73    -81.1      113  7.02e-06        0      216       324     housing Transportation
+    4       73    -81.1      113  7.02e-06        0        0       324 scintillator Transportation
+    5     75.6      -89      107  7.02e-06        0     9.99       334     housing Transportation
+    6     75.6      -89      107  7.02e-06        0        0       334 scintillator Transportation
+    7       89    -47.6     78.2  7.02e-06        0     52.4       386         pmt Transportation
+    8     89.3      -45     76.3  7.02e-06        0     3.26       389   photocath Transportation
+    9     89.3      -45     76.3  7.02e-06        0        0       389         pmt Transportation
+   10       89    -42.4     74.4  7.02e-06        0     3.26       393 scintillator Transportation
+   11     51.7     72.4    -6.74  7.02e-06 7.02e-06      145       538 scintillator OpAbsorption
+
+*********************************************************************************************************
+* G4Track Information:   Particle = opticalphoton,   Track ID = 34,   Parent ID = 3
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0      -10     3.67    -67.7  7.05e-06        0        0         0 scintillator initStep
+    1     74.4       89    -6.99  7.05e-06        0      135       135     housing Transportation
+    2     74.4       89    -6.99  7.05e-06        0        0       135 scintillator Transportation
+    3       89     74.2     3.53  7.05e-06        0     23.3       158     housing Transportation
+    4       89     74.2     3.53  7.05e-06        0        0       158 scintillator Transportation
+    5     60.2     45.1     24.2  7.05e-06 7.05e-06     45.9       204 scintillator OpAbsorption
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 3,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    9      -10     3.67    -67.7    0.0258        0        0     0.392 scintillator initStep
+   10      -10     3.67    -67.7         0   0.0258  0.00905     0.401 scintillator eIoni
+   11      -10     3.67    -67.7         0        0        0     0.401 scintillator NoProcess
 
 *********************************************************************************************************
 * G4Track Information:   Particle = opticalphoton,   Track ID = 41,   Parent ID = 3
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -4.26     0.41     20.2  7.14e-06        0        0         0 scintillator initStep
-    1     20.5       89    -17.1  7.14e-06        0     99.2      99.2     housing Transportation
-    2     20.5       89    -17.1  7.14e-06        0        0      99.2 scintillator Transportation
-    3     70.4      -89    -91.9  7.14e-06        0      199       299     housing Transportation
-    4     70.4      -89    -91.9  7.14e-06        0        0       299 scintillator Transportation
-    5     72.5    -81.6      -95  7.14e-06 7.14e-06     8.32       307 scintillator OpAbsorption
+    0      -10     3.67    -67.7  7.05e-06        0        0         0 scintillator initStep
+    1    -12.1     10.3    -66.4  7.05e-06 7.05e-06     7.07      7.07 scintillator OpAbsorption
 
 *********************************************************************************************************
 * G4Track Information:   Particle = opticalphoton,   Track ID = 40,   Parent ID = 3
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -4.26     0.41     20.2  7.12e-06        0        0         0 scintillator initStep
-    1    -1.95   -0.422       20  7.12e-06 7.12e-06     2.46      2.46 scintillator OpAbsorption
+    0      -10     3.67    -67.7  7.04e-06        0        0         0 scintillator initStep
+    1    -26.3   -0.809     -113  7.04e-06        0     48.3      48.3     housing Transportation
+    2    -26.3   -0.809     -113  7.04e-06        0        0      48.3 scintillator Transportation
+    3      -89    -18.1     61.5  7.04e-06        0      186       235     housing Transportation
+    4      -89    -18.1     61.5  7.04e-06        0        0       235 scintillator Transportation
+    5    -70.5    -23.2      113  7.04e-06        0     54.9       289     housing Transportation
+    6    -70.5    -23.2      113  7.04e-06        0        0       289 scintillator Transportation
+    7    -52.4    -28.2     62.5  7.04e-06 7.04e-06     53.9       343 scintillator OpAbsorption
 
 *********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 3,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    1    -4.26     0.41     20.2    0.0507        0        0    0.0372 scintillator initStep
-    2    -4.26    0.412     20.2    0.0332   0.0175   0.0189     0.056 scintillator eIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 49,   Parent ID = 3
+* G4Track Information:   Particle = opticalphoton,   Track ID = 39,   Parent ID = 3
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -4.26    0.411     20.2  7.12e-06        0        0         0 scintillator initStep
-    1    -60.2      -89     57.2  7.12e-06        0      112       112     housing Transportation
-    2    -60.2      -89     57.2  7.12e-06        0        0       112 scintillator Transportation
-    3      -89      -43     76.2  7.12e-06        0     57.5       169         pmt Transportation
-    4    -89.3    -42.5     76.5  7.12e-06 7.12e-06    0.648       170   photocath Transportation
-
-*********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 48,   Parent ID = 3
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -4.26    0.411     20.2  7.08e-06        0        0         0 scintillator initStep
-    1    -3.04     17.2      113  7.08e-06        0     94.3      94.3     housing Transportation
-    2    -3.04     17.2      113  7.08e-06        0        0      94.3 scintillator Transportation
-    3  -0.0933     58.2     -113  7.08e-06        0      230       324     housing Transportation
-    4  -0.0933     58.2     -113  7.08e-06        0        0       324 scintillator Transportation
-    5     2.12       89     56.5  7.08e-06        0      172       496     housing Transportation
-    6     2.12       89     56.5  7.08e-06        0        0       496 scintillator Transportation
-    7     2.86     78.8      113  7.08e-06        0     57.4       554     housing Transportation
-    8     2.86     78.8      113  7.08e-06        0        0       554 scintillator Transportation
-    9     2.98       77      104  7.08e-06 7.08e-06     9.62       563 scintillator OpAbsorption
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 3,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    2    -4.26    0.412     20.2    0.0332        0        0     0.056 scintillator initStep
-    3    -4.26    0.411     20.2         0   0.0332    0.013    0.0691 scintillator eIoni
-    4    -4.26    0.411     20.2         0        0        0    0.0691 scintillator NoProcess
-
-*********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 50,   Parent ID = 3
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -4.26    0.411     20.2  7.09e-06        0        0         0 scintillator initStep
-    1     4.48    -12.2     25.1  7.09e-06 7.09e-06     16.1      16.1 scintillator OpAbsorption
+    0      -10     3.67    -67.7  7.03e-06        0        0         0 scintillator initStep
+    1     10.8      -89     51.9  7.03e-06        0      153       153     housing Transportation
+    2     10.8      -89     51.9  7.03e-06        0        0       153 scintillator Transportation
+    3     21.5    -41.7      113  7.03e-06        0       78       231     housing Transportation
+    4     21.5    -41.7      113  7.03e-06        0        0       231 scintillator Transportation
+    5     34.2     14.9     39.9  7.03e-06 7.03e-06     93.3       324 scintillator OpAbsorption
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0     8.71    0.0302        0        0         0 scintillator initStep
-    1 0.000276 -2.8e-05     8.71   0.00824   0.0219   0.0116    0.0116 scintillator eIoni
+    0        0        0      -70     0.228        0        0         0 scintillator initStep
+    1   0.0175  -0.0065    -69.9     0.189   0.0393   0.0814    0.0814 scintillator eIoni
 
 *********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 54,   Parent ID = 2
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0   0.0001 -1.02e-05     8.71  7.03e-06        0        0         0 scintillator initStep
-    1    -19.2    -39.9    -6.47  7.03e-06 7.03e-06     46.8      46.8 scintillator OpAbsorption
-
-*********************************************************************************************************
-* G4Track Information:   Particle = opticalphoton,   Track ID = 53,   Parent ID = 2
+* G4Track Information:   Particle = opticalphoton,   Track ID = 43,   Parent ID = 2
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0 0.000258 -2.62e-05     8.71  7.05e-06        0        0         0 scintillator initStep
-    1     62.9      -89    -92.4  7.05e-06        0      149       149     housing Transportation
-    2     62.9      -89    -92.4  7.05e-06        0        0       149 scintillator Transportation
-    3     75.7    -70.9     -113  7.05e-06        0     30.3       179     housing Transportation
-    4     75.7    -70.9     -113  7.05e-06        0        0       179 scintillator Transportation
-    5       89      -52    -91.6  7.05e-06        0     31.5       210         pmt Transportation
-    6     89.3    -51.5      -91  7.05e-06 7.05e-06     0.85       211   photocath Transportation
+    0   0.0131 -0.00488      -70   7.1e-06        0        0         0 scintillator initStep
+    1    -2.54      -89    -28.6   7.1e-06        0     98.2      98.2     housing Transportation
+    2    -2.54      -89    -28.6   7.1e-06        0        0      98.2 scintillator Transportation
+    3    -7.64       89     54.1   7.1e-06        0      196       294     housing Transportation
+    4    -7.64       89     54.1   7.1e-06        0        0       294 scintillator Transportation
+    5    -11.3    -37.9      113   7.1e-06        0      140       434     housing Transportation
+    6    -11.3    -37.9      113   7.1e-06        0        0       434 scintillator Transportation
+    7    -12.7      -89     89.2   7.1e-06        0     56.4       491     housing Transportation
+    8    -12.7      -89     89.2   7.1e-06        0        0       491 scintillator Transportation
+    9    -17.9       89     6.55   7.1e-06        0      196       687     housing Transportation
+   10    -17.9       89     6.55   7.1e-06        0        0       687 scintillator Transportation
+   11    -20.8    -12.2    -40.5   7.1e-06  7.1e-06      112       799 scintillator OpAbsorption
+
+*********************************************************************************************************
+* G4Track Information:   Particle = opticalphoton,   Track ID = 42,   Parent ID = 2
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0  0.00162 -0.000603      -70  7.01e-06        0        0         0 scintillator initStep
+    1     35.2    -15.8     -113  7.01e-06        0     57.8      57.8     housing Transportation
+    2     35.2    -15.8     -113  7.01e-06        0        0      57.8 scintillator Transportation
+    3       89      -40    -47.3  7.01e-06        0     88.3       146     housing Transportation
+    4       89      -40    -47.3  7.01e-06        0        0       146 scintillator Transportation
+    5    -3.28    -81.5     65.4  7.01e-06 7.01e-06      151       298 scintillator OpAbsorption
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    1   0.0175  -0.0065    -69.9     0.189        0        0    0.0814 scintillator initStep
+    2   0.0446 -0.00629    -69.9     0.156   0.0327   0.0544     0.136 scintillator Cerenkov
+
+*********************************************************************************************************
+* G4Track Information:   Particle = opticalphoton,   Track ID = 45,   Parent ID = 2
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0   0.0261 -0.00643    -69.9  7.02e-06        0        0         0 scintillator initStep
+    1    -11.1     -6.2    -35.8  7.02e-06 7.02e-06     36.4      36.4 scintillator OpAbsorption
+
+*********************************************************************************************************
+* G4Track Information:   Particle = opticalphoton,   Track ID = 44,   Parent ID = 2
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0    0.018 -0.00649    -69.9  7.04e-06        0        0         0 scintillator initStep
+    1      -89    -17.5     46.7  7.04e-06        0      148       148     housing Transportation
+    2      -89    -17.5     46.7  7.04e-06        0        0       148 scintillator Transportation
+    3    -80.2    -19.2     58.3  7.04e-06 7.04e-06     14.6       162 scintillator OpAbsorption
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    2   0.0446 -0.00629    -69.9     0.156        0        0     0.136 scintillator initStep
+    3   0.0435  -0.0139    -69.9     0.127   0.0288   0.0518     0.188 scintillator eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = opticalphoton,   Track ID = 47,   Parent ID = 2
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0   0.0435  -0.0138    -69.9  7.14e-06        0        0         0 scintillator initStep
+    1     7.87     35.7    -67.9  7.14e-06 7.14e-06     36.7      36.7 scintillator OpAbsorption
+
+*********************************************************************************************************
+* G4Track Information:   Particle = opticalphoton,   Track ID = 46,   Parent ID = 2
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0   0.0441 -0.00959    -69.9  7.08e-06        0        0         0 scintillator initStep
+    1       89     24.4    -59.3  7.08e-06        0     92.9      92.9     housing Transportation
+    2       89     24.4    -59.3  7.08e-06        0        0      92.9 scintillator Transportation
+    3      -89     73.4    -38.1  7.08e-06        0      186       279     housing Transportation
+    4      -89     73.4    -38.1  7.08e-06        0        0       279 scintillator Transportation
+    5      -85     74.5    -37.6  7.08e-06 7.08e-06     4.16       283 scintillator OpAbsorption
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    3   0.0435  -0.0139    -69.9     0.127        0        0     0.188 scintillator initStep
+    4   0.0402 -0.00673    -69.9    0.0721   0.0551   0.0415     0.229 scintillator eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = opticalphoton,   Track ID = 50,   Parent ID = 2
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0   0.0422  -0.0111    -69.9  7.08e-06        0        0         0 scintillator initStep
+    1    -16.2    -23.8     -108  7.08e-06 7.08e-06     47.9      47.9 scintillator OpAbsorption
+
+*********************************************************************************************************
+* G4Track Information:   Particle = opticalphoton,   Track ID = 49,   Parent ID = 2
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0   0.0419  -0.0104    -69.9  7.05e-06        0        0         0 scintillator initStep
+    1    -25.8    -2.13     -113  7.05e-06        0     50.3      50.3     housing Transportation
+    2    -25.8    -2.13     -113  7.05e-06        0        0      50.3 scintillator Transportation
+    3    -55.3    -4.56    -63.8  7.05e-06 7.05e-06     57.5       108 scintillator OpAbsorption
+
+*********************************************************************************************************
+* G4Track Information:   Particle = opticalphoton,   Track ID = 48,   Parent ID = 2
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0   0.0427  -0.0122    -69.9  7.05e-06        0        0         0 scintillator initStep
+    1      -89       14      -73  7.05e-06        0     90.2      90.2     housing Transportation
+    2      -89       14      -73  7.05e-06        0        0      90.2 scintillator Transportation
+    3       89     41.9    -79.2  7.05e-06        0      180       270         pmt Transportation
+    4     89.3     41.9    -79.2  7.05e-06 7.05e-06    0.322       271   photocath Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    4   0.0402 -0.00673    -69.9    0.0721        0        0     0.229 scintillator initStep
+    5     0.04 -0.00373    -69.9    0.0517   0.0205   0.0247     0.254 scintillator eIoni
+    6   0.0404 -0.00458    -69.9    0.0333   0.0183   0.0191     0.273 scintillator eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = opticalphoton,   Track ID = 52,   Parent ID = 2
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0 5.34e-05 -5.42e-06     8.71  7.05e-06        0        0         0 scintillator initStep
-    1      -89    -69.7      -51  7.05e-06        0      128       128     housing Transportation
-    2      -89    -69.7      -51  7.05e-06        0        0       128 scintillator Transportation
-    3    -64.4      -89    -67.6  7.05e-06        0     35.4       163         pmt Transportation
-    4    -63.9    -89.3    -67.8  7.05e-06 7.05e-06    0.621       164   photocath Transportation
+    0   0.0403 -0.00432    -69.9   7.1e-06        0        0         0 scintillator initStep
+    1    -1.78       89    -61.3   7.1e-06        0     89.4      89.4     housing Transportation
+    2    -1.78       89    -61.3   7.1e-06        0        0      89.4 scintillator Transportation
+    3    -3.99    -19.3    -50.9   7.1e-06  7.1e-06      109       198 scintillator OpAbsorption
 
 *********************************************************************************************************
 * G4Track Information:   Particle = opticalphoton,   Track ID = 51,   Parent ID = 2
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0 0.000227 -2.31e-05     8.71  7.11e-06        0        0         0 scintillator initStep
-    1    -24.2     28.3      113  7.11e-06        0      111       111     housing Transportation
-    2    -24.2     28.3      113  7.11e-06        0        0       111 scintillator Transportation
-    3    -76.1       89     -111  7.11e-06        0      238       348     housing Transportation
-    4    -76.1       89     -111  7.11e-06        0        0       348 scintillator Transportation
-    5    -76.6     88.4     -113  7.11e-06        0     2.39       351     housing Transportation
-    6    -76.6     88.4     -113  7.11e-06        0        0       351 scintillator Transportation
-    7      -89     73.9    -59.5  7.11e-06        0     56.8       407     housing Transportation
-    8      -89     73.9    -59.5  7.11e-06        0        0       407 scintillator Transportation
-    9    -82.9     66.7    -33.2  7.11e-06 7.11e-06       28       435 scintillator OpAbsorption
+    0   0.0401 -0.00398    -69.9  7.09e-06        0        0         0 scintillator initStep
+    1     6.12     1.97     -113  7.09e-06        0     43.5      43.5     housing Transportation
+    2     6.12     1.97     -113  7.09e-06        0        0      43.5 scintillator Transportation
+    3     11.5      3.7    -75.1  7.09e-06 7.09e-06     38.3      81.8 scintillator OpAbsorption
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    1 0.000276 -2.8e-05     8.71   0.00824        0        0    0.0116 scintillator initStep
-    2  0.00025   -4e-05     8.71         0  0.00824  0.00135    0.0129 scintillator eIoni
-    3  0.00025   -4e-05     8.71         0        0        0    0.0129 scintillator NoProcess
-	Energy weighted position of hits in LXe : (-56.31061468057568,5.915957398559218,39.46224254991066)
-	Total energy deposition in scintillator : 511.2333629530793 (keV)
-	Reconstructed position of hits in LXe : (3.008999999999999,20.85133333333333,22.62116666666667)
-	Number of photons that hit PMTs in this event : 15
+    6   0.0404 -0.00458    -69.9    0.0333        0        0     0.273 scintillator initStep
+    7   0.0406 -0.00471    -69.9   0.00793   0.0254   0.0131     0.286 scintillator eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = opticalphoton,   Track ID = 55,   Parent ID = 2
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0   0.0404 -0.00459    -69.9  7.01e-06        0        0         0 scintillator initStep
+    1     13.5    -53.4     -113  7.01e-06        0     69.9      69.9     housing Transportation
+    2     13.5    -53.4     -113  7.01e-06        0        0      69.9 scintillator Transportation
+    3     22.5      -89    -84.2  7.01e-06        0     46.7       117     housing Transportation
+    4     22.5      -89    -84.2  7.01e-06        0        0       117 scintillator Transportation
+    5     59.4     57.5       34  7.01e-06        0      192       308      sphere Transportation
+    6     59.4     57.5       34  7.01e-06        0        0       308 scintillator Transportation
+    7     70.6       89     50.1  7.01e-06        0     37.1       346     housing Transportation
+    8     70.6       89     50.1  7.01e-06        0        0       346 scintillator Transportation
+    9       89       37     76.7  7.01e-06        0     61.2       407         pmt Transportation
+   10     89.3     35.4     77.5  7.01e-06        0     1.78       409   photocath Transportation
+   11     89.3     35.4     77.5  7.01e-06        0        0       409         pmt Transportation
+   12       89     33.9     78.3  7.01e-06        0     1.78       410 scintillator Transportation
+   13     64.9    -34.2      113  7.01e-06        0     80.1       490         pmt Transportation
+   14     64.6      -35      113  7.01e-06 7.01e-06    0.862       491   photocath Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = opticalphoton,   Track ID = 54,   Parent ID = 2
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0   0.0404  -0.0046    -69.9  7.01e-06        0        0         0 scintillator initStep
+    1      -89      -52     7.45  7.01e-06        0      129       129         pmt Transportation
+    2    -89.3    -52.2     7.75  7.01e-06        0    0.477       129   photocath Transportation
+    3    -89.3    -52.2     7.75  7.01e-06        0        0       129         pmt Transportation
+    4      -89    -52.4     8.04  7.01e-06        0    0.477       130 scintillator Transportation
+    5    -26.4      -89     62.5  7.01e-06        0     90.7       221         pmt Transportation
+    6    -25.7    -89.3       63  7.01e-06        0    0.964       221   photocath Transportation
+    7    -25.7    -89.3       63  7.01e-06        0        0       221         pmt Transportation
+    8      -25      -89     63.6  7.01e-06        0    0.964       222 scintillator Transportation
+    9     31.8    -55.8      113  7.01e-06        0     82.2       305         pmt Transportation
+   10     32.2    -55.6      113  7.01e-06 7.01e-06    0.562       305   photocath Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = opticalphoton,   Track ID = 53,   Parent ID = 2
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0   0.0406 -0.00468    -69.9  7.02e-06        0        0         0 scintillator initStep
+    1    -57.4       89    -52.8  7.02e-06        0      107       107     housing Transportation
+    2    -57.4       89    -52.8  7.02e-06        0        0       107 scintillator Transportation
+    3      -89       40    -43.4  7.02e-06        0     59.1       166     housing Transportation
+    4      -89       40    -43.4  7.02e-06        0        0       166 scintillator Transportation
+    5      -58    -7.95    -34.2  7.02e-06 7.02e-06     57.8       224 scintillator OpAbsorption
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    7   0.0406 -0.00471    -69.9   0.00793        0        0     0.286 scintillator initStep
+    8   0.0406 -0.00471    -69.9         0  0.00793  0.00127     0.287 scintillator eIoni
+    9   0.0406 -0.00471    -69.9         0        0        0     0.287 scintillator NoProcess
+
+*********************************************************************************************************
+* G4Track Information:   Particle = opticalphoton,   Track ID = 56,   Parent ID = 2
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0   0.0406 -0.00471    -69.9  7.08e-06        0        0         0 scintillator initStep
+    1     11.9     8.49    -46.4  7.08e-06 7.08e-06     27.6      27.6 scintillator OpAbsorption
+	Energy weighted position of hits in LXe : (-5.533666442656005,2.000947821005183,-68.73881317820164)
+	Total energy deposition in scintillator : 511.2897648225263 (keV)
+	Reconstructed position of hits in LXe : (0,-17.8635,-22.59999999999999)
+	Number of photons that hit PMTs in this event : 10
 	Number of PMTs above threshold(4) : 0
-	Number of photons produced by scintillation in this event : 48
-	Number of photons produced by cerenkov in this event : 0
-	Number of photons absorbed (OpAbsorption) in this event : 33
+	Number of photons produced by scintillation in this event : 50
+	Number of photons produced by cerenkov in this event : 1
+	Number of photons absorbed (OpAbsorption) in this event : 41
 	Number of photons absorbed at boundaries (OpBoundary) in this event : 0
 Unaccounted for photons in this event : 0
 "./currentEvent.rndm" is copied to "./run2evt0.rndm Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.010000s Real=0.003497s Sys=0.000000s
+  User=0.010000s Real=0.003813s Sys=0.000000s
 
  ======================== run summary ======================
 The run was 1 events.
-Number of hits per event:	 15 +- 0
+Number of hits per event:	 10 +- 0
 Number of hits per event above threshold:	 0 +- 0
-Number of scintillation photons per event :	 48 +- 0
-Number of Cerenkov photons per event:	 0 +- 0
-Number of absorbed photons per event :	 33 +- 0
+Number of scintillation photons per event :	 50 +- 0
+Number of Cerenkov photons per event:	 1 +- 0
+Number of absorbed photons per event :	 41 +- 0
 Number of photons absorbed at boundary per event:	 0 +- 0
-Total energy deposition in scintillator per event:	 511.2 +- 0 keV.
+Total energy deposition in scintillator per event:	 511.3 +- 0 keV.
 
 Graphics systems deleted.
 Visualization Manager deleting...
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 15 of which, static: 0
-Dynamic pools deleted: 15 / Total memory freed: 1.8 MB
+Dynamic pools deleted: 15 / Total memory freed: 1.6 MB
 ============================================================

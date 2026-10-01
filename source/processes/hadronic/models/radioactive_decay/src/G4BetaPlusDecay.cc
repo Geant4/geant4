@@ -167,8 +167,12 @@ G4BetaPlusDecay::SetUpBetaSpectrumSampler(const G4int& daughterZ,
     G4double f;   // Spectral shape function
     G4double f0 = 0.0;
     G4double sum = 0.0;
-    for (G4int i = 1; i < npti-1; ++i) {
+    for (G4int i = 0; i < npti; ++i) {
       ex = estep*i;
+      if (i == 0)
+      {
+        ex = 1.e-6;
+      }
       p = std::sqrt(ex*(ex + 2.));
       f = p*(1. + ex)*(maxEnergy - ex)*(maxEnergy - ex);
 
@@ -177,11 +181,13 @@ G4BetaPlusDecay::SetUpBetaSpectrumSampler(const G4int& daughterZ,
 
       // Apply shape factor for forbidden transitions
       f *= corrections.ShapeFactor(betaType, p, maxEnergy - ex);
-      sum += f + f0;
-      cdf[i] = sum;
+      if (i > 0)
+      {
+        sum += f + f0;
+        cdf[i] = sum;
+      }
       f0 = f;
     }
-    cdf[npti-1] = sum + f0;
   } else {
     for (G4int i = 0; i < npti; ++i) { cdf[i] = 0.0; }
   }

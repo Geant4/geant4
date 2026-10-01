@@ -6,6 +6,12 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2026-09-25 Gabriele Cosmo (proccuts-V11-03-02)
+- G4VRangeToEnergyConverter: store the shared energy vector by value to prevent
+  converter destruction from invalidating it for surviving or new converters.
+- Removed unnecessary lock in FillEnergyVector() and documented serial use
+  of constructor and setters.
+
 ## 2026-05-21 Gabriele Cosmo (proccuts-V11-03-01)
 - Fixed MT data race in G4ProductionCuts, which can be caused in MT mode by
   workers replaying broadcast UI commands in G4WorkerRunManager, so that

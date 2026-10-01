@@ -6,6 +6,12 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2026-09-25 Gabriele Cosmo (materials-V11-03-07)
+- G4UCNMaterialPropertiesTable: use integer loop indices to fully populate
+  micro-roughness tables, fixing uninitialised reads reported by Valgrind in
+  the ExUCN example. Corrected integral-probability lookup strides and use
+  delete[] for arrays.
+
 ## 2026-06-15 Gabriele Cosmo (materials-V11-03-06)
 - In G4NistManager, fixed implementation of SetDensityEffectCalculatorFlag(..)
   and removed redundant unused vectors data members for elements and materials.

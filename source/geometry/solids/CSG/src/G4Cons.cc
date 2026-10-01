@@ -43,12 +43,11 @@
 #include "G4AffineTransform.hh"
 #include "G4BoundingEnvelope.hh"
 #include "G4GeometryTolerance.hh"
+#include "G4QuickRand.hh"
 
 #include "G4VPVParameterisation.hh"
 
 #include "meshdefs.hh"
-
-#include "Randomize.hh"
 
 #include "G4VGraphicsScene.hh"
 #include "G4AutoLock.hh"
@@ -2121,34 +2120,34 @@ G4ThreeVector G4Cons::GetPointOnSurface() const
   G4double Afour  = 0.5*fDPhi*(fRmax2*fRmax2-fRmin2*fRmin2); // base at +Dz
   G4double Afive  = fDz*(fRmax1-fRmin1+fRmax2-fRmin2); // phi section
 
-  G4double phi    = G4RandFlat::shoot(fSPhi,fSPhi+fDPhi);
+  G4double phi    = fSPhi + fDPhi * G4QuickRand();
   G4double cosu   = std::cos(phi);
   G4double sinu   = std::sin(phi);
   G4double rRand1 = GetRadiusInRing(fRmin1, fRmax1);
   G4double rRand2 = GetRadiusInRing(fRmin2, fRmax2);
   
   if ( (fSPhi == 0.) && fPhiFullCone )  { Afive = 0.; }
-  G4double chose  = G4RandFlat::shoot(0.,Aone+Atwo+Athree+Afour+2.*Afive);
+  G4double chose = (Aone + Atwo + Athree + Afour + 2. * Afive) * G4QuickRand();
 
   if( (chose >= 0.) && (chose < Aone) ) // outer surface
   {
     if(fRmax1 != fRmax2)
     {
-      G4double zRand = G4RandFlat::shoot(-1.*fDz,fDz);
+      G4double zRand = fDz * (2. * G4QuickRand() - 1.);
       return { rone*cosu*(qone-zRand), rone*sinu*(qone-zRand), zRand };
     }
     
-    return { fRmax1*cosu, fRmax2*sinu, G4RandFlat::shoot(-1.*fDz,fDz) };
+    return {fRmax1 * cosu, fRmax2 * sinu, fDz * (2. * G4QuickRand() - 1.)};
   }
   if( (chose >= Aone) && (chose < Aone + Atwo) )  // inner surface
   {
     if(fRmin1 != fRmin2)
     {
-      G4double zRand = G4RandFlat::shoot(-1.*fDz,fDz);
+      G4double zRand = fDz * (2. * G4QuickRand() - 1.);
       return { rtwo*cosu*(qtwo-zRand), rtwo*sinu*(qtwo-zRand), zRand };
     }
     
-    return { fRmin1*cosu, fRmin2*sinu, G4RandFlat::shoot(-1.*fDz,fDz) };
+    return {fRmin1 * cosu, fRmin2 * sinu, fDz * (2. * G4QuickRand() - 1.)};
   }
   if( (chose >= Aone + Atwo) && (chose < Aone + Atwo + Athree) ) // base at -Dz
   {
@@ -2162,16 +2161,18 @@ G4ThreeVector G4Cons::GetPointOnSurface() const
   if( (chose >= Aone + Atwo + Athree + Afour) // SPhi section
         && (chose < Aone + Atwo + Athree + Afour + Afive) )
   {
-    G4double zRand  = G4RandFlat::shoot(-1.*fDz,fDz);
-    rRand1 = G4RandFlat::shoot(fRmin2-((zRand-fDz)/(2.*fDz))*(fRmin1-fRmin2),
-                               fRmax2-((zRand-fDz)/(2.*fDz))*(fRmax1-fRmax2));
+    G4double zRand = fDz * (2. * G4QuickRand() - 1.);
+    auto rMin = fRmin2 - ((zRand - fDz) / (2. * fDz)) * (fRmin1 - fRmin2);
+    auto rMax = fRmax2 - ((zRand - fDz) / (2. * fDz)) * (fRmax1 - fRmax2);
+    rRand1 = rMin + (rMax - rMin) * G4QuickRand();
     return { rRand1*cosSPhi, rRand1*sinSPhi, zRand };
   }
 
   // SPhi+DPhi section
-  G4double zRand  = G4RandFlat::shoot(-1.*fDz,fDz);
-  rRand1 = G4RandFlat::shoot(fRmin2-((zRand-fDz)/(2.*fDz))*(fRmin1-fRmin2),
-                             fRmax2-((zRand-fDz)/(2.*fDz))*(fRmax1-fRmax2)); 
+  G4double zRand = fDz * (2. * G4QuickRand() - 1.);
+  auto rMin = fRmin2 - ((zRand - fDz) / (2. * fDz)) * (fRmin1 - fRmin2);
+  auto rMax = fRmax2 - ((zRand - fDz) / (2. * fDz)) * (fRmax1 - fRmax2);
+  rRand1 = rMin + (rMax - rMin) * G4QuickRand();
   return { rRand1*cosEPhi, rRand1*sinEPhi, zRand };
 }
 

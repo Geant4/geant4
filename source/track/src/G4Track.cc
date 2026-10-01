@@ -220,13 +220,6 @@ void G4Track::SetAuxiliaryTrackInformation(G4int id,
     fpAuxiliaryTrackInformationMap =
       new std::map<G4int, G4VAuxiliaryTrackInformation*>;
   }
-  if(G4PhysicsModelCatalog::GetModelIndex(id) < 0)
-  {
-    G4ExceptionDescription ED;
-    ED << "Process/model ID <" << id << "> is invalid.";
-    G4Exception("G4VAuxiliaryTrackInformation::G4VAuxiliaryTrackInformation()",
-                "TRACK0982", FatalException, ED);
-  }
   (*fpAuxiliaryTrackInformationMap)[id] = info;
 }
 

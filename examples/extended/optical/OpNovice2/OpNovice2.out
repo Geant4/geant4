@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-04-patch-02    (12-June-2026)
+ Geant4 version Name: geant4-11-04-patch-03    (01-October-2026)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -1019,7 +1019,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=0.700000s Real=0.703616s Sys=0.000000s
+  User=0.940000s Real=0.940467s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -1035,22 +1035,22 @@ Average number of photons absorbed by WLS2 per event: 0
 Average number of photons created by WLS2 per event: 0
 Average energy of WLS2 photons created per event: 0 eV.
 Average number of OpRayleigh per event:   0
-Average number of OpAbsorption per event: 0.0096
+Average number of OpAbsorption per event: 0.009
 
 Surface events (on +X surface, maximum one per photon) this run:
 # of primary particles:         1e+05
-OpAbsorption before surface:       81
-Total # of surface events:      99919
+OpAbsorption before surface:       59
+Total # of surface events:      99941
 Unaccounted for:                    0
 
 Surface events by process:
-  Fresnel refraction:           46334
-  Lambertian reflection:        48828
-  Lobe reflection:                227
-  Spike reflection:               632
-  Backscattering:                2937
-  Absorption:                     961
- Sum:                           99919
+  Fresnel refraction:           46227
+  Lambertian reflection:        48837
+  Lobe reflection:                236
+  Spike reflection:               647
+  Backscattering:                2980
+  Absorption:                    1014
+ Sum:                           99941
  Unaccounted for:                   0
 ---------------------------------
 
@@ -1063,8 +1063,8 @@ Surface events by process:
  WLS emission time: mean = 0 ns rms = 0 ns.
  WLS2 emission spectrum: mean = 0 eV rms = 0 eV.
  WLS2 emission time: mean = 0 ns rms = 0 ns.
- X momentum dir of backward-going photons: mean = -0.685371 rms = 0.244071
- Y momentum dir of backward-going photons: mean = -0.00391549 rms = 0.485711
+ X momentum dir of backward-going photons: mean = -0.685706 rms = 0.244906
+ Y momentum dir of backward-going photons: mean = -0.00655794 rms = 0.484159
 
 ... write file : opnovice2.root - done
 ... close file : opnovice2.root - done

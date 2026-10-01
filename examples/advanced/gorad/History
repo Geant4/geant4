@@ -1,9 +1,15 @@
 # Example gorad History
 
 See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
-which **must** added in reverse chronological order (newest at the top). It must **not**
-be used as a substitute for writing good git commit messages!
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
 
+-------------------------------------------------------------------------------
+
+## 2026-09-22 Makoto Asai (gorad-V11-03-00)
+- GRPrimGenActionMessenger.cc
+  - Avoid invoking G4Tokenizer () operator more than once in one line. It causes 
+    the order of tokens unpredictably reordered.
 
 ## 2023-11-15 I. Hrivnacova (gorad-V11-01-01)
 - Updated vis.mac:

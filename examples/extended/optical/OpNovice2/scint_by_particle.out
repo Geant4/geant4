@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-04-patch-02    (12-June-2026)
+ Geant4 version Name: geant4-11-04-patch-03    (01-October-2026)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -2615,7 +2615,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=6.810000s Real=6.847460s Sys=0.010000s
+  User=5.400000s Real=5.546186s Sys=0.010000s
 
     Run Summary
 ---------------------------------
@@ -2626,8 +2626,8 @@ Material of tank:  G4_BGO
 
 Average energy of Cerenkov photons created per event: 0 eV.
 Average number of Cerenkov photons created per event: 0
-Average energy of scintillation photons created per event: 1.7e+05 eV.
-Average number of scintillation photons created per event: 3.5e+04
+Average energy of scintillation photons created per event: 1.9e+05 eV.
+Average number of scintillation photons created per event: 3.9e+04
  Average energy per photon: 4.9 eV.
 Average number of photons absorbed by WLS per event: 0 
 Average number of photons created by WLS per event: 0
@@ -2636,22 +2636,22 @@ Average number of photons absorbed by WLS2 per event: 0
 Average number of photons created by WLS2 per event: 0
 Average energy of WLS2 photons created per event: 0 eV.
 Average number of OpRayleigh per event:   0
-Average number of OpAbsorption per event: 4.2e+04
+Average number of OpAbsorption per event: 3.9e+04
 
 Surface events (on +X surface, maximum one per photon) this run:
 # of primary particles:         1e+02
-OpAbsorption before surface:  2676106
-Total # of surface events:    1493893
+OpAbsorption before surface:  2412652
+Total # of surface events:    1462643
 
 Surface events by process:
  Sum:                               0
- Unaccounted for:             1493893
+ Unaccounted for:             1462643
 ---------------------------------
 
  Histogram statistics for the entire run:
 
- Scintillation spectrum: mean = 4.88647 eV rms = 1.72814 eV.
- Scintillation time: mean = 58.156 ns rms = 50.4855 ns.
+ Scintillation spectrum: mean = 4.88799 eV rms = 1.72831 eV.
+ Scintillation time: mean = 58.1349 ns rms = 50.4742 ns.
 
 ... write file : scint_by_particle_e.root - done
 ... close file : scint_by_particle_e.root - done
@@ -2684,7 +2684,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.090000s Real=0.090641s Sys=0.000000s
+  User=0.080000s Real=0.081168s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -2705,22 +2705,22 @@ Average number of photons absorbed by WLS2 per event: 0
 Average number of photons created by WLS2 per event: 0
 Average energy of WLS2 photons created per event: 0 eV.
 Average number of OpRayleigh per event:   0
-Average number of OpAbsorption per event: 5.7e+02
+Average number of OpAbsorption per event: 4.9e+02
 
 Surface events (on +X surface, maximum one per photon) this run:
 # of primary particles:         1e+02
-OpAbsorption before surface:    30690
-Total # of surface events:      26016
+OpAbsorption before surface:    25292
+Total # of surface events:      24032
 
 Surface events by process:
  Sum:                               0
- Unaccounted for:               26016
+ Unaccounted for:               24032
 ---------------------------------
 
  Histogram statistics for the entire run:
 
- Scintillation spectrum: mean = 4.81367 eV rms = 1.72501 eV.
- Scintillation time: mean = 68.5317 ns rms = 54.0187 ns.
+ Scintillation spectrum: mean = 4.80096 eV rms = 1.7199 eV.
+ Scintillation time: mean = 68.4728 ns rms = 54.143 ns.
 
 ... write file : scint_by_particle_p.root - done
 ... close file : scint_by_particle_p.root - done
@@ -2753,7 +2753,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.980000s Real=0.980287s Sys=0.000000s
+  User=0.740000s Real=0.736924s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -2774,22 +2774,22 @@ Average number of photons absorbed by WLS2 per event: 0
 Average number of photons created by WLS2 per event: 0
 Average energy of WLS2 photons created per event: 0 eV.
 Average number of OpRayleigh per event:   0
-Average number of OpAbsorption per event: 5.8e+03
+Average number of OpAbsorption per event: 5e+03
 
 Surface events (on +X surface, maximum one per photon) this run:
 # of primary particles:         1e+02
-OpAbsorption before surface:   310231
-Total # of surface events:     264787
+OpAbsorption before surface:   251032
+Total # of surface events:     249115
 
 Surface events by process:
  Sum:                               0
- Unaccounted for:              264787
+ Unaccounted for:              249115
 ---------------------------------
 
  Histogram statistics for the entire run:
 
- Scintillation spectrum: mean = 4.97429 eV rms = 1.73177 eV.
- Scintillation time: mean = 36.4284 ns rms = 36.1714 ns.
+ Scintillation spectrum: mean = 4.9732 eV rms = 1.73139 eV.
+ Scintillation time: mean = 36.4481 ns rms = 36.1882 ns.
 
 ... write file : scint_by_particle_a.root - done
 ... close file : scint_by_particle_a.root - done
@@ -2822,7 +2822,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.090000s Real=0.094288s Sys=0.000000s
+  User=0.080000s Real=0.081321s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -2843,22 +2843,22 @@ Average number of photons absorbed by WLS2 per event: 0
 Average number of photons created by WLS2 per event: 0
 Average energy of WLS2 photons created per event: 0 eV.
 Average number of OpRayleigh per event:   0
-Average number of OpAbsorption per event: 5.7e+02
+Average number of OpAbsorption per event: 4.9e+02
 
 Surface events (on +X surface, maximum one per photon) this run:
 # of primary particles:         1e+02
-OpAbsorption before surface:    30628
-Total # of surface events:      25970
+OpAbsorption before surface:    25018
+Total # of surface events:      24354
 
 Surface events by process:
  Sum:                               0
- Unaccounted for:               25970
+ Unaccounted for:               24354
 ---------------------------------
 
  Histogram statistics for the entire run:
 
- Scintillation spectrum: mean = 4.92083 eV rms = 1.73346 eV.
- Scintillation time: mean = 38.9036 ns rms = 45.6316 ns.
+ Scintillation spectrum: mean = 4.93481 eV rms = 1.73127 eV.
+ Scintillation time: mean = 38.7522 ns rms = 45.2847 ns.
 
 ... write file : scint_by_particle_d.root - done
 ... close file : scint_by_particle_d.root - done
@@ -2892,7 +2892,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.160000s Real=0.157689s Sys=0.000000s
+  User=0.090000s Real=0.090592s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -2913,22 +2913,22 @@ Average number of photons absorbed by WLS2 per event: 0
 Average number of photons created by WLS2 per event: 0
 Average energy of WLS2 photons created per event: 0 eV.
 Average number of OpRayleigh per event:   0
-Average number of OpAbsorption per event: 5.7e+02
+Average number of OpAbsorption per event: 5e+02
 
 Surface events (on +X surface, maximum one per photon) this run:
 # of primary particles:         1e+02
-OpAbsorption before surface:    30978
-Total # of surface events:      26431
+OpAbsorption before surface:    24867
+Total # of surface events:      24836
 
 Surface events by process:
  Sum:                               0
- Unaccounted for:               26431
+ Unaccounted for:               24836
 ---------------------------------
 
  Histogram statistics for the entire run:
 
- Scintillation spectrum: mean = 5.09787 eV rms = 1.73358 eV.
- Scintillation time: mean = 19.9906 ns rms = 19.9611 ns.
+ Scintillation spectrum: mean = 5.09858 eV rms = 1.73323 eV.
+ Scintillation time: mean = 19.9454 ns rms = 19.8335 ns.
 
 ... write file : scint_by_particle_i.root - done
 ... close file : scint_by_particle_i.root - done
@@ -2936,5 +2936,5 @@ Graphics systems deleted.
 Visualization Manager deleting...
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 10 of which, static: 0
-Dynamic pools deleted: 10 / Total memory freed: 9.3 MB
+Dynamic pools deleted: 10 / Total memory freed: 8.5 MB
 ============================================================

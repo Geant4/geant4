@@ -313,8 +313,9 @@ void DetectorConstruction::ComputeGeomParameters()
     fXendAbs = fXposAbs + 0.5 * fAbsorberThickness;
 
     G4double xmax = std::max(std::abs(fXstartAbs), std::abs(fXendAbs));
-    fWorldSizeX = 4 * xmax;
-    fWorldSizeYZ = 2 * fAbsorberSizeYZ;
+    G4double maxDim = std::max(xmax, fAbsorberSizeYZ);
+    fWorldSizeX = 4 * maxDim;
+    fWorldSizeYZ = 4 * maxDim;
 
     if (nullptr != fPhysiWorld) {
       ChangeGeometry();

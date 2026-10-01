@@ -6,6 +6,15 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2026-07-21 Gabriele Cosmo (geomdiv-V11-03-02)
+- Fix in G4VDivisionParameterisation to cure a double-free in MT mode.
+  ChangeRotMatrix() assigned one thread-local rotation matrix to multiple
+  division physical volumes; as each replica owns and deletes its rotation
+  during worker teardown, this was producing a double-free.
+  The fix reuses the per-volume rotation matrix already allocated by
+  G4PVReplica, resets it before applying each phi rotation and removes
+  the shared thread-local rotation and G4AutoDelete registration.
+
 ## 2025-09-15 Gabriele Cosmo (geomdiv-V11-03-01)
 - Reorganised and enriched comments in headers to follow Doxygen style.
 - Removed unused data in G4VDivisionParameterisation.

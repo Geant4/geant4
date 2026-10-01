@@ -6,6 +6,18 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2026-09-16 Gabriele Cosmo (run-V11-03-10)
+- Report parallel voxel statistics from the master after worker synchronisation
+  in MT and tasking modes, avoiding suppression by worker initialisation filters.
+
+## 2026-06-29 Gabriele Cosmo
+- Implemented a guard in G4ExceptionHandler::DumpTrackInfo() such that
+  incomplete step data is handled by checking the step point and its
+  G4TouchableHandle before calling G4StepPoint::GetPhysicalVolume().
+  It still prints the usual step-point diagnostics when available, but
+  reports "not available" when the track is too new or the touchable has
+  not been initialized yet. Addressing problem report #2740.
+
 ## 2026-06-04 Makoto Asai (run-V11-03-09)
 - G4SubEvtRunManager.cc
  - G4Event::GetNumberOfRemainingSubEvents() uses Mutex only for the G4Event used

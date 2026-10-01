@@ -6,6 +6,24 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2026-09-17 Gabriele Cosmo (particles-V11-03-04)
+- In G4IonTable, use lower_bound() instead of find() and restrict scans to
+  matching multimap keys to avoid skipping ion states. Fixes duplicate ion
+  registration and the resulting PART122 abort observed in several examples
+  and tests on macOS.
+
+## 2026-08-01 Ben Morgan
+- Account for electron mass in sampling and kinematics of `G4MuonDecayChannel`
+  daughters, with improved kinematic endpoint/singularity handling.
+  - Addresses Issue #293 on floating point exceptions and off-mass-shell kinematics.
+  - Follow up to [Bugzilla 2678](https://bugzilla-geant4.kek.jp/show_bug.cgi?id=2678).
+
+## 2026-06-19 Gabriele Cosmo
+- Fix in G4IonTable::AddProcessManager() for G4MuonicAtom setup when assigning
+  the shared particle definition ID, keeping late-created G4MuonicAtom
+  instances complete for MT SetupShadowProcess() on subsequent runs.
+  Addressing problem report #2716.
+
 ## 2026-05-20 Gabriele Cosmo (particles-V11-03-03)
 - In G4ParticleDefinition, added idempotent guard in SetParticleDefinitionID()
   for setting the 'g4particleDefinitionInstanceID' index and cure an MT data

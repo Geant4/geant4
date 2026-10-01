@@ -78,7 +78,7 @@ void G4HadFinalState::Clear()
 
 G4HadSecondary * G4HadFinalState::GetSecondary(size_t i) 
 {
-  if(i>theSecs.size()) {
+  if(i>=theSecs.size()) {
     throw G4HadronicException(__FILE__, __LINE__, 
 	  "Trying direct access to secondary beyond end of list");
   }
@@ -87,7 +87,7 @@ G4HadSecondary * G4HadFinalState::GetSecondary(size_t i)
 
 const G4HadSecondary* G4HadFinalState::GetSecondary(size_t i) const
 {
-  if(i>theSecs.size()) {
+  if(i>=theSecs.size()) {
     throw G4HadronicException(__FILE__, __LINE__, 
 	  "Trying direct access to secondary beyond end of list");
   }

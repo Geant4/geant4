@@ -36,8 +36,8 @@
 //
 //----------------------------------------------------------------------------
 //
-#ifndef UrQMDAntiBarionBuilder_h
-#define UrQMDAntiBarionBuilder_h 1
+#ifndef URQMDANTIBARIONBUILDER_H
+#define URQMDANTIBARIONBUILDER_H
 
 #include "G4HadronElasticProcess.hh"
 #include "G4UrQMD1_3Model.hh"
@@ -52,6 +52,7 @@ class UrQMDAntiBarionBuilder : public G4VAntiBarionBuilder
     UrQMDAntiBarionBuilder();
     virtual ~UrQMDAntiBarionBuilder();
 
+    using G4VAntiBarionBuilder::Build;  // keep base Build() visible (avoid -Woverloaded-virtual)
     virtual void Build(G4HadronElasticProcess* aP);
     virtual void Build(G4HadronInelasticProcess* aP);
 

@@ -418,6 +418,7 @@ void G4MTRunManager::InitializeEventLoop(G4int n_event, const char* macroFile, G
   // We need a barrier here. Wait for workers to start event loop.
   // This will return only when all workers have started processing events.
   WaitForReadyWorkers();
+  G4GeometryManager::GetInstance()->ReportParallelOptimisationStats();
 }
 
 // --------------------------------------------------------------------
@@ -432,6 +433,7 @@ void G4MTRunManager::GeometryOptimisation()
 
   // Force workers to execute UI command
   RequestWorkersProcessCommandsStack();
+  geomManager->ReportParallelOptimisationStats();
 }
 
 // --------------------------------------------------------------------

@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-04-patch-02    (12-June-2026)
+ Geant4 version Name: geant4-11-04-patch-03    (01-October-2026)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -57,15 +57,6 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
  G4ChordFinder: stepperDriverId: 2
 #
 /testem/gun/setDefault
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Event0401
-      issued by : G4VPrimaryGenerator::SetParticlePosition
-Invalid vertex position ((-60,0,0)). Position MUST be located -inside- the world volume.
-Gun position has NOT been changed!
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
 /testem/gun/rndm 0.1
 /gun/particle proton
 /gun/energy 300 MeV
@@ -556,24 +547,24 @@ CoulombScat:  for pi- XStype:1 SubType=1 BuildTable=1
 ------------------------------------------------------------
       material   Edep       RMS         sqrt(E0(GeV))*rmsE/Emean     total tracklen 
  
-     Aluminium:      0 eV  :      0 eV          0 +-     0 %         0 fm  +-    0 fm 
+     Aluminium: 84.384 MeV :   1.49 MeV     0.967 +- 0.3058 %      10.4 cm  +-  901 um 
 
- Total energy deposited = 0 eV  +- 0 eV 
- Energy leakage = 300 MeV +- 0 eV 
+ Total energy deposited = 84.38 MeV +- 1.49 MeV
+ Energy leakage = 215.6 MeV +- 1.49 MeV
  Total energy :  Edep + Eleak = 300 MeV +- 0 eV 
 ------------------------------------------------------------
  Beam particle proton  E = 300 MeV
  Mean number of gamma       0
  Mean number of e-          0
  Mean number of e+          0
- Mean number of charged steps  0
+ Mean number of charged steps  6.1
  Mean number of neutral steps  0
 ------------------------------------------------------------
 
  Energy deposition from Energy flow balance : 
   material 	 Total Edep 
  
- Aluminium:	 300 MeV
+ Aluminium:	 84.3842 MeV
 
 ------------------------------------------------------------
 

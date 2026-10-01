@@ -1,7 +1,7 @@
 \page ExampleHadr02 Example Hadr02
 
 
-Example and DMJET: 
+Example and DPMJET: 
 \author V.Ivanchenko, A.Ivanchenko, \n
 UrQMD: Kh Abdel-Waged et al, A. Dotti  \n
 CRMC: A. Ribon (with contributions by T. Pierog and A. Tykhonov) \n
@@ -13,13 +13,15 @@ University of Bordeaux, CENBG/IN2P3/CNRS \n
 This example application is providing simulation of ion beam interaction with different 
 targets. Hadronic aspects of beam target interaction are demonstrated in the example 
 including longitudinal profile of energy deposition, spectra of secondary  particles,
-isotope production spectra. The results are presenting in a form of average numbers 
+isotope production spectra. The results are presented in a form of average numbers 
 and histograms. All ion/ion models of Geant4 are available. 
 
-In addition an interface to the FORTRAN code UrQMD-1.3rc developed by Kh, Abdel-Waged et al
+In addition an interface to the FORTRAN code UrQMD-1.3cr developed by Kh. Abdel-Waged et al
 for the KACST/NCMP. UrQMD model by S.A.Bass et al. Prog.Part.Nucl.Phys. 41 (1998) 225
 and M.Bleicher et al. J.Phys. G25 (1999) 1859.
-UrQMD can be used only for ion-ion physics or for all hadronic inelastic interactions.
+The UrQMD physics list uses UrQMD for supported hadron-beam interactions and FTF for
+hyperons. It also exposes an ion-ion path, which is not enabled by default - see the
+Limitations section below.
 
 The interface to the Cosmic Ray Monte Carlo (CRMC) allows to use generators -
 such as EPOS, DPMJET, SIBYLL etc. - for hadron-nucleus and nucleus-nucleus collisions
@@ -47,50 +49,93 @@ setenv PHYSLIST QGSP_BIC
 
 ## ACTIVATION OF URQMD INTERFACE
 
-UrQMD 1.3 FORTRAN code is NOT provided with Geant4 code-base.
-You can get UrQMD code from UrQMD code website: http://urqmd.org
-The Geant4 interface has been developed and tested against urqmd-1.3cr
-Once the tarball urqmd-1.3cr.tar.gz has been downloaded copy it in the 
-urqmd1_3 directory of this example.
-To compile support for UrQMD interface in the example define the environment
-variable G4_USE_URQMD. i.e. by typing:
+The UrQMD 1.3 FORTRAN code is NOT provided with the Geant4 code-base. The interface is
+written for the specific urqmd-1.3cr ("cosmic ray") version, which is request-only: it
+is no longer a public download (urqmd.org now serves 3.4 / 4.0, which are not compatible
+with this interface). Request urqmd-1.3cr.tar(.gz) from the UrQMD group (M. Bleicher,
+ITP Frankfurt).
+
+Unpack the tarball inside the urqmd1_3 sub-directory of this example. The archive
+contains a top-level urqmd-1.3cr directory, so the sources land in urqmd1_3/urqmd-1.3cr :
 
 ```
-setenv G4_USE_URQMD 1
+cd examples/extended/hadronic/Hadr02/urqmd1_3
+tar xf /path/to/urqmd-1.3cr.tar
 ```
 
-Two possible uses of UrQMD interface are possible: use UrQMD code only for
-ion-ion interactions or use the provided UrQMD physics list (all hadron inelastic interactions
-use UrQMD).
-To run the example with UrQMD only for ion-ion physics:
+No manual build step is needed. Enable the interface with the CMake option G4_USE_URQMD
+(OFF by default); CMake then compiles the UrQMD .f sources into a static library and
+links the gfortran runtime automatically. A gfortran compiler is required.
+
+```
+cd examples/extended/hadronic/Hadr02
+cmake -S . -B build -DCMAKE_PREFIX_PATH=<geant4-install> -DG4_USE_URQMD=ON
+cmake --build build -j
+```
+
+UrQMD can be used in two ways: only for ion-ion interactions, or as a physics list
+where supported hadronic inelastic interactions use UrQMD and hyperons use FTF.
+
+To use UrQMD only for ion-ion physics (added on top of a reference physics list).
+NOTE: as shipped this ion-ion path is not usable - with the trimmed arrays a dense A+A
+event overflows UrQMD's collision table and aborts (a fixable capacity limit; see the
+Limitations section). Use the full UrQMD physics list (below) for hadron beams. The
+ion-ion invocation is:
 
 ```
 ./Hadr02 urqmd.in QGSP_BIC
 ```
 
-The last parameter is optional. It is the name of Geant4 reference Physics List on
-top of which a new ion physics is added. Alternatively Physics List can be defined via 
-environment variable
+The last parameter is the reference physics list on top of which the UrQMD ion physics
+is added. Alternatively the physics list can be defined via the environment variable:
 
 ```
-setenv PHYSLIST QGSP_BIC
+export PHYSLIST=QGSP_BIC
 ```
 
-To run the example with the full UrQMD physics:
+To use the UrQMD physics list (UrQMD for supported interactions and FTF for hyperons):
 
 ```
-./Hadr02 default.in UrQMD
+./Hadr02 hadr02.in UrQMD
 ```
 or:
 ```
-setenv PHYSLIST UrQMD
-./Hadr02 default.in
+export PHYSLIST=UrQMD
+./Hadr02 hadr02.in
 ```
 
-UrQMD physics list can be used in any application, releavant headers and source files (*UrQDM*)
-should be copied in your application source tree, together with the urqmd1_3 sub-directory.
-Your application makefile should also be modified following the example of the makefile for this 
-example.
+To reuse the UrQMD physics list in another application, copy the relevant headers and
+sources (*UrQMD*) together with the urqmd1_3 sub-directory, and add the same G4_USE_URQMD
+CMake block used by this example. The UrQMD interface is not thread-safe, so the reusing
+application must run single-threaded (serial run manager); see the Limitations section.
+
+### Limitations of the UrQMD interface
+
+- Usable for hadron beams (proton, neutron, pion, kaon). Charged-pion production is
+  comparable to Geant4's FTFP/Binary models; that is the observable for which the
+  interface was validated (p+Cu / p+Pb at 3-15 GeV/c).
+- Ion-ion (nucleus-nucleus) collisions are not enabled by default. UrQMD-1.3cr is the
+  "cosmic ray" fork of UrQMD 1.3, trimmed for hadron+air use by shrinking its fixed
+  arrays - notably the collision table (ncollmax 10000 -> 100) and the particle array
+  (nmax 40000 -> 500). A dense A+A event (e.g. S+Al) overflows the 100-entry collision
+  table, and the overflow bookkeeping corrupts and aborts inside UrQMD (an
+  "anndec: no final state" FORTRAN stop, or a segfault). This is a capacity limit, not
+  broken physics: enlarging ncollmax (in urqmd1_3/urqmd-1.3cr/colltab.f, with the
+  matching size in include/G4UrQMD1_3Interface.hh) removes the crash. However,
+  nucleus-nucleus was never validated for this trimmed fork.
+- No coalescence / residual-nucleus de-excitation is applied, so all target nucleons
+  are emitted as free particles; nucleon multiplicities are therefore higher than the
+  reference Geant4 models (charged-pion production is unaffected).
+- UrQMD is registered from 0 MeV, but that is a software dispatch setting, not a
+  validated range. In CORSIKA it is the "low-energy" generator only relative to the
+  air-shower high-energy models (below the ~80 GeV hand-off) - not a claim about the
+  sub-GeV nuclear regime. Results below a few hundred MeV/nucleon need dedicated
+  validation; at tens of MeV/nucleon the missing residual-nucleus / evaporation /
+  coalescence physics (see above) is a real limitation.
+- Not thread-safe. The UrQMD FORTRAN keeps all its state in global COMMON blocks (and is
+  compiled with -fno-automatic, so even local variables are static), so it must run
+  single-threaded. This example uses a serial run manager for that reason; do not use the
+  UrQMD physics list in a multithreaded (MT) application.
 
 ## ACTIVATION OF CRMC INTERFACE                        
 
@@ -185,7 +230,7 @@ The material of the Check volume is the same as the World material. The World
 volume has the sizes 10 mm larger than that of the Target volume. Any material
 from the Geant4 database can be defined. The default World  material is
 G4Galactic and the default  Target material is aluminum. The Target is
-subdivided on number of equal slices. Following UI commands are available to
+subdivided into a number of equal slices. The following UI commands are available to
 modify the geometry:
 
 ```
@@ -251,12 +296,12 @@ Additionally it is possible to add ion-ion interactions using UI command
 
 ```
 /testhadr/ionPhysics   HIJING
-/testhadr/ionPhysics   QrQMD
+/testhadr/ionPhysics   UrQMD
 ```
 
 ## VISUALIZATION
 
-The vis.mac file can be used an example of visualization.
+The vis.mac file can be used as an example of visualization.
 
 ## HISTOGRAMS
 

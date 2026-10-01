@@ -6,6 +6,13 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2026-07-10 Ben Morgan (cmake-V11-03-19)
+- Apply [GitHub PR 102](https://github.com/Geant4/geant4/pull/102) to address
+  [Bugzilla 2744](https://bugzilla-geant4.kek.jp/show_bug.cgi?id=2744)
+  - If the build path contains valid but special characters like "+", module composition
+    step can fail due to use of regexing. The patch escapes special characters so they
+    don't get interpreted as regex directives.
+
 ## 2026-02-17 Ben Morgan (cmake-V11-03-18)
 - Use CMake 3.16-3.19 compatible construction of interface libraries.
   - Fixes [Bugzilla 2700](https://bugzilla-geant4.kek.jp/show_bug.cgi?id=2700)

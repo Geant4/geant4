@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-04-patch-02    (12-June-2026)
+ Geant4 version Name: geant4-11-04-patch-03    (01-October-2026)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -1015,128 +1015,223 @@ Index : 6     used in the geometry : Yes
 ... open analysis file : wls.root - done
 --> Event 0 starts.
 
--------->Hits Collection: in this event there are 2 hits in the photon detector: 
-Arrival time: 5.52526 ns Arrival position: (-123.689 um , -125.757 um ) Exit position: (-111.873 um , -95.084 um ) Energy: 2.65383 eV 
-Arrival time: 5.68617 ns Arrival position: (110.921 um , 45.7566 um ) Exit position: (86.7899 um , -22.9834 um ) Energy: 2.84912 eV 
+-------->Hits Collection: in this event there are 31 hits in the photon detector: 
+Arrival time: 6.08404 ns Arrival position: (267.805 um , 369.465 um ) Exit position: (199.889 um , 407.003 um ) Energy: 2.78967 eV 
+Arrival time: 16.7016 ns Arrival position: (-251.667 um , 316.291 um ) Exit position: (-322.848 um ,  135.39 um ) Energy: 2.68938 eV 
+Arrival time: 12.9718 ns Arrival position: (328.439 um , -143.391 um ) Exit position: (330.335 um , -175.524 um ) Energy: 2.06879 eV 
+Arrival time: 8.41561 ns Arrival position: (-214.887 um , 180.664 um ) Exit position: ( -205.2 um , 126.144 um ) Energy: 2.83644 eV 
+Arrival time: 22.4238 ns Arrival position: (-406.86 um , -80.7591 um ) Exit position: (-367.088 um , 10.3737 um ) Energy: 2.39981 eV 
+Arrival time: 13.8187 ns Arrival position: (-540.139 um , -22.1832 um ) Exit position: (-335.188 um , -226.717 um ) Energy: 2.57136 eV 
+Arrival time: 50.0369 ns Arrival position: (11.2649 um , -501.668 um ) Exit position: (2.42898 um , -388.32 um ) Energy: 2.71092 eV 
+Arrival time:  28.885 ns Arrival position: (19.0566 um , 496.413 um ) Exit position: (21.8271 um , 476.134 um ) Energy: 2.80937 eV 
+Arrival time: 13.7265 ns Arrival position: (46.7649 um , 117.376 um ) Exit position: (16.2424 um , 199.532 um ) Energy: 2.40427 eV 
+Arrival time: 7.58334 ns Arrival position: (381.506 um , -77.299 um ) Exit position: (292.954 um , -51.9625 um ) Energy: 2.92206 eV 
+Arrival time: 7.75538 ns Arrival position: (-55.8314 um ,  219.72 um ) Exit position: (-111.305 um , 166.238 um ) Energy: 2.68155 eV 
+Arrival time: 52.7346 ns Arrival position: (-310.448 um , 85.7918 um ) Exit position: (-235.564 um , 222.987 um ) Energy: 2.54438 eV 
+Arrival time: 19.8267 ns Arrival position: (379.145 um , -10.2422 um ) Exit position: (305.804 um , -105.17 um ) Energy: 2.67127 eV 
+Arrival time: 7.97043 ns Arrival position: ( 78.552 um ,  5.2063 um ) Exit position: (77.7647 um , -74.5437 um ) Energy:   2.325 eV 
+Arrival time: 11.9861 ns Arrival position: (-192.247 um , -67.4353 um ) Exit position: (-149.691 um , -47.9121 um ) Energy: 2.72252 eV 
+Arrival time: 11.2948 ns Arrival position: (15.8849 um , 340.499 um ) Exit position: (60.0547 um , 332.446 um ) Energy: 2.57958 eV 
+Arrival time:  8.1247 ns Arrival position: (-306.41 um , -18.0847 um ) Exit position: (-276.276 um , -64.4703 um ) Energy:  2.5557 eV 
+Arrival time: 18.3725 ns Arrival position: (48.1313 um , 506.643 um ) Exit position: (18.9412 um , 382.478 um ) Energy: 2.94565 eV 
+Arrival time: 17.6672 ns Arrival position: (97.3452 um , -349.191 um ) Exit position: (156.045 um , -388.163 um ) Energy: 2.69678 eV 
+Arrival time: 28.0593 ns Arrival position: (-184.16 um , 408.213 um ) Exit position: (-212.763 um ,  239.98 um ) Energy: 2.48026 eV 
+Arrival time: 6.07434 ns Arrival position: (-166.444 um , 236.486 um ) Exit position: (-198.018 um , 210.203 um ) Energy: 2.42684 eV 
+Arrival time: 17.4933 ns Arrival position: (-1.78023 um , -217.399 um ) Exit position: (-51.958 um , -220.685 um ) Energy: 2.83012 eV 
+Arrival time: 14.7148 ns Arrival position: (-308.756 um , 53.7127 um ) Exit position: (-299.523 um , 322.961 um ) Energy:  2.6689 eV 
+Arrival time:   10.06 ns Arrival position: (-214.02 um , 141.213 um ) Exit position: (-117.196 um , 168.413 um ) Energy: 2.95618 eV 
+Arrival time: 7.82831 ns Arrival position: (309.523 um , -432.359 um ) Exit position: (344.189 um , -174.974 um ) Energy: 2.58081 eV 
+Arrival time: 28.0343 ns Arrival position: (-379.577 um , -20.6419 um ) Exit position: (-304.39 um ,  61.833 um ) Energy: 2.44825 eV 
+Arrival time: 10.4966 ns Arrival position: (-206.108 um , 157.016 um ) Exit position: (-272.417 um , 84.6095 um ) Energy:  2.5885 eV 
+Arrival time: 9.31935 ns Arrival position: (-239.454 um , -41.0625 um ) Exit position: (-201.08 um , -37.9353 um ) Energy: 2.30984 eV 
+Arrival time: 6.55022 ns Arrival position: (-289.924 um , -29.4959 um ) Exit position: (-225.184 um ,  -58.21 um ) Energy: 2.55831 eV 
+Arrival time:  15.415 ns Arrival position: (357.892 um , -112.823 um ) Exit position: (359.902 um , -163.362 um ) Energy: 2.85362 eV 
+Arrival time: 36.9345 ns Arrival position: (51.2559 um , 141.097 um ) Exit position: (204.272 um , 149.364 um ) Energy: 2.79425 eV 
 --> Event 1 starts.
 
--------->Hits Collection: in this event there are 14 hits in the photon detector: 
-Arrival time: 39.3842 ns Arrival position: (-62.2657 um , 263.749 um ) Exit position: (-53.1601 um , 321.432 um ) Energy: 2.77938 eV 
-Arrival time: 19.4025 ns Arrival position: (87.6075 um ,  48.085 um ) Exit position: (148.043 um ,  46.814 um ) Energy: 2.22226 eV 
-Arrival time: 15.1246 ns Arrival position: (313.466 um , 134.546 um ) Exit position: (375.916 um , 151.017 um ) Energy: 2.71407 eV 
-Arrival time: 14.5772 ns Arrival position: (324.533 um , -10.8693 um ) Exit position: (249.682 um , 86.9925 um ) Energy: 2.47867 eV 
-Arrival time: 21.2268 ns Arrival position: (-83.8145 um , 289.638 um ) Exit position: (-49.3262 um ,  222.09 um ) Energy: 2.80661 eV 
-Arrival time: 19.4615 ns Arrival position: (69.9846 um , -189.188 um ) Exit position: (82.1605 um , -62.9274 um ) Energy: 2.32328 eV 
-Arrival time: 20.8223 ns Arrival position: (-344.388 um , -326.162 um ) Exit position: (-230.742 um , -272.376 um ) Energy: 2.65309 eV 
-Arrival time: 8.62335 ns Arrival position: (-317.408 um ,  105.45 um ) Exit position: (-363.562 um , -42.4219 um ) Energy: 2.68356 eV 
-Arrival time: 13.0388 ns Arrival position: (135.588 um , 236.463 um ) Exit position: (101.674 um , 127.805 um ) Energy: 2.37441 eV 
-Arrival time: 20.3612 ns Arrival position: (72.0926 um , -78.6041 um ) Exit position: (-20.5996 um , 744.065 nm ) Energy: 2.72899 eV 
-Arrival time: 8.97382 ns Arrival position: (68.2323 um , 226.502 um ) Exit position: (79.4597 um , 251.477 um ) Energy: 2.34579 eV 
-Arrival time:  22.787 ns Arrival position: (-474.862 um , 160.344 um ) Exit position: (-355.511 um , 222.472 um ) Energy: 2.59122 eV 
-Arrival time: 6.67046 ns Arrival position: (304.813 um , 302.234 um ) Exit position: (164.096 um , 379.294 um ) Energy: 2.84851 eV 
-Arrival time: 12.8795 ns Arrival position: (62.6281 um , -130.641 um ) Exit position: (-19.2976 um , -181.651 um ) Energy: 2.81405 eV 
+-------->Hits Collection: in this event there are 25 hits in the photon detector: 
+Arrival time: 6.79795 ns Arrival position: (413.427 um , -101.002 um ) Exit position: (332.256 um ,  22.853 um ) Energy: 2.51603 eV 
+Arrival time:  10.585 ns Arrival position: ( 345.06 um , -3.08582 um ) Exit position: (304.262 um , 57.5777 um ) Energy: 2.81705 eV 
+Arrival time: 20.7886 ns Arrival position: (-362.515 um , -165.057 um ) Exit position: (-269.849 um , -115.437 um ) Energy: 2.63082 eV 
+Arrival time: 12.6824 ns Arrival position: (-254.516 um , -391.777 um ) Exit position: (-309.719 um , -250.184 um ) Energy: 2.67383 eV 
+Arrival time: 16.6628 ns Arrival position: (-133.145 um , 110.912 um ) Exit position: (-228.209 um , -8.95629 um ) Energy: 2.71628 eV 
+Arrival time: 7.72348 ns Arrival position: (-139.441 um , 405.624 um ) Exit position: (-140.875 um , 368.823 um ) Energy: 2.87611 eV 
+Arrival time:   27.17 ns Arrival position: (-120.186 um , -224.803 um ) Exit position: (-180.789 um , -228.194 um ) Energy: 2.25474 eV 
+Arrival time: 17.2862 ns Arrival position: (14.8325 um , 117.383 um ) Exit position: (30.0706 um , 120.642 um ) Energy: 2.96499 eV 
+Arrival time: 7.80786 ns Arrival position: (-132.689 um , -305.626 um ) Exit position: (-67.5114 um , -411.757 um ) Energy: 2.80052 eV 
+Arrival time: 24.4554 ns Arrival position: (-118.731 um , -86.8954 um ) Exit position: (-136.78 um , -148.404 um ) Energy: 2.46968 eV 
+Arrival time: 6.52174 ns Arrival position: (122.427 um , 172.671 um ) Exit position: ( 108.87 um , 84.3013 um ) Energy: 2.77936 eV 
+Arrival time: 55.3119 ns Arrival position: (-322.249 um , -99.8546 um ) Exit position: (-305.48 um , -199.31 um ) Energy:  2.6322 eV 
+Arrival time: 9.05373 ns Arrival position: (41.6054 um , -43.0438 um ) Exit position: (8.12632 um , -48.5063 um ) Energy: 2.23536 eV 
+Arrival time: 6.70215 ns Arrival position: (-191.932 um , -339.863 um ) Exit position: (-185.615 um , -367.695 um ) Energy:  2.6046 eV 
+Arrival time:  45.856 ns Arrival position: (188.451 um , -410.664 um ) Exit position: (181.342 um , -428.046 um ) Energy: 2.57605 eV 
+Arrival time: 24.2664 ns Arrival position: (66.2442 um , 416.799 um ) Exit position: (127.608 um , 470.824 um ) Energy:  2.8366 eV 
+Arrival time: 11.5189 ns Arrival position: (355.418 um , -207.732 um ) Exit position: (249.821 um , -159.544 um ) Energy: 2.89691 eV 
+Arrival time: 6.52544 ns Arrival position: (232.788 um , 190.929 um ) Exit position: ( 207.54 um , 239.208 um ) Energy: 2.50157 eV 
+Arrival time: 19.0678 ns Arrival position: (-67.0626 um , 421.349 um ) Exit position: (33.8221 um , 374.497 um ) Energy: 2.46075 eV 
+Arrival time: 24.6007 ns Arrival position: (348.389 um , 19.9463 um ) Exit position: (292.197 um , 86.2384 um ) Energy: 2.31427 eV 
+Arrival time: 13.3429 ns Arrival position: (69.0251 um ,  156.34 um ) Exit position: (204.227 um , 136.183 um ) Energy: 2.64594 eV 
+Arrival time: 7.91623 ns Arrival position: (-321.582 um , 174.989 um ) Exit position: (-320.176 um , 131.348 um ) Energy: 2.57086 eV 
+Arrival time: 72.7074 ns Arrival position: (318.165 um , 206.658 um ) Exit position: ( 306.12 um , 146.033 um ) Energy: 2.41403 eV 
+Arrival time: 11.0548 ns Arrival position: (243.324 um , -107.86 um ) Exit position: (169.691 um , -49.5203 um ) Energy: 2.77191 eV 
+Arrival time: 8.24088 ns Arrival position: (-183.69 um , -449.89 um ) Exit position: (-171.293 um , -318.011 um ) Energy:   2.868 eV 
 --> Event 2 starts.
 
--------->Hits Collection: in this event there are 9 hits in the photon detector: 
-Arrival time: 7.57257 ns Arrival position: ( 127.52 um , -379.724 um ) Exit position: (99.8075 um , -356.774 um ) Energy: 2.33317 eV 
-Arrival time: 6.19343 ns Arrival position: (168.881 um ,  144.71 um ) Exit position: (201.056 um , 15.7042 um ) Energy: 2.50888 eV 
-Arrival time: 66.1326 ns Arrival position: (-43.2106 um , -362.19 um ) Exit position: (60.1715 um , -351.892 um ) Energy: 2.16801 eV 
-Arrival time: 31.5966 ns Arrival position: (-196.938 um , -355.787 um ) Exit position: (-236.584 um , -206.913 um ) Energy: 2.48858 eV 
-Arrival time: 9.92684 ns Arrival position: ( -216.7 um , -311.055 um ) Exit position: (-144.376 um , -342.75 um ) Energy:  2.7399 eV 
-Arrival time: 12.9991 ns Arrival position: (-123.774 um , -45.3365 um ) Exit position: (-67.9121 um , -148.116 um ) Energy: 2.85626 eV 
-Arrival time: 14.6245 ns Arrival position: (7.92491 um , 23.4897 um ) Exit position: (84.3141 um , -7.73259 um ) Energy: 2.79285 eV 
-Arrival time: 11.6126 ns Arrival position: (79.1338 um , 64.9114 um ) Exit position: (-6.01024 um , 40.5797 um ) Energy: 2.77722 eV 
-Arrival time: 40.3291 ns Arrival position: (339.417 um , 169.683 um ) Exit position: (273.333 um ,  162.41 um ) Energy: 2.75355 eV 
+-------->Hits Collection: in this event there are 1 hits in the photon detector: 
+Arrival time: 5.38967 ns Arrival position: (117.747 um , -277.294 um ) Exit position: (151.381 um , -274.722 um ) Energy: 2.13074 eV 
 --> Event 3 starts.
 
--------->Hits Collection: in this event there are 15 hits in the photon detector: 
-Arrival time: 27.9165 ns Arrival position: (-35.3387 um , 79.9731 um ) Exit position: (-135.827 um , 86.0142 um ) Energy: 2.72144 eV 
-Arrival time: 6.71992 ns Arrival position: (377.591 um , -16.8212 um ) Exit position: (237.007 um , -69.8759 um ) Energy: 2.83097 eV 
-Arrival time: 12.3875 ns Arrival position: (166.563 um , -123.792 um ) Exit position: (201.042 um , -115.553 um ) Energy: 2.71188 eV 
-Arrival time: 30.9045 ns Arrival position: (-165.061 um , -24.4535 um ) Exit position: (-239.627 um , 5.80994 um ) Energy: 2.63682 eV 
-Arrival time:   23.41 ns Arrival position: (-131.927 um , 533.948 um ) Exit position: (-166.345 um , 385.689 um ) Energy: 2.54597 eV 
-Arrival time: 9.24753 ns Arrival position: (94.4546 um , 387.948 um ) Exit position: (-25.7259 um , 436.606 um ) Energy: 2.28744 eV 
-Arrival time: 10.6643 ns Arrival position: (-109.919 um , -320.762 um ) Exit position: (-154.673 um , -376.723 um ) Energy:  2.3736 eV 
-Arrival time: 37.1672 ns Arrival position: (-6.57489 um ,  383.95 um ) Exit position: (-31.4704 um , 357.359 um ) Energy: 2.87379 eV 
-Arrival time: 9.56492 ns Arrival position: (122.759 um , -51.5979 um ) Exit position: (245.829 um , -41.5041 um ) Energy:  2.5864 eV 
-Arrival time: 18.1747 ns Arrival position: (102.553 um , 208.656 um ) Exit position: (-39.7578 um , 267.987 um ) Energy:   2.231 eV 
-Arrival time: 19.6525 ns Arrival position: (-51.7803 um , 222.635 um ) Exit position: (-199.141 um ,  248.84 um ) Energy: 2.59621 eV 
-Arrival time: 17.0567 ns Arrival position: (97.4751 um , -207.42 um ) Exit position: (163.059 um , -168.73 um ) Energy: 2.80104 eV 
-Arrival time: 30.3164 ns Arrival position: (-237.985 um ,  157.38 um ) Exit position: (-276.206 um , 94.3576 um ) Energy: 2.79407 eV 
-Arrival time:  7.9078 ns Arrival position: (-53.3464 um , 30.3384 um ) Exit position: (-76.2371 um , 8.29823 um ) Energy: 2.68008 eV 
-Arrival time: 12.1321 ns Arrival position: (98.9113 um , -144.61 um ) Exit position: (100.228 um , -146.656 um ) Energy: 2.76248 eV 
+-------->Hits Collection: in this event there are 7 hits in the photon detector: 
+Arrival time: 22.7276 ns Arrival position: (266.979 um , 142.521 um ) Exit position: (210.042 um , 110.685 um ) Energy: 2.77676 eV 
+Arrival time: 11.3393 ns Arrival position: (179.757 um , -78.9853 um ) Exit position: (231.149 um , 68.0498 um ) Energy:  2.4801 eV 
+Arrival time: 13.8388 ns Arrival position: (-163.06 um , -4.94469 um ) Exit position: (-194.955 um , 122.385 um ) Energy: 2.66381 eV 
+Arrival time: 27.2619 ns Arrival position: (-355.291 um , -2.66797 um ) Exit position: (-295.093 um , -72.7559 um ) Energy: 2.86234 eV 
+Arrival time:  9.9421 ns Arrival position: (-278.176 um , 9.05044 um ) Exit position: (-241.007 um , -34.6502 um ) Energy: 2.65686 eV 
+Arrival time: 10.6018 ns Arrival position: ( 364.17 um , -56.1285 um ) Exit position: (291.684 um , 18.6833 um ) Energy: 2.48498 eV 
+Arrival time: 8.99395 ns Arrival position: (222.554 um , -450.719 um ) Exit position: (177.934 um , -435.248 um ) Energy: 2.25654 eV 
 --> Event 4 starts.
 
--------->Hits Collection: in this event there are 7 hits in the photon detector: 
-Arrival time: 15.1326 ns Arrival position: (-399.139 um , 121.764 um ) Exit position: (-215.26 um , 364.746 um ) Energy: 2.59584 eV 
-Arrival time: 18.6902 ns Arrival position: (30.8345 um , 169.637 um ) Exit position: (85.3596 um , 311.148 um ) Energy: 2.45111 eV 
-Arrival time: 6.72707 ns Arrival position: (-412.294 um , -20.2158 um ) Exit position: (-341.811 um , -33.0303 um ) Energy: 2.82618 eV 
-Arrival time: 27.0186 ns Arrival position: ( 168.63 um , -436.804 um ) Exit position: (115.214 um , -402.843 um ) Energy: 2.39434 eV 
-Arrival time: 9.84285 ns Arrival position: (33.0353 um , -476.779 um ) Exit position: (193.549 um , -429.84 um ) Energy: 2.18721 eV 
-Arrival time: 10.9023 ns Arrival position: (61.0515 um , 234.826 um ) Exit position: (84.7728 um , 125.626 um ) Energy: 2.35703 eV 
-Arrival time: 7.55848 ns Arrival position: (117.089 um , 543.996 um ) Exit position: ( 18.048 um , 417.813 um ) Energy: 2.85084 eV 
+-------->Hits Collection: in this event there are 9 hits in the photon detector: 
+Arrival time: 23.6972 ns Arrival position: (-68.7578 um , -367.005 um ) Exit position: (-105.609 um , -299.811 um ) Energy: 2.79648 eV 
+Arrival time: 38.8724 ns Arrival position: (72.9548 um , 333.569 um ) Exit position: (87.5482 um , 407.365 um ) Energy: 2.82479 eV 
+Arrival time: 16.1127 ns Arrival position: (-240.623 um , -276.607 um ) Exit position: (-157.846 um , -142.581 um ) Energy: 2.59707 eV 
+Arrival time: 14.6043 ns Arrival position: (-170.624 um ,   298.5 um ) Exit position: (-86.6985 um , 427.194 um ) Energy: 2.62536 eV 
+Arrival time: 10.1255 ns Arrival position: (160.975 um , 52.2832 um ) Exit position: (  175.8 um , 74.0615 um ) Energy: 2.50794 eV 
+Arrival time: 7.08395 ns Arrival position: (309.409 um , -23.6529 um ) Exit position: ( 273.23 um , -55.9581 um ) Energy: 2.36867 eV 
+Arrival time: 43.1076 ns Arrival position: (-44.854 um , -259.076 um ) Exit position: (-110.013 um , -280.583 um ) Energy: 2.68295 eV 
+Arrival time: 8.51959 ns Arrival position: (-143.346 um , -354.155 um ) Exit position: (-106.592 um , -247.845 um ) Energy: 2.77068 eV 
+Arrival time: 31.0764 ns Arrival position: (-29.8747 um ,  368.37 um ) Exit position: (-78.6904 um , 217.422 um ) Energy: 2.54424 eV 
 --> Event 5 starts.
 
--------->Hits Collection: in this event there are 3 hits in the photon detector: 
-Arrival time: 5.44339 ns Arrival position: (-41.2209 um , -462.953 um ) Exit position: (-13.0291 um , -334.177 um ) Energy: 2.50338 eV 
-Arrival time: 5.38233 ns Arrival position: (-32.7852 um , -382.594 um ) Exit position: (-9.64271 um , -497.696 um ) Energy: 2.57155 eV 
-Arrival time: 5.60153 ns Arrival position: ( -237.9 um , -279.533 um ) Exit position: (-339.829 um , -147.855 um ) Energy: 2.15401 eV 
+-------->Hits Collection: in this event there are 6 hits in the photon detector: 
+Arrival time: 9.69279 ns Arrival position: (-110.634 um , -275.107 um ) Exit position: (-119.603 um , -341.867 um ) Energy: 2.37652 eV 
+Arrival time:  20.063 ns Arrival position: (331.828 um , 89.3302 um ) Exit position: (349.593 um ,  201.65 um ) Energy: 2.70884 eV 
+Arrival time: 13.4245 ns Arrival position: (329.155 um , -423.171 um ) Exit position: (305.798 um , -303.976 um ) Energy: 2.75244 eV 
+Arrival time: 14.8797 ns Arrival position: (-274.574 um ,  278.97 um ) Exit position: (-299.959 um , 332.095 um ) Energy: 2.83332 eV 
+Arrival time: 28.8463 ns Arrival position: (246.813 um , -2.15173 um ) Exit position: (384.044 um , -78.2663 um ) Energy: 2.63559 eV 
+Arrival time: 8.62656 ns Arrival position: (19.1644 um , -164.478 um ) Exit position: (19.4672 um , -142.594 um ) Energy: 2.46703 eV 
 --> Event 6 starts.
 
--------->Hits Collection: in this event there are 0 hits in the photon detector: 
+-------->Hits Collection: in this event there are 35 hits in the photon detector: 
+Arrival time: 5.74688 ns Arrival position: (14.0127 um , 17.9665 um ) Exit position: (50.7281 um , 131.629 um ) Energy: 2.66353 eV 
+Arrival time: 15.2395 ns Arrival position: (-481.866 um , 53.8473 um ) Exit position: (-326.394 um , 211.249 um ) Energy: 2.64691 eV 
+Arrival time:  17.278 ns Arrival position: (-84.3424 um ,  349.88 um ) Exit position: (-91.9534 um , 476.408 um ) Energy: 2.73214 eV 
+Arrival time: 11.8904 ns Arrival position: (13.3688 um , 96.6531 um ) Exit position: (-115.788 um , 175.907 um ) Energy: 2.58665 eV 
+Arrival time: 24.7551 ns Arrival position: (-41.5728 um , -96.7917 um ) Exit position: (-98.9909 um , -41.9612 um ) Energy: 2.73331 eV 
+Arrival time: 14.8659 ns Arrival position: ( -238.1 um , -222.086 um ) Exit position: (-205.892 um , -279.421 um ) Energy: 2.19781 eV 
+Arrival time:  11.799 ns Arrival position: (-246.41 um , 393.908 um ) Exit position: (-196.909 um , 393.424 um ) Energy: 2.26975 eV 
+Arrival time: 19.2728 ns Arrival position: (-105.554 um ,  127.53 um ) Exit position: (-103.462 um , 117.409 um ) Energy:  2.7159 eV 
+Arrival time: 11.6891 ns Arrival position: (-489.188 um , -9.0392 um ) Exit position: (-395.41 um , -44.4152 um ) Energy: 2.87078 eV 
+Arrival time: 14.6339 ns Arrival position: (361.587 um , 209.077 um ) Exit position: (370.395 um , 220.248 um ) Energy: 2.65383 eV 
+Arrival time: 7.81143 ns Arrival position: (5.45226 um , 259.093 um ) Exit position: (-97.7021 um , 217.763 um ) Energy: 2.76088 eV 
+Arrival time: 11.6521 ns Arrival position: (-93.8528 um ,  215.11 um ) Exit position: (32.9482 um , 140.684 um ) Energy: 2.38792 eV 
+Arrival time: 22.3559 ns Arrival position: (-75.7165 um , 287.408 um ) Exit position: (-165.181 um , 342.169 um ) Energy: 2.14317 eV 
+Arrival time: 21.7845 ns Arrival position: (-296.462 um , -325.605 um ) Exit position: (-216.051 um , -340.781 um ) Energy: 2.10391 eV 
+Arrival time: 6.38408 ns Arrival position: (286.567 um , -59.1944 um ) Exit position: (262.555 um , -138.643 um ) Energy: 2.74977 eV 
+Arrival time: 28.0717 ns Arrival position: (217.325 um , -138.763 um ) Exit position: (  127.7 um , -211.907 um ) Energy: 2.45033 eV 
+Arrival time:  13.075 ns Arrival position: (-240.097 um , 323.883 um ) Exit position: (-152.623 um ,  259.66 um ) Energy: 2.63316 eV 
+Arrival time: 33.6451 ns Arrival position: (-323.375 um , -194.563 um ) Exit position: (-356.341 um , -117.669 um ) Energy: 2.45189 eV 
+Arrival time: 12.3304 ns Arrival position: (-58.0701 um , -202.83 um ) Exit position: (-75.5038 um , -141.774 um ) Energy: 2.49994 eV 
+Arrival time: 19.4306 ns Arrival position: (31.1055 um , 240.696 um ) Exit position: (-26.9721 um , 188.344 um ) Energy: 2.88714 eV 
+Arrival time: 24.9836 ns Arrival position: (233.363 um , 345.671 um ) Exit position: (142.379 um , 262.247 um ) Energy: 2.62439 eV 
+Arrival time: 14.1503 ns Arrival position: (81.0403 um , -254.183 um ) Exit position: (69.4249 um , -278.748 um ) Energy: 2.57089 eV 
+Arrival time: 37.7209 ns Arrival position: (-130.178 um , -110.792 um ) Exit position: (-94.4415 um , -44.8997 um ) Energy: 2.83514 eV 
+Arrival time:  7.9703 ns Arrival position: (-400.828 um , 316.577 um ) Exit position: (-348.233 um ,  228.03 um ) Energy: 2.86805 eV 
+Arrival time: 7.82979 ns Arrival position: (-197.575 um , -114.44 um ) Exit position: (-59.3709 um , -125.839 um ) Energy: 2.76137 eV 
+Arrival time: 18.2214 ns Arrival position: (100.319 um , 155.628 um ) Exit position: (83.4318 um , 228.933 um ) Energy: 2.56578 eV 
+Arrival time: 11.2849 ns Arrival position: (-74.8678 um ,  358.86 um ) Exit position: (-85.9817 um , 474.261 um ) Energy: 2.55698 eV 
+Arrival time: 32.1606 ns Arrival position: (425.005 um , -225.293 um ) Exit position: (  318.1 um , -278.844 um ) Energy: 2.38642 eV 
+Arrival time: 7.92684 ns Arrival position: (-312.443 um , -140.311 um ) Exit position: (-266.909 um , -362.317 um ) Energy: 2.56938 eV 
+Arrival time: 6.83955 ns Arrival position: (-211.222 um , 35.1437 um ) Exit position: (-280.727 um , 117.026 um ) Energy: 2.55055 eV 
+Arrival time: 18.6019 ns Arrival position: (312.106 um , 93.7963 um ) Exit position: (264.251 um , 87.9014 um ) Energy: 2.59955 eV 
+Arrival time: 9.19892 ns Arrival position: (-54.6065 um , 363.005 um ) Exit position: (-40.386 um , 465.253 um ) Energy: 2.57476 eV 
+Arrival time: 19.1341 ns Arrival position: (223.751 um , 324.896 um ) Exit position: ( 127.45 um , 354.145 um ) Energy: 2.50178 eV 
+Arrival time: 12.5304 ns Arrival position: (206.758 um , -282.55 um ) Exit position: (206.986 um , -331.484 um ) Energy: 2.19424 eV 
+Arrival time: 11.5378 ns Arrival position: (-85.6944 um , 391.311 um ) Exit position: (-62.407 um ,  461.71 um ) Energy: 2.74937 eV 
 --> Event 7 starts.
 
--------->Hits Collection: in this event there are 12 hits in the photon detector: 
-Arrival time: 5.50163 ns Arrival position: (-477.603 um , -301.412 um ) Exit position: (-348.555 um , -232.212 um ) Energy: 2.66927 eV 
-Arrival time: 5.46565 ns Arrival position: (156.574 um , -175.06 um ) Exit position: (255.524 um , -71.8437 um ) Energy: 2.87659 eV 
-Arrival time: 51.1493 ns Arrival position: (103.959 um , -139.457 um ) Exit position: (118.196 um , -166.578 um ) Energy: 2.74837 eV 
-Arrival time: 14.4773 ns Arrival position: (93.5707 um , -193.117 um ) Exit position: (97.4818 um , -86.8586 um ) Energy: 2.75549 eV 
-Arrival time:  11.668 ns Arrival position: (79.9681 um , -38.6136 um ) Exit position: (78.9155 um , -111.794 um ) Energy: 2.38849 eV 
-Arrival time: 6.29999 ns Arrival position: (290.311 um , -285.062 um ) Exit position: (310.817 um , -238.834 um ) Energy: 2.54078 eV 
-Arrival time: 12.0242 ns Arrival position: (61.1032 um , -206.668 um ) Exit position: ( 170.54 um , -277.182 um ) Energy: 2.58497 eV 
-Arrival time: 12.7383 ns Arrival position: (153.198 um , -274.673 um ) Exit position: (168.535 um , -263.09 um ) Energy: 2.40661 eV 
-Arrival time: 11.4497 ns Arrival position: (95.5889 um , 467.758 um ) Exit position: (111.783 um , 328.608 um ) Energy: 2.70307 eV 
-Arrival time: 16.2096 ns Arrival position: (284.352 um , 444.216 um ) Exit position: (249.635 um ,   385.9 um ) Energy: 2.92007 eV 
-Arrival time: 9.56868 ns Arrival position: (-239.918 um , -126.506 um ) Exit position: (-127.498 um , -117.925 um ) Energy: 2.69338 eV 
-Arrival time: 42.5629 ns Arrival position: (-163.703 um , -113.404 um ) Exit position: (-216.835 um , -221.248 um ) Energy:  2.3911 eV 
+-------->Hits Collection: in this event there are 13 hits in the photon detector: 
+Arrival time: 10.3863 ns Arrival position: (284.893 um , -63.2275 um ) Exit position: (235.099 um , -66.7494 um ) Energy: 2.44465 eV 
+Arrival time: 18.6584 ns Arrival position: (124.456 um , 348.128 um ) Exit position: (85.4325 um , 423.168 um ) Energy:  2.8377 eV 
+Arrival time: 11.3258 ns Arrival position: (-77.3832 um , 248.559 um ) Exit position: (-111.131 um ,  219.24 um ) Energy: 2.48712 eV 
+Arrival time: 7.23086 ns Arrival position: (-37.2684 um , -31.7555 um ) Exit position: (-28.1437 um , -9.14207 um ) Energy: 2.79519 eV 
+Arrival time: 9.13758 ns Arrival position: (-147.568 um , 348.433 um ) Exit position: (-141.671 um , 216.507 um ) Energy: 2.55827 eV 
+Arrival time: 10.8096 ns Arrival position: (215.954 um , 64.5482 um ) Exit position: (275.908 um , 6.65452 um ) Energy: 2.80416 eV 
+Arrival time:  14.468 ns Arrival position: (259.218 um , 224.971 um ) Exit position: (197.178 um , 104.613 um ) Energy: 2.69082 eV 
+Arrival time: 9.49815 ns Arrival position: (100.474 um , -399.292 um ) Exit position: (36.9878 um , -346.753 um ) Energy: 2.82208 eV 
+Arrival time: 8.38733 ns Arrival position: (128.734 um , -405.697 um ) Exit position: (186.273 um , -448.924 um ) Energy: 2.71409 eV 
+Arrival time: 22.0319 ns Arrival position: (399.031 um , -389.913 um ) Exit position: (267.238 um , -340.208 um ) Energy: 2.86365 eV 
+Arrival time: 11.8234 ns Arrival position: (-290.593 um , -255.803 um ) Exit position: (-199.389 um , -237.86 um ) Energy: 2.47102 eV 
+Arrival time:   21.79 ns Arrival position: (175.236 um , 170.156 um ) Exit position: (215.226 um , 195.822 um ) Energy: 2.29212 eV 
+Arrival time: 7.00821 ns Arrival position: (208.928 um , -149.424 um ) Exit position: (205.216 um , -198.065 um ) Energy: 2.96288 eV 
 --> Event 8 starts.
 
--------->Hits Collection: in this event there are 3 hits in the photon detector: 
-Arrival time: 5.19372 ns Arrival position: (-54.5245 um , -114.564 um ) Exit position: (-126.347 um , -88.2362 um ) Energy:  2.7574 eV 
-Arrival time: 4.97809 ns Arrival position: (-233.528 um , 380.103 um ) Exit position: (-236.932 um , 367.162 um ) Energy: 2.00375 eV 
-Arrival time: 5.84403 ns Arrival position: (-157.53 um , 550.755 um ) Exit position: (52.2777 um , 455.149 um ) Energy: 2.32624 eV 
+-------->Hits Collection: in this event there are 18 hits in the photon detector: 
+Arrival time: 5.50801 ns Arrival position: (-237.961 um , -411.28 um ) Exit position: (-226.736 um , -344.644 um ) Energy:  2.8999 eV 
+Arrival time:  5.7487 ns Arrival position: (167.742 um , 14.6259 um ) Exit position: (149.189 um , 128.693 um ) Energy: 2.61146 eV 
+Arrival time: 5.59078 ns Arrival position: (-15.8556 um , 207.917 um ) Exit position: (-41.1176 um , 129.251 um ) Energy: 2.85865 eV 
+Arrival time: 5.84356 ns Arrival position: (347.659 um , 154.607 um ) Exit position: (362.601 um , 29.9943 um ) Energy:  2.0613 eV 
+Arrival time:  8.4227 ns Arrival position: (-44.8143 um , -182.986 um ) Exit position: (-24.5447 um , -216.844 um ) Energy:  2.7597 eV 
+Arrival time: 13.5864 ns Arrival position: (-411.315 um , 366.619 um ) Exit position: (-112.28 um , 444.497 um ) Energy: 2.81682 eV 
+Arrival time: 6.81827 ns Arrival position: (-303.468 um , 13.3749 um ) Exit position: (-328.534 um , -121.469 um ) Energy:  2.5121 eV 
+Arrival time: 7.90698 ns Arrival position: (-344.183 nm , -598.701 um ) Exit position: (17.6069 um , -474.002 um ) Energy: 2.77135 eV 
+Arrival time: 8.02766 ns Arrival position: (385.163 um , 141.378 um ) Exit position: (299.002 um ,  10.498 um ) Energy:  2.5757 eV 
+Arrival time: 10.0626 ns Arrival position: (-133.853 um , -131.16 um ) Exit position: (-99.4728 um , -159.014 um ) Energy: 2.72607 eV 
+Arrival time: 6.74347 ns Arrival position: (8.87768 um , -66.5422 um ) Exit position: (-849.402 nm , -53.2978 um ) Energy:  2.8382 eV 
+Arrival time: 12.1847 ns Arrival position: (262.225 um , -29.3874 um ) Exit position: (292.923 um , -171.545 um ) Energy: 2.50155 eV 
+Arrival time:  13.348 ns Arrival position: (247.846 um , 160.978 um ) Exit position: (203.461 um , 179.878 um ) Energy: 2.45872 eV 
+Arrival time: 10.3661 ns Arrival position: (-120.825 um , 328.489 um ) Exit position: (-151.376 um , 254.423 um ) Energy: 2.14895 eV 
+Arrival time: 12.0099 ns Arrival position: (-119.315 um , -206.176 um ) Exit position: (-192.759 um , -261.398 um ) Energy: 2.81982 eV 
+Arrival time: 58.9715 ns Arrival position: (-247.359 um , -341.85 um ) Exit position: (-233.206 um , -319.548 um ) Energy: 2.62236 eV 
+Arrival time: 24.8328 ns Arrival position: (291.411 um , 98.9473 um ) Exit position: (310.174 um , 95.0561 um ) Energy: 2.46469 eV 
+Arrival time: 12.6903 ns Arrival position: ( 14.974 um , -54.3637 um ) Exit position: (81.3579 um , -164.319 um ) Energy: 2.80323 eV 
 --> Event 9 starts.
 
--------->Hits Collection: in this event there are 0 hits in the photon detector: 
+-------->Hits Collection: in this event there are 15 hits in the photon detector: 
+Arrival time: 17.5391 ns Arrival position: (-60.8792 um , -180.553 um ) Exit position: (-86.9914 um , -87.4214 um ) Energy: 2.38928 eV 
+Arrival time: 18.7191 ns Arrival position: (14.6042 um , -71.2711 um ) Exit position: (62.8676 um , -6.38024 um ) Energy: 2.39344 eV 
+Arrival time: 7.61813 ns Arrival position: ( 365.16 um , -33.7327 um ) Exit position: ( 215.58 um , 3.52371 um ) Energy: 2.58885 eV 
+Arrival time: 8.15076 ns Arrival position: (180.108 um , -492.997 um ) Exit position: (149.286 um , -414.89 um ) Energy: 2.69141 eV 
+Arrival time: 9.02478 ns Arrival position: (-220.035 um ,    33.9 um ) Exit position: (-121.83 um , 44.4034 um ) Energy:  2.8359 eV 
+Arrival time: 6.55823 ns Arrival position: (375.194 um ,  -230.1 um ) Exit position: (373.398 um , -143.284 um ) Energy: 2.77445 eV 
+Arrival time: 12.6699 ns Arrival position: (202.905 um , 99.7397 um ) Exit position: (199.248 um , 147.824 um ) Energy: 2.28427 eV 
+Arrival time: 7.46758 ns Arrival position: (89.7709 um , -236.328 um ) Exit position: (61.3548 um , -94.7416 um ) Energy: 2.71595 eV 
+Arrival time:  7.3853 ns Arrival position: (-157.832 um ,  116.02 um ) Exit position: (-120.08 um , 164.623 um ) Energy: 2.24371 eV 
+Arrival time: 28.5584 ns Arrival position: (105.214 um ,  252.85 nm ) Exit position: (202.309 um , -42.8771 um ) Energy: 2.38594 eV 
+Arrival time: 25.6346 ns Arrival position: (-45.0462 um , -48.1004 um ) Exit position: (-169.604 um , -106.594 um ) Energy: 2.39545 eV 
+Arrival time: 18.7822 ns Arrival position: (-124.55 um ,  213.15 um ) Exit position: (-140.927 um ,   205.3 um ) Energy: 2.45121 eV 
+Arrival time: 8.23364 ns Arrival position: ( -143.4 um , -206.691 um ) Exit position: (-55.5087 um , -182.887 um ) Energy: 2.37927 eV 
+Arrival time: 7.33654 ns Arrival position: (-160.477 um , -140.229 um ) Exit position: (-29.6309 um , -51.9848 um ) Energy: 2.70853 eV 
+Arrival time: 11.8654 ns Arrival position: (186.244 um , -96.706 um ) Exit position: (177.209 um , -125.061 um ) Energy: 2.52801 eV 
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=3.120000s Real=3.146083s Sys=0.000000s
+  User=8.160000s Real=8.218479s Sys=0.010000s
 
  ----> print histograms statistics for the entire run 
 
- Mean number of photons detected/event: 6.5 rms = 5.42679
+ Mean number of photons detected/event: 16 rms = 10.6583
 ... write file : wls.root - done
 ... close file : wls.root - done
 
  ======================== run summary =====================
 Average number per event:
- TIR:          5.79e+04 +- 5.41e+04
- Exiting:      1.42e+05 +- 1.38e+05
- Escaped Mid:  133 +- 124
- Escaped End:  6.7 +- 5.55
- Bounced:      5.56e+03 +- 5.41e+03
+ TIR:          1.74e+05 +- 1.09e+05
+ Exiting:      3.6e+05 +- 2.25e+05
+ Escaped Mid:  323 +- 195
+ Escaped End:  16.3 +- 10.8
+ Bounced:      1.32e+04 +- 8.48e+03
  WLS Bounce:   0 +- 0
- Clad1 Bounce: 3.74e+03 +- 3.64e+03
+ Clad1 Bounce: 8.91e+03 +- 5.73e+03
  Clad2 Bounce: 0 +- 0
- Reflected:    8.27e+03 +- 8.81e+03
- Escaped:      0.2 +- 0.4
- Mirror:       7.9 +- 9.09
- Detector hit: 6.5 +- 5.43
+ Reflected:    2.11e+04 +- 1.31e+04
+ Escaped:      0.3 +- 0.64
+ Mirror:       18.2 +- 9.74
+ Detector hit: 16 +- 10.7
 
 Graphics systems deleted.
 Visualization Manager deleting...
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 14 of which, static: 0
-Dynamic pools deleted: 14 / Total memory freed: 1.1 MB
+Dynamic pools deleted: 14 / Total memory freed: 1.7 MB
 ============================================================

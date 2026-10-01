@@ -46,9 +46,11 @@ class G4VRangeToEnergyConverter
 {
 public:
 
+  // Default constructor
+  // NOTE: created only by master thread at initialisation
   G4VRangeToEnergyConverter();
 
-  virtual ~G4VRangeToEnergyConverter();
+  virtual ~G4VRangeToEnergyConverter() = default;
 
   // operators are not used
   G4VRangeToEnergyConverter(const G4VRangeToEnergyConverter& r) = delete;
@@ -61,16 +63,20 @@ public:
   virtual G4double Convert(const G4double rangeCut, const G4Material* material);
 
   // Set energy range for all particle type
-  // if highedge > 10 GeV, highedge value is not changed
+  // if highedge > 10 GeV, highedge value is not changed.
+  // NOTE: to be called only by master thread at initialisation
   static void SetEnergyRange(const G4double lowedge, const G4double highedge);
 
   // Get energy range for all particle type
   static G4double GetLowEdgeEnergy();
   static G4double GetHighEdgeEnergy();
 
-  // Get/set max cut energy for all particle type
-  // No check on the value
+  // Get max cut energy for all particle type
   static G4double GetMaxEnergyCut();
+
+  // Set max cut energy for all particle type
+  // No check on the value
+  // NOTE: to be called only by master thread at initialisation
   static void SetMaxEnergyCut(const G4double value);
   
   // Return pointer to the particle type which this converter takes care of
@@ -109,7 +115,7 @@ private:
 
   static G4double sEmin;
   static G4double sEmax; 
-  static std::vector<G4double>* sEnergy;
+  static std::vector<G4double> sEnergy;
   static G4int sNbinPerDecade;
   static G4int sNbin;
 

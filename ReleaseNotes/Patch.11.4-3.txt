@@ -1,0 +1,232 @@
+
+                 Geant4 11.4 - patch-03 Release Notes
+                 ------------------------------------
+
+                                                           1 October 2026
+
+List of fixes included in this public patch since release 11.4.2:
+
+o CMake
+  -----
+  + Fix to escape special characters so they don't get interpreted as regex
+    directives, so that a build path containing valid but special characters
+    like "+", don't get module composition step failing due to use of regexing,
+    as proposed in [GitHub PR #102](https://github.com/Geant4/geant4/pull/102).
+    Addressing problem report #2744. 
+
+o Geometry
+  --------
+  + divisions
+    o Fix in G4VDivisionParameterisation to cure a double-free in MT mode.
+      ChangeRotMatrix() assigned one thread-local rotation matrix to multiple
+      division physical volumes; as each replica owns and deletes its rotation
+      during worker teardown, this was producing a double-free. The fix reuses
+      the per-volume rotation matrix already allocated by G4PVReplica, resets
+      it before applying each phi rotation and removes the shared thread-local
+      rotation and G4AutoDelete registration.
+  + management:
+    o Fixed segmentation fault in G4GeomSplitter; offset is defined as
+      thread-local, but its allocation capacity was tracked globally. A second
+      thread therefore could believe storage was already allocated, leaving its
+      own offset null before dereferencing it. Addressing problem report #2747.
+    o Fixed verbosity handling in G4GeometryManager and G4VoxelisationHelper to
+      print voxel statistics and the global timing report once through the master
+      after MT voxelisation, preserving explicit verbosity requests without
+      additional diagnostic printouts.
+  + navigation:
+    o In G4Navigator, correction in CreateTouchableHistory() to detect if the 
+      current location is outside the world volume.
+  + solids/CSG:
+    o In G4Cons::GetPointOnSurface(), use G4QuickRand instead of main random
+      engine, keeping surface sampling on the geometry quick-random stream.
+
+o Global
+  ------
+  + Updated date and version for 11.4.3.
+
+o Materials
+  ---------
+  + G4UCNMaterialPropertiesTable: use integer loop indices to fully populate
+    micro-roughness tables, fixing uninitialised reads reported by Valgrind.
+    Corrected integral-probability lookup strides and use delete[] for arrays.
+
+o Particles
+  ---------
+  + Fix in G4IonTable::AddProcessManager() for G4MuonicAtom setup when
+    assigning the shared particle definition ID, keeping late-created
+    G4MuonicAtom instances complete for MT SetupShadowProcess() on subsequent
+    runs. Addressing problem report #2716.
+  + Account for electron mass in sampling and kinematics of G4MuonDecayChannel
+    daughters, with improved kinematic endpoint/singularity handling.
+    Addresses detected issue about floating point exceptions and off-mass-shell
+    kinematics. Addressing problem report #2678.
+  + In G4IonTable, use lower_bound() instead of find() and restrict scans to
+    matching multimap keys to avoid skipping ion states. Fixes duplicate ion
+    registration and the resulting PART122 abort observed on macOS-26.
+
+o Processes - Electromagnetic
+  ---------------------------
+  + xrays
+    o Reverted exclusion of optical photons from G4Scintillation applicability.
+      Addressing problem report #2750.
+  
+o Processes - Generic
+  -------------------
+  + Biasing
+    o In G4BiasingProcessInterface, invoke Initialize(track) in PostStepDoIt()
+      for G4ParticleChangeForOccurenceBiasing instance.
+      Addressing problem report #2593.
+  + Cuts:
+    o G4VRangeToEnergyConverter: store the shared energy vector by value to
+      prevent converter destruction from invalidating it for surviving or new
+      converters.
+    o Removed unnecessary lock in FillEnergyVector() and documented serial
+      use of constructor and setters.
+  + Optical
+    o Fixed minimum primary energy check to use GetMinEnergy() in G4OpWLS/2.
+    o In G4OpBoundaryProcess, refresh 'fDichroicVector' only when the current
+      optical surface differs from the one used on the previous call.
+      Addressing problem report #2676.
+
+o Processes - Hadronic
+  --------------------
+  + cross_sections:
+    o In G4NeutrinoElectronCCXsc, corrected calculation of neutrino-electron
+      energy threshold. Addressing problem report #2761.
+      Based on [GitHub PR #114](https://github.com/Geant4/geant4/pull/114).
+    o G4GammaNuclearXS: protected initialisation of the shared static element
+      data table with G4AutoLock.
+    o Get rid of unnecessary static instance pointer in G4HadronXSDataTable.
+  + management:
+    o In G4HadronicProcess, fixed a memory leak by deleting secondary
+      particles when an invalid final state is rejected.
+      Based on [GitHub PR #95](https://github.com/Geant4/geant4/pull/95).
+  + models/coherent_elastic:
+    o In G4NeutrinoElectronNcModel, corrected typo in particle name conditional.
+      Addressing problem report #2760.
+      Based on [GitHub PR #113](https://github.com/Geant4/geant4/pull/113).
+  + models/de_excitation:
+    o Fixed thread safety issues in G4FermiBreakUpAN; removed shared mutable
+      state from a const method and made BreakItUp() properly reentrant; made
+      singletons fully build themselves in their constructors.
+    o In G4FermiBreakUpAN, require an energetically open decay channel in
+      IsApplicable(), allowing evaporation to handle light fragments below the
+      Fermi break-up threshold; reject invalid nuclei and non-finite or negative
+      excitation energies.
+    o Use G4double type variables to read data on IC and gamma probabilities.
+      In the internal data structure G4float still is used. The limit on 'fAlpha'
+      value is removed but extra check on numerical accuracy is added to avoid
+      precision loss in arithmetics. Addressing problem reports #2702 and #2706.
+    o Fixed compilation warning for variable set but not used in G4_NO_VERBOSE
+      mode in G4LevelReader.
+  + models/lepto_nuclear:
+    o In G4ElectroVDNuclearModel and G4MuonVDNuclearModel, added missing
+      rotation of the final-state secondaries produced by the real-gamma/pi0
+      inelastic nuclear interaction. Addressing problem report #2695.
+      Note that 3-momentum is still not fully conserved (although the violation
+      before was larger): this is due to the fact that the approach relies on
+      an unphysical transformation of a virtual gamma into an on-shell particle,
+      either a real gamma or a pi0.
+    o Fixed thread safety issue in G4MuonVDNuclearModel constructor, to guarantee
+      exactly-once initialisation of 'fElementData' with full ordering.
+    o In G4NeutrinoElectronCcModel, corrected calculation of neutrino-electron
+      energy threshold. Addresses problem report #2761.
+      Based on [GitHub PR #114](https://github.com/Geant4/geant4/pull/114).
+  + models/particle_hp:
+    o In G4ParticleHPParticleYield, fixed interpolation for thermal neutron
+      class. Based on [GitHub PR #103](https://github.com/Geant4/geant4/pull/103).
+      This fixes a silent type conversion by the compiler of the energy argument
+      leading to wrong getter call.
+    o In G4ParticleHPContAngularPar, fixed probability normalisation in discrete/
+      continuous emission sampling. Corrected the discrete/continuous branch
+      selection to compare the scaled random number directly, while retaining
+      scaling of the random number by the total probability for subsequent
+      energy sampling, which uses unnormalised cumulative probabilities.
+  + models/radioactive_decay:
+    o In G4BetaMinusDecay and G4BetaPlusDecay, fixed low-energy step artefacts
+      at Q/100 boundaries by including the non-zero lower-endpoint density when
+      constructing the CDF.
+  + util:
+    o Fixed condition for exception in G4HadFinalState::GetSecondary().
+
+o Run
+  ---
+  + Implemented a guard in G4ExceptionHandler::DumpTrackInfo() such that
+    incomplete step data is handled by checking the step point and its
+    G4TouchableHandle before calling G4StepPoint::GetPhysicalVolume().
+    It still prints the usual step-point diagnostics when available, but
+    reports "not available" when the track is too new or the touchable has
+    not been initialised yet. Addressing problem report #2740.
+  + Report parallel voxel statistics from the master after worker synchronisation
+    in MT and tasking modes, avoiding suppression by worker initialisation filters.
+
+o Track
+  -----
+  + Added an overload of IncrementCurrentStepNumber() in G4Track, taking
+    an argument to increment the current step number by more than one.
+  + In G4Track, in SetAuxiliaryTrackInformation(), removed unnecessary and now
+    wrong check of the model-index of the integer argument of the method; the
+    integer argument is assumed to be a model-id, but for a custom/user-defined
+    physics model, only the model-id is defined, not the model-index.
+
+o Visualization
+  -------------
+  + Vtk:
+    o Fixed VTK deprecation warnings for VTK 9.7, still supporting VTK 9.5.
+ 
+o Examples
+  --------
+  + advanced/fastaerosol:
+    o Use G4QuickRand() instead of G4UniformRand() for generating points on
+      surface in custom FastAerosolSolid. This avoids contaminating the random
+      sequence in event processing if invoking on-demand tasks.
+  + advanced/exp_microdosimetry:
+    o In DetectorConstruction, enlarged vacuum world to enclose 0.2 m GPS sphere
+      to allow position of primary particles to be contained in world volume.
+  + advanced/gorad:
+    o In GRPrimGenActionMessenger, do not invoke G4Tokenizer () operator in
+      sequence in one line to avoid tokens unpredictably reordered.
+  + advanced/stim_pixe_tomography:
+    o Corrected world volume dimensions to enclose rotated tomographic beam
+      positions.
+  + extended/electromagnetic/TestEm3:
+    o In PrimnaryGeneratorAction, fixed location of primary to stay within the
+      world volume boundaries.
+  + extended/hadronic/Hadr02:
+    o Revived the optional UrQMD 1.3cr interface (gated behind G4_USE_URQMD)
+      and fixed several long-standing defects: in G4UrQMD1_3Model, removed the
+      target mass number from GetA_asInt(); seed the UrQMD generator from
+      Geant4 default engine; re-initialise the nucleus per event (was
+      done once and frozen, which broke energy conservation and re-sampling);
+      R_proj+R_target impact parameter (was target-only); build secondaries
+      on-shell (Fermi momentum had been added to the momentum but not the energy).
+    o In HadronPhysicsUrQMD, IonUrQMDPhysics, UrQMD*Builder, compilation fixes
+      for the current API and registration of the nucleon/pion inelastic cross
+      sections (fixes a runtime had001 exception).
+    o In CMake script, G4_USE_URQMD option (OFF by default) compiles the
+      UrQMD 1.3cr FORTRAN via enable_language(Fortran); no separate build step.
+    o Usable for hadron beams; the ion path remains unsupported (a pre-existing
+      UrQMD-1.3cr limitation - no coalescence/residual-nucleus stage, and an
+      internal FORTRAN stop on ion final states).
+    o Corrected position of primary particles, as outside the world volume.
+  + extended/hadronic/ParticleFluence/Layer:
+    o Corrected the location of the primary particle after a geometry change.
+  + extended/parameterisations/Par04:
+    o Bump keras from 3.12.1 to 3.15.0.
+      Addresses security vulnerability tagged by GitHub's dependabot.
+
+
+ ----------------------------------------------------------------------------
+
+                             Technical Notes
+                             --------------- 
+
+  o  This patch should be applied on top of release 11.4 series.
+  o  Technical notes distributed for release 11.4 are also applicable and
+     valid for this patch.
+
+The code and rebuilt binary libraries for release 11.4.3 are available
+through the Geant4 "Download" Web page.
+
+Please refer to the Geant4 User Documentation for further information about
+using Geant4.

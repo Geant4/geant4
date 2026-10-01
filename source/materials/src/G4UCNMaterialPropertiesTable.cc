@@ -77,10 +77,10 @@ G4UCNMaterialPropertiesTable::G4UCNMaterialPropertiesTable()
 
 G4UCNMaterialPropertiesTable::~G4UCNMaterialPropertiesTable()
 {
-  delete theMicroRoughnessTable;
-  delete maxMicroRoughnessTable;
-  delete theMicroRoughnessTransTable;
-  delete maxMicroRoughnessTransTable;
+  delete[] theMicroRoughnessTable;
+  delete[] maxMicroRoughnessTable;
+  delete[] theMicroRoughnessTransTable;
+  delete[] maxMicroRoughnessTransTable;
 }
 
 G4double* G4UCNMaterialPropertiesTable::GetMicroRoughnessTable() { return theMicroRoughnessTable; }
@@ -121,13 +121,13 @@ void G4UCNMaterialPropertiesTable::InitMicroRoughnessTables()
   // delete old tables if existing and allocate memory for new tables
 
   if (Nthetadim * NEdim > 0) {
-    delete theMicroRoughnessTable;
+    delete[] theMicroRoughnessTable;
     theMicroRoughnessTable = new G4double[Nthetadim * NEdim];
-    delete maxMicroRoughnessTable;
+    delete[] maxMicroRoughnessTable;
     maxMicroRoughnessTable = new G4double[Nthetadim * NEdim];
-    delete theMicroRoughnessTransTable;
+    delete[] theMicroRoughnessTransTable;
     theMicroRoughnessTransTable = new G4double[Nthetadim * NEdim];
-    delete maxMicroRoughnessTransTable;
+    delete[] maxMicroRoughnessTransTable;
     maxMicroRoughnessTransTable = new G4double[Nthetadim * NEdim];
   }
 }
@@ -158,8 +158,6 @@ void G4UCNMaterialPropertiesTable::ComputeMicroRoughnessTables()
 
   G4double fermipot = GetConstProperty("FERMIPOT") * (1.e-9 * eV);
 
-  G4double theta_i, E;
-
   // Calculates the increment in theta_i in the lookup-table
   theta_i_step = (theta_i_max - theta_i_min) / (no_theta_i - 1);
 
@@ -169,17 +167,21 @@ void G4UCNMaterialPropertiesTable::ComputeMicroRoughnessTables()
   // Runs the lookup-table memory allocation
   InitMicroRoughnessTables();
 
-  G4int counter = 0;
-
   // Writes the mr-lookup-tables to files for immediate control
   std::ofstream dateir("MRrefl.dat", std::ios::out);
   std::ofstream dateit("MRtrans.dat", std::ios::out);
 
   // G4cout << theMicroRoughnessTable << G4endl;
 
-  for (theta_i = theta_i_min; theta_i <= theta_i_max + 1e-6; theta_i += theta_i_step) {
+  // Use integer indices so rounding cannot omit the last energy in a row.
+  for (G4int i = 0; i < no_theta_i; ++i)
+  {
+    const G4double theta_i = (i == no_theta_i - 1) ? theta_i_max : theta_i_min + i * theta_i_step;
     // Calculation for each cell in the lookup-table
-    for (E = Emin; E <= Emax; E += E_step) {
+    for (G4int j = 0; j < noE; ++j)
+    {
+      const G4double E = (j == noE - 1) ? Emax : Emin + j * E_step;
+      const G4int counter = i * noE + j;
       *(theMicroRoughnessTable + counter) = G4UCNMicroRoughnessHelper::GetInstance()->IntIplus(E,
         fermipot, theta_i, AngNoTheta, AngNoPhi, b2, w2, maxMicroRoughnessTable + counter, AngCut);
 
@@ -189,8 +191,6 @@ void G4UCNMaterialPropertiesTable::ComputeMicroRoughnessTables()
 
       dateir << *(theMicroRoughnessTable + counter) << G4endl;
       dateit << *(theMicroRoughnessTransTable + counter) << G4endl;
-
-      counter++;
     }
   }
 
@@ -203,8 +203,12 @@ void G4UCNMaterialPropertiesTable::ComputeMicroRoughnessTables()
   std::ofstream dateimr("MRmaxrefl.dat", std::ios::out);
   std::ofstream dateimt("MRmaxtrans.dat", std::ios::out);
 
-  for (theta_i = theta_i_min; theta_i <= theta_i_max + 1e-6; theta_i += theta_i_step) {
-    for (E = Emin; E <= Emax; E += E_step) {
+  for (G4int i = 0; i < no_theta_i; ++i)
+  {
+    const G4double theta_i = (i == no_theta_i - 1) ? theta_i_max : theta_i_min + i * theta_i_step;
+    for (G4int j = 0; j < noE; ++j)
+    {
+      const G4double E = (j == noE - 1) ? Emax : Emin + j * E_step;
       // tests the GetXXProbability functions by writing the entries
       // of the lookup tables to files
 
@@ -240,7 +244,7 @@ G4double G4UCNMaterialPropertiesTable::GetMRIntProbability(G4double theta_i, G4d
 
   // lookup table is onedimensional (1 row), energy is in rows,
   // theta_i in columns
-  return *(theMicroRoughnessTable + E_pos + theta_i_pos * (noE - 1));
+  return *(theMicroRoughnessTable + E_pos + theta_i_pos * noE);
 }
 
 G4double G4UCNMaterialPropertiesTable::GetMRIntTransProbability(G4double theta_i, G4double Energy)
@@ -265,7 +269,7 @@ G4double G4UCNMaterialPropertiesTable::GetMRIntTransProbability(G4double theta_i
   // lookup table is onedimensional (1 row), energy is in rows,
   // theta_i in columns
 
-  return *(theMicroRoughnessTransTable + E_pos + theta_i_pos * (noE - 1));
+  return *(theMicroRoughnessTransTable + E_pos + theta_i_pos * noE);
 }
 
 G4double G4UCNMaterialPropertiesTable::GetMRMaxProbability(G4double theta_i, G4double Energy)

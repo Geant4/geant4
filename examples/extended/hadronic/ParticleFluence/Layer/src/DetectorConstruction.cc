@@ -229,8 +229,9 @@ void DetectorConstruction::UpdateGeometry()
   G4RunManager::GetRunManager()->ReinitializeGeometry();
   PrintParameters();
   // Update also the position of the gun
-  const PrimaryGeneratorAction* pPrimaryAction = dynamic_cast<const PrimaryGeneratorAction*>(
+  const PrimaryGeneratorAction* pPrimaryActionConst = dynamic_cast<const PrimaryGeneratorAction*>(
     G4RunManager::GetRunManager()->GetUserPrimaryGeneratorAction());
+  PrimaryGeneratorAction* pPrimaryAction= const_cast<PrimaryGeneratorAction*>(pPrimaryActionConst);
   if (pPrimaryAction) pPrimaryAction->SetGunPosition();
 }
 

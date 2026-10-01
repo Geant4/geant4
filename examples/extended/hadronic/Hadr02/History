@@ -1,9 +1,33 @@
 # Example Hadr02 History
 
 See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
-which **must** added in reverse chronological order (newest at the top). It must **not**
-be used as a substitute for writing good git commit messages!
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
 
+-------------------------------------------------------------------------------
+
+## 2026-09-02 J. Apostolakis  (exhadr02-V11-03-00)
+- Corrected position of primary particles - as it was outside the world volume.
+
+## 2026-07-24 D. Konstantinov
+- Revived the optional UrQMD 1.3cr interface (gated behind G4_USE_URQMD), which
+  no longer compiled against Geant4 11.x, and fixed several long-standing defects:
+  - G4UrQMD1_3Model: target mass number from GetA_asInt() (GetN()/GetZ() removed;
+    GetN_asInt() returns the neutron number -> wrong nucleus, no secondaries);
+    seed the UrQMD generator from Geant4's engine (was a fixed constant, so
+    /random/setSeeds had no effect); re-initialise the nucleus per event (was
+    done once and frozen, which broke energy conservation and re-sampling);
+    R_proj+R_target impact parameter (was target-only); build secondaries
+    on-shell (Fermi momentum had been added to the momentum but not the energy).
+  - HadronPhysicsUrQMD, IonUrQMDPhysics, UrQMD*Builder: compilation fixes for the
+    current API and registration of the nucleon/pion inelastic cross sections
+    (fixes a runtime had001).
+  - CMakeLists: G4_USE_URQMD option (OFF by default) compiles the UrQMD 1.3cr
+    FORTRAN via enable_language(Fortran); no separate build step.
+  Usable for hadron beams; the ion path remains unsupported (a pre-existing
+  UrQMD-1.3cr limitation - no coalescence/residual-nucleus stage, and an internal
+  FORTRAN stop on ion final states). Prompted by the forum thread
+  https://geant4-forum.web.cern.ch/t/urqmd-model-in-hadr02-example/15275
 
 ## 2022-10-24 I. Hrivnacova  (exhadr02-V11-00-01)
 - Coding guidelines: start data member with 'f'

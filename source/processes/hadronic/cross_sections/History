@@ -6,6 +6,18 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2026-09-18 Gabriele Cosmo (hadr-cross-V11-03-11)
+- Get rid of unnecessary static instance pointer in G4HadronXSDataTable.
+
+## 2026-08-28 Ben Morgan
+- G4NeutrinoElectronCCXsc.cc - Correct calculation of neutrino-electron energy threshold
+  - Applies [GitHub PR 114](https://github.com/Geant4/geant4/pull/114)
+  - Fixes [Bugzilla 2761](https://bugzilla-geant4.kek.jp/show_bug.cgi?id=2761)
+
+## 2026-04-29 Dmitri Konstantinov
+- G4GammaNuclearXS - protect initialisation of the shared static element data
+    table with G4AutoLock.
+
 ## 2026-01-21 Vladimir Ivanchenko (hadr-cross-V11-03-10)
 - G4ChargeExchangeXS - added two different biasing factors for pions and
     kaons (urgent request NA64).

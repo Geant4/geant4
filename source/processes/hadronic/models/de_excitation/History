@@ -6,6 +6,29 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2026-08-28 Artemii Novikov (via Dmitri Konstantinov) (hadr-deex-V11-03-27)
+- G4FermiBreakUpAN - require an energetically open decay channel in
+  IsApplicable(), allowing evaporation to handle light fragments below the
+  Fermi break-up threshold; reject invalid nuclei and non-finite or negative
+  excitation energies.
+
+## 2026-07-17 Dmitri Konstantinov
+- Fixed thread safety issues in G4FermiBreakUpAN; removed shared mutable state
+  from a const method and made BreakItUp() properly reentrant; made singletons
+  fully build themselves in their constructors.
+
+## 2026-07-06 Vladimir Ivanchenko
+- Fixed problems #2702 and #2706 by use of G4double type of variables to read
+  data on IC and gamma probabilities. In the internal data structure G4float
+  still is used. The limit on fAlpha value is removed but extra check on
+  numerical accuracy is added to avoid precision loss in arithmetics. This
+  should also fix the problem reported by M. Omer at the Geant4 Technical Forum
+  (https://indico.cern.ch/event/1659856/contributions/7025712/attachments/3263543/5828084/67thGeant4TechnicalForum_Omer.pdf).
+
+## 2026-06-10 Gabriele Cosmo
+- Fixed compilation warning on Intel/icx compiler for variable set but not used
+  in G4_NO_VERBOSE mode in G4LevelReader.
+
 ## 2026-05-22 Gabriele Cosmo (hadr-deex-V11-03-26)
 - Fixed MT data race in G4NuclearLevelData, by removing the separate
   std::vector<G4bool> loaded flag and making the manager pointer itself

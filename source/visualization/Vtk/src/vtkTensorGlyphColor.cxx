@@ -164,30 +164,50 @@ int vtkTensorGlyphColor::RequestData(vtkInformation* vtkNotUsed(request),
   numSourceCells = source->GetNumberOfCells();
 
   newPts = vtkPoints::New();
+#if (VTK_MAJOR_VERSION >= 9)  && (VTK_MINOR_VERSION >= 6)
+  newPts->Reserve(numDirs * numPts * numSourcePts);
+#else
   newPts->Allocate(numDirs * numPts * numSourcePts);
+#endif
 
   // Setting up for calls to PolyData::InsertNextCell()
   if ((sourceCells = source->GetVerts())->GetNumberOfCells() > 0) {
     cells = vtkCellArray::New();
+#if (VTK_MAJOR_VERSION >= 9)  && (VTK_MINOR_VERSION >= 6)
+    cells->AllocateEstimate(numDirs * numPts, sourceCells->GetNumberOfCells());
+#else
     cells->Allocate(numDirs * numPts * sourceCells->GetSize());
+#endif
     output->SetVerts(cells);
     cells->Delete();
   }
   if ((sourceCells = this->GetSource()->GetLines())->GetNumberOfCells() > 0) {
     cells = vtkCellArray::New();
-    cells->Allocate(numDirs * numPts * sourceCells->GetSize());
+#if (VTK_MAJOR_VERSION >= 9)  && (VTK_MINOR_VERSION >= 6)
+    cells->AllocateEstimate(numDirs * numPts, sourceCells->GetNumberOfCells());
+#else
+    cells->Allocate(numDirs * numPts * sourceCells->GetNumberOfCells());
+#endif
     output->SetLines(cells);
     cells->Delete();
   }
   if ((sourceCells = this->GetSource()->GetPolys())->GetNumberOfCells() > 0) {
     cells = vtkCellArray::New();
-    cells->Allocate(numDirs * numPts * sourceCells->GetSize());
+#if (VTK_MAJOR_VERSION >= 9) && (VTK_MINOR_VERSION >= 6)
+    cells->AllocateEstimate(numDirs * numPts,  sourceCells->GetNumberOfCells());
+#else
+    cells->Allocate(numDirs * numPts * sourceCells->GetNumberOfCells());
+#endif
     output->SetPolys(cells);
     cells->Delete();
   }
   if ((sourceCells = this->GetSource()->GetStrips())->GetNumberOfCells() > 0) {
     cells = vtkCellArray::New();
-    cells->Allocate(numDirs * numPts * sourceCells->GetSize());
+#if (VTK_MAJOR_VERSION >= 9)  && (VTK_MINOR_VERSION >= 6)
+    cells->AllocateEstimate(numDirs * numPts, sourceCells->GetNumberOfCells());
+#else
+    cells->Allocate(numDirs * numPts * sourceCells->GetNumberOfCells());
+#endif
     output->SetStrips(cells);
     cells->Delete();
   }
@@ -201,7 +221,11 @@ int vtkTensorGlyphColor::RequestData(vtkInformation* vtkNotUsed(request),
   {
     newScalars = vtkFloatArray::New();
     newScalars->SetNumberOfComponents(4);
+#if (VTK_MAJOR_VERSION >= 9)  && (VTK_MINOR_VERSION >= 6)
+    newScalars->ReserveTuples(numDirs * numPts * numSourcePts);
+#else
     newScalars->Allocate(numDirs * numPts * numSourcePts);
+#endif
     if (this->ColorMode == COLOR_BY_EIGENVALUES) {
       newScalars->SetName("MaxEigenvalue");
     }
@@ -218,7 +242,11 @@ int vtkTensorGlyphColor::RequestData(vtkInformation* vtkNotUsed(request),
     newNormals = vtkFloatArray::New();
     newNormals->SetNumberOfComponents(3);
     newNormals->SetName("Normals");
+#if (VTK_MAJOR_VERSION >= 9)  && (VTK_MINOR_VERSION >= 6)
+    newNormals->ReserveTuples(numDirs * 3 * numPts * numSourcePts);
+#else
     newNormals->Allocate(numDirs * 3 * numPts * numSourcePts);
+#endif
   }
   //
   // First copy all topology (transformation independent)

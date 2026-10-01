@@ -6,6 +6,22 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2026-09-16 Gabriele Cosmo (geommng-V11-03-14)
+- Fixed verbosity handling in G4GeometryManager and G4VoxelisationHelper to
+  print voxel statistics and the global timing report once through the master
+  after MT voxelisation, preserving explicit verbosity requests without
+  additional diagnostic printouts.
+
+## 2026-07-17 Gabriele Cosmo
+- Fixed segmentation fault in G4GeomSplitter; offset is defined as thread-local,
+  but its allocation capacity was tracked globally. A second thread therefore
+  could believe storage was already allocated, leaving its own offset null
+  before dereferencing it. Addressing problem report #2747.
+  The fix sets the allocated capacity per thread; storage is allocated whenever
+  a new thread creates a subinstance; existing shared data is copied when
+  construction moves between threads and thread-local capacity is resetted
+  when storage is freed.
+
 ## 2026-06-12 Evgueni Tcherniaev (geommng-V11-03-13)
 - Fixed G4GeomTools::TriangulatePolygon, this addresses issue VECGEOM-653
 

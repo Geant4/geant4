@@ -149,7 +149,8 @@ void G4Scintillation::ProcessDescription(std::ostream& out) const
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4bool G4Scintillation::IsApplicable(const G4ParticleDefinition& aParticleType)
 {
-  return (!aParticleType.IsShortLived());
+  return (aParticleType.GetParticleName() != "opticalphoton"
+         && !aParticleType.IsShortLived());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

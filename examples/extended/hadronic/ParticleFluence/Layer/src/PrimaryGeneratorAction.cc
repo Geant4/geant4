@@ -35,7 +35,10 @@
 #include "G4ParticleGun.hh"
 #include "G4ParticleTable.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4Threading.hh"
 #include "globals.hh"
+
+G4ThreeVector  PrimaryGeneratorAction::fGunPosition = { 0., 0., 0. };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -60,7 +63,7 @@ PrimaryGeneratorAction::~PrimaryGeneratorAction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void PrimaryGeneratorAction::SetGunPosition() const
+void PrimaryGeneratorAction::SetGunPosition()
 {
   // Shoot the particle in the middle between the world and the target layer
   G4double targetThickness =
@@ -70,7 +73,9 @@ void PrimaryGeneratorAction::SetGunPosition() const
   G4cout << G4endl
          << "PrimaryGenerationAction::SetGunPosition() : gun position along z = " << gunPosition
          << " mm " << G4endl << G4endl;
-  fParticleGun->SetParticlePosition(G4ThreeVector(0.0, 0.0, gunPosition));
+  if( G4Threading::IsMasterThread() ){
+     fGunPosition= G4ThreeVector(0.0, 0.0, gunPosition);
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -78,6 +83,7 @@ void PrimaryGeneratorAction::SetGunPosition() const
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
   G4ThreeVector v(0.0, 0.0, 1.0);  //***LOOKHERE*** default shoot along the z-axis
+  fParticleGun->SetParticlePosition(fGunPosition);
   fParticleGun->SetParticleMomentumDirection(v);
   fParticleGun->GeneratePrimaryVertex(anEvent);
 }

@@ -1,8 +1,15 @@
 # Example fastAerosol History
 
 See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
-which **must** added in reverse chronological order (newest at the top). It must **not**
-be used as a substitute for writing good git commit messages!
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
+
+-------------------------------------------------------------------------------
+
+## 2026-07-01 Gabriele Cosmo (fastAerosol-V11-03-00)
+- Use G4QuickRand() instead of G4UniformRand() for generating points on
+  surface in custom FastAerosolSolid. This avoids contaminating the random
+  sequence in event processing if invoking on-demand tasks.
 
 ## 2024-08-12 I. Hrivnacova (fastAerosol-V11-02-00)
 - Updated for changes in accumulables:

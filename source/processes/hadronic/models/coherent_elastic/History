@@ -6,6 +6,11 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2026-08-28 Ben Morgan (hadr-cohe-V11-03-07)
+- G4NeutrinoElectronNcModel.cc - Correct typo in particle name conditional.
+  - Applies [GitHub PR 113](https://github.com/Geant4/geant4/pull/113)
+  - Fixes [Bugzilla 2760](https://bugzilla-geant4.kek.jp/show_bug.cgi?id=2760)
+
 ## 2026-01-05 Vladimir Ivanchenko (hadr-cohe-V11-03-06)
 - G4ChargeExchange - fixed bug in sampling of scattering angle for kaons
 

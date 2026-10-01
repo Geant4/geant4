@@ -32,6 +32,7 @@
 #include "FastAerosolSolid.hh"
 
 #include "G4SystemOfUnits.hh"
+#include "G4QuickRand.hh"
 
 // calculate extent
 #include "G4BoundingEnvelope.hh"
@@ -400,7 +401,7 @@ G4ThreeVector FastAerosolSolid::GetPointOnSurface() const
 	G4double fDy = fCloud->GetYHalfLength();
 	G4double fDz = fCloud->GetZHalfLength();
 
-	G4ThreeVector p(2.0*fDx*G4UniformRand(),2.0*fDy*G4UniformRand(),2.0*fDz*G4UniformRand());
+	G4ThreeVector p(2.0*fDx*G4QuickRand(),2.0*fDy*G4QuickRand(),2.0*fDz*G4QuickRand());
 	p -= G4ThreeVector(fDx, fDy, fDz);
 
 	fCloud->GetNearestDroplet(p, center, closestDistance, DBL_MAX, fDroplet, fRotation);

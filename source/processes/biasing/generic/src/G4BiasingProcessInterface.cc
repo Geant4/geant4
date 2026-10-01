@@ -225,7 +225,7 @@ PostStepGetPhysicalInteractionLength( const G4Track& track,
     } // -- end of " if ( fSharedData->fParallelGeometriesLimiterProcess )"
 
     // -- Get biasing operator in mass geometry:
-    // -- [§§ Note : bug with this first step ? Does not work if previous step was concurrently limited with geometry. Might make use of safety at last point ?]
+    // -- [Note : bug with this first step ? Does not work if previous step was concurrently limited with geometry. Might make use of safety at last point ?]
     G4bool  firstStepInVolume = ( (track.GetStep()->GetPreStepPoint()->GetStepStatus() == fGeomBoundary)
                                || (track.GetCurrentStepNumber() == 1) );
     //      fSharedData->fIsNewOperator           = false;
@@ -511,6 +511,7 @@ G4VParticleChange* G4BiasingProcessInterface::PostStepDoIt(const G4Track& track,
                                fFinalStateBiasingOperation,
                                finalStateParticleChange );
 
+  fOccurenceBiasingParticleChange->Initialize(track);
   fOccurenceBiasingParticleChange->SetOccurenceWeightForInteraction( weightForInteraction );
   fOccurenceBiasingParticleChange->SetSecondaryWeightByProcess( true );
   fOccurenceBiasingParticleChange->SetWrappedParticleChange( finalStateParticleChange );
@@ -621,6 +622,7 @@ G4BiasingProcessInterface::AlongStepDoIt(const G4Track& track,
   // -----------------------------------
   // -- case inside volume with biasing:
   // -----------------------------------
+  fOccurenceBiasingParticleChange->Initialize(track);
   if ( fWrappedProcessIsAlong )
   {
     fOccurenceBiasingParticleChange

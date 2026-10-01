@@ -1,8 +1,14 @@
 # Example TestEm3 History
 
 See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
-which **must** added in reverse chronological order (newest at the top). It must **not**
-be used as a substitute for writing good git commit messages!
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
+
+-------------------------------------------------------------------------------
+
+## 2026-09-02 J. Apostolakis (testem3-V11-03-00)
+- In PrimaryGeneratorAction, fixed location of primary to stay within the
+  world volume boundaries.
 
 ## 2024-10-22 Michel Maire (testem3-V11-02-02)
 - TrackingAction: in energy leakage, add special traitement for positron

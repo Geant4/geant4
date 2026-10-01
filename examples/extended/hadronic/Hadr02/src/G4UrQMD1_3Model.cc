@@ -54,6 +54,7 @@
 //-------------------------------
 #  include "G4CollisionOutput.hh"
 #  include "G4DynamicParticle.hh"
+#  include "G4HadronicException.hh"
 #  include "G4IonTable.hh"
 #  include "G4LorentzRotation.hh"
 #  include "G4Nucleus.hh"
@@ -63,6 +64,7 @@
 #  include "G4SystemOfUnits.hh"
 #  include "G4Track.hh"
 #  include "G4V3DNucleus.hh"
+#  include "Randomize.hh"
 #  include "globals.hh"
 
 // AND->
@@ -154,8 +156,8 @@ G4HadFinalState* G4UrQMD1_3Model::ApplyYourself(const G4HadProjectile& theTrack,
   const G4ParticleDefinition* definitionP = theTrack.GetDefinition();
   const G4double AP = definitionP->GetBaryonNumber();
   const G4double ZP = definitionP->GetPDGCharge();
-  G4double AT = theTarget.GetN();
-  G4double ZT = theTarget.GetZ();
+  G4double AT = theTarget.GetA_asInt();  // mass number A (was GetN(); NOT GetN_asInt!)
+  G4double ZT = theTarget.GetZ_asInt();  // charge Z
   //  -----------------------------------------------
   G4int id = definitionP->GetPDGEncoding();  // get particle encoding
   // ------------------------------------------------
@@ -259,23 +261,35 @@ G4HadFinalState* G4UrQMD1_3Model::ApplyYourself(const G4HadProjectile& theTrack,
   }
 
   //------------------------------------------------------------
-  // identify impact parameter
-  urqmdparams_.u_imp = -(1.1 * std::pow(G4double(AT1), (1. / 3.)));
+  // identify impact parameter (negative => UrQMD samples b, area-weighted, up to
+  // |u_imp|). Use the interaction radius R_proj + R_target = 1.1*(Ap^1/3 + At^1/3),
+  // matching UrQMD's own definition nucrad(Ap)+nucrad(At) in init.f. The previous
+  // value used only the target radius, which omits the projectile size: negligible
+  // for a hadron (Ap=1) but about half the radius for a heavy ion, forcing
+  // over-central collisions.
+  urqmdparams_.u_imp =
+    -(1.1 * (std::pow(G4double(AP1), (1. / 3.)) + std::pow(G4double(AT1), (1. / 3.))));
   // units are in fm for UrQMD;
   //------------------------------------------------------------
   ///////////////////////// initialise/////////////////////
+  // uinit() must run before every UrQMD() call, as the reference UrqmdEvent
+  // driver does: it re-samples the projectile/target nucleons (positions and
+  // Fermi momenta) via cascinit() for THIS event. Previously it ran only once
+  // (guarded by CurrentEvent), which froze the nucleus for the whole run and
+  // made re-sampled interactions identical, so had012 warnings could never be
+  // recovered and escalated to a fatal had006. uinit()'s own internal "ifirst"
+  // guard keeps the expensive one-time table loading (loadwtab, potentials,
+  // norm_init) to the first call, so repeating it per event only redoes the
+  // cheap per-event nucleus sampling.
+  G4int io = 0;
+  if (CurrentEvent == 0) {
+    G4cout << "\n creation of table, wait-------\n" << G4endl;
+  }
+
+  uinit_(&io);
 
   if (CurrentEvent == 0) {
-    G4cout << "\n creation of table, wait-------" << G4endl;
-
-    G4cout << "\n" << G4endl;
-
-    G4int io = 0;
-
-    uinit_(&io);
-
     G4cout << "\n end to create  table " << G4endl;
-
     CurrentEvent = 1;
   }
   ////////////////////////////////////////////////////////
@@ -290,8 +304,8 @@ G4HadFinalState* G4UrQMD1_3Model::ApplyYourself(const G4HadProjectile& theTrack,
 
   // G4cout <<"Number of produced particles:  " <<sys_.npart<<G4endl;
 
-  G4int n = sys_.npart;  // no of produced particles
-  if (n < 2) {
+  G4int nProduced = sys_.npart;  // no of produced particles
+  if (nProduced < 2) {
     G4cout << "===============Warning================" << G4endl;
     G4cout << "======================================" << G4endl;
 
@@ -309,7 +323,7 @@ G4HadFinalState* G4UrQMD1_3Model::ApplyYourself(const G4HadProjectile& theTrack,
     // AND<-
   }
   else {
-    for (G4int i = 0; i < n; i++) {
+    for (G4int i = 0; i < nProduced; i++) {
       G4int pid = pdgid_(&isys_.ityp[i], &isys_.iso3[i]);
 
       // Particle is a final state secondary and not a nucleus.
@@ -320,12 +334,26 @@ G4HadFinalState* G4UrQMD1_3Model::ApplyYourself(const G4HadProjectile& theTrack,
       G4ParticleDefinition* pd = G4ParticleTable::GetParticleTable()->FindParticle(pid);
 
       if (pd) {
-        G4double px = (coor_.px[i] + ffermi_.ffermpx[i]) * GeV;
+        // The secondary's physical momentum includes the Fermi motion that UrQMD
+        // keeps in the separate ffermp array: init.f moves the Fermi momentum out of
+        // px into ffermp (setting the grid px), and coload.f uses px+ffermp as the
+        // real momentum in collisions. UrQMD's stored energy p0, however, is on-shell
+        // for px ALONE (p0 = sqrt(px^2+fmass^2)), so the original code paired momentum
+        // px+ffermp with energy et = p0 and produced an OFF-SHELL particle
+        // (E^2 != p^2 + m^2). Keep the physical momentum px+ffermp and give it the
+        // matching on-shell energy sqrt((px+ffermp)^2 + fmass^2), using UrQMD's
+        // dynamical mass fmass.
+        G4double pxf = coor_.px[i] + ffermi_.ffermpx[i];
+        G4double pyf = coor_.py[i] + ffermi_.ffermpy[i];
+        G4double pzf = coor_.pz[i] + ffermi_.ffermpz[i];
+        G4double px = pxf * GeV;
         // units are in MeV/c for G4
-        G4double py = (coor_.py[i] + ffermi_.ffermpy[i]) * GeV;
-        G4double pz = (coor_.pz[i] + ffermi_.ffermpz[i]) * GeV;
+        G4double py = pyf * GeV;
+        G4double pz = pzf * GeV;
 
-        G4double et = (coor_.p0[i]) * GeV;
+        G4double et = std::sqrt(pxf * pxf + pyf * pyf + pzf * pzf
+                                + coor_.fmass[i] * coor_.fmass[i])
+                      * GeV;
 
         //    ------------------------------Use only "Lorentz vector"----------
 
@@ -428,14 +456,15 @@ void G4UrQMD1_3Model::InitialiseDataTables()
 
   g4urqmdblockdata_();
 
-  ///////////////////////////////////////////////////
-  /////// Dynamic seed //////////////////////////////
-  // G4int ranseed=-time_ ();
-  //     Fixed seed  ///////////////////////////
+  // Seed the UrQMD random generator from Geant4's random engine, so that UrQMD
+  // results depend on Geant4's seed (/random/setSeeds) and are reproducible.
+  // The old code used a hardcoded constant (1097569630), which ignored Geant4's
+  // engine and made every run identical; the commented-out -time_() variant
+  // seeded from the wall clock, which is not reproducible either. sseed() needs
+  // a positive seed (it negates it internally to prime the ran2 generator).
+  G4int ranseed = 1 + static_cast<G4int>(G4UniformRand() * 2147483646.0);
 
-  G4int ranseed = 1097569630;
-
-  G4cout << "\n seed:  " << ranseed << G4endl;
+  G4cout << "\n UrQMD seed (from Geant4 engine):  " << ranseed << G4endl;
 
   sseed_(&ranseed);
 

@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-04-patch-02    (12-June-2026)
+ Geant4 version Name: geant4-11-04-patch-03    (01-October-2026)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -614,17 +614,17 @@ Start closing geometry.
 G4VoxelisationHelper::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   2913 kByte
-    Total CPU time elapsed for geometry optimisation: 3.39 seconds
+    Total CPU time elapsed for geometry optimisation: 3.61 seconds
 
     Voxelisation: top CPU users:
     Percent   Total CPU    System CPU       Memory  Volume
     -------   ----------   ----------     --------  ----------
-      99.12         3.36         0.00         2914k VoxelStraight_logic
+      98.89         3.57         0.01         2914k VoxelStraight_logic
 
     Voxelisation: top memory users:
     Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
     -------   --------     ------   ------   --------   ----------    ----------
-     100.00       2913k     20884    21735      54614         3.36    VoxelStraight_logic
+     100.00       2913k     20884    21735      54614         3.57    VoxelStraight_logic
 --------------------------------------------------------------------------------
 
 ### Run 0 starts.
@@ -844,16 +844,16 @@ ___________________________________
  Run terminated.
 Run Summary
   Number of events processed : 2
-  User=402.480000s Real=412.353809s Sys=0.120000s
+  User=431.990000s Real=439.394177s Sys=0.210000s
 
 ----> Histograms are saved
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.
 Deleting G4Run (id:0) 
-UserDetectorConstruction deleted 0xc67960
-UserPhysicsList deleted 0xc68520
-UserActionInitialization deleted 0xf1aa60
+UserDetectorConstruction deleted 0x16aa990
+UserPhysicsList deleted 0x16ab550
+UserActionInitialization deleted 0x195da90
 UserWorkerInitialization deleted 0
 UserWorkerThreadInitialization deleted 0
 UserRunAction deleted.

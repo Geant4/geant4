@@ -267,13 +267,16 @@ G4ReactionProduct* G4ParticleHPContAngularPar::Sample(G4double anEnergy, G4doubl
         delete[] running;
 	return result;
       }
-      // Normalize random
+
+      // Scale random to total probability and use it for DIS/CON decision and
+      // in the subsequent energy sampling, which operates on unnormalized
+      // cumulative probabilities.
       random *= (tot_prob_DIS + tot_prob_CON);
+
       // 2nd Judge Discrete or not
 
       // This should be relatively close to 1  For safty
-      if (random <= (tot_prob_DIS / (tot_prob_DIS + tot_prob_CON))
-          || nDiscreteEnergies == nEnergies)
+      if (random <= tot_prob_DIS || nDiscreteEnergies == nEnergies)
       {
         // Discrete Emission
         for (G4int j = 0; j < nDiscreteEnergies; ++j) {

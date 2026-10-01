@@ -6,6 +6,11 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2026-07-10 Dmitri Konstantinov (hadr-man-V11-03-03)
+- G4HadronicProcess - fixed a memory leak by deleting secondary particles when
+  an invalid final state is rejected. The problem was reported in
+  [Geant4/geant4#95](https://github.com/Geant4/geant4/pull/95).
+
 ## 2025-08-25 Vladimir Ivanchenko (hadr-man-V11-03-02)
 - G4HadronicProcess - removed misleading exception - fixed problem #2675
 

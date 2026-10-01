@@ -332,6 +332,11 @@ inline void G4Track::IncrementCurrentStepNumber()
   ++fCurrentStepNumber;
 }
 
+inline void G4Track::IncrementCurrentStepNumber(const G4int nSteps)
+{
+  fCurrentStepNumber += nSteps;
+}
+
 // step length
 inline G4double G4Track::GetStepLength() const
 {

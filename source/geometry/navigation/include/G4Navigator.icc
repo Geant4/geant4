@@ -225,7 +225,14 @@ G4RotationMatrix G4Navigator::NetRotation() const
 inline
 G4TouchableHistory* G4Navigator::CreateTouchableHistory() const
 {
-  return new G4TouchableHistory(fHistory);
+  G4TouchableHistory* theTouchable = nullptr;
+  if (fLocatedOutsideWorld)  // We are outside the world volume
+  {
+    theTouchable = new G4TouchableHistory();
+  } else {
+    theTouchable = new G4TouchableHistory(fHistory);
+  }
+  return theTouchable;
 }
 
 // ********************************************************************

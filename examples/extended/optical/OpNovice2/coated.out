@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-04-patch-02    (12-June-2026)
+ Geant4 version Name: geant4-11-04-patch-03    (01-October-2026)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -996,7 +996,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 500000
-  User=1.520000s Real=1.520224s Sys=0.000000s
+  User=1.500000s Real=1.502008s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -1016,14 +1016,14 @@ Average number of OpAbsorption per event: 0.11
 
 Surface events (on +X surface, maximum one per photon) this run:
 # of primary particles:         5e+05
-OpAbsorption before surface:      242
-Total # of surface events:     499758
+OpAbsorption before surface:      237
+Total # of surface events:     499763
 Unaccounted for:                    0
 
 Surface events by process:
-  CoatedDielectricRefraction:   446058
-  CoatedDielectricReflection:    53700
- Sum:                          499758
+  CoatedDielectricRefraction:   446277
+  CoatedDielectricReflection:    53486
+ Sum:                          499763
  Unaccounted for:                   0
 ---------------------------------
 Polarization of primary optical photons: 0 deg.
@@ -1072,7 +1072,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 500000
-  User=1.550000s Real=1.577717s Sys=0.000000s
+  User=1.600000s Real=1.604693s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -1092,14 +1092,14 @@ Average number of OpAbsorption per event: 0.11
 
 Surface events (on +X surface, maximum one per photon) this run:
 # of primary particles:         5e+05
-OpAbsorption before surface:      235
-Total # of surface events:     499765
+OpAbsorption before surface:      273
+Total # of surface events:     499727
 Unaccounted for:                    0
 
 Surface events by process:
-  CoatedDielectricRefraction:   445987
-  CoatedDielectricReflection:    53778
- Sum:                          499765
+  CoatedDielectricRefraction:   445945
+  CoatedDielectricReflection:    53782
+ Sum:                          499727
  Unaccounted for:                   0
 ---------------------------------
 Polarization of primary optical photons: 90 deg.

@@ -70,7 +70,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* event)
 {
   if (event->GetEventID() == 0) {
     if (fHisto->DefaultBeamPosition()) {
-      G4double zVertex = -(5.0 * mm + fHisto->Length());
+      G4double zVertex = -(5.0 * mm + 0.5 * fHisto->Length());
       fParticleGun->SetParticlePosition(G4ThreeVector(0., 0., zVertex));
     }
   }

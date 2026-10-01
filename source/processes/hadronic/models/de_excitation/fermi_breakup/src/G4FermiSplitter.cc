@@ -37,10 +37,11 @@
 
 #include <G4PhysicalConstants.hh>
 
+#include <algorithm>
+#include <functional>
 #include <iterator>
 #include <numeric>
 #include <optional>
-#include <functional>
 
 namespace
 {
@@ -59,7 +60,8 @@ G4double CoulombBarrier(const G4FermiFragmentVector& split)
   std::uint32_t atomicMassSum = 0.;
   std::uint32_t chargeSum = 0.;
   G4double CoulombEnergy = 0.;
-  for (const auto fragmentPtr : split) {
+  for (const auto fragmentPtr : split)
+  {
     auto mass = static_cast<std::uint32_t>(fragmentPtr->GetAtomicMass());
     auto charge = static_cast<std::uint32_t>(fragmentPtr->GetChargeNumber());
     CoulombEnergy += std::pow(charge, 2) / std::cbrt(static_cast<G4double>(mass));
@@ -76,7 +78,8 @@ G4double SpinFactor(const G4FermiFragmentVector& split)
 {
   G4double factor = 1;
 
-  for (const auto fragmentPtr : split) {
+  for (const auto fragmentPtr : split)
+  {
     factor *= fragmentPtr->GetPolarization();
   }
 
@@ -86,12 +89,14 @@ G4double SpinFactor(const G4FermiFragmentVector& split)
 G4double KineticEnergy(const G4FermiFragmentVector& split, G4double totalEnergy)
 {
   auto kineticEnergy = totalEnergy;
-  for (const auto fragmentPtr : split) {
+  for (const auto fragmentPtr : split)
+  {
     kineticEnergy -= fragmentPtr->GetTotalEnergy();
   }
 
   // skip columb calculation for optimization purposes
-  if (kineticEnergy <= 0.) {
+  if (kineticEnergy <= 0.)
+  {
     return kineticEnergy;
   }
 
@@ -102,12 +107,16 @@ G4double MassFactor(const G4FermiFragmentVector& split)
 {
   G4double massSum = 0.;
   G4double massProduct = 1.;
-  for (const auto fragmentPtr : split) {
+  for (const auto fragmentPtr : split)
+  {
     const auto fragmentMass = fragmentPtr->GetMass();
     massProduct *= fragmentMass;
     massSum += fragmentMass;
   }
-  if (0.0 >= massSum) { return 1.0; }
+  if (0.0 >= massSum)
+  {
+    return 1.0;
+  }
   auto massFactor = massProduct / massSum;
   massFactor *= std::sqrt(massFactor);
   return massFactor;
@@ -116,7 +125,8 @@ G4double MassFactor(const G4FermiFragmentVector& split)
 std::size_t Factorial(const std::size_t n)
 {
   std::size_t factorial = 1;
-  for (std::size_t i = 2; i <= n; ++i) {
+  for (std::size_t i = 2; i <= n; ++i)
+  {
     factorial *= i;
   }
   return factorial;
@@ -135,8 +145,10 @@ G4double ConfigurationFactor(const G4FermiFragmentVector& split)
   G4double factor = 1;
 
   std::size_t repeatCount = 1;  // we skip first, so start with 1
-  for (std::size_t i = 1; i < masses.size(); ++i) {
-    if (masses[i] != masses[i - 1]) {
+  for (std::size_t i = 1; i < masses.size(); ++i)
+  {
+    if (masses[i] != masses[i - 1])
+    {
       factor *= static_cast<G4double>(Factorial(repeatCount));
       repeatCount = 0;
     }
@@ -159,12 +171,14 @@ G4double GammaFactor(std::size_t fragmentsCount)
 {
   G4double gamma = 1.0;
   G4double arg = 3.0 * static_cast<G4double>(fragmentsCount - 1) / 2.0 - 1.0;
-  while (arg > 1.1) {
+  while (arg > 1.1)
+  {
     gamma *= arg;
     arg -= 1;
   }
 
-  if (fragmentsCount % 2 == 0) {
+  if (fragmentsCount % 2 == 0)
+  {
     gamma *= std::sqrt(CLHEP::pi);
   }
 
@@ -172,13 +186,24 @@ G4double GammaFactor(std::size_t fragmentsCount)
 }
 }  // namespace
 
+G4double G4FermiSplitter::DecayThreshold(const G4FermiFragmentVector& split)
+{
+  G4double threshold = 0.;
+  for (const auto fragmentPtr : split)
+  {
+    threshold += fragmentPtr->GetTotalEnergy();
+  }
+  return threshold + std::max(0., CoulombBarrier(split));
+}
+
 G4double G4FermiSplitter::DecayWeight(const G4FermiFragmentVector& split,
                                       G4FermiAtomicMass atomicMass, G4double totalEnergy)
 {
   const auto kineticEnergy = KineticEnergy(split, totalEnergy);  // in MeV
 
   // Check that there is enough energy to produce K fragments
-  if (kineticEnergy <= 0.) {
+  if (kineticEnergy <= 0.)
+  {
     return 0.;
   }
 
@@ -227,10 +252,12 @@ std::vector<G4FermiFragmentVector> PossibleSplits(const G4FermiPartition& massPa
 
   // count all possible splits due to multiplicity of fragments
   std::size_t splitsCount = 1;
-  for (std::size_t fragmentIdx = 0; fragmentIdx < fragmentCount; ++fragmentIdx) {
+  for (std::size_t fragmentIdx = 0; fragmentIdx < fragmentCount; ++fragmentIdx)
+  {
     splitsCount *= fragmentPool.Count(G4FermiAtomicMass(massPartition[fragmentIdx]),
                                       G4FermiChargeNumber(chargePartition[fragmentIdx]));
-    if (splitsCount == 0) {
+    if (splitsCount == 0)
+    {
       return {};
     }
   }
@@ -241,7 +268,8 @@ std::vector<G4FermiFragmentVector> PossibleSplits(const G4FermiPartition& massPa
   // incrementally build splits
   // !! chosen order matters, because later there we need to remove duplicates
   std::size_t groupSize = splitsCount;
-  for (std::size_t fragmentIdx = 0; fragmentIdx < fragmentCount; ++fragmentIdx) {
+  for (std::size_t fragmentIdx = 0; fragmentIdx < fragmentCount; ++fragmentIdx)
+  {
     const auto fragmentRange =
       fragmentPool.GetFragments(G4FermiAtomicMass(massPartition[fragmentIdx]),
                                 G4FermiChargeNumber(chargePartition[fragmentIdx]));
@@ -249,9 +277,12 @@ std::vector<G4FermiFragmentVector> PossibleSplits(const G4FermiPartition& massPa
     const std::size_t multiplicity = std::distance(fragmentRange.begin(), fragmentRange.end());
     groupSize /= multiplicity;
 
-    for (std::size_t offset = 0; offset < splitsCount;) {
-      for (const auto fragmentPtr : fragmentRange) {
-        for (std::size_t pos = 0; pos < groupSize; ++pos) {
+    for (std::size_t offset = 0; offset < splitsCount;)
+    {
+      for (const auto fragmentPtr : fragmentRange)
+      {
+        for (std::size_t pos = 0; pos < groupSize; ++pos)
+        {
           splits[offset + pos][fragmentIdx] = fragmentPtr;
         }
         offset += groupSize;
@@ -260,7 +291,8 @@ std::vector<G4FermiFragmentVector> PossibleSplits(const G4FermiPartition& massPa
   }
 
   // remove duplicate splits
-  for (auto& split : splits) {
+  for (auto& split : splits)
+  {
     std::sort(split.begin(), split.end(), std::greater<>());
     // greater, because they already partially sorted as greater due to integer partition
   }
@@ -288,14 +320,18 @@ void G4FermiSplitter::GenerateSplits(G4FermiNucleiData nucleiData,
   // let's split nucleus into 2, ..., A fragments
   const auto maxFragmentsCount = static_cast<std::uint32_t>(nucleiData.atomicMass);
 
-  for (std::uint32_t fragmentCount = 2; fragmentCount <= maxFragmentsCount; ++fragmentCount) {
+  for (std::uint32_t fragmentCount = 2; fragmentCount <= maxFragmentsCount; ++fragmentCount)
+  {
     // Form all possible partition by combination of A partitions and Z partitions (Z partitions
     // include null parts)
-    for (auto& massPartition : G4integerPartition(nucleiData.atomicMass, fragmentCount, 1)) {
-      for (auto& chargePartition : G4integerPartition(nucleiData.chargeNumber, fragmentCount, 0)) {
+    for (auto& massPartition : G4integerPartition(nucleiData.atomicMass, fragmentCount, 1))
+    {
+      for (auto& chargePartition : G4integerPartition(nucleiData.chargeNumber, fragmentCount, 0))
+      {
         // Some splits are invalid, some nuclei doesn't exist
         if (auto partitionSplits = PossibleSplits(massPartition, chargePartition);
-            !partitionSplits.empty()) {
+            !partitionSplits.empty())
+        {
           splits.insert(splits.end(), std::make_move_iterator(partitionSplits.begin()),
                         std::make_move_iterator(partitionSplits.end()));
         }

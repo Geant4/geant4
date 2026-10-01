@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-04-patch-02    (12-June-2026)
+ Geant4 version Name: geant4-11-04-patch-03    (01-October-2026)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -777,8 +777,8 @@ G4VoxelisationHelper::ReportVoxelStats -- Voxel Statistics
 ooo Run 0 starts (global).
 
 --------- Ranlux engine status ---------
- Initial seed = 1781370102
- float_seed_table[] = 0.944942 0.962884 0.0180731 0.342627 0.990852 0.0277911 0.174973 0.480423 0.66778 0.646614 0.782926 0.0545687 0.572549 0.0378525 0.717327 0.309728 0.590831 0.625106 0.0952846 0.766477 0.94288 0.419084 0.291655 0.286941 
+ Initial seed = 1790188861
+ float_seed_table[] = 0.864621 0.0650272 0.14487 0.846816 0.544372 0.619299 0.7038 0.986689 0.546775 0.779426 0.995124 0.96712 0.430395 0.848741 0.677142 0.249131 0.749699 0.462309 0.999412 0.658606 0.502414 0.739021 0.334884 0.208456 
  i_lag = 23, j_lag = 9
  carry = 0, count24 = 0
  luxury = 3 nskip = 199
@@ -789,15 +789,15 @@ mu- Mono Plane
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.700000s Real=0.698339s Sys=0.000000s
+  User=0.590000s Real=0.594994s Sys=0.000000s
 ### Run 0 (global) ended.
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.
 Deleting G4Run (id:0) 
-UserDetectorConstruction deleted 0x135d8d0
-UserPhysicsList deleted 0x139d9b8
-UserActionInitialization deleted 0x153ae60
+UserDetectorConstruction deleted 0x1477900
+UserPhysicsList deleted 0x14b79e8
+UserActionInitialization deleted 0x1655080
 UserWorkerInitialization deleted 0
 UserWorkerThreadInitialization deleted 0
 UserRunAction deleted.
@@ -807,10 +807,10 @@ G4SDManager deleted.
 EventManager deleted.
 Units table cleared.
 TransportationManager deleted.
-Total navigation history collections cleaned: 10
+Total navigation history collections cleaned: 11
 G4RNGHelper object is deleted.
 ================== Deleting memory pools ===================
-Pool ID '20G4NavigationLevelRep', size : 0.0135 MB
+Pool ID '20G4NavigationLevelRep', size : 0.0144 MB
 Pool ID '24G4ReferenceCountedHandleIvE', size : 0.000961 MB
 Pool ID '17G4DynamicParticle', size : 0.024 MB
 Pool ID '7G4Event', size : 0.000961 MB
@@ -818,12 +818,12 @@ Pool ID '15G4PrimaryVertex', size : 0.000961 MB
 Pool ID '17G4PrimaryParticle', size : 0.000961 MB
 Pool ID '15G4HCofThisEvent', size : 0.000961 MB
 Pool ID '16G4HitsCollection', size : 0.000961 MB
-Pool ID '7G4Track', size : 0.0471 MB
+Pool ID '7G4Track', size : 0.0481 MB
 Pool ID '18G4TouchableHistory', size : 0.000961 MB
 Pool ID '15G4CountedObjectIvE', size : 0.000961 MB
-Pool ID '15UltraOpticalHit', size : 0.00385 MB
+Pool ID '15UltraOpticalHit', size : 0.00481 MB
 Number of memory pools allocated: 12 of which, static: 0
-Dynamic pools deleted: 12 / Total memory freed: 0.096 MB
+Dynamic pools deleted: 12 / Total memory freed: 0.099 MB
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

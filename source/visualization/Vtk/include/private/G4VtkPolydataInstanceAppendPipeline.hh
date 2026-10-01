@@ -31,12 +31,13 @@
 class G4String;
 class G4VtkVisContext;
 
-class vtkTransformPolyDataFilter;
+class vtkTransformFilter;
 class vtkAppendPolyData;
 
 class G4VtkPolydataInstanceAppendPipeline : public G4VtkPolydataInstancePipeline
 {
   public:
+
     G4VtkPolydataInstanceAppendPipeline(G4String name, const G4VtkVisContext& vc);
     ~G4VtkPolydataInstanceAppendPipeline() override = default;
 
@@ -52,7 +53,8 @@ class G4VtkPolydataInstanceAppendPipeline : public G4VtkPolydataInstancePipeline
     static std::size_t MakeHash(const G4Polyhedron& p, const G4VtkVisContext& vc);
 
   protected:
-    std::map<G4String, vtkSmartPointer<vtkTransformPolyDataFilter>> transformFilterMap;
+
+    std::map<G4String, vtkSmartPointer<vtkTransformFilter>> transformFilterMap;
     vtkSmartPointer<vtkAppendPolyData> appendFilter;
 };
 

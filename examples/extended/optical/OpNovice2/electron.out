@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-04-patch-02    (12-June-2026)
+ Geant4 version Name: geant4-11-04-patch-03    (01-October-2026)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -1575,7 +1575,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=1.450000s Real=1.458488s Sys=0.000000s
+  User=1.300000s Real=1.320763s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -1584,8 +1584,8 @@ Number of events: 100
 Material of world: G4_AIR
 Material of tank:  G4_BGO
 
-Average energy of Cerenkov photons created per event: 2.3e+02 eV.
-Average number of Cerenkov photons created per event: 45
+Average energy of Cerenkov photons created per event: 2.2e+02 eV.
+Average number of Cerenkov photons created per event: 43
  Average energy per photon: 5.2 eV.
 Average energy of scintillation photons created per event: 1.7e+04 eV.
 Average number of scintillation photons created per event: 3.1e+03
@@ -1601,27 +1601,27 @@ Average number of OpAbsorption per event: 3e+03
 
 Surface events (on +X surface, maximum one per photon) this run:
 # of primary particles:         1e+02
-OpAbsorption before surface:   168802
-Total # of surface events:     147495
+OpAbsorption before surface:   171164
+Total # of surface events:     140672
 
 Surface events by process:
-  Transmission:                 14801
-  Fresnel refraction:           48242
-  Lambertian reflection:        49321
-  Lobe reflection:               6148
-  Spike reflection:              7111
-  Backscattering:                7078
-  Absorption:                   13376
-  Detection:                     1418
- Sum:                          147495
+  Transmission:                 14066
+  Fresnel refraction:           46513
+  Lambertian reflection:        46841
+  Lobe reflection:               5866
+  Spike reflection:              6804
+  Backscattering:                6647
+  Absorption:                   12586
+  Detection:                     1349
+ Sum:                          140672
  Unaccounted for:                   0
 ---------------------------------
 
  Histogram statistics for the entire run:
 
- Cerenkov spectrum: mean = 5.19026 eV rms = 1.73685 eV.
- Scintillation spectrum: mean = 5.4313 eV rms = 1.66662 eV.
- Scintillation time: mean = 48.407 ns rms = 46.9642 ns.
+ Cerenkov spectrum: mean = 5.15643 eV rms = 1.73474 eV.
+ Scintillation spectrum: mean = 5.42457 eV rms = 1.66453 eV.
+ Scintillation time: mean = 48.3935 ns rms = 46.8322 ns.
 
 ... write file : electron.root - done
 ... close file : electron.root - done
@@ -1629,5 +1629,5 @@ Graphics systems deleted.
 Visualization Manager deleting...
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 10 of which, static: 0
-Dynamic pools deleted: 10 / Total memory freed: 0.46 MB
+Dynamic pools deleted: 10 / Total memory freed: 0.44 MB
 ============================================================

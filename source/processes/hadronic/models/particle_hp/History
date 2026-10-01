@@ -6,6 +6,28 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2026-09-09 Soon Yung Jun (hadr-hpp-V11-03-08)
+- Fix probability normalization in discrete/continuous emission sampling.
+  Correct the discrete/continuous branch selection to compare the scaled
+  random number directly with tot_prob_DIS while retaining scaling of the
+  random number by the total probability for subsequent energy sampling,
+  which uses unnormalized cumulative probabilities.
+- This bug was reported by Jieran Shen (University of Pennsylvania/DUNE).
+
+## 2026-07-15 Vladimir Ivanchenko
+- G4ParticleHPParticleYield - fixed interpolation for thermal neutron class
+  proposed in github issue #103 (Fix ParticleHP fission nubar evaluated at wrong
+  energy in const getters). GetMean(), GetPrompt(), and GetDelayed(G4double)
+  methods are const member functions. Inside them the member vectors (theSimpleMean,
+  thePrompt, theDelayed) are seen as const, so the interpolating GetY(G4double),
+  which is not const, is not a viable overload. The compiler silently converts
+  the energy argument to an int and calls GetY(G4int) const instead. The yield is
+  then read as the y value of table point floor(E), with E in internal units. For
+  any reactor-relevant energy this lands on the first table points, i.e. the thermal
+  nubar (2.4254 for U-235 with G4NDL 4.7.1), whatever the incident energy.
+  G4ParticleHPFSFissionFS::SampleNeutronMult takes all fission multiplicities from
+  these getters, so every ParticleHP fission samples a thermal-valued multiplicity.
+
 ## 2026-05-18 Gabriele Cosmo (hadr-hpp-V11-03-07)
 - Fixed MT data race in G4ParticleHPFissionFS, by removing the shared mutable
   'produceFissionFragments' member and making the decision local to each

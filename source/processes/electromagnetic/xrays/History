@@ -6,6 +6,10 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2026-09-18 Soon Yung Jun (xrays-V11-03-07)
+- Revert exclusion of optical photons from G4Scintillation applicability which
+  was introduced in xrays-V11-03-04.
+
 ## 2025-11-06 Gabriele Cosmo (xrays-V11-03-06)
 - Fixed compilation warning for implicit type conversion on macOS/XCode
   in G4GeneralCherenkov::BuildPhysicsTable().

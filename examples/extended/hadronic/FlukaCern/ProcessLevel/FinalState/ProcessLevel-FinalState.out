@@ -143,6 +143,6 @@ Average (per event) number of triton              0.1
 
  Final random number = 0.772647
 
-Processed 10 events (collisions) in 1.187519e+00 seconds. Average: 118.752 ms / event.
+Processed 10 events (collisions) in 1.004900e-01 seconds. Average: 10.049 ms / event.
 
 === End of test ===

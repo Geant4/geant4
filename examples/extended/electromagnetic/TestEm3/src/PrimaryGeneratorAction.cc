@@ -69,7 +69,7 @@ void PrimaryGeneratorAction::SetDefaultKinematic()
   fParticleGun->SetParticleDefinition(particle);
   fParticleGun->SetParticleMomentumDirection(G4ThreeVector(1., 0., 0.));
   fParticleGun->SetParticleEnergy(1. * GeV);
-  G4double position = -0.5 * (fDetector->GetWorldSizeX());
+  G4double position = -(0.499) * (fDetector->GetWorldSizeX());
   fParticleGun->SetParticlePosition(G4ThreeVector(position, 0. * cm, 0. * cm));
 }
 

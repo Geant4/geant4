@@ -175,7 +175,7 @@ void DetectorConstruction::ConstructVacuumWorld()
 	G4Material* vacuum = new G4Material("Galactic", Z, A,
 						 vacuumDensity,kStateGas,temperature,pressure);
 	
-	G4double worldSize = 10.*cm;
+	G4double worldSize = 1.*m;
 	
 	G4Box* world_box = new G4Box("world_box", worldSize/2, worldSize/2, worldSize/2);
 	G4LogicalVolume* logical_world = new G4LogicalVolume(world_box, vacuum, "world_log",0,0,0);

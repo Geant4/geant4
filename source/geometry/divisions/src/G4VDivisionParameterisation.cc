@@ -30,32 +30,33 @@
 // 21.04.10 - M.Asai, Added gaps
 // --------------------------------------------------------------------
 
-#include "G4VDivisionParameterisation.hh" 
-#include "G4VSolid.hh"
-#include "G4VPhysicalVolume.hh"
-#include "G4RotationMatrix.hh"
-#include "G4ReflectedSolid.hh"
+#include "G4VDivisionParameterisation.hh"
+
 #include "G4GeometryTolerance.hh"
-#include "G4AutoDelete.hh"
+#include "G4ReflectedSolid.hh"
+#include "G4RotationMatrix.hh"
+#include "G4VPhysicalVolume.hh"
+#include "G4VSolid.hh"
 
 const G4int G4VDivisionParameterisation::verbose = 5;
-G4ThreadLocal G4RotationMatrix* G4VDivisionParameterisation::fRot = nullptr;
 
 //--------------------------------------------------------------------------
-G4VDivisionParameterisation::
-G4VDivisionParameterisation( EAxis axis, G4int nDiv,
-                             G4double step, G4double offset,
-                             DivisionType divType, G4VSolid* motherSolid )
-  : faxis(axis), fnDiv( nDiv), fwidth(step), foffset(offset),
-    fDivisionType(divType), fmotherSolid( motherSolid )
+G4VDivisionParameterisation::G4VDivisionParameterisation(EAxis axis, G4int nDiv, G4double step,
+                                                         G4double offset, DivisionType divType,
+                                                         G4VSolid* motherSolid)
+  : faxis(axis),
+    fnDiv(nDiv),
+    fwidth(step),
+    foffset(offset),
+    fDivisionType(divType),
+    fmotherSolid(motherSolid)
 {
 #ifdef G4DIVDEBUG
   if (verbose >= 1)
   {
-    G4cout << " G4VDivisionParameterisation  no divisions " << fnDiv
-           << " = " << nDiv << G4endl
-           << " offset " << foffset << " = " << offset << G4endl
-           << " step " << fwidth << " = " << step << G4endl;
+    G4cout << " G4VDivisionParameterisation  no divisions " << fnDiv << " = " << nDiv << G4endl
+           << " offset " << foffset << " = " << offset << G4endl << " step " << fwidth << " = "
+           << step << G4endl;
   }
 #endif
   kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
@@ -64,13 +65,14 @@ G4VDivisionParameterisation( EAxis axis, G4int nDiv,
 //--------------------------------------------------------------------------
 G4VDivisionParameterisation::~G4VDivisionParameterisation()
 {
-  if (fDeleteSolid)  { delete fmotherSolid; }
+  if (fDeleteSolid)
+  {
+    delete fmotherSolid;
+  }
 }
 
 //--------------------------------------------------------------------------
-G4VSolid* 
-G4VDivisionParameterisation::
-ComputeSolid( const G4int i, G4VPhysicalVolume* pv )
+G4VSolid* G4VDivisionParameterisation::ComputeSolid(const G4int i, G4VPhysicalVolume* pv)
 {
   G4VSolid* solid = G4VPVParameterisation::ComputeSolid(i, pv);
   if (solid->GetEntityType() == "G4ReflectedSolid")
@@ -78,91 +80,81 @@ ComputeSolid( const G4int i, G4VPhysicalVolume* pv )
     solid = ((G4ReflectedSolid*)solid)->GetConstituentMovedSolid();
   }
   return solid;
-}      
-
-//--------------------------------------------------------------------------
-void
-G4VDivisionParameterisation::
-ChangeRotMatrix( G4VPhysicalVolume* physVol, G4double rotZ ) const
-{
-  if (fRot == nullptr)
-  {
-    fRot = new G4RotationMatrix();
-    G4AutoDelete::Register(fRot);
-  }
-  fRot->rotateZ( rotZ );
-  physVol->SetRotation(fRot);
 }
 
 //--------------------------------------------------------------------------
-G4int
-G4VDivisionParameterisation::
-CalculateNDiv( G4double motherDim, G4double width, G4double offset ) const
+void G4VDivisionParameterisation::ChangeRotMatrix(G4VPhysicalVolume* physVol, G4double rotZ) const
+{
+  // G4PVReplica owns a separate rotation matrix for each phi replica, both
+  // on the master and in every worker.  Reuse that matrix rather than
+  // replacing it with a pointer shared by all divisions in the thread.
+  if (faxis == kPhi)
+  {
+    G4RotationMatrix* rotation = physVol->GetRotation();
+    *rotation = G4RotationMatrix();
+    rotation->rotateZ(rotZ);
+  }
+}
+
+//--------------------------------------------------------------------------
+G4int G4VDivisionParameterisation::CalculateNDiv(G4double motherDim, G4double width,
+                                                 G4double offset) const
 {
 #ifdef G4DIVDEBUG
-  G4cout << " G4VDivisionParameterisation::CalculateNDiv: "
-         << ( motherDim - offset ) / width 
-         << " Motherdim: " <<  motherDim << ", Offset: " << offset
-         << ", Width: " << width << G4endl;
+  G4cout << " G4VDivisionParameterisation::CalculateNDiv: " << (motherDim - offset) / width
+         << " Motherdim: " << motherDim << ", Offset: " << offset << ", Width: " << width << G4endl;
 #endif
 
-  return G4int( ( motherDim - offset ) / width );
+  return G4int((motherDim - offset) / width);
 }
 
 //--------------------------------------------------------------------------
-G4double
-G4VDivisionParameterisation::
-CalculateWidth( G4double motherDim, G4int nDiv, G4double offset ) const
-{ 
+G4double G4VDivisionParameterisation::CalculateWidth(G4double motherDim, G4int nDiv,
+                                                     G4double offset) const
+{
 #ifdef G4DIVDEBUG
-  G4cout << " G4VDivisionParameterisation::CalculateWidth: "
-         << ( motherDim - offset ) / nDiv
+  G4cout << " G4VDivisionParameterisation::CalculateWidth: " << (motherDim - offset) / nDiv
          << ", Motherdim: " << motherDim << ", Offset: " << offset
          << ", Number of divisions: " << nDiv << G4endl;
 #endif
 
-  return ( motherDim - offset ) / nDiv;
+  return (motherDim - offset) / nDiv;
 }
 
 //--------------------------------------------------------------------------
 void G4VDivisionParameterisation::CheckParametersValidity()
 {
   G4double maxPar = GetMaxParameter();
-  CheckOffset( maxPar );
-  CheckNDivAndWidth( maxPar );
+  CheckOffset(maxPar);
+  CheckNDivAndWidth(maxPar);
 }
 
 //--------------------------------------------------------------------------
-void G4VDivisionParameterisation::CheckOffset( G4double maxPar )
+void G4VDivisionParameterisation::CheckOffset(G4double maxPar)
 {
-  if( foffset >= maxPar )
+  if (foffset >= maxPar)
   {
     std::ostringstream message;
-    message << "Configuration not supported." << G4endl
-            << "Division of solid " << fmotherSolid->GetName()
-            << " has too big offset = " << G4endl
-            << "        " << foffset << " > " << maxPar << " !";
-    G4Exception("G4VDivisionParameterisation::CheckOffset()",
-                "GeomDiv0001", FatalException, message);
+    message << "Configuration not supported." << G4endl << "Division of solid "
+            << fmotherSolid->GetName() << " has too big offset = " << G4endl << "        "
+            << foffset << " > " << maxPar << " !";
+    G4Exception("G4VDivisionParameterisation::CheckOffset()", "GeomDiv0001", FatalException,
+                message);
   }
 }
 
 //--------------------------------------------------------------------------
-void G4VDivisionParameterisation::CheckNDivAndWidth( G4double maxPar )
+void G4VDivisionParameterisation::CheckNDivAndWidth(G4double maxPar)
 {
-  if( (fDivisionType == DivNDIVandWIDTH)
-      && (foffset + fwidth*fnDiv - maxPar > kCarTolerance ) )
+  if ((fDivisionType == DivNDIVandWIDTH) && (foffset + fwidth * fnDiv - maxPar > kCarTolerance))
   {
     std::ostringstream message;
-    message << "Configuration not supported." << G4endl
-            << "Division of solid " << fmotherSolid->GetName()
-           << " has too big offset + width*nDiv = " << G4endl
-           << "        " << foffset + fwidth*fnDiv << " > "
-           << foffset << ". Width = "
-           << G4endl
-           << "        " << fwidth << ". nDiv = " << fnDiv << " !";
-    G4Exception("G4VDivisionParameterisation::CheckNDivAndWidth()",
-                "GeomDiv0001", FatalException, message);
+    message << "Configuration not supported." << G4endl << "Division of solid "
+            << fmotherSolid->GetName() << " has too big offset + width*nDiv = " << G4endl
+            << "        " << foffset + fwidth * fnDiv << " > " << foffset << ". Width = " << G4endl
+            << "        " << fwidth << ". nDiv = " << fnDiv << " !";
+    G4Exception("G4VDivisionParameterisation::CheckNDivAndWidth()", "GeomDiv0001", FatalException,
+                message);
   }
 }
 
@@ -174,10 +166,8 @@ G4double G4VDivisionParameterisation::OffsetZ() const
   G4double offset = foffset;
   if (fReflectedSolid)
   {
-    offset = GetMaxParameter() - fwidth*fnDiv - foffset;
+    offset = GetMaxParameter() - fwidth * fnDiv - foffset;
   }
 
   return offset;
-}  
-
-  
+}

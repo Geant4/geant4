@@ -6,6 +6,19 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2026-07-22 Alberto Ribon (track-V11-03-00)
+- G4Track : in the method `SetAuxiliaryTrackInformation`, removed old, and now
+  wrong, check of the model-index of the integer argument of the method
+  (this integer argument is assumed to be a model-id, but for custom/user-defined
+  physics model, only the model-id is defined, not the model-index).
+  This is a bug fix triggered by a recent post in the Geant4 User Forum
+  by Mike Kelsey.
+
+## 2026-06-10 Severin Diederichs
+- Add an overload of `G4Track::IncrementCurrentStepNumber()` taking a
+  `G4int nSteps` argument to increment the current step number by more
+  than one.
+
 ## 2024-06-01 Makoto Asai (track-V11-02-03)
 - Add optional copy of touchables when copy constructing G4Track to support
   subevent parallelism

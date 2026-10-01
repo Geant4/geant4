@@ -26,10 +26,11 @@
 /// \file PrimaryGeneratorAction.hh
 /// \brief Definition of the PrimaryGeneratorAction class
 
-#ifndef PrimaryGeneratorAction_h
-#define PrimaryGeneratorAction_h 1
+#ifndef PRIMARYGENERATORACTION_H
+#define PRIMARYGENERATORACTION_H
 
 #include "G4VUserPrimaryGeneratorAction.hh"
+#include "G4ThreeVector.hh"
 
 class G4ParticleGun;
 class G4Event;
@@ -43,10 +44,11 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     PrimaryGeneratorAction(const DetectorConstruction*);
     ~PrimaryGeneratorAction();
     void GeneratePrimaries(G4Event* anEvent) override;
-    void SetGunPosition() const;
+    void SetGunPosition();
 
   private:
     G4ParticleGun* fParticleGun;
+    static G4ThreeVector  fGunPosition;
     const DetectorConstruction* fPointerDetectorConstruction = nullptr;
 };
 

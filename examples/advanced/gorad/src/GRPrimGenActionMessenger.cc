@@ -139,7 +139,11 @@ void GRPrimGenActionMessenger::SetNewValue(G4UIcommand * command,G4String newVal
     unit = "mm";
     G4cout<<"################ Radius of the GPS sphere is set to "<<r<<" (mm)"<<G4endl;
   }
-  G4String pos = next() + " " + next() + " " + next();
+  G4String pos = next();
+  pos += " ";
+  pos += next();
+  pos += " ";
+  pos += next();
 
   G4String cmd;
   G4int ec = 0;

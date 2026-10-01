@@ -5,6 +5,17 @@ which **must** added in reverse chronological order (newest at the top).
 It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
+
+## 2026-09-21 Soon Yung Jun (op-V11-03-04)
+- G4OpBoundaryProcess: Refresh fDichroicVector only when the current optical
+  surface differs from the one used on the previous call including when
+  fOpticalSurface becomes null (fix for the Bugzilla #2676).
+
+## 2026-09-18 Soon Yung Jun
+- Fix minimum primary energy check to use GetMinEnergy() in G4OpWLS(2).cc.
+  The condition validating the minimum primary energy incorrectly called
+  WLSIntegral->GetMinValue() instead of WLSIntegral->GetMinEnergy().
+
 ## 2025-09-16 Soon Yung Jun (op-V11-03-03)
 - G4OpBoundaryProcess: Refactor boundary handling at dielectric-dielectric
   interfaces by replacing goto with a do-while loop to improve readability.

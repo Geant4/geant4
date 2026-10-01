@@ -30,23 +30,27 @@
 
 #include "G4FermiBreakUpAN.hh"
 
+#include "G4BaryonConstructor.hh"
+#include "G4DeexPrecoParameters.hh"
 #include "G4FermiDataTypes.hh"
 #include "G4FermiFragmentPoolAN.hh"
 #include "G4FermiNucleiProperties.hh"
 #include "G4FermiParticle.hh"
 #include "G4FermiPhaseDecay.hh"
 #include "G4FermiSplitter.hh"
-#include "G4VFermiFragmentAN.hh"
-
-#include "G4BaryonConstructor.hh"
+#include "G4NuclearLevelData.hh"
 #include "G4NucleiProperties.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4PhysicsModelCatalog.hh"
 #include "G4ThreeVector.hh"
+#include "G4VFermiFragmentAN.hh"
 #include "Randomize.hh"
 
-#include <numeric>
+#include <algorithm>
+#include <cmath>
 #include <functional>
+#include <limits>
+#include <numeric>
 
 #ifdef G4VERBOSE
 #  define G4FERMI_VERBOSE 1
@@ -55,9 +59,12 @@
 #endif
 
 #define FERMI_LOG_MSG(verbosity, level, msg)                                                 \
-  do {                                                                                       \
-    if (G4FERMI_VERBOSE) {                                                                   \
-      if ((verbosity) >= (level)) {                                                          \
+  do                                                                                         \
+  {                                                                                          \
+    if (G4FERMI_VERBOSE)                                                                     \
+    {                                                                                        \
+      if ((verbosity) >= (level))                                                            \
+      {                                                                                      \
         G4cout << __FILE__ << ':' << __LINE__ << " in function \"" << __FUNCTION__ << "\"\n" \
                << msg << G4endl;                                                             \
       }                                                                                      \
@@ -80,10 +87,12 @@ std::size_t SampleWeightDistribution(const std::vector<G4double>& weights)
 
   const auto targetWeight = G4RandFlat::shoot() * totalWeight;
   G4double cummulativeWeight = 0;
-  for (std::size_t i = 0; i < weights.size(); ++i) {
+  for (std::size_t i = 0; i < weights.size(); ++i)
+  {
     cummulativeWeight += weights[i];
 
-    if (cummulativeWeight >= targetWeight) {
+    if (cummulativeWeight >= targetWeight)
+    {
       return i;
     }
   }
@@ -96,7 +105,8 @@ G4String LogProducts(const std::vector<G4FermiParticle>& particles)
   std::ostringstream out;
 
   out << "[\n";
-  for (const auto& particle : particles) {
+  for (const auto& particle : particles)
+  {
     out << SPACES_OFFSET << particle << ";\n";
   }
   out << "]";
@@ -116,7 +126,8 @@ G4String LogSplit(const G4FermiFragmentVector& split)
   std::ostringstream out;
 
   out << "[\n";
-  for (const auto fragmentPtr : split) {
+  for (const auto fragmentPtr : split)
+  {
     out << SPACES_OFFSET << *fragmentPtr << ";\n";
   }
   out << "]";
@@ -152,7 +163,8 @@ void G4FermiBreakUpAN::PossibleSplits::InsertSplits(const G4FermiAtomicMass atom
 {
   const auto slot = GetSlot(atomicMass, chargeNumber);
 
-  if (slot >= splits_.size()) {
+  if (slot >= splits_.size())
+  {
     splits_.resize(slot + static_cast<std::uint32_t>(atomicMass));
   }
 
@@ -169,35 +181,38 @@ std::vector<G4FermiParticle> G4FermiBreakUpAN::BreakItUp(const G4FermiParticle& 
 {
   FERMI_LOG_DEBUG(verbosity_, "Breaking up particle: " << particle);
 
-  if (particle.GetExcitationEnergy() < 0.) {
+  if (particle.GetExcitationEnergy() < 0.)
+  {
     FERMI_LOG_DEBUG(verbosity_, "G4FermiParticle is stable with excitation energy = "
-		    << particle.GetExcitationEnergy());
+                                  << particle.GetExcitationEnergy());
     return {particle};
   }
 
   const auto& splits = splits_.GetSplits(particle.GetAtomicMass(), particle.GetChargeNumber());
   FERMI_LOG_DEBUG(verbosity_,
-		  "Selecting Split for " << particle << " from " << splits.size() << " splits");
-  if (splits.empty()) {
+                  "Selecting Split for " << particle << " from " << splits.size() << " splits");
+  if (splits.empty())
+  {
     FERMI_LOG_DEBUG(verbosity_, "No splits found");
     return {particle};
   }
 
   // get phase space weights for every split
   // we can't cache them, because calculations is probabilistic
-  weights_.resize(splits.size());
-  std::transform(splits.begin(), splits.end(), weights_.begin(),
+  std::vector<G4double> weights(splits.size(), 0.);
+  std::transform(splits.begin(), splits.end(), weights.begin(),
                  [atomicMass = particle.GetAtomicMass(),
                   totalEnergy = particle.GetMomentum().m()](const auto& split) {
                    return G4FermiSplitter::DecayWeight(split, atomicMass, totalEnergy);
                  });
 
-  if (std::all_of(weights_.begin(), weights_.end(), [](auto weight) { return weight == 0.; })) {
+  if (std::all_of(weights.begin(), weights.end(), [](auto weight) { return weight == 0.; }))
+  {
     FERMI_LOG_DEBUG(verbosity_, "Every split has zero weight");
     return {particle};
   }
 
-  const auto& chosenSplit = splits[SampleWeightDistribution(weights_)];
+  const auto& chosenSplit = splits[SampleWeightDistribution(weights)];
   FERMI_LOG_DEBUG(verbosity_,
                   "From " << splits.size() << " splits chosen split: " << LogSplit(chosenSplit));
 
@@ -206,39 +221,62 @@ std::vector<G4FermiParticle> G4FermiBreakUpAN::BreakItUp(const G4FermiParticle& 
 
 void G4FermiBreakUpAN::Initialise()
 {
-  if (G4NucleiProperties::GetNuclearMass(2, 0) <= 0.) {
+  minimumExcitationEnergy_ = G4NuclearLevelData::GetInstance()->GetParameters()->GetMinExcitation();
+
+  if (G4NucleiProperties::GetNuclearMass(2, 0) <= 0.)
+  {
     G4BaryonConstructor pCBar;
     pCBar.ConstructParticle();
   }
-  G4FermiNucleiProperties::Instance().Initialize();
-
-  {
-    auto pool = G4FermiFragmentPoolAN::DefaultPoolANSource();
-    pool.Initialize();
-    G4FermiFragmentPoolAN::Instance().Initialize(pool);
-  }
+  // The process-wide pool is initialized once by its thread-safe static constructor.
+  (void)G4FermiFragmentPoolAN::Instance();
 
   // order is important here, we use G4FermiFragmentPool to create splits!
   splits_ = PossibleSplits();
-  for (auto a = 1; a < MAX_A; ++a) {
-    for (auto z = 0; z <= a; ++z) {
+  minimumExcitationEnergies_.assign(
+    GetSlot(G4FermiAtomicMass(MAX_A - 1), G4FermiChargeNumber(MAX_A - 1)) + 1,
+    std::numeric_limits<G4double>::infinity());
+  for (auto a = 1; a < MAX_A; ++a)
+  {
+    for (auto z = 0; z <= a; ++z)
+    {
       const auto atomicMass = G4FermiAtomicMass(a);
       const auto chargeNumber = G4FermiChargeNumber(z);
+      auto splits = G4FermiSplitter::GenerateSplits({atomicMass, chargeNumber});
 
-      splits_.InsertSplits(atomicMass, chargeNumber,
-                           G4FermiSplitter::GenerateSplits({atomicMass, chargeNumber}));
+      auto minimumTotalEnergy = std::numeric_limits<G4double>::infinity();
+      for (const auto& split : splits)
+      {
+        minimumTotalEnergy = std::min(minimumTotalEnergy, G4FermiSplitter::DecayThreshold(split));
+      }
+
+      if (std::isfinite(minimumTotalEnergy))
+      {
+        minimumExcitationEnergies_[GetSlot(atomicMass, chargeNumber)] =
+          minimumTotalEnergy - G4FermiNucleiProperties::GetNuclearMass(atomicMass, chargeNumber);
+      }
+
+      splits_.InsertSplits(atomicMass, chargeNumber, std::move(splits));
     }
   }
 }
 
-G4bool G4FermiBreakUpAN::IsApplicable(G4int Z, G4int A, G4double /* eexc */) const
+G4bool G4FermiBreakUpAN::IsApplicable(G4int Z, G4int A, G4double eexc) const
 {
-  return Z < MAX_Z && A < MAX_A;
+  if (Z < 0 || A <= 0 || Z > A || Z >= MAX_Z || A >= MAX_A || !std::isfinite(eexc) || eexc < 0.)
+  {
+    return false;
+  }
+
+  const auto slot = GetSlot(G4FermiAtomicMass(A), G4FermiChargeNumber(Z));
+  return slot < minimumExcitationEnergies_.size()
+         && eexc > minimumExcitationEnergies_[slot] + minimumExcitationEnergy_;
 }
 
 void G4FermiBreakUpAN::BreakFragment(G4FragmentVector* results, G4Fragment* theNucleus)
 {
-  if (theNucleus == nullptr || results == nullptr) {
+  if (theNucleus == nullptr || results == nullptr)
+  {
     G4ExceptionDescription ed;
     ed << "G4Fragment or result G4FragmentVector is not set in FermiBreakUp";
     G4Exception("G4FermiBreakUpAN::BreakFragment()", "Fermi003", FatalErrorInArgument, ed);
@@ -251,16 +289,20 @@ void G4FermiBreakUpAN::BreakFragment(G4FragmentVector* results, G4Fragment* theN
   const auto fragments = BreakItUp(particle);
 
   // decay impossible
-  if (fragments.size() <= 1) { return; }
+  if (fragments.size() <= 1)
+  {
+    return;
+  }
 
   const auto creationTime = theNucleus->GetCreationTime();
   // primary should be deleted
   delete theNucleus;
-  
-  for (const auto& fragment : fragments) {
-    auto fr = new G4Fragment(static_cast<G4int>(fragment.GetAtomicMass()),
-                             static_cast<G4int>(fragment.GetChargeNumber()),
-                             fragment.GetMomentum());
+
+  for (const auto& fragment : fragments)
+  {
+    auto fr =
+      new G4Fragment(static_cast<G4int>(fragment.GetAtomicMass()),
+                     static_cast<G4int>(fragment.GetChargeNumber()), fragment.GetMomentum());
     results->push_back(fr);
     fr->SetCreationTime(creationTime);
     fr->SetCreatorModelID(secID_);
@@ -276,10 +318,11 @@ G4FermiBreakUpAN::SplitToParticles(const G4FermiParticle& sourceParticle,
                  std::mem_fn(&G4VFermiFragmentAN::GetTotalEnergy));
 
   G4FermiPhaseDecay phaseSampler;
-  std::vector<G4LorentzVector> particlesMomentum
-    = phaseSampler.CalculateDecay(sourceParticle.GetMomentum(), splitMasses);
+  std::vector<G4LorentzVector> particlesMomentum =
+    phaseSampler.CalculateDecay(sourceParticle.GetMomentum(), splitMasses);
 
-  if (particlesMomentum.empty()) {
+  if (particlesMomentum.empty())
+  {
     return {sourceParticle};
   }
 
@@ -287,7 +330,8 @@ G4FermiBreakUpAN::SplitToParticles(const G4FermiParticle& sourceParticle,
   std::vector<G4FermiParticle> particleSplit;
   particleSplit.reserve(2 * split.size());
   const auto boostVector = sourceParticle.GetMomentum().boostVector();
-  for (std::size_t fragmentIdx = 0; fragmentIdx < split.size(); ++fragmentIdx) {
+  for (std::size_t fragmentIdx = 0; fragmentIdx < split.size(); ++fragmentIdx)
+  {
     const auto fragmentMomentum =
       ChangeFrameOfReference(particlesMomentum[fragmentIdx], boostVector);
     split[fragmentIdx]->AppendDecayFragments(fragmentMomentum, particleSplit);

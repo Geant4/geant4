@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-04-patch-02    (12-June-2026)
+ Geant4 version Name: geant4-11-04-patch-03    (01-October-2026)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -990,15 +990,15 @@ G4VoxelisationHelper::ReportVoxelStats -- Voxel Statistics
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=19.820000s Real=19.893478s Sys=0.010000s
+  User=18.230000s Real=18.489654s Sys=0.010000s
 
  ======================== run summary ======================
 The run was 100 events.
 Number of hits per event:	 0 +- 0
 Number of hits per event above threshold:	 0 +- 0
-Number of scintillation photons per event :	 4821 +- 0
-Number of Cerenkov photons per event:	 23.25 +- 0.617
-Number of absorbed photons per event :	 4642 +- 0
+Number of scintillation photons per event :	 4736 +- 0
+Number of Cerenkov photons per event:	 23.68 +- 0.619
+Number of absorbed photons per event :	 4561 +- 25.85
 Number of photons absorbed at boundary per event:	 0 +- 0
 Total energy deposition in scintillator per event:	 0 +- 0 keV.
 
@@ -1008,9 +1008,9 @@ Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.
 Deleting G4Run (id:0) 
-UserDetectorConstruction deleted 0x1456d80
-UserPhysicsList deleted 0x14a4a60
-UserActionInitialization deleted 0x1646060
+UserDetectorConstruction deleted 0xed9db0
+UserPhysicsList deleted 0xf27a90
+UserActionInitialization deleted 0x10c9280
 UserWorkerInitialization deleted 0
 UserWorkerThreadInitialization deleted 0
 UserRunAction deleted.
@@ -1025,19 +1025,19 @@ G4RNGHelper object is deleted.
 ================== Deleting memory pools ===================
 Pool ID '20G4NavigationLevelRep', size : 0.00961 MB
 Pool ID '24G4ReferenceCountedHandleIvE', size : 0.000961 MB
-Pool ID '17G4DynamicParticle', size : 0.275 MB
+Pool ID '17G4DynamicParticle', size : 0.277 MB
 Pool ID '7G4Event', size : 0.000961 MB
 Pool ID '15G4PrimaryVertex', size : 0.000961 MB
 Pool ID '17G4PrimaryParticle', size : 0.000961 MB
 Pool ID '15G4HCofThisEvent', size : 0.000961 MB
 Pool ID '16G4HitsCollection', size : 0.000961 MB
-Pool ID '7G4Track', size : 0.55 MB
+Pool ID '7G4Track', size : 0.553 MB
 Pool ID '18G4TouchableHistory', size : 0.000961 MB
 Pool ID '15G4CountedObjectIvE', size : 0.000961 MB
 Pool ID '13LXeTrajectory', size : 0.000961 MB
 Pool ID '17G4TrajectoryPoint', size : 0.000961 MB
 Number of memory pools allocated: 13 of which, static: 0
-Dynamic pools deleted: 13 / Total memory freed: 0.84 MB
+Dynamic pools deleted: 13 / Total memory freed: 0.85 MB
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

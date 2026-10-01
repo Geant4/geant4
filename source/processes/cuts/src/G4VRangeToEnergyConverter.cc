@@ -34,17 +34,11 @@
 #include "G4SystemOfUnits.hh"
 #include "G4Log.hh"
 #include "G4Exp.hh"
-#include "G4AutoLock.hh"
-
-namespace
-{
-  G4Mutex theREMutex = G4MUTEX_INITIALIZER;
-}
 
 G4double G4VRangeToEnergyConverter::sEmin = 0.0;
 G4double G4VRangeToEnergyConverter::sEmax = 0.0;
 
-std::vector<G4double>* G4VRangeToEnergyConverter::sEnergy = nullptr;
+std::vector<G4double> G4VRangeToEnergyConverter::sEnergy;
 
 G4int G4VRangeToEnergyConverter::sNbinPerDecade = 50;
 G4int G4VRangeToEnergyConverter::sNbin = 350;
@@ -52,19 +46,7 @@ G4int G4VRangeToEnergyConverter::sNbin = 350;
 // --------------------------------------------------------------------
 G4VRangeToEnergyConverter::G4VRangeToEnergyConverter()
 {
-  if(sEnergy==nullptr) FillEnergyVector(0.99*CLHEP::keV, 10.0*CLHEP::GeV);
-}
-
-// --------------------------------------------------------------------
-G4VRangeToEnergyConverter::~G4VRangeToEnergyConverter()
-{
-  if (nullptr != sEnergy)
-  {
-    G4AutoLock l(&theREMutex);
-    delete sEnergy;
-    sEnergy = nullptr;
-    l.unlock();
-  }
+  if (sEnergy.empty()) FillEnergyVector(0.99*CLHEP::keV, 10.0*CLHEP::GeV);
 }
 
 // --------------------------------------------------------------------
@@ -150,17 +132,17 @@ void G4VRangeToEnergyConverter::FillEnergyVector(const G4double emin,
   if ((sEmin == emin && sEmax == emax) || emin <= 0.0 || emax <= emin) { return; }
 
   // fill energy vector
-  G4AutoLock l(&theREMutex);
   sEmin = emin;
   sEmax = emax;
   sNbin = sNbinPerDecade*G4lrint(std::log10(emax/emin));
-  delete sEnergy;
-  sEnergy = new std::vector<G4double>(sNbin + 1);
-  (*sEnergy)[0] = emin;
-  (*sEnergy)[sNbin] = emax;
+  sEnergy.resize(sNbin + 1);
+  sEnergy[0] = emin;
+  sEnergy[sNbin] = emax;
   G4double fact = G4Log(emax/emin)/sNbin;
-  for (G4int i=1; i<sNbin; ++i) { (*sEnergy)[i] = emin*G4Exp(i * fact); }
-  l.unlock();
+  for (G4int i=1; i<sNbin; ++i)
+  {
+    sEnergy[i] = emin*G4Exp(i * fact);
+  }
 }
 
 // --------------------------------------------------------------------
@@ -179,7 +161,7 @@ G4VRangeToEnergyConverter::ConvertForGamma(const G4double rangeCut,
   G4double e2 = 0.0;
   for (G4int i=0; i<sNbin; ++i)
   {
-    e2 = (*sEnergy)[i];
+    e2 = sEnergy[i];
     G4double sig = 0.;
     
     for (G4int j=0; j<nelm; ++j)
@@ -219,7 +201,7 @@ G4VRangeToEnergyConverter::ConvertForElectron(const G4double rangeCut,
   G4double range = 0.;
   for (G4int i=0; i<sNbin; ++i)
   {
-    e2 = (*sEnergy)[i];
+    e2 = sEnergy[i];
     dedx2 = 0.0;
     for (G4int j=0; j<nelm; ++j)
     {
