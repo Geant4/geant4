@@ -148,8 +148,15 @@ G4int G4ParticleHPProduct::GetMultiplicity(G4double anEnergy)
     fCache.Get().theCurrentMultiplicity = 0;
     return 0;
   }
-  G4int multi =
-    (theMultiplicityMethod == G4HPMultiPoisson) ? (G4int)G4Poisson(mean) : G4lrint(mean);
+  G4int multi;
+  if (theMultiplicityMethod == G4HPMultiPoisson) {
+    multi = (G4int)G4Poisson(mean);
+  }
+  else {
+    multi = G4int(mean);
+    // randomly select between floor(mean) and ceil(mean) to preserve mean yield
+    if (G4UniformRand() < mean - multi) { ++multi; }
+  }
 
 #ifdef G4VERBOSE
   if (G4ParticleHPManager::GetInstance()->GetDEBUG())
