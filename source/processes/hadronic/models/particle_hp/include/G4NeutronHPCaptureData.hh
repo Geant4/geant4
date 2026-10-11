@@ -46,9 +46,13 @@
 #include "G4DynamicParticle.hh"
 #include "G4VCrossSectionDataSet.hh"
 
+#include <vector>
+
 class G4ParticleHPManager;
 class G4ParticleDefinition;
 class G4PhysicsTable;
+class G4PhysicsVector;
+class G4Isotope;
 class G4Element;
 class G4Material;
 
@@ -75,7 +79,17 @@ class G4NeutronHPCaptureData : public G4VCrossSectionDataSet
 
   private:
 
+    // Doppler-broadened cross section of one target (element or isotope)
+    G4double DopplerAverage(const G4DynamicParticle*, const G4PhysicsVector*, G4double targetMass,
+                            G4double aT);
+
+    void BuildIsotopeTables();
+    void ClearIsotopeTables();
+
     static G4PhysicsTable* theCrossSections;
+
+    // isotope-wise capture cross sections, [element index][isotope index]
+    static std::vector<std::vector<G4PhysicsVector*>>* theIsoCrossSections;
     G4ParticleHPManager* fManager;
     G4double emax;
 
@@ -83,6 +97,7 @@ class G4NeutronHPCaptureData : public G4VCrossSectionDataSet
     G4double xs_cache{0.0};
     const G4Element* element_cache{nullptr};
     const G4Material* material_cache{nullptr};
+    const G4Isotope* isotope_cache{nullptr};
 
     G4bool isFirst{false};
     static G4bool fLock;

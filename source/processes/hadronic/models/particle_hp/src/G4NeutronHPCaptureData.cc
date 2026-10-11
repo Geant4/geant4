@@ -48,6 +48,10 @@
 #include "G4NucleiProperties.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleHPData.hh"
+#include "G4ParticleHPIsoData.hh"
+#include "G4ParticleHPVector.hh"
+#include "G4PhysicsFreeVector.hh"
+#include "G4Isotope.hh"
 #include "G4ParticleHPManager.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4PhysicsTable.hh"
@@ -56,6 +60,7 @@
 
 G4bool G4NeutronHPCaptureData::fLock = true;
 G4PhysicsTable* G4NeutronHPCaptureData::theCrossSections = nullptr;
+std::vector<std::vector<G4PhysicsVector*>>* G4NeutronHPCaptureData::theIsoCrossSections = nullptr;
 
 namespace
 {
@@ -75,6 +80,7 @@ G4NeutronHPCaptureData::~G4NeutronHPCaptureData()
     if (nullptr != theCrossSections) theCrossSections->clearAndDestroy();
     delete theCrossSections;
     theCrossSections = nullptr;
+    ClearIsotopeTables();
   }
 }
 
@@ -84,20 +90,112 @@ G4bool G4NeutronHPCaptureData::IsIsoApplicable(const G4DynamicParticle*, G4int, 
   return true;
 }
 
-G4double G4NeutronHPCaptureData::GetIsoCrossSection(const G4DynamicParticle* dp, G4int /*Z*/,
-                                                    G4int /*A*/, const G4Isotope* /*iso*/,
+G4double G4NeutronHPCaptureData::GetIsoCrossSection(const G4DynamicParticle* dp, G4int Z,
+                                                    G4int A, const G4Isotope* iso,
                                                     const G4Element* element,
                                                     const G4Material* material)
 {
-  if (dp->GetKineticEnergy() == ke_cache && element == element_cache && material == material_cache)
+  // The cache key includes the isotope: G4CrossSectionDataStore asks for every
+  // isotope of an element at the same energy to sample the target isotope.
+  if (dp->GetKineticEnergy() == ke_cache && element == element_cache && material == material_cache
+      && iso == isotope_cache)
     return xs_cache;
 
   ke_cache = dp->GetKineticEnergy();
   element_cache = element;
   material_cache = material;
-  G4double xs = GetCrossSection(dp, element, material->GetTemperature());
+  isotope_cache = iso;
+
+  // Isotope-wise cross section; fall back to the element cross section if the
+  // isotope has no data of its own
+  const G4PhysicsVector* isoVec = nullptr;
+  if (nullptr != iso && nullptr != element && nullptr != theIsoCrossSections)
+  {
+    std::size_t idx = element->GetIndex();
+    if (idx < theIsoCrossSections->size())
+    {
+      const auto& vecs = (*theIsoCrossSections)[idx];
+      for (std::size_t j = 0; j < element->GetNumberOfIsotopes() && j < vecs.size(); ++j)
+      {
+        if (element->GetIsotope((G4int)j) == iso)
+        {
+          isoVec = vecs[j];
+          break;
+        }
+      }
+    }
+  }
+
+  G4double xs;
+  if (nullptr != isoVec && dp->GetKineticEnergy() < emax)
+  {
+    G4double isoMass = G4NucleiProperties::GetNuclearMass(A, Z) / CLHEP::neutron_mass_c2;
+    xs = DopplerAverage(dp, isoVec, isoMass, material->GetTemperature());
+  }
+  else
+  {
+    xs = GetCrossSection(dp, element, material->GetTemperature());
+  }
   xs_cache = xs;
   return xs;
+}
+
+void G4NeutronHPCaptureData::ClearIsotopeTables()
+{
+  if (nullptr == theIsoCrossSections) return;
+  for (auto& vecs : *theIsoCrossSections)
+  {
+    for (auto v : vecs)
+    {
+      delete v;
+    }
+  }
+  delete theIsoCrossSections;
+  theIsoCrossSections = nullptr;
+}
+
+void G4NeutronHPCaptureData::BuildIsotopeTables()
+{
+  // Load the capture cross section of every isotope of every element on its own
+  // (abundance 100 %), so that the target isotope can be sampled correctly.
+  ClearIsotopeTables();
+  std::size_t numberOfElements = G4Element::GetNumberOfElements();
+  theIsoCrossSections = new std::vector<std::vector<G4PhysicsVector*>>(numberOfElements);
+
+  G4String dirName = fManager->GetNeutronHPPath() + "/Capture";
+  auto theElementTable = G4Element::GetElementTable();
+  for (std::size_t i = 0; i < numberOfElements; ++i)
+  {
+    auto elm = (*theElementTable)[i];
+    std::size_t nIso = elm->GetNumberOfIsotopes();
+    auto& vecs = (*theIsoCrossSections)[i];
+    vecs.assign(nIso, nullptr);
+    if (nIso < 2) continue;  // single isotope: element cross section is the isotope one
+
+    for (std::size_t j = 0; j < nIso; ++j)
+    {
+      const G4Isotope* iso = elm->GetIsotope((G4int)j);
+      G4ParticleHPIsoData isoData;
+      isoData.Init(iso->GetN(), iso->GetZ(), iso->Getm(), 100., dirName, "/CrossSection");
+      G4ParticleHPVector* hpVec = isoData.MakeChannelData();
+      if (nullptr == hpVec || hpVec->GetVectorLength() == 0) continue;
+
+      G4int len = hpVec->GetVectorLength();
+      auto v = new G4PhysicsFreeVector(len, hpVec->GetX(0), hpVec->GetX(len - 1));
+      for (G4int k = 0; k < len; ++k)
+      {
+        v->PutValues(k, hpVec->GetX(k), hpVec->GetY(k));
+      }
+      vecs[j] = v;
+#ifdef G4VERBOSE
+      if (fManager->GetDEBUG())
+      {
+        G4cout << "G4NeutronHPCaptureData: isotope table " << elm->GetName() << " "
+               << iso->GetName() << " " << len << " points" << G4endl;
+      }
+#endif
+    }
+  }
 }
 
 void G4NeutronHPCaptureData::BuildPhysicsTable(const G4ParticleDefinition& p)
@@ -152,6 +250,7 @@ void G4NeutronHPCaptureData::BuildPhysicsTable(const G4ParticleDefinition& p)
     theCrossSections->push_back(physVec);
   }
   fManager->RegisterCaptureCrossSections(theCrossSections);
+  BuildIsotopeTables();
   l.unlock();
 }
 
@@ -190,7 +289,6 @@ void G4NeutronHPCaptureData::DumpPhysicsTable(const G4ParticleDefinition&)
 G4double G4NeutronHPCaptureData::GetCrossSection(const G4DynamicParticle* aP, const G4Element* anE,
                                                  G4double aT)
 {
-  G4double result = 0;
   auto idx = (G4int)anE->GetIndex();
 
   // prepare neutron
@@ -200,10 +298,24 @@ G4double G4NeutronHPCaptureData::GetCrossSection(const G4DynamicParticle* aP, co
     return 0.0;
   }
 
+  G4int theA = anE->GetN();
+  G4int theZ = anE->GetZasInt();
+  G4double eleMass = G4NucleiProperties::GetNuclearMass(theA, theZ) / CLHEP::neutron_mass_c2;
+
+  return DopplerAverage(aP, (*theCrossSections)(idx), eleMass, aT);
+}
+
+G4double G4NeutronHPCaptureData::DopplerAverage(const G4DynamicParticle* aP,
+                                                const G4PhysicsVector* xsVec,
+                                                G4double targetMass, G4double aT)
+{
+  G4double result = 0;
+  G4double eKinetic = aP->GetKineticEnergy();
+
   // NEGLECT_DOPPLER
   if (fManager->GetNeglectDoppler())
   {
-    return (*((*theCrossSections)(idx))).Value(eKinetic);
+    return xsVec->Value(eKinetic);
   }
 
   G4ReactionProduct theNeutron(aP->GetDefinition());
@@ -212,9 +324,6 @@ G4double G4NeutronHPCaptureData::GetCrossSection(const G4DynamicParticle* aP, co
 
   // prepare thermal nucleus
   G4Nucleus aNuc;
-  G4int theA = anE->GetN();
-  G4int theZ = anE->GetZasInt();
-  G4double eleMass = G4NucleiProperties::GetNuclearMass(theA, theZ) / CLHEP::neutron_mass_c2;
 
   G4ReactionProduct boosted;
   G4double aXsection;
@@ -234,10 +343,10 @@ G4double G4NeutronHPCaptureData::GetCrossSection(const G4DynamicParticle* aP, co
     while (counter < size)  // Loop checking, 11.05.2015, T. Koi
     {
       ++counter;
-      G4ReactionProduct aThermalNuc = aNuc.GetThermalNucleus(eleMass, aT);
+      G4ReactionProduct aThermalNuc = aNuc.GetThermalNucleus(targetMass, aT);
       boosted.Lorentz(theNeutron, aThermalNuc);
       G4double theEkin = boosted.GetKineticEnergy();
-      aXsection = (*((*theCrossSections)(idx))).Value(theEkin);
+      aXsection = xsVec->Value(theEkin);
       // velocity correction, or luminosity factor...
       G4ThreeVector targetVelocity = 1. / aThermalNuc.GetMass() * aThermalNuc.GetMomentum();
       aXsection *= (targetVelocity - neutronVelocity).mag() / neutronVMag;
@@ -246,12 +355,6 @@ G4double G4NeutronHPCaptureData::GetCrossSection(const G4DynamicParticle* aP, co
     size += size;
   }
   result /= counter;
-  /*
-    // Checking impact of  G4NEUTRONHP_NEGLECT_DOPPLER
-    G4cout << " result " << result << " "
-           << (*((*theCrossSections)(index))).Value(eKinetic) << " "
-           << (*((*theCrossSections)(index))).Value(eKinetic) /result << G4endl;
-  */
   return result;
 }
 
