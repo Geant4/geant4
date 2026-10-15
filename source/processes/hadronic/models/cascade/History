@@ -6,6 +6,12 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2026-10-14 Tamas Almos Vami
+- G4CascadeT1GamNChannel: list the meson first in the gamma n two-body final
+    states, as already done for gamma p. The CM angle from the gamma N -> N pi
+    and gamma N -> K Lambda/Sigma distributions goes to the first particle, so gamma n
+    gave the forward-peaked pion distribution to the nucleon.
+
 ## 2026-06-16 Alvaro Tolosa-Delgado (hadr-casc-V11-04-02)
 - Fixed Bertini secondary creator model IDs in G4CascadeInterface, tagging 
     particles from precompound and evaporation stages with their corresponding 
