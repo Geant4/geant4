@@ -74,8 +74,11 @@ static const G4int gamp9bfs[7][9] = {
 namespace
 {
 // gamma n : Outgoing particle types of a given multiplicity
-static const G4int gamn2bfs[6][2] = {{gam, neu}, {neu, pi0}, {pro, pim},
-                                     {lam, k0},  {s0, k0},   {sm, kpl}};
+// Meson listed first, as for gamma p: the CM angle sampled from the
+// gamma N -> N pi and gamma N -> K Lambda/Sigma distributions is given to the
+// first particle
+static const G4int gamn2bfs[6][2] = {{gam, neu}, {pi0, neu}, {pim, pro},
+                                     {k0, lam},  {k0, s0},   {kpl, sm}};
 
 static const G4int gamn3bfs[6][3] = {{neu, pip, pim}, {neu, pi0, pi0}, {pro, pim, pi0},
                                      {neu, k0, k0b},  {neu, kpl, kmi}, {pro, k0, kmi}};
