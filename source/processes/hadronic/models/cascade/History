@@ -6,6 +6,16 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2026-10-14 Tamas Almos Vami
+- G4NucleiModel::generateInteractionPartners: for forced particles (incident
+    photons and muons), choose a single interaction point from the total
+    inverse mean free path and the target nucleon or dinucleon in proportion
+    to its inverse mean free path. Before, every target got its own forced
+    path and the shortest won, which over-selects targets with small cross
+    sections; photon absorption on dinucleons was over-produced by one to two
+    orders of magnitude. Other particles are unchanged. Algorithm by
+    N. Toro (SLAC), used by LDMX since Geant4 10.2.3.
+
 ## 2026-06-16 Alvaro Tolosa-Delgado (hadr-casc-V11-04-02)
 - Fixed Bertini secondary creator model IDs in G4CascadeInterface, tagging 
     particles from precompound and evaporation stages with their corresponding 

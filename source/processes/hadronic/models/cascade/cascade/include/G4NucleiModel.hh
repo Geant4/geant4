@@ -250,6 +250,7 @@ class G4NucleiModel
 
     std::vector<G4InuclElementaryParticle> qdeutrons;  // For h+(NN) trials
     std::vector<G4double> acsecs;
+    std::vector<partner> candidates;  // (target, invmfp) for forced particles
 
     std::vector<G4ThreeVector> coordinates;  // for initializeCascad()
     std::vector<G4LorentzVector> momentums;
