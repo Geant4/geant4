@@ -1,0 +1,522 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+//
+//
+//
+// G4VulkanQtViewer : Class to provide WindowsNT specific
+//                       functionality for Vulkan in GEANT4
+//
+// Alex Vergara Gil  17th October 2026
+// Ported to Vulkan from the OpenGL work by M. Kelsey (30/06/2014).
+
+#ifndef G4VULKANQTVIEWER_HH
+#define G4VULKANQTVIEWER_HH
+
+#include "G4AutoLock.hh"
+#include "G4VulkanViewer.hh"
+#include "G4PhysicalVolumeModel.hh"
+#include "globals.hh"
+
+#include <qobject.h>
+#include <qpixmap.h>
+#include <qpoint.h>
+
+class G4VulkanSceneHandler;
+class G4UImanager;
+class G4Text;
+class G4UIcommand;
+
+#include <QImage>
+#include <QPainter>
+#include <QPaintEvent>
+#include <QResizeEvent>
+#include <QShowEvent>
+#include <QWidget>
+#include <QtGlobal>
+#include <algorithm>
+#include <cstring>
+
+class G4QVulkanWidgetType : public QWidget
+{
+  public:
+
+    G4QVulkanWidgetType(QWidget* parent = nullptr) : QWidget(parent) {}
+    ~G4QVulkanWidgetType() override = default;
+
+    bool isValid() const { return true; }
+    void makeCurrent() {}
+    void doneCurrent() {}
+    QObject* context() const { return nullptr; }
+
+    virtual void initializeVK() {}
+    virtual void resizeVK(int, int) {}
+    virtual void paintVK() {}
+    void updateVK() { update(); }
+
+    QImage buildFramebufferImage() const
+    {
+      auto& ctx = G4VulkanContext::Instance();
+      ctx.SyncGpuFramebufferToCpu();
+      int w = ctx.fFbWidth;
+      int h = ctx.fFbHeight;
+      if (w <= 0 || h <= 0 || ctx.fColorBuffer.size() < static_cast<size_t>(w * h * 4))
+      {
+        return QImage(std::max(1, width()), std::max(1, height()), QImage::Format_RGBA8888);
+      }
+      QImage img(w, h, QImage::Format_RGBA8888);
+      for (int y = 0; y < h; ++y)
+      {
+        const uint8_t* srcRow = ctx.fColorBuffer.data() + static_cast<size_t>(h - 1 - y) * w * 4;
+        std::memcpy(img.scanLine(y), srcRow, static_cast<size_t>(w) * 4);
+      }
+      return img;
+    }
+
+    QImage grabFramebuffer()
+    {
+      paintVK();
+      return buildFramebufferImage();
+    }
+
+    QImage grabFrameBuffer() { return grabFramebuffer(); }
+
+    void renderText(double, double, double, const QString&, const QFont& = QFont()) {}
+
+  protected:
+
+    void showEvent(QShowEvent* e) override
+    {
+      QWidget::showEvent(e);
+      initializeVK();
+    }
+
+    void resizeEvent(QResizeEvent* e) override
+    {
+      QWidget::resizeEvent(e);
+      resizeVK(width(), height());
+    }
+
+    void paintEvent(QPaintEvent* e) override
+    {
+      QWidget::paintEvent(e);
+      paintVK();
+      QImage img = buildFramebufferImage();
+      QPainter painter(this);
+      painter.drawImage(rect(), img);
+    }
+};
+
+class QDialog;
+class QTextEdit;
+class QContextMenuEvent;
+class QMenu;
+class QImage;
+class QAction;
+class QTabWidget;
+class QMouseEvent;
+class QKeyEvent;
+class QWheelEvent;
+class QProcess;
+class QTime;
+class QElapsedTimer;
+class QVBoxLayout;
+class QPushButton;
+class QSlider;
+class QTreeWidgetItem;
+class QTreeWidget;
+class QColor;
+class G4VulkanSceneHandler;
+class G4VulkanQtMovieDialog;
+class QLineEdit;
+class G4UIQt;
+class QTableWidget;
+class QTableWidgetItem;
+class QScrollArea;
+class QSplitter;
+
+class G4VulkanQtViewer : public QObject, virtual public G4VulkanViewer
+{
+    Q_OBJECT
+
+    typedef G4PhysicalVolumeModel::G4PhysicalVolumeNodeID PVNodeID;
+    typedef std::vector<PVNodeID> PVPath;
+
+  public:
+
+    G4VulkanQtViewer(G4VulkanSceneHandler& scene);
+    virtual ~G4VulkanQtViewer();
+#ifdef G4MULTITHREADED
+    // For switching threads in MT mode
+    // Note: the order of calling of MovingToVisSubThread and SwitchToVisSubThread
+    // is undefined, so we have to use mutexes to ensure required information,
+    // namely the vis sub-thread address, is available before moving objects.
+    // To summarise, the order of calling is
+    //   DoneWithMasterThread
+    //   MovingToVisSubThread ) or ( SwitchToVisSubThread
+    //   SwitchToVisSubThread )    ( MovingToVisSubThread
+    //   DoneWithVisSubThread
+    //   MovingToMasterThread
+    //   SwitchToMasterThread
+    // Called on the master thread before starting the vis sub-thread.
+    virtual void DoneWithMasterThread();
+    // Called on the master thread after starting the vis sub-thread.
+    virtual void MovingToVisSubThread();
+    // Called on the vis sub-thread when waiting for events.
+    virtual void SwitchToVisSubThread();
+    // Called on the vis sub-thread when all events have been processed.
+    virtual void DoneWithVisSubThread();
+    // Called on the vis sub-thread when all events have been processed.
+    // virtual void MovingToMasterThread ();  Not used in G4VulkanQtViewer.
+    // Called on the master thread after the vis sub-thread has terminated.
+    virtual void SwitchToMasterThread();
+#endif
+
+  private:
+
+    G4VulkanQtViewer(const G4VulkanQtViewer&);
+    G4VulkanQtViewer& operator=(const G4VulkanQtViewer&);
+
+  public:
+
+    virtual G4bool ReadyToDraw();
+    virtual void updateQWidget() = 0;
+    void updateSceneTreeWidget();
+    void updateViewerPropertiesTableWidget();
+    void updatePickInfosWidget(int, int);
+    QString setEncoderPath(QString path);
+    QString getEncoderPath();
+    QString setTempFolderPath(QString path);
+    QString getTempFolderPath();
+    QString setSaveFileName(QString path);
+    QString getSaveFileName();
+    bool isRecording();
+    bool isStopped();
+    bool isPaused();
+    bool isEncoding();
+    bool isWaiting();
+    bool isFailed();
+    void setWaiting();
+    bool isBadEncoder();
+    bool isBadOutput();
+    bool isBadTmp();
+    bool isSuccess();
+    void setBadTmp();
+    void setBadOutput();
+    void setBadEncoder();
+    bool isReadyToEncode();
+    void resetRecording();
+    void encodeVideo();
+    void stopVideo();
+    void saveVideo();
+    bool generateMpegEncoderParameters();
+    void displayRecordingStatus();
+    void DrawText(const G4Text&);
+    void ResetView();
+    void addPVSceneTreeElement(const G4String& model, G4PhysicalVolumeModel* pPVModel,
+                               int currentPVPOIndex);
+    void addNonPVSceneTreeElement(const G4String& model, int currentPVPOIndex,
+                                  const std::string& modelDescription, const G4Visible& visible);
+    bool isTouchableVisible(int POindex);
+    void clearTreeWidget();
+    bool exportImage(std::string name = "", int width = -1, int height = -1);
+    G4bool GetWindowSize(unsigned int& a_w, unsigned int& a_h);
+    G4bool GetRenderAreaSize(unsigned int& a_w, unsigned int& a_h);
+
+  public:
+
+    void G4MousePressEvent(QMouseEvent* event);
+    void G4wheelEvent(QWheelEvent* event);
+    void G4keyPressEvent(QKeyEvent* event);
+    void G4keyReleaseEvent(QKeyEvent* event);
+    void G4MouseDoubleClickEvent();
+    void G4MouseReleaseEvent(QMouseEvent* evnt);
+    void G4MouseMoveEvent(QMouseEvent* event);
+
+  protected:
+
+    void CreateVKQtContext();
+    virtual void CreateMainWindow(G4QVulkanWidgetType*, const QString&);
+    void G4manageContextMenuEvent(QContextMenuEvent* e);
+    void rotateQtScene(float, float);
+    void rotateQtSceneToggle(float, float);
+    void moveScene(float, float, float, bool);
+    void FinishView();
+    void updateKeyModifierState(const Qt::KeyboardModifiers&);
+    void displaySceneTreeComponent();
+    G4Colour getColorForPoIndex(int poIndex);
+
+    // So that privately accumulated vis attributes modifiers may be
+    // concatenated with the standard vis attributes modifiers for commands
+    // such as /vis/viewer/set/all and /vis/viewer/save...
+    const std::vector<G4ModelingParameters::VisAttributesModifier>*
+    GetPrivateVisAttributesModifiers() const;
+    bool isCurrentWidget();
+
+  protected:
+
+    G4UIQt* fUiQt;
+    QWidget* fVKWidget;
+    void savePPMToTemp();
+    int fRecordFrameNumber;
+
+#if QT_VERSION < 0x060000
+    bool fHasToRepaint;
+    bool fUpdateVKLock;
+    bool fQVKWidgetInitialiseCompleted;
+    bool fPaintEventLock;
+#endif
+
+    // Flag to indicate that action was initiated by interaction (mouse
+    // click) on the scene tree.  It is used and reset in
+    // G4VulkanStoredQtViewer::CompareForKernelVisit to prevent rebuild
+    // in this case.
+    bool fMouseOnSceneTree;
+
+  private:
+
+    enum RECORDING_STEP
+    {
+      WAIT,
+      START,
+      PAUSE,
+      CONTINUE,
+      STOP,
+      READY_TO_ENCODE,
+      ENCODING,
+      FAILED,
+      SUCCESS,
+      BAD_ENCODER,
+      BAD_OUTPUT,
+      BAD_TMP,
+      SAVE
+    };
+
+    void createPopupMenu();
+    void createRadioAction(QAction*, QAction*, const std::string&, unsigned int a = 1);
+    void rescaleImage(int, int);
+    bool printPDF(const std::string, int, QImage);
+    void showMovieParametersDialog();
+    void initMovieParameters();
+    QString createTempFolder();
+    QString removeTempFolder();
+    void setRecordingStatus(RECORDING_STEP);
+    void setRecordingInfos(const QString&);
+    QString getProcessErrorMsg();
+    QWidget* getParentWidget();
+    bool parseAndInsertInSceneTree(QTreeWidgetItem*, G4PhysicalVolumeModel* pPVModel,
+                                   unsigned int fullPathIndex, const QString& parentRoot,
+                                   unsigned int currentIndex, int currentPVPOIndex);
+    void setCheckComponent(QTreeWidgetItem* item, bool check);
+    void createSceneTreeComponent();
+    void createSceneTreeWidget();
+    void createViewerPropertiesWidget();
+    void createPickInfosWidget();
+    bool parseAndCheckVisibility(QTreeWidgetItem* treeNode, int POindex);
+    QTreeWidgetItem* createTreeWidgetItem(const PVPath& fullPath, const QString& name, int copyNb,
+                                          int POIndex, const QString& logicalName,
+                                          Qt::CheckState state, QTreeWidgetItem* treeNode,
+                                          const G4Colour& color);
+    QString getModelShortName(const G4String& modelShortName);
+    void cloneSceneTree(QTreeWidgetItem* rootItem);
+    void changeDepthOnSceneTreeItem(double lookForDepth, double currentDepth,
+                                    QTreeWidgetItem* item);
+    void updatePositivePoIndexSceneTreeWidgetQuickMap(int POindex, QTreeWidgetItem* item);
+    void changeQColorForTreeWidgetItem(QTreeWidgetItem* item, const QColor&);
+
+    bool isSameSceneTreeElement(QTreeWidgetItem* parentOldItem, QTreeWidgetItem* parentNewItem);
+    void changeOpenCloseVisibleHiddenSelectedColorSceneTreeElement(QTreeWidgetItem* subItem);
+    bool isPVVolume(QTreeWidgetItem* item);
+    QTreeWidgetItem* cloneWidgetItem(QTreeWidgetItem* item);
+    void clearSceneTreeSelection(QTreeWidgetItem*);
+    void clearTreeWidgetElements(QTreeWidgetItem* item);
+
+    // Get the tree wigdet item for POindex if exists
+    QTreeWidgetItem* getTreeWidgetItem(int POindex);
+
+    // Get the old tree wigdet item for POindex if exists
+    QTreeWidgetItem* getOldTreeWidgetItem(int POindex);
+
+    // parse the scene tree and return a string of status that can be saved
+    std::string parseSceneTreeAndSaveState();
+
+    std::string parseSceneTreeElementAndSaveState(QTreeWidgetItem* item, unsigned int level);
+    QString GetCommandParameterList(const G4UIcommand* aCommand);
+    void changeColorAndTransparency(VKuint index, G4Color color);
+
+    QMenu* fContextMenu;
+    QPoint fLastPos1;
+    QPoint fLastPos2;
+    QPoint fLastPos3;
+    QPoint fLastPickPoint;
+
+    // delta of depth move. This delta is put in % of the scene view
+    G4double fDeltaDepth;
+    // delta of zoom move. This delta is put in % of the scene view
+    G4double fDeltaZoom;
+    // To ensure key event are keep one by one
+    bool fHoldKeyEvent;
+    // To ensure move event are keep one by one
+    bool fHoldMoveEvent;
+    // To ensure rotate event are keep one by one
+    bool fHoldRotateEvent;
+    bool fAutoMove;
+    QString fEncoderPath;
+    QString fTempFolderPath;
+    QString fMovieTempFolderPath;
+    QString fSaveFileName;
+    QString fParameterFileName;
+    QAction* fMouseRotateAction;
+    QAction* fMouseMoveAction;
+    QAction* fMousePickAction;
+    QAction* fMouseZoomInAction;
+    QAction* fMouseZoomOutAction;
+    QAction* fFullScreenOn;
+    QAction* fFullScreenOff;
+    QAction* fDrawingWireframe;
+    QAction* fDrawingLineRemoval;
+    QAction* fDrawingSurfaceRemoval;
+    QAction* fDrawingLineSurfaceRemoval;
+    QAction* fProjectionOrtho;
+    QAction* fProjectionPerspective;
+    G4VulkanQtMovieDialog* fMovieParametersDialog;
+    RECORDING_STEP fRecordingStep;
+    QProcess* fProcess;
+#if (QT_VERSION < QT_VERSION_CHECK(5, 14, 0))
+    QTime* fLastEventTime;
+#else
+    QElapsedTimer* fLastEventTime;
+#endif
+    int fSpinningDelay;
+    int fNbMaxFramesPerSec;
+    float fNbMaxAnglePerSec;
+    int fLaunchSpinDelay;
+    QWidget* fUISceneTreeWidget;
+    QWidget* fUIViewerPropertiesWidget;
+    QWidget* fUIPickInfosWidget;
+    bool fNoKeyPress;
+    bool fAltKeyPress;
+    bool fControlKeyPress;
+    bool fShiftKeyPress;
+    bool fBatchMode;
+    bool fCheckSceneTreeComponentSignalLock;
+    bool fViewerPropertiesTableWidgetIsInit;
+    QTreeWidget* fSceneTreeComponentTreeWidget;
+    // This is only use to hold the old "expand" value, see
+    // file:///Developer/Documentation/Qt/html/qtreewidgetitem.html#setExpanded
+    QWidget* fSceneTreeWidget;
+    bool fPVRootNodeCreate;
+    QLineEdit* fFilterOutput;
+    QString fFileSavePath;
+    int fNbRotation;
+    int fTimeRotation;
+    QString fTouchableVolumes;
+    QDialog* fShortcutsDialog;
+    QTableWidget* fViewerPropertiesTableWidget;
+    QWidget* fPickInfosWidget;
+    QScrollArea* fPickInfosScrollArea;
+    int fTreeWidgetInfosIgnoredCommands;
+    QPushButton* fSceneTreeButtonApply;
+    QTextEdit* fShortcutsDialogInfos;
+    QSlider* fSceneTreeDepthSlider;
+    std::map<int, PVPath> fTreeItemModels;
+    std::map<int, PVPath> fOldTreeItemModels;
+
+    // quick scene tree map
+    std::map<int, QTreeWidgetItem*> fPositivePoIndexSceneTreeWidgetQuickMap;
+    // old scene tree map
+    std::map<int, QTreeWidgetItem*> fOldPositivePoIndexSceneTreeWidgetQuickMap;
+    std::vector<QTreeWidgetItem*> fOldNullPoIndexSceneTreeWidgetQuickVector;
+    // old vis attr color map
+    std::map<int, QColor> fOldVisAttrColorMap;
+
+    unsigned int fSceneTreeDepth;
+    QTreeWidgetItem* fModelShortNameItem;
+    int fNumber;
+    int fMaxPOindexInserted;
+
+    // quick map index to find next item
+    std::map<int, QTreeWidgetItem*>::const_iterator fLastSceneTreeWidgetAskForIterator;
+    std::map<int, QTreeWidgetItem*>::const_iterator fLastSceneTreeWidgetAskForIteratorEnd;
+
+    // quick map index to find next item
+    std::map<int, QTreeWidgetItem*>::const_iterator fOldLastSceneTreeWidgetAskForIterator;
+    std::map<int, QTreeWidgetItem*>::const_iterator fOldLastSceneTreeWidgetAskForIteratorEnd;
+
+    // icons
+    QPixmap* fTreeIconOpen;
+    QPixmap* fTreeIconClosed;
+    QPixmap* fSearchIcon;
+
+    int fLastExportSliderValue;
+    G4Color fLastHighlightColor;
+    VKuint fLastHighlightName;
+    bool fIsDeleting;
+
+#ifdef G4MULTITHREADED
+    QThread* fQVKContextVisSubThread;
+    QThread* fQVKContextMainThread;
+#endif
+
+  public Q_SLOTS:
+    void startPauseVideo();
+
+  protected Q_SLOTS:
+    void updateToolbarAndMouseContextMenu();
+
+  private Q_SLOTS:
+    void actionSaveImage();
+    void actionChangeBackgroundColor();
+    void actionChangeTextColor();
+    void actionChangeDefaultColor();
+    void actionMovieParameters();
+
+    void showShortcuts();
+    void toggleMouseAction(int);
+    void toggleSurfaceAction(int);
+    void toggleProjection(bool);
+    void toggleTransparency(bool);
+    void toggleAntialiasing(bool);
+    void toggleHaloing(bool);
+    void toggleAux(bool);
+    void toggleHiddenMarkers(bool);
+    void toggleFullScreen(bool);
+    void processEncodeFinished();
+    void processLookForFinished();
+    void processEncodeStdout();
+    void sceneTreeComponentItemChanged(QTreeWidgetItem* item, int id);
+    void toggleSceneTreeComponentPickingCout(int);
+    void togglePicking();
+    void currentTabActivated(int);
+
+    // action trigger by a click on a component scene tree
+    void sceneTreeComponentSelected();
+    void changeDepthInSceneTree(int);
+    void changeSearchSelection();
+    void changeColorAndTransparency(QTreeWidgetItem* item, int val);
+    void tableWidgetViewerSetItemChanged(QTableWidgetItem*);
+};
+
+#endif

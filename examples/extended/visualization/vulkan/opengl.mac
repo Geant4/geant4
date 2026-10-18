@@ -1,0 +1,26 @@
+# Corresponding OpenGL visualization macro demonstrating /vis/ogl/ commands
+# for side-by-side comparison with vulkan.mac
+#
+/run/initialize
+/vis/open OGLSQt 800x800-0+0
+/vis/drawVolume
+/vis/geometry/set/visibility World 0 false
+/vis/geometry/set/colour Envelope 0 0 0 1 .3
+/vis/viewer/set/style surface
+/vis/viewer/set/viewpointThetaPhi 120 150
+/vis/viewer/set/background white
+
+# Configure OpenGL driver parameters (/vis/ogl/...)
+/vis/ogl/set/transparency true
+/vis/ogl/set/displayListLimit 100000
+/vis/ogl/set/eventsDrawInterval 1
+/vis/ogl/set/exportFormat eps
+/vis/ogl/export exampleOpenGL_scene.eps
+
+# Run 5 events and export vector EPS
+/vis/scene/add/trajectories smooth
+/vis/scene/endOfEventAction accumulate
+/run/beamOn 5
+/vis/viewer/flush
+/vis/ogl/export exampleOpenGL_events.eps
+

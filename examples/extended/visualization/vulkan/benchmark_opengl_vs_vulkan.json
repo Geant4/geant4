@@ -1,0 +1,134 @@
+{
+  "benchmark": "Geant4 OpenGL vs Vulkan Visualization Benchmark",
+  "author": "Alex Vergara Gil",
+  "date": "2026-10-17",
+  "coexistence_verified": true,
+  "mutual_dependency": "none",
+  "scene_geometry": {
+    "description": "Concrete dump with boolean cylindrical subtraction cutout, calorimeter ring, and tracker tile (8x3 instances)",
+    "polyhedra_count": 24,
+    "total_facets": 1656
+  },
+  "drivers": [
+    {
+      "driver_name": "VulkanStoredQt",
+      "driver_nickname": "VKSQt",
+      "driver_init_us": 760159.214,
+      "display_list_compile_us": 2364.572,
+      "polyhedra_count": 24,
+      "total_facets": 1656,
+      "stored_mode_rendering": [
+        {
+          "resolution": "256x256",
+          "width": 256,
+          "height": 256,
+          "frames": 50,
+          "total_ms": 18.401,
+          "avg_frame_ms": 0.368,
+          "fps": 2717.174,
+          "center_pixel_rgba": [229, 51, 51, 255]
+        },
+        {
+          "resolution": "512x512",
+          "width": 512,
+          "height": 512,
+          "frames": 50,
+          "total_ms": 5.612,
+          "avg_frame_ms": 0.112,
+          "fps": 8909.675,
+          "center_pixel_rgba": [229, 51, 51, 255]
+        },
+        {
+          "resolution": "1024x1024",
+          "width": 1024,
+          "height": 1024,
+          "frames": 50,
+          "total_ms": 5.121,
+          "avg_frame_ms": 0.102,
+          "fps": 9763.598,
+          "center_pixel_rgba": [229, 51, 51, 255]
+        }
+      ],
+      "immediate_mode_512x512": {
+        "frames": 25,
+        "avg_frame_ms": 0.899,
+        "fps": 1112.859
+      },
+      "picking_3d_selection": {
+        "iterations": 200,
+        "avg_pick_us": 0.688,
+        "picks_per_second": 1454238.742,
+        "hits": 1,
+        "picked_name": 77
+      },
+      "vector_eps_export": {
+        "export_time_ms": 3.456,
+        "file_size_bytes": 9138
+      }
+    },
+    {
+      "driver_name": "OpenGLStoredQt",
+      "driver_nickname": "OGLSQt",
+      "driver_init_us": 28.924,
+      "display_list_compile_us": 1671.012,
+      "polyhedra_count": 24,
+      "total_facets": 1656,
+      "stored_mode_rendering": [
+        {
+          "resolution": "256x256",
+          "width": 256,
+          "height": 256,
+          "frames": 50,
+          "total_ms": 24.193,
+          "avg_frame_ms": 0.484,
+          "fps": 2066.677,
+          "center_pixel_rgba": [255, 61, 61, 255]
+        },
+        {
+          "resolution": "512x512",
+          "width": 512,
+          "height": 512,
+          "frames": 50,
+          "total_ms": 18.586,
+          "avg_frame_ms": 0.372,
+          "fps": 2690.213,
+          "center_pixel_rgba": [255, 61, 61, 255]
+        },
+        {
+          "resolution": "1024x1024",
+          "width": 1024,
+          "height": 1024,
+          "frames": 50,
+          "total_ms": 39.124,
+          "avg_frame_ms": 0.782,
+          "fps": 1277.982,
+          "center_pixel_rgba": [255, 61, 61, 255]
+        }
+      ],
+      "immediate_mode_512x512": {
+        "frames": 25,
+        "avg_frame_ms": 0.691,
+        "fps": 1446.216
+      },
+      "picking_3d_selection": {
+        "iterations": 200,
+        "avg_pick_us": 128.606,
+        "picks_per_second": 7775.670,
+        "hits": 1,
+        "picked_name": 77
+      },
+      "vector_eps_export": {
+        "export_time_ms": 303.685,
+        "file_size_bytes": 1108139
+      }
+    }
+  ],
+  "comparison_ratios_vulkan_vs_opengl": {
+    "display_list_compile_speedup": 0.707,
+    "stored_256x256_speedup": 1.315,
+    "stored_512x512_speedup": 3.312,
+    "stored_1024x1024_speedup": 7.640,
+    "picking_3d_speedup": 187.024,
+    "vector_eps_export_speedup": 87.873
+  }
+}

@@ -1,0 +1,100 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+//
+//
+//
+// Alex Vergara Gil  17th October 2026
+// Ported to Vulkan from the OpenGL work by Andrew Walkden (20th January 1998).
+
+inline void G4VulkanSceneHandler::AddSolid(const G4Box& box)
+{
+  G4VSceneHandler::AddSolid(box);
+}
+
+inline void G4VulkanSceneHandler::AddSolid(const G4Cons& cons)
+{
+  G4VSceneHandler::AddSolid(cons);
+}
+
+inline void G4VulkanSceneHandler::AddSolid(const G4Tubs& tubs)
+{
+  G4VSceneHandler::AddSolid(tubs);
+}
+
+inline void G4VulkanSceneHandler::AddSolid(const G4Trd& trd)
+{
+  G4VSceneHandler::AddSolid(trd);
+}
+
+inline void G4VulkanSceneHandler::AddSolid(const G4Trap& trap)
+{
+  G4VSceneHandler::AddSolid(trap);
+}
+
+inline void G4VulkanSceneHandler::AddSolid(const G4Sphere& sphere)
+{
+  G4VSceneHandler::AddSolid(sphere);
+}
+
+inline void G4VulkanSceneHandler::AddSolid(const G4Para& para)
+{
+  G4VSceneHandler::AddSolid(para);
+}
+
+inline void G4VulkanSceneHandler::AddSolid(const G4Torus& torus)
+{
+  G4VSceneHandler::AddSolid(torus);
+}
+
+inline void G4VulkanSceneHandler::AddSolid(const G4Polycone& polycone)
+{
+  G4VSceneHandler::AddSolid(polycone);
+}
+
+inline void G4VulkanSceneHandler::AddSolid(const G4Polyhedra& polyhedra)
+{
+  G4VSceneHandler::AddSolid(polyhedra);
+}
+
+inline void G4VulkanSceneHandler::AddSolid(const G4Orb& orb)
+{
+  G4VSceneHandler::AddSolid(orb);
+}
+
+inline void G4VulkanSceneHandler::AddSolid(const G4Ellipsoid& ellipsoid)
+{
+  G4VSceneHandler::AddSolid(ellipsoid);
+}
+
+inline void G4VulkanSceneHandler::AddSolid(const G4TessellatedSolid& tess)
+{
+  G4VSceneHandler::AddSolid(tess);
+}
+
+inline void G4VulkanSceneHandler::AddSolid(const G4VSolid& vsolid)
+{
+  G4VSceneHandler::AddSolid(vsolid);
+}
