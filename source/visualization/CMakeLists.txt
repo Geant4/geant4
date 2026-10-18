@@ -22,3 +22,8 @@ endif()
 if(GEANT4_USE_VTK)
   add_subdirectory(Vtk)
 endif()
+
+# Vulkan is optional depending on user selection
+if(GEANT4_USE_VULKAN)
+  add_subdirectory(Vulkan)
+endif()

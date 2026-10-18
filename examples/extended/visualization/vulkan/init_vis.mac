@@ -1,0 +1,13 @@
+# Macro file for the initialization of exampleVulkan
+# in interactive session
+#
+/control/verbose 2
+/control/saveHistory
+/run/verbose 2
+#
+# Initialize kernel
+/run/initialize
+#
+# Visualization setting
+/control/execute vis.mac
+

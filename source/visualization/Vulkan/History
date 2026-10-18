@@ -1,0 +1,26 @@
+# Category vulkan History
+
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
+
+-------------------------------------------------------------------------------
+
+## 2026-10-18 Alex Vergara Gil (vulkan-V11-04-00)
+- Initial implementation of the Geant4 Vulkan visualization category (`G4Vulkan`),
+  ported from the Geant4 OpenGL visualization driver (`G4OpenGL`) while keeping
+  complete runtime and build independence from OpenGL:
+  - Added public graphics system headers (`G4VulkanImmediateQt`, `G4VulkanStoredQt`,
+    `G4VulkanImmediateX`, `G4VulkanStoredX`, `G4VulkanImmediateXm`, `G4VulkanStoredXm`,
+    `G4VulkanImmediateWin32`, `G4VulkanStoredWin32`) and full private scene handler /
+    viewer hierarchy in `include/private/` and `src/`.
+  - Replaced all `GL*` / `gl*` types, constants, and entrypoints with self-contained
+    `VK*` / `vk*` equivalents in `G4Vulkan.hh` and `G4vk2ps.hh`/`.cc`.
+  - Implemented hardware-accelerated Vulkan rendering via `VkInstance` (including
+    `VK_KHR_portability_enumeration` for MoltenVK on macOS), `VkPhysicalDevice`,
+    `VkDevice`, `VkRenderPass`, SPIR-V vertex/fragment `VkPipeline`s, GPU offscreen
+    color/depth `VkFramebuffer`, persistent mapped `VkBuffer` vertex storage, and
+    command buffer ring submission (`vkFlush` / `vkFinish` / `vkReadPixels`).
+  - Replaced closure-based display lists with pre-triangulated, GPU-resident baked
+    display lists (`G4VulkanDisplayList`) and 3D AABB-accelerated object picking
+    (`VK_SELECT`) and vector feedback export (`VK_FEEDBACK` / `G4vk2ps`).

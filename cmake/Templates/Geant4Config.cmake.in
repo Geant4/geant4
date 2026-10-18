@@ -523,6 +523,14 @@ if(_geant4_use_vtk_library)
   list(APPEND _geant4_internal_libraries Geant4::G4visVtk${_geant4_lib_use_suffix})
 endif()
 
+set(Geant4_vis_vulkan_FOUND @GEANT4_USE_VULKAN@)
+if(Geant4_vis_vulkan_FOUND)
+  find_dependency(Vulkan)
+  if(("vis_vulkan" IN_LIST Geant4_FIND_COMPONENTS) OR Geant4_vis_all_FOUND)
+    list(APPEND _geant4_internal_libraries Geant4::G4Vulkan${_geant4_lib_use_suffix})
+  endif()
+endif()
+
 # - GDML always added for now as old G4persistency lib always added if present
 if(Geant4_gdml_FOUND)
   set(_geant4_g4gdml_library Geant4::G4gdml${_geant4_lib_use_suffix})

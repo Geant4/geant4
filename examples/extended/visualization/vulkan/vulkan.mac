@@ -1,0 +1,25 @@
+# Vulkan-specific visualization macro demonstrating /vis/vk/ commands
+#
+/run/initialize
+/vis/open VKSQt 800x800-0+0
+/vis/drawVolume
+/vis/geometry/set/visibility World 0 false
+/vis/geometry/set/colour Envelope 0 0 0 1 .3
+/vis/viewer/set/style surface
+/vis/viewer/set/viewpointThetaPhi 120 150
+/vis/viewer/set/background white
+
+# Configure Vulkan driver parameters (/vis/vk/...)
+/vis/vk/set/transparency true
+/vis/vk/set/displayListLimit 100000
+/vis/vk/set/eventsDrawInterval 1
+/vis/vk/set/exportFormat eps
+/vis/vk/export exampleVulkan_scene.eps
+
+# Run 5 events and export vector EPS
+/vis/scene/add/trajectories smooth
+/vis/scene/endOfEventAction accumulate
+/run/beamOn 5
+/vis/viewer/flush
+/vis/vk/export exampleVulkan_events.eps
+
