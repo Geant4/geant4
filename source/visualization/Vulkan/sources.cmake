@@ -189,15 +189,15 @@ if(GEANT4_USE_VULKAN_XM)
       G4VulkanStoredXmViewer.cc
       G4VulkanXm.cc
       G4VulkanXmBox.cc
+      G4VulkanXmConvenienceRoutines.cc
       G4VulkanXmFourArrowButtons.cc
       G4VulkanXmFramedBox.cc
-      G4VulkanXmMiscCallbacks.cc
+      G4VulkanXmMainMenubarCallbacks.cc
       G4VulkanXmPanningCallbacks.cc
       G4VulkanXmPushButton.cc
       G4VulkanXmRadioButton.cc
       G4VulkanXmRotationCallbacks.cc
       G4VulkanXmSeparator.cc
-      G4VulkanXmSettingCallbacks.cc
       G4VulkanXmSliderBar.cc
       G4VulkanXmStyleCallbacks.cc
       G4VulkanXmTextField.cc

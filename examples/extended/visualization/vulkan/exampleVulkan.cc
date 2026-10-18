@@ -29,6 +29,7 @@
 /// \brief Main program of the visualization/vulkan example (with OpenGL vs Vulkan JSON benchmark)
 
 #define GL_SILENCE_DEPRECATION
+#define GL_GLEXT_PROTOTYPES
 
 #include "ActionInitialization.hh"
 #include "DetectorConstruction.hh"
@@ -69,6 +70,12 @@
 
 #ifdef __APPLE__
 #  include <OpenGL/OpenGL.h>
+#elif defined(__linux__)
+#  define GL_GLEXT_PROTOTYPES
+#  include <GL/gl.h>
+#  include <GL/glext.h>
+#  include <GL/glx.h>
+#  include <X11/Xlib.h>
 #endif
 
 #include <chrono>
@@ -422,6 +429,37 @@ int RunHeadToHeadBenchmark(const std::string& jsonPath)
   glBindRenderbuffer(GL_RENDERBUFFER, depthRb);
   glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, 1024, 1024);
   glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthRb);
+#elif defined(__linux__)
+  Display* glxDpy = XOpenDisplay(nullptr);
+  GLXContext glxCtx = nullptr;
+  GLXPbuffer glxPbuf = 0;
+  if (glxDpy) {
+    int fbAttribs[] = {
+      GLX_RENDER_TYPE, GLX_RGBA_BIT,
+      GLX_DRAWABLE_TYPE, GLX_PBUFFER_BIT | GLX_WINDOW_BIT,
+      GLX_RED_SIZE, 8,
+      GLX_GREEN_SIZE, 8,
+      GLX_BLUE_SIZE, 8,
+      GLX_ALPHA_SIZE, 8,
+      GLX_DEPTH_SIZE, 24,
+      None
+    };
+    int numFbc = 0;
+    GLXFBConfig* fbc = glXChooseFBConfig(glxDpy, DefaultScreen(glxDpy), fbAttribs, &numFbc);
+    if (fbc && numFbc > 0) {
+      int pbufAttribs[] = {
+        GLX_PBUFFER_WIDTH, 1024,
+        GLX_PBUFFER_HEIGHT, 1024,
+        None
+      };
+      glxPbuf = glXCreatePbuffer(glxDpy, fbc[0], pbufAttribs);
+      glxCtx = glXCreateNewContext(glxDpy, fbc[0], GLX_RGBA_TYPE, nullptr, True);
+      if (glxCtx && glxPbuf) {
+        glXMakeContextCurrent(glxDpy, glxPbuf, glxPbuf, glxCtx);
+      }
+      XFree(fbc);
+    }
+  }
 #endif
 
   {
@@ -584,6 +622,13 @@ int RunHeadToHeadBenchmark(const std::string& jsonPath)
   if (cglCtx) {
     CGLSetCurrentContext(nullptr);
     CGLDestroyContext(cglCtx);
+  }
+#elif defined(__linux__)
+  if (glxDpy) {
+    glXMakeContextCurrent(glxDpy, None, None, nullptr);
+    if (glxCtx) glXDestroyContext(glxDpy, glxCtx);
+    if (glxPbuf) glXDestroyPbuffer(glxDpy, glxPbuf);
+    XCloseDisplay(glxDpy);
   }
 #endif
 

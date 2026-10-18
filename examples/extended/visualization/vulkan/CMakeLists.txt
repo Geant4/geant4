@@ -14,12 +14,20 @@ else()
 endif()
 
 find_package(Vulkan REQUIRED)
+find_package(OpenGL REQUIRED)
+if(UNIX AND NOT APPLE)
+  find_package(X11 REQUIRED)
+endif()
 
 #----------------------------------------------------------------------------
 # Setup Geant4 include directories and compile definitions
 #
 include(${Geant4_USE_FILE})
-include_directories(${PROJECT_SOURCE_DIR}/include)
+include_directories(
+  ${PROJECT_SOURCE_DIR}/include
+  ${PROJECT_SOURCE_DIR}/../../../../source/visualization/OpenGL/include/private
+  ${PROJECT_SOURCE_DIR}/../../../../source/visualization/Vulkan/include/private
+  )
 
 #----------------------------------------------------------------------------
 # Locate sources and headers for this project
@@ -31,7 +39,10 @@ file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 # Add the executable, and link it to the Geant4 and Vulkan libraries
 #
 add_executable(exampleVulkan exampleVulkan.cc ${sources} ${headers})
-target_link_libraries(exampleVulkan ${Geant4_LIBRARIES} Vulkan::Vulkan)
+target_link_libraries(exampleVulkan ${Geant4_LIBRARIES} Vulkan::Vulkan OpenGL::GL)
+if(UNIX AND NOT APPLE)
+  target_link_libraries(exampleVulkan X11::X11)
+endif()
 
 #----------------------------------------------------------------------------
 # Copy all scripts and benchmark files to the build directory
@@ -42,6 +53,8 @@ set(EXAMPLEVULKAN_SCRIPTS
   vulkan.mac
   opengl.mac
   benchmark_opengl_vs_vulkan.json
+  benchmark_opengl_vs_vulkan_moltenvk.json
+  benchmark_opengl_vs_vulkan_linux.json
   )
 
 foreach(_script ${EXAMPLEVULKAN_SCRIPTS})

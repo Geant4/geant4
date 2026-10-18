@@ -6,3 +6,5 @@ add_subdirectory(perspective)
 add_subdirectory(standalone)
 add_subdirectory(userVisAction)
 add_subdirectory(movies)
+add_subdirectory(vulkan)
+
