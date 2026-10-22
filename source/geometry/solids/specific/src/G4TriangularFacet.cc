@@ -835,9 +835,16 @@ G4bool G4TriangularFacet::Intersect(const G4ThreeVector& p, const G4ThreeVector&
   G4double ss = fB * e - fC * d;
   G4double t = fB * d - fA * e;
 
-  G4double sTolerance = (fabs(fB) + fabs(fC) + fabs(d) + fabs(e)) * kCarTolerance;
-  G4double tTolerance = (fabs(fA) + fabs(fB) + fabs(d) + fabs(e)) * kCarTolerance;
-  G4double detTolerance = (fabs(fA) + fabs(fC) + 2 * fabs(fB)) * kCarTolerance;
+  // With pp - p0 = alpha*fE1 + beta*fE2 we have ss = alpha*fDet and
+  // t = beta*fDet. The distance of pp from the edge opposite to each
+  // barycentric is alpha*sqrt(fDet)/|fE2|, beta*sqrt(fDet)/|fE1| and
+  // (alpha+beta-1)*sqrt(fDet)/|fE2-fE1|. Scale the tolerances so that they
+  // correspond to kCarTolerance measured as a distance from the edge.
+  //
+  G4double sqrtDet = std::sqrt(fDet);
+  G4double sTolerance = kCarTolerance * sqrtDet * fE2.mag();
+  G4double tTolerance = kCarTolerance * sqrtDet * fE1.mag();
+  G4double detTolerance = kCarTolerance * sqrtDet * (fE2 - fE1).mag();
 
   // if (ss < 0.0 || t < 0.0 || ss+t > fDet)
   if (ss < -sTolerance || t < -tTolerance || (ss + t - fDet) > detTolerance)
