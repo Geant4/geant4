@@ -58,6 +58,9 @@ void G4ParticleHPNXInelasticFS::Init(G4double A, G4double Z, G4int M, const G4St
                                      const G4String& aFSType, G4ParticleDefinition* projectile)
 {
   G4ParticleHPInelasticBaseFS::Init(A, Z, M, dirName, aFSType, projectile);
+  // Data provided for these processes are inclusive to all final states. Use correlated final state
+  // sampling to conserve energy, charge, and baryon number.
+  if (theEnergyAngData != nullptr) theEnergyAngData->SetInclusive(true);
   G4double ResidualA = 0;
   G4double ResidualZ = 0;
   if (projectile == G4Neutron::Neutron())
