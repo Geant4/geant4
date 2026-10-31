@@ -147,7 +147,7 @@ G4VParticleChange* G4MuonMinusAtomicCapture::AtRestDoIt(const G4Track& track, co
 
   G4DynamicParticle* dp = new G4DynamicParticle(muonicAtom, G4RandomDirection(), 0.);
   G4HadSecondary hadSec(dp);
-  hadSec.SetTime(time0);
+  hadSec.SetTime(0.0);  // local time: time0 is added to every secondary below
   result->AddSecondary(hadSec);
 
   // Fill results
