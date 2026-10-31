@@ -111,4 +111,18 @@ class G4MuonMinusAtomicCapture : public G4VRestProcess
     G4Nucleus targetNucleus;
 };
 
+inline void G4MuonMinusAtomicCapture::SetElementSelector(G4ElementSelector* ptr)
+{
+  if (fElementSelector != ptr)
+  {
+    delete fElementSelector;
+    fElementSelector = ptr;
+  }
+}
+
+inline void G4MuonMinusAtomicCapture::SetEmCascade(G4HadronicInteraction* ptr)
+{
+  fEmCascade = ptr;
+}
+
 #endif

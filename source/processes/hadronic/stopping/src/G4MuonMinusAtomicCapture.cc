@@ -78,6 +78,8 @@ G4MuonMinusAtomicCapture::~G4MuonMinusAtomicCapture()
 {
   G4HadronicProcessStore::Instance()->DeRegisterExtraProcess(this);
   delete theTotalResult;
+  delete fElementSelector;
+  // NOTE: fEmCascade is owned by the interaction registry, not locally
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
