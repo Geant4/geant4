@@ -58,6 +58,4 @@ endforeach()
 # Install the executable to 'bin' directory under CMAKE_INSTALL_PREFIX
 #
 install(TARGETS gorad DESTINATION bin)
-# Below should go into share?
-install(FILES DESTINATION bin)
 

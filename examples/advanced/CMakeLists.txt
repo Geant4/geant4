@@ -15,8 +15,10 @@ add_subdirectory(stim_pixe_tomography)
 
 if(Geant4_gdml_FOUND)
   add_subdirectory(ChargeExchangeMC)
+  add_subdirectory(gorad)
 else()
   message(STATUS "G4 Examples: GDML not installed --> ChargeExchangeMC example disabled")
+  message(STATUS "G4 Examples: GDML not installed --> gorad example disabled")
 endif()
 
 if(NOT Geant4_builtin_clhep_FOUND)

@@ -15,13 +15,17 @@ on top of Geant4. Simulation geometry should be provided in the form of GDML.
 Gorad is controlled by UI commands, and it works both in interactive mode 
 with Qt window and in batch mode with an input macro file. 
 
-The current Gorad requires Geant4 version 10.7 (release of December 2020). 
-It does not work with earlier version of Geant4. Geant4 has to be installed 
-with multithreading mode and GDML interface enabled. Qt is also recommended 
-for the use of Gorad in interactive mode. Geant4 GDML interface requires 
-Xerces-C++ version 3 or higher. Xerces-C++ has to be compiled with the same 
-compiler Geant4 is compiled. Please refer to the Geant4 installation guide 
-for enabling these options. 
+Gorad was first released with Geant4 10.7 (December 2020). It is maintained
+for current Geant4 releases (11.x). Geant4 has to be installed with
+multithreading mode and GDML interface enabled. Qt is also recommended for
+the use of Gorad in interactive mode. Geant4 GDML interface requires
+Xerces-C++ version 3 or higher. Xerces-C++ has to be compiled with the same
+compiler Geant4 is compiled. Please refer to the Geant4 installation guide
+for enabling these options.
+
+When building the full examples tree, gorad is enabled only if Geant4 was
+built with GDML support (see examples/advanced/CMakeLists.txt).
+ 
 
 Building and running Gorad
 --------------------------
