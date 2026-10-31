@@ -45,6 +45,7 @@
 
 #include "G4Fragment.hh"
 #include "G4Gamma.hh"
+#include "G4HadronicParameters.hh"
 #include "G4IonTable.hh"
 #include "G4Ions.hh"
 #include "G4LorentzRotation.hh"
@@ -175,7 +176,7 @@ G4ReactionProductVector* G4ParticleHPEnAngCorrelation::Sample(G4double anEnergy)
   G4LorentzRotation toLab(toZ.inverse());
   // toLab only change axis NOT to LAB system
 
-  if (isInclusive && correlatedSampling)
+  if (isInclusive && G4HadronicParameters::Instance()->EnableParticleHPCorrelatedSampling())
   {
     G4ReactionProductVector* correlatedResult = SampleCorrelated(anEnergy, theCMS, toLab);
     if (correlatedResult != nullptr)

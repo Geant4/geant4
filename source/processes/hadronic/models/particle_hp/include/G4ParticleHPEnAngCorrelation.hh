@@ -83,8 +83,8 @@ class G4ParticleHPEnAngCorrelation
 
     G4bool InCharge() { return inCharge; }
 
-    // The data are inclusive, use correlated sampling of final states to ensure conservation of
-    // energy, charge, and baryon number.
+    // The data are inclusive. If enabled in G4HadronicParameters, correlated sampling of final
+    // states is used to ensure conservation of energy, charge, and baryon number.
     void SetInclusive(G4bool val) { isInclusive = val; }
 
     G4double GetTargetMass() { return targetMass; }
@@ -109,7 +109,7 @@ class G4ParticleHPEnAngCorrelation
     // is chosen from its yield, only the light particles that lead to it are emitted, and the
     // residual is de-excited with G4PhotonEvaporation from the excitation left by energy balance.
     // Returns nullptr when the data do not allow it, and the caller then samples products
-    // independently. Used for inclusive data when correlatedSampling is true.
+    // independently. Used for inclusive data when enabled in G4HadronicParameters.
     G4ReactionProductVector* SampleCorrelated(G4double anEnergy, const G4ReactionProduct& theCMS,
                                               const G4LorentzRotation& toLab);
 
@@ -122,7 +122,6 @@ class G4ParticleHPEnAngCorrelation
     G4int nProducts{0};
     G4bool inCharge{false};
     G4bool isInclusive{false};
-    G4bool correlatedSampling{true};  // false: independent sampling also for inclusive data
 
     // cached values
     //
