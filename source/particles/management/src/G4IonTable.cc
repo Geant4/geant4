@@ -1742,38 +1742,39 @@ G4ParticleDefinition* G4IonTable::GetMuonicAtom(G4Ions const* base)
   // not found in either list; create and potentially insert
   auto const name = "Mu" + GetIonName(Z, A);
 
-  G4MuonicAtom* muatom = G4MuonicAtomHelper::ConstructMuonicAtom(name, encoding, base);
-
-  // Not sure this is doing the right thing...
-  AddProcessManager(muatom);
-
-  // Now, we have to push the muatom into the appropriate IonTables
-  // first, recheck global list, in case another thread came along
-  // before us and created this same muatom
+  G4MuonicAtom* muatom = nullptr;
 
 #ifdef G4MULTITHREADED
   if (G4Threading::IsWorkerThread())
   {
+    // Construct under the lock, as GetIon() does: constructing the
+    // particle registers it in the shared particle table, so two
+    // workers must not both construct the same muonic atom.
     G4MUTEXLOCK(&G4IonTable::ionTableMutex);
-    // first, we need to make sure it hasn't been inserted by some
-    // other thread
+    // recheck the global list, in case another thread created this
+    // muatom after our first look
     auto j = fIonListShadow->find(encoding);
     if (j != fIonListShadow->cend())
     {
-      // oops ... someone else built a copy when we weren't looking;
-      // cleanup our instantiation, and take a handle to the one in
-      // the global list
-      delete muatom;
       muatom = const_cast<G4MuonicAtom*>(static_cast<G4MuonicAtom const*>(j->second));
     }
     else
     {
-      // otherwise, push onto the global list first
+      muatom = G4MuonicAtomHelper::ConstructMuonicAtom(name, encoding, base);
+      AddProcessManager(muatom);
+      // push onto the global list first
       fIonListShadow->insert(std::make_pair(encoding, muatom));
     }
     G4MUTEXUNLOCK(&G4IonTable::ionTableMutex);
   }
 #endif
+
+  if (muatom == nullptr)
+  {
+    muatom = G4MuonicAtomHelper::ConstructMuonicAtom(name, encoding, base);
+    AddProcessManager(muatom);
+  }
+
   // in either case, push onto the the threadlocal list
   fIonList->insert(std::make_pair(encoding, muatom));
 
