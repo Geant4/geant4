@@ -159,6 +159,12 @@ class G4HadronicParameters
     void SetEnableNUDEX(G4bool val);
     // NUDEX gamma de-excitation is enabled/disabled.
 
+    inline G4bool EnableParticleHPCorrelatedSampling() const;
+    void SetEnableParticleHPCorrelatedSampling(G4bool val);
+    // Boolean switch that allows ParticleHP to sample inclusive (MT5) final-state data
+    // in a correlated way, conserving energy, charge and baryon number per event.
+    // By default it is disabled, and the products are sampled independently.
+
     inline const G4String& GetTypeTablePT() const;
     void SetTypeTablePT(const G4String& typeTablePT);
     // Specify the type of PT table - between  "calendf"  and  "njoy"  for
@@ -253,6 +259,7 @@ class G4HadronicParameters
     G4bool fEnableIntegralElasticXS = true;
     G4bool fEnableDiffDissociationForBGreater10 = false;
     G4bool fEnableNUDEX = false;
+    G4bool fEnableParticleHPCorrelatedSampling = false;
     G4bool fNeutronGeneral = false;
     G4bool fChargeExchange = false;
     G4bool fBinaryDebug = false;
@@ -387,6 +394,11 @@ inline G4bool G4HadronicParameters::EnableNeutronGeneralProcess() const
 inline G4bool G4HadronicParameters::EnableNUDEX() const
 {
   return fEnableNUDEX;
+}
+
+inline G4bool G4HadronicParameters::EnableParticleHPCorrelatedSampling() const
+{
+  return fEnableParticleHPCorrelatedSampling;
 }
 
 inline const G4String& G4HadronicParameters::GetTypeTablePT() const

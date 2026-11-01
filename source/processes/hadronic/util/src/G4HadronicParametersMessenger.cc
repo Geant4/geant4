@@ -71,6 +71,14 @@ G4HadronicParametersMessenger::G4HadronicParametersMessenger(G4HadronicParameter
   theCRCoalescenceCmd->SetParameterName("EnableCRCoalescence", false);
   theCRCoalescenceCmd->SetDefaultValue(false);
 
+  // This command enables the correlated sampling of inclusive (MT5) data in ParticleHP
+  theParticleHPCorrelatedSamplingCmd =
+    new G4UIcmdWithABool("/process/had/enableParticleHPCorrelatedSampling", this);
+  theParticleHPCorrelatedSamplingCmd->SetGuidance(
+    "Enable correlated sampling of inclusive (MT5) data in ParticleHP (default: false).");
+  theParticleHPCorrelatedSamplingCmd->SetParameterName("EnableParticleHPCorrelatedSampling", false);
+  theParticleHPCorrelatedSamplingCmd->AvailableForStates(G4State_PreInit);
+
   // This command dumps the hadronic parameters to G4cout
   theDumpCmd = new G4UIcommand("/process/had/printParameters", this);
   theDumpCmd->SetGuidance("Print all Hadronic parameters.");
@@ -84,6 +92,7 @@ G4HadronicParametersMessenger::~G4HadronicParametersMessenger()
   delete theVerboseCmd;
   delete theMaxEnergyCmd;
   delete theCRCoalescenceCmd;
+  delete theParticleHPCorrelatedSamplingCmd;
   delete theDumpCmd;
 }
 
@@ -103,6 +112,11 @@ void G4HadronicParametersMessenger::SetNewValue(G4UIcommand* command, G4String n
   else if (command == theCRCoalescenceCmd)
   {
     theHadronicParameters->SetEnableCRCoalescence(theCRCoalescenceCmd->GetNewBoolValue(newValues));
+  }
+  else if (command == theParticleHPCorrelatedSamplingCmd)
+  {
+    theHadronicParameters->SetEnableParticleHPCorrelatedSampling(
+      theParticleHPCorrelatedSamplingCmd->GetNewBoolValue(newValues));
   }
   else if (command == theDumpCmd)
   {

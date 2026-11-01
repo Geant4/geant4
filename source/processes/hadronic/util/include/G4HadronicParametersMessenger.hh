@@ -58,6 +58,7 @@ class G4HadronicParametersMessenger : public G4UImessenger
     G4UIcmdWithAnInteger* theVerboseCmd;
     G4UIcmdWithADoubleAndUnit* theMaxEnergyCmd;
     G4UIcmdWithABool* theCRCoalescenceCmd;
+    G4UIcmdWithABool* theParticleHPCorrelatedSamplingCmd;
     G4UIcommand* theDumpCmd;
 };
 

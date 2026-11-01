@@ -213,6 +213,8 @@ void G4HadronicParameters::StreamInfo(std::ostream& os) const
      << "\n";
   os << "Enable coherent charge exchange                     " << boolToString(fChargeExchange)
      << "\n";
+  os << "Enable ParticleHP correlated sampling of MT5 data   "
+     << boolToString(fEnableParticleHPCorrelatedSampling) << "\n";
 
   os << "=======================================================================" << "\n";
   os << "======                 Particle Production Control             ========" << "\n";
@@ -457,6 +459,11 @@ void G4HadronicParameters::SetEnableNeutronGeneralProcess(G4bool val)
 void G4HadronicParameters::SetEnableNUDEX(G4bool val)
 {
   if (!IsLocked()) fEnableNUDEX = val;
+}
+
+void G4HadronicParameters::SetEnableParticleHPCorrelatedSampling(G4bool val)
+{
+  if (!IsLocked()) fEnableParticleHPCorrelatedSampling = val;
 }
 
 void G4HadronicParameters::SetTypeTablePT(const G4String& typeTablePT)
