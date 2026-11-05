@@ -78,7 +78,7 @@ G4ParticleHPNames::G4ParticleHPNames(G4int maxOffSet) : theMaxOffSet(maxOffSet)
 
 G4String G4ParticleHPNames::GetName(G4int i) const
 {
-  return (i > 0 && i < 100) ? theString[i] : G4String("");
+  return (i >= 0 && i < 100) ? theString[i] : G4String("");
 }
 
 G4String G4ParticleHPNames::itoa(G4int current) const
