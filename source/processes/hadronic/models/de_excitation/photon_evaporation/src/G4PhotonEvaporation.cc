@@ -333,7 +333,7 @@ G4double G4PhotonEvaporation::GetEmissionProbability(G4Fragment* nucleus)
   G4double gammaR2 = gammaE2 * wres2;
   G4double egdp2 = gammaE2 - eres2;
 
-  G4double p0 = egam * gammaR2 * gammaE2 / (egdp2 * egdp2 + gammaR2);
+  G4double p0 = gammaR2 * gammaE2 / (egdp2 * egdp2 + gammaR2);
   G4double p1, e;
 
   for (G4int i = 1; i < fPoints; ++i)
@@ -350,7 +350,7 @@ G4double G4PhotonEvaporation::GetEmissionProbability(G4Fragment* nucleus)
       egdp2 = gammaE2 - eres2;
       e = fExcEnergy - egam;
       levelDensity = fNuclearLevelData->GetLevelDensity(Z, A, e);
-      p1 = egam * G4Exp(2.0 * (std::sqrt(levelDensity * e))) * gammaR2 * gammaE2
+      p1 = G4Exp(2.0 * (std::sqrt(levelDensity * e))) * gammaR2 * gammaE2
            / (egdp2 * egdp2 + gammaR2);
     }
     fProbability += (p1 + p0);
