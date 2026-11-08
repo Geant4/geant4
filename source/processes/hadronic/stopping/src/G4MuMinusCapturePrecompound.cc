@@ -258,7 +258,7 @@ G4HadFinalState* G4MuMinusCapturePrecompound::ApplyYourself(const G4HadProjectil
       G4ReactionProduct* rp = (*rpv)[i];
 
       // reaction time
-      fTime = time0 + rp->GetTOF();
+      fTime = time0 + std::max(rp->GetFormationTime(), 0.0);
       G4ThreeVector direction = rp->GetMomentum().unit();
       AddNewParticle(rp->GetDefinition(), direction, rp->GetKineticEnergy());
       delete rp;
