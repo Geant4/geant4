@@ -434,7 +434,8 @@ G4VParticleChange* G4MuonicAtomDecay::DecayIt(const G4Track& aTrack, const G4Ste
     for (G4int i = 0; i < nsec; ++i)
     {
       G4HadSecondary* sec = result->GetSecondary(i);
-      G4double ctime = sec->GetTime();
+      // a negative model time (G4HadSecondary default: -1 ns) is not a delay
+      G4double ctime = std::max(sec->GetTime(), 0.0);
       sec->SetTime(maDTime + ctime);  // we add time0 in the next stage
 #ifdef G4VERBOSE
       if (GetVerboseLevel() > 1)
