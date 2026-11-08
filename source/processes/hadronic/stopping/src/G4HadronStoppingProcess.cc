@@ -249,7 +249,8 @@ G4VParticleChange* G4HadronStoppingProcess::AtRestDoIt(const G4Track& track, con
     for (std::size_t i = 0; i < nnuc; ++i)
     {
       G4HadSecondary* sec = resultNuc->GetSecondary(i);
-      sec->SetTime(capTime + sec->GetTime());
+      // a negative model time (G4HadSecondary default: -1 ns) is not a delay
+      sec->SetTime(capTime + std::max(sec->GetTime(), 0.0));
     }
 
     nSecondaries += nnuc;
