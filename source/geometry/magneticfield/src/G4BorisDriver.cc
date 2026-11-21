@@ -155,7 +155,7 @@ G4bool G4BorisDriver::AccurateAdvance(G4FieldTrack& track, G4double hstep, G4dou
   track.LoadFromArray(yCurrent, G4FieldTrack::ncompSVEC);
   track.SetCurveLength(curveLength);
 
-  return true;
+  return curveLength >= endCurveLength;
 }
 
 // --------------------------------------------------------------------------
