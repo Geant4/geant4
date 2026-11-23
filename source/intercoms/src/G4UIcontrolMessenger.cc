@@ -291,7 +291,7 @@ G4UIcontrolMessenger::G4UIcontrolMessenger()
   auto* val5a = new G4UIparameter("value1", 'i', false);
   remainderCommand->SetParameter(val5a);
   auto* val5b = new G4UIparameter("value2", 'i', false);
-  val4b->SetParameterRange("value2 != 0");
+  val5b->SetParameterRange("value2 != 0");
   remainderCommand->SetParameter(val5b);
   remainderCommand->SetToBeBroadcasted(false);
 
