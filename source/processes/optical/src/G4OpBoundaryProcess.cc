@@ -892,6 +892,7 @@ void G4OpBoundaryProcess::DielectricLUTDAVIS()
         if (angleIncident <= 0.01)
         {
           fNewMomentum = fOldMomentum;
+          fNewPolarization = fOldPolarization;
           break;
         }
 
@@ -925,6 +926,7 @@ void G4OpBoundaryProcess::DielectricLUTDAVIS()
       if (angleIncident == 0)
       {
         fNewMomentum = -fOldMomentum;
+        fNewPolarization = -fOldPolarization;
         break;
       }
 
