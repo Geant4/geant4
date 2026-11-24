@@ -1516,6 +1516,20 @@ void G4OpBoundaryProcess::CoatedDielectricDielectric()
       E1_parl = 1.0;
     }
 
+    if (sint2 >= 1.0)
+    {  // n1 sin(theta1) >= n2: no propagating wave in medium 2, so the
+       // coated interface totally reflects (cost2 below would be NaN)
+      fStatus = TotalInternalReflection;
+      PdotN = fOldMomentum * fFacetNormal;
+      fNewMomentum = fOldMomentum - (2. * PdotN) * fFacetNormal;
+      G4double EdotN = fOldPolarization * fFacetNormal;
+      fNewPolarization = -fOldPolarization + (2. * EdotN) * fFacetNormal;
+      fOldMomentum = fNewMomentum.unit();
+      fOldPolarization = fNewPolarization.unit();
+      done = (fNewMomentum * fGlobalNormal >= -fCarTolerance);
+      continue;
+    }
+
     s1 = fRindex1 * cost1;
 
     cost2 = (cost1 > 0.0 ? 1.0 : -1.0) * std::sqrt(1. - sint2 * sint2);
