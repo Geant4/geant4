@@ -774,6 +774,7 @@ void G4OpBoundaryProcess::DielectricMetal()
           }
           else if (f_iTM > 0)
           {
+            A_trans = (fSint1 > 0.0) ? fOldMomentum.cross(fFacetNormal).unit() : fOldPolarization;
             fNewPolarization = -fNewMomentum.cross(A_trans).unit();  // = -A_paral
           }
         }
