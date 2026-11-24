@@ -762,19 +762,24 @@ void G4OpBoundaryProcess::DielectricMetal()
           }
           fNewMomentum = fOldMomentum - 2. * (fOldMomentum * fFacetNormal) * fFacetNormal;
 
-          if (f_iTE > 0 && f_iTM > 0)
+          G4ThreeVector A_trans_cross = fOldMomentum.cross(fFacetNormal);
+          if (A_trans_cross.mag() > fCarTolerance && (f_iTE > 0 || f_iTM > 0) &&
+              !(f_iTE > 0 && f_iTM > 0))
+          {
+            A_trans = A_trans_cross.unit();
+            if (f_iTE > 0)
+            {
+              fNewPolarization = -A_trans;
+            }
+            else
+            {
+              fNewPolarization = -fNewMomentum.cross(A_trans).unit();  // = -A_paral
+            }
+          }
+          else
           {
             fNewPolarization =
               -fOldPolarization + 2. * (fOldPolarization * fFacetNormal) * fFacetNormal;
-          }
-          else if (f_iTE > 0)
-          {
-            A_trans = (fSint1 > 0.0) ? fOldMomentum.cross(fFacetNormal).unit() : fOldPolarization;
-            fNewPolarization = -A_trans;
-          }
-          else if (f_iTM > 0)
-          {
-            fNewPolarization = -fNewMomentum.cross(A_trans).unit();  // = -A_paral
           }
         }
       }
