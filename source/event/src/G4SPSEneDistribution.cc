@@ -602,37 +602,6 @@ void G4SPSEneDistribution::LinearInterpolation()  // MT: Lock in caller
     --maxi;
   }
 
-  if (!EnergySpec)
-  {
-    // change currently stored values (emin etc) which are actually momenta
-    // to energies
-    //
-    G4ParticleDefinition* pdef = threadLocalData.Get().particle_definition;
-    if (pdef == nullptr)
-    {
-      G4Exception("G4SPSEneDistribution::LinearInterpolation", "Event0302", FatalException,
-                  "Error: particle not defined");
-    }
-    else
-    {
-      // Apply Energy**2 = p**2c**2 + m0**2c**4
-      // p should be entered as E/c i.e. without the division by c
-      // being done - energy equivalent
-
-      G4double mass = pdef->GetPDGMass();
-
-      // Convert point to energy unit and its value to per energy unit
-      //
-      G4double total_energy;
-      for (count = 0; count < maxi; ++count)
-      {
-        total_energy = std::sqrt((Arb_x[count] * Arb_x[count]) + (mass * mass));  // total energy
-        Arb_y[count] = Arb_y[count] * Arb_x[count] / total_energy;
-        Arb_x[count] = total_energy - mass;  // kinetic energy
-      }
-    }
-  }
-
   i = 1;
 
   Arb_grad = new G4double[1024];
@@ -738,37 +707,6 @@ void G4SPSEneDistribution::LogInterpolation()  // MT: Lock in caller
       Arb_y[count] = (Arb_y[count] - Arb_y[count + 1]) / (Arb_x[count + 1] - Arb_x[count]);
     }
     --maxi;
-  }
-
-  if (!EnergySpec)
-  {
-    // Change currently stored values (emin etc) which are actually momenta
-    // to energies
-
-    G4ParticleDefinition* pdef = threadLocalData.Get().particle_definition;
-    if (pdef == nullptr)
-    {
-      G4Exception("G4SPSEneDistribution::LogInterpolation", "Event0302", FatalException,
-                  "Error: particle not defined");
-    }
-    else
-    {
-      // Apply Energy**2 = p**2c**2 + m0**2c**4
-      // p should be entered as E/c i.e. without the division by c
-      // being done - energy equivalent
-
-      G4double mass = pdef->GetPDGMass();
-
-      // Convert point to energy unit and its value to per energy unit
-      //
-      G4double total_energy;
-      for (count = 0; count < maxi; ++count)
-      {
-        total_energy = std::sqrt((Arb_x[count] * Arb_x[count]) + (mass * mass));
-        Arb_y[count] = Arb_y[count] * Arb_x[count] / total_energy;
-        Arb_x[count] = total_energy - mass;  // kinetic energy
-      }
-    }
   }
 
   i = 1;
@@ -895,37 +833,6 @@ void G4SPSEneDistribution::ExpInterpolation()  // MT: Lock in caller
     --maxi;
   }
 
-  if (!EnergySpec)
-  {
-    // Change currently stored values (emin etc) which are actually momenta
-    // to energies
-    //
-    G4ParticleDefinition* pdef = threadLocalData.Get().particle_definition;
-    if (pdef == nullptr)
-    {
-      G4Exception("G4SPSEneDistribution::ExpInterpolation", "Event0302", FatalException,
-                  "Error: particle not defined");
-    }
-    else
-    {
-      // Apply Energy**2 = p**2c**2 + m0**2c**4
-      // p should be entered as E/c i.e. without the division by c
-      // being done - energy equivalent
-
-      G4double mass = pdef->GetPDGMass();
-
-      // Convert point to energy unit and its value to per energy unit
-      //
-      G4double total_energy;
-      for (count = 0; count < maxi; ++count)
-      {
-        total_energy = std::sqrt((Arb_x[count] * Arb_x[count]) + (mass * mass));
-        Arb_y[count] = Arb_y[count] * Arb_x[count] / total_energy;
-        Arb_x[count] = total_energy - mass;  // kinetic energy
-      }
-    }
-  }
-
   i = 1;
 
   if (Arb_ezero != nullptr)
@@ -1022,37 +929,6 @@ void G4SPSEneDistribution::SplineInterpolation()  // MT: Lock in caller
       Arb_y[count] = (Arb_y[count] - Arb_y[count + 1]) / (Arb_x[count + 1] - Arb_x[count]);
     }
     --maxi;
-  }
-
-  if (!EnergySpec)
-  {
-    // Change currently stored values (emin etc) which are actually momenta
-    // to energies
-    //
-    G4ParticleDefinition* pdef = threadLocalData.Get().particle_definition;
-    if (pdef == nullptr)
-    {
-      G4Exception("G4SPSEneDistribution::SplineInterpolation", "Event0302", FatalException,
-                  "Error: particle not defined");
-    }
-    else
-    {
-      // Apply Energy**2 = p**2c**2 + m0**2c**4
-      // p should be entered as E/c i.e. without the division by c
-      // being done - energy equivalent
-
-      G4double mass = pdef->GetPDGMass();
-
-      // Convert point to energy unit and its value to per energy unit
-      //
-      G4double total_energy;
-      for (count = 0; count < maxi; ++count)
-      {
-        total_energy = std::sqrt((Arb_x[count] * Arb_x[count]) + (mass * mass));
-        Arb_y[count] = Arb_y[count] * Arb_x[count] / total_energy;
-        Arb_x[count] = total_energy - mass;  // kinetic energy
-      }
-    }
   }
 
   i = 1;
@@ -2023,6 +1899,16 @@ G4double G4SPSEneDistribution::GenerateOne(G4ParticleDefinition* a)
         G4cout << "Error: EnergyDisType has unusual value" << G4endl;
       }
     }
+  }
+  // Arbitrary spectra entered in momentum coordinates must be sampled in
+  // momentum coordinates.  Interpolating after converting the histogram to
+  // kinetic energy changes the user-specified distribution (and is singular
+  // at p = 0 for massive particles).  Convert only the sampled variate.
+  if (EnergyDisType == "Arb" && !EnergySpec)
+  {
+    const G4double momentum = params.particle_energy;
+    const G4double mass = a->GetPDGMass();
+    return (mass == 0.) ? momentum : momentum * momentum / (std::hypot(momentum, mass) + mass);
   }
   return params.particle_energy;
 }
